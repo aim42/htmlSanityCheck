@@ -1,0 +1,70 @@
+= Test File for HTML Sanity Check
+
+
+== Image Directory Setting
+Via the following directive, the image directory is set to "./images":
+
+----
+:imagesdir: ./images
+----
+:imagesdir: ./images
+
+
+== Internal Links
+
+
+* A link to the subheading below: <<aim42, title>>.
+* A second link, but <<24mia, misspelled>>
+
+
+This plugin has been created in context of the <<aim42>> project
+
+
+[[aim42]]
+=== aim42 Architecture Improvement
+
+
+== Images
+One image from the image directory - created with this asciidoc:
+----
+image::aim42.png["alternate-text", title="aim42-logo", width="150"]
+----
+
+image::aim42.png["alternate-text", title="aim42-logo", width="150"]
+
+
+=== A Missing Image
+
+Another image tag - but this image (with the strange name)
+does not exist in the file system:
+----
+image::missing-image-urjk8ybepw8.jpg["missing...", title="missing-image"]
+----
+image::missing-image-urjk8ybepw8.jpg["missing...", title="missing-image"]
+
+
+== Duplicate ID's or Bookmarks
+In Asciidoc, ID's are defined using double brackets
+----
+[[some-anchor]]
+----
+One can <<some-anchor, reference>> those id's/bookmarks
+with <<some-anchor>> directive in asciidoc.
+
+[[some-anchor]]
+In this section, we define this id:
+....
+[[some-anchor]]
+....
+
+for the first time.
+Where will the browser jump to, if we <<some-anchor, click here?>>
+
+
+[[some-anchor]]
+=== Second definition
+In this section, we define it the second time.
+
+
+== External Links
+(to be done)
