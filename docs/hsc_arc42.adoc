@@ -1,0 +1,108 @@
+= HTML Sanity Checker Architecture Documentation
+:author: Gernot Starke
+:email: gernot.starke@innoq.com
+:date: May 30th 2014
+:revision: Version 0.9b
+
+:toc:
+
+(C)
+We acknowledge that this document uses material from the arc 42 architecture
+template, http://www.arc42.de.
+Created by Dr. Peter Hruschka & Dr. Gernot Starke.
+Asciidoc version by Jürgen Krey. For additional contributors see http://arc42.de/about/contributors.html
+
+
+This material is open source and provided under the Creative Commons Sharealike 4.0 license.
+It comes *without any guarantee*. Use on your own risk.
+
+
+
+== Introduction and Goals
+
+[NOTE]
+====
+Within the following text, the "Html Sanity Checker" shall be abbreviated with +HtmlSC+
+====
+
+
+=== Requirements Overview
+
++HtmlSC+ shall provide the following functionality:
+
+
+. +HtmlSC+ shall read a single (configurable) html file and perform the following checks:
+.. Check all image tags wether the referenced image files exist
+.. Check all internal links from anchor-tags (href="XYZ") wether the link targets "XYZ"
+are defined
+.. Check all bookmark definitions (... id="XYZ") wether the id's ("XYZ") are unique.
+
+. +HtmlSC+ can be configured to either
+.. output on stdout (the console)
+.. creates an html/markdown (or similar) output within a configurable directory
+
+. +HtmlSC+ can be called from the command line with arguments and options
+. +HtmlSC+ can be integrated in a gradle-build as plugin ()
+
+
+=== Quality Goals
+
+[format="csv", options="header"]
+|===
+Priority,Quality-Goal,Scenario
+1, Correctness, Every broken internal link is found
+2, Performance, Check of 100kB html file performed under 10 secs (excluding gradle startup)
+|===
+
+
+=== Stakeholder
+
+[options="header"]
+.Stakeholder
+|===
+| Role | Description | Goal, Intention
+
+| aim42 contributor
+| contributes to aim42 methode-guide
+| check generated html code to ensure links and images are correct during
+(gradle-based) build process
+
+| arc42 user
+| uses the arc42 template for architecture documentation
+| wants an example of pragmatic arc42 usage
+
+|===
+
+
+== Constraints
+
+* Shall be platform independend and should run on the major operating systems
+(Windows (TM), Linux and Mac-OS(TM))
+* Shall be integrated with the Gradle build tool
+* Liberal open-source license
+
+== Context
+
+
+== Building Block View
+
+== Runtime View
+Note: Not appropriate for this system due to very simple implementation.
+
+== Deployment View
+Sanity checker will
+
+1. be bundled as a single jar.
+2. be uploaded to a public repository (MavenCentral, JCenter, Bintray or similar),
+referencable within a gradle buildfile.
+3. provide a +main+ method with parameters and options, so all checks can be
+called from the command line.
+
+
+== Technical and Crosscutting Concepts
+
+
+
+== Design Decisions
+
+=== Decision: Checking of external links postponed
