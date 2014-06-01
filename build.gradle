@@ -14,6 +14,10 @@ dependencies {
     compile 'org.jsoup:jsoup:1.7.3' // html parser
 
     testCompile 'junit:junit:4.11'
+
+    // mockito needed to test string similarity
+    testCompile "org.mockito:mockito-all:1.9.5"
+
 }
 
 
