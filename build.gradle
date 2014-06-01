@@ -11,7 +11,9 @@ apply plugin: 'maven'
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile 'org.jsoup:jsoup:1.7.3' // html parser
+
+    // jsoup is our awesome html parser, see jsoup.org
+    compile 'org.jsoup:jsoup:1.7.3'
 
     testCompile 'junit:junit:4.11'
 
@@ -23,7 +25,6 @@ dependencies {
 
 repositories {
     mavenCentral()
-
 }
 
 
