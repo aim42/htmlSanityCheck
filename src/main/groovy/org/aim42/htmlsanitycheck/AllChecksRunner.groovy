@@ -61,6 +61,7 @@ class AllChecksRunner {
         this.imageDirPath = docDirPath + "images/";
     }
 
+
     public void runImageCheck() {
         imageChecker = new ImageFileExistChecker(
                 pageToCheck: pageToCheck,
@@ -73,6 +74,7 @@ class AllChecksRunner {
         imageCheckingResults = imageChecker.check()
         println imageCheckingResults.toString()
     }
+
 
     public void runInternalLinkCheck() {
         undefinedInternalLinksChecker = new InternalLinksChecker(

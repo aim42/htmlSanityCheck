@@ -1,7 +1,5 @@
 package org.aim42.htmlsanitycheck.checker
 
-import org.aim42.htmlsanitycheck.html.HtmlElement
-
 // see end-of-file for license information
 
 
