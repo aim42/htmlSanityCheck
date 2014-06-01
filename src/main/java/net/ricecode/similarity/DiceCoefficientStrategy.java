@@ -59,7 +59,7 @@ public class DiceCoefficientStrategy implements SimilarityStrategy {
 		
 		// The coefficient is:
 		// 
-		//        2 ∙ | s1 ⋂ s2 |
+		//        2 * | s1 n s2 |   (n == intersection)
 		// D = ----------------------
 		//        | s1 | + | s2 |
 		// 

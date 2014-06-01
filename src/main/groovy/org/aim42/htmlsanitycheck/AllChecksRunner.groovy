@@ -42,7 +42,15 @@ class AllChecksRunner {
 
     private HtmlPage pageToCheck
 
-
+    /**
+     * runs all available checks on the file with name "fileName",
+     * contained in the directory "docDirPath". Images are expected in
+     * imageDirPath.
+     *
+     * @param docDirPath
+     * @param fileName
+     * @param imageDirPath
+     */
     public AllChecksRunner(
             String docDirPath,
             String fileName,
@@ -111,6 +119,7 @@ class AllChecksRunner {
     private void parseHtml() {
         pageToCheck = new HtmlPage( new File( pathToHtmlFile ))
     }
+
 
     /**
      * runs the checks from the command

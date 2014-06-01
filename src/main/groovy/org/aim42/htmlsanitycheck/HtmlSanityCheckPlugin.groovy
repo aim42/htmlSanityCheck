@@ -1,19 +1,17 @@
-/**
-  Checks html code for duplicate ids, missing links and missing images.
+// see end-of-file for license information
 
-  Can be called from the command line via
-  @see AllChecksRunner or
-  @see ChecksRunner or
-  is integrated into frontends, like Gradle (as plugin) or UI-based html checker.
+package org.aim42.htmlsanitycheck
 
- **/
+import org.gradle.api.Project
+import org.gradle.api.Plugin
 
-package org.aim42.htmlsanitycheck;
-
-
-/*======================================================================
-
-Copyright 2014 Gernot Starke and aim42 contributors
+class HtmlSanityCheckPlugin implements Plugin<Project> {
+    void apply(Project project) {
+        project.task('htmlSanityCheck', type: HtmlSanityCheckTask, group: 'Check')
+    }
+}
+/*========================================================================
+ Copyright 2014 Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -27,4 +25,5 @@ Copyright 2014 Gernot Starke and aim42 contributors
  either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
- ======================================================================*/
+ ========================================================================*/
+
