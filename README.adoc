@@ -1,0 +1,138 @@
+Html Sanity Check Gradle Plugin
+===============================
+:version: 0.1.0.SNAPSHOT
+
+:plugin-url: https://github.com/aim42/htmlSanityCheck-gradle-plugin
+:plugin-issues: https://github.com/aim42/htmlSanityCheck-gradle-plugin/issues
+
+:asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin
+
+
+:asciidoc-url: http://asciidoctor.org
+:gradle-url: http://gradle.org/
+
+:gernotstarke: https://github.com/gernotstarke
+
+
+== About
+This plugin provides some basic sanity checking on html files.
+
+It can be helpful in case of html generated from e.g. {asciidoc-url}[Asciidoctor],
+Markdown or other formats - as converters usually don't check for missing images
+or broken links.
+
+
+== Installation
+
+Use the following snippet inside a Gradle build file:
+
+.build.gradle
+[source,groovy]
+[subs="attributes"]
+----
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.aim42:htmlSanityCheck-gradle-plugin:{version}'
+    }
+}
+
+apply plugin: 'htmlSanityCheck'
+----
+
+== Usage
+
+The plugin adds a new task named `sanityCheckHtml`.
+
+This task exposes a single property as part of its configuration
+
+[horizontal]
+sourceDir:: where the html file is located. Type: File. Default: `build/docs`.
+sourceDocumentName:: an override to process a single source file. Type: File.
+Defaults to index.html`
+
+.build.gradle
+[source,groovy]
+----
+// append below the line: apply plugin: 'sanityCheckHtml'
+
+sanityCheckHtml {
+    outputDir = new File("$buildDir/docs")
+}
+----
+
+== Types of Sanity Checks
+
+=== Broken Internal Links
+
+Finds all '<a href="XYZ">' where XYZ is not defined.
+
+.src/broken.html
+[source,html]
+----
+<a href="#missing>internal anchor</a>
+...
+<h2 id="missinG">Bookmark-Header</h2>
+----
+
+In this example, the bookmark is _misspelled_.
+TODO: If an anchor XYZ is undefined, the plugin will look for _similar_ definitions
+(using a sophisticated string-similarity algorithm).
+
+=== Missing Images
+Images, referenced in '<img src="XYZ"...' tags, refer to external files. The existence of
+these files is checked by the plugin.
+
+=== Multiple Definitions of Bookmarks or ID's
+If any is defined more than once, any anchor linking to it will be confused :-)
+
+
+=== Broken External Links
+Although external links might suffer from network issues or site maintenance,
+checks are still possible...
+
+
+== Development
+There is a small and largely unpolished
+link:docs/DevelopmentGuide.adoc[development guide].
+
+== Fundamentals
+This tiny piece rests on incredible groundwork:
+
+* http://jsoup.org[Jsoup HTML parser] and analysis toolkit - robust and easy-to-use.
+
+* IntelliJ IDEA - my (Gernot) best (programming) friend.
+
+* Of course, Groovy, Gradle and JUnit.
+
+
+== Ideas and Origin
+
+* The plugin heavily relies on code provided by the {gradle-url}[Gradle project].
+
+* Inspiration on code organization, implementation and testing of the plugin
+came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by .
+
+* Code for string similarity calculation by
+  https://github.com/rrice/java-string-similarity[Ralph Rice].
+
+* Initial implementation by {gernotstarke}[Gernot Starke].
+
+== Development
+Several sources provided help during development:
+
+* http://www.gradle.org/docs/current/userguide/custom_plugins.html[Gradle guide on writing custom plugins]
+* The code4reference tutorial an Gradle custom plugins,
+http://code4reference.com/2012/08/gradle-custom-plugin-part-1/[part 1] and
+http://code4reference.com/2012/08/gradle-custom-plugin-part-2/[part 2].
+* Of course, the http://jsoup.org/apidocs/[JSoup API documentation]
+
+
+== Contributing
+Please report {plugin-issues}[issues or suggestions].
+
+Want to improve the plugin: Fork our {plugin-url}[repository] and
+send a pull request.
