@@ -39,31 +39,11 @@ class HtmlSanityCheckTask extends DefaultTask {
      */
     @TaskAction
     public void sanityCheckHtml() {
-
-//        CheckingResults imageFilesExist =
-//        new ImageFileExistChecker(
-//                headline: "Image File Exist Check",
-//                name: "img links",
-//                sourceItemName: "img link",
-//                targetItemName: "image file",
-//                pageToCheck: htmlPageToCheck
-//        ).check
-
-        // TODO CheckingResults internalLinkTargetsExist
-
-        // TODO CheckingResults duplicateIdDefinition
+        println "kind regards from sanityCheck plugin..."
 
 
     }
 
-
-    /**
-     * initSanityCheckReport
-     *
-     */
-    private void initSanityCheckReport() {
-        println "init Sanity Check Report"
-    }
 
 
 }

@@ -7,7 +7,9 @@ import org.gradle.api.Plugin
 
 class HtmlSanityCheckPlugin implements Plugin<Project> {
     void apply(Project project) {
-        project.task('htmlSanityCheck', type: HtmlSanityCheckTask, group: 'Check')
+        project.task('htmlSanityCheck',
+                type: HtmlSanityCheckTask,
+                group: 'Check')
     }
 }
 /*========================================================================
