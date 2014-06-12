@@ -10,7 +10,7 @@
 We acknowledge that this document uses material from the arc 42 architecture
 template, http://www.arc42.de.
 Created by Dr. Peter Hruschka & Dr. Gernot Starke.
-Asciidoc version by Jürgen Krey. For additional contributors see http://arc42.de/about/contributors.html
+Asciidoc version by Jürgen Krey.
 
 
 This material is open source and provided under the Creative Commons Sharealike 4.0 license.
@@ -42,12 +42,13 @@ are defined
 .. creates an html/markdown (or similar) output within a configurable directory
 
 . +HtmlSC+ can be called from the command line with arguments and options
-. +HtmlSC+ can be integrated in a gradle-build as plugin ()
+. +HtmlSC+ can be integrated in a gradle-build as plugin
 
 
 === Quality Goals
 
-[format="csv", options="header"]
+[format="csv", options="header", cols="1,2,6"]
+.Quality-Goals
 |===
 Priority,Quality-Goal,Scenario
 1, Correctness, Every broken internal link is found
@@ -57,10 +58,13 @@ Priority,Quality-Goal,Scenario
 
 === Stakeholder
 
-[options="header"]
+[options="header", cols="2,4,5"]
 .Stakeholder
 |===
 | Role | Description | Goal, Intention
+
+| [[arc42_user]] arc42 user | uses the arc42 template for architecture documentation
+| wants a small but practical example of _how to apply arc42_.
 
 | aim42 contributor
 | contributes to aim42 methode-guide
@@ -83,14 +87,102 @@ Priority,Quality-Goal,Scenario
 
 == Context
 
+image::images/context.png["Context", title="Context"]
+
+
+// tabular description of context view
+[options="header", cols="1,4"]
+.Context
+|===
+| Neighbour | Description
+| user | documents software with toolchain that generates html. Wants to ensure that
+links within this html are valid.
+| build system |
+| local html files | +HtmlSC+ reads and parses local html files and
+performs sanity checks within those.
+| local image files | +HtmlSC+ checks if linked images exist as (local) files.
+| external web resources | Optionally +HtmlSC+ can be configured to check for the existance
+of external web resources. Due the nature of web systems, this check might need a significant
+amount of time and might yield invalid results due to network and latency issues.
+|===
+
 
 == Building Block View
+
+=== Whitebox +HtmlSC+ (Level 1)
+
+image::images/whitebox-hsc.png["Whitebox", title="Whitebox (Overall system)"]
+
+Rationale::
+_reasons for this structure_
+
+
+Contained Blackboxes::
+
+[cols="1,2" options=""]
+|===
+| <<checker_blackbox, Checker>> | core: html parsing and sanity checking, file handling
+| HSC Gradle Plugin | integrates the Gradle build tool with +HtmlSC+,
+enabling arbitrary gradle builds to use +HtmlSC+ functionality.
+| HSC Command Line Interface | (not documented)
+| HSC Graphical Interface | (planned, not implemented)
+
+| Reporter
+| outputs the collected checking results to configurable
+destinations, e.g. StdOut or a html file.
+|===
+
+
+Interfaces::
+
+[cols="1,4", options="header"]
+|===
+| Interface | Description
+| usage via shell | <<arc42_user, arc42 user>> uses a command
+line shell to call the +HtmlSC+
+| build system  | currently restricted to Gradle: The build
+system uses +HtmlSC+ as configured in the buildscript.
+| local-html and local-images | +HtmlSC+ needs access to several
+local files, especially the html page to be checked and to the
+corresponding image directories.
+|===
+
+
+[[checker_blackbox]]
+==== _Checker_ (Blackbox)
+
+Intent/Responsibility:: Checker contains the core functions
+to perform the various sanity checks. It parses the html file
+into an DOM-like in-memory representation, which is then
+used to perform the actual checks.
+
+
+Interfaces::
+[cols="2,4", options="header"]
+|===
+| Interface (From-To) | Description
+
+| Command Line Interface -> Checker
+| Exposes the #AllChecksRunner class, as described
+in <<allChecksRunner, AllChecksRunner>>.
+
+| Gradle Plugin -> Checker
+| Exposes +HtmlSC+ via a standard Gradle plugin,
+as described in the Gradle user guide.
+|===
+
+
+Files::
+    +org.aim42.htmlsc.AllChecksRunner+,
+    +org.aim42.htmlsc.HtmlSanityCheckGradlePlugin+
+
 
 == Runtime View
 Note: Not appropriate for this system due to very simple implementation.
 
+
 == Deployment View
-Sanity checker will
+Sanity checker will:
 
 1. be bundled as a single jar.
 2. be uploaded to a public repository (MavenCentral, JCenter, Bintray or similar),
@@ -100,7 +192,7 @@ called from the command line.
 
 
 == Technical and Crosscutting Concepts
-
+to be done.
 
 
 == Design Decisions
