@@ -1,0 +1,9 @@
+
+== Deployment View
+Sanity checker will:
+
+1. be bundled as a single jar.
+2. be uploaded to a public repository (MavenCentral, JCenter, Bintray or similar),
+referencable within a gradle buildfile.
+3. provide a +main+ method with parameters and options, so all checks can be
+called from the command line.

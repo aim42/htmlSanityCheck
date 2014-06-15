@@ -1,0 +1,7 @@
+:numbered:
+== Constraints
+
+* Shall be platform independend and should run on the major operating systems
+(Windows (TM), Linux and Mac-OS(TM))
+* Shall be integrated with the Gradle build tool
+* Liberal open-source license

@@ -1,0 +1,59 @@
+:numbered:
+== Introduction and Goals
+
+
+[[requirements]]
+=== Requirements Overview
+
++HtmlSC+ shall provide the following functionality:
+
+
+. +HtmlSC+ shall read a single (configurable) html file and perform the following checks:
+.. Check all image tags wether the referenced image files exist
+.. Check all internal links from anchor-tags (href="XYZ") wether the link targets "XYZ"
+are defined
+.. Check all bookmark definitions (... id="XYZ") wether the id's ("XYZ") are unique.
+
+. +HtmlSC+ can be configured to either
+.. output on stdout (the console)
+.. creates an html/markdown (or similar) output within a configurable directory
+
+. +HtmlSC+ can be called from the command line with arguments and options
+. +HtmlSC+ can be integrated into {gradle-url}[gradle-build] as plugin
+
+
+[[quality-goals]]
+=== Quality Goals
+
+[format="csv", options="header", cols="1,2,6"]
+.Quality-Goals
+|===
+Priority,Quality-Goal,Scenario
+1, Correctness, Every broken internal link is found.
+1, Correctness, Every missing local image is found.
+2, Safety, Content of the files to be checked is _never_ altered.
+3, Performance, Check of 100kB html file performed under 10 secs
+(excluding gradle startup)
+|===
+
+
+=== Stakeholder
+
+[options="header", cols="2,4,5"]
+.Stakeholder
+|===
+| Role | Description | Goal, Intention
+
+| [[arc42_user]] arc42 user | uses the arc42 template for architecture documentation
+| wants a small but practical example of _how to apply arc42_.
+
+| aim42 contributor
+| contributes to aim42 methode-guide
+| check generated html code to ensure links and images are correct during
+(gradle-based) build process
+
+| arc42 user
+| uses the arc42 template for architecture documentation
+| wants an example of pragmatic arc42 usage
+
+|===

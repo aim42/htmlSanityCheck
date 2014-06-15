@@ -1,0 +1,20 @@
+
+== Context
+
+image::hsc-context.png["Context", title="Context"]
+
+// tabular description of context view
+[options="header", cols="1,4"]
+.Context
+|===
+| Neighbour | Description
+| user | documents software with toolchain that generates html. Wants to ensure that
+links within this html are valid.
+| build system |
+| local html files | +HtmlSC+ reads and parses local html files and
+performs sanity checks within those.
+| local image files | +HtmlSC+ checks if linked images exist as (local) files.
+| external web resources | Optionally +HtmlSC+ can be configured to check for the existance
+of external web resources. Due the nature of web systems, this check might need a significant
+amount of time and might yield invalid results due to network and latency issues.
+|===

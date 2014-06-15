@@ -1,0 +1,107 @@
+
+== Building Block View
+
+=== Whitebox HtmlSanityChecker
+
+image::hsc-whitebox.png["Whitebox", title="Whitebox (Overall system)"]
+
+Rationale::
+_reasons for this structure_
+
+
+Contained Blackboxes::
+
+[cols="1,2" options=""]
+|===
+| <<checker_blackbox, CheckerCore>> | core: html parsing and sanity checking, file handling
+| HSC Gradle Plugin | integrates the Gradle build tool with +HtmlSC+,
+enabling arbitrary gradle builds to use +HtmlSC+ functionality.
+| HSC Command Line Interface | (not documented)
+| HSC Graphical Interface | (planned, not implemented)
+
+| Reporter
+| outputs the collected checking results to configurable
+destinations, e.g. StdOut or a html file.
+|===
+
+
+Interfaces::
+
+[cols="1,4", options="header"]
+|===
+| Interface | Description
+| usage via shell | <<arc42_user, arc42 user>> uses a command
+line shell to call the +HtmlSC+
+| build system  | currently restricted to Gradle: The build
+system uses +HtmlSC+ as configured in the buildscript.
+| local-html and local-images | +HtmlSC+ needs access to several
+local files, especially the html page to be checked and to the
+corresponding image directories.
+|===
+
+
+[[checker_blackbox]]
+==== _CheckerCore_ (Blackbox)
+
+Intent/Responsibility:: Checker contains the core functions
+to perform the various sanity checks. It parses the html file
+into an DOM-like in-memory representation, which is then
+used to perform the actual checks.
+
+
+Interfaces::
+[cols="2,4", options="header"]
+|===
+| Interface (From-To) | Description
+
+| Command Line Interface -> Checker
+| Exposes the #AllChecksRunner class, as described
+in <<allChecksRunner, AllChecksRunner>>.
+
+| Gradle Plugin -> Checker
+| Exposes +HtmlSC+ via a standard Gradle plugin,
+as described in the Gradle user guide.
+|===
+
+
+Files::
+    * +org.aim42.htmlsc.AllChecksRunner+
+    * +org.aim42.htmlsc.HtmlSanityCheckGradlePlugin+
+
+
+=== _CheckerCore_ (Whitebox)
+
+
+image::CheckerCore-Whitebox.png["Whitebox", title="CheckerCore (Whitebox)"]
+
+Rationale::
+_reasons for this structure_
+
+
+Contained Blackboxes::
+
+[cols="1,3" options=""]
+|===
+| Checker
+| abstract class, used in form of the template-pattern. Shall be subclassed
+for all checking algorithms.
+
+| AllChecksRunner
+| Facade to the different Checker instances. Provides a (parameter-driven)
+command-line interface.
+
+| ResultsCollector
+| Collects all checking results.
+
+| HtmlParser
+| Encapsulates html parsing, provides methods to search
+within the (parsed) html.
+
+|===
+
+
+==== Checker and xyzChecker Subclasses
+
+The abstract Checker provides a uniform interface (public void check())
+to different checking algorithms. It is based upon the <<checking-concept,
+concept of extensible checking algorithms>>.

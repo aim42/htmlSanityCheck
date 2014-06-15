@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:0.7.1'
+    }
+}
+
+apply plugin: 'org.asciidoctor.gradle.asciidoctor'
+
+asciidoctor {
+    outputDir = new File("../build/docs/")
+    sourceDir = new File('.')
+    sourceDocumentName = new File('./hsc_arc42.adoc')
+
+        options = [
+        attributes: [
+            toc         : 'left',
+            backend     : 'html5',
+            doctype     : 'book',
+            icons       : 'font',
+            sectlink    : true,
+            sectanchors : true,
+            numbered    : true,
+            imagesdir   : 'images',
+        ]
+    ]
+}
+
+
+defaultTasks 'arc42'
+
+task copyImages(
+    type: Copy,
+    description: 'copy images into build output folder so that references can be resolved '
+) {
+    from './images/'
+    into '../build/docs/images/'
+}
+
+
+
+task arc42(
+    dependsOn: [copyImages, asciidoctor],
+    description: 'collects all required tasks for creating arc42 documentation'
+) << { }

@@ -1,0 +1,6 @@
+:numbered:
+== Design Decisions
+
+=== Checking of external links postponed
+
+ 
