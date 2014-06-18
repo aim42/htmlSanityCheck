@@ -22,8 +22,11 @@ import org.gradle.api.tasks.TaskAction
  */
 class HtmlSanityCheckTask extends DefaultTask {
     @Optional @InputFile File sourceDocumentName
-    @Optional @InputDirectory File sourceDir
+
+    // currently we only support checking a SINGLE FILE
+    //@Optional @InputDirectory File sourceDir
     @Optional @InputDirectory File imageDir
+
     @OutputDirectory File outputDir
 
 
@@ -40,6 +43,7 @@ class HtmlSanityCheckTask extends DefaultTask {
     @TaskAction
     public void sanityCheckHtml() {
         println "kind regards from sanityCheck plugin..."
+        println ""
 
 
     }
