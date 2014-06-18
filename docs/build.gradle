@@ -36,7 +36,7 @@ task copyImages(
     type: Copy,
     description: 'copy images into build output folder so that references can be resolved '
 ) {
-    from './images/'
+    from './images/*'
     into '../build/docs/images/'
 }
 
