@@ -34,10 +34,19 @@ class AllChecksRunner {
     static CheckingResultsCollector internalLinkCheckingResults
     static CheckingResultsCollector duplicateIdsResults
 
-    static String fileName
-    static String docDirPath
-    static String pathToHtmlFile
-    static String imageDirPath
+
+    // we process one single input file
+    private static File inputFile
+
+    // where do we put our results
+    private static File outputDir
+
+    // where do we expect images?
+    private static String imageDirPath
+
+    // shall we also check external links
+    // TODO: currently ignored
+    private static Boolean checkExternalLinks = false
 
 
     private HtmlPage pageToCheck

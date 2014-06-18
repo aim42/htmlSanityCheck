@@ -3,10 +3,8 @@
 package org.aim42.htmlsanitycheck
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
@@ -21,16 +19,32 @@ import org.gradle.api.tasks.TaskAction
  * which does all the work.
  */
 class HtmlSanityCheckTask extends DefaultTask {
+    @Optional Boolean verbose  = false
+
+    // currently we check only ONE SINGLE DOCUMENT
     @Optional @InputFile File sourceDocumentName
-    @Optional @InputDirectory File sourceDir
+
+    // where do we expect images?
     @Optional @InputDirectory File imageDir
+
+    // where do we put our results
     @OutputDirectory File outputDir
 
+    // for future usage - we might check several files
+    @Optional @InputDirectory File sourceDir
 
-    AllChecksRunner allChecksRunner
+    //@Optional Boolean checkExternalLinks = false
+
+
+    private AllChecksRunner allChecksRunner
+
 
     public HtmlSanityCheckTask() {
-        allChecksRunner = new AllChecksRunner()
+        allChecksRunner = new AllChecksRunner(
+                imageDir: imageDir,
+                outputDir: outputDir,
+                checkExternalLinks: checkExternalLinks
+        )
     }
 
     /**
@@ -39,11 +53,23 @@ class HtmlSanityCheckTask extends DefaultTask {
      */
     @TaskAction
     public void sanityCheckHtml() {
-        println "kind regards from sanityCheck plugin..."
 
+        println "=============== HtmlSanityCheck Gradle Plugin ==============="
+
+        if (verbose) printCurrentOptions()
+
+        allChecksRunner = new AllChecksRunner
 
     }
 
+    private void printCurrentOptions() {
+        println "---- current option settings ----"
+        println "sourceDocumentName = $sourceDocumentName"
+        println "imageDir  = $imageDir"
+        println "outputDir = $outputDir"
+        println "checkExternalLinks = $checkExternalLinks"
+        println "---------------------------------"
+    }
 
 
 }
