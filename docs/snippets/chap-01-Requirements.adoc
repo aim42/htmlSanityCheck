@@ -19,7 +19,7 @@ are defined
 .. creates an html/markdown (or similar) output within a configurable directory
 
 . +HtmlSC+ can be called from the command line with arguments and options
-. +HtmlSC+ can be integrated into {gradle-url}[gradle-build] as plugin
+. +HtmlSC+ can be integrated into {gradle-url} as plugin
 
 
 [[quality-goals]]
