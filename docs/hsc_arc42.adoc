@@ -2,11 +2,13 @@
 :toc:
 :numbered:
 :linkattrs:
+:source-highlighter: coderay
+
 
 :author: Dr. Gernot Starke
 :email: gernot.starke@innoq.com
-:date: June 15th 2014
-:revision: Version 0.9c
+:date: June 24th 2014
+:revision: Version 0.9d
 
 // where are images located?
 :imagesdir: ./images

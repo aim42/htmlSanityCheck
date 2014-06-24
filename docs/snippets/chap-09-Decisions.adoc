@@ -1,6 +1,8 @@
 :numbered:
+
 == Design Decisions
 
 === Checking of external links postponed
+In the current {revision} we won't check external links. These checks have been postponed to later versions.
 
  

@@ -1,9 +1,52 @@
 
-== Deployment View
-Sanity checker will:
+== Technical and Crosscutting Concepts
 
-1. be bundled as a single jar.
-2. be uploaded to a public repository (MavenCentral, JCenter, Bintray or similar),
-referencable within a gradle buildfile.
-3. provide a +main+ method with parameters and options, so all checks can be
-called from the command line.
+[[template-method]]
+=== Flexible Checking Algorithms 
++htmlSC+ uses the {template-method-pattern} to enable flexible checking algorithms:
+
+[quote, http://sourcemaking.com/design_patterns/template_method]
+The Template Method defines a skeleton of an algorithm in an operation, and defers some steps to subclasses.
+
+
+We achieve that by defining the skeleton of the checking algorithm in one operation, deferring the specific checking algorithm steps to subclasses.
+
+The invariant steps are implemented in the abstract base class, while the variant checking algorithms have to be provided by the subclasses. 
+
+[source, groovy]
+    /**
+    ** template method for performing a single type of checks
+     * on the given @see HtmlPage
+    **/
+    public CheckingResultsCollector performCheck() {
+        initResults()        
+        return check()
+    }
+
+
+
+
+[[gradle-plugin]]
+=== Gradle Plugin
+To enable the <<requirements, required Gradle integration>>, 
+we implement a lean wrapper as described in the Gradle user guide.
+
+[source, groovy]
+  class HtmlSanityCheckPlugin implements Plugin<Project> {
+      void apply(Project project) {
+          project.task('htmlSanityCheck',
+                  type: HtmlSanityCheckTask,
+                  group: 'Check')
+      }
+  }
+
+
+
+
+TODO:
+
+* provide URL
+* explain contributors to plugin implementation (plugin, task, setting, implementation)
+* describe implementation (aka link to source)
+
+

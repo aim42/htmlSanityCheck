@@ -1,11 +1,13 @@
 
 == Context
 
-image::hsc-context.png["Context", title="Context"]
+=== Business Context
+
+image::hsc-context.png["Business Context", title="Business Context"]
 
 // tabular description of context view
 [options="header", cols="1,4"]
-.Context
+.Business Context
 |===
 | Neighbour | Description
 | user | documents software with toolchain that generates html. Wants to ensure that
@@ -18,3 +20,18 @@ performs sanity checks within those.
 of external web resources. Due the nature of web systems, this check might need a significant
 amount of time and might yield invalid results due to network and latency issues.
 |===
+
+
+=== Deployment Context
+
+TODO: diagram containing bintray and local gradle repository.
+
+[options="header", cols="1,4"]
+.Deployment Context
+|===
+| Neighbour | Description
+| Bintray | public _cloud_ storage for open-source binaries, where releases of +HtmlSC+ are uploaded.
+| local Gradle repository | local storage where Gradle stores downloaded artifacts, like the +HtmlSC+ plugin with all required dependencies.
+| build.gradle | Gradle build script configuring (among other things) the +HtmlSC+ plugin.
+|===
+
