@@ -1,7 +1,7 @@
 // gradle build script for html sanity check
 // =========================================
 group = 'org.aim42'
-version = '0.2-SNAPSHOT'
+version = '0.2b-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'groovy'
@@ -26,9 +26,7 @@ dependencies {
     // mockito needed to test string similarity
     testCompile "org.mockito:mockito-all:1.9.5"
 
-
 }
-
 
 
 uploadArchives {
@@ -38,8 +36,6 @@ uploadArchives {
         }
     }
 }
-
-
 
 /*
  * Permission is hereby granted, free of charge, to any person obtaining a copy

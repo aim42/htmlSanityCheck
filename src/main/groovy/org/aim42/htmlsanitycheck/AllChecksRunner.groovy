@@ -43,6 +43,7 @@ class AllChecksRunner {
 
     // where do we expect images?
     private static String imageDirPath
+    private static String docDirPath
 
     // shall we also check external links
     // TODO: currently ignored
@@ -139,11 +140,12 @@ class AllChecksRunner {
         // TODO: read parameter from command line
         AllChecksRunner allChecksRunner = new AllChecksRunner()
 
-        allChecksRunner.fileName = "file-to-test.html"
-        allChecksRunner.docDirPath = System.getProperty("user.dir") + "/src/test/resources/"
-        allChecksRunner.pathToHtmlFile = docDirPath + fileName
-        allChecksRunner.imageDirPath = docDirPath
+        //allChecksRunner.fileName = "file-to-test.html"
+        //allChecksRunner.docDirPath = System.getProperty("user.dir") + "/src/test/resources/"
+        //allChecksRunner.pathToHtmlFile = docDirPath + fileName
+        //allChecksRunner.imageDirPath = docDirPath
 
+        // TODO: main-method is completely broken!!
         allChecksRunner.parseHtml()
 
         allChecksRunner.runImageCheck()

@@ -11,7 +11,7 @@ _reasons for this structure_
 
 Contained Blackboxes::
 
-[cols="1,2" options=""]
+[cols="1,3" options=""]
 |===
 | <<checker_blackbox, CheckerCore>> | core: html parsing and sanity checking, file handling
 | HSC Gradle Plugin | integrates the Gradle build tool with +HtmlSC+,
@@ -69,7 +69,9 @@ Files::
     * +org.aim42.htmlsc.HtmlSanityCheckGradlePlugin+
 
 
-=== _CheckerCore_ (Whitebox)
+=== Building Blocks - Level 2
+
+==== _CheckerCore_ (Whitebox)
 
 
 image::CheckerCore-Whitebox.png["Whitebox", title="CheckerCore (Whitebox)"]
@@ -80,7 +82,7 @@ _reasons for this structure_
 
 Contained Blackboxes::
 
-[cols="1,3" options=""]
+[cols="1,4" options=""]
 |===
 | Checker
 | abstract class, used in form of the template-pattern. Shall be subclassed
