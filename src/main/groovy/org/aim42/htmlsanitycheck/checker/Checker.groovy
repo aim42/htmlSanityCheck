@@ -30,6 +30,17 @@ abstract class Checker {
     HtmlPage pageToCheck
 
 
+    /**
+    ** template method for performing a single type of checks
+     * on the given @see HtmlPage
+    **/
+    public CheckingResultsCollector performCheck() {
+        initResults()
+        return check()
+    }
+
+
+
     protected void initResults() {
         checkingResults = new CheckingResultsCollector( headline )
 
