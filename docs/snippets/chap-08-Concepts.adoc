@@ -8,7 +8,6 @@
 [quote, http://sourcemaking.com/design_patterns/template_method]
 The Template Method defines a skeleton of an algorithm in an operation, and defers some steps to subclasses.
 
-
 We achieve that by defining the skeleton of the checking algorithm in one operation, deferring the specific checking algorithm steps to subclasses.
 
 The invariant steps are implemented in the abstract base class, while the variant checking algorithms have to be provided by the subclasses. 
@@ -23,6 +22,16 @@ The invariant steps are implemented in the abstract base class, while the varian
      return check()
  }
 
+
+
+image::template-method.png["Template Method", title="Template-Method"]
+
+[options="header", cols="1,4"]
+.Template Method
+|===
+| Component | Description
+| Checker    | _abstract_ base class, containing the template method plus an abstract method +check()+
+|===
 
 
 
