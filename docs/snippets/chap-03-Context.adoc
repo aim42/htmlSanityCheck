@@ -24,14 +24,20 @@ amount of time and might yield invalid results due to network and latency issues
 
 === Deployment Context
 
-TODO: diagram containing bintray and local gradle repository.
+
+image::hsc-deployment.png["Deployment", title="Deployment"]
 
 [options="header", cols="1,4"]
-.Deployment Context
+.Deployment View
 |===
-| Neighbour | Description
-| Bintray | public _cloud_ storage for open-source binaries, where releases of +HtmlSC+ are uploaded.
-| local Gradle repository | local storage where Gradle stores downloaded artifacts, like the +HtmlSC+ plugin with all required dependencies.
-| build.gradle | Gradle build script configuring (among other things) the +HtmlSC+ plugin.
+| Node / Artifact | Description
+| hsc-development | where development of +HtmlSC+ takes place
+| Bintray         | global public _cloud_ repository for binary artifacts, similar to http://search.maven.org/[mavenCentral] or https://bintray.com/bintray/jcenter[jcenter].  Free for open-source binaries. +HtmlSC+ are uploaded to this server.
+| hsc user computer | where arbitrary documentation takes place with html as output formats.
+| hsc deployment spec | specification on how to deploy +HtmlSC+ binary releases to Bintray
+| HtmlSanityCheck | our source code + dependencies
+| some documentation | html file(s), optionally with images and other resources
+| build.gradle    |  Gradle build script configuring (among other things) the +HtmlSC+ plugin to check _some documentation_.
 |===
+
 

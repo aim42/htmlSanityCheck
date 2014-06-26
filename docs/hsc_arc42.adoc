@@ -1,6 +1,5 @@
 = HTML Sanity Checker Architecture Documentation
 :toc:
-:numbered:
 :linkattrs:
 :source-highlighter: coderay
 
@@ -32,6 +31,11 @@ completed and maintained by Gernot Starke.#
 Within the following text, the "Html Sanity Checker" shall be abbreviated with +HtmlSC+
 ====
 
+:numbered!:
+== Colophone
+This documentation has been written in http://asciidoctor.org[Asciidoctor], a powerful and flexible footnote:[Be warned: Asciidoc is so awesome, you will never want to write documentation with anything else...] plain-text based language to generate HTML or docbook formats. Diagrams have been prepared with Sparx' Systems(C) http://www.sparxsystems.com/[Enterprise-Architect] in _handdrawn_ mode. 
+
+
 
 // ---------------------------------
 // define some links here
@@ -48,6 +52,7 @@ Within the following text, the "Html Sanity Checker" shall be abbreviated with +
 
 // ---------------------------------
 
+:numbered:
 
 include::./snippets/chap-01-Requirements.adoc[]
 include::snippets/chap-02-Constraints.adoc[]

@@ -14,14 +14,14 @@ We achieve that by defining the skeleton of the checking algorithm in one operat
 The invariant steps are implemented in the abstract base class, while the variant checking algorithms have to be provided by the subclasses. 
 
 [source, groovy]
-    /**
-    ** template method for performing a single type of checks
-     * on the given @see HtmlPage
-    **/
-    public CheckingResultsCollector performCheck() {
-        initResults()        
-        return check()
-    }
+ /**
+ ** template method for performing a single type of checks
+  * on the given @see HtmlPage
+ **/
+ public CheckingResultsCollector performCheck() {
+     initResults()        
+     return check()
+ }
 
 
 
