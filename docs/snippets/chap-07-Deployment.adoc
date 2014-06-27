@@ -2,6 +2,7 @@
 [[deployment-view]]
 == Deployment View
 
+[[img-deployment]]
 image::hsc-deployment.png["Deployment", title="Deployment"]
 
 [options="header", cols="1,4"]
@@ -10,12 +11,12 @@ image::hsc-deployment.png["Deployment", title="Deployment"]
 | Node / Artifact | Description
 | hsc plugin binary | compiled version of +HtmlSC+, including required dependencies.
 | hsc-development | where development of +HtmlSC+ takes place
-| Bintray         | global public _cloud_ repository for binary artifacts, similar to http://search.maven.org/[mavenCentral] or https://bintray.com/bintray/jcenter[jcenter].  Free for open-source binaries. +HtmlSC+ are uploaded to this server.
+| artifact repository (https://bintray.com/bintray/jcenter[Bintray]) | global public _cloud_ repository for binary artifacts, similar to http://search.maven.org/[mavenCentral].  +HtmlSC+ binaries are uploaded to this server.
 | hsc user computer | where arbitrary documentation takes place with html as output formats.
 | build.gradle    |  Gradle build script configuring (among other things) the +HtmlSC+ plugin to check _some documentation_.
 |===
 
-The three nodes (_computers_) shown in <<Deployment>> are connected via public internet.
+The three nodes (_computers_) shown in <<img-deployment>> are connected via public internet.
 
 Sanity checker will:
 

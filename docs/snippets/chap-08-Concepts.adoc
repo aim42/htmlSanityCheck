@@ -59,3 +59,10 @@ TODO:
 * describe implementation (aka link to source)
 
 
+=== HTML Parsing
+To check HTML we parse it into an internal (DOM-like) representation. For this task we use {jsoup-url}.
+
+To quote from the jsoup website:
+
+[quote]
+jsoup is a Java library for working with real-world HTML. It provides a very convenient API for extracting and manipulating data, using the best of DOM, CSS, and jquery-like methods. 

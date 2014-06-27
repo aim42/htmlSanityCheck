@@ -8,7 +8,7 @@
 +HtmlSC+ shall provide the following functionality:
 
 
-. +HtmlSC+ shall read a single (configurable) html file and perform the following checks:
+. +HtmlSC+ shall read a single (configurable) HTML file and perform the following checks:
 .. Check all image tags wether the referenced image files exist
 .. Check all internal links from anchor-tags (href="XYZ") wether the link targets "XYZ"
 are defined

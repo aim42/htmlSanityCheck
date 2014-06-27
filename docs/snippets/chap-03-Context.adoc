@@ -23,17 +23,20 @@ amount of time and might yield invalid results due to network and latency issues
 
 === Deployment Context
 
+The following diagram shows the participating computers ({node}) with their technical connections plus the major {artifact} of +HtmlSC+, the hsc-plugin-binary.
+
 
 image::deployment-context.png["Deployment Context", title="Deployment Context"]
 
-[options="header", cols="1,4"]
+[options="header", cols="1,3"]
 .Deployment Context
 |===
 | Node / Artifact | Description
-| hsc-development | where development of +HtmlSC+ takes place
-| Bintray         | global public _cloud_ repository for binary artifacts, similar to http://search.maven.org/[mavenCentral] or https://bintray.com/bintray/jcenter[jcenter].  Free for open-source binaries. +HtmlSC+ are uploaded to this server.
-| hsc user computer | where arbitrary documentation takes place with html as output formats.
-| build.gradle    |  Gradle build script configuring (among other things) the +HtmlSC+ plugin to check _some documentation_.
+| {node} hsc-development | where development of +HtmlSC+ takes place
+| {artifact} hsc-plugin-binary | Compiled and packaged version of +HtmlSC+ including required dependencies. 
+| {node} artifact repository (https://bintray.com/bintray/jcenter[Bintray]) | global public _cloud_ repository for binary artifacts, similar to http://search.maven.org/[mavenCentral].  +HtmlSC+ binaries are uploaded to this server.
+| {node} hsc user computer | where arbitrary documentation takes place with html as output formats.
+| {artifact} build.gradle | Gradle build script configuring (among other things) the +HtmlSC+ plugin to perform the Html checking.
 |===
 
 

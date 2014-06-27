@@ -12,6 +12,10 @@
 // where are images located?
 :imagesdir: ./images
 
+:node: &laquo;node&raquo;
+:artifact: &laquo;artifact&raquo;
+
+
 [cols="1,4" options=""]
 |===
 | image:arc42-logo.png[arc42]
@@ -35,7 +39,7 @@ Within the following text, the "Html Sanity Checker" shall be abbreviated with +
 == Colophone
 This documentation has been written in http://asciidoctor.org[Asciidoctor], a powerful and flexible footnote:[Be warned: Asciidoc is so awesome, you will never want to write documentation with anything else...] plain-text based language to generate HTML or docbook formats. Diagrams have been prepared with Sparx' Systems(C) http://www.sparxsystems.com/[Enterprise-Architect] in _handdrawn_ mode. 
 
-
+This document version {revision} of {localdate}.
 
 // ---------------------------------
 // define some links here
@@ -49,6 +53,8 @@ This documentation has been written in http://asciidoctor.org[Asciidoctor], a po
 :asciidoc-url: http://asciidoctor.org
 :gradle-url: http://gradle.org/[Gradle]
 :groovy-url: http://groovy.codehaus.org/
+
+:jsoup-url: http://jsoup.org[jsoup HTML parser]
 
 // ---------------------------------
 

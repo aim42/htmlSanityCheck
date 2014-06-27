@@ -1,8 +1,8 @@
 
 == Solution Strategy
 
-* Implement +HtmlSC+ in Java and {groovy-url}[Groovy].
+* Implement +HtmlSC+ in {groovy-url}[Groovy] and Java with minimal external dependencies.
 Wrap this implementation into a {gradle-url} plugin, so it can be used within
 automated builds.
-* Apply the {template-method-url} to enable multiple checking algorithms.
-See <<checking-concept, concept for checking algorithms>>.
+* Apply the _template-method-pattern_ (see e.g. {template-method-url}) to enable multiple checking algorithms.
+See <<template-method, concept for checking algorithms>>.
