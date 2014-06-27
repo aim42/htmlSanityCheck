@@ -30,10 +30,10 @@ are defined
 .Quality-Goals
 |===
 Priority,Quality-Goal,Scenario
-1, Correctness, Every broken internal link is found.
-1, Correctness, Every missing local image is found.
-2, Safety, Content of the files to be checked is _never_ altered.
-3, Performance, Check of 100kB html file performed under 10 secs
+1, Correctness: Every broken internal link is found.
+1, Correctness: Every missing local image is found.
+2, Safety: Content of the files to be checked is _never_ altered.
+3, Performance: Check of 100kB html file performed under 10 secs
 (excluding gradle startup)
 |===
 
