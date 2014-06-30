@@ -61,7 +61,7 @@ Therefore the expected local absolute path of the "one-image.jpg" would be:
 
 
 We check for existing files using the usual Java api, but have to add the
-+baseDir+ (directory prefix) to the image-src given in the HTML tag
++baseDir+ (directory prefix) to the image-src given in the HTML tag to get the +absolutePathToImageFile+:
 
 
 [source, java]
