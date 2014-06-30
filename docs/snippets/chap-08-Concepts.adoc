@@ -36,10 +36,37 @@ image::template-method.png["Template Method", title="Template-Method Overview"]
 |===
 | Component | Description
 | Checker    | _abstract_ base class, containing the template method plus an abstract method +check()+
-| ImageFileExistChecker | checks if referenced images exist in the directory denoted by +imageDirectory+
+| <<ImageFileExistChecker>> | checks if referenced images exist, relative to +baseDirectory+
 | InternalLinksChecker | checks if links referenced within the page exist
 | DuplicateIdChecker   | checks if any id has multiple definitions
 |===
+
+
+==== ImageFileExistChecker
+The (little) problem with checking images is their path: Consider the following
+HTML fragment (from the file +testme.html+:
+
+
+[source, html]
+<img src="./images/one-image.jpg">
+
+
+This image file ("one-image.jpg") has to be located relative to the directory containing the corresponding HTML file, i.e.:
+
+   /Users/gstarke/projects/htmlSanityChecker/test/testme.html
+
+Therefore the expected local absolute path of the "one-image.jpg" would be:
+
+  /Users/gstarke/projects/htmlSanityChecker/test/images/one-image.jpg
+
+
+We check for existing files using the usual Java api, but have to add the
++baseDir+ (directory prefix) to the image-src given in the HTML tag
+
+
+[source, java]
+  File f = new File( absolutePathToImageFile );
+  if(f.exists() && !f.isDirectory())  
 
 
 
