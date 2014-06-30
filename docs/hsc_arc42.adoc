@@ -2,6 +2,7 @@
 :toc:
 :linkattrs:
 :source-highlighter: coderay
+:icons: font
 
 
 :author: Dr. Gernot Starke

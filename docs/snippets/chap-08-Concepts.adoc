@@ -23,20 +23,22 @@ The invariant steps are implemented in the abstract base class, while the varian
     public CheckingResultsCollector performCheck() {
         // assert prerequisite
         assert pageToCheck != null
-
         initResults()
         return check() // execute the actual checking algorithm
     }
 
 
 
-image::template-method.png["Template Method", title="Template-Method"]
+image::template-method.png["Template Method", title="Template-Method Overview"]
 
 [options="header", cols="1,4"]
 .Template Method
 |===
 | Component | Description
 | Checker    | _abstract_ base class, containing the template method plus an abstract method +check()+
+| ImageFileExistChecker | checks if referenced images exist in the directory denoted by +imageDirectory+
+| InternalLinksChecker | checks if links referenced within the page exist
+| DuplicateIdChecker   | checks if any id has multiple definitions
 |===
 
 
