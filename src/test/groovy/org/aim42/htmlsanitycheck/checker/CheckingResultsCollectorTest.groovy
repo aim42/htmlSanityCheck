@@ -23,7 +23,10 @@ class CheckingResultsCollectorTest extends GroovyTestCase {
         checkingResultsCollector =
                 new CheckingResultsCollector(headline)
 
-        imageDir = System.getProperty("user.dir") + localPath
+        // not working in IntelliJ multi-module setup
+        // imageDir = System.getProperty("user.dir") + localPath
+
+        imageDir = new File(".").getCanonicalPath() + localPath
 
 
     }
@@ -73,7 +76,7 @@ class CheckingResultsCollectorTest extends GroovyTestCase {
                 pageToCheck: htmlPage,
                 baseDir: imageDir,
                 headline: "Image File Exist Check",
-                name: "img links",
+                whatToCheck: "img links",
                 sourceItemName: "img link",
                 targetItemName: "image file")
 

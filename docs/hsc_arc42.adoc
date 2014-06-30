@@ -54,7 +54,6 @@ This document version {revision} of {localdate}.
 :gradle-url: http://gradle.org/[Gradle]
 :groovy-url: http://groovy.codehaus.org/
 
-:jsoup-url: http://jsoup.org[jsoup HTML parser]
 
 // ---------------------------------
 

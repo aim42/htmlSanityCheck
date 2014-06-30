@@ -52,7 +52,7 @@ class ImageFileExistCheckerTest extends GroovyTestCase {
                 pageToCheck: htmlPage,
                 baseDir: imageDir,
                 headline: "Image File Exist Check",
-                name: "img links",
+                whatToCheck: "img links",
                 sourceItemName: "img link",
                 targetItemName: "image file")
 

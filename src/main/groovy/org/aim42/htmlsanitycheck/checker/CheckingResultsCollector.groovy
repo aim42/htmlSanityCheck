@@ -29,7 +29,7 @@ class CheckingResultsCollector {
 
     /**
      * add a single finding to the collection,
-     * based upon name.
+     * based upon whatToCheck.
      * @param message: what kind of finding is it?
      */
     public void newFinding( String message ) {

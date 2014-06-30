@@ -7,7 +7,8 @@ import org.aim42.htmlsanitycheck.html.HtmlPage
 
 
 /**
- * Base class for the different concrete checkers (i.e. ImageChecker)
+ * Base class for the different concrete checkers (i.e. ImageChecker),
+ * following the template-method-pattern.
  *
  * No constructor is defined, allowing for arbitrary "named parameters"
  * in constructor calls.
@@ -18,7 +19,7 @@ import org.aim42.htmlsanitycheck.html.HtmlPage
 abstract class Checker {
 
     String headline         // i.e. Image References
-    String name             // i.e. missing images
+    String whatToCheck      // i.e. missing images
 
     // source-item is checked against target-item
     String sourceItemName   // i.e. image-reference, anchor/link
@@ -32,28 +33,35 @@ abstract class Checker {
 
     /**
     ** template method for performing a single type of checks
-     * on the given @see HtmlPage
+     * on the given @see HtmlPage.
+     *
+     * Prerequisite: pageToCheck has been successfully parsed,
+     * prior to constructing this Checker instance.
     **/
     public CheckingResultsCollector performCheck() {
+        // assert prerequisite
+        assert pageToCheck != null
+
         initResults()
-        return check()
-    }
-
-
-
-    protected void initResults() {
-        checkingResults = new CheckingResultsCollector( headline )
-
+        return check() // execute the actual checking algorithm
     }
 
     /**
-     * Perform a particular kind of checks, i.e. duplicate-definition-check
+     * Initialize the checking results to "empty".
+     * The recurring part of the Template-Method-Pattern.
+     */
+    protected void initResults() {
+        checkingResults = new CheckingResultsCollector( headline )
+    }
+
+
+    /**
+     * Perform a particular kind of checks, i.e. duplicate-definition-check.
      *
-     * @return collected results of this checking-group
+     * @return collected results of this Checker instance
      */
     abstract public CheckingResultsCollector check( )
 
-    // TODO: check for valid parameters
 }
 
 

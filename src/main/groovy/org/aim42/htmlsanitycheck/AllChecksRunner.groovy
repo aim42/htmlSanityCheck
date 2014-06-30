@@ -85,7 +85,7 @@ class AllChecksRunner {
                 pageToCheck: pageToCheck,
                 baseDir: imageDirPath,
                 headline: "Image File Exist Check",
-                name: "img links",
+                whatToCheck: "img links",
                 sourceItemName: "img link",
                 targetItemName: "image file")
 
@@ -98,7 +98,7 @@ class AllChecksRunner {
         undefinedInternalLinksChecker = new InternalLinksChecker(
                 pageToCheck: pageToCheck,
                 headline: "Undefined Internal Links Check",
-                name: "matching id\'s for hrefs",
+                whatToCheck: "matching id\'s for hrefs",
                 sourceItemName: "href",
                 targetItemName: "id" )
 
@@ -112,7 +112,7 @@ class AllChecksRunner {
         duplicateIdChecker = new  DuplicateIdChecker(
                 pageToCheck: pageToCheck,
                 headline: "Duplicate Ids Check",
-                name: "multiple definition of id\'s",
+                whatToCheck: "multiple definition of id\'s",
                 sourceItemName: "id",
                 targetItemName: "id"
         )

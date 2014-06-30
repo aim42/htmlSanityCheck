@@ -23,6 +23,10 @@ class ParserSample {
         final String fileName = 'README.html'
         final String localPath = "/"
         final String filePath = userDir + localPath + fileName
+        final String pathToThisClass  = new File(".").getAbsolutePath()
+
+
+        println "canonicalPath = $pathToThisClass"
 
 
         final File file = new File(filePath)

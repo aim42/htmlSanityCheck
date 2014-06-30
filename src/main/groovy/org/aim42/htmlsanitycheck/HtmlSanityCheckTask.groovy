@@ -33,7 +33,10 @@ class HtmlSanityCheckTask extends DefaultTask {
     AllChecksRunner allChecksRunner
 
     public HtmlSanityCheckTask() {
-        allChecksRunner = new AllChecksRunner()
+        allChecksRunner = new AllChecksRunner(
+                imageDir: imageDir,
+
+        )
     }
 
     /**
@@ -43,7 +46,9 @@ class HtmlSanityCheckTask extends DefaultTask {
     @TaskAction
     public void sanityCheckHtml() {
         println "kind regards from sanityCheck plugin..."
-        println ""
+        println "="*30
+
+
 
 
     }
