@@ -15,7 +15,7 @@ abstract class FindingsReporter {
     int percentSuccessful
 
 
-    public FindingsReporter( ) {
+    public FindingsReporter() {
         checkingResults = new ArrayList<CheckingResultsCollector>()
         totalNrOfChecksPerformed = 0
 
@@ -23,10 +23,17 @@ abstract class FindingsReporter {
         totalNrOfFindings = 0
     }
 
+    public FindingsReporter(ArrayList<CheckingResultsCollector> checkingResults) {
+        this.checkingResults = checkingResults
+        totalNrOfChecksPerformed = 0
+
+        percentSuccessful = 0
+        totalNrOfFindings = 0
+    }
 
     // primarily used for testing
-    public void addCheckingField( CheckingResultsCollector checkingField) {
-        this.checkingResults.add( checkingField )
+    public void addCheckingField(CheckingResultsCollector checkingField) {
+        this.checkingResults.add(checkingField)
     }
 
     abstract void reportFindings()
@@ -37,7 +44,8 @@ abstract class FindingsReporter {
     public void calculateSummary() {
         totalNrOfChecksPerformed = 0
         checkingResults.each { checkingField ->
-            totalNrOfChecksPerformed +=  checkingField.nrOfItemsChecked }
+            totalNrOfChecksPerformed += checkingField.nrOfItemsChecked
+        }
 
         totalNrOfFindings = 0
         checkingResults.each { checkingField ->
@@ -48,10 +56,10 @@ abstract class FindingsReporter {
         if (totalNrOfChecksPerformed <= 0) {
             percentSuccessful = 100
         }
-            // at least one check was performed, calculate percentage
+        // at least one check was performed, calculate percentage
         else {
             percentSuccessful =
-                    100 - (100*totalNrOfFindings) / totalNrOfChecksPerformed
+                    100 - (100 * totalNrOfFindings) / totalNrOfChecksPerformed
         }
 
     }
@@ -60,7 +68,6 @@ abstract class FindingsReporter {
 
 
 }
-
 
 /*======================================================================
 

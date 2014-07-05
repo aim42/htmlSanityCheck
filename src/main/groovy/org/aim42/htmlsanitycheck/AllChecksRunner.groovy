@@ -42,8 +42,8 @@ class AllChecksRunner {
     private static File outputDir
 
     // where do we expect images?
-    private static String imageDirPath
-    private static String docDirPath
+    private static File baseDir
+
 
     // shall we also check external links
     // TODO: currently ignored
@@ -57,33 +57,53 @@ class AllChecksRunner {
      * contained in the directory "docDirPath". Images are expected in
      * imageDirPath.
      *
-     * @param docDirPath
-     * @param fileName
-     * @param imageDirPath
+     * @param outputDir
+     * @param inputFile
+     * @param baseDir
      */
     public AllChecksRunner(
-            String docDirPath,
-            String fileName,
-            String imageDirPath) {
-        this.pathToHtmlFile =  docDirPath + fileName
-        this.fileName = fileName
-        this.imageDirPath = imageDirPath
+            File inputFile,
+            File outputDir,
+            File baseDir) {
+        this.inputFile = inputFile
+        this.outputDir = outputDir
+        this.baseDir = baseDir
+
     }
 
 
     public AllChecksRunner() {
 
-        this.fileName = "index.html"
-        this.docDirPath = System.getProperty("user.dir") + "/build/docs/"
+        String fileName = "index.html"
 
-        this.imageDirPath = docDirPath + "images/";
+        String outDirName = System.getProperty("user.dir") + "/build/docs/"
+        this.outputDir = new File( outDirName )
+
     }
+
+    public AllChecksRunner( String html, File baseDir, File outDir ) {
+        this.pageToCheck = new HtmlPage( html )
+        this.outputDir = outDir
+        this.baseDir = baseDir
+
+    }
+
+    /**
+     * performs all available checks
+     * on pageToCheck
+     */
+    public void performChecks() {
+      runImageCheck()
+      runDuplicateIdCheck()
+      runInternalLinkCheck()
+    }
+
 
 
     public void runImageCheck() {
         imageChecker = new ImageFileExistChecker(
                 pageToCheck: pageToCheck,
-                baseDir: imageDirPath,
+                baseDir: baseDir,
                 headline: "Image File Exist Check",
                 whatToCheck: "img links",
                 sourceItemName: "img link",
@@ -127,7 +147,8 @@ class AllChecksRunner {
      * reads the html page
      */
     private void parseHtml() {
-        pageToCheck = new HtmlPage( new File( pathToHtmlFile ))
+        assert inputFile.exists()
+        pageToCheck = new HtmlPage( inputFile )
     }
 
 

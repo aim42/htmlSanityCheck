@@ -3,10 +3,8 @@
 package org.aim42.htmlsanitycheck
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
@@ -21,12 +19,15 @@ import org.gradle.api.tasks.TaskAction
  * which does all the work.
  */
 class HtmlSanityCheckTask extends DefaultTask {
-    @Optional @InputFile File sourceDocumentName
 
     // currently we only support checking a SINGLE FILE
-    //@Optional @InputDirectory File sourceDir
-    @Optional @InputDirectory File imageDir
+    @Optional @InputFile File sourceDocument
 
+    // baseDir is the directory where sourceDocument resides,
+    // and from which the image directory is descendant
+    @Optional @InputDirectory File baseDir
+
+    // where do we store checking results
     @OutputDirectory File outputDir
 
 
@@ -34,7 +35,7 @@ class HtmlSanityCheckTask extends DefaultTask {
 
     public HtmlSanityCheckTask() {
         allChecksRunner = new AllChecksRunner(
-                imageDir: imageDir,
+                imageDir: baseDir,
 
         )
     }

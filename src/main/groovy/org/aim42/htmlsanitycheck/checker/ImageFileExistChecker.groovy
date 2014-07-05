@@ -60,7 +60,7 @@ class ImageFileExistChecker extends Checker {
 
         File imageFile = new File(absolutePath);
 
-        if (!imageFile.exists()) {
+        if (!imageFile.exists() || imageFile.isDirectory()) {
             String findingText = "image $relativePathToImageFile missing"
             checkingResults.newFinding(findingText)
         }

@@ -2,9 +2,15 @@
 
 package org.aim42.htmlsanitycheck.checker
 
+import junit.framework.Assert
 import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.aim42.htmlsanitycheck.html.HtmlPage
+import org.junit.After
+import org.junit.Before
+import org.junit.BeforeClass
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
 
 class ImageFileExistCheckerTest extends GroovyTestCase {
 
@@ -18,21 +24,67 @@ class ImageFileExistCheckerTest extends GroovyTestCase {
     String imageDir
 
 
+    @Before
     public void setUp() {
 
         userDir = System.getProperty("user.dir")
         fileName = 'file-to-test.html'
         localPath = "/src/test/resources/"
-        imageDir = userDir + localPath + "images/"
+        imageDir = userDir + localPath // + "images/"
         filePath = userDir + localPath + fileName
-
     }
+
 
     @Test
     public void testCheckImageDirectoryExists() {
-        assertTrue( "image directory $imageDir does not exist ",
+        assertTrue( "new image directory $imageDir does not exist ",
                 new File( imageDir ).exists())
     }
+
+    @Test
+    public void testImageMustNotBeDirectory() {
+        // we try to use userDir as an image...
+        File userDirectory = new File( userDir )
+        assertTrue( "userDir does not exist", userDirectory.exists())
+        assertTrue(" userDir is no directory", userDirectory.isDirectory())
+
+        String HTML_WITH_DIR_AS_IMAGE = """
+           <html>
+             <head></head>
+              <body>
+                   <h1 id=\"aim42\">dummy-heading-1</h1>
+                   <img src=\"$userDir\">
+              </body>
+           </html>"""
+
+        htmlPage = new HtmlPage(HTML_WITH_DIR_AS_IMAGE)
+
+        List<HtmlElement> images = htmlPage.getAllImageTags()
+        assertEquals( "expected 1 image", 1, images.size())
+
+
+        checker = new ImageFileExistChecker(
+                pageToCheck: htmlPage,
+                baseDir: "",
+                headline: "Image File Exist Check",
+                whatToCheck: "img links",
+                sourceItemName: "img link",
+                targetItemName: "image file")
+
+        CheckingResultsCollector checkingResults =
+                checker.check()
+
+        // checker must check one item
+        int expected = 1
+        int actual = checkingResults.nrOfItemsChecked
+
+        assertEquals("expected $expected images, found $actual",
+                expected, actual)
+
+
+
+    }
+
 
     @Test
     public void testCheckSingleImageWithMissingImage() {
@@ -63,6 +115,13 @@ class ImageFileExistCheckerTest extends GroovyTestCase {
         int actual = checkingResults.nrOfItemsChecked
 
         assertEquals("expected $expected images, found $actual",
+                expected, actual)
+
+        // we have one problem in the file (missing image)
+        expected = 1
+        actual = checkingResults.nrOfProblems()
+
+        assertEquals( "extected $expected finding, found $actual",
                 expected, actual)
 
     }
