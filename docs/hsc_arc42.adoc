@@ -38,9 +38,14 @@ Within the following text, the "Html Sanity Checker" shall be abbreviated with +
 
 :numbered!:
 == Colophone
-This documentation has been written in http://asciidoctor.org[Asciidoctor], a powerful and flexible footnote:[Be warned: Asciidoc is so awesome, you will never want to write documentation with anything else...] plain-text based language to generate HTML or docbook formats. Diagrams have been prepared with Sparx' Systems(C) http://www.sparxsystems.com/[Enterprise-Architect] in _handdrawn_ mode. 
+This documentation has been written in http://asciidoctor.org[Asciidoctor],
+a powerful and flexible
+footnote:[Be warned: Asciidoc is so awesome, you will never want to write documentation with anything else...] plain-text based language to generate HTML or docbook formats. Diagrams have been prepared with Sparx' Systems(C) http://www.sparxsystems.com/[Enterprise-Architect] in _handdrawn_ mode.
 
 This document version {revision} of {localdate}.
+
+image::http://img.shields.io/badge/motivation-high-blue.svg["Motivation is high"]
+
 
 // ---------------------------------
 // define some links here
@@ -60,7 +65,7 @@ This document version {revision} of {localdate}.
 
 :numbered:
 
-include::./snippets/chap-01-Requirements.adoc[]
+include::snippets/chap-01-Requirements.adoc[]
 include::snippets/chap-02-Constraints.adoc[]
 include::snippets/chap-03-Context.adoc[]
 include::snippets/chap-04-SolutionStrategy.adoc[]

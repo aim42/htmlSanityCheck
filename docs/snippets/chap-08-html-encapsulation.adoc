@@ -1,0 +1,7 @@
+
+[[html-encapsulation]]
+=== Encapsulate HTML Parsing
+
+We encapsulate the third-party HTML parser (http://jsoup.org) in
+simple wrapper classes with interfaces specific to our different
+checking algorithms.
