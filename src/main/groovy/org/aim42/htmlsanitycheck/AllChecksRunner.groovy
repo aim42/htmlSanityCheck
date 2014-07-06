@@ -161,7 +161,7 @@ class AllChecksRunner {
         // TODO: read parameter from command line
         AllChecksRunner allChecksRunner = new AllChecksRunner()
 
-        //allChecksRunner.fileName = "file-to-test.html"
+        allChecksRunner.inputFile = new File( "file-to-test.html")
         //allChecksRunner.docDirPath = System.getProperty("user.dir") + "/src/test/resources/"
         //allChecksRunner.pathToHtmlFile = docDirPath + fileName
         //allChecksRunner.imageDirPath = docDirPath

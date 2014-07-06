@@ -10,30 +10,16 @@ public class FindingsHtmlReporter extends FindingsReporter {
 
     FindingsHtmlReporter() {
         super()
-        String userDir = System.getProperty("user.dir");
-        String CheckDirPath = userDir + "/build/";
-        String CheckReportFileName = "index.html"
-        writer = new FileWriter( CheckDirPath + CheckReportFileName )
     }
 
 
     @Override
-    void reportFindings() {
-        writeHtmlPrefix()
-        reportSummary()
-        writeHtmlPostfix()
-    }
+    void initializeReport() {
+        String userDir = System.getProperty("user.dir");
+        String CheckDirPath = userDir + "/build/";
+        String CheckReportFileName = "index.html"
+        writer = new FileWriter(CheckDirPath + CheckReportFileName)
 
-
-    void writeHtmlPostfix() {
-        writer.write '''
-    </div>
-</body>
-</html>
-'''
-    }
-
-    void writeHtmlPrefix() {
         writer.write
         '''
         <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -50,14 +36,20 @@ public class FindingsHtmlReporter extends FindingsReporter {
     }
 
     @Override
-    void reportSummary() {
+    void reportHeader() {
+
+    }
+
+
+    @Override
+    void reportNumericalSummary() {
         writeSummaryPrefix()
 //        writeSummary(imageFindings.checkingResults,
 //                imageFindings.findings.size())
 //        writeSummary(internalLinkFindings.checkingResults,
 //                internalLinkFindings.findings.size())
 //
-        writeSummaryPostfix( calculateSummary() )
+        writeSummaryPostfix(calculateSummary())
     }
 
 
@@ -106,6 +98,16 @@ public class FindingsHtmlReporter extends FindingsReporter {
     @Override
     void reportDetails() {
 
+    }
+
+    @Override
+    void closeReport() {
+        writer.write
+        '''
+    </div>
+</body>
+</html>
+'''
     }
 }
 

@@ -1,8 +1,18 @@
+/**
+ * Report the results of one or more checks.
+ * Applies the Template-Method-Pattern (in @see reportFindings())
+ * to determine concrete
+ * output format (e.g. HTML or text) or destination
+ * (file or console).
+ *
+ */
+
 // see end-of-file for license information
 
 package org.aim42.htmlsanitycheck.reporter
 
 import org.aim42.htmlsanitycheck.checker.CheckingResultsCollector
+
 
 abstract class FindingsReporter {
 
@@ -14,6 +24,8 @@ abstract class FindingsReporter {
     // summary
     int percentSuccessful
 
+    String createdOnDate
+
 
     public FindingsReporter() {
         checkingResults = new ArrayList<CheckingResultsCollector>()
@@ -21,36 +33,56 @@ abstract class FindingsReporter {
 
         percentSuccessful = 0
         totalNrOfFindings = 0
+
+        createdOnDate = new Date().format('dd. MMMM YYYY, HH:mmh')
     }
 
     public FindingsReporter(ArrayList<CheckingResultsCollector> checkingResults) {
-        this.checkingResults = checkingResults
-        totalNrOfChecksPerformed = 0
 
-        percentSuccessful = 0
-        totalNrOfFindings = 0
+        FindingsReporter()
+
+        this.checkingResults = checkingResults
+
     }
+
+
+    /**
+     * Presents a report of a subtype (e.g. HTML, console)
+     * using the Template-Method-Pattern.
+     */
+    public void reportFindings() {
+        // sum up numbers, calculate percentages
+        calculateSummary()
+
+        // e.g. setup filename, open output file
+        initializeReport()
+
+        // output general information about checks
+        reportHeader()
+
+        // output statistics, percentages etc.
+        reportNumericalSummary()
+
+        // output details
+        reportDetails()
+
+        closeReport()
+    }
+
 
     // primarily used for testing
     public void addCheckingField(CheckingResultsCollector checkingField) {
         this.checkingResults.add(checkingField)
     }
 
-    abstract void reportFindings()
-
-    abstract void reportSummary()
-
-
     public void calculateSummary() {
         totalNrOfChecksPerformed = 0
-        checkingResults.each { checkingField ->
-            totalNrOfChecksPerformed += checkingField.nrOfItemsChecked
-        }
-
         totalNrOfFindings = 0
         checkingResults.each { checkingField ->
+            totalNrOfChecksPerformed += checkingField.nrOfItemsChecked
             totalNrOfFindings += checkingField.nrOfProblems()
         }
+
 
         // base case: if no checks performed, 100% successful
         if (totalNrOfChecksPerformed <= 0) {
@@ -64,8 +96,19 @@ abstract class FindingsReporter {
 
     }
 
-    protected void reportDetails() {}
 
+    // stuff delegated to subclasses
+    // ************************************
+
+    abstract void initializeReport()
+
+    abstract void reportHeader()
+
+    abstract void reportNumericalSummary()
+
+    abstract void reportDetails()
+
+    abstract void closeReport()
 
 }
 
