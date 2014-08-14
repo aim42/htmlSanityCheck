@@ -1,9 +1,9 @@
-Html Sanity Check Gradle Plugin
+Html Sanity Check
 ===============================
 :version: 0.1.0.SNAPSHOT
 
-:plugin-url: https://github.com/aim42/htmlSanityCheck-gradle-plugin
-:plugin-issues: https://github.com/aim42/htmlSanityCheck-gradle-plugin/issues
+:plugin-url: https://github.com/aim42/htmlSanityCheck
+:plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
 
 :asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin
 
@@ -15,11 +15,17 @@ Html Sanity Check Gradle Plugin
 
 
 == About
-This plugin provides some basic sanity checking on html files.
+This project provides some basic sanity checking on html files.
 
 It can be helpful in case of html generated from e.g. {asciidoc-url}[Asciidoctor],
 Markdown or other formats - as converters usually don't check for missing images
 or broken links.
+
+It can be used as Gradle plugin or as standalone Java/Groovy app. A simple UI
+is planned for a future release.
+
+
+WARNING: The Gradle plugin is still unfinished!
 
 
 == Installation
@@ -82,6 +88,7 @@ In this example, the bookmark is _misspelled_.
 TODO: If an anchor XYZ is undefined, the plugin will look for _similar_ definitions
 (using a sophisticated string-similarity algorithm).
 
+
 === Missing Images
 Images, referenced in '<img src="XYZ"...' tags, refer to external files. The existence of
 these files is checked by the plugin.
@@ -89,15 +96,22 @@ these files is checked by the plugin.
 === Multiple Definitions of Bookmarks or ID's
 If any is defined more than once, any anchor linking to it will be confused :-)
 
-
 === Broken External Links
+*planned*
+
 Although external links might suffer from network issues or site maintenance,
 checks are still possible...
 
+=== Broken ImageMap Links
+*planned*
 
-== Development
-There is a small and largely unpolished
-link:docs/DevelopmentGuide.adoc[development guide].
+
+== Technical Documentation
+In addition to checking HTML, this project serves as an example for http://arc42.de[arc42]
+software architecture documentation.
+
+//docs/DevelopmentGuide.adoc[development guide].
+
 
 == Fundamentals
 This tiny piece rests on incredible groundwork:
