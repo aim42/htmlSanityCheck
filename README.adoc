@@ -1,5 +1,4 @@
-Html Sanity Check
-===============================
+= Html Sanity Check
 :version: 0.1.0.SNAPSHOT
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
