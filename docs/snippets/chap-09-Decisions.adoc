@@ -42,7 +42,6 @@ Find details on how +HtmlSC+ implements HTML parsing in the
 <<html-encapsulation, HTML encapsulation concept>>.
 
 
-
 === String Similarity Checking with http://wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance[Jaro-Winkler-Distance]
 
 The small https://github.com/rrice/java-string-similarity[java-string-similarity] library (by Ralph Allen Rice) contains implementations of several similarity-calculation algorithms. As it is *not available* as public binary,
