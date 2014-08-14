@@ -65,12 +65,22 @@ image::http://img.shields.io/badge/motivation-high-blue.svg["Motivation is high"
 
 :numbered:
 
-include::snippets/chap-01-Requirements.adoc[]
-include::snippets/chap-02-Constraints.adoc[]
-include::snippets/chap-03-Context.adoc[]
-include::snippets/chap-04-SolutionStrategy.adoc[]
-include::snippets/chap-05-BuildingBlocks.adoc[]
-include::snippets/chap-06-Runtime.adoc[]
-include::snippets/chap-07-Deployment.adoc[]
-include::snippets/chap-08-Concepts.adoc[]
-include::snippets/chap-09-Decisions.adoc[]
+==== Table of Content:
+
+include::snippets/chap-01-Requirements.adoc[Requirements]
+
+include::snippets/chap-02-Constraints.adoc[Constraints]
+
+include::snippets/chap-03-Context.adoc[Context]
+
+include::snippets/chap-04-SolutionStrategy.adoc[Solution Strategy]
+
+include::snippets/chap-05-BuildingBlocks.adoc[Building Blocks]
+
+include::snippets/chap-06-Runtime.adoc[Runtime View]
+
+include::snippets/chap-07-Deployment.adoc[Deployment]
+
+include::snippets/chap-08-Concepts.adoc[Concepts]
+
+include::snippets/chap-09-Decisions.adoc[Decisions]
