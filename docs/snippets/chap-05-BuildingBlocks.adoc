@@ -47,7 +47,7 @@ corresponding image directories.
 
 Intent/Responsibility:: Checker contains the core functions
 to perform the various sanity checks. It parses the html file
-into an DOM-like in-memory representation, which is then
+into a DOM-like in-memory representation, which is then
 used to perform the actual checks.
 
 
