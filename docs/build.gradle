@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:0.7.1'
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
     }
 }
 
@@ -12,8 +12,8 @@ apply plugin: 'org.asciidoctor.gradle.asciidoctor'
 
 asciidoctor {
     outputDir = new File("../build/docs/")
-    sourceDir = new File('.')
-    sourceDocumentName = new File('./hsc_arc42.adoc')
+    sourceDir = file('../docs/adoc')
+    //sourceDocumentNames = files('hsc_arc42.adoc')
 
         options = [
         attributes: [

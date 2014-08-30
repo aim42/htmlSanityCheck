@@ -14,6 +14,12 @@
 are defined
 .. Check all bookmark definitions (... id="XYZ") wether the id's ("XYZ") are unique.
 
+. The following checks are optional:
+.. Check wether all images found in image directories are referenced
+   from the HTML.
+.. Check external images
+.. Check external links
+
 . +HtmlSC+ can be configured to either
 .. output on stdout (the console)
 .. creates an html/markdown (or similar) output within a configurable directory
@@ -21,6 +27,7 @@ are defined
 . +HtmlSC+ can be called from the command line with arguments and options
 
 . +HtmlSC+ can be run as {gradle-url}-plugin.
+
 
 
 [[quality-goals]]
@@ -55,8 +62,7 @@ Gradle, command-line and a graphical client have to be supported.
 | check generated html code to ensure links and images are correct during
 (gradle-based) build process
 
-| arc42 user
-| uses the arc42 template for architecture documentation
-| wants an example of pragmatic arc42 usage
+| software developer |
+| wants an example of pragmatic architecture documentation and arc42 usage
 
 |===
