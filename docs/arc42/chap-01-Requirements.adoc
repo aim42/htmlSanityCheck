@@ -5,6 +5,15 @@
 [[requirements]]
 === Requirements Overview
 
+==== Basic Usage
+
+. A user configures the location (directory and filename) of an HTML file,
+. and the corresponding images directory.
+. kbd:[HtmlSC] performs various checks on the HTML and
+. reports its results either on the console or as file.
+
+kbd:[HtmlSC] can run from the command line or as {gradle-url}-plugin.
+
 ==== General Functionality
 
 
@@ -19,6 +28,7 @@
 | G-4 | configurable output | output can be configured to console or file
 | G-5 | free and open source | all required dependencies shall be compliant
                                to the https://creativecommons.org/licenses/by-sa/4.0/[CC-SA-4 licence].
+| G-6 | available via public repositories                               
 |===
 
 
@@ -48,11 +58,19 @@
 |===
 
 
-==== Output and Reporting Requirements
+==== Reporting and Output Requirements
 
-. kbd:[HtmlSC] can be configured to either
-.. output on stdout (the console)
-.. creates an html/markdown (or similar) output within a configurable directory
+
+[options="header", cols="1,3,8"]
+.Reporting Requirements
+|===
+| ID  | Requirement | Description
+| R-1 | various output formats | checking output in plaintext and HTML
+| R-2 | output to stdout | kbd:[HtmlSC] can output results on stdout (the console)
+| R-3 | configurable file output | kbd:[HtmlSC] can store results in
+                                  file in configurable directories
+|===
+
 
 
 
