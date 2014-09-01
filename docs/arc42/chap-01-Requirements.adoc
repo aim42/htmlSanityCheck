@@ -5,28 +5,55 @@
 [[requirements]]
 === Requirements Overview
 
-kbd:[HtmlSC] shall provide the following functionality:
+==== General Functionality
 
 
-. kbd:[HtmlSC] shall read a single (configurable) HTML file and perform the following checks:
-.. Check all image tags wether the referenced image files exist
-.. Check all internal links from anchor-tags (href="XYZ") wether the link targets "XYZ"
-are defined
-.. Check all bookmark definitions (... id="XYZ") wether the id's ("XYZ") are unique.
+[options="header", cols="1,3,8"]
+.General Requirements
+|===
+| ID  | Functionality | Description
+| G-1 | read HTML file | kbd:[HtmlSC] shall read a single (configurable)
+                        HTML file
+| G-2 | command line usage | kbd:[HtmlSC] can be called from the command line with arguments and options
+| G-3 | {gradle-url}-plugin | kbd:[HtmlSC] can be run as {gradle-url}-plugin.
+| G-4 | configurable output | output can be configured to console or file
+| G-5 | free and open source | all required dependencies shall be compliant
+                               to the https://creativecommons.org/licenses/by-sa/4.0/[CC-SA-4 licence].
+|===
 
-. The following checks are optional:
-.. Check wether all images found in image directories are referenced
-   from the HTML.
-.. Check external images
-.. Check external links
+
+==== Types of Sanity Checks
+
+[options="header", cols="1,3,8"]
+.Required Checks
+|===
+| ID | Check | Description
+| R-1 | missing image files | Check all image tags wether the referenced
+                        image files exist
+| R-2 | broken internal links | Check all internal links from anchor-tags (href="XYZ")
+                          wether the link targets "XYZ" are defined
+| R-3 | duplicate link targets | Check all bookmark definitions
+                            (... id="XYZ") wether the id's ("XYZ") are unique.
+|===
+
+
+[options="header", cols="1,3,8"]
+.Optional Checks
+|===
+| ID | Check  | Description
+| O-1 | unused images | Check wether all images found in image
+                  director(y/ies) are referenced from the HTML.
+| O-2 | missing extern images | Check externally referenced images for availability
+| O-3 | broken external links | Check external links for both syntax and availability
+|===
+
+
+==== Output and Reporting Requirements
 
 . kbd:[HtmlSC] can be configured to either
 .. output on stdout (the console)
 .. creates an html/markdown (or similar) output within a configurable directory
 
-. kbd:[HtmlSC] can be called from the command line with arguments and options
-
-. kbd:[HtmlSC] can be run as {gradle-url}-plugin.
 
 
 
