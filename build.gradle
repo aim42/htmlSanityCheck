@@ -89,7 +89,8 @@ apply plugin: 'org.asciidoctor.gradle.asciidoctor'
 asciidoctor {
     outputDir = new File(outputPath)
     sourceDir = file( asciidocSrcPath )
-//    sourceDocumentNames = files( new File('hsc_arc42.adoc'))
+    //sourceDocumentNames = files( 'hsc_arc42.adoc',
+    //                              'DevelopmentGuide.adoc')
 
         options = [
         attributes: [

@@ -1,0 +1,18 @@
+:experimental:
+
+:toc!:
+
+= HTML Sanity Checker Documentation Overview
+
+
+[cols="1,4"]
+|===
+| Development Guide          | Info for software developers,
+                              setup of development environment,
+                              building kbd:[HtmlSC] and its documentation.
+| Architecture Documentation | arc42-based documentation,
+                              with requirements, quality-goals,
+                              context, building-blocks and
+                              concepts. Created as an example
+                              for arc42.
+|===

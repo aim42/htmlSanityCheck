@@ -1,20 +1,20 @@
-== Development Guide
+= Development Guide
 
-image::http://img.shields.io/badge/motivation-high-blue.svg[]
 
 
 :toc:
 
+== Prerequisites
 
-=== Required for Gradle Plugin Development
+=== Prerequisites for Gradle Plugin Development
 You should definitely read the original [Gradle User Guide] on custom plugin development.
 
 Some more step-by-step description contained
 
-==== Directory Structure and Required Files
+=== Directory Structure and Required Files
 
 ----
-|-htmlSanityCheck-gradle-plugin
+|-htmlSanityCheck
    |  |-src
    |  |  |-main
    |  |  |  |-org
@@ -43,7 +43,7 @@ Some more step-by-step description contained
  implementation-class=org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin
 
 
-=== Building the Plugin
+== Building the Plugin
 
 
 
