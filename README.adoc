@@ -11,6 +11,11 @@
 :gradle-url: http://gradle.org/
 
 :gernotstarke: https://github.com/gernotstarke
+:project: htmlSanityCheck
+:project-url: https://github.com/aim42/htmlSanityCheck
+:project-issues: https://github.com/aim42/htmlSanityCheck/issues
+:project-bugs: https://github.com/aim42/htmlSanityCheck/issues?q=is%3Aopen+is%3Aissue+label%3Abug
+
 
 
 == About
@@ -25,6 +30,12 @@ is planned for a future release.
 
 
 WARNING: The Gradle plugin is still unfinished!
+
+Status:
+image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
+image:http://img.shields.io/:motivation-high-blue.svg[motivation is high]
+image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link="{project-bugs}"]
+image:http://img.shields.io/github/issues/aim42/{project}.svg[link={project-issues}]
 
 
 == Installation
