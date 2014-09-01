@@ -28,7 +28,7 @@ kbd:[HtmlSC] can run from the command line or as {gradle-url}-plugin.
 | G-4 | configurable output | output can be configured to console or file
 | G-5 | free and open source | all required dependencies shall be compliant
                                to the https://creativecommons.org/licenses/by-sa/4.0/[CC-SA-4 licence].
-| G-6 | available via public repositories                               
+| G-6 | available via public repositories
 |===
 
 
@@ -38,11 +38,11 @@ kbd:[HtmlSC] can run from the command line or as {gradle-url}-plugin.
 .Required Checks
 |===
 | ID | Check | Description
-| R-1 | missing image files | Check all image tags wether the referenced
+| [[MissingImageFiles]] R-1 | missing image files | Check all image tags wether the referenced
                         image files exist
 | R-2 | broken internal links | Check all internal links from anchor-tags (href="XYZ")
                           wether the link targets "XYZ" are defined
-| R-3 | duplicate link targets | Check all bookmark definitions
+| [[DuplicateLinkTargets]] R-3 | duplicate link targets | Check all bookmark definitions
                             (... id="XYZ") wether the id's ("XYZ") are unique.
 |===
 
@@ -51,10 +51,10 @@ kbd:[HtmlSC] can run from the command line or as {gradle-url}-plugin.
 .Optional Checks
 |===
 | ID | Check  | Description
-| O-1 | unused images | Check wether all images found in image
+| Opt-1 | unused images | Check wether all images found in image
                   director(y/ies) are referenced from the HTML.
-| O-2 | missing extern images | Check externally referenced images for availability
-| O-3 | broken external links | Check external links for both syntax and availability
+| Opt-2 | missing extern images | Check externally referenced images for availability
+| Opt-3 | broken external links | Check external links for both syntax and availability
 |===
 
 

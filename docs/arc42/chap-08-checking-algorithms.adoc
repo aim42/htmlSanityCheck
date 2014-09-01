@@ -40,6 +40,9 @@ image::template-method.png["Template Method", title="Template-Method Overview"]
 
 
 ==== ImageFileExistChecker
+
+[small]#Adresses requirement <<MissingImageFiles>>.#
+
 The (little) problem with checking images is their path: Consider the following
 HTML fragment (from the file +testme.html+:
 
