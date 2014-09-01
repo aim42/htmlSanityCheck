@@ -28,7 +28,7 @@ Check HTML programatically by using an existing API that provides access and fin
 methods to the DOM-tree of the file(s) to be checked.
 
 Decision Criteria::
-* few dependencies, so the +HtmlSC+ binary stays as small as possible.
+* few dependencies, so the kbd:[HtmlSC] binary stays as small as possible.
 * accessor and finder methods to find images, links and link-targets within the DOM tree.
 
 Alternatives::
@@ -38,7 +38,7 @@ Alternatives::
 access all HTML elements in DOM-like syntax.
 
 
-Find details on how +HtmlSC+ implements HTML parsing in the
+Find details on how kbd:[HtmlSC] implements HTML parsing in the
 <<html-encapsulation, HTML encapsulation concept>>.
 
 
@@ -52,4 +52,4 @@ we use the sources instead, primarily:
 
 [NOTE]
 The actual implementation of the similarity comparison has been postponed
-to a later release of +HtmlSC+
+to a later release of kbd:[HtmlSC]

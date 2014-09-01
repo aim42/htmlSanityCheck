@@ -1,7 +1,7 @@
 :numbered:
 == Constraints
 
-+htmlSC+ shall be:
+kbd:[HtmlSC] shall be:
 
 * platform independend and should run on the major operating systems
 (Windows (TM), Linux and Mac-OS(TM))

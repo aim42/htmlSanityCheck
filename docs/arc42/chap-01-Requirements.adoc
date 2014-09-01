@@ -5,10 +5,10 @@
 [[requirements]]
 === Requirements Overview
 
-+HtmlSC+ shall provide the following functionality:
+kbd:[HtmlSC] shall provide the following functionality:
 
 
-. +HtmlSC+ shall read a single (configurable) HTML file and perform the following checks:
+. kbd:[HtmlSC] shall read a single (configurable) HTML file and perform the following checks:
 .. Check all image tags wether the referenced image files exist
 .. Check all internal links from anchor-tags (href="XYZ") wether the link targets "XYZ"
 are defined
@@ -20,13 +20,13 @@ are defined
 .. Check external images
 .. Check external links
 
-. +HtmlSC+ can be configured to either
+. kbd:[HtmlSC] can be configured to either
 .. output on stdout (the console)
 .. creates an html/markdown (or similar) output within a configurable directory
 
-. +HtmlSC+ can be called from the command line with arguments and options
+. kbd:[HtmlSC] can be called from the command line with arguments and options
 
-. +HtmlSC+ can be run as {gradle-url}-plugin.
+. kbd:[HtmlSC] can be run as {gradle-url}-plugin.
 
 
 

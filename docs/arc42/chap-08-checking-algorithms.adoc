@@ -1,6 +1,6 @@
 [[template-method]]
 === Flexible Checking Algorithms
-+htmlSC+ uses the {template-method-pattern} to enable flexible checking algorithms:
+kbd:[HtmlSC] uses the {template-method-pattern} to enable flexible checking algorithms:
 
 [quote, http://sourcemaking.com/design_patterns/template_method]
 The Template Method defines a skeleton of an algorithm in an operation, and defers some steps to subclasses.

@@ -11,7 +11,7 @@ include::chap-08-html-encapsulation.adoc[]
 
 [[reporting-concept]]
 === Flexible Reporting
-+HtmlSC+ allows for different output
+kbd:[HtmlSC] allows for different output
 * formats (HTML and text) and
 * destinations (file and console)
 

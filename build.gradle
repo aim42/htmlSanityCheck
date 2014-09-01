@@ -1,7 +1,7 @@
 // gradle build script for html sanity check
 // =========================================
 group = 'org.aim42'
-version = '0.2b-SNAPSHOT'
+version = '0.2c-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'groovy'
@@ -28,6 +28,18 @@ dependencies {
 
 }
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
+    }
+
+}
+
+
 
 uploadArchives {
     repositories {
@@ -36,6 +48,81 @@ uploadArchives {
         }
     }
 }
+
+
+// ###############################
+//
+// AsciiDoc stuff
+//
+// ###############################
+
+// location of AsciiDoc files
+def asciidocSrcPath = "$projectDir/docs"
+
+// location of images used in AsciiDoc documentation
+def srcImagesPath = "$asciidocSrcPath/images"
+
+// results of asciidoc compilitation (HTML) is stored
+def outputPath = "$buildDir/docs"
+
+// where HTMLSanityCheck checkingresults ares stored
+def reportPath = "$buildDir/report/"
+
+
+task info(
+    description: "info on several paths"
+  ) <<
+{
+  println "project.name = " + project.name
+  println "projectDir = " + projectDir
+  println "buildDir = " + buildDir
+  println "="*50
+  println "asciidoc src files: " + asciidocSrcPath
+  println "source images: " + srcImagesPath
+  println "asciidoc output: " + outputPath
+  println "reportPath = " + reportPath
+}
+
+
+apply plugin: 'org.asciidoctor.gradle.asciidoctor'
+
+asciidoctor {
+    outputDir = new File(outputPath)
+    sourceDir = file( asciidocSrcPath )
+//    sourceDocumentNames = files( new File('hsc_arc42.adoc'))
+
+        options = [
+        attributes: [
+            toc         : 'left',
+            backend     : 'html5',
+            doctype     : 'book',
+            icons       : 'font',
+            sectlink    : true,
+            sectanchors : true
+        ]
+    ]
+}
+
+
+defaultTasks 'arc42'
+
+task copyImages(
+    type: Copy,
+    description: 'copy images into build output folder'
+) {
+    from srcImagesPath
+    into outputPath +'/images/'
+    include( '**/*.jpg', '**/*.png', '**/*.svg')
+}
+
+
+
+task arc42(
+    dependsOn: [copyImages, asciidoctor],
+    description: 'collects all required tasks for creating arc42 documentation'
+) << { }
+
+
 
 /*
  * Permission is hereby granted, free of charge, to any person obtaining a copy

@@ -1,0 +1,51 @@
+== Development Guide
+
+image::http://img.shields.io/badge/motivation-high-blue.svg[]
+
+
+:toc:
+
+
+=== Required for Gradle Plugin Development
+You should definitely read the original [Gradle User Guide] on custom plugin development.
+
+Some more step-by-step description contained
+
+==== Directory Structure and Required Files
+
+----
+|-htmlSanityCheck-gradle-plugin
+   |  |-src
+   |  |  |-main
+   |  |  |  |-org
+   |  |  |  |  |-aim42
+   |  |  |  |  |  |-htmlsanitycheck
+   |  |  |  |  |  |  | ...
+   |  |  |  |  |  |  |-HtmlSanityCheckPlugin.groovy // <1>
+   |  |  |  |  |  |  |-HtmlSanityCheckTask.groovy
+   |  |  |  |-resources
+   |  |  |  |  |-META-INF                          // <2>
+   |  |  |  |  |  |-gradle-plugins
+   |  |  |  |  |  |  |-htmlSanityCheck.properties  // <3>
+   |  |  |-test
+   |  |  |  |-org
+   |  |  |  |  |-aim42
+   |  |  |  |  |  |-htmlsanitycheck
+   |  |  |  |  |  |  | ...
+   |  |  |  |  |  |  |-HtmlSanityCheckPluginTest
+   |
+----
+
+<1> the actual plugin code, a xyzPlugin and xyzTask groovy files
+<2> Gradle expects plugin properties in META-INF
+<3> Property file containing the name of the actual implementation class:
+
+ implementation-class=org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin
+
+
+=== Building the Plugin
+
+
+
+
+=== Uploading to Public Archives

@@ -1,58 +1,86 @@
+++++
+<!-- github ribbon thanx to https://github.com/blog/273-github-ribbons -->
+<a href="https://github.com/aim42/htmlSanityCheck">
+<img style="position: absolute; top: 0; right: 0; border: 0;"
+src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67"
+alt="Fork me on GitHub"
+data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+++++
+
+
 = HTML Sanity Checker Architecture Documentation
 :toc:
 :numbered:
 :linkattrs:
+:experimental:
+
 
 :author: Dr. Gernot Starke
 :email: gernot.starke@innoq.com
-:date: June 15th 2014
-:revision: Version 0.9c
+:date: August 31st 2014
+:revision: Version 0.9.1
+
+:project: htmlsanitycheck
+:version: 0.9
 
 // where are images located?
 :imagesdir: ./images
 
+:project: htmlSanityCheck
+:project-url: https://github.com/aim42/htmlSanityCheck
+:project-issues: https://github.com/aim42/htmlSanityCheck/issues
+:project-bugs: https://github.com/aim42/htmlSanityCheck/issues?q=is%3Aopen+is%3Aissue+label%3Abug
+
+:project-name: asciidoctor-gradle-plugin
+
+:asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin
+
+:arc42-url: http://github.com/arc42
+:asciidoc-url: http://asciidoctor.org
+:gradle-url: http://gradle.org/[Gradle]
+:groovy-url: http://groovy.codehaus.org/
+
+:template-method-url: http://sourcemaking.com/design_patterns/template_method/[Template-Method-Pattern]
+// ---------------------------------
+
+
+
 [cols="1,4" options=""]
 |===
-| image:arc42-logo.png[arc42]
-| (C) This document uses material from the arc42 architecture
-template, http://www.arc42.de.
+| image:arc42-logo.png[arc42, link={arc42-url}]
+| (C) This document uses material from the http://arc42.de[arc42 architecture
+template^], freely available at {arc42-url}[{arc42-url}^].
 
 [small]#This material is open source and provided under the Creative Commons Sharealike 4.0 license.
 It comes *without any guarantee*. Use on your own risk.
 arc42 and its structure by Dr. Peter Hruschka and Dr. Gernot Starke.
 Asciidoc version initiated by Markus Schärtel and Jürgen Krey,
-completed and maintained by Ralf Müller and maGernot Starke.#
+completed and maintained by Ralf Müller and Gernot Starke.#
 |===
+
+
+Version {version} of {docdate}
+
+image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
+image:http://img.shields.io/:motivation-high-blue.svg[motivation is high]
+image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link="{project-bugs}"^]
+image:http://img.shields.io/github/issues/aim42/{project}.svg[link={project-issues}]
+
 
 
 [NOTE]
 ====
-Within the following text, the "Html Sanity Checker" shall be abbreviated with +HtmlSC+
+Within the following text, the "Html Sanity Checker" shall be
+abbreviated with kbd:[HtmlSC]
 ====
 
 
-// ---------------------------------
-// define some links here
-
-:template-method-url: http://sourcemaking.com/design_patterns/template_method/[Template-Method Pattern]
-:plugin-url: https://github.com/aim42/htmlSanityCheck-gradle-plugin
-:plugin-issues: https://github.com/aim42/htmlSanityCheck-gradle-plugin/issues
-
-:asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin
-
-:asciidoc-url: http://asciidoctor.org
-:gradle-url: http://gradle.org/[Gradle]
-:groovy-url: http://groovy.codehaus.org/
-
-// ---------------------------------
-
-
-include::./snippets/chap-01-Requirements.adoc[]
-include::snippets/chap-02-Constraints.adoc[]
-include::snippets/chap-03-Context.adoc[]
-include::snippets/chap-04-SolutionStrategy.adoc[]
-include::snippets/chap-05-BuildingBlocks.adoc[]
-include::snippets/chap-06-Runtime.adoc[]
-include::snippets/chap-07-Deployment.adoc[]
-include::snippets/chap-08-Concepts.adoc[]
-include::snippets/chap-09-Decisions.adoc[]
+include::arc42/chap-01-Requirements.adoc[]
+include::arc42/chap-02-Constraints.adoc[]
+include::arc42/chap-03-Context.adoc[]
+include::arc42/chap-04-SolutionStrategy.adoc[]
+include::arc42/chap-05-BuildingBlocks.adoc[]
+include::arc42/chap-06-Runtime.adoc[]
+include::arc42/chap-07-Deployment.adoc[]
+include::arc42/chap-08-Concepts.adoc[]
+include::arc42/chap-09-Decisions.adoc[]

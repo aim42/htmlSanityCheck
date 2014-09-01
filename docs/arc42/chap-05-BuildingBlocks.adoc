@@ -15,8 +15,8 @@ Contained Blackboxes::
 .HtmlSanityChecker building blocks
 |===
 | <<checker_blackbox, CheckerCore>> | core: html parsing and sanity checking, file handling
-| HSC Gradle Plugin | integrates the Gradle build tool with +HtmlSC+,
-enabling arbitrary gradle builds to use +HtmlSC+ functionality.
+| HSC Gradle Plugin | integrates the Gradle build tool with kbd:[HtmlSC],
+enabling arbitrary gradle builds to use kbd:[HtmlSC] functionality.
 | HSC Command Line Interface | (not documented)
 | HSC Graphical Interface | (planned, not implemented)
 
@@ -33,10 +33,10 @@ Interfaces::
 |===
 | Interface | Description
 | usage via shell | <<arc42_user, arc42 user>> uses a command
-line shell to call the +HtmlSC+
+line shell to call the kbd:[HtmlSC]
 | build system  | currently restricted to Gradle: The build
-system uses +HtmlSC+ as configured in the buildscript.
-| local-html and local-images | +HtmlSC+ needs access to several
+system uses kbd:[HtmlSC] as configured in the buildscript.
+| local-html and local-images | kbd:[HtmlSC] needs access to several
 local files, especially the html page to be checked and to the
 corresponding image directories.
 |===
@@ -63,7 +63,7 @@ Interfaces::
 in <<allChecksRunner, AllChecksRunner>>.
 
 | Gradle Plugin -> Checker
-| Exposes +HtmlSC+ via a standard Gradle plugin,
+| Exposes kbd:[HtmlSC] via a standard Gradle plugin,
 as described in the Gradle user guide.
 |===
 
