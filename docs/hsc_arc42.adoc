@@ -62,10 +62,12 @@ completed and maintained by Ralf Müller and Gernot Starke.#
 Version {version} of {docdate}
 
 image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
-image:http://img.shields.io/:motivation-high-blue.svg[motivation is high]
 image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link="{project-bugs}"^]
 image:http://img.shields.io/github/issues/aim42/{project}.svg[link={project-issues}]
 
+[small]#if the issue-count is not display or says "vendor unresponsive",
+our badge provider http://shields.io[shields.io]
+cannot access the github data fast enough...#
 
 
 [NOTE]
