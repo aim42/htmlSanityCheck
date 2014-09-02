@@ -1,18 +1,41 @@
+:imagesdir: ./images
+= image:htmlsanitycheck-logo.png[HTML Sanity Checker] Documentation Overview
+Dr. Gernot Starke <gernot.starke@innoq.com>
+v0.9, Sept-02-2014
+
 :experimental:
 
-:toc!:
+*The Problem*: Languages like AsciiDoc or Markdown allow for easy writing and
+hyperlinking. When they are transformed to HTML the sanity of these links
+is not checked - that's where kbd:[HtmlSC] comes into play...
 
-= HTML Sanity Checker Documentation Overview
+*The Solution*:
 
+image::htmlsanitycheck-overview.png["Overview", title="Overview"]
+
+kbd:[HtmlSC] can perform various content and semantic checks on HTML files,
+e.g. check for missing images, broken internal links, duplicate targets etc.
+
+It is open source software and provides the following kinds of documentation:
 
 [cols="1,4"]
 |===
-| Development Guide          | Info for software developers,
-                              setup of development environment,
-                              building kbd:[HtmlSC] and its documentation.
-| Architecture Documentation | arc42-based documentation,
-                              with requirements, quality-goals,
-                              context, building-blocks and
-                              concepts. Created as an example
-                              for arc42.
+| link:DevelopmentGuide.html[Development Guide]
+| Info for software developers,
+  setup of development environment,
+  building kbd:[HtmlSC] and its documentation.
+
+| link:hsc_arc42.html[Architecture Documentation] 
+| http://github.com/arc42[arc42]-based documentation,
+  with requirements, quality-goals,
+  context, building-blocks and
+  concepts. Created as an example
+  for http://arc42.de[arc42].
+
+| User Guide
+| (planned) intended for writers and authors, explains
+  how to check your (generated) html
 |===
+
+
+"External resources" icon from http://openclipart.org/detail/179896/world-wide-web-by-gr8dan-179896[openclipart]
