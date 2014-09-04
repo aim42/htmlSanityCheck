@@ -95,6 +95,7 @@ asciidoctor {
         options = [
         attributes: [
             backend     : 'html5',
+            toc         : "left",
             doctype     : 'book',
             icons       : 'font',
             sectlink    : true,
