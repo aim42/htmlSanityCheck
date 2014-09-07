@@ -86,16 +86,23 @@ task info(
 
 apply plugin: 'org.asciidoctor.gradle.asciidoctor'
 
+// the files we process
+def hsc_arc42 = asciidocSrcPath + "/hsc_arc42.adoc"
+def hsc_devguide = asciidocSrcPath + "/DevelopmentGuide.adoc"
+def hsc_index = asciidocSrcPath + "/index.adoc"
+
+
 asciidoctor {
     outputDir = new File(outputPath)
     sourceDir = file( asciidocSrcPath )
-    //sourceDocumentNames = files( 'hsc_arc42.adoc',
-    //                              'DevelopmentGuide.adoc')
+    sourceDocumentNames = files(  new File( hsc_arc42),
+                                  new File( hsc_devguide),
+                                  new File( hsc_index) )
 
         options = [
         attributes: [
             backend     : 'html5',
-            toc         : "left",
+            toc         : 'left',
             doctype     : 'book',
             icons       : 'font',
             sectlink    : true,

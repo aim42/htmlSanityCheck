@@ -1,8 +1,9 @@
 = Development Guide
-
-
-
 :toc:
+:toclevels: 2
+:toc-position: right
+
+:experimental:
 
 == Prerequisites
 

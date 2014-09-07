@@ -1,5 +1,7 @@
-:imagesdir: ./images
+:!toc:
 = image:htmlsanitycheck-logo.png[HTML Sanity Checker] Documentation Overview
+:imagesdir: ./images
+
 Dr. Gernot Starke <gernot.starke@innoq.com>
 v0.9, Sept-02-2014
 
@@ -43,7 +45,7 @@ It is open source software and provides the following kinds of documentation:
   how to check your (generated) html
 |===
 
-The {project-url}[repository is located on Github]. 
+The {project-url}[repository is located on Github].
 
 *Status*:
 image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
