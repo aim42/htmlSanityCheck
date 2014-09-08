@@ -151,6 +151,12 @@ class AllChecksRunner {
         pageToCheck = new HtmlPage( inputFile )
     }
 
+    /**
+     * just for testing purposes
+     */
+    public String info() {
+        return "AllChecksRunner.groovy ready..."
+    }
 
     /**
      * runs the checks from the command
