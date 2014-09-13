@@ -5,13 +5,22 @@ package org.aim42.htmlsanitycheck
 import org.gradle.api.Project
 import org.gradle.api.Plugin
 
+
 class HtmlSanityCheckPlugin implements Plugin<Project> {
+
+    final static String HTML_SANITY_CHECK = "htmlSanityCheck"
+
     void apply(Project project) {
-        project.task('htmlSanityCheck',
+
+        project.task( HTML_SANITY_CHECK,
                 type: HtmlSanityCheckTask,
+                description: "performs various semantic checks on html files",
                 group: 'Check')
+
     }
 }
+
+
 /*========================================================================
  Copyright 2014 Gernot Starke and aim42 contributors
 

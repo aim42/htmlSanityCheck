@@ -1,13 +1,14 @@
 package org.aim42.htmlsanitycheck
 
+// see end-of-file for license information
+
 import org.aim42.htmlsanitycheck.checker.Checker
 import org.aim42.htmlsanitycheck.checker.CheckingResultsCollector
 import org.aim42.htmlsanitycheck.checker.DuplicateIdChecker
 import org.aim42.htmlsanitycheck.checker.ImageFileExistChecker
 import org.aim42.htmlsanitycheck.checker.InternalLinksChecker
-import org.aim42.htmlsanitycheck.html.HtmlPage
 
-// see end-of-file for license information
+import org.aim42.htmlsanitycheck.html.HtmlPage
 
 /**
  * Coordinates and runs all available html sanity checks.
@@ -26,28 +27,28 @@ import org.aim42.htmlsanitycheck.html.HtmlPage
 
 class AllChecksRunner {
 
-    static Checker imageChecker
-    static Checker undefinedInternalLinksChecker
-    static Checker duplicateIdChecker
-
-    static CheckingResultsCollector imageCheckingResults
-    static CheckingResultsCollector internalLinkCheckingResults
-    static CheckingResultsCollector duplicateIdsResults
-
 
     // we process one single input file
-    private static File inputFile
+    private  File fileToCheck
 
     // where do we put our results
-    private static File outputDir
+    private File checkingResultsDir
 
     // where do we expect images?
-    private static File baseDir
+    private File imageDir
+
+    // TODO: handle checking of external resources
+    private  Boolean checkExternalResources = false
 
 
-    // shall we also check external links
-    // TODO: currently ignored
-    private static Boolean checkExternalLinks = false
+    private Checker imageChecker
+    private Checker undefinedInternalLinksChecker
+    private Checker duplicateIdChecker
+
+    private CheckingResultsCollector imageCheckingResults
+    private CheckingResultsCollector internalLinkCheckingResults
+    private CheckingResultsCollector duplicateIdsResults
+
 
 
     private HtmlPage pageToCheck
@@ -57,45 +58,39 @@ class AllChecksRunner {
      * contained in the directory "docDirPath". Images are expected in
      * imageDirPath.
      *
-     * @param outputDir
-     * @param inputFile
-     * @param baseDir
+     * @param checkingResultsDir
+     * @param fileToCheck
+     * @param imagesDir
      */
+
     public AllChecksRunner(
-            File inputFile,
-            File outputDir,
-            File baseDir) {
-        this.inputFile = inputFile
-        this.outputDir = outputDir
-        this.baseDir = baseDir
+            File fileToCheck,
+            File imageDir,
+            File checkingResultsDir,
+            Boolean checkExternalResources
+            ) {
+        this.fileToCheck = fileToCheck
+        this.checkingResultsDir = checkingResultsDir
+        this.imageDir = imageDir
+        this.checkExternalResources = checkExternalResources
 
     }
 
 
-    public AllChecksRunner() {
-
-        String fileName = "index.html"
-
-        String outDirName = System.getProperty("user.dir") + "/build/docs/"
-        this.outputDir = new File( outDirName )
-
-    }
-
-    public AllChecksRunner( String html, File baseDir, File outDir ) {
-        this.pageToCheck = new HtmlPage( html )
-        this.outputDir = outDir
-        this.baseDir = baseDir
-
-    }
 
     /**
      * performs all available checks
      * on pageToCheck
      */
-    public void performChecks() {
-      runImageCheck()
-      runDuplicateIdCheck()
-      runInternalLinkCheck()
+    public void performChecks( Boolean verbose ) {
+
+        if (verbose) {
+            println "\nrunning ImageCheck"
+            runImageCheck()
+        }
+
+        runDuplicateIdCheck( )
+        runInternalLinkCheck()
     }
 
 
@@ -103,7 +98,7 @@ class AllChecksRunner {
     public void runImageCheck() {
         imageChecker = new ImageFileExistChecker(
                 pageToCheck: pageToCheck,
-                baseDir: baseDir,
+                baseDir: imageDir,
                 headline: "Image File Exist Check",
                 whatToCheck: "img links",
                 sourceItemName: "img link",
@@ -147,16 +142,11 @@ class AllChecksRunner {
      * reads the html page
      */
     private void parseHtml() {
-        assert inputFile.exists()
-        pageToCheck = new HtmlPage( inputFile )
+        assert fileToCheck.exists()
+        pageToCheck = new HtmlPage( fileToCheck )
     }
 
-    /**
-     * just for testing purposes
-     */
-    public String info() {
-        return "AllChecksRunner.groovy ready..."
-    }
+
 
     /**
      * runs the checks from the command
@@ -167,7 +157,7 @@ class AllChecksRunner {
         // TODO: read parameter from command line
         AllChecksRunner allChecksRunner = new AllChecksRunner()
 
-        allChecksRunner.inputFile = new File( "file-to-test.html")
+        allChecksRunner.fileToCheck = new File( "file-to-test.html")
         //allChecksRunner.docDirPath = System.getProperty("user.dir") + "/src/test/resources/"
         //allChecksRunner.pathToHtmlFile = docDirPath + fileName
         //allChecksRunner.imageDirPath = docDirPath
@@ -179,6 +169,15 @@ class AllChecksRunner {
         allChecksRunner.runInternalLinkCheck()
         allChecksRunner.runDuplicateIdCheck()
 
+    }
+
+    @Override
+    public String toString() {
+        return "AllChecksRunner{\n" +
+                "   which file to check  : " + fileToCheck +
+                "   where to put results : " + checkingResultsDir +
+                "   where to find images : " + imageDir   +
+                '\n}';
     }
 }
 

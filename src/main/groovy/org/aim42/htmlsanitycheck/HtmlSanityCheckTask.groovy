@@ -21,25 +21,21 @@ import org.gradle.api.tasks.TaskAction
 class HtmlSanityCheckTask extends DefaultTask {
 
     // currently we only support checking a SINGLE FILE
-    @Optional @InputFile File sourceDocument
+    @InputFile File fileToCheck
 
-    // baseDir is the directory where sourceDocument resides,
+    // imagesDir is the directory where sourceDocument resides,
     // and from which the image directory is descendant
-    @Optional @InputDirectory File baseDir
+    @Optional @InputDirectory File imageDir
 
     // where do we store checking results
-    @OutputDirectory File outputDir
+    @Optional @OutputDirectory File checkingResultsDir
 
+    // shall we also check external resources?
+    @Optional Boolean checkExternalLinks = false
 
-    AllChecksRunner allChecksRunner
+    // true for additional runtime (log/debug) information
+    @Optional Boolean verbose = false
 
-    public HtmlSanityCheckTask() {
-       allChecksRunner = new AllChecksRunner(
-                //imageDir: baseDir,
-
-        )
-
-    }
 
     /**
      * entry point for several html sanity checks
@@ -47,12 +43,38 @@ class HtmlSanityCheckTask extends DefaultTask {
      */
     @TaskAction
     public void sanityCheckHtml() {
-        println "kind regards from sanityCheck plugin..."
-        println "="*50
 
-        println allChecksRunner.info()
+        if (verbose) {
+            println "\n"
+            println "=" * 70
+            println "Parameters given to sanityCheck plugin from gradle buildfile..."
+            println "-" * 70
+
+            println "File to check   : $fileToCheck"
+            println "Image dir       : $imageDir"
+            println "Results dir     : $checkingResultsDir"
+            println "Check externals : $checkExternalLinks"
+
+            println "=" * 50
+        }
+
+        // validate parameters
+        // ======================================
+        // TODO: validate parameter
+
+        // create an AllChecksRunner...
+        // ======================================
+        def allChecksRunner = new AllChecksRunner(
+                fileToCheck,
+                imageDir,
+                checkingResultsDir,
+                checkExternalLinks
+        )
 
 
+        // perform the actual checks
+        // ======================================
+        allChecksRunner.performChecks(verbose)
 
 
     }
