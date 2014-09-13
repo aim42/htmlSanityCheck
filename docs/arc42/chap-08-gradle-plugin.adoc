@@ -7,6 +7,8 @@ You should definitely read the original
 To enable the <<requirements, required Gradle integration>>,
 we implement a lean wrapper as described in the Gradle user guide.
 
+
+
 [source, groovy]
   class HtmlSanityCheckPlugin implements Plugin<Project> {
       void apply(Project project) {
@@ -49,9 +51,17 @@ HtmlSanityCheckTask groovy files
 
  implementation-class=org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin
 
+==== Passing Parameters From Buildfile to Plugin
+To be done
 
 ==== Building the Plugin
-The plugin code itself is built with gradle
+The plugin code itself is built with gradle.
 
 
 ==== Uploading to Public Archives
+
+
+==== Further Information on Creating Gradle Plugins
+Although writing plugins is described in the Gradle user guide, 
+a clearly explained sample is given in a 
+http://code4reference.com/2012/08/gradle-custom-plugin-part-2/[Code4Reference] tutorial. 
