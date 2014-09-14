@@ -44,23 +44,13 @@ class HtmlSanityCheckTask extends DefaultTask {
     @TaskAction
     public void sanityCheckHtml() {
 
-        if (verbose) {
-            println "\n"
-            println "=" * 70
-            println "Parameters given to sanityCheck plugin from gradle buildfile..."
-            println "-" * 70
+        logBuildParameter()
 
-            println "File to check   : $fileToCheck"
-            println "Image dir       : $imageDir"
-            println "Results dir     : $checkingResultsDir"
-            println "Check externals : $checkExternalLinks"
-
-            println "=" * 50
-        }
 
         // validate parameters
         // ======================================
         // TODO: validate parameter
+
 
         // create an AllChecksRunner...
         // ======================================
@@ -74,11 +64,21 @@ class HtmlSanityCheckTask extends DefaultTask {
 
         // perform the actual checks
         // ======================================
-        allChecksRunner.performChecks(verbose)
+        allChecksRunner.performAllChecks()
 
 
     }
 
+
+    private void logBuildParameter() {
+        logger.info "=" * 70
+        logger.info "Parameters given to sanityCheck plugin from gradle buildfile..."
+        logger.info "File to check   : $fileToCheck"
+        logger.info "Image dir       : $imageDir"
+        logger.info "Results dir     : $checkingResultsDir"
+        logger.info "Check externals : $checkExternalLinks"
+
+    }
 
 
 }

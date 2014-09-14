@@ -10,6 +10,10 @@ import org.aim42.htmlsanitycheck.checker.InternalLinksChecker
 
 import org.aim42.htmlsanitycheck.html.HtmlPage
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 /**
  * Coordinates and runs all available html sanity checks.
  * <p>
@@ -49,18 +53,23 @@ class AllChecksRunner {
     private CheckingResultsCollector internalLinkCheckingResults
     private CheckingResultsCollector duplicateIdsResults
 
-
-
     private HtmlPage pageToCheck
 
+
+    // some logging info
+    private static Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
+    private static String HSC = "[HtmlSanityCheck]"
+
+
     /**
-     * runs all available checks on the file with name "fileName",
-     * contained in the directory "docDirPath". Images are expected in
-     * imageDirPath.
+     * runs all available checks on the file
      *
+     * @param fileToCheck all available checks are run against this file
+     * TODO: enhance to fileSet
+
+     * @param imageDir: images are expected here
      * @param checkingResultsDir
-     * @param fileToCheck
-     * @param imagesDir
+
      */
 
     public AllChecksRunner(
@@ -74,6 +83,8 @@ class AllChecksRunner {
         this.imageDir = imageDir
         this.checkExternalResources = checkExternalResources
 
+        logger.info( "$HSC AlLChecksRunner created")
+
     }
 
 
@@ -82,13 +93,12 @@ class AllChecksRunner {
      * performs all available checks
      * on pageToCheck
      */
-    public void performChecks( Boolean verbose ) {
+    public void performAllChecks( ) {
 
-        if (verbose) {
-            println "\nrunning ImageCheck"
-            runImageCheck()
-        }
+        pageToCheck = parseHtml()
 
+        // the actual checks
+        runImageCheck()
         runDuplicateIdCheck( )
         runInternalLinkCheck()
     }
@@ -141,9 +151,9 @@ class AllChecksRunner {
     /**
      * reads the html page
      */
-    private void parseHtml() {
+    private HtmlPage parseHtml() {
         assert fileToCheck.exists()
-        pageToCheck = new HtmlPage( fileToCheck )
+        return new HtmlPage( fileToCheck )
     }
 
 
