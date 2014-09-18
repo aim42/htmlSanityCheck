@@ -1,6 +1,8 @@
 package org.aim42.htmlsanitycheck.checker
 
 import org.aim42.htmlsanitycheck.html.HtmlElement
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 // see end-of-file for license information
 
@@ -8,12 +10,17 @@ import org.aim42.htmlsanitycheck.html.HtmlElement
 class ImageFileExistChecker extends Checker {
 
     private List<HtmlElement> images
-    private String baseDir
+    private String baseDirPath
+
+    // logging stuff
+    private static Logger logger = LoggerFactory.getLogger(ImageFileExistChecker.class);
+
 
 
 
     @Override
     public CheckingResultsCollector check() {
+
         super.initResults()
 
         //get list of all image-tags "<img..." in html file
@@ -29,21 +36,35 @@ class ImageFileExistChecker extends Checker {
     private void checkAllImages() {
 
         images.each { image ->
-            checkSingleImage(image)
+            checkSingleLocalImage(image)
+      }
+    }
 
+    private void checkSingleLocalImage(HtmlElement image) {
+        String relativePathToCurrentImage = image.getSrcAttribute()
+
+        logger.info( "image: " + image)
+        logger.info( "relPathToCurImage: \n$relativePathToCurrentImage")
+
+        // check only "local" image references
+        if (isLocalImage(relativePathToCurrentImage)) {
+
+            // bookkeeping:
+            checkingResults.incNrOfChecks()
+
+            doesFileExist( relativePathToCurrentImage );
         }
     }
 
-    private void checkSingleImage(HtmlElement image) {
-        String relativePathToCurrentImage = image.getSrcAttribute()
 
-        // bookkeeping one more check...
-        checkingResults.incNrOfChecks()
-
-        // check only "local" image references
-        if (!relativePathToCurrentImage.startsWith("http:")) {
-            doesFileExist(relativePathToCurrentImage);
-        }
+    /*
+     * Checks if this image (given by its relative path + filename)
+     * is local
+     * @param relativePathToCurrentImage
+     * @return
+     */
+    private boolean isLocalImage(String relativePathToCurrentImage) {
+        return !relativePathToCurrentImage.startsWith("http:")
     }
 
 
@@ -56,7 +77,11 @@ class ImageFileExistChecker extends Checker {
         // problem: if the relativePath is "./images/fileName.jpg",
         // we need to add the appropriate path prefix...
 
-        String absolutePath = baseDir + relativePathToImageFile[1..relativePathToImageFile.length()-1]
+        // thx to rdmueller for the improvement below:
+        // was: relativePathToImageFile[1..relativePathToImageFile.length()-1]
+        String absolutePath = baseDirPath + "/" + relativePathToImageFile //[1..-1]
+
+        logger.info( "doesFileExist: absolutePath of image: $absolutePath")
 
         File imageFile = new File(absolutePath);
 
@@ -66,6 +91,8 @@ class ImageFileExistChecker extends Checker {
         }
 
     }
+
+
 
 }
 

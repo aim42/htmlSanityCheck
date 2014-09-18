@@ -2,15 +2,12 @@
 
 package org.aim42.htmlsanitycheck.checker
 
-import junit.framework.Assert
 import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.aim42.htmlsanitycheck.html.HtmlPage
-import org.junit.After
 import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class ImageFileExistCheckerTest extends GroovyTestCase {
 
@@ -21,7 +18,10 @@ class ImageFileExistCheckerTest extends GroovyTestCase {
     String fileName
     String localPath
     String filePath
-    String imageDir
+
+    // logging stuff
+    private static Logger logger = LoggerFactory.getLogger(ImageFileExistCheckerTest.class);
+    private static String IFEXT = "[IFEXT]"
 
 
     @Before
@@ -30,15 +30,18 @@ class ImageFileExistCheckerTest extends GroovyTestCase {
         userDir = System.getProperty("user.dir")
         fileName = 'file-to-test.html'
         localPath = "/src/test/resources/"
-        imageDir = userDir + localPath // + "images/"
+        //completePath = new File(userDir).absolutePath
+        imagesDir = userDir + localPath
         filePath = userDir + localPath + fileName
+
+        logger.info( "$IFEXT imagesDir: $imagesDir")
     }
 
 
     @Test
     public void testCheckImageDirectoryExists() {
-        assertTrue( "new image directory $imageDir does not exist ",
-                new File( imageDir ).exists())
+        assertTrue( "new image directory $imagesDir does not exist ",
+                new File( imagesDir ).exists())
     }
 
     @Test
@@ -65,7 +68,7 @@ class ImageFileExistCheckerTest extends GroovyTestCase {
 
         checker = new ImageFileExistChecker(
                 pageToCheck: htmlPage,
-                baseDir: "",
+                baseDirPath: "",
                 headline: "Image File Exist Check",
                 whatToCheck: "img links",
                 sourceItemName: "img link",
@@ -102,7 +105,7 @@ class ImageFileExistCheckerTest extends GroovyTestCase {
 
         checker = new ImageFileExistChecker(
                 pageToCheck: htmlPage,
-                baseDir: imageDir,
+                baseDirPath: imagesDir,
                 headline: "Image File Exist Check",
                 whatToCheck: "img links",
                 sourceItemName: "img link",

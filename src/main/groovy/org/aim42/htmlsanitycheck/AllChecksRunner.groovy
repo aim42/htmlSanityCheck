@@ -35,11 +35,16 @@ class AllChecksRunner {
     // we process one single input file
     private  File fileToCheck
 
+    // our base directory: image-links within HTML are supposed to be relative to this
+    private String baseDirPath
+
+    // where do we expect images?
+    // (later we need to convert this to String)
+    private File imagesDir
+
     // where do we put our results
     private File checkingResultsDir
 
-    // where do we expect images?
-    private File imageDir
 
     // TODO: handle checking of external resources
     private  Boolean checkExternalResources = false
@@ -56,7 +61,7 @@ class AllChecksRunner {
     private HtmlPage pageToCheck
 
 
-    // some logging info
+    // logging stuff
     private static Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
     private static String HSC = "[HtmlSanityCheck]"
 
@@ -67,21 +72,23 @@ class AllChecksRunner {
      * @param fileToCheck all available checks are run against this file
      * TODO: enhance to fileSet
 
-     * @param imageDir: images are expected here
+     * @param imagesDir: images are expected here
      * @param checkingResultsDir
 
      */
 
     public AllChecksRunner(
             File fileToCheck,
-            File imageDir,
+            File imagesDir,
             File checkingResultsDir,
             Boolean checkExternalResources
             ) {
         this.fileToCheck = fileToCheck
         this.checkingResultsDir = checkingResultsDir
-        this.imageDir = imageDir
+        this.imagesDir = imagesDir
         this.checkExternalResources = checkExternalResources
+
+        this.baseDirPath = fileToCheck.getParent()
 
         logger.info( "$HSC AlLChecksRunner created")
 
@@ -95,20 +102,23 @@ class AllChecksRunner {
      */
     public void performAllChecks( ) {
 
+        logger.info( this.toString())
+
         pageToCheck = parseHtml()
 
         // the actual checks
-        runImageCheck()
+        runImageFileExistCheck()
         runDuplicateIdCheck( )
         runInternalLinkCheck()
     }
 
 
 
-    public void runImageCheck() {
+    public void runImageFileExistCheck() {
+        // from gradle we get a File object for imageDirPath
         imageChecker = new ImageFileExistChecker(
                 pageToCheck: pageToCheck,
-                baseDir: imageDir,
+                baseDirPath: baseDirPath,
                 headline: "Image File Exist Check",
                 whatToCheck: "img links",
                 sourceItemName: "img link",
@@ -175,7 +185,7 @@ class AllChecksRunner {
         // TODO: main-method is completely broken!!
         allChecksRunner.parseHtml()
 
-        allChecksRunner.runImageCheck()
+        allChecksRunner.runImageFileExistCheck()
         allChecksRunner.runInternalLinkCheck()
         allChecksRunner.runDuplicateIdCheck()
 
@@ -183,11 +193,9 @@ class AllChecksRunner {
 
     @Override
     public String toString() {
-        return "AllChecksRunner{\n" +
-                "   which file to check  : " + fileToCheck +
-                "   where to put results : " + checkingResultsDir +
-                "   where to find images : " + imageDir   +
-                '\n}';
+        return  "   file to check : $fileToCheck\n" +
+                "   put results   : $checkingResultsDir\n" +
+                "   images dir    : $imagesDir\n";
     }
 }
 
