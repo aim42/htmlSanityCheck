@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.checker
 
+import org.aim42.htmlsanitycheck.URLUtil
 import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -47,7 +48,7 @@ class ImageFileExistChecker extends Checker {
         logger.info( "relPathToCurImage: \n$relativePathToCurrentImage")
 
         // check only "local" image references
-        if (isLocalImage(relativePathToCurrentImage)) {
+        if (URLUtil.isRemoteURL(relativePathToCurrentImage)) {
 
             // bookkeeping:
             checkingResults.incNrOfChecks()
@@ -56,16 +57,6 @@ class ImageFileExistChecker extends Checker {
         }
     }
 
-
-    /*
-     * Checks if this image (given by its relative path + filename)
-     * is local
-     * @param relativePathToCurrentImage
-     * @return
-     */
-    private boolean isLocalImage(String relativePathToCurrentImage) {
-        return !relativePathToCurrentImage.startsWith("http:")
-    }
 
 
     /**
