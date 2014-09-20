@@ -14,9 +14,17 @@ class DuplicateIdChecker extends Checker {
     // all html-tags containing ids including potential duplicates
     List<String> tagsWithId
 
+
     @Override
-    CheckingResultsCollector check() {
-        super.initResults()
+    protected void initCheckingResultsDescription() {
+        checkingResults.whatIsChecked  = "Duplicate Definition of id Check"
+        checkingResults.sourceItemName = "id"
+        checkingResults.targetItemName = "id"
+     }
+
+
+    @Override
+    protected CheckingResultsCollector check() {
 
         //get list of all tagsWithId '<... id="XYZ"...' in html file
         idStrings = pageToCheck.getAllIdStrings().toSet()
@@ -34,8 +42,7 @@ class DuplicateIdChecker extends Checker {
      */
     private void checkForDuplicateIds() {
 
-        // tagsWithId is the SET of id-strings in the document
-        idStrings.each {
+       idStrings.each {
             checkForDuplicateDefinition( it )
         }
 
@@ -45,14 +52,13 @@ class DuplicateIdChecker extends Checker {
     private void checkForDuplicateDefinition(String idString) {
         checkingResults.incNrOfChecks()
 
-        // if idString appears more than once in tagsWithId,
-        // we found
+        // duplicate, IFF idString appears more than once in tagsWithId
         List<String> tagsWithSpecificId =
                 getAllTagsWithSpecificId( idString, tagsWithId).collect { it.toString() }
 
         if (tagsWithSpecificId.size() > 1) {
             String findingStrings = tagsWithSpecificId.join(",")
-            checkingResults.newFinding(  "$idString has multiple definitions:" + findingStrings )
+            checkingResults.newFinding(  "\"$idString\" has multiple definitions:" + findingStrings )
         }
     }
 

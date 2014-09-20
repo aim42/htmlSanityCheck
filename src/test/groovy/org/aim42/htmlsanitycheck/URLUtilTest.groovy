@@ -40,17 +40,22 @@ class URLUtilTest extends GroovyTestCase {
 
     @Test
     public void testRemoteURLs() {
-        def prefixes = ["http", "HTTP", "https", "HTTPS", "hTtPs", "ftp", "FTP", "fTP", "telnet", "TELNET"]
+        def prefixes = ["http", "HTTP", "https", "HTTPS", "hTtPs",
+                        "ftp", "FTP", "fTP", "telnet", "TELNET"]
 
         prefixes.each { prefix ->
             String url = prefix + "://$AIM/$IMG"
-            assertTrue( "$prefix is remote URL but wasnt recognized", URLUtil.isRemoteURL(url))
+            assertTrue( "$prefix is remote URL but wasnt recognized",
+                    URLUtil.isRemoteURL(url))
         }
     }
 
     @Test
     public void testRelativeFilePath() {
-        def paths = ["./$IMG", "../$IMG", "$IMG", "../../$IMG"]
+        def paths = ["./$IMG", "../$IMG", "$IMG",
+                     "../../$IMG", "$IMG",
+                     "images/aim42-logo.png"
+                    ]
 
         paths.each { url ->
             assertFalse( "$url is local but was recognized as remote", URLUtil.isRemoteURL(url))

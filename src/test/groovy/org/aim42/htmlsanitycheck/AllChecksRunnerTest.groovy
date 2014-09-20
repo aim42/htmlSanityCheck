@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck
 
 import org.junit.Before
+import org.junit.Test
 
 class AllChecksRunnerTest extends GroovyTestCase {
 
@@ -12,6 +13,16 @@ class AllChecksRunnerTest extends GroovyTestCase {
                 new AllChecksRunner(
 
         )
+    }
+
+    // TODO: create a useful test here...
+    // problem: AllChecksRunner is a simple integration class,
+    // without serious processing on its own...
+
+    @Test
+    public void testNothingSerious() {
+        assertTrue("sorry, I have no idea what or how to test the AllChecksRunner...",
+                true)
     }
 
 }

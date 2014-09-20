@@ -9,9 +9,19 @@ class InternalLinksChecker extends Checker {
     private List<String> ids    // id="XYZ"
     private List<String> hrefs  // a href="XYZ"
 
+
     @Override
-    public CheckingResultsCollector check() {
-        super.initResults()
+    protected void initCheckingResultsDescription() {
+        checkingResults.whatIsChecked =  "Broken Internal Links Check"
+        //whatToCheck: "matching id\\'s for hrefs"
+        checkingResults.sourceItemName =  "href"
+        checkingResults.targetItemName = "id"
+    }
+
+
+    @Override
+    protected CheckingResultsCollector check() {
+
 
         //get list of all a-tags "<a src=..." in html file
         hrefs = pageToCheck.getAllHrefStrings()
@@ -26,11 +36,10 @@ class InternalLinksChecker extends Checker {
 
     /*
      * check all internal links against the existing id's
-     * @return
      */
     private void checkAllInternalLinks() {
 
-        // for all hrefs check wether the id exists
+        // for all hrefs check if the corresponding id exists
         hrefs.each {
             checkSingleInternalLink( it )
         }
@@ -59,7 +68,7 @@ class InternalLinksChecker extends Checker {
     private void doesLinkTargetExist(String href) {
 
         if (!ids.contains( href )) {
-            String findingText = "link target $href missing"
+            String findingText = "link target \"$href\" missing"
             checkingResults.newFinding(findingText)
         }
 

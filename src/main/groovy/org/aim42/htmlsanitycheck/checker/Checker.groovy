@@ -13,54 +13,54 @@ import org.aim42.htmlsanitycheck.html.HtmlPage
  * No constructor is defined, allowing for arbitrary "named parameters"
  * in constructor calls.
  *
+ * While checking, every subclass builds an instance of {@link CheckingResultsCollector}
+ *
  * @author Gernot Starke <gs@gernotstarke.de>
  */
 
 abstract class Checker {
 
-    String headline         // i.e. Image References
-    String whatToCheck      // i.e. missing images
-
-    // source-item is checked against target-item
-    String sourceItemName   // i.e. image-reference, anchor/link
-    String targetItemName   // i.e. image-file, id/bookmark
-
-    // i.e. image-links, internal links (anchors/hrefs)
+     // i.e. image-links, internal links (anchors/hrefs)
     CheckingResultsCollector checkingResults
 
     HtmlPage pageToCheck
 
 
     /**
-    ** template method for performing a single type of checks
-     * on the given @see HtmlPage.
+    ** template method for performing a single type of checks on the given @see HtmlPage.
      *
      * Prerequisite: pageToCheck has been successfully parsed,
      * prior to constructing this Checker instance.
     **/
     public CheckingResultsCollector performCheck() {
-        // assert prerequisite
+        // assert non-null htmlPage
         assert pageToCheck != null
 
-        initResults()
+        checkingResults = new CheckingResultsCollector()
+
+        // description is set by subclasses
+        initCheckingResultsDescription()
+
         return check() // execute the actual checking algorithm
     }
 
-    /**
-     * Initialize the checking results to "empty".
-     * The recurring part of the Template-Method-Pattern.
-     */
-    protected void initResults() {
-        checkingResults = new CheckingResultsCollector( headline )
-    }
-
 
     /**
-     * Perform a particular kind of checks, i.e. duplicate-definition-check.
+     * Initialize with suitable description.
      *
+     */
+    abstract protected void initCheckingResultsDescription()
+
+
+    /**
+     * Perform a particular kind of checks, i.e. missing-local-images-check
+     *
+     * Called by {@link #performCheck()} as part of the template method pattern.
      * @return collected results of this Checker instance
      */
-    abstract public CheckingResultsCollector check( )
+    abstract protected CheckingResultsCollector check( )
+
+
 
 }
 

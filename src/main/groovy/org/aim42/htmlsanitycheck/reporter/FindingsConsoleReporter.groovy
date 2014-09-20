@@ -1,52 +1,68 @@
 package org.aim42.htmlsanitycheck.reporter
 
+import org.aim42.htmlsanitycheck.checker.CheckingResultsCollector
+
+
 // see end-of-file for license information
 
 
 class FindingsConsoleReporter extends FindingsReporter {
 
-    @Override
-    void reportFindings() {
+
+    public FindingsConsoleReporter(ArrayList<CheckingResultsCollector> results) {
+        super(results)
 
     }
+
 
     @Override
     void initializeReport() {
         // as we output to console, we don't need initialization
+        println ""
     }
 
     @Override
     void reportHeader() {
         println "********* HTML Sanity Checker findings report *********"
         println "created on $createdOnDate"
-        println
+        println ""
 
     }
 
     @Override
-    void reportNumericalSummary() {
-        println "-"*50
+    void reportOverallSummary() {
         println "Summary:"
+        println "========"
         println "performed ${checkingResults.size()} types of checks"
         println "checked $totalNrOfChecksPerformed items total, "
-        println "found   $totalNrOfFindings issues, ${percentSuccessful}%successful."
-        println "-"*50
+        println "found   $totalNrOfFindings issues, $percentSuccessful% successful."
+        println "-" * 50
     }
 
     @Override
-    void reportDetails() {
-        checkingResults.each {
-            it.toString()
-            println "-"*50
-        }
+    void reportSingleCheckSummary() {
+        println "\nDetails:\n"
+
+        checkingResults.each { result ->
+            println "Results for ${result.whatIsChecked}"
+            println "${result.nrOfItemsChecked} $result.sourceItemName checked,"
+            println "${result.nrOfProblems()} $result.targetItemName found.\n"
+            result.findings.each {
+                println it.toString()
+            }
+
+            println "-" * 50
+        }  // each result
     }
+
 
     @Override
     void closeReport() {
         println "thanx for using HtmlSanityChecker."
     }
-}
 
+
+}
 
 /*======================================================================
 

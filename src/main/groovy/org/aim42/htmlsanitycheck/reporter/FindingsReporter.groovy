@@ -16,35 +16,27 @@ import org.aim42.htmlsanitycheck.checker.CheckingResultsCollector
 
 abstract class FindingsReporter {
 
-    private ArrayList<CheckingResultsCollector> checkingResults
+    ArrayList<CheckingResultsCollector> checkingResults
 
     int totalNrOfChecksPerformed
     int totalNrOfFindings
-
-    // summary
     int percentSuccessful
 
     String createdOnDate
 
 
-    public FindingsReporter() {
-        checkingResults = new ArrayList<CheckingResultsCollector>()
-        totalNrOfChecksPerformed = 0
-
-        percentSuccessful = 0
-        totalNrOfFindings = 0
-
-        createdOnDate = new Date().format('dd. MMMM YYYY, HH:mmh')
-    }
 
     public FindingsReporter(ArrayList<CheckingResultsCollector> checkingResults) {
 
-        FindingsReporter()
-
         this.checkingResults = checkingResults
+        this.totalNrOfChecksPerformed = 0
+
+        this.percentSuccessful = 0
+        this.totalNrOfFindings = 0
+
+        this.createdOnDate = new Date().format('dd. MMMM YYYY, HH:mm')
 
     }
-
 
     /**
      * Presents a report of a subtype (e.g. HTML, console)
@@ -61,28 +53,26 @@ abstract class FindingsReporter {
         reportHeader()
 
         // output statistics, percentages etc.
-        reportNumericalSummary()
+        reportOverallSummary()
 
         // output details
-        reportDetails()
+        reportSingleCheckSummary()
 
         closeReport()
     }
 
-
     // primarily used for testing
-    public void addCheckingField(CheckingResultsCollector checkingField) {
-        this.checkingResults.add(checkingField)
+    public void addCheckingField(CheckingResultsCollector resultsCollector) {
+        this.checkingResults.add(resultsCollector)
     }
 
     public void calculateSummary() {
         totalNrOfChecksPerformed = 0
         totalNrOfFindings = 0
-        checkingResults.each { checkingField ->
-            totalNrOfChecksPerformed += checkingField.nrOfItemsChecked
-            totalNrOfFindings += checkingField.nrOfProblems()
+        checkingResults.each { checkingResult ->
+            totalNrOfChecksPerformed += checkingResult.nrOfItemsChecked
+            totalNrOfFindings += checkingResult.nrOfProblems()
         }
-
 
         // base case: if no checks performed, 100% successful
         if (totalNrOfChecksPerformed <= 0) {
@@ -96,7 +86,6 @@ abstract class FindingsReporter {
 
     }
 
-
     // stuff delegated to subclasses
     // ************************************
 
@@ -104,9 +93,9 @@ abstract class FindingsReporter {
 
     abstract void reportHeader()
 
-    abstract void reportNumericalSummary()
+    abstract void reportOverallSummary()
 
-    abstract void reportDetails()
+    abstract void reportSingleCheckSummary()
 
     abstract void closeReport()
 

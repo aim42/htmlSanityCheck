@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory
 
 class ImageFileExistChecker extends Checker {
 
+    // members are initialized in implicit constructor
     private List<HtmlElement> images
     private String baseDirPath
 
@@ -17,12 +18,17 @@ class ImageFileExistChecker extends Checker {
     private static Logger logger = LoggerFactory.getLogger(ImageFileExistChecker.class);
 
 
+    @Override
+    protected void initCheckingResultsDescription() {
+
+        checkingResults.whatIsChecked  = "Missing Local Images Check"
+        checkingResults.sourceItemName = "img src attributes"
+        checkingResults.targetItemName = "missing image files"
+    }
 
 
     @Override
-    public CheckingResultsCollector check() {
-
-        super.initResults()
+    protected CheckingResultsCollector check() {
 
         //get list of all image-tags "<img..." in html file
         images = pageToCheck.getAllImageTags()
@@ -48,7 +54,8 @@ class ImageFileExistChecker extends Checker {
         logger.info( "relPathToCurImage: \n$relativePathToCurrentImage")
 
         // check only "local" image references
-        if (URLUtil.isRemoteURL(relativePathToCurrentImage)) {
+        // (that is, NO remote URL)
+        if (!URLUtil.isRemoteURL(relativePathToCurrentImage)) {
 
             // bookkeeping:
             checkingResults.incNrOfChecks()
@@ -77,7 +84,7 @@ class ImageFileExistChecker extends Checker {
         File imageFile = new File(absolutePath);
 
         if (!imageFile.exists() || imageFile.isDirectory()) {
-            String findingText = "image $relativePathToImageFile missing"
+            String findingText = "image \"$relativePathToImageFile\" missing"
             checkingResults.newFinding(findingText)
         }
 

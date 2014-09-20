@@ -42,7 +42,7 @@ public class FindingsHtmlReporter extends FindingsReporter {
 
 
     @Override
-    void reportNumericalSummary() {
+    void reportOverallSummary() {
         writeSummaryPrefix()
 //        writeSummary(imageFindings.checkingResults,
 //                imageFindings.findings.size())
@@ -96,7 +96,7 @@ public class FindingsHtmlReporter extends FindingsReporter {
     }
 
     @Override
-    void reportDetails() {
+    void reportSingleCheckSummary() {
 
     }
 

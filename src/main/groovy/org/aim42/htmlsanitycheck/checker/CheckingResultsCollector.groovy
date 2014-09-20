@@ -11,21 +11,28 @@ package org.aim42.htmlsanitycheck.checker
 
 class CheckingResultsCollector {
 
-    public final String headline         // i.e. Image References
+    protected String whatIsChecked    // i.e. "Missing Local Images Check"
+
+    // source-item is checked against target-item
+    protected String sourceItemName   // i.e. image-src-attribute, anchor/link
+    protected String targetItemName   // i.e. local-image-file, id/bookmark
 
     public int nrOfItemsChecked
 
     public ArrayList<Finding> findings
 
     /**
-     * Initialize everything to empty or zero.
+     * Initialize some members.
+     *
+     * Other members are set by the Checker-instance
+     * owning this CheckingResultsCollector.
      */
-    public CheckingResultsCollector( String headline ) {
+    public CheckingResultsCollector() {
 
-        this.headline = headline
         this.nrOfItemsChecked = 0
         this.findings = new ArrayList<Finding>()
     }
+
 
     /**
      * add a single finding to the collection,
@@ -45,7 +52,7 @@ class CheckingResultsCollector {
     }
 
     /**
-     * one more check :-)
+     * bookkeeping on the number of checks
      */
     public void incNrOfChecks() {
         nrOfItemsChecked += 1
@@ -60,11 +67,13 @@ class CheckingResultsCollector {
     }
 
 
+
+
     @Override
     public String toString() {
         int nrOfProblems = nrOfProblems()
-        return "Checking results for $headline" + '\n' +
-                " $nrOfItemsChecked items checked" + '\n' +
+        return "Checking results for $whatIsChecked" + '\n' +
+                " $nrOfItemsChecked $sourceItemName checked," + '\n' +
                 " $nrOfProblems finding(s)" + '\n' +
                 findings.each { it.toString() + '\n'}
 

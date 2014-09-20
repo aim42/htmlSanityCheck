@@ -35,8 +35,8 @@ class CheckingResultsCollectorTest extends GroovyTestCase {
     public void testCheckingResultConstruction() {
         String expected = "empty checkingResult shall have "
 
-        assertEquals(expected + "proper headline",
-                headline, checkingResultsCollector.headline)
+        assertEquals(expected + "proper whatIsChecked",
+                headline, checkingResultsCollector.whatIsChecked)
 
         assertEquals(expected + "zero findings",
                 0, checkingResultsCollector.nrOfProblems())

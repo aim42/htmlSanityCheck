@@ -1,25 +1,19 @@
 package org.aim42.htmlsanitycheck
 
+import org.aim42.htmlsanitycheck.checker.*
+
 // see end-of-file for license information
-
-import org.aim42.htmlsanitycheck.checker.Checker
-import org.aim42.htmlsanitycheck.checker.CheckingResultsCollector
-import org.aim42.htmlsanitycheck.checker.DuplicateIdChecker
-import org.aim42.htmlsanitycheck.checker.ImageFileExistChecker
-import org.aim42.htmlsanitycheck.checker.InternalLinksChecker
-
 import org.aim42.htmlsanitycheck.html.HtmlPage
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.aim42.htmlsanitycheck.reporter.FindingsConsoleReporter
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Coordinates and runs all available html sanity checks.
  * <p>
  * <ol>
  *     <li>parse the html file </li>
- *     <li>initialize image file checker </li>
+ *     <li>initialize and run image file checker </li>
  *     <li></li>
  *     <li></li>
  * </ol>
@@ -31,9 +25,8 @@ import org.slf4j.LoggerFactory;
 
 class AllChecksRunner {
 
-
     // we process one single input file
-    private  File fileToCheck
+    private File fileToCheck
 
     // our base directory: image-links within HTML are supposed to be relative to this
     private String baseDirPath
@@ -45,26 +38,24 @@ class AllChecksRunner {
     // where do we put our results
     private File checkingResultsDir
 
-
     // TODO: handle checking of external resources
-    private  Boolean checkExternalResources = false
+    private Boolean checkExternalResources = false
 
-
+    // the checker instances
     private Checker imageChecker
     private Checker undefinedInternalLinksChecker
     private Checker duplicateIdChecker
 
+    // collections for the results
     private CheckingResultsCollector imageCheckingResults
     private CheckingResultsCollector internalLinkCheckingResults
-    private CheckingResultsCollector duplicateIdsResults
+    private CheckingResultsCollector duplicateIdsCheckingResults
 
+    // our input html
     private HtmlPage pageToCheck
-
 
     // logging stuff
     private static Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
-    private static String HSC = "[HtmlSanityCheck]"
-
 
     /**
      * runs all available checks on the file
@@ -72,7 +63,7 @@ class AllChecksRunner {
      * @param fileToCheck all available checks are run against this file
      * TODO: enhance to fileSet
 
-     * @param imagesDir: images are expected here
+     * @param imagesDir : images are expected here
      * @param checkingResultsDir
 
      */
@@ -82,7 +73,7 @@ class AllChecksRunner {
             File imagesDir,
             File checkingResultsDir,
             Boolean checkExternalResources
-            ) {
+    ) {
         this.fileToCheck = fileToCheck
         this.checkingResultsDir = checkingResultsDir
         this.imagesDir = imagesDir
@@ -90,83 +81,91 @@ class AllChecksRunner {
 
         this.baseDirPath = fileToCheck.getParent()
 
-        logger.info( "$HSC AlLChecksRunner created")
+        logger.info("AlLChecksRunner created")
 
     }
-
-
 
     /**
      * performs all available checks
      * on pageToCheck
      */
-    public void performAllChecks( ) {
+    public void performAllChecks() {
 
-        logger.info( this.toString())
+        logger.info(this.toString())
 
         pageToCheck = parseHtml()
 
         // the actual checks
         runImageFileExistCheck()
-        runDuplicateIdCheck( )
+        runDuplicateIdCheck()
         runInternalLinkCheck()
+
+        reportCheckingResultsOnConsole()
     }
 
+    /**
+     * reports results on stdout
+     */
+    public void reportCheckingResultsOnConsole() {
+        def results = new ArrayList<CheckingResultsCollector>( Arrays.asList(
+                        imageCheckingResults,
+                        internalLinkCheckingResults,
+                        duplicateIdsCheckingResults ))
 
+        logger.info "results = " + results
 
+        new FindingsConsoleReporter(results).reportFindings()
+
+        //reporter.reportFindings()
+
+    }
+
+    /**
+     * check if the referenced image files exist
+     *
+     * This check is useful only for local images, where
+     * the img-src attribute looks like src="images/test.jpg" or
+     * src="file://image.jpg"
+     */
     public void runImageFileExistCheck() {
         // from gradle we get a File object for imageDirPath
         imageChecker = new ImageFileExistChecker(
                 pageToCheck: pageToCheck,
-                baseDirPath: baseDirPath,
-                headline: "Image File Exist Check",
-                whatToCheck: "img links",
-                sourceItemName: "img link",
-                targetItemName: "image file")
+                baseDirPath: baseDirPath
+              )
 
-        imageCheckingResults = imageChecker.check()
-        println imageCheckingResults.toString()
+        imageCheckingResults = imageChecker.performCheck()
+        logger.info imageCheckingResults.toString()
     }
 
 
     public void runInternalLinkCheck() {
         undefinedInternalLinksChecker = new InternalLinksChecker(
-                pageToCheck: pageToCheck,
-                headline: "Undefined Internal Links Check",
-                whatToCheck: "matching id\'s for hrefs",
-                sourceItemName: "href",
-                targetItemName: "id" )
+                pageToCheck: pageToCheck
+        )
 
-        internalLinkCheckingResults = undefinedInternalLinksChecker.check()
+        internalLinkCheckingResults = undefinedInternalLinksChecker.performCheck()
 
-        println internalLinkCheckingResults.toString()
+        logger.info internalLinkCheckingResults.toString()
     }
 
 
     public void runDuplicateIdCheck() {
-        duplicateIdChecker = new  DuplicateIdChecker(
-                pageToCheck: pageToCheck,
-                headline: "Duplicate Ids Check",
-                whatToCheck: "multiple definition of id\'s",
-                sourceItemName: "id",
-                targetItemName: "id"
+        duplicateIdChecker = new DuplicateIdChecker(
+                pageToCheck: pageToCheck
         )
-        duplicateIdsResults = duplicateIdChecker.check()
+        duplicateIdsCheckingResults = duplicateIdChecker.performCheck()
 
-        println duplicateIdsResults.toString()
+        logger.info duplicateIdsCheckingResults.toString()
     }
-
-
 
     /**
      * reads the html page
      */
     private HtmlPage parseHtml() {
         assert fileToCheck.exists()
-        return new HtmlPage( fileToCheck )
+        return new HtmlPage(fileToCheck)
     }
-
-
 
     /**
      * runs the checks from the command
@@ -177,7 +176,7 @@ class AllChecksRunner {
         // TODO: read parameter from command line
         AllChecksRunner allChecksRunner = new AllChecksRunner()
 
-        allChecksRunner.fileToCheck = new File( "file-to-test.html")
+        allChecksRunner.fileToCheck = new File("file-to-test.html")
         //allChecksRunner.docDirPath = System.getProperty("user.dir") + "/src/test/resources/"
         //allChecksRunner.pathToHtmlFile = docDirPath + fileName
         //allChecksRunner.imageDirPath = docDirPath
@@ -193,7 +192,7 @@ class AllChecksRunner {
 
     @Override
     public String toString() {
-        return  "   file to check : $fileToCheck\n" +
+        return "   file to check : $fileToCheck\n" +
                 "   put results   : $checkingResultsDir\n" +
                 "   images dir    : $imagesDir\n";
     }
