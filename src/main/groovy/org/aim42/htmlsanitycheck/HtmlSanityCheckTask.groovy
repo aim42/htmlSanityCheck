@@ -3,14 +3,9 @@
 package org.aim42.htmlsanitycheck
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.InputDirectory
-import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.OutputDirectory
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.*
 
-
-
+import javax.inject.Inject
 
 /**
  * Entry class for the gradle-plugin.
@@ -21,21 +16,33 @@ import org.gradle.api.tasks.TaskAction
 class HtmlSanityCheckTask extends DefaultTask {
 
     // currently we only support checking a SINGLE FILE
-    @InputFile File fileToCheck
+    @InputFile
+    File fileToCheck
 
     // imagesDir is the directory where sourceDocument resides,
     // and from which the image directory is descendant
-    @Optional @InputDirectory File imageDir
+    @Optional
+    @InputDirectory
+    File imageDir
 
     // where do we store checking results
-    @Optional @OutputDirectory File checkingResultsDir
+    @Optional
+    @OutputDirectory
+    File checkingResultsDir
 
     // shall we also check external resources?
-    @Optional Boolean checkExternalLinks = false
+    @Optional
+    Boolean checkExternalLinks = false
 
-    // true for additional runtime (log/debug) information
-    @Optional Boolean verbose = false
 
+
+    // use constructor to care for _run-always_
+    HtmlSanityCheckTask() {
+
+        // Never consider this up to date.
+        // thx https://github.com/stevesaliman/gradle-cobertura-plugin/commit/d61191f7d5f4e8e89abcd5f3839a210985526648
+        outputs.upToDateWhen { false }
+    }
 
     /**
      * entry point for several html sanity checks
@@ -46,11 +53,9 @@ class HtmlSanityCheckTask extends DefaultTask {
 
         logBuildParameter()
 
-
         // validate parameters
         // ======================================
         // TODO: validate parameter
-
 
         // create an AllChecksRunner...
         // ======================================
@@ -60,7 +65,6 @@ class HtmlSanityCheckTask extends DefaultTask {
                 checkingResultsDir,
                 checkExternalLinks
         )
-
 
         // perform the actual checks
         // ======================================
@@ -82,7 +86,6 @@ class HtmlSanityCheckTask extends DefaultTask {
 
 
 }
-
 
 /*========================================================================
  Copyright 2014 Gernot Starke and aim42 contributors
