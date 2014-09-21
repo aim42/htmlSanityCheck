@@ -42,12 +42,22 @@ class URLUtilTest extends GroovyTestCase {
     public void testRemoteURLs() {
         def prefixes = ["http", "HTTP", "https", "HTTPS", "hTtPs",
                         "ftp", "FTP", "fTP", "telnet", "TELNET",
-                        "mailto", "MAILTO", "MailTO",
                         "gopher", "ssh", "SSH"]
 
         prefixes.each { prefix ->
             String url = prefix + "://$AIM/$IMG"
             assertTrue( "$prefix is remote URL but wasnt recognized",
+                    URLUtil.isRemoteURL(url))
+        }
+    }
+
+    @Test
+    public void testMailtoLink() {
+        def prefixes = ["mailto", "MAILTO", "mailTO"]
+
+        prefixes.each { prefix ->
+            String url = prefix + ":chuck.norris@example.com"
+            assertTrue( "$prefix is mailto-link but wasnt recognized",
                     URLUtil.isRemoteURL(url))
         }
     }

@@ -10,7 +10,10 @@ class URLUtil {
     public static boolean isRemoteURL(String link) {
         // simple regular expression to match http://, https:// and ftp://
         //
-        return ( link ==~ (/^(?i)(https?|ftp|telnet|mailto|ssh|gopher):\/\/.*$/) )
+
+        return ( link ==~ (/^(?i)(https?|ftp|telnet|ssh|gopher):\/\/.*$/) ||
+                 // special case for mailto-links
+                 link ==~ (/^(?i)(mailto):.*$/) )
 
     }
 

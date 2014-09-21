@@ -97,7 +97,6 @@ class BrokenInternalLinksCheckerTest extends GroovyTestCase {
 
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
         assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)
-
     }
 
     @Test
@@ -132,7 +131,24 @@ class BrokenInternalLinksCheckerTest extends GroovyTestCase {
         actual = collector.findings[1]
         expected = "link target \"arc42\" missing"
         assertEquals(message, expected, actual)
+    }
 
+
+    @Test
+    public void testMailtoinkIsIgnored() {
+        String HTML = '''
+           <html><head></head><body>
+                   <a href="mailto:chuck.norris@example.org">mail him</a>
+              </body></html>'''
+
+        htmlPage = new HtmlPage( HTML )
+
+        undefinedInternalLinksChecker = new BrokenInternalLinksChecker(
+                pageToCheck: htmlPage )
+        collector = undefinedInternalLinksChecker.performCheck()
+
+        assertEquals( "expected zero checks", 0, collector.nrOfItemsChecked)
+        assertEquals( "expected zero finding", 0, collector.nrOfProblems())
     }
 
 }
