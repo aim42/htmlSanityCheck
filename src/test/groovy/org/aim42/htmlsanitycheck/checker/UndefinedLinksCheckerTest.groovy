@@ -21,7 +21,7 @@ class UndefinedLinksCheckerTest extends GroovyTestCase {
 
 
     @Test
-    public void externalLinkShallBeIgnored() {
+    public void testExternalLinkShallBeIgnored() {
         String HTML = '''
            <html>
              <head></head>
@@ -69,7 +69,7 @@ class UndefinedLinksCheckerTest extends GroovyTestCase {
         assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)
 
         String actual = collector.findings.first()
-        String expected = "link target nonexisting missing"
+        String expected = "link target \"nonexisting\" missing"
         String message = "expected $expected"
 
         assertEquals(message, expected, actual)
@@ -123,14 +123,14 @@ class UndefinedLinksCheckerTest extends GroovyTestCase {
 
         // first finding: aim42 link missing
         String actual = collector.findings.first()
-        String expected = "link target aim42 missing"
+        String expected = "link target \"aim42\" missing"
         String message = "expected $expected"
 
         assertEquals(message, expected, actual)
 
         // second finding: arc42 link missing
         actual = collector.findings[1]
-        expected = "link target arc42 missing"
+        expected = "link target \"arc42\" missing"
         assertEquals(message, expected, actual)
 
     }
