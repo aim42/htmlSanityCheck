@@ -68,6 +68,8 @@ class HtmlPage {
         return toHtmlElementsCollection( elements )
     }
 
+
+
     /**
      *
      * @return ArrayList<String> of all href-attributes
@@ -114,6 +116,10 @@ class HtmlPage {
 
         return normalizedHref
     }
+
+    /**
+     * getAllIdStrings return ArrayList<String> of all id="xyz" definitions
+     */
 
     public final ArrayList<String> getAllIdStrings() {
         Elements elements = document.getElementsByAttribute( "id")
