@@ -2,6 +2,7 @@ package org.aim42.htmlsanitycheck
 
 import org.aim42.htmlsanitycheck.checker.CheckingResultsCollector
 import org.aim42.htmlsanitycheck.checker.Finding
+import org.aim42.htmlsanitycheck.reporter.FindingsConsoleReporter
 import org.aim42.htmlsanitycheck.reporter.FindingsHtmlReporter
 import org.aim42.htmlsanitycheck.reporter.FindingsReporter
 import org.junit.Test
@@ -23,10 +24,10 @@ class CalculateSummaryTest extends GroovyTestCase {
 
 
     public void setUp() {
-        // create empty Reporter without findings
-        reporter = new FindingsHtmlReporter()
-
         checkingField = new CheckingResultsCollector()
+
+        // create empty Reporter without findings
+        reporter = new FindingsConsoleReporter( new ArrayList<CheckingResultsCollector>( ))
 
         singleFinding = new Finding()
     }

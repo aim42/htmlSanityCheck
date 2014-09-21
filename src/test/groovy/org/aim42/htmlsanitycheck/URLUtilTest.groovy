@@ -41,7 +41,9 @@ class URLUtilTest extends GroovyTestCase {
     @Test
     public void testRemoteURLs() {
         def prefixes = ["http", "HTTP", "https", "HTTPS", "hTtPs",
-                        "ftp", "FTP", "fTP", "telnet", "TELNET"]
+                        "ftp", "FTP", "fTP", "telnet", "TELNET",
+                        "mailto", "MAILTO", "MailTO",
+                        "gopher", "ssh", "SSH"]
 
         prefixes.each { prefix ->
             String url = prefix + "://$AIM/$IMG"

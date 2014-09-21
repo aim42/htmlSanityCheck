@@ -70,7 +70,7 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
         assertEquals( "expected 1 image", 1, images.size())
 
 
-        checker = new ImageFileExistChecker(
+        checker = new MissingImageFilesChecker(
                 pageToCheck: htmlPage,
                 baseDirPath: "")
 
@@ -102,7 +102,7 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
 
         assertNotNull("htmlpage must not be null", htmlPage )
 
-        checker = new ImageFileExistChecker(
+        checker = new MissingImageFilesChecker(
                 pageToCheck: htmlPage,
                 baseDirPath: imagesDir)
 

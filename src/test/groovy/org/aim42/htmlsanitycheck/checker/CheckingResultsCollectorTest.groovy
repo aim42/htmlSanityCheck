@@ -9,7 +9,7 @@ import org.junit.Test
 
 class CheckingResultsCollectorTest extends GroovyTestCase {
 
-    final String headline = "A Headline for Testing Purpose"
+    final String whatIsCheckedMessage = "A Headline for Testing Purpose"
 
     final String localPath = "/src/test/resources"
 
@@ -21,7 +21,9 @@ class CheckingResultsCollectorTest extends GroovyTestCase {
 
     public void setUp() {
         checkingResultsCollector =
-                new CheckingResultsCollector(headline)
+                new CheckingResultsCollector(
+                        whatIsChecked: whatIsCheckedMessage
+                )
 
         // not working in IntelliJ multi-module setup
         // imagesDir = System.getProperty("user.dir") + localPath
@@ -36,7 +38,7 @@ class CheckingResultsCollectorTest extends GroovyTestCase {
         String expected = "empty checkingResult shall have "
 
         assertEquals(expected + "proper whatIsChecked",
-                headline, checkingResultsCollector.whatIsChecked)
+                whatIsCheckedMessage, checkingResultsCollector.whatIsChecked)
 
         assertEquals(expected + "zero findings",
                 0, checkingResultsCollector.nrOfProblems())
@@ -72,16 +74,12 @@ class CheckingResultsCollectorTest extends GroovyTestCase {
         List<HtmlElement> images = htmlPage.getAllImageTags()
         assertEquals( "expected 2 images", 2, images.size())
 
-        checker = new ImageFileExistChecker(
+        checker = new MissingImageFilesChecker(
                 pageToCheck: htmlPage,
-                baseDirPath: imageDir,
-                headline: "Image File Exist Check",
-                whatToCheck: "img links",
-                sourceItemName: "img link",
-                targetItemName: "image file")
+                baseDirPath: imageDir )
 
         CheckingResultsCollector checkingResults =
-                checker.check()
+                checker.performCheck()
 
 
         int expected = 2
@@ -98,9 +96,10 @@ class CheckingResultsCollectorTest extends GroovyTestCase {
                 expected, actual)
 
         // we expect the finding to be ./images/test_xyz_uvw.jpg
-        String expectedImageSrc = "image ./images/test_xyz_uvw.jpg missing"
+        String expectedImageSrc = "image \"./images/test_xyz_uvw.jpg\" missing"
         String actualFinding = checkingResults.findings.first().item
-        assertEquals( "expected /images/test_xyz_uvw.jpg as finding",
+
+        assertEquals( "expected \"/images/test_xyz_uvw.jpg\" as finding",
         expectedImageSrc, actualFinding)
 
 

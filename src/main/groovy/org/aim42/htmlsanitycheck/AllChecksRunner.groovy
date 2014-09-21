@@ -129,7 +129,7 @@ class AllChecksRunner {
      */
     public void runImageFileExistCheck() {
         // from gradle we get a File object for imageDirPath
-        imageChecker = new ImageFileExistChecker(
+        imageChecker = new MissingImageFilesChecker(
                 pageToCheck: pageToCheck,
                 baseDirPath: baseDirPath
               )
@@ -140,7 +140,7 @@ class AllChecksRunner {
 
 
     public void runInternalLinkCheck() {
-        undefinedInternalLinksChecker = new InternalLinksChecker(
+        undefinedInternalLinksChecker = new BrokenInternalLinksChecker(
                 pageToCheck: pageToCheck
         )
 

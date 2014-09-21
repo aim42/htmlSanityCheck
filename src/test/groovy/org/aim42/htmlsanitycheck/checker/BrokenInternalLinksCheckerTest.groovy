@@ -27,9 +27,9 @@ class BrokenInternalLinksCheckerTest extends GroovyTestCase {
              <head></head>
               <body>
                    <h1>dummy-heading-1</h1>
-                   <a href="http://github.com/aim42</a>
+                   <a href="http://github.com/aim42">aim42</a>
                    <a href="https://github.com/arc42">arc42</a>
-                   <a
+
               </body>
            </html>'''
 
@@ -41,7 +41,7 @@ class BrokenInternalLinksCheckerTest extends GroovyTestCase {
 
 
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
-        assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)
+        assertEquals( "expected zero checks", 0, collector.nrOfItemsChecked)
 
     }
 
