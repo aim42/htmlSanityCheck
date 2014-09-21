@@ -41,8 +41,8 @@ class InternalLinksChecker extends Checker {
     private void checkAllInternalLinks() {
 
         // for all hrefs check if the corresponding id exists
-        hrefs.each {
-            checkSingleInternalLink( it )
+        hrefs.each { href ->
+            checkSingleInternalLink( href )
         }
     }
 

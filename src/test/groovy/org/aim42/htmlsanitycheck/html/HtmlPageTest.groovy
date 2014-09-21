@@ -1,48 +1,51 @@
 package org.aim42.htmlsanitycheck.html
 
+import org.junit.Before
 import org.junit.Test
 
 // see end-of-file for license information
 
+/**
+ * test that important HTML elements are correctly parsed and extracted from {@link HtmlPage}.
+ */
 
 class HtmlPageTest extends GroovyTestCase {
 
     /**
      * this file resides in git - so we can
-     * hardcode the filename into the tests
+     * bake the filename into the tests
      */
-    final String fileName = 'file-to-test.html'
+    final static String FILENAME= 'file-to-test.html'
 
     /**
      * the local (relative) path to the test/resources directory
      * is fix - so we can hardcode the name into the tests
      */
-    final String localPath = "/src/test/resources/"
+    final static String LOCAL_PATH = "/src/test/resources/"
+
+    final static String HTML_HEAD = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <head></head><html>'
 
 
     final String HTML_WITH_IMG_TAG =
-            '''
-           <html>
-             $HTML_HEAD
+            """$HTML_HEAD
               <body>
                    <h1>dummy-heading-1</h1>
                    <img src="images/test_xyz_uvw.jpg" >
               </body>
-           </html>'''
+           </html>"""
 
     final String HTML_WITH_TWO_IMG_TAGS =
-            '''
-           <html>
-             $HTML_HEAD
+            """$HTML_HEAD
               <body>
                    <img src='test.jpg'/>
                    <img src='test.jpg'/>
               </body>
-           </html>'''
+           </html>"""
 
     File tmpFile
 
 
+    @Before
     public void setUp() {
         tmpFile = File.createTempFile("testfile", "html")
     }
@@ -104,7 +107,7 @@ class HtmlPageTest extends GroovyTestCase {
     @Test
     public void testGetHtmlImgTagsFromFile() {
         String userDir = System.getProperty("user.dir")
-        String filePath = userDir + localPath + fileName
+        String filePath = userDir + LOCAL_PATH + FILENAME
 
         // make sure the generated file exists...
         assertTrue("file $filePath  does NOT exist (but should!)",

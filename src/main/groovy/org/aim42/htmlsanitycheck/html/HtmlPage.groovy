@@ -2,7 +2,6 @@ package org.aim42.htmlsanitycheck.html
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
 // see end-of-file for license information
@@ -70,7 +69,15 @@ class HtmlPage {
     }
 
     /**
+     *
      * @return ArrayList<String> of all href-attributes
+     *
+     * common pitfalls with hrefs:
+     * - local hrefs start with # (like "#appendix")
+     * - remote hrefs should be valid URLs (like "https://google.com")
+     * - remote hrefs might start with other than http (e.g. https, mailto, telnet, ssh)
+     * - hrefs might start with file://
+     * - hrefs might be empty strings (nobody knows wtf this is good for, but html parsers usually accept it)
      */
     public final ArrayList<String> getAllHrefStrings( ) {
         Elements elements = document.select("a[href]")
@@ -78,13 +85,35 @@ class HtmlPage {
         ArrayList<String> hrefStrings = new ArrayList<>()
 
         elements.each { element ->
-            def href = element.attr("href")
-            hrefStrings.add(href[1..href.length()-1])
+            String href = element.attr("href")
+
+            hrefStrings.add( normalizeHrefString( href ))
+
+            // the following line was caused http and https links to treated as local links...
+            // hrefStrings.add(href[1..href.length()-1])
         }
 
         return hrefStrings
     }
 
+    /*
+     convert href to string
+     */
+    private String normalizeHrefString( String href ) {
+        String normalizedHref
+
+        // local href, starting with "#" (e.g. #appendix or #_appendix
+        if (href.startsWith("#")) {
+           normalizedHref =  href[1..-1] // cut off first letter
+        }
+        // empty href might be treated differently one day...
+        else if (href=="") {
+            normalizedHref = ""
+        }
+        else normalizedHref = href
+
+        return normalizedHref
+    }
 
     public final ArrayList<String> getAllIdStrings() {
         Elements elements = document.getElementsByAttribute( "id")
