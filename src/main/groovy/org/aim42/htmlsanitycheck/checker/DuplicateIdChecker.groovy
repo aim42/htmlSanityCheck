@@ -9,10 +9,10 @@ class DuplicateIdChecker extends Checker {
 
     // the pure Id's as a set (duplicates are already removed here)
     // we take this set as basis for our checks!
-    Set<String> idStrings
+    Set<String> idStringsSet
 
     // all html-tags containing ids including potential duplicates
-    List<String> tagsWithId
+    List<String> idStringsList
 
 
     @Override
@@ -27,11 +27,11 @@ class DuplicateIdChecker extends Checker {
     protected CheckingResultsCollector check() {
 
         //get list of all tagsWithId '<... id="XYZ"...' in html file
-        idStrings = pageToCheck.getAllIdStrings().toSet()
 
-        tagsWithId = pageToCheck.getAllIds()
+        idStringsList = pageToCheck.getAllIdStrings()
+        idStringsSet = idStringsList.toSet()
 
-        checkForDuplicateIds()
+        checkForDuplicateIds( idStringsSet )
 
         return checkingResults
 
@@ -40,10 +40,10 @@ class DuplicateIdChecker extends Checker {
     /*
     * iterate over all id's to check for duplicate definitions
      */
-    private void checkForDuplicateIds() {
+    private void checkForDuplicateIds( Set<String> idStringsSet ) {
 
-       idStrings.each {
-            checkForDuplicateDefinition( it )
+       idStringsSet.each { oneIdString ->
+            checkForDuplicateDefinition( oneIdString )
         }
 
     }
@@ -52,13 +52,12 @@ class DuplicateIdChecker extends Checker {
     private void checkForDuplicateDefinition(String idString) {
         checkingResults.incNrOfChecks()
 
-        // duplicate, IFF idString appears more than once in tagsWithId
-        List<String> tagsWithSpecificId =
-                getAllTagsWithSpecificId( idString, tagsWithId).collect { it.toString() }
+        int nrOfOccurrences = idStringsList.findAll{ it == idString}.size()
 
-        if (tagsWithSpecificId.size() > 1) {
-            String findingStrings = tagsWithSpecificId.join(",")
-            checkingResults.newFinding(  "\"$idString\" has multiple definitions:" + findingStrings )
+        // duplicate, IFF idString appears more than once in idStringsList
+        if (nrOfOccurrences > 1) {
+
+            checkingResults.newFinding(  "id \"$idString\" has $nrOfOccurrences definitions." )
         }
     }
 

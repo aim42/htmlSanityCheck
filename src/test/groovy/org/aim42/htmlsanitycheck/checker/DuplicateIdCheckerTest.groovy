@@ -90,7 +90,7 @@ class DuplicateIdCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage(HTML_WITH_DUPLICATE_ID)
         ArrayList tagsWithId = htmlPage.getAllIds()
-        //Set idStrings = htmlPage.getAllIdStrings().toSet()
+        //Set idStringsSet = htmlPage.getAllIdStrings().toSet()
 
         assertEquals("Expected 4 tags with ids", 4, tagsWithId.size())
 
