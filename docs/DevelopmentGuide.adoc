@@ -4,6 +4,7 @@
 :toc-position: right
 
 :experimental:
+:imagesdir: ./images
 
 == Prerequisites
 
@@ -42,6 +43,13 @@ Some more step-by-step description contained
 <3> Property file containing the name of the actual implementation class:
 
  implementation-class=org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin
+
+== Notes for IntelliJ Users
+If you work with IntelliJ, you should configure your run- and test configurations
+so that the working-directory is set to your current module - most easily done
+by making $MODULE_DIR$ your default.
+
+image:intellij-run-configuration.jpg[]
 
 
 == Building the Plugin
