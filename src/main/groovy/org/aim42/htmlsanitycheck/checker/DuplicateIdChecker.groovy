@@ -19,7 +19,7 @@ class DuplicateIdChecker extends Checker {
     protected void initCheckingResultsDescription() {
         checkingResults.whatIsChecked  = "Duplicate Definition of id Check"
         checkingResults.sourceItemName = "id"
-        checkingResults.targetItemName = "id"
+        checkingResults.targetItemName = "duplicate id"
      }
 
 

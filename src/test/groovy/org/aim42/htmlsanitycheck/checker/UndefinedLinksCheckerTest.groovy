@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.checker
 
 import org.aim42.htmlsanitycheck.html.HtmlPage
+import org.junit.Before
 import org.junit.Test
 
 // see end-of-file for license information
@@ -12,6 +13,38 @@ class UndefinedLinksCheckerTest extends GroovyTestCase {
     Checker undefinedInternalLinksChecker
     HtmlPage htmlPage
     CheckingResultsCollector collector
+
+    @Before
+    public void setUp() {
+      collector = new CheckingResultsCollector()
+    }
+
+
+    @Test
+    public void externalLinkShallBeIgnored() {
+        String HTML = '''
+           <html>
+             <head></head>
+              <body>
+                   <h1>dummy-heading-1</h1>
+                   <a href="http://github.com/aim42</a>
+                   <a href="https://github.com/arc42">arc42</a>
+                   <a
+              </body>
+           </html>'''
+
+        htmlPage = new HtmlPage( HTML )
+
+        undefinedInternalLinksChecker = new InternalLinksChecker(
+                pageToCheck: htmlPage )
+        collector = undefinedInternalLinksChecker.performCheck()
+
+
+        assertEquals( "expected zero finding", 0, collector.nrOfProblems())
+        assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)
+
+    }
+
 
     @Test
     public void testOneGoodOneBrokenLink() {
@@ -29,10 +62,8 @@ class UndefinedLinksCheckerTest extends GroovyTestCase {
         htmlPage = new HtmlPage( HTML_WITH_A_TAGS_AND_ID )
 
         undefinedInternalLinksChecker = new InternalLinksChecker(
-                pageToCheck: htmlPage,
-                headline: "Undefined Internal Links Check Test"
-        )
-        collector = undefinedInternalLinksChecker.check()
+                pageToCheck: htmlPage)
+        collector = undefinedInternalLinksChecker.performCheck()
 
         assertEquals( "expected one finding", 1, collector.nrOfProblems())
         assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)
@@ -61,10 +92,8 @@ class UndefinedLinksCheckerTest extends GroovyTestCase {
         htmlPage = new HtmlPage( HTML_WITH_TWO_TAGS_AND_ID )
 
         undefinedInternalLinksChecker = new InternalLinksChecker(
-                pageToCheck: htmlPage,
-                headline: "Undefined Internal Links Check Test"
-        )
-        collector = undefinedInternalLinksChecker.check()
+                pageToCheck: htmlPage )
+        collector = undefinedInternalLinksChecker.performCheck()
 
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
         assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)
@@ -85,10 +114,9 @@ class UndefinedLinksCheckerTest extends GroovyTestCase {
         htmlPage = new HtmlPage( HTML_WITH_TWO_LINKS_NO_ID)
 
         undefinedInternalLinksChecker = new InternalLinksChecker(
-                pageToCheck: htmlPage,
-                headline: "Undefined Internal Links Check Test"
-        )
-        collector = undefinedInternalLinksChecker.check()
+                pageToCheck: htmlPage )
+
+        collector = undefinedInternalLinksChecker.performCheck()
 
         assertEquals( "expected two findings", 2, collector.nrOfProblems())
         assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)

@@ -1,5 +1,7 @@
 package org.aim42.htmlsanitycheck.checker
 
+import org.aim42.htmlsanitycheck.URLUtil
+
 // see end-of-file for license information
 
 
@@ -13,9 +15,8 @@ class InternalLinksChecker extends Checker {
     @Override
     protected void initCheckingResultsDescription() {
         checkingResults.whatIsChecked =  "Broken Internal Links Check"
-        //whatToCheck: "matching id\\'s for hrefs"
         checkingResults.sourceItemName =  "href"
-        checkingResults.targetItemName = "id"
+        checkingResults.targetItemName = "missing id"
     }
 
 
@@ -51,11 +52,11 @@ class InternalLinksChecker extends Checker {
      */
     private void checkSingleInternalLink( String href ) {
 
-        // bookkeeping and statistics
-        checkingResults.incNrOfChecks()
+        if (!URLUtil.isRemoteURL( href )) {
 
-        // check only "local" references
-        if (!href.startsWith("http:")) {
+            // bookkeeping:
+            checkingResults.incNrOfChecks()
+
             doesLinkTargetExist(href)
         }
     }

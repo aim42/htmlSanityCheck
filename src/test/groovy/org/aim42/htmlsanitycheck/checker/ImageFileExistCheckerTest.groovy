@@ -18,10 +18,12 @@ class ImageFileExistCheckerTest extends GroovyTestCase {
     String fileName
     String localPath
     String filePath
+    String imagesDir
+
+    CheckingResultsCollector checkingResults
 
     // logging stuff
     private static Logger logger = LoggerFactory.getLogger(ImageFileExistCheckerTest.class);
-    private static String IFEXT = "[IFEXT]"
 
 
     @Before
@@ -34,7 +36,9 @@ class ImageFileExistCheckerTest extends GroovyTestCase {
         imagesDir = userDir + localPath
         filePath = userDir + localPath + fileName
 
-        logger.info( "$IFEXT imagesDir: $imagesDir")
+        checkingResults = new CheckingResultsCollector()
+
+        logger.info( "imagesDir: $imagesDir")
     }
 
 
@@ -68,14 +72,9 @@ class ImageFileExistCheckerTest extends GroovyTestCase {
 
         checker = new ImageFileExistChecker(
                 pageToCheck: htmlPage,
-                baseDirPath: "",
-                headline: "Image File Exist Check",
-                whatToCheck: "img links",
-                sourceItemName: "img link",
-                targetItemName: "image file")
+                baseDirPath: "")
 
-        CheckingResultsCollector checkingResults =
-                checker.check()
+        checkingResults = checker.performCheck()
 
         // checker must check one item
         int expected = 1
@@ -105,14 +104,9 @@ class ImageFileExistCheckerTest extends GroovyTestCase {
 
         checker = new ImageFileExistChecker(
                 pageToCheck: htmlPage,
-                baseDirPath: imagesDir,
-                headline: "Image File Exist Check",
-                whatToCheck: "img links",
-                sourceItemName: "img link",
-                targetItemName: "image file")
+                baseDirPath: imagesDir)
 
-        CheckingResultsCollector checkingResults =
-                checker.check()
+        checkingResults = checker.performCheck()
 
         int expected = 2
         int actual = checkingResults.nrOfItemsChecked

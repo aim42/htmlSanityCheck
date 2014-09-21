@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.checker
 
 import org.aim42.htmlsanitycheck.html.HtmlPage
+import org.junit.Before
 import org.junit.Test
 
 // see end-of-file for license information
@@ -11,6 +12,12 @@ class DuplicateIdCheckerTest extends GroovyTestCase {
     Checker duplicateIdChecker
     HtmlPage htmlPage
     CheckingResultsCollector collector
+
+    @Before
+    public void setUp() {
+        collector = new CheckingResultsCollector()
+    }
+
 
     @Test
     public void testOneDuplicateId() {
@@ -27,10 +34,9 @@ class DuplicateIdCheckerTest extends GroovyTestCase {
         htmlPage = new HtmlPage(HTML_WITH_DUPLICATE_ID)
 
         duplicateIdChecker = new DuplicateIdChecker(
-                pageToCheck: htmlPage,
-                headline: "Duplicate Id Check"
+                pageToCheck: htmlPage
         )
-        collector = duplicateIdChecker.check()
+        collector = duplicateIdChecker.performCheck()
 
         // expect ONE check, as we check the SET of ids
         assertEquals("expected one check", 1, collector?.nrOfItemsChecked)
@@ -58,10 +64,9 @@ class DuplicateIdCheckerTest extends GroovyTestCase {
         htmlPage = new HtmlPage(HTML_WITH_DUPLICATE_ID)
 
         duplicateIdChecker = new DuplicateIdChecker(
-                pageToCheck: htmlPage,
-                headline: "Duplicate Id Check"
+                pageToCheck: htmlPage
         )
-        collector = duplicateIdChecker.check()
+        collector = duplicateIdChecker.performCheck()
 
         // expect THREE checks, as we check the SET of ids
         assertEquals("expected four checks", 4, collector?.nrOfItemsChecked)
