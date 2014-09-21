@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory
 // see end-of-file for license information
 
 
-class ImageFileExistChecker extends Checker {
+class MissingImageFilesChecker extends Checker {
 
     // members are initialized in implicit constructor
     private List<HtmlElement> images
     private String baseDirPath
 
     // logging stuff
-    private static Logger logger = LoggerFactory.getLogger(ImageFileExistChecker.class);
+    private static Logger logger = LoggerFactory.getLogger(MissingImageFilesChecker.class);
 
 
     @Override

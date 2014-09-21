@@ -7,7 +7,7 @@ import org.junit.Test
 // see end-of-file for license information
 
 
-class UndefinedLinksCheckerTest extends GroovyTestCase {
+class BrokenInternalLinksCheckerTest extends GroovyTestCase {
 
 
     Checker undefinedInternalLinksChecker
@@ -35,7 +35,7 @@ class UndefinedLinksCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML )
 
-        undefinedInternalLinksChecker = new InternalLinksChecker(
+        undefinedInternalLinksChecker = new BrokenInternalLinksChecker(
                 pageToCheck: htmlPage )
         collector = undefinedInternalLinksChecker.performCheck()
 
@@ -61,7 +61,7 @@ class UndefinedLinksCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML_WITH_A_TAGS_AND_ID )
 
-        undefinedInternalLinksChecker = new InternalLinksChecker(
+        undefinedInternalLinksChecker = new BrokenInternalLinksChecker(
                 pageToCheck: htmlPage)
         collector = undefinedInternalLinksChecker.performCheck()
 
@@ -91,7 +91,7 @@ class UndefinedLinksCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML_WITH_TWO_TAGS_AND_ID )
 
-        undefinedInternalLinksChecker = new InternalLinksChecker(
+        undefinedInternalLinksChecker = new BrokenInternalLinksChecker(
                 pageToCheck: htmlPage )
         collector = undefinedInternalLinksChecker.performCheck()
 
@@ -113,7 +113,7 @@ class UndefinedLinksCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML_WITH_TWO_LINKS_NO_ID)
 
-        undefinedInternalLinksChecker = new InternalLinksChecker(
+        undefinedInternalLinksChecker = new BrokenInternalLinksChecker(
                 pageToCheck: htmlPage )
 
         collector = undefinedInternalLinksChecker.performCheck()

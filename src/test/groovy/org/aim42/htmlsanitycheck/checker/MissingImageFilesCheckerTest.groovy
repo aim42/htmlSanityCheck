@@ -9,7 +9,7 @@ import org.junit.Test
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class ImageFileExistCheckerTest extends GroovyTestCase {
+class MissingImageFilesCheckerTest extends GroovyTestCase {
 
     Checker checker
     HtmlPage htmlPage
@@ -23,7 +23,7 @@ class ImageFileExistCheckerTest extends GroovyTestCase {
     CheckingResultsCollector checkingResults
 
     // logging stuff
-    private static Logger logger = LoggerFactory.getLogger(ImageFileExistCheckerTest.class);
+    private static Logger logger = LoggerFactory.getLogger(MissingImageFilesCheckerTest.class);
 
 
     @Before
