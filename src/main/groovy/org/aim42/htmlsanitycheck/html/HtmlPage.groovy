@@ -79,7 +79,7 @@ class HtmlPage {
      * - remote hrefs should be valid URLs (like "https://google.com")
      * - remote hrefs might start with other than http (e.g. https, mailto, telnet, ssh)
      * - hrefs might start with file://
-     * - hrefs might be empty strings (nobody knows wtf this is good for, but html parsers usually accept it)
+     * - href might be empty string (nobody knows wtf this is good for, but html parsers usually accept it)
      */
     public final ArrayList<String> getAllHrefStrings( ) {
         Elements elements = document.select("a[href]")
