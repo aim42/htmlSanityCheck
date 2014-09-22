@@ -39,7 +39,8 @@ buildscript {
 
 }
 
-uploadArchives.dependsOn clean
+
+uploadArchives.dependsOn 'clean'
 
 uploadArchives {
     repositories {
