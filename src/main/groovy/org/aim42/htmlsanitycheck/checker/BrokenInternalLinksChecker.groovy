@@ -8,8 +8,10 @@ import org.aim42.htmlsanitycheck.URLUtil
 class BrokenInternalLinksChecker extends Checker {
 
 
-    private List<String> ids    // id="XYZ"
-    private List<String> hrefs  // a href="XYZ"
+    private List<String> listOfIds    // id="XYZ"
+    private List<String> hrefList
+    private Set<String> hrefSet       // a href="XYZ"
+
 
 
     @Override
@@ -25,10 +27,11 @@ class BrokenInternalLinksChecker extends Checker {
 
 
         //get list of all a-tags "<a src=..." in html file
-        hrefs = pageToCheck.getAllHrefStrings()
+        hrefList = pageToCheck.getAllHrefStrings()
+        hrefSet  = hrefList.toSet()
 
         // get list of all id="XYZ"
-        ids = pageToCheck.getAllIdStrings()
+        listOfIds = pageToCheck.getAllIdStrings()
 
         checkAllInternalLinks( )
 
@@ -40,8 +43,8 @@ class BrokenInternalLinksChecker extends Checker {
      */
     private void checkAllInternalLinks() {
 
-        // for all hrefs check if the corresponding id exists
-        hrefs.each { href ->
+        // for all hrefSet check if the corresponding id exists
+        hrefSet.each { href ->
             checkSingleInternalLink( href )
         }
     }
@@ -68,8 +71,15 @@ class BrokenInternalLinksChecker extends Checker {
      **/
     private void doesLinkTargetExist(String href) {
 
-        if (!ids.contains( href )) {
-            String findingText = "link target \"$href\" missing"
+        if (!listOfIds.contains( href )) {
+
+            // we found a missing link!
+
+            // now count occurences - how often is it referenced
+            int nrOfReferences = hrefList.findAll{  it == href }.size()
+
+            String findingText = "link target \"$href\" missing (reference count $nrOfReferences)"
+
             checkingResults.newFinding(findingText)
         }
 
