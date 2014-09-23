@@ -7,8 +7,9 @@ import org.junit.Test
 // see end-of-file for license information
 
 
-class BrokenInternalLinksCheckerTest extends GroovyTestCase {
+class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
+    private final static String HTMLHEAD = "<html><head></head><body>"
 
     Checker undefinedInternalLinksChecker
     HtmlPage htmlPage
@@ -22,20 +23,18 @@ class BrokenInternalLinksCheckerTest extends GroovyTestCase {
 
     @Test
     public void testExternalLinkShallBeIgnored() {
-        String HTML = '''
-           <html>
-             <head></head>
-              <body>
+        String HTML = """$HTMLHEAD
+
                    <h1>dummy-heading-1</h1>
                    <a href="http://github.com/aim42">aim42</a>
                    <a href="https://github.com/arc42">arc42</a>
 
               </body>
-           </html>'''
+           </html>"""
 
         htmlPage = new HtmlPage( HTML )
 
-        undefinedInternalLinksChecker = new BrokenInternalLinksChecker(
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
                 pageToCheck: htmlPage )
         collector = undefinedInternalLinksChecker.performCheck()
 
@@ -61,7 +60,7 @@ class BrokenInternalLinksCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML_WITH_A_TAGS_AND_ID )
 
-        undefinedInternalLinksChecker = new BrokenInternalLinksChecker(
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
                 pageToCheck: htmlPage)
         collector = undefinedInternalLinksChecker.performCheck()
 
@@ -91,7 +90,7 @@ class BrokenInternalLinksCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML_WITH_TWO_TAGS_AND_ID )
 
-        undefinedInternalLinksChecker = new BrokenInternalLinksChecker(
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
                 pageToCheck: htmlPage )
         collector = undefinedInternalLinksChecker.performCheck()
 
@@ -112,7 +111,7 @@ class BrokenInternalLinksCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML_WITH_TWO_LINKS_NO_ID)
 
-        undefinedInternalLinksChecker = new BrokenInternalLinksChecker(
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
                 pageToCheck: htmlPage )
 
         collector = undefinedInternalLinksChecker.performCheck()
@@ -135,8 +134,7 @@ class BrokenInternalLinksCheckerTest extends GroovyTestCase {
 
     @Test
     public void testReferenceCount() {
-        String HTML = '''<html><head></head>
-              <body>
+        String HTML = """$HTMLHEAD
                    <a href="#aim42">link-0</a>
                    <a href="#aim42">link-1</a>
                    <a href="#aim42">link-2</a>
@@ -144,11 +142,11 @@ class BrokenInternalLinksCheckerTest extends GroovyTestCase {
                    <a href="#aim42">link-4</a>
 
               </body>
-           </html>'''
+           </html>"""
 
         htmlPage = new HtmlPage( HTML)
 
-        undefinedInternalLinksChecker = new BrokenInternalLinksChecker(
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
                 pageToCheck: htmlPage )
 
         collector = undefinedInternalLinksChecker.performCheck()
@@ -166,19 +164,37 @@ class BrokenInternalLinksCheckerTest extends GroovyTestCase {
 
     @Test
     public void testMailtoinkIsIgnored() {
-        String HTML = '''
-           <html><head></head><body>
+        String HTML = """$HTMLHEAD
                    <a href="mailto:chuck.norris@example.org">mail him</a>
-              </body></html>'''
+              </body></html>"""
 
         htmlPage = new HtmlPage( HTML )
 
-        undefinedInternalLinksChecker = new BrokenInternalLinksChecker(
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
                 pageToCheck: htmlPage )
         collector = undefinedInternalLinksChecker.performCheck()
 
         assertEquals( "expected zero checks", 0, collector.nrOfItemsChecked)
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
+    }
+
+    @Test
+    public void testLinkToLocalFileShallNotBeChecked() {
+        String HTML = """$HTMLHEAD
+           <a href="api/nonexisting.html">internal-link-to-file</a>
+         </body>
+           </html>
+        """
+        htmlPage = new HtmlPage( HTML )
+
+        undefinedInternalLinksChecker = new BrokenCrossReferencesCheckerTest(
+                pageToCheck: htmlPage
+        )
+        collector = undefinedInternalLinksChecker.performCheck()
+
+        // for local references, no checks shall be performed
+        assertEquals( "expected that local file is not checked", 0, collector.nrOfItemsChecked)
+
     }
 
 }

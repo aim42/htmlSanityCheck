@@ -5,7 +5,7 @@ import org.aim42.htmlsanitycheck.URLUtil
 // see end-of-file for license information
 
 
-class BrokenInternalLinksChecker extends Checker {
+class BrokenCrossReferencesChecker extends Checker {
 
 
     private List<String> listOfIds    // id="XYZ"

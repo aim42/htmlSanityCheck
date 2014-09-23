@@ -32,16 +32,18 @@ image::template-method.png["Template Method", title="Template-Method Overview"]
 .Template Method
 |===
 | Component | Description
-| Checker    | _abstract_ base class, containing the template method plus an abstract method +check()+
-| <<ImageFileExistChecker>> | checks if referenced images exist, relative to +baseDirectory+
-| InternalLinksChecker | checks if links referenced within the page exist
-| DuplicateIdChecker   | checks if any id has multiple definitions
+| Checker                           | _abstract_ base class, containing the template method +check()+
+                                        plus the public method +performCheck()+
+| <<ImageFileExistChecker>>         | checks if referenced local image files exist
+| <<BrokenCrossReferencesChecker>>  | checks if cross references (links referenced within the page) exist
+| <<DuplicateIdChecker>>            | checks if any id has multiple definitions
+| MissingAltTagsForImagesChecker    | (planned) checks if there are image tags without alt-attributes.
 |===
 
 
 ==== ImageFileExistChecker
 
-[small]#Adresses requirement <<MissingImageFiles>>.#
+[small]#Adresses requirement <<Req1-MissingImageFiles>>.#
 
 The (little) problem with checking images is their path: Consider the following
 HTML fragment (from the file +testme.html+:
@@ -67,3 +69,14 @@ We check for existing files using the usual Java api, but have to add the
 [source, java]
   File f = new File( absolutePathToImageFile );
   if(f.exists() && !f.isDirectory())
+
+
+
+==== BrokenCrossReferencesChecker
+
+[small]#Adresses requirement <<Req2-BrokenCrossReferences>>.#
+
+Cross references are document-internal links where the +href="link-target" from the html anchor
+tag has no prefix like +http+, +https+, +ftp+, +telnet+, +mailto+, +file+ and such.
+
+Only links with prefix +#+ shall be taken into account, e.g. +<a href="#internalLink">+.

@@ -14,6 +14,46 @@
 
 kbd:[HtmlSC] can run from the command line or as {gradle-url}-plugin.
 
+[[Terminology]]
+==== Terminology: What Can Go Wrong in HTML Files?
+
+Severe errors:
+
+. Cross-references (internal links) can be broken, e.g. due to missing or misspelled link-target.
+  See <<BrokenCrossReferencesChecker>>
+. Referenced image files can be missing or misspelled.
+. Links can have multiple identical link-targets (several id attributes with the same name)
+. External links can be broken - due to myriads of reasons: misspelled, link-target currently offline,
+ illegal link syntax
+
+Flaws:
+
+. Images missing an alt-attribute
+
+
+
+[options="header", cols="2,6"]
+.Important Terms
+|===
+| Term              | Description
+| Anchor            | Html element to create ->Links. Contain link-targets in the form <a href="link-target">.
+| Cross reference   | link from one part of the document to another part within the same document.
+                        A special form of ->internal-link, with a ->link-target in the same document.
+| external link     | link to another page or resource at another domain.
+| id                | identifier for a specific part of a document, e.g. +++<h2 id="#someHeader">+++
+| internal link     | link to another section of the same page or to another page of the same domain
+| Link              | Any a reference in the html document that lets you display or activate another
+                        part of this document (internal ink) or another document, image or resource
+                        (can be either local or external link).
+                        Every link leads from the _link source_ to the _link target_
+| link-target       | Either a location in the current document (identified by ->id), another document (identified by URI)
+                        or another resource to view or download.
+
+|===
+
+
+
+
 ==== General Functionality
 
 
@@ -38,9 +78,9 @@ kbd:[HtmlSC] can run from the command line or as {gradle-url}-plugin.
 .Required Checks
 |===
 | ID | Check | Description
-| [[MissingImageFiles]] R-1 | missing image files | Check all image tags wether the referenced
+| [[Req1-MissingImageFiles]] R-1 | missing image files | Check all image tags if the referenced
                         image files exist
-| R-2 | broken internal links | Check all internal links from anchor-tags (href="XYZ")
+| [[Req2-BrokenCrossReferences]] R-2 | broken internal links | Check all internal links from anchor-tags (href="XYZ")
                           wether the link targets "XYZ" are defined
 | [[DuplicateLinkTargets]] R-3 | duplicate link targets | Check all bookmark definitions
                             (... id="XYZ") wether the id's ("XYZ") are unique.
