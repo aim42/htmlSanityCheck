@@ -1,5 +1,10 @@
 package org.aim42.htmlsanitycheck
 
+/**
+ * functions to identify categories of string-representations of URLs,
+ * e.g. isRemote, isCrossReference
+ *
+ */
 class URLUtil {
 
     /*
@@ -16,6 +21,8 @@ class URLUtil {
                  link ==~ (/^(?i)(mailto):.*$/) )
 
     }
+
+
 
 }
 

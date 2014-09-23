@@ -43,12 +43,12 @@ class AllChecksRunner {
 
     // the checker instances
     private Checker imageChecker
-    private Checker undefinedInternalLinksChecker
+    private Checker undefinedCrossReferencesChecker
     private Checker duplicateIdChecker
 
     // collections for the results
     private CheckingResultsCollector imageCheckingResults
-    private CheckingResultsCollector internalLinkCheckingResults
+    private CheckingResultsCollector crossReferencesCheckingResults
     private CheckingResultsCollector duplicateIdsCheckingResults
 
     // our input html
@@ -98,7 +98,7 @@ class AllChecksRunner {
         // the actual checks
         runImageFileExistCheck()
         runDuplicateIdCheck()
-        runInternalLinkCheck()
+        runCrossReferencesCheck()
 
         reportCheckingResultsOnConsole()
     }
@@ -109,7 +109,7 @@ class AllChecksRunner {
     public void reportCheckingResultsOnConsole() {
         def results = new ArrayList<CheckingResultsCollector>( Arrays.asList(
                         imageCheckingResults,
-                        internalLinkCheckingResults,
+                        crossReferencesCheckingResults,
                         duplicateIdsCheckingResults ))
 
         logger.info "results = " + results
@@ -139,14 +139,14 @@ class AllChecksRunner {
     }
 
 
-    public void runInternalLinkCheck() {
-        undefinedInternalLinksChecker = new BrokenInternalLinksChecker(
+    public void runCrossReferencesCheck() {
+        undefinedCrossReferencesChecker = new BrokenCrossReferencesChecker(
                 pageToCheck: pageToCheck
         )
 
-        internalLinkCheckingResults = undefinedInternalLinksChecker.performCheck()
+        crossReferencesCheckingResults = undefinedCrossReferencesChecker.performCheck()
 
-        logger.info internalLinkCheckingResults.toString()
+        logger.info crossReferencesCheckingResults.toString()
     }
 
 
@@ -185,7 +185,7 @@ class AllChecksRunner {
         allChecksRunner.parseHtml()
 
         allChecksRunner.runImageFileExistCheck()
-        allChecksRunner.runInternalLinkCheck()
+        allChecksRunner.runCrossReferencesCheck()
         allChecksRunner.runDuplicateIdCheck()
 
     }
