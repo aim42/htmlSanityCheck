@@ -41,9 +41,9 @@ image::template-method.png["Template Method", title="Template-Method Overview"]
 |===
 
 
-==== ImageFileExistChecker
+==== MissingImageFilesChecker
 
-[small]#Adresses requirement <<Req1-MissingImageFiles>>.#
+[small]#Adresses requirement <<MissingImageFiles>>.#
 
 The (little) problem with checking images is their path: Consider the following
 HTML fragment (from the file +testme.html+:
@@ -53,18 +53,14 @@ HTML fragment (from the file +testme.html+:
 <img src="./images/one-image.jpg">
 
 
-This image file ("one-image.jpg") has to be located relative to the directory containing the corresponding HTML file, i.e.:
+This image file ("one-image.jpg") has to be located relative to the directory
+containing the corresponding HTML file.
 
-   /Users/gstarke/projects/htmlSanityChecker/test/testme.html
+Therefore the expected absolute path of the "one-image.jpg" has to be determined
+from the absolute path of the html file under test.
 
-Therefore the expected local absolute path of the "one-image.jpg" would be:
-
-  /Users/gstarke/projects/htmlSanityChecker/test/images/one-image.jpg
-
-
-We check for existing files using the usual Java api, but have to add the
-+imagesDir+ (directory prefix) to the image-src given in the HTML tag to get the +absolutePathToImageFile+:
-
+We check for existing files using the usual Java api, but have to do some
+_directory arithmetic_ to get the +absolutePathToImageFile+:
 
 [source, java]
   File f = new File( absolutePathToImageFile );
@@ -74,9 +70,34 @@ We check for existing files using the usual Java api, but have to add the
 
 ==== BrokenCrossReferencesChecker
 
-[small]#Adresses requirement <<Req2-BrokenCrossReferences>>.#
+[small]#Adresses requirement <<BrokenCrossReferences>>.#
 
 Cross references are document-internal links where the +href="link-target" from the html anchor
 tag has no prefix like +http+, +https+, +ftp+, +telnet+, +mailto+, +file+ and such.
 
 Only links with prefix +#+ shall be taken into account, e.g. +<a href="#internalLink">+.
+
+
+==== DuplicateLinkTargetsChecker
+
+[small]#Adresses requirement <<DuplicateLinkTargets>>.#
+
+Sections, especially headings, can be made link-targets by adding the +id="#xyz"+ element,
+yielding for example html headings like the following example.
+
+Problems occur if the same link target is defined several times (also shown below).
+
+[source,html]
+  <h2 id="seealso">First Heading</h2>
+  <h2 id="seealso">Second Heading</h2>
+  <a href="#seealso">Duplicate definition - where shall I go now?</a>
+
+
+==== MissingLocalResourcesChecker
+
+[small]#Adresses requirement <<MissingLocalResources>>.#
+
+
+==== BrokenExternalLinksChecker
+
+[small]#Adresses requirement <<BrokenExternalLinks>>.#

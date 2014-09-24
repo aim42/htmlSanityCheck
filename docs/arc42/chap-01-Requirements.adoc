@@ -14,26 +14,43 @@
 
 kbd:[HtmlSC] can run from the command line or as {gradle-url}-plugin.
 
-[[Terminology]]
+
+[Terminology]
 ==== Terminology: What Can Go Wrong in HTML Files?
 
-Severe errors:
+Apart from purely syntactical errors, many things can go wrong in html, especially with respect to
+hyperlinks and references.
 
-. Cross-references (internal links) can be broken, e.g. due to missing or misspelled link-target.
-  See <<BrokenCrossReferencesChecker>>
-. Referenced image files can be missing or misspelled.
-. Links can have multiple identical link-targets (several id attributes with the same name)
-. External links can be broken - due to myriads of reasons: misspelled, link-target currently offline,
- illegal link syntax
+[[BrokenCrossReferences]]
+Broken Cross References:: Cross-references (internal links) can be broken,
+e.g. due to missing or misspelled link-target.
+See <<BrokenCrossReferencesChecker>>
 
-Flaws:
+[[MissingImageFiles]]
+Missing Image Files:: Referenced image files can be missing or misspelled. See <<MissingImageFilesChecker>>.
 
-. Images missing an alt-attribute
+[[MissingLocalResources]]
+Missing local resources:: Referenced local resources (other than images) can be missing or misspelled.
+  See <<MissingLocalResourcesChecker>>
 
+[[DuplicateLinkTargets]]
+Duplicate link targets:: Links can have multiple identical link-targets (several id attributes with the same name).
+  See <<DuplicateLinkTargetsChecker>>.
+
+[[BrokenExternalLinks]]
+Broken external links:: External links can be broken - due to myriads of reasons: misspelled, link-target currently offline,
+ illegal link syntax. See <<BrokenExternalLinksChecker>>
+
+[[MissingImageAltAttributes]]
+Missing Alt Attribute in Image Tags: Images missing an alt-attribute.
+
+
+Checking and reporting these errors and flaws is the central _business requirement_ of kbd:[HtmlSC].
 
 
 [options="header", cols="2,6"]
 .Important Terms
+
 |===
 | Term              | Description
 | Anchor            | Html element to create ->Links. Contain link-targets in the form <a href="link-target">.
@@ -48,9 +65,8 @@ Flaws:
                         Every link leads from the _link source_ to the _link target_
 | link-target       | Either a location in the current document (identified by ->id), another document (identified by URI)
                         or another resource to view or download.
-
+| local resource    | local file, either other html files or other filetypes (e.g. pdf, docx)
 |===
-
 
 
 
@@ -63,12 +79,12 @@ Flaws:
 | ID  | Functionality | Description
 | G-1 | read HTML file | kbd:[HtmlSC] shall read a single (configurable)
                         HTML file
-| G-2 | command line usage | kbd:[HtmlSC] can be called from the command line with arguments and options
-| G-3 | {gradle-url}-plugin | kbd:[HtmlSC] can be run as {gradle-url}-plugin.
+| G-2 | {gradle-url}-plugin | kbd:[HtmlSC] can be run as {gradle-url}-plugin.
+| G-3 | command line usage | kbd:[HtmlSC] can be called from the command line with arguments and options
 | G-4 | configurable output | output can be configured to console or file
 | G-5 | free and open source | all required dependencies shall be compliant
                                to the https://creativecommons.org/licenses/by-sa/4.0/[CC-SA-4 licence].
-| G-6 | available via public repositories
+| G-6 | available via public repositories, like bintray or jcenter.
 |===
 
 
@@ -78,12 +94,19 @@ Flaws:
 .Required Checks
 |===
 | ID | Check | Description
-| [[Req1-MissingImageFiles]] R-1 | missing image files | Check all image tags if the referenced
-                        image files exist
-| [[Req2-BrokenCrossReferences]] R-2 | broken internal links | Check all internal links from anchor-tags (href="XYZ")
-                          wether the link targets "XYZ" are defined
-| [[DuplicateLinkTargets]] R-3 | duplicate link targets | Check all bookmark definitions
-                            (... id="XYZ") wether the id's ("XYZ") are unique.
+|      R-1 | missing image files | Check all image tags if the referenced
+                                image files exist.
+                                See <<MissingImageFilesChecker>>
+| [BrokenCrossReferences] R-2 | broken internal links | Check all internal links from anchor-tags
+                                (href="XYZ") if the link targets "XYZ" are defined.
+                                See <<BrokenCrossReferencesChecker>>
+| [MissingLocalResources] R-3  | missing local files, either other html-files, pdf's or similar.
+                                See <<MissingLocalResourcesChecker>>
+| [DuplicateLinkTargets] R-4 | duplicate link targets | Check all bookmark definitions
+                               (... id="XYZ") wether the id's ("XYZ") are unique.
+                               See <<DuplicateLinkTargetsChecker>>
+| [MissingImgAltAttribute] | missing alt-attribute in image-tags.
+                            See <<MissingImgAltAttributeChecker>>
 |===
 
 
@@ -91,10 +114,8 @@ Flaws:
 .Optional Checks
 |===
 | ID | Check  | Description
-| Opt-1 | unused images | Check wether all images found in image
-                  director(y/ies) are referenced from the HTML.
-| Opt-2 | missing extern images | Check externally referenced images for availability
-| Opt-3 | broken external links | Check external links for both syntax and availability
+| Opt-1 | missing external images | Check externally referenced images for availability
+| Opt-2 | broken external links | Check external links for both syntax and availability
 |===
 
 
