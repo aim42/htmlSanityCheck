@@ -19,7 +19,7 @@ class HtmlSanityCheckTask extends DefaultTask {
     @InputFile
     File fileToCheck
 
-    // imagesDir is the directory where sourceDocument resides,
+    // baseDir is the directory where sourceDocument resides,
     // and from which the image directory is descendant
     @Optional
     @InputDirectory
