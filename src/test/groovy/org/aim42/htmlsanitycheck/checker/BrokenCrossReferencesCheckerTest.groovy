@@ -187,7 +187,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
         """
         htmlPage = new HtmlPage( HTML )
 
-        undefinedInternalLinksChecker = new BrokenCrossReferencesCheckerTest(
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
                 pageToCheck: htmlPage
         )
         collector = undefinedInternalLinksChecker.performCheck()

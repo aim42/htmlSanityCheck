@@ -55,7 +55,9 @@ class BrokenCrossReferencesChecker extends Checker {
      */
     private void checkSingleInternalLink( String href ) {
 
-        if (!URLUtil.isRemoteURL( href )) {
+        // we check only cross-references, that means we exclude
+        // remote-urls and references to local files
+        if (URLUtil.isCrossReference( href )) {
 
             // bookkeeping:
             checkingResults.incNrOfChecks()
@@ -73,7 +75,7 @@ class BrokenCrossReferencesChecker extends Checker {
 
         if (!listOfIds.contains( href )) {
 
-            // we found a missing link!
+            // we found a broken link!
 
             // now count occurences - how often is it referenced
             int nrOfReferences = hrefList.findAll{  it == href }.size()

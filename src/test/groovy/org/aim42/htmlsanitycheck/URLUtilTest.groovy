@@ -17,13 +17,13 @@ class URLUtilTest extends GroovyTestCase {
 
         Boolean actual = URLUtil.isRemoteURL(fileURL)
 
-        assertFalse ("$fileURL shall be recognized as file but wasn't",
+        assertFalse("$fileURL shall be recognized as file but wasn't",
                 actual)
 
         fileURL = "$IMG"
         actual = URLUtil.isRemoteURL(fileURL)
 
-        assertFalse ("$fileURL shall be recognized as file but wasn't",
+        assertFalse("$fileURL shall be recognized as file but wasn't",
                 actual)
 
 
@@ -33,7 +33,7 @@ class URLUtilTest extends GroovyTestCase {
     public void testHTTPUrl() {
         String httpURL = "http://$AIM/$IMG"
         Boolean actual = URLUtil.isRemoteURL(httpURL)
-        assertTrue ("$httpURL shall be recognized as remote url but wasn't", actual)
+        assertTrue("$httpURL shall be recognized as remote url but wasn't", actual)
 
     }
 
@@ -46,7 +46,7 @@ class URLUtilTest extends GroovyTestCase {
 
         prefixes.each { prefix ->
             String url = prefix + "://$AIM/$IMG"
-            assertTrue( "$prefix is remote URL but wasnt recognized",
+            assertTrue("$prefix is remote URL but wasnt recognized",
                     URLUtil.isRemoteURL(url))
         }
     }
@@ -57,7 +57,7 @@ class URLUtilTest extends GroovyTestCase {
 
         prefixes.each { prefix ->
             String url = prefix + ":chuck.norris@example.com"
-            assertTrue( "$prefix is mailto-link but wasnt recognized",
+            assertTrue("$prefix is mailto-link but wasnt recognized",
                     URLUtil.isRemoteURL(url))
         }
     }
@@ -67,12 +67,53 @@ class URLUtilTest extends GroovyTestCase {
         def paths = ["./$IMG", "../$IMG", "$IMG",
                      "../../$IMG", "$IMG",
                      "images/aim42-logo.png"
-                    ]
+        ]
 
         paths.each { url ->
-            assertFalse( "$url is local but was recognized as remote", URLUtil.isRemoteURL(url))
+            assertFalse("$url is local but was recognized as remote", URLUtil.isRemoteURL(url))
+        }
+
+    }
+
+    /**
+     * tests if cross-references (intra-document-links) are recognized
+     */
+    @Test
+    public void testSimpleStringIsCrossReference() {
+        String crossRefs = ["xref", "A1B2c3", "abcdefghijklmnopqrsuvwyz"]
+
+        crossRefs.each { cf ->
+            assertTrue("legal cross-reference not recognized",
+                    URLUtil.isCrossReference(cf))
         }
     }
+
+    @Test
+    public void testPathIsNoCrossReference() {
+        String path = "api/Checker.html"
+        assertFalse("api/Checker.html recognized as cross-reference", URLUtil.isCrossReference(path))
+
+        path = "api/doc/Checker.html"
+        assertFalse("api/doc/Checker.html recognized as cross-reference", URLUtil.isCrossReference(path))
+
+
+        path = "images/xref"
+        assertFalse( "$path recognized as cross-reference", URLUtil.isCrossReference( path))
+
+        path = "Anotherfile.html"
+        assertFalse( "Anotherfile.html recognized as cross-reference", URLUtil.isCrossReference( path))
+
+
+        path = "Somefile.docx"
+        assertFalse( "Somefile.docx recognized as cross-reference", URLUtil.isCrossReference( path))
+
+        path = "downloads/Somefile.pdf"
+        assertFalse( "downloads/Somefile.pdf recognized as cross-reference", URLUtil.isCrossReference( path))
+
+
+    }
+
+
 }
 /************************************************************************
  * This is free software - without ANY guarantee!

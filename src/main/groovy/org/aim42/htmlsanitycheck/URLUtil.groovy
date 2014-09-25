@@ -12,20 +12,43 @@ class URLUtil {
      * represents a remote URL (startsWith http, https, ftp, telnet...)
      * @param link
      */
+
     public static boolean isRemoteURL(String link) {
         // simple regular expression to match http://, https:// and ftp://
         //
 
-        return ( link ==~ (/^(?i)(https?|ftp|telnet|ssh|gopher):\/\/.*$/) ||
-                 // special case for mailto-links
-                 link ==~ (/^(?i)(mailto):.*$/) )
+        return (link ==~ (/^(?i)(https?|ftp|telnet|ssh|gopher):\/\/.*$/) ||
+                // special case for mailto-links
+                link ==~ (/^(?i)(mailto):.*$/))
 
     }
 
+    /**
+     * Checks if this String represents a cross-reference,
+     * that is an intra-document link
+     * @param xref
+     */
+    public static boolean isCrossReference(String xref) {
 
+        // xref CAN NOT be a cross-reference if one of the following is true:
+        // (1) xref contains a path separator ('\' on Mac/Unix, '/' on Windows),
+        // (2) xref is a remoteURL (starts with http or similar protocol identifiers)
+        // (3) contains ".html" or ".htm" as suffix
+        // (4) is a filename... very simple test: contains a "."
+
+        String upped = xref.toUpperCase()
+
+        return !(xref.contains(File.separatorChar.toString())     // (1)
+                ||
+                URLUtil.isRemoteURL( xref )                       // (2)
+                ||
+                upped.endsWith("HTML") || upped.endsWith("HTM")   // (3)
+                ||
+                xref.contains(".")                                // (4)
+        )
+    }
 
 }
-
 
 /************************************************************************
  * This is free software - without ANY guarantee!
