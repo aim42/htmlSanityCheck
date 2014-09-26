@@ -1,7 +1,6 @@
 package org.aim42.htmlsanitycheck.checker
 
 import org.aim42.htmlsanitycheck.URLUtil
-import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -12,7 +11,7 @@ class MissingLocalResourcesChecker extends Checker {
 
     // we need to know the baseDir of the html file, so we can check
     // for local resources either with relative or absolute paths
-    private String baseDirPath
+    //private String baseDirPath
 
 
 

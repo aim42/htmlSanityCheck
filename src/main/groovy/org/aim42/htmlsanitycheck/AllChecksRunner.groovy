@@ -42,14 +42,17 @@ class AllChecksRunner {
     private Boolean checkExternalResources = false
 
     // the checker instances
-    private Checker imageChecker
+    private Checker missingImagesChecker
     private Checker undefinedCrossReferencesChecker
     private Checker duplicateIdChecker
+    private Checker missingLocalResourcesChecker
+
 
     // collections for the results
     private CheckingResultsCollector imageCheckingResults
     private CheckingResultsCollector crossReferencesCheckingResults
     private CheckingResultsCollector duplicateIdsCheckingResults
+    private CheckingResultsCollector missingLocalResourcesCheckingResults
 
     // our input html
     private HtmlPage pageToCheck
@@ -96,9 +99,11 @@ class AllChecksRunner {
         pageToCheck = parseHtml()
 
         // the actual checks
-        runImageFileExistCheck()
-        runDuplicateIdCheck()
-        runCrossReferencesCheck()
+
+        runMissingImageFileChecker()
+        runDuplicateIdChecker()
+        runCrossReferencesChecker()
+        runMissingLocalResourcesChecker()
 
         reportCheckingResultsOnConsole()
     }
@@ -106,11 +111,12 @@ class AllChecksRunner {
     /**
      * reports results on stdout
      */
-    public void reportCheckingResultsOnConsole() {
+    private void reportCheckingResultsOnConsole() {
         def results = new ArrayList<CheckingResultsCollector>( Arrays.asList(
                         imageCheckingResults,
                         crossReferencesCheckingResults,
-                        duplicateIdsCheckingResults ))
+                        duplicateIdsCheckingResults,
+                        missingLocalResourcesCheckingResults ))
 
         logger.info "results = " + results
 
@@ -127,19 +133,19 @@ class AllChecksRunner {
      * the img-src attribute looks like src="images/test.jpg" or
      * src="file://image.jpg"
      */
-    public void runImageFileExistCheck() {
+    private void runMissingImageFileChecker() {
         // from gradle we get a File object for imageDirPath
-        imageChecker = new MissingImageFilesChecker(
+        missingImagesChecker = new MissingImageFilesChecker(
                 pageToCheck: pageToCheck,
                 baseDirPath: baseDirPath
               )
 
-        imageCheckingResults = imageChecker.performCheck()
+        imageCheckingResults = missingImagesChecker.performCheck()
         logger.info imageCheckingResults.toString()
     }
 
 
-    public void runCrossReferencesCheck() {
+    private void runCrossReferencesChecker() {
         undefinedCrossReferencesChecker = new BrokenCrossReferencesChecker(
                 pageToCheck: pageToCheck
         )
@@ -150,13 +156,24 @@ class AllChecksRunner {
     }
 
 
-    public void runDuplicateIdCheck() {
+    private void runDuplicateIdChecker() {
         duplicateIdChecker = new DuplicateIdChecker(
                 pageToCheck: pageToCheck
         )
         duplicateIdsCheckingResults = duplicateIdChecker.performCheck()
 
         logger.info duplicateIdsCheckingResults.toString()
+    }
+
+
+    private void runMissingLocalResourcesChecker() {
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker(
+                pageToCheck: pageToCheck
+        )
+        missingLocalResourcesCheckingResults = missingLocalResourcesChecker.performCheck()
+
+        logger.info missingLocalResourcesCheckingResults.toString()
+        
     }
 
     /**
@@ -184,9 +201,9 @@ class AllChecksRunner {
         // TODO: main-method is completely broken!!
         allChecksRunner.parseHtml()
 
-        allChecksRunner.runImageFileExistCheck()
-        allChecksRunner.runCrossReferencesCheck()
-        allChecksRunner.runDuplicateIdCheck()
+        allChecksRunner.runMissingImageFileChecker()
+        allChecksRunner.runCrossReferencesChecker()
+        allChecksRunner.runDuplicateIdChecker()
 
     }
 
