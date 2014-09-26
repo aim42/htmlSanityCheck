@@ -37,6 +37,21 @@ class HtmlPage {
     }
 
     /**
+     * get document meta info (e.g. filename, title, size etc.)
+     */
+     public int getDocumentSize() {
+         return document.toString().length()
+     }
+
+    public String getDocumentTitle() {
+        return document.title()
+    }
+
+    public String getDocumentURL() {
+        return document.nodeName()
+    }
+
+    /**
      * builds a list from all '<img src="XYZ"/>' tags
      * @return immutable ArrayList
      */
