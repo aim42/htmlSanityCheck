@@ -98,6 +98,7 @@ class AllChecksRunner {
 
         pageToCheck = parseHtml()
 
+
         // the actual checks
 
         runMissingImageFileChecker()

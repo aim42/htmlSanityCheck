@@ -7,21 +7,7 @@ class HtmlPageMetaInfoTest extends GroovyTestCase {
 
     final static String HTML_PREFIX = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> '
 
-    private HtmlPageMetaInfo metaInfo
-    private HtmlPage htmlPage
-
-    private File tmpFile
-
-
-    @Before
-    public void setUp() {
-        tmpFile = File.createTempFile("testfile", "html")
-    }
-
-
-    @Test
-    public void testDocumentSizeAndTitle() {
-        String HTML = """$HTML_PREFIX
+    private final String HTML = """$HTML_PREFIX
            <head>
              <title>CoolTitle</title>
            </head>
@@ -29,6 +15,22 @@ class HtmlPageMetaInfoTest extends GroovyTestCase {
            <body>
            </body>
         </html>"""
+
+
+    private HtmlPageMetaInfo metaInfo
+
+    private HtmlPage htmlPage
+
+    private File tmpFile
+
+    @Before
+    public void setUp() {
+
+    }
+
+
+    @Test
+    public void testDocumentSizeAndTitle() {
 
         htmlPage = new HtmlPage(HTML)
         metaInfo = new HtmlPageMetaInfo(htmlPage)
@@ -52,6 +54,40 @@ class HtmlPageMetaInfoTest extends GroovyTestCase {
         metaInfo = new HtmlPageMetaInfo(htmlPage)
 
         assertEquals("expected empty", "", metaInfo.documentTitle)
+    }
+
+    @Test
+    public void testEmptyHtml() {
+
+        htmlPage = new HtmlPage("")
+        metaInfo = new HtmlPageMetaInfo(htmlPage)
+
+        assertEquals("expected empty", "", metaInfo.documentTitle)
+
+        assertEquals("expected 44 char document", 44, metaInfo.documentSize)
+        // parsing an empty string as html-document yields the following
+        // document:
+        //    <html><head></head><body></body></html>
+    }
+
+    @Test
+    public void testHtmlFromFile() {
+
+        // create file with proper html content
+        tmpFile = File.createTempFile("testfile", "html")
+        tmpFile.write( HTML )
+
+        htmlPage = new HtmlPage(tmpFile)
+        metaInfo = new HtmlPageMetaInfo(htmlPage)
+
+        //println tmpFile.absolutePath
+
+        assertEquals("expected CoolTitle", "CoolTitle", metaInfo.documentTitle)
+        //assertEquals("expected testfile.html as filename", "testfile.html", metaInfo.documentFileName)
+
+        assertEquals("expected 136 char document", 132, metaInfo.documentSize)
+
+
     }
 }
 

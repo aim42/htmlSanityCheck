@@ -1,8 +1,7 @@
 /**
  * Report the results of one or more checks.
  * Applies the Template-Method-Pattern (in @see reportFindings())
- * to determine concrete
- * output format (e.g. HTML or text) or destination
+ * to determine concrete output format (e.g. HTML or text) or destination
  * (file or console).
  *
  */
@@ -93,6 +92,7 @@ abstract class FindingsReporter {
     }
 
     private void calculateMetainfo() {
+
 
     }
 
