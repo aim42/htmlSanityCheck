@@ -14,7 +14,7 @@ import org.aim42.htmlsanitycheck.checker.CheckingResultsCollector
 import org.aim42.htmlsanitycheck.html.HtmlPageMetaInfo
 
 
-abstract class FindingsReporter {
+abstract class FindingsForFileReporter {
 
     private HtmlPageMetaInfo metaInfo
 
@@ -28,7 +28,8 @@ abstract class FindingsReporter {
 
 
 
-    public FindingsReporter(ArrayList<CheckingResultsCollector> checkingResults) {
+    public FindingsForFileReporter( ArrayList<CheckingResultsCollector> checkingResults,
+                                    HtmlPageMetaInfo metaInfo ) {
 
         this.checkingResults = checkingResults
         this.totalNrOfChecksPerformed = 0
@@ -38,6 +39,7 @@ abstract class FindingsReporter {
 
         this.createdOnDate = new Date().format('dd. MMMM YYYY, HH:mm')
 
+        this.metaInfo = metaInfo
     }
 
     /**

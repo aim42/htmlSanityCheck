@@ -2,7 +2,7 @@ package org.aim42.htmlsanitycheck.html
 
 /**
  * Container for simple meta information about a html page.
- * This class will be used by @see FindingsReporter
+ * This class will be used by @see FindingsForFileReporter
  *
  */
 class HtmlPageMetaInfo {

@@ -3,8 +3,7 @@ package org.aim42.htmlsanitycheck
 import org.aim42.htmlsanitycheck.checker.CheckingResultsCollector
 import org.aim42.htmlsanitycheck.checker.Finding
 import org.aim42.htmlsanitycheck.reporter.FindingsConsoleReporter
-import org.aim42.htmlsanitycheck.reporter.FindingsHtmlReporter
-import org.aim42.htmlsanitycheck.reporter.FindingsReporter
+import org.aim42.htmlsanitycheck.reporter.FindingsForFileReporter
 import org.junit.Test
 
 // see end-of-file for license information
@@ -15,7 +14,7 @@ class CalculateSummaryTest extends GroovyTestCase {
     CheckingResultsCollector checkingField
     Finding singleFinding
 
-    FindingsReporter reporter
+    FindingsForFileReporter reporter
 
 
     int expected

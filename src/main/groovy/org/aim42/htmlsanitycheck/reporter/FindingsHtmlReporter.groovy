@@ -4,7 +4,7 @@ package org.aim42.htmlsanitycheck.reporter
 /**
  * write the findings report to HTML
  */
-public class FindingsHtmlReporter extends FindingsReporter {
+public class FindingsHtmlReporter extends FindingsForFileReporter {
 
     FileWriter writer
 

@@ -6,7 +6,7 @@ import org.aim42.htmlsanitycheck.checker.CheckingResultsCollector
 // see end-of-file for license information
 
 
-class FindingsConsoleReporter extends FindingsReporter {
+class FindingsConsoleReporter extends FindingsForFileReporter {
 
 
     public FindingsConsoleReporter(ArrayList<CheckingResultsCollector> results) {
