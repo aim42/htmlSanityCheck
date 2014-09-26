@@ -48,7 +48,7 @@ class MissingImageFilesChecker extends Checker {
     }
 
     private void checkSingleLocalImage(HtmlElement image) {
-        String relativePathToCurrentImage = image.getSrcAttribute()
+        String relativePathToCurrentImage = image.getImageSrcAttribute()
 
         //logger.info( "image: " + image)
         //logger.info( "relPathToCurImage: \n$relativePathToCurrentImage")
@@ -60,7 +60,7 @@ class MissingImageFilesChecker extends Checker {
             // bookkeeping:
             checkingResults.incNrOfChecks()
 
-            doesFileExist( relativePathToCurrentImage );
+            doesImageFileExist( relativePathToCurrentImage );
         }
     }
 
@@ -71,12 +71,10 @@ class MissingImageFilesChecker extends Checker {
      *
     * @param relativePathToImageFile == XYZ in <img src="XYZ">
      **/
-    private void doesFileExist(String relativePathToImageFile) {
+    private void doesImageFileExist(String relativePathToImageFile) {
         // problem: if the relativePath is "./images/fileName.jpg",
         // we need to add the appropriate path prefix...
 
-        // thx to rdmueller for the improvement below:
-        // was: relativePathToImageFile[1..relativePathToImageFile.length()-1]
         String absolutePath = baseDirPath + "/" + relativePathToImageFile //[1..-1]
 
         //logger.info( "doesFileExist: absolutePath of image: $absolutePath")

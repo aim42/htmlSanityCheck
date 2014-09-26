@@ -7,21 +7,41 @@ package org.aim42.htmlsanitycheck
  */
 class URLUtil {
 
-    /*
-     * Checks if this String
-     * represents a remote URL (startsWith http, https, ftp, telnet...)
+    /**
+     * Checks if this String represents a remote URL
+     * (startsWith http, https, ftp, telnet...)
      * @param link
-     */
+     * */
 
     public static boolean isRemoteURL(String link) {
         // simple regular expression to match http://, https:// and ftp://
         //
 
-        return (link ==~ (/^(?i)(https?|ftp|telnet|ssh|gopher):\/\/.*$/) ||
+        return (link ==~ (/^(?i)(https?|ftp|telnet|ssh|gopher|localhost):\/\/.*$/) ||
                 // special case for mailto-links
                 link ==~ (/^(?i)(mailto):.*$/))
 
     }
+
+    /**
+     * Checks if this String represents a local resource, either:
+     *   (1) "file://path/filename.ext" or
+     *   (2) contains a path-separator, e.g. "directory/filename.ext" or
+     *   (3) is directory with
+     *   (3) "directory"
+     */
+    public static boolean isLocalResource(String link) {
+        if (URLUtil.isRemoteURL(link))
+            return false
+        else return (
+                (link ==~ (/^(?i)(file):\/\/.*$/))  // (1)
+                 ||
+                (link.contains(File.separatorChar.toString()) ) //
+                ||
+                ( link ==~/^[\w|\/,\s-]+\.[A-Za-z]{3,4}$/ )
+             )
+    }
+
 
     /**
      * Checks if this String represents a cross-reference,

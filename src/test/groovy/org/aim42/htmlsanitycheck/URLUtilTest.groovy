@@ -68,7 +68,7 @@ class URLUtilTest extends GroovyTestCase {
     @Test
     public void testRelativeFilePath() {
        List<String> paths = ["./$IMG", "../$IMG", "$IMG",
-                             "../../$IMG", "$IMG",
+                             "../../$IMG", "$IMG", "#$IMG",
                             "images/aim42-logo.png"
         ]
 
@@ -78,6 +78,28 @@ class URLUtilTest extends GroovyTestCase {
         }
 
     }
+
+
+    @Test
+    public void testLocalResources() {
+        List<String> locals = ["file://test.html", "test.html", "./test.html",
+                                "down/loads/test.htm", "test.htm", "test.HTM",
+                                "../down/loads/test.docx",
+                                "test.docx", "test.pdf", "./test.docx"]
+
+        locals.each { it ->
+            assertTrue("$it not recognized as local resource", URLUtil.isLocalResource( it ))
+        }
+
+
+        List<String> remotes = ["http://google.com", "mailto:/hello@example.com",
+                                "ftp://file.html", "https://github.com"]
+        remotes.each {
+            assertFalse("$it recognized as local resource", URLUtil.isLocalResource( it ))
+        }
+
+    }
+
 
     /**
      * tests if cross-references (intra-document-links) are recognized

@@ -96,6 +96,7 @@ class HtmlPage {
         return hrefStrings
     }
 
+
     /*
      convert href to string
      */

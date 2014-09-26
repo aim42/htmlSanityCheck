@@ -19,7 +19,7 @@ class HtmlElement {
     /**
      * @return XYZ for img src="XYZ" tags
      */
-    public String getSrcAttribute() {
+    public String getImageSrcAttribute() {
         if (element.tagName().equals("img"))
             element.attr("src")
         else return ""

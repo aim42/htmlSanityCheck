@@ -41,7 +41,7 @@ class ParserSample {
         print "found %d images", imgs.size()
 
         print "first image"
-        println imgs.first().getSrcAttribute()
+        println imgs.first().getImageSrcAttribute()
 
         Elements links = doc.select("a[href]");
         Elements media = doc.select("[src]");

@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.html
 
+import org.aim42.htmlsanitycheck.URLUtil
 import org.junit.Before
 import org.junit.Test
 
@@ -15,7 +16,7 @@ class HtmlPageTest extends GroovyTestCase {
      * this file resides in git - so we can
      * bake the filename into the tests
      */
-    final static String FILENAME= 'file-to-test.html'
+    final static String FILENAME = 'file-to-test.html'
 
     /**
      * the local (relative) path to the test/resources directory
@@ -159,7 +160,7 @@ class HtmlPageTest extends GroovyTestCase {
         </body></html>
         """
 
-        HtmlPage htmlPage = new HtmlPage( HTML )
+        HtmlPage htmlPage = new HtmlPage(HTML)
 
         ArrayList anchors = htmlPage.getAllAnchorHrefs()
 
@@ -188,9 +189,9 @@ class HtmlPageTest extends GroovyTestCase {
         ArrayList bookmarks = htmlPage.getAllIds()
 
         // there's ONE id contained in the sample html
-        assertEquals( "only ONE id is expected in bookmark list", 1, bookmarks.size())
+        assertEquals("only ONE id is expected in bookmark list", 1, bookmarks.size())
 
-        assertEquals( "id shall equal $HREF_ONE", HREF_ONE, bookmarks.first().getIdAttribute())
+        assertEquals("id shall equal $HREF_ONE", HREF_ONE, bookmarks.first().getIdAttribute())
 
     }
 
@@ -211,15 +212,14 @@ class HtmlPageTest extends GroovyTestCase {
            </html>'''
 
         HtmlPage htmlPage = new HtmlPage(HTML_WITH_A_TAG_AND_ID)
-
         ArrayList bookmarks = htmlPage.getAllIds()
 
         // there's TWO ids contained in the sample html
-        assertEquals( "TWO ids expected in bookmark list", 3, bookmarks.size())
-
-        assertEquals( "id shall equal $HREF_ONE", HREF_ONE, bookmarks.first().getIdAttribute())
-
+        assertEquals("TWO ids expected in bookmark list", 3, bookmarks.size())
+        assertEquals("id shall equal $HREF_ONE", HREF_ONE, bookmarks.first().getIdAttribute())
     }
+
+
     @Test
     public void testAnchorsToStringList() {
         String HTML_WITH_A_TAGS_AND_ID = '''
@@ -233,11 +233,44 @@ class HtmlPageTest extends GroovyTestCase {
               </body>
            </html>'''
 
-        HtmlPage htmlPage = new HtmlPage( HTML_WITH_A_TAGS_AND_ID )
+        HtmlPage htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
         ArrayList hrefs = htmlPage.getAllHrefStrings()
 
-        assertEquals( "expected []", ['#aim42', '#nonexisting'], hrefs)
+        assertEquals("expected [#aim42, #nonexisting]", ['#aim42', '#nonexisting'], hrefs)
+
     }
+
+    /*
+     LocalResourceHrefs have one of the following forms:
+       (1) <a href="file://path"> or
+       (2) <a href="directory/file.ext">...
+     */
+
+    @Test
+    public void testGetAllLocalResourceHrefStrings() {
+        final String LOC1 = "file://path/filename.html"
+        final String LOC2 = "dir/ectory/filename.pdf"
+
+        String HTML = """$HTML_HEAD<body>
+             <h1>dummy-heading-1</h1>
+             <a href="$LOC1">a local file resource</a>
+             <a href="$LOC2">another local resource</a>
+             <a href="#crossref">a cross reference</a>
+        </body></html>"""
+
+        HtmlPage htmlPage = new HtmlPage(HTML)
+        ArrayList<String> hrefs = htmlPage.getAllHrefStrings()
+
+        assertEquals("expected 3 href-strings", 3, hrefs.size())
+
+        // now filter the local resources
+        List<String> localHrefStrings = hrefs.findAll { hrefString ->
+            URLUtil.isLocalResource(hrefString)
+        }
+
+        assertEquals("expected 2 local resources", 2, localHrefStrings.size())
+    }
+
 
     @Test
     public void testGetManyIdStrings() {
@@ -254,35 +287,32 @@ class HtmlPageTest extends GroovyTestCase {
               </body>
            </html>'''
 
-        HtmlPage htmlPage = new HtmlPage( HTML_WITH_A_TAGS_AND_ID )
+        HtmlPage htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
         ArrayList ids = htmlPage.getAllIdStrings()
 
         def expected = ['aim42', 'aim43', 'aim44', 'aim45', 'aim46']
-        assertEquals( "expected $expected", expected, ids )
+        assertEquals("expected $expected", expected, ids)
     }
 
 
     @Test
     public void testGetIdStringsAndAllIds() {
-        String HTML_WITH_A_TAGS_AND_ID = '''
-           <html>
-             $HTML_HEAD
-              <body>
+        String HTML_WITH_A_TAGS_AND_ID = """$HTML_HEAD<body>
                    <a href="#aim42">link-to-aim42</a>
                    <h2 id="aim42">aim42 Architecture Improvement</h3>
                    <h2 id="aim43">aim43 </h3>
                    <h2 id="aim44">aim44 </h3>
               </body>
-           </html>'''
+           </html>"""
 
-        HtmlPage htmlPage = new HtmlPage( HTML_WITH_A_TAGS_AND_ID )
+        HtmlPage htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
         ArrayList idStrings = htmlPage.getAllIdStrings()
 
         def expectedIdStrings = ['aim42', 'aim43', 'aim44']
-        assertEquals( "expected $expectedIdStrings", expectedIdStrings, idStrings)
+        assertEquals("expected $expectedIdStrings", expectedIdStrings, idStrings)
 
         ArrayList tagsWithId = htmlPage.getAllIds()
-        assertEquals( "expected 3 tags with ids", 3, tagsWithId.size())
+        assertEquals("expected 3 tags with ids", 3, tagsWithId.size())
 
     }
 

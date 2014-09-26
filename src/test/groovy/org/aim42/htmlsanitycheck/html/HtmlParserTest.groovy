@@ -55,7 +55,7 @@ class HtmlParserTest extends GroovyTestCase {
         assertEquals("expect exactly one image tag", 1, imageTags.size())
 
         String expected = LOCAL_IMG_SRC
-        String actual = imageTags.first().getSrcAttribute()
+        String actual = imageTags.first().getImageSrcAttribute()
         assertEquals("src-path $LOCAL_IMG_SRC expected but got $actual",
                 expected, actual)
     }
@@ -76,7 +76,7 @@ class HtmlParserTest extends GroovyTestCase {
         ArrayList<HtmlElement> imageTags = htmlPage.getAllImageTags()
 
         String expected = REMOTE_IMG_SRC
-        String actual   = imageTags.first().getSrcAttribute()
+        String actual   = imageTags.first().getImageSrcAttribute()
 
         assertEquals( "$REMOTE_IMG_SRC could not be found in imageTags", expected, actual )
 
