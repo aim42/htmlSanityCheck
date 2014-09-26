@@ -121,21 +121,19 @@ class HtmlPageTest extends GroovyTestCase {
     }
 
     @Test
-    public void testGetAnchorHrefsFromHtml() {
+    public void testGetLocalAnchorHrefsFromHtml() {
 
-        String HREF_ONE = "aim42"
-        String HREF_TWO = "nonexisting"
+        String HREF_ONE = "#aim42"
+        String HREF_TWO = "#nonexisting"
 
-        String HTML_WITH_A_TAGS_AND_ID = '''
-           <html>
-             $HTML_HEAD
+        String HTML_WITH_A_TAGS_AND_ID = """ $HTML_HEAD
               <body>
                    <h1>dummy-heading-1</h1>
-                   <a href="#aim42">link-to-aim42</a>
+                   <a href="$HREF_ONE">link-to-aim42</a>
                    <h2 id="aim42">aim42 Architecture Improvement</h3>
-                   <a href="#nonexisting">non-existing-link</a>
+                   <a href="$HREF_TWO">non-existing-link</a>
               </body>
-           </html>'''
+           </html>"""
 
         HtmlPage htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
 
@@ -148,6 +146,30 @@ class HtmlPageTest extends GroovyTestCase {
 
     }
 
+    @Test
+    public void testGetLocalAndRemoteAnchorsFromHtml() {
+        String ONE = "downloads/aim42.pdf"
+        String TWO = "File.docx"
+
+        String HTML = """$HTML_HEAD<body>
+                <h1>dummy-heading-1</h1>
+            <a href="downloads/aim42.pdf">aim42.pdf</a>
+            <a href="./downloads/aim42.pdf">aim42.pdf</a>
+            <a href="$TWO">download</a>
+        </body></html>
+        """
+
+        HtmlPage htmlPage = new HtmlPage( HTML )
+
+        ArrayList anchors = htmlPage.getAllAnchorHrefs()
+
+        assertEquals("three anchor hrefs expected", 3, anchors.size())
+
+        assertEquals("href $ONE expected", ONE, anchors.first().getHrefAttribute())
+        assertEquals("href $TWO expected", TWO, anchors.last().getHrefAttribute())
+
+    }
+
     /**
      * make sure we get the hrefs (id="XYZ") from html
      **/
@@ -155,16 +177,11 @@ class HtmlPageTest extends GroovyTestCase {
     public void testGetOneIdFromHtml() {
 
         String HREF_ONE = "aim42"
-        String HREF_TWO = "nonexisting"
 
-        String HTML_WITH_A_TAG_AND_ID = '''
-           <html>
-             $HTML_HEAD
-              <body>
-                   <a href="#aim42">link-to-aim42</a>
-                   <h2 id="aim42">aim42 Architecture Improvement</h3>
-              </body>
-           </html>'''
+        String HTML_WITH_A_TAG_AND_ID = """$HTML_HEAD<body>
+              <a href="#aim42">link-to-aim42</a>
+              <h2 id="aim42">aim42 Architecture Improvement</h3>
+          </body> </html>"""
 
         HtmlPage htmlPage = new HtmlPage(HTML_WITH_A_TAG_AND_ID)
 
@@ -219,7 +236,7 @@ class HtmlPageTest extends GroovyTestCase {
         HtmlPage htmlPage = new HtmlPage( HTML_WITH_A_TAGS_AND_ID )
         ArrayList hrefs = htmlPage.getAllHrefStrings()
 
-        assertEquals( "expected []", ['aim42', 'nonexisting'], hrefs)
+        assertEquals( "expected []", ['#aim42', '#nonexisting'], hrefs)
     }
 
     @Test

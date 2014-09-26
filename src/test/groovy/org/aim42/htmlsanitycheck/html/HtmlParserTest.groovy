@@ -103,7 +103,7 @@ class HtmlParserTest extends GroovyTestCase {
 
         assertTrue( "expect empty url to be contained in hrefs, but wasn't", hrefs.contains(""))
 
-        assertTrue( "expect \"local\" to be contained in hrefs, but wasn't", hrefs.contains("local"))
+        assertTrue( "expect \"#local\" to be contained in hrefs, but wasn't", hrefs.contains("#local"))
 
 
 

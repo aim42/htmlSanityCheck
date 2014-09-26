@@ -36,16 +36,20 @@ class URLUtil {
         // (3) contains ".html" or ".htm" as suffix
         // (4) is a filename... very simple test: contains a "."
 
-        String upped = xref.toUpperCase()
+        // the simple test is if the xref starts with "#", though :-)
 
-        return !(xref.contains(File.separatorChar.toString())     // (1)
-                ||
-                URLUtil.isRemoteURL( xref )                       // (2)
-                ||
-                upped.endsWith("HTML") || upped.endsWith("HTM")   // (3)
-                ||
-                xref.contains(".")                                // (4)
-        )
+        return xref.startsWith("#")
+
+//        String upped = xref.toUpperCase()
+//
+//        return ! (xref.contains(File.separatorChar.toString())     // (1)
+//                 ||
+//                 URLUtil.isRemoteURL( xref )                       // (2)
+//                 ||
+//                 upped.endsWith("HTML") || upped.endsWith("HTM")   // (3)
+//                 ||
+//                 xref.contains(".")                                // (4)
+//         )
     }
 
 }

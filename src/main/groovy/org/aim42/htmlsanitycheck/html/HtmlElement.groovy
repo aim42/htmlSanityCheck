@@ -30,9 +30,8 @@ class HtmlElement {
      */
     public String getHrefAttribute() {
         if (element.tagName().equals("a")) {
-            String hrefWithHash = element.attr("href")
-            return hrefWithHash[1..hrefWithHash.length()-1]
-        }
+            return element.attr("href")
+            }
         else return ""
     }
 

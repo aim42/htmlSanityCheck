@@ -89,10 +89,8 @@ class HtmlPage {
         elements.each { element ->
             String href = element.attr("href")
 
-            hrefStrings.add( normalizeHrefString( href ))
-
-            // the following line was caused http and https links to treated as local links...
-            // hrefStrings.add(href[1..href.length()-1])
+            //hrefStrings.add( normalizeHrefString( href ))
+            hrefStrings.add( href )
         }
 
         return hrefStrings

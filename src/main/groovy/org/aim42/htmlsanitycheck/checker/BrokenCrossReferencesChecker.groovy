@@ -69,18 +69,22 @@ class BrokenCrossReferencesChecker extends Checker {
     /**
      * check if the id for the href parameter exists
      *
-     * @param href== XYZ in id="XYZ"
+     * @param href= "#XYZ" in id="XYZ"
      **/
     private void doesLinkTargetExist(String href) {
 
-        if (!listOfIds.contains( href )) {
+        // strip href of its leading "#"
+        String linkTarget = (href.startsWith("#")) ? href[1..-1] : href
+
+
+        if (!listOfIds.contains( linkTarget )) {
 
             // we found a broken link!
 
             // now count occurences - how often is it referenced
             int nrOfReferences = hrefList.findAll{  it == href }.size()
 
-            String findingText = "link target \"$href\" missing (reference count $nrOfReferences)"
+            String findingText = "link target \"$linkTarget\" missing (reference count $nrOfReferences)"
 
             checkingResults.newFinding(findingText)
         }

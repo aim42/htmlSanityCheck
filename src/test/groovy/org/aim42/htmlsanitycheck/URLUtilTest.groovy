@@ -2,6 +2,9 @@ package org.aim42.htmlsanitycheck
 
 
 import org.junit.Test
+import org.hamcrest.*
+
+import static org.hamcrest.MatcherAssert.assertThat
 
 // see end-of-file for license information
 
@@ -23,7 +26,7 @@ class URLUtilTest extends GroovyTestCase {
         fileURL = "$IMG"
         actual = URLUtil.isRemoteURL(fileURL)
 
-        assertFalse("$fileURL shall be recognized as file but wasn't",
+        assertFalse("$fileURL is file-url but not remote-url",
                 actual)
 
 
@@ -53,7 +56,7 @@ class URLUtilTest extends GroovyTestCase {
 
     @Test
     public void testMailtoLink() {
-        def prefixes = ["mailto", "MAILTO", "mailTO"]
+        List<String> prefixes = ["mailto", "MAILTO", "mailTO"]
 
         prefixes.each { prefix ->
             String url = prefix + ":chuck.norris@example.com"
@@ -64,13 +67,14 @@ class URLUtilTest extends GroovyTestCase {
 
     @Test
     public void testRelativeFilePath() {
-        def paths = ["./$IMG", "../$IMG", "$IMG",
-                     "../../$IMG", "$IMG",
-                     "images/aim42-logo.png"
+       List<String> paths = ["./$IMG", "../$IMG", "$IMG",
+                             "../../$IMG", "$IMG",
+                            "images/aim42-logo.png"
         ]
 
         paths.each { url ->
-            assertFalse("$url is local but was recognized as remote", URLUtil.isRemoteURL(url))
+            assertFalse("$url is local but was recognized as remote",
+                    URLUtil.isRemoteURL(url))
         }
 
     }
@@ -80,35 +84,27 @@ class URLUtilTest extends GroovyTestCase {
      */
     @Test
     public void testSimpleStringIsCrossReference() {
-        String crossRefs = ["xref", "A1B2c3", "abcdefghijklmnopqrsuvwyz"]
+        List<String> crossRefs = ["#xref", "#A1B2c3", "#abcdefghijklmnopqrsuvwyz"]
 
-        crossRefs.each { cf ->
-            assertTrue("legal cross-reference not recognized",
+        crossRefs.each  { cf ->
+            //log.info(cf)
+            assertTrue("$cf legal cross-reference not recognized",
                     URLUtil.isCrossReference(cf))
         }
     }
 
     @Test
     public void testPathIsNoCrossReference() {
-        String path = "api/Checker.html"
-        assertFalse("api/Checker.html recognized as cross-reference", URLUtil.isCrossReference(path))
+        List<String> paths = ["api/Checker.html",
+                              "api/doc/Checker.html",
+                              "images/xref", "Anotherfile.html",
+                              "Somefile.docx",
+                              "downloads/Somefile.pdf"]
 
-        path = "api/doc/Checker.html"
-        assertFalse("api/doc/Checker.html recognized as cross-reference", URLUtil.isCrossReference(path))
-
-
-        path = "images/xref"
-        assertFalse( "$path recognized as cross-reference", URLUtil.isCrossReference( path))
-
-        path = "Anotherfile.html"
-        assertFalse( "Anotherfile.html recognized as cross-reference", URLUtil.isCrossReference( path))
-
-
-        path = "Somefile.docx"
-        assertFalse( "Somefile.docx recognized as cross-reference", URLUtil.isCrossReference( path))
-
-        path = "downloads/Somefile.pdf"
-        assertFalse( "downloads/Somefile.pdf recognized as cross-reference", URLUtil.isCrossReference( path))
+        paths.each { path ->
+            assertFalse("$path recognized as cross-reference",
+                    URLUtil.isCrossReference(path))
+        }
 
 
     }

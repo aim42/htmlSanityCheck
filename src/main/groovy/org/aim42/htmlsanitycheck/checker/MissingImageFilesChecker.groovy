@@ -50,8 +50,8 @@ class MissingImageFilesChecker extends Checker {
     private void checkSingleLocalImage(HtmlElement image) {
         String relativePathToCurrentImage = image.getSrcAttribute()
 
-        logger.info( "image: " + image)
-        logger.info( "relPathToCurImage: \n$relativePathToCurrentImage")
+        //logger.info( "image: " + image)
+        //logger.info( "relPathToCurImage: \n$relativePathToCurrentImage")
 
         // check only "local" image references
         // (that is, NO remote URL)
@@ -79,7 +79,7 @@ class MissingImageFilesChecker extends Checker {
         // was: relativePathToImageFile[1..relativePathToImageFile.length()-1]
         String absolutePath = baseDirPath + "/" + relativePathToImageFile //[1..-1]
 
-        logger.info( "doesFileExist: absolutePath of image: $absolutePath")
+        //logger.info( "doesFileExist: absolutePath of image: $absolutePath")
 
         File imageFile = new File(absolutePath);
 
