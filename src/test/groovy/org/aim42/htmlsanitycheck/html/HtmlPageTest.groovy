@@ -202,7 +202,7 @@ class HtmlPageTest extends GroovyTestCase {
 
         String HTML_WITH_A_TAG_AND_ID = '''
            <html>
-             $HTML_HEAD
+             $HTML_PREFIX
               <body>
                    <a href="#aim42">link-to-aim42</a>
                    <h2 id="aim42">aim42 Architecture Improvement</h3>
@@ -224,7 +224,7 @@ class HtmlPageTest extends GroovyTestCase {
     public void testAnchorsToStringList() {
         String HTML_WITH_A_TAGS_AND_ID = '''
            <html>
-             $HTML_HEAD
+             $HTML_PREFIX
               <body>
                    <h1>dummy-heading-1</h1>
                    <a href="#aim42">link-to-aim42</a>
@@ -276,7 +276,7 @@ class HtmlPageTest extends GroovyTestCase {
     public void testGetManyIdStrings() {
         String HTML_WITH_A_TAGS_AND_ID = '''
            <html>
-             $HTML_HEAD
+             $HTML_PREFIX
               <body>
                    <a href="#aim42">link-to-aim42</a>
                    <h2 id="aim42">aim42 Architecture Improvement</h3>
