@@ -12,9 +12,12 @@
 package org.aim42.htmlsanitycheck.reporter
 
 import org.aim42.htmlsanitycheck.checker.CheckingResultsCollector
+import org.aim42.htmlsanitycheck.html.HtmlPageMetaInfo
 
 
 abstract class FindingsReporter {
+
+    private HtmlPageMetaInfo metaInfo
 
     ArrayList<CheckingResultsCollector> checkingResults
 
@@ -43,6 +46,9 @@ abstract class FindingsReporter {
      * using the Template-Method-Pattern.
      */
     public void reportFindings() {
+        // determine title, size etc.
+        calculateMetainfo()
+
         // sum up numbers, calculate percentages
         calculateSummary()
 
@@ -83,6 +89,10 @@ abstract class FindingsReporter {
             percentSuccessful =
                     100 - (100 * totalNrOfFindings) / totalNrOfChecksPerformed
         }
+
+    }
+
+    private void calculateMetainfo() {
 
     }
 
