@@ -22,7 +22,7 @@ class MissingLocalResourcesChecker extends Checker {
     protected void initCheckingResultsDescription() {
         checkingResults.whatIsChecked  = "Missing Local Resources Check"
         checkingResults.sourceItemName = "anchor tag href attribute"
-        checkingResults.targetItemName = "missing local resource"
+        checkingResults.targetItemName = "missing local resources"
     }
 
     @Override
