@@ -51,6 +51,9 @@ class HtmlPage {
         return document.nodeName()
     }
 
+    public String getDocument() {
+        return document.toString()
+    }
     /**
      * builds a list from all '<img src="XYZ"/>' tags
      * @return immutable ArrayList
