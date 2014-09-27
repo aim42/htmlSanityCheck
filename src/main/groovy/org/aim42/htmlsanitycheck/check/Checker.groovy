@@ -21,7 +21,8 @@ import org.aim42.htmlsanitycheck.html.HtmlPage
 
 abstract class Checker {
 
-     // i.e. image-links, internal links (anchors/hrefs)
+    // temporarily keep results of a single check, ie missing-images,
+    // internal cross-references etc.
     SingleCheckResultsCollector checkingResults
 
     HtmlPage pageToCheck
