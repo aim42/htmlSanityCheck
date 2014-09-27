@@ -19,33 +19,27 @@ kbd:[HtmlSC] can run from the command line or as {gradle-url}-plugin.
 ==== Terminology: What Can Go Wrong in HTML Files?
 
 Apart from purely syntactical errors, many things can go wrong in html, especially with respect to
-hyperlinks and references.
+hyperlinks, anchors and id's - as those are often manually maintained.
 
-[[BrokenCrossReferences]]
-Broken Cross References:: Cross-references (internal links) can be broken,
+.Broken Cross References:: Cross-references (internal links) can be broken,
 e.g. due to missing or misspelled link-target.
 See <<BrokenCrossReferencesChecker>>
+.Missing image files: Referenced image files can be missing or misspelled. See <<MissingImageFilesChecker>>.
 
-[[MissingImageFiles]]
-Missing Image Files:: Referenced image files can be missing or misspelled. See <<MissingImageFilesChecker>>.
-
-[[MissingLocalResources]]
-Missing local resources:: Referenced local resources (other than images) can be missing or misspelled.
+.Missing local resources: Referenced local resources (other than images) can be missing or misspelled.
   See <<MissingLocalResourcesChecker>>
 
-[[DuplicateLinkTargets]]
-Duplicate link targets:: Links can have multiple identical link-targets (several id attributes with the same name).
+.Duplicate link targets: link-targets can occur several times with the same name - so the browser cannot know
+which is the desired target.
   See <<DuplicateLinkTargetsChecker>>.
 
-[[IllegalAnchors]]
-Illegal links:: The links (aka anchors or URIs) can contain illegal characters or violate HTML link syntax.
+.Illegal links:: The links (aka anchors or URIs) can contain illegal characters or violate HTML link syntax.
+  See <<IllegalLinkChecker
 
-[[BrokenExternalLinks]]
-Broken external links:: External links can be broken - due to myriads of reasons: misspelled, link-target currently offline,
+.Broken external links: External links can be broken due to myriads of reasons: misspelled, link-target currently offline,
  illegal link syntax. See <<BrokenExternalLinksChecker>>
 
-[[MissingImageAltAttributes]]
-Missing Alt Attribute in Image Tags: Images missing an alt-attribute.
+.Missing Alt Attribute in Image Tags: Images missing an alt-attribute.
 
 
 Checking and reporting these errors and flaws is the central _business requirement_ of kbd:[HtmlSC].
@@ -118,6 +112,7 @@ Checking and reporting these errors and flaws is the central _business requireme
                                   See <<MissingImgAltAttributeChecker>>
 | [UnusedImages]           R-7  | check for files in image-directories that are not referenced by any
                                   of the HTML files in this _run_
+| [IllegalAnchors]         R-8  |
 |===
 
 
