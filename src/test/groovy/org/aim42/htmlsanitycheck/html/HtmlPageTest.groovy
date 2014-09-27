@@ -43,7 +43,8 @@ class HtmlPageTest extends GroovyTestCase {
               </body>
            </html>"""
 
-    File tmpFile
+    private File tmpFile
+    private HtmlPage htmlPage
 
 
     @Before
@@ -55,9 +56,9 @@ class HtmlPageTest extends GroovyTestCase {
     @Test
     public void testGetTwoImagesFromHtml() {
 
-        HtmlPage htmlpage = new HtmlPage(HTML_WITH_TWO_IMG_TAGS)
+        htmlPage = new HtmlPage(HTML_WITH_TWO_IMG_TAGS)
 
-        ArrayList<HtmlElement> images = htmlpage.getAllImageTags()
+        ArrayList<HtmlElement> images = htmlPage.getAllImageTags()
 
         // should yield TWO image tags!
         assertEquals("TWO images expected", 2, images.size())
@@ -69,9 +70,9 @@ class HtmlPageTest extends GroovyTestCase {
     @Test
     public void testGetOneImageFromHtml() {
 
-        HtmlPage htmlpage = new HtmlPage(HTML_WITH_IMG_TAG)
+        htmlPage = new HtmlPage(HTML_WITH_IMG_TAG)
 
-        ArrayList images = htmlpage.getAllImageTags()
+        ArrayList images = htmlPage.getAllImageTags()
 
         // should yield exactly ONE image tag!
         assertEquals("ONE image expected", 1, images.size())
@@ -82,9 +83,9 @@ class HtmlPageTest extends GroovyTestCase {
     public void testGetOneImageFromHtmlFile() {
         tmpFile.write(HTML_WITH_IMG_TAG)
 
-        HtmlPage htmlpage = new HtmlPage(tmpFile)
+        htmlPage = new HtmlPage(tmpFile)
 
-        ArrayList images = htmlpage.getAllImageTags()
+        ArrayList images = htmlPage.getAllImageTags()
 
         // should yield exactly ONE image tag!
         assertEquals("ONE image expected", 1, images.size())
@@ -95,9 +96,9 @@ class HtmlPageTest extends GroovyTestCase {
     public void testGetTwoImagesFromHtmlFile() {
         tmpFile.write(HTML_WITH_TWO_IMG_TAGS)
 
-        HtmlPage htmlpage = new HtmlPage(tmpFile)
+        htmlPage = new HtmlPage(tmpFile)
 
-        ArrayList images = htmlpage.getAllImageTags()
+        ArrayList images = htmlPage.getAllImageTags()
 
         // should yield exactly ONE image tag!
         assertEquals("ONE image expected", 2, images.size())
@@ -114,7 +115,7 @@ class HtmlPageTest extends GroovyTestCase {
         assertTrue("file $filePath  does NOT exist (but should!)",
                 new File(filePath).exists())
 
-        HtmlPage htmlPage = new HtmlPage(new File(filePath))
+        htmlPage = new HtmlPage(new File(filePath))
 
         ArrayList images = htmlPage.getAllImageTags()
         assertEquals("expected 2 images", 2, images.size())
@@ -136,7 +137,7 @@ class HtmlPageTest extends GroovyTestCase {
               </body>
            </html>"""
 
-        HtmlPage htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
+        htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
 
         ArrayList anchors = htmlPage.getAllAnchorHrefs()
 
@@ -160,7 +161,7 @@ class HtmlPageTest extends GroovyTestCase {
         </body></html>
         """
 
-        HtmlPage htmlPage = new HtmlPage(HTML)
+        htmlPage = new HtmlPage(HTML)
 
         ArrayList anchors = htmlPage.getAllAnchorHrefs()
 
@@ -184,7 +185,7 @@ class HtmlPageTest extends GroovyTestCase {
               <h2 id="aim42">aim42 Architecture Improvement</h3>
           </body> </html>"""
 
-        HtmlPage htmlPage = new HtmlPage(HTML_WITH_A_TAG_AND_ID)
+        htmlPage = new HtmlPage(HTML_WITH_A_TAG_AND_ID)
 
         ArrayList bookmarks = htmlPage.getAllIds()
 
@@ -211,7 +212,7 @@ class HtmlPageTest extends GroovyTestCase {
                   </body>
            </html>'''
 
-        HtmlPage htmlPage = new HtmlPage(HTML_WITH_A_TAG_AND_ID)
+        htmlPage = new HtmlPage(HTML_WITH_A_TAG_AND_ID)
         ArrayList bookmarks = htmlPage.getAllIds()
 
         // there's TWO ids contained in the sample html
@@ -233,7 +234,7 @@ class HtmlPageTest extends GroovyTestCase {
               </body>
            </html>'''
 
-        HtmlPage htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
+        htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
         ArrayList hrefs = htmlPage.getAllHrefStrings()
 
         assertEquals("expected [#aim42, #nonexisting]", ['#aim42', '#nonexisting'], hrefs)
@@ -258,7 +259,7 @@ class HtmlPageTest extends GroovyTestCase {
              <a href="#crossref">a cross reference</a>
         </body></html>"""
 
-        HtmlPage htmlPage = new HtmlPage(HTML)
+        htmlPage = new HtmlPage(HTML)
         ArrayList<String> hrefs = htmlPage.getAllHrefStrings()
 
         assertEquals("expected 3 href-strings", 3, hrefs.size())
@@ -287,7 +288,7 @@ class HtmlPageTest extends GroovyTestCase {
               </body>
            </html>'''
 
-        HtmlPage htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
+        htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
         ArrayList ids = htmlPage.getAllIdStrings()
 
         def expected = ['aim42', 'aim43', 'aim44', 'aim45', 'aim46']
@@ -305,7 +306,7 @@ class HtmlPageTest extends GroovyTestCase {
               </body>
            </html>"""
 
-        HtmlPage htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
+        htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
         ArrayList idStrings = htmlPage.getAllIdStrings()
 
         def expectedIdStrings = ['aim42', 'aim43', 'aim44']
@@ -316,6 +317,44 @@ class HtmlPageTest extends GroovyTestCase {
 
     }
 
+    /**
+     * Tests thousands of anchor elements
+     *
+     * Due to discussion on StackOverFlow (jsoup tag), the parser might be
+     * restricted to about 4300 links/anchor elements - we verify our upper limit.
+     * (
+     */
+    @Test
+    public void testManyAnchorTags() {
+
+        final int NR_OF_ANCHORS = 3000
+
+        // create file with proper html content
+        tmpFile = File.createTempFile("testfile", "html")
+        tmpFile.write( HTML_HEAD)
+        tmpFile.append( "<body>")
+
+        for ( int i = 0; i < NR_OF_ANCHORS; i++) {
+            tmpFile.append("<a href=\"#link$i\">link number $i</a>")
+        }
+        tmpFile.append("</body></html>")
+
+        htmlPage = new HtmlPage(tmpFile)
+
+        List<String> hrefs = htmlPage.getAllHrefStrings()
+
+        // assert we find the correct number of anchors
+        assertEquals("expected $NR_OF_ANCHORS anchors", NR_OF_ANCHORS, hrefs.size())
+
+        String link
+        // assert we find the correct anchors - all of them
+        for ( int i = 0; i < NR_OF_ANCHORS; i++) {
+            link = "#link$i"
+            assertTrue("expect $link in results, but wasn't", hrefs.contains(link))
+        }
+
+
+    }
 
 }
 
