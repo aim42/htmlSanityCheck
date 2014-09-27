@@ -1,5 +1,5 @@
 // see end-of-file for license information
-package org.aim42.htmlsanitycheck.reporter
+package org.aim42.htmlsanitycheck.report
 
 /**
  * write the findings report to HTML

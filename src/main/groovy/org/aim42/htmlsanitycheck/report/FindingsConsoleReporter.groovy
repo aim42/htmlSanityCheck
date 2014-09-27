@@ -1,4 +1,4 @@
-package org.aim42.htmlsanitycheck.reporter
+package org.aim42.htmlsanitycheck.report
 
 import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
 

@@ -2,8 +2,8 @@ package org.aim42.htmlsanitycheck
 
 import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
-import org.aim42.htmlsanitycheck.reporter.FindingsConsoleReporter
-import org.aim42.htmlsanitycheck.reporter.FindingsForFileReporter
+import org.aim42.htmlsanitycheck.report.FindingsConsoleReporter
+import org.aim42.htmlsanitycheck.report.FindingsForFileReporter
 import org.junit.Test
 
 // see end-of-file for license information

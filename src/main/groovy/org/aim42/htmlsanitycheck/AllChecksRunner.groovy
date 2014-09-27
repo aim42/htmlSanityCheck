@@ -5,7 +5,7 @@ import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
 
 // see end-of-file for license information
 import org.aim42.htmlsanitycheck.html.HtmlPage
-import org.aim42.htmlsanitycheck.reporter.FindingsConsoleReporter
+import org.aim42.htmlsanitycheck.report.FindingsConsoleReporter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
