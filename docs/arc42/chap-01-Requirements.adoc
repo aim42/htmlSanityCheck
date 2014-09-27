@@ -10,7 +10,7 @@
 . A user configures the location (directory and filename) of an HTML file,
 . and the corresponding images directory.
 . kbd:[HtmlSC] performs various checks on the HTML and
-. reports its results either on the console or as file.
+. reports its results either on the console or as HTML report.
 
 kbd:[HtmlSC] can run from the command line or as {gradle-url}-plugin.
 
@@ -36,6 +36,9 @@ Missing local resources:: Referenced local resources (other than images) can be 
 [[DuplicateLinkTargets]]
 Duplicate link targets:: Links can have multiple identical link-targets (several id attributes with the same name).
   See <<DuplicateLinkTargetsChecker>>.
+
+[[IllegalAnchors]]
+Illegal links:: The links (aka anchors or URIs) can contain illegal characters or violate HTML link syntax.
 
 [[BrokenExternalLinks]]
 Broken external links:: External links can be broken - due to myriads of reasons: misspelled, link-target currently offline,
@@ -66,6 +69,9 @@ Checking and reporting these errors and flaws is the central _business requireme
 | link-target       | Either a location in the current document (identified by ->id), another document (identified by URI)
                         or another resource to view or download.
 | local resource    | local file, either other html files or other filetypes (e.g. pdf, docx)
+| URI               | Universal Resource Identifier. Defined in http://www.ietf.org/rfc/rfc2396.txt[RFC-2396]
+                      The ultimate source of truth concerning link syntax and semantic.
+
 |===
 
 
@@ -85,6 +91,8 @@ Checking and reporting these errors and flaws is the central _business requireme
 | G-5 | free and open source | all required dependencies shall be compliant
                                to the https://creativecommons.org/licenses/by-sa/4.0/[CC-SA-4 licence].
 | G-6 | available via public repositories, like bintray or jcenter.
+| G-7 | configurable to check multiple HTML files in a single _run_ and produce a joint report.
+        (useful for e.g. API documentation with many HTML files referencing each other)
 |===
 
 
@@ -94,19 +102,22 @@ Checking and reporting these errors and flaws is the central _business requireme
 .Required Checks
 |===
 | ID | Check | Description
-|      R-1 | missing image files | Check all image tags if the referenced
-                                image files exist.
-                                See <<MissingImageFilesChecker>>
-| [BrokenCrossReferences] R-2 | broken internal links | Check all internal links from anchor-tags
-                                (href="XYZ") if the link targets "XYZ" are defined.
-                                See <<BrokenCrossReferencesChecker>>
-| [MissingLocalResources] R-3  | missing local files, either other html-files, pdf's or similar.
-                                See <<MissingLocalResourcesChecker>>
-| [DuplicateLinkTargets] R-4 | duplicate link targets | Check all bookmark definitions
-                               (... id="XYZ") wether the id's ("XYZ") are unique.
-                               See <<DuplicateLinkTargetsChecker>>
-| [MissingImgAltAttribute] | missing alt-attribute in image-tags.
-                            See <<MissingImgAltAttributeChecker>>
+| [MissingImageFiles]      R-1 | missing image files | Check all image tags if the referenced
+                                  image files exist.
+                                  See <<MissingImageFilesChecker>>
+| [BrokenCrossReferences]  R-2 | broken internal links | Check all internal links from anchor-tags
+                                  (href="XYZ") if the link targets "XYZ" are defined.
+                                  See <<BrokenCrossReferencesChecker>>
+| [MissingLocalResources]  R-3  | missing local files, either other html-files, pdf's or similar.
+                                  See <<MissingLocalResourcesChecker>>
+| [DuplicateLinkTargets]   R-4  | duplicate link targets | Check all bookmark definitions
+                                  (... id="XYZ") whether the id's ("XYZ") are unique.
+                                  See <<DuplicateLinkTargetsChecker>>
+|                          R-5  | Malformed links | Check all links for syntactical correctness
+| [MissingImgAltAttribute] R-6  | missing alt-attribute in image-tags.
+                                  See <<MissingImgAltAttributeChecker>>
+| [UnusedImages]           R-7  | check for files in image-directories that are not referenced by any
+                                  of the HTML files in this _run_
 |===
 
 
