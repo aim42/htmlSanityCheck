@@ -56,22 +56,20 @@ class AllChecksRunner {
     private SingleCheckResultsCollector duplicateIdsCheckingResults
     private SingleCheckResultsCollector missingLocalResourcesCheckingResults
 
-    // TODO: to handle #15 and #30 (enhancement for FileSet)
-    private SinglePageResultsCollector singlePageResultsCollector
-
-    // our input html
     private HtmlPage pageToCheck
 
-    // logging stuff
+    // our input html
     private static Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
 
+    // logging stuff
     /**
      * runs all available checks on the file
      *
      * @param fileToCheck all available checks are run against this file
+     *        from this we can deduce the baseDirPath
      * TODO: enhance to fileSet
 
-     * @param imagesDir : images are expected here
+     * @param
      * @param checkingResultsDir
 
      */
@@ -103,8 +101,29 @@ class AllChecksRunner {
 
         //logger.info(this.toString())
 
+        performAllChecksForOneFile( fileToCheck )
 
-        pageToCheck = parseHtml()
+        reportCheckingResultsOnConsole()
+    }
+
+
+    /**
+     *  performs all known checks on a single HTML file.
+     *
+     *  Creates a {@link SinglePageResultsCollector} instance to keep checking results.
+     */
+    public void performAllChecksForOneFile( File fileToCheck ) {
+
+        pageToCheck = parseHtml( fileToCheck )
+
+        // TODO: to handle #15 and #30 (enhancement for FileSet)
+        SinglePageResultsCollector singlePageResultsCollector =
+                new SinglePageResultsCollector(
+                        pageFileName: fileToCheck.canonicalPath.toString(),
+                        pageToCheck: pageToCheck.getDocumentTitle(),
+                        pageSize:    pageToCheck.documentSize
+                )
+
 
 
         // the actual checks
@@ -114,16 +133,6 @@ class AllChecksRunner {
         runCrossReferencesChecker()
         runMissingLocalResourcesChecker()
 
-        reportCheckingResultsOnConsole()
-    }
-
-    /**
-     *  performs all known checks on a single HTML file.
-     *
-     *  Creates a {@link SinglePageResultsCollector} instance to keep checking results.
-     */
-    public void performAllChecksForOneFile( String fileName ) {
-        //
 
     }
 
