@@ -56,7 +56,7 @@ class AllChecksRunner {
     private SingleCheckResultsCollector duplicateIdsCheckingResults
     private SingleCheckResultsCollector missingLocalResourcesCheckingResults
 
-    // TODO: to handle #15 and #30
+    // TODO: to handle #15 and #30 (enhancement for FileSet)
     private SinglePageResultsCollector singlePageResultsCollector
 
     // our input html
@@ -76,6 +76,7 @@ class AllChecksRunner {
 
      */
 
+    // TODO: remove imagesDir
     public AllChecksRunner(
             File fileToCheck,
             File imagesDir,
@@ -96,10 +97,12 @@ class AllChecksRunner {
     /**
      * performs all available checks
      * on pageToCheck
+     * TODO: enhance to support FileSet instead of just one file
      */
     public void performAllChecks() {
 
-        logger.info(this.toString())
+        //logger.info(this.toString())
+
 
         pageToCheck = parseHtml()
 
@@ -112,6 +115,16 @@ class AllChecksRunner {
         runMissingLocalResourcesChecker()
 
         reportCheckingResultsOnConsole()
+    }
+
+    /**
+     *  performs all known checks on a single HTML file.
+     *
+     *  Creates a {@link SinglePageResultsCollector} instance to keep checking results.
+     */
+    public void performAllChecksForOneFile( String fileName ) {
+        //
+
     }
 
     /**
