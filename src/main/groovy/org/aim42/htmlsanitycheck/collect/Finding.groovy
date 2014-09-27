@@ -1,6 +1,6 @@
 // see end-of-file for license information
 
-package org.aim42.htmlsanitycheck.checker
+package org.aim42.htmlsanitycheck.collect
 
 /**
  * A single "finding" from any check, i.e.:

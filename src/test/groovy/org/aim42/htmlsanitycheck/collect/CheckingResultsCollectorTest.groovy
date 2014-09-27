@@ -1,5 +1,9 @@
-package org.aim42.htmlsanitycheck.checker
+package org.aim42.htmlsanitycheck.collect
 
+import org.aim42.htmlsanitycheck.check.Checker
+import org.aim42.htmlsanitycheck.check.Finding
+import org.aim42.htmlsanitycheck.check.MissingImageFilesChecker
+import org.aim42.htmlsanitycheck.collect.CheckingResultsCollector
 import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.junit.Test

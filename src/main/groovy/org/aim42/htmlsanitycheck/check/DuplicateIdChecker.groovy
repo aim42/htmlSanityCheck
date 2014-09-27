@@ -1,4 +1,4 @@
-package org.aim42.htmlsanitycheck.checker
+package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.html.HtmlElement
 

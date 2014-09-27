@@ -1,7 +1,6 @@
 // see end-of-file for license information
 
-package org.aim42.htmlsanitycheck.checker
-
+package org.aim42.htmlsanitycheck.collect
 /**
  * collects results for a specific checking field
  * (i.e. missing images).
@@ -9,7 +8,7 @@ package org.aim42.htmlsanitycheck.checker
  * @author Gernot Starke <gs@gernotstarke.de>
  */
 
-class CheckingResultsCollector {
+class SingleCheckResultsCollector {
 
     protected String whatIsChecked    // i.e. "Missing Local Images Check"
 
@@ -25,9 +24,9 @@ class CheckingResultsCollector {
      * Initialize some members.
      *
      * Other members are set by the Checker-instance
-     * owning this CheckingResultsCollector.
+     * owning this SingleCheckResultsCollector.
      */
-    public CheckingResultsCollector() {
+    public SingleCheckResultsCollector() {
 
         this.nrOfItemsChecked = 0
         this.findings = new ArrayList<Finding>()
