@@ -2,6 +2,7 @@ package org.aim42.htmlsanitycheck
 
 import org.aim42.htmlsanitycheck.check.*
 import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
+import org.aim42.htmlsanitycheck.collect.SinglePageResultsCollector
 
 // see end-of-file for license information
 import org.aim42.htmlsanitycheck.html.HtmlPage
@@ -54,6 +55,9 @@ class AllChecksRunner {
     private SingleCheckResultsCollector crossReferencesCheckingResults
     private SingleCheckResultsCollector duplicateIdsCheckingResults
     private SingleCheckResultsCollector missingLocalResourcesCheckingResults
+
+    // TODO: to handle #15 and #30
+    private SinglePageResultsCollector singlePageResultsCollector
 
     // our input html
     private HtmlPage pageToCheck
@@ -136,7 +140,7 @@ class AllChecksRunner {
      * src="file://image.jpg"
      */
     private void runMissingImageFileChecker() {
-        // from gradle we get a File object for imageDirPath
+
         missingImagesChecker = new MissingImageFilesChecker(
                 pageToCheck: pageToCheck,
                 baseDirPath: baseDirPath
