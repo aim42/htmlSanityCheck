@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck
 
-import org.aim42.htmlsanitycheck.checker.*
+import org.aim42.htmlsanitycheck.check.*
+import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
 
 // see end-of-file for license information
 import org.aim42.htmlsanitycheck.html.HtmlPage
@@ -41,7 +42,7 @@ class AllChecksRunner {
     // TODO: handle checking of external resources
     private Boolean checkExternalResources = false
 
-    // the checker instances
+    // the check instances
     private Checker missingImagesChecker
     private Checker undefinedCrossReferencesChecker
     private Checker duplicateIdChecker
@@ -49,10 +50,10 @@ class AllChecksRunner {
 
 
     // collections for the results
-    private CheckingResultsCollector imageCheckingResults
-    private CheckingResultsCollector crossReferencesCheckingResults
-    private CheckingResultsCollector duplicateIdsCheckingResults
-    private CheckingResultsCollector missingLocalResourcesCheckingResults
+    private SingleCheckResultsCollector imageCheckingResults
+    private SingleCheckResultsCollector crossReferencesCheckingResults
+    private SingleCheckResultsCollector duplicateIdsCheckingResults
+    private SingleCheckResultsCollector missingLocalResourcesCheckingResults
 
     // our input html
     private HtmlPage pageToCheck
@@ -113,7 +114,7 @@ class AllChecksRunner {
      * reports results on stdout
      */
     private void reportCheckingResultsOnConsole() {
-        def results = new ArrayList<CheckingResultsCollector>( Arrays.asList(
+        def results = new ArrayList<SingleCheckResultsCollector>( Arrays.asList(
                         imageCheckingResults,
                         crossReferencesCheckingResults,
                         duplicateIdsCheckingResults,
@@ -169,7 +170,8 @@ class AllChecksRunner {
 
     private void runMissingLocalResourcesChecker() {
         missingLocalResourcesChecker = new MissingLocalResourcesChecker(
-                pageToCheck: pageToCheck
+                pageToCheck: pageToCheck,
+                baseDirPath: baseDirPath
         )
         missingLocalResourcesCheckingResults = missingLocalResourcesChecker.performCheck()
 

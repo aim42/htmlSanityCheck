@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.URLUtil
+import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -26,7 +27,7 @@ class MissingLocalResourcesChecker extends Checker {
     }
 
     @Override
-    protected CheckingResultsCollector check() {
+    protected SingleCheckResultsCollector check() {
         //get list of all anchor-tags containing href="xyz" in html file
         List<String> allHrefs = pageToCheck.getAllHrefStrings()
 

@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.URLUtil
+import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
 
 // see end-of-file for license information
 
@@ -23,7 +24,7 @@ class BrokenCrossReferencesChecker extends Checker {
 
 
     @Override
-    protected CheckingResultsCollector check() {
+    protected SingleCheckResultsCollector check() {
 
 
         //get list of all a-tags "<a src=..." in html file

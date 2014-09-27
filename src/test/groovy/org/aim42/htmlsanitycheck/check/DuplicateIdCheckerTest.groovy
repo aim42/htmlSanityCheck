@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.junit.Before
 import org.junit.Test
@@ -11,11 +12,11 @@ class DuplicateIdCheckerTest extends GroovyTestCase {
 
     Checker duplicateIdChecker
     HtmlPage htmlPage
-    CheckingResultsCollector collector
+    SingleCheckResultsCollector collector
 
     @Before
     public void setUp() {
-        collector = new CheckingResultsCollector()
+        collector = new SingleCheckResultsCollector()
     }
 
 

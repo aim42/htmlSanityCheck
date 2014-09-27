@@ -1,6 +1,6 @@
 package org.aim42.htmlsanitycheck.reporter
 
-import org.aim42.htmlsanitycheck.checker.CheckingResultsCollector
+import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
 
 
 // see end-of-file for license information
@@ -9,7 +9,7 @@ import org.aim42.htmlsanitycheck.checker.CheckingResultsCollector
 class FindingsConsoleReporter extends FindingsForFileReporter {
 
 
-    public FindingsConsoleReporter(ArrayList<CheckingResultsCollector> results) {
+    public FindingsConsoleReporter(ArrayList<SingleCheckResultsCollector> results) {
         super(results)
 
     }

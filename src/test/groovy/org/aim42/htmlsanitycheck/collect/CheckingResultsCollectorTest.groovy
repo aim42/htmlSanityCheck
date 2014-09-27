@@ -1,9 +1,7 @@
 package org.aim42.htmlsanitycheck.collect
 
 import org.aim42.htmlsanitycheck.check.Checker
-import org.aim42.htmlsanitycheck.check.Finding
 import org.aim42.htmlsanitycheck.check.MissingImageFilesChecker
-import org.aim42.htmlsanitycheck.collect.CheckingResultsCollector
 import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.junit.Test
@@ -19,13 +17,13 @@ class CheckingResultsCollectorTest extends GroovyTestCase {
 
     String imageDir
 
-    CheckingResultsCollector checkingResultsCollector
+    SingleCheckResultsCollector checkingResultsCollector
 
     Checker checker
 
     public void setUp() {
         checkingResultsCollector =
-                new CheckingResultsCollector(
+                new SingleCheckResultsCollector(
                         whatIsChecked: whatIsCheckedMessage
                 )
 
@@ -82,7 +80,7 @@ class CheckingResultsCollectorTest extends GroovyTestCase {
                 pageToCheck: htmlPage,
                 baseDirPath: imageDir )
 
-        CheckingResultsCollector checkingResults =
+        SingleCheckResultsCollector checkingResults =
                 checker.performCheck()
 
 

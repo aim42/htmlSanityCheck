@@ -322,6 +322,7 @@ class HtmlPageTest extends GroovyTestCase {
      *
      * Due to discussion on StackOverFlow (jsoup tag), the parser might be
      * restricted to about 4300 links/anchor elements - we verify our upper limit.
+     * http://stackoverflow.com/questions/18573915/jsoup-finds-only-half-of-9000-a-tags-in-the-document
      * (
      */
     @Test

@@ -2,6 +2,7 @@
 
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
 import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.junit.Before
@@ -20,7 +21,7 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
     String filePath
     String imagesDir
 
-    CheckingResultsCollector checkingResults
+    SingleCheckResultsCollector checkingResults
 
     // logging stuff
     private static Logger logger = LoggerFactory.getLogger(MissingImageFilesCheckerTest.class);
@@ -36,7 +37,7 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
         imagesDir = userDir + localPath
         filePath = userDir + localPath + fileName
 
-        checkingResults = new CheckingResultsCollector()
+        checkingResults = new SingleCheckResultsCollector()
 
         logger.info( "imagesDir: $imagesDir")
     }
