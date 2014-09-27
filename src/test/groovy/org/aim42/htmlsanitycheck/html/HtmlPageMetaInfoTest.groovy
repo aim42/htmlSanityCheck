@@ -3,6 +3,10 @@ package org.aim42.htmlsanitycheck.html
 import org.junit.Before
 import org.junit.Test
 
+/**
+ * @deprecated as of version 0.5.0 - all meta-info is now contained in
+ * {@link org.aim42.htmlsanitycheck.collect.SinglePageResultsCollector}
+ */
 class HtmlPageMetaInfoTest extends GroovyTestCase {
 
     final static String HTML_PREFIX = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> '
