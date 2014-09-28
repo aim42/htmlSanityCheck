@@ -1,9 +1,7 @@
 package org.aim42.htmlsanitycheck.report
 
 import org.aim42.htmlsanitycheck.collect.Finding
-import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
-import org.aim42.htmlsanitycheck.report.FindingsConsoleReporter
-import org.aim42.htmlsanitycheck.report.FindingsForFileReporter
+import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.junit.Test
 
 // see end-of-file for license information
@@ -11,7 +9,7 @@ import org.junit.Test
 
 class CalculateSummaryTest extends GroovyTestCase {
 
-    SingleCheckResultsCollector checkingField
+    SingleCheckResults checkingField
     Finding singleFinding
 
     FindingsForFileReporter reporter
@@ -23,10 +21,10 @@ class CalculateSummaryTest extends GroovyTestCase {
 
 
     public void setUp() {
-        checkingField = new SingleCheckResultsCollector()
+        checkingField = new SingleCheckResults()
 
         // create empty Reporter without findings
-        reporter = new FindingsConsoleReporter( new ArrayList<SingleCheckResultsCollector>( ))
+        reporter = new FindingsConsoleReporter( new ArrayList<SingleCheckResults>( ))
 
         singleFinding = new Finding()
     }

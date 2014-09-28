@@ -1,8 +1,9 @@
 package org.aim42.htmlsanitycheck
 
 import org.aim42.htmlsanitycheck.check.*
-import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
-import org.aim42.htmlsanitycheck.collect.SinglePageResultsCollector
+import org.aim42.htmlsanitycheck.collect.PerRunResults
+import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
 // see end-of-file for license information
 import org.aim42.htmlsanitycheck.html.HtmlPage
@@ -43,7 +44,7 @@ class AllChecksRunner {
     // TODO: handle checking of external resources
     private Boolean checkExternalResources = false
 
-    // the check instances
+    // the checker instances
     private Checker missingImagesChecker
     private Checker undefinedCrossReferencesChecker
     private Checker duplicateIdChecker
@@ -51,17 +52,19 @@ class AllChecksRunner {
 
 
     // collections for the results
-    private SingleCheckResultsCollector imageCheckingResults
-    private SingleCheckResultsCollector crossReferencesCheckingResults
-    private SingleCheckResultsCollector duplicateIdsCheckingResults
-    private SingleCheckResultsCollector missingLocalResourcesCheckingResults
+    private SingleCheckResults imageCheckingResults
+    private SingleCheckResults crossReferencesCheckingResults
+    private SingleCheckResults duplicateIdsCheckingResults
+    private SingleCheckResults missingLocalResourcesCheckingResults
+
 
     private HtmlPage pageToCheck
 
-    // our input html
+    // keep all results
+    private PerRunResults  resultsForAllPages
+
     private static Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
 
-    // logging stuff
     /**
      * runs all available checks on the file
      *
@@ -88,8 +91,17 @@ class AllChecksRunner {
 
         this.baseDirPath = fileToCheck.getParent()
 
-        logger.info("AlLChecksRunner created")
+        this.resultsForAllPages = new PerRunResults()
 
+        logger.info("AlLChecksRunner created")
+    }
+
+    public AllChecksRunner( File fileToCheck ) {
+        this(
+            fileToCheck,
+            fileToCheck.parent,
+            fileToCheck.parent,
+            false)
     }
 
     /**
@@ -97,50 +109,53 @@ class AllChecksRunner {
      * on pageToCheck
      * TODO: enhance to support FileSet instead of just one file
      */
-    public void performAllChecks() {
+    public PerRunResults performAllChecks() {
 
         //logger.info(this.toString())
 
-        performAllChecksForOneFile( fileToCheck )
+        // TODO: this works for just ONE file...
+        resultsForAllPages.addPageResults(
+                performAllChecksForOneFile( fileToCheck ))
 
-        reportCheckingResultsOnConsole()
+        //
+        // reportCheckingResultsOnConsole()
     }
 
 
     /**
      *  performs all known checks on a single HTML file.
      *
-     *  Creates a {@link SinglePageResultsCollector} instance to keep checking results.
+     *  Creates a {@link SinglePageResults} instance to keep checking results.
      */
-    public void performAllChecksForOneFile( File fileToCheck ) {
+    public SinglePageResults performAllChecksForOneFile( File fileToCheck ) {
 
         pageToCheck = parseHtml( fileToCheck )
 
         // TODO: to handle #15 and #30 (enhancement for FileSet)
-        SinglePageResultsCollector singlePageResultsCollector =
-                new SinglePageResultsCollector(
+        SinglePageResults resultsCollector =
+                new SinglePageResults(
                         pageFileName: fileToCheck.canonicalPath.toString(),
                         pageToCheck: pageToCheck.getDocumentTitle(),
                         pageSize:    pageToCheck.documentSize
                 )
 
-
-
         // the actual checks
+        resultsCollector.addResultsForSingleCheck( missingImageFilesCheck() )
 
-        runMissingImageFileChecker()
-        runDuplicateIdChecker()
-        runCrossReferencesChecker()
-        runMissingLocalResourcesChecker()
+        duplicateIdCheck()
+        brokenCrossReferencesCheck()
+        missingLocalResourcesCheck()
 
-
+        return resultsCollector
     }
+
 
     /**
      * reports results on stdout
+     * TODO: this is now completely broken - FIXME
      */
     private void reportCheckingResultsOnConsole() {
-        def results = new ArrayList<SingleCheckResultsCollector>( Arrays.asList(
+       /* def results = new ArrayList<SingleCheckResults>( Arrays.asList(
                         imageCheckingResults,
                         crossReferencesCheckingResults,
                         duplicateIdsCheckingResults,
@@ -149,7 +164,7 @@ class AllChecksRunner {
         logger.info "results = " + results
 
         new FindingsConsoleReporter(results).reportFindings()
-
+*/
         //reporter.reportFindings()
 
     }
@@ -161,55 +176,57 @@ class AllChecksRunner {
      * the img-src attribute looks like src="images/test.jpg" or
      * src="file://image.jpg"
      */
-    private void runMissingImageFileChecker() {
+    private SingleCheckResults missingImageFilesCheck() {
 
         missingImagesChecker = new MissingImageFilesChecker(
                 pageToCheck: pageToCheck,
                 baseDirPath: baseDirPath
               )
 
-        imageCheckingResults = missingImagesChecker.performCheck()
-        logger.info imageCheckingResults.toString()
+        return missingImagesChecker.performCheck()
+        //logger.info imageCheckingResults.toString()
     }
 
-
-    private void runCrossReferencesChecker() {
+    /**
+     * checks for broken intra-document links (aka cross-references)
+    */
+    private SingleCheckResults brokenCrossReferencesCheck() {
         undefinedCrossReferencesChecker = new BrokenCrossReferencesChecker(
                 pageToCheck: pageToCheck
         )
 
-        crossReferencesCheckingResults = undefinedCrossReferencesChecker.performCheck()
-
-        logger.info crossReferencesCheckingResults.toString()
+        return undefinedCrossReferencesChecker.performCheck()
     }
 
-
-    private void runDuplicateIdChecker() {
+    /**
+     * checks for duplicate definitions of id's (link-targets)
+     */
+    private SingleCheckResults duplicateIdCheck() {
         duplicateIdChecker = new DuplicateIdChecker(
                 pageToCheck: pageToCheck
         )
-        duplicateIdsCheckingResults = duplicateIdChecker.performCheck()
-
-        logger.info duplicateIdsCheckingResults.toString()
+        return duplicateIdChecker.performCheck()
     }
 
+    /**
+     * checks for missing local resources, e.g. download-files or
+     * referenced local HTML files.
+     */
 
-    private void runMissingLocalResourcesChecker() {
+    private SingleCheckResults missingLocalResourcesCheck() {
         missingLocalResourcesChecker = new MissingLocalResourcesChecker(
                 pageToCheck: pageToCheck,
                 baseDirPath: baseDirPath
         )
-        missingLocalResourcesCheckingResults = missingLocalResourcesChecker.performCheck()
+        return missingLocalResourcesChecker.performCheck()
 
-        logger.info missingLocalResourcesCheckingResults.toString()
-        
     }
 
     /**
      * invokes the parser for the html page
      * @param input file
      */
-    private HtmlPage parseHtml( File fileToCheck ) {
+    private static HtmlPage parseHtml( File fileToCheck ) {
         assert fileToCheck.exists()
         return new HtmlPage( fileToCheck )
     }

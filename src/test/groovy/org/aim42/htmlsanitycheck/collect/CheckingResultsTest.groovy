@@ -9,7 +9,7 @@ import org.junit.Test
 // see end-of-file for license information
 
 
-class CheckingResultsCollectorTest extends GroovyTestCase {
+class CheckingResultsTest extends GroovyTestCase {
 
     final String whatIsCheckedMessage = "A Headline for Testing Purpose"
 
@@ -17,13 +17,13 @@ class CheckingResultsCollectorTest extends GroovyTestCase {
 
     String imageDir
 
-    SingleCheckResultsCollector checkingResultsCollector
+    SingleCheckResults checkingResults
 
     Checker checker
 
     public void setUp() {
-        checkingResultsCollector =
-                new SingleCheckResultsCollector(
+        checkingResults =
+                new SingleCheckResults(
                         whatIsChecked: whatIsCheckedMessage
                 )
 
@@ -40,20 +40,20 @@ class CheckingResultsCollectorTest extends GroovyTestCase {
         String expected = "empty checkingResult shall have "
 
         assertEquals(expected + "proper whatIsChecked",
-                whatIsCheckedMessage, checkingResultsCollector.whatIsChecked)
+                whatIsCheckedMessage, checkingResults.whatIsChecked)
 
         assertEquals(expected + "zero findings",
-                0, checkingResultsCollector.nrOfProblems())
+                0, checkingResults.nrOfProblems())
 
 
     }
 
     @Test
     public void testAddFindingToCheckingResult() {
-        checkingResultsCollector.addFinding( new Finding( "googlygoob"))
+        checkingResults.addFinding( new Finding( "googlygoob"))
 
         String expected = "One finding expected"
-        assertEquals( expected, 1, checkingResultsCollector.nrOfProblems() )
+        assertEquals( expected, 1, checkingResults.nrOfProblems() )
     }
 
     @Test
@@ -80,7 +80,7 @@ class CheckingResultsCollectorTest extends GroovyTestCase {
                 pageToCheck: htmlPage,
                 baseDirPath: imageDir )
 
-        SingleCheckResultsCollector checkingResults =
+        SingleCheckResults checkingResults =
                 checker.performCheck()
 
 

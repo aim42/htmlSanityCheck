@@ -1,6 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
-import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
+import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
 
 
@@ -25,7 +25,7 @@ class DuplicateIdChecker extends Checker {
 
 
     @Override
-    protected SingleCheckResultsCollector check() {
+    protected SingleCheckResults check() {
 
         //get list of all tagsWithId '<... id="XYZ"...' in html file
 

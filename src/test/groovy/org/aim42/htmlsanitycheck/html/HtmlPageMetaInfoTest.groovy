@@ -5,7 +5,7 @@ import org.junit.Test
 
 /**
  * @deprecated as of version 0.5.0 - all meta-info is now contained in
- * {@link org.aim42.htmlsanitycheck.collect.SinglePageResultsCollector}
+ * {@link org.aim42.htmlsanitycheck.collect.SinglePageResults}
  */
 class HtmlPageMetaInfoTest extends GroovyTestCase {
 

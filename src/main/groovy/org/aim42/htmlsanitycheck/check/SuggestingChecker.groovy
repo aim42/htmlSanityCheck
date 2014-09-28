@@ -1,6 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
-import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
+import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 
 
 /**
@@ -12,7 +12,7 @@ abstract class SuggestingChecker extends Checker {
     abstract protected void initCheckingResultsDescription()
 
     @Override
-    abstract protected SingleCheckResultsCollector check()
+    abstract protected SingleCheckResults check()
 
 
 }

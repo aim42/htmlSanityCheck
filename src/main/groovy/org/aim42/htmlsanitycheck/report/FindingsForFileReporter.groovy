@@ -10,7 +10,7 @@
 
 package org.aim42.htmlsanitycheck.report
 
-import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
+import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlPageMetaInfo
 
 
@@ -18,7 +18,7 @@ abstract class FindingsForFileReporter {
 
     private HtmlPageMetaInfo metaInfo
 
-    ArrayList<SingleCheckResultsCollector> checkingResults
+    ArrayList<SingleCheckResults> checkingResults
 
     int totalNrOfChecksPerformed
     int totalNrOfFindings
@@ -28,7 +28,7 @@ abstract class FindingsForFileReporter {
 
 
 
-    public FindingsForFileReporter( ArrayList<SingleCheckResultsCollector> checkingResults  ) {
+    public FindingsForFileReporter( ArrayList<SingleCheckResults> checkingResults  ) {
 
         this.checkingResults = checkingResults
         this.totalNrOfChecksPerformed = 0
@@ -65,7 +65,7 @@ abstract class FindingsForFileReporter {
     }
 
     // primarily used for testing
-    public void addCheckingField(SingleCheckResultsCollector resultsCollector) {
+    public void addCheckingField(SingleCheckResults resultsCollector) {
         this.checkingResults.add(resultsCollector)
     }
 

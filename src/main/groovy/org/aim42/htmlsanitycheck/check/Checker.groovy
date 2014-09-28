@@ -1,6 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
-import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
+import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
 
 
@@ -14,7 +14,7 @@ import org.aim42.htmlsanitycheck.html.HtmlPage
  * No constructor is defined, allowing for arbitrary "named parameters"
  * in constructor calls.
  *
- * While checking, every subclass builds an instance of {@link SingleCheckResultsCollector}
+ * While checking, every subclass builds an instance of {@link SingleCheckResults}
  *
  * @author Gernot Starke <gs@gernotstarke.de>
  */
@@ -23,7 +23,7 @@ abstract class Checker {
 
     // temporarily keep results of a single check, ie missing-images,
     // internal cross-references etc.
-    SingleCheckResultsCollector checkingResults
+    SingleCheckResults checkingResults
 
     HtmlPage pageToCheck
 
@@ -34,11 +34,11 @@ abstract class Checker {
      * Prerequisite: pageToCheck has been successfully parsed,
      * prior to constructing this Checker instance.
     **/
-    public SingleCheckResultsCollector performCheck() {
+    public SingleCheckResults performCheck() {
         // assert non-null htmlPage
         assert pageToCheck != null
 
-        checkingResults = new SingleCheckResultsCollector()
+        checkingResults = new SingleCheckResults()
 
         // description is set by subclasses
         initCheckingResultsDescription()
@@ -60,7 +60,7 @@ abstract class Checker {
      * Called by {@link #performCheck()} as part of the template method pattern.
      * @return collected results of this Checker instance
      */
-    abstract protected SingleCheckResultsCollector check( )
+    abstract protected SingleCheckResults check( )
 
 
 
