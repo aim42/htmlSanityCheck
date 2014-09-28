@@ -4,11 +4,10 @@ import org.aim42.htmlsanitycheck.check.*
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
+import org.aim42.htmlsanitycheck.html.HtmlPage
+import org.slf4j.Logger
 
 // see end-of-file for license information
-import org.aim42.htmlsanitycheck.html.HtmlPage
-import org.aim42.htmlsanitycheck.report.FindingsConsoleReporter
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
@@ -50,7 +49,6 @@ class AllChecksRunner {
     private Checker duplicateIdChecker
     private Checker missingLocalResourcesChecker
 
-
     // collections for the results
     private SingleCheckResults imageCheckingResults
     private SingleCheckResults crossReferencesCheckingResults
@@ -61,7 +59,7 @@ class AllChecksRunner {
     private HtmlPage pageToCheck
 
     // keep all results
-    private PerRunResults  resultsForAllPages
+    private PerRunResults resultsForAllPages
 
     private static Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
 
@@ -96,12 +94,12 @@ class AllChecksRunner {
         logger.info("AlLChecksRunner created")
     }
 
-    public AllChecksRunner( File fileToCheck ) {
+    public AllChecksRunner(File fileToCheck) {
         this(
-            fileToCheck,
-            new File( fileToCheck.parent),
-            new File( fileToCheck.parent),
-            false)
+                fileToCheck,
+                new File(fileToCheck.parent),
+                new File(fileToCheck.parent),
+                false)
     }
 
     /**
@@ -115,56 +113,54 @@ class AllChecksRunner {
 
         // TODO: this works for just ONE file...
         resultsForAllPages.addPageResults(
-                performAllChecksForOneFile( fileToCheck ))
+                performAllChecksForOneFile(fileToCheck))
 
         //
         // reportCheckingResultsOnConsole()
     }
-
 
     /**
      *  performs all known checks on a single HTML file.
      *
      *  Creates a {@link SinglePageResults} instance to keep checking results.
      */
-    public SinglePageResults performAllChecksForOneFile( File fileToCheck ) {
+    public SinglePageResults performAllChecksForOneFile(File fileToCheck) {
 
-        pageToCheck = parseHtml( fileToCheck )
+        pageToCheck = parseHtml(fileToCheck)
 
-        // TODO: to handle #15 and #30 (enhancement for FileSet)
         SinglePageResults resultsCollector =
                 new SinglePageResults(
                         pageFileName: fileToCheck.canonicalPath.toString(),
                         pageTitle: pageToCheck.getDocumentTitle(),
-                        pageSize:  pageToCheck.documentSize
+                        pageSize: pageToCheck.documentSize
                 )
 
         // the actual checks
-        resultsCollector.addResultsForSingleCheck( missingImageFilesCheck() )
-
-        duplicateIdCheck()
-        brokenCrossReferencesCheck()
-        missingLocalResourcesCheck()
+        resultsCollector.with {
+            addResultsForSingleCheck( missingImageFilesCheck())
+            addResultsForSingleCheck( duplicateIdCheck())
+            addResultsForSingleCheck( brokenCrossReferencesCheck())
+            addResultsForSingleCheck( missingLocalResourcesCheck())
+        }
 
         return resultsCollector
     }
-
 
     /**
      * reports results on stdout
      * TODO: this is now completely broken - FIXME
      */
     private void reportCheckingResultsOnConsole() {
-       /* def results = new ArrayList<SingleCheckResults>( Arrays.asList(
-                        imageCheckingResults,
-                        crossReferencesCheckingResults,
-                        duplicateIdsCheckingResults,
-                        missingLocalResourcesCheckingResults ))
+        /* def results = new ArrayList<SingleCheckResults>( Arrays.asList(
+                         imageCheckingResults,
+                         crossReferencesCheckingResults,
+                         duplicateIdsCheckingResults,
+                         missingLocalResourcesCheckingResults ))
 
-        logger.info "results = " + results
+         logger.info "results = " + results
 
-        new FindingsConsoleReporter(results).reportFindings()
-*/
+         new FindingsConsoleReporter(results).reportFindings()
+ */
         //reporter.reportFindings()
 
     }
@@ -181,7 +177,7 @@ class AllChecksRunner {
         missingImagesChecker = new MissingImageFilesChecker(
                 pageToCheck: pageToCheck,
                 baseDirPath: baseDirPath
-              )
+        )
 
         return missingImagesChecker.performCheck()
         //logger.info imageCheckingResults.toString()
@@ -189,7 +185,7 @@ class AllChecksRunner {
 
     /**
      * checks for broken intra-document links (aka cross-references)
-    */
+     */
     private SingleCheckResults brokenCrossReferencesCheck() {
         undefinedCrossReferencesChecker = new BrokenCrossReferencesChecker(
                 pageToCheck: pageToCheck
@@ -226,9 +222,9 @@ class AllChecksRunner {
      * invokes the parser for the html page
      * @param input file
      */
-    private static HtmlPage parseHtml( File fileToCheck ) {
+    private static HtmlPage parseHtml(File fileToCheck) {
         assert fileToCheck.exists()
-        return new HtmlPage( fileToCheck )
+        return new HtmlPage(fileToCheck)
     }
 
     /**
