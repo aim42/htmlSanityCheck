@@ -6,10 +6,9 @@ import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.slf4j.Logger
-
-// see end-of-file for license information
 import org.slf4j.LoggerFactory
 
+// see end-of-file for license information
 /**
  * Coordinates and runs all available html sanity checks.
  * <p>
@@ -49,17 +48,12 @@ class AllChecksRunner {
     private Checker duplicateIdChecker
     private Checker missingLocalResourcesChecker
 
-    // collections for the results
-    private SingleCheckResults imageCheckingResults
-    private SingleCheckResults crossReferencesCheckingResults
-    private SingleCheckResults duplicateIdsCheckingResults
-    private SingleCheckResults missingLocalResourcesCheckingResults
-
 
     private HtmlPage pageToCheck
 
     // keep all results
     private PerRunResults resultsForAllPages
+
 
     private static Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
 
@@ -94,12 +88,18 @@ class AllChecksRunner {
         logger.info("AlLChecksRunner created")
     }
 
-    public AllChecksRunner(File fileToCheck) {
-        this(
-                fileToCheck,
-                new File(fileToCheck.parent),
-                new File(fileToCheck.parent),
-                false)
+    // TODO: maybe chain constructors here...
+    public AllChecksRunner(File singleFileToCheck) {
+        this.fileToCheck = singleFileToCheck
+        this.checkingResultsDir = singleFileToCheck.parentFile
+        this.checkExternalResources = false
+
+        this.baseDirPath = fileToCheck.getParent()
+
+        this.resultsForAllPages = new PerRunResults()
+
+        logger.info("checking file", singleFileToCheck.canonicalPath)
+
     }
 
     /**
@@ -124,23 +124,23 @@ class AllChecksRunner {
      *
      *  Creates a {@link SinglePageResults} instance to keep checking results.
      */
-    public SinglePageResults performAllChecksForOneFile(File fileToCheck) {
+    public SinglePageResults performAllChecksForOneFile(File thisFile) {
 
-        pageToCheck = parseHtml(fileToCheck)
+        pageToCheck = parseHtml(thisFile)
 
         SinglePageResults resultsCollector =
                 new SinglePageResults(
-                        pageFileName: fileToCheck.canonicalPath.toString(),
+                        pageFileName: thisFile.canonicalPath.toString(),
                         pageTitle: pageToCheck.getDocumentTitle(),
                         pageSize: pageToCheck.documentSize
                 )
 
         // the actual checks
         resultsCollector.with {
-            addResultsForSingleCheck( missingImageFilesCheck())
-            addResultsForSingleCheck( duplicateIdCheck())
-            addResultsForSingleCheck( brokenCrossReferencesCheck())
-            addResultsForSingleCheck( missingLocalResourcesCheck())
+            addResultsForSingleCheck( missingImageFilesCheck() )
+            addResultsForSingleCheck(duplicateIdCheck())
+            addResultsForSingleCheck(brokenCrossReferencesCheck())
+            addResultsForSingleCheck(missingLocalResourcesCheck())
         }
 
         return resultsCollector
