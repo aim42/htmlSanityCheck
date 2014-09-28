@@ -9,7 +9,7 @@ import org.junit.Test
 // see end-of-file for license information
 
 
-class CheckingResultsTest extends GroovyTestCase {
+class SingleCheckResultsTest extends GroovyTestCase {
 
     final String whatIsCheckedMessage = "A Headline for Testing Purpose"
 
