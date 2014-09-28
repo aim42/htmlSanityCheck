@@ -1,6 +1,5 @@
 package org.aim42.htmlsanitycheck.html
 
-import org.aim42.htmlsanitycheck.URLUtil
 import org.junit.Before
 import org.junit.Test
 

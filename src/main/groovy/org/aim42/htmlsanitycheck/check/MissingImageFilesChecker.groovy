@@ -1,6 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
-import org.aim42.htmlsanitycheck.URLUtil
+import org.aim42.htmlsanitycheck.html.URLUtil
 import org.aim42.htmlsanitycheck.collect.SingleCheckResultsCollector
 import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.slf4j.Logger
