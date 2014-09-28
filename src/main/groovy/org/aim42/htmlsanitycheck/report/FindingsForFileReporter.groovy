@@ -28,8 +28,7 @@ abstract class FindingsForFileReporter {
 
 
 
-    public FindingsForFileReporter( ArrayList<SingleCheckResultsCollector> checkingResults,
-                                    HtmlPageMetaInfo metaInfo ) {
+    public FindingsForFileReporter( ArrayList<SingleCheckResultsCollector> checkingResults  ) {
 
         this.checkingResults = checkingResults
         this.totalNrOfChecksPerformed = 0
@@ -39,16 +38,13 @@ abstract class FindingsForFileReporter {
 
         this.createdOnDate = new Date().format('dd. MMMM YYYY, HH:mm')
 
-        this.metaInfo = metaInfo
-    }
+     }
 
     /**
      * Presents a report of a subtype (e.g. HTML, console)
      * using the Template-Method-Pattern.
      */
     public void reportFindings() {
-        // determine title, size etc.
-        calculateMetainfo()
 
         // sum up numbers, calculate percentages
         calculateSummary()
@@ -93,10 +89,6 @@ abstract class FindingsForFileReporter {
 
     }
 
-    private void calculateMetainfo() {
-
-
-    }
 
     // stuff delegated to subclasses
     // ************************************
