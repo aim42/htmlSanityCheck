@@ -220,27 +220,14 @@ class AllChecksRunner {
      */
     public static void main(String[] args) {
         // TODO: read parameter from command line
-        AllChecksRunner allChecksRunner = new AllChecksRunner()
-
-        allChecksRunner.fileToCheck = new File("file-to-test.html")
-        //allChecksRunner.docDirPath = System.getProperty("user.dir") + "/src/test/resources/"
-        //allChecksRunner.pathToHtmlFile = docDirPath + fileName
-        //allChecksRunner.imageDirPath = docDirPath
-
-        // TODO: main-method is completely broken!!
-        allChecksRunner.parseHtml()
-
-        allChecksRunner.runMissingImageFileChecker()
-        allChecksRunner.runCrossReferencesChecker()
-        allChecksRunner.runDuplicateIdChecker()
-
     }
+
 
     @Override
     public String toString() {
-        return "   file to check : $fileToCheck\n" +
-                "   put results   : $checkingResultsDir\n" +
-                "   images dir    : $imagesDir\n";
+        return "   file(s) to check : $fileToCheck\n" +
+                "   put results in  : $checkingResultsDir\n" +
+                "   base dir        : $baseDirPath\n";
     }
 }
 
