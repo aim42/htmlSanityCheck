@@ -28,20 +28,20 @@ class SinglePageResults {
 
     // query the results
     public int totalNrOfItemsChecked() {
-        int tnic = 0
+        int nrOfItemsChecked = 0
         singleCheckResults.each {
-            tnic += it.nrOfItemsChecked
+            nrOfItemsChecked += it.nrOfItemsChecked
         }
-        return tnic
+        return nrOfItemsChecked
 
     }
 
     public int totalNrOfFindings() {
-        int tnif = 0
+        int nrOfFindings = 0
         singleCheckResults.each {
-            tnif += it.nrOfProblems()
+            nrOfFindings += it.nrOfProblems()
         }
-        return tnif
+        return nrOfFindings
 
     }
 
