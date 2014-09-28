@@ -206,11 +206,12 @@ class AllChecksRunner {
     }
 
     /**
-     * reads the html page
+     * invokes the parser for the html page
+     * @param input file
      */
-    private HtmlPage parseHtml() {
+    private HtmlPage parseHtml( File fileToCheck ) {
         assert fileToCheck.exists()
-        return new HtmlPage(fileToCheck)
+        return new HtmlPage( fileToCheck )
     }
 
     /**
