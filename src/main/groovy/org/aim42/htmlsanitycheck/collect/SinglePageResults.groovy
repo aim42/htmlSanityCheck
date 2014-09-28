@@ -13,7 +13,6 @@ class SinglePageResults {
     public int    pageSize     // size in byte
 
 
-    // TODO: make private
     public List<SingleCheckResults> singleCheckResults
 
     public SinglePageResults() {
@@ -27,6 +26,33 @@ class SinglePageResults {
         singleCheckResults.add( resultsForSingleCheck )
     }
 
+    // query the results
+    public int totalNrOfItemsChecked() {
+        int tnic = 0
+        singleCheckResults.each {
+            tnic += it.nrOfItemsChecked
+        }
+        return tnic
+
+    }
+
+    public int totalNrOfFindings() {
+        int tnif = 0
+        singleCheckResults.each {
+            tnif += it.nrOfProblems()
+        }
+        return tnif
+
+    }
+
+    /**
+     * returns the number of distinct checker types that have run
+     * (by the number of SingleCheckResults available)
+     * @return
+     */
+    public int howManyCheckersHaveRun() {
+        return singleCheckResults.size()
+    }
 }
 
 
