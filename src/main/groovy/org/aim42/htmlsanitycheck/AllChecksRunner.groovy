@@ -32,10 +32,6 @@ class AllChecksRunner {
     // our base directory: image-links within HTML are supposed to be relative to this
     private String baseDirPath
 
-    // where do we expect images?
-    // (later we need to convert this to String)
-    private File imagesDir
-
     // where do we put our results
     private File checkingResultsDir
 
@@ -72,15 +68,12 @@ class AllChecksRunner {
     // TODO: remove imagesDir
     public AllChecksRunner(
             File fileToCheck,
-            File imagesDir,
             File checkingResultsDir,
             Boolean checkExternalResources
     ) {
         this.fileToCheck = fileToCheck
         this.checkingResultsDir = checkingResultsDir
-        this.imagesDir = imagesDir
         this.checkExternalResources = checkExternalResources
-
         this.baseDirPath = fileToCheck.getParent()
 
         this.resultsForAllPages = new PerRunResults()
@@ -137,7 +130,7 @@ class AllChecksRunner {
 
         // the actual checks
         resultsCollector.with {
-            addResultsForSingleCheck( missingImageFilesCheck() )
+            addResultsForSingleCheck(missingImageFilesCheck())
             addResultsForSingleCheck(duplicateIdCheck())
             addResultsForSingleCheck(brokenCrossReferencesCheck())
             addResultsForSingleCheck(missingLocalResourcesCheck())
