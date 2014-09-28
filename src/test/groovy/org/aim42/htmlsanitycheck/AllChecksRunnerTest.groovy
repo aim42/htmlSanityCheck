@@ -1,6 +1,5 @@
 package org.aim42.htmlsanitycheck
 
-import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.junit.Before
 import org.junit.Test
@@ -18,9 +17,6 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
     }
 
-    // TODO: create a useful test here...
-
-
 
     @Test
     public void testSingleCorrectHTMLFile() {
@@ -28,10 +24,9 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
         // create file with proper html content
         tmpFile = File.createTempFile("testfile", ".html")
-        tmpFile.write( HTML )
+        tmpFile.write(HTML)
 
-        allChecksRunner = new AllChecksRunner( tmpFile )
-
+        allChecksRunner = new AllChecksRunner(tmpFile)
         SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile(tmpFile)
 
         // expectation:
@@ -42,11 +37,42 @@ class AllChecksRunnerTest extends GroovyTestCase {
         int expected = 4
         assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
 
-        assertEquals("expected 0 items checked", 0,  pageResults.totalNrOfItemsChecked())
+        assertEquals("expected 0 items checked", 0, pageResults.totalNrOfItemsChecked())
 
         assertEquals("expected 0 findings", 0, pageResults.totalNrOfFindings())
 
         assertEquals("expected hsc title", "hsc", pageResults.pageTitle)
+    }
+
+
+    @Test
+    public void testSingleBrokenHtmlFile() {
+        String HTML = """$HTML_HEAD<body><title>Faulty Dragon</title></body>
+                   <h1 id="aim42">dummy-heading-1</h1>
+                   <h2 id="aim42">duplicate id</h2>
+                   <a href="#nonexisting">broken cross reference</a>
+                </html>"""
+
+        // create file
+        tmpFile = File.createTempFile("testfile", ".html")
+        tmpFile.write(HTML)
+
+        allChecksRunner = new AllChecksRunner( tmpFile )
+
+        SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile( tmpFile )
+
+        // expectation:
+        // 4 checks run
+        // 3 items checked
+        // X findings
+        // title = "Faulty Dragon"
+        int expected = 4
+        assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
+
+        assertEquals("expected 2 items checked", 2, pageResults.totalNrOfItemsChecked())
+
+        assertEquals("expected 2 findings", 2, pageResults.totalNrOfFindings())
+
     }
 
 }
