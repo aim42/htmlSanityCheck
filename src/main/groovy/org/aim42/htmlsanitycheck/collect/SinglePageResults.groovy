@@ -4,9 +4,9 @@ package org.aim42.htmlsanitycheck.collect
  * Collects checking results {@link Finding} of a single html page.
  *
  * Contains information about the page itself, e.g. its filename and title.
- * Instances of this class will be contained in {@link SingleCheckResultsCollector}
+ * Instances of this class will be contained in {@link SingleCheckResults}
  */
-class SinglePageResultsCollector {
+class SinglePageResults {
 
     public String pageFileName // from where we read the HTML
     public String pageTitle    // as given in the <title> attribute
@@ -14,8 +14,14 @@ class SinglePageResultsCollector {
 
 
     //
-    public List<SingleCheckResultsCollector> singleCheckResultsCollectors
+    public List<SingleCheckResults> singleCheckResultsCollectors
 
+
+    public void addResultsForSingleCheck( SingleCheckResults resultsForSingleCheck ) {
+      assert singleCheckResultsCollectors != null
+
+        singleCheckResultsCollectors.add( resultsForSingleCheck )
+    }
 
 }
 

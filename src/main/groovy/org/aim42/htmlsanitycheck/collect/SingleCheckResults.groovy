@@ -8,7 +8,7 @@ package org.aim42.htmlsanitycheck.collect
  * @author Gernot Starke <gs@gernotstarke.de>
  */
 
-class SingleCheckResultsCollector {
+class SingleCheckResults {
 
     protected String whatIsChecked    // i.e. "Missing Local Images Check"
 
@@ -24,9 +24,9 @@ class SingleCheckResultsCollector {
      * Initialize some members.
      *
      * Other members are set by the Checker-instance
-     * owning this SingleCheckResultsCollector.
+     * owning this SingleCheckResults.
      */
-    public SingleCheckResultsCollector() {
+    public SingleCheckResults() {
 
         this.nrOfItemsChecked = 0
         this.findings = new ArrayList<Finding>()
