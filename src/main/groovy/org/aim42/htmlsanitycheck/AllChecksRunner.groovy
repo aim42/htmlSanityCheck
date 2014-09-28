@@ -99,8 +99,8 @@ class AllChecksRunner {
     public AllChecksRunner( File fileToCheck ) {
         this(
             fileToCheck,
-            fileToCheck.parent,
-            fileToCheck.parent,
+            new File( fileToCheck.parent),
+            new File( fileToCheck.parent),
             false)
     }
 
