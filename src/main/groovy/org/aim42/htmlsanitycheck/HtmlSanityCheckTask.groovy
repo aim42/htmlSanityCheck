@@ -16,14 +16,9 @@ import javax.inject.Inject
 class HtmlSanityCheckTask extends DefaultTask {
 
     // currently we only support checking a SINGLE FILE
+    // will make this a FileCollection soon
     @InputFile
     File fileToCheck
-
-    // baseDir is the directory where sourceDocument resides,
-    // and from which the image directory is descendant
-    @Optional
-    @InputDirectory
-    File imageDir
 
     // where do we store checking results
     @Optional
