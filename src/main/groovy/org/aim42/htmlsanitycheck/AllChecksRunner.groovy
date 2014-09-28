@@ -135,8 +135,8 @@ class AllChecksRunner {
         SinglePageResults resultsCollector =
                 new SinglePageResults(
                         pageFileName: fileToCheck.canonicalPath.toString(),
-                        pageToCheck: pageToCheck.getDocumentTitle(),
-                        pageSize:    pageToCheck.documentSize
+                        pageTitle: pageToCheck.getDocumentTitle(),
+                        pageSize:  pageToCheck.documentSize
                 )
 
         // the actual checks

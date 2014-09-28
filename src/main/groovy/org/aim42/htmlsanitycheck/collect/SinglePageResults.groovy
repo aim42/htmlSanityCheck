@@ -13,14 +13,18 @@ class SinglePageResults {
     public int    pageSize     // size in byte
 
 
-    //
-    public List<SingleCheckResults> singleCheckResultsCollectors
+    // TODO: make private
+    public List<SingleCheckResults> singleCheckResults
 
+    public SinglePageResults() {
+        this.singleCheckResults = new ArrayList<SingleCheckResults>()
+
+    }
 
     public void addResultsForSingleCheck( SingleCheckResults resultsForSingleCheck ) {
-      assert singleCheckResultsCollectors != null
+        assert singleCheckResults != null
 
-        singleCheckResultsCollectors.add( resultsForSingleCheck )
+        singleCheckResults.add( resultsForSingleCheck )
     }
 
 }

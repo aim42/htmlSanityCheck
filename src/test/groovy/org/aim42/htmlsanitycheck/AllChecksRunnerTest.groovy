@@ -1,28 +1,40 @@
 package org.aim42.htmlsanitycheck
 
+import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.junit.Before
 import org.junit.Test
 
 class AllChecksRunnerTest extends GroovyTestCase {
 
-    AllChecksRunner allChecksRunner
+    final static String HTML_HEAD = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <head></head><html>'
+
+    private File tmpFile
+
+    private AllChecksRunner allChecksRunner
 
     @Before
     void setup() {
-        allChecksRunner =
-                new AllChecksRunner(
 
-        )
     }
 
     // TODO: create a useful test here...
-    // problem: AllChecksRunner is a simple integration class,
-    // without serious processing on its own...
+
+
 
     @Test
-    public void testNothingSerious() {
-        assertTrue("sorry, I have no idea what or how to test the AllChecksRunner...",
-                true)
+    public void testSingleCorrectHTMLFile() {
+        String HTML = """$HTML_HEAD<body><title>title</title></body></html>"""
+
+        // create file with proper html content
+        tmpFile = File.createTempFile("testfile", ".html")
+        tmpFile.write( HTML )
+
+        allChecksRunner = new AllChecksRunner( tmpFile )
+
+        SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile(tmpFile)
+
+        int expected = 4
+        assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
     }
 
 }
