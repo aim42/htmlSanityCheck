@@ -1,6 +1,5 @@
 package org.aim42.htmlsanitycheck.collect
 
-import org.aim42.htmlsanitycheck.check.Checker
 import org.junit.Before
 import org.junit.Test
 
@@ -15,7 +14,7 @@ class SinglePageResultTest extends GroovyTestCase {
 
 
     private SingleCheckResults singleCheckResults
-    private SinglePageResults  singlePageResults
+    private SinglePageResults singlePageResults
 
     private File tmpFile
 
@@ -24,7 +23,7 @@ class SinglePageResultTest extends GroovyTestCase {
 
         // create file
         tmpFile = File.createTempFile("testfile", ".html")
-        tmpFile.write( HTML )
+        tmpFile.write(HTML)
 
         singlePageResults = new SinglePageResults(
                 pageFileName: tmpFile.canonicalPath.toString(),
@@ -41,19 +40,83 @@ class SinglePageResultTest extends GroovyTestCase {
     }
 
     @Test
-    public void testSinglePageResultConstruction() {
+    public void testSinglePageResultForOnePage() {
         assertEquals("exptected temporary filename ", tmpFile.getCanonicalPath().toString(),
-                             singlePageResults.pageFileName)
+                singlePageResults.pageFileName)
 
+        int nrOfChecks = 10
+
+        for (int findingNr = 0; findingNr < nrOfChecks; findingNr++) {
+
+            singleCheckResults.with {
+                addFinding(new Finding("Finding #$findingNr"))
+                incNrOfChecks()
+            }
+        }
+
+        assertEquals("expect $nrOfChecks item checked on SingleCheckResults",
+                nrOfChecks, singleCheckResults.nrOfItemsChecked)
+        assertEquals("expect $nrOfChecks findings on SingleCheckResults",
+                nrOfChecks, singleCheckResults.nrOfProblems())
+
+        singlePageResults.addResultsForSingleCheck(singleCheckResults)
+
+        assertEquals("expected $nrOfChecks checks on SinglePageChecks",
+                nrOfChecks, singlePageResults.totalNrOfItemsChecked())
+        assertEquals("expected $nrOfChecks findings on SinglePageChecks",
+                nrOfChecks, singlePageResults.totalNrOfFindings())
 
     }
 
     @Test
     public void testAddFindingToCheckingResult() {
-        singleCheckResults.addFinding(new Finding("googlygoob"))
 
-        String expected = "One finding expected"
-        assertEquals(expected, 1, singleCheckResults.nrOfProblems())
+        // we produce some checkers with some findings and many checks...
+
+        int nrOfCheckers = 4
+        int nrOfFindings = 10
+        int nrOfChecks = 50
+
+        SingleCheckResults scr
+
+        // in outer loop, create SingleCheckResults
+        for (int checker = 0; checker < nrOfCheckers; checker++) {
+
+            scr = new SingleCheckResults(
+                    whatIsChecked: "Dummy Check $checker",
+                    sourceItemName: "source-$checker",
+                    targetItemName: "target-$checker"
+            )
+
+            // add some findings
+            for (int findingNr = 0; findingNr < nrOfFindings; findingNr++) {
+                scr.addFinding(new Finding("Finding #$findingNr"))
+            }
+
+            // now set the nr of checks
+            for (int i = 0; i < nrOfChecks; i++) {
+                scr.incNrOfChecks()
+            }
+
+            // now add this scr instance to SinglePageResults
+            singlePageResults.addResultsForSingleCheck( scr )
+
+        }
+
+        // now we've pretty high expectations concerning the nr of checks and findings...
+
+        // assert nr of checkers
+
+        assertEquals("expected $nrOfCheckers on SinglePageChecks",
+                nrOfCheckers, singlePageResults.howManyCheckersHaveRun() )
+
+        int expectedNrOfFindings =nrOfFindings * nrOfCheckers
+        assertEquals("expected $expectedNrOfFindings findings on SinglePageChecks",
+                expectedNrOfFindings, singlePageResults.totalNrOfFindings())
+
+        int expectedNrOfChecks = nrOfCheckers * nrOfChecks
+        assertEquals( "expected $expectedNrOfChecks checks on SinglePageChecks",
+                expectedNrOfChecks, singlePageResults.totalNrOfItemsChecked())
     }
 
 }
