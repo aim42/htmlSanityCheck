@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck
 
+import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.junit.Before
 import org.junit.Test
@@ -23,7 +24,7 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
     @Test
     public void testSingleCorrectHTMLFile() {
-        String HTML = """$HTML_HEAD<body><title>title</title></body></html>"""
+        String HTML = """$HTML_HEAD<body><title>hsc</title></body></html>"""
 
         // create file with proper html content
         tmpFile = File.createTempFile("testfile", ".html")
@@ -33,8 +34,19 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
         SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile(tmpFile)
 
+        // expectation:
+        // 4 checks run
+        // 0 items checked
+        // 0 findings
+        // title = "hsc"
         int expected = 4
         assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
+
+        assertEquals("expected 0 items checked", 0,  pageResults.totalNrOfItemsChecked())
+
+        assertEquals("expected 0 findings", 0, pageResults.totalNrOfFindings())
+
+        assertEquals("expected hsc title", "hsc", pageResults.pageTitle)
     }
 
 }
