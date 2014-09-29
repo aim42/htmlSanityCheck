@@ -42,6 +42,9 @@ class AllChecksRunnerTest extends GroovyTestCase {
         assertEquals("expected 0 findings", 0, pageResults.totalNrOfFindings())
 
         assertEquals("expected hsc title", "hsc", pageResults.pageTitle)
+
+        String tmpFileName = tmpFile.name
+        assertEquals("expected $tmpFileName as fileName", tmpFileName, pageResults.pageFileName )
     }
 
 

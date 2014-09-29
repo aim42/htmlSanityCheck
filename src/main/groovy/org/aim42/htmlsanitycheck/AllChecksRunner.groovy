@@ -123,7 +123,8 @@ class AllChecksRunner {
 
         SinglePageResults resultsCollector =
                 new SinglePageResults(
-                        pageFileName: thisFile.canonicalPath.toString(),
+                        pageFilePath: thisFile.canonicalPath,
+                        pageFileName: thisFile.name,
                         pageTitle: pageToCheck.getDocumentTitle(),
                         pageSize: pageToCheck.documentSize
                 )

@@ -9,6 +9,7 @@ package org.aim42.htmlsanitycheck.collect
 class SinglePageResults {
 
     public String pageFileName // from where we read the HTML
+    public String pageFilePath // the complete path from where we read
     public String pageTitle    // as given in the <title> attribute
     public int    pageSize     // size in byte
 
