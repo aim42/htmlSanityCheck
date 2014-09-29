@@ -17,7 +17,7 @@ class URLUtil {
         // simple regular expression to match http://, https:// and ftp://
         //
 
-        return (link ==~ (/^(?i)(https?|ftp|telnet|ssh|gopher|localhost):\/\/.*$/) ||
+        return (link ==~ (/^(?i)(https?|ftp|telnet|ssh|ssl|gopher|localhost):\/\/.*$/) ||
                 // special case for mailto-links
                 link ==~ (/^(?i)(mailto):.*$/))
 
