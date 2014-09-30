@@ -14,7 +14,7 @@ import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlPageMetaInfo
 
 
-abstract class FindingsForFileReporter {
+abstract class FindingsForPageReporter {
 
     private HtmlPageMetaInfo metaInfo
 
@@ -28,7 +28,7 @@ abstract class FindingsForFileReporter {
 
 
 
-    public FindingsForFileReporter( ArrayList<SingleCheckResults> checkingResults  ) {
+    public FindingsForPageReporter( ArrayList<SingleCheckResults> checkingResults  ) {
 
         this.checkingResults = checkingResults
         this.totalNrOfChecksPerformed = 0

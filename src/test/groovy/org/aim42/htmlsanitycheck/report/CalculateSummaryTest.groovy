@@ -12,7 +12,7 @@ class CalculateSummaryTest extends GroovyTestCase {
     SingleCheckResults checkingField
     Finding singleFinding
 
-    FindingsForFileReporter reporter
+    FindingsForPageReporter reporter
 
 
     int expected
