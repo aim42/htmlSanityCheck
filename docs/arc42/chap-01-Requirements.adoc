@@ -149,11 +149,14 @@ Checking and reporting these errors and flaws is the central _business requireme
 .Quality-Goals
 |===
 | Priority | Quality-Goal | Scenario
-| 1        | Correctness  | Every broken internal link is found.
+| 1        | Correctness  | Every broken internal link (crossreference) is found.
 | 1        | Correctness  | Every missing local image is found.
 | 2        | Flexibility  | multiple checking algorithms, report formats and clients. At least
 Gradle, command-line and a graphical client have to be supported.
 | 2        | Safety       | Content of the files to be checked is _never_ altered.
+| 2        | Correctness  | Correctness of every checker is automatically tested for positive AND negative
+                            cases
+| 2        | Correctness  | Every reporting format is tested: Reports must exactly reflect checking results.
 | 3        | Performance  | Check of 100kB html file performed under 10 secs
 (excluding gradle startup)
 |===
