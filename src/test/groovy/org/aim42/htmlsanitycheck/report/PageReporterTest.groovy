@@ -7,7 +7,7 @@ import org.junit.Test
 // see end-of-file for license information
 
 
-class CalculateSummaryTest extends GroovyTestCase {
+class PageReporterTest extends GroovyTestCase {
 
     SingleCheckResults checkingField
     Finding singleFinding
@@ -34,10 +34,10 @@ class CalculateSummaryTest extends GroovyTestCase {
     public void testEmptyReporter() {
         whatToExpect = "Empty reporter has no findings"
         expected = 0
-        actual = reporter.totalNrOfFindings
+        actual = reporter.statistics.totalNrOfFindings
         assertEquals(whatToExpect, expected, actual)
 
-        actual = reporter.totalNrOfChecksPerformed
+        actual = reporter.sta
         whatToExpect = "Empty reporter has no checks performed"
         assertEquals(whatToExpect, expected, actual)
     }
@@ -48,8 +48,8 @@ class CalculateSummaryTest extends GroovyTestCase {
         // add CheckingResults without Finding (note: singular vs plural)
         reporter.addCheckingField(checkingField)
 
-        assertEquals("Zero checks expected", 0, reporter.totalNrOfChecksPerformed)
-        assertEquals("Zero findings expected", 0, reporter.totalNrOfFindings)
+        assertEquals("Zero checks expected", 0, reporter.statistics.totalNrOfChecksPerformed)
+        assertEquals("Zero findings expected", 0, reporter.statistics.totalNrOfFindings)
 
         reporter.calculateSummary()
 
