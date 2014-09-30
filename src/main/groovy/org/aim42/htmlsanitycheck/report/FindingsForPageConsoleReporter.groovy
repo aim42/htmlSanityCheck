@@ -2,19 +2,22 @@ package org.aim42.htmlsanitycheck.report
 
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
 
 // see end-of-file for license information
 
 
-class FindingsConsoleReporter extends FindingsForPageReporter {
+class FindingsForPageConsoleReporter extends FindingsForPageReporter {
 
-    private PerRunResults runResults
+    private SinglePageResults pageResults
 
-    public FindingsConsoleReporter(ArrayList<SingleCheckResults> results) {
+    public FindingsForPageConsoleReporter( SinglePageResults results) {
         super(results)
 
     }
+
+
 
 
     @Override

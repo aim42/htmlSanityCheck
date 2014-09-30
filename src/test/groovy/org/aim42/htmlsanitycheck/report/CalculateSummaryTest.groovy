@@ -24,7 +24,7 @@ class CalculateSummaryTest extends GroovyTestCase {
         checkingField = new SingleCheckResults()
 
         // create empty Reporter without findings
-        reporter = new FindingsConsoleReporter( new ArrayList<SingleCheckResults>( ))
+        reporter = new FindingsForPageConsoleReporter( new ArrayList<SingleCheckResults>( ))
 
         singleFinding = new Finding()
     }

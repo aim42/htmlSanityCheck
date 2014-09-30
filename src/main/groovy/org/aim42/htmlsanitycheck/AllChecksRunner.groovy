@@ -153,7 +153,7 @@ class AllChecksRunner {
 
          logger.info "results = " + results
 
-         new FindingsConsoleReporter(results).reportFindings()
+         new FindingsForPageConsoleReporter(results).reportFindings()
  */
         //reporter.reportFindings()
 
