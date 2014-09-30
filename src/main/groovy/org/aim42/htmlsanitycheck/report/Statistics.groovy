@@ -14,7 +14,8 @@ class Statistics {
     }
 
 
-    private int calculateSummary() {
+    public int calculateSummary() {
+
         // base case: if no checks performed, 100% successful
         if (totalNrOfChecksPerformed <= 0) {
             return 100

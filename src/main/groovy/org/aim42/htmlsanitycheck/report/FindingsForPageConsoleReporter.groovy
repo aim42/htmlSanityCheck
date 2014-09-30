@@ -1,7 +1,5 @@
 package org.aim42.htmlsanitycheck.report
 
-import org.aim42.htmlsanitycheck.collect.PerRunResults
-import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
 
@@ -9,8 +7,6 @@ import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
 
 class FindingsForPageConsoleReporter extends FindingsForPageReporter {
-
-    private SinglePageResults pageResults
 
     public FindingsForPageConsoleReporter( SinglePageResults results) {
         super(results)
@@ -38,7 +34,7 @@ class FindingsForPageConsoleReporter extends FindingsForPageReporter {
     void reportOverallSummary() {
         println "Summary:"
         println "========"
-        println "performed ${checkingResults.size()} types of checks"
+        println "performed ${pageResults.size()} types of checks"
         println "checked $totalNrOfChecksPerformed items total, "
         println "found   $totalNrOfFindings issues, $percentSuccessful% successful."
         println "-" * 50
@@ -48,7 +44,7 @@ class FindingsForPageConsoleReporter extends FindingsForPageReporter {
     void reportSingleCheckSummary() {
         println "\nDetails:\n"
 
-        checkingResults.each { result ->
+        pageResults.each { result ->
             println "Results for ${result.whatIsChecked}"
             println "${result.nrOfItemsChecked} $result.sourceItemName checked,"
             println "${result.nrOfProblems()} $result.targetItemName found.\n"

@@ -11,30 +11,28 @@
 package org.aim42.htmlsanitycheck.report
 
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.aim42.htmlsanitycheck.html.HtmlPageMetaInfo
 
 
 abstract class FindingsForPageReporter {
 
-    private HtmlPageMetaInfo metaInfo
+    public SinglePageResults pageResults
 
-    ArrayList<SingleCheckResults> checkingResults
+    public Statistics statistics
 
-    int totalNrOfChecksPerformed
-    int totalNrOfFindings
-    int percentSuccessful
-
-    String createdOnDate
+    public String createdOnDate
 
 
 
-    public FindingsForPageReporter( ArrayList<SingleCheckResults> checkingResults  ) {
+    public FindingsForPageReporter( SinglePageResults pageResults  ) {
 
-        this.checkingResults = checkingResults
-        this.totalNrOfChecksPerformed = 0
+        this.pageResults = pageResults
+        this.statistics = new Statistics(
+          pageResults.totalNrOfItemsChecked(),
+          pageResults.totalNrOfFindings()
+        )
 
-        this.percentSuccessful = 0
-        this.totalNrOfFindings = 0
 
         this.createdOnDate = new Date().format('dd. MMMM YYYY, HH:mm')
 
@@ -47,7 +45,7 @@ abstract class FindingsForPageReporter {
     public void reportFindings() {
 
         // sum up numbers, calculate percentages
-        calculateSummary()
+
 
         // e.g. setup filename, open output file
         initializeReport()
@@ -65,29 +63,13 @@ abstract class FindingsForPageReporter {
     }
 
     // primarily used for testing
-    public void addCheckingField(SingleCheckResults resultsCollector) {
-        this.checkingResults.add(resultsCollector)
+    public void addCheckingField( SingleCheckResults resultsCollector) {
+        this.pageResults.singleCheckResults.add( resultsCollector )
+
+        // we need to re-calculate the summary after every new resultsCollector
+        this.statistics.calculateSummary()
     }
 
-    public void calculateSummary() {
-        totalNrOfChecksPerformed = 0
-        totalNrOfFindings = 0
-        checkingResults.each { checkingResult ->
-            totalNrOfChecksPerformed += checkingResult.nrOfItemsChecked
-            totalNrOfFindings += checkingResult.nrOfProblems()
-        }
-
-        // base case: if no checks performed, 100% successful
-        if (totalNrOfChecksPerformed <= 0) {
-            percentSuccessful = 100
-        }
-        // at least one check was performed, calculate percentage
-        else {
-            percentSuccessful =
-                    100 - (100 * totalNrOfFindings) / totalNrOfChecksPerformed
-        }
-
-    }
 
 
     // stuff delegated to subclasses

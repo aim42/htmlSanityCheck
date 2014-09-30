@@ -25,6 +25,7 @@ class SinglePageResults {
         assert singleCheckResults != null
 
         singleCheckResults.add( resultsForSingleCheck )
+
     }
 
     // query the results

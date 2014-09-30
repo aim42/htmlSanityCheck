@@ -44,9 +44,9 @@ public class FindingsHtmlReporter extends FindingsForPageReporter {
     @Override
     void reportOverallSummary() {
         writeSummaryPrefix()
-//        writeSummary(imageFindings.checkingResults,
+//        writeSummary(imageFindings.pageResults,
 //                imageFindings.findings.size())
-//        writeSummary(internalLinkFindings.checkingResults,
+//        writeSummary(internalLinkFindings.pageResults,
 //                internalLinkFindings.findings.size())
 //
         writeSummaryPostfix(calculateSummary())
