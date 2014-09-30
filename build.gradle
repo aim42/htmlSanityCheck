@@ -11,6 +11,7 @@ apply plugin: 'maven'
 repositories {
     jcenter()
     mavenCentral()
+    maven {url "http://oss.sonatype.org/content/repositories/snapshots/"}
 }
 
 
@@ -25,6 +26,9 @@ dependencies {
 
     // mockito needed to test string similarity
     testCompile "org.mockito:mockito-all:1.9.5"
+
+    //
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.3-SNAPSHOT"
 
 }
 
