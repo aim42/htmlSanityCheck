@@ -49,11 +49,21 @@ class SingleCheckResultsTest extends GroovyTestCase {
     }
 
     @Test
+    public void testAddManyFindingToCheckingResult() {
+        int maxNrOfFindinds = 2
+
+        for (int i = 1; i < maxNrOfFindinds; i++) {
+            checkingResults.addFinding(new Finding("googlygoob + $i"))
+            assertEquals("$i nr of findings expected", i, checkingResults.nrOfProblems())
+        }
+    }
+
+    @Test
     public void testAddFindingToCheckingResult() {
-        checkingResults.addFinding( new Finding( "googlygoob"))
+        checkingResults.addFinding(new Finding("googlygoob"))
 
         String expected = "One finding expected"
-        assertEquals( expected, 1, checkingResults.nrOfProblems() )
+        assertEquals(expected, 1, checkingResults.nrOfProblems())
     }
 
     @Test
@@ -71,14 +81,14 @@ class SingleCheckResultsTest extends GroovyTestCase {
               </body>
            </html>
                 '''
-        HtmlPage htmlPage = new HtmlPage( oneGoodOneBadImageHTML )
+        HtmlPage htmlPage = new HtmlPage(oneGoodOneBadImageHTML)
 
         List<HtmlElement> images = htmlPage.getAllImageTags()
-        assertEquals( "expected 2 images", 2, images.size())
+        assertEquals("expected 2 images", 2, images.size())
 
         checker = new MissingImageFilesChecker(
                 pageToCheck: htmlPage,
-                baseDirPath: imageDir )
+                baseDirPath: imageDir)
 
         SingleCheckResults checkingResults =
                 checker.performCheck()
@@ -101,8 +111,8 @@ class SingleCheckResultsTest extends GroovyTestCase {
         String expectedImageSrc = "image \"./images/test_xyz_uvw.jpg\" missing"
         String actualFinding = checkingResults.findings.first().item
 
-        assertEquals( "expected \"/images/test_xyz_uvw.jpg\" as finding",
-        expectedImageSrc, actualFinding)
+        assertEquals("expected \"/images/test_xyz_uvw.jpg\" as finding",
+                expectedImageSrc, actualFinding)
 
 
     }

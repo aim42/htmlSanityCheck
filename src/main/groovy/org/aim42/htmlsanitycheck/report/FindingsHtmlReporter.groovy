@@ -49,7 +49,7 @@ public class FindingsHtmlReporter extends FindingsForPageReporter {
 //        writeSummary(internalLinkFindings.pageResults,
 //                internalLinkFindings.findings.size())
 //
-        writeSummaryPostfix(calculateSummary())
+        writeSummaryPostfix(percentSuccessful())
     }
 
 

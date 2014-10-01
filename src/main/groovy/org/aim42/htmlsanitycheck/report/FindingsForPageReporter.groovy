@@ -12,31 +12,22 @@ package org.aim42.htmlsanitycheck.report
 
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
-import org.aim42.htmlsanitycheck.html.HtmlPageMetaInfo
-
 
 abstract class FindingsForPageReporter {
 
     public SinglePageResults pageResults
 
-    public Statistics statistics
-
     public String createdOnDate
 
 
-
-    public FindingsForPageReporter( SinglePageResults pageResults  ) {
+    public FindingsForPageReporter(SinglePageResults pageResults) {
 
         this.pageResults = pageResults
-        this.statistics = new Statistics(
-          pageResults.totalNrOfItemsChecked(),
-          pageResults.totalNrOfFindings()
-        )
 
 
         this.createdOnDate = new Date().format('dd. MMMM YYYY, HH:mm')
 
-     }
+    }
 
     /**
      * Presents a report of a subtype (e.g. HTML, console)
@@ -45,7 +36,6 @@ abstract class FindingsForPageReporter {
     public void reportFindings() {
 
         // sum up numbers, calculate percentages
-
 
         // e.g. setup filename, open output file
         initializeReport()
@@ -62,15 +52,12 @@ abstract class FindingsForPageReporter {
         closeReport()
     }
 
+
     // primarily used for testing
-    public void addCheckingField( SingleCheckResults resultsCollector) {
-        this.pageResults.singleCheckResults.add( resultsCollector )
+    public void addCheckingField(SingleCheckResults resultsCollector) {
+        this.pageResults.singleCheckResults.add(resultsCollector)
 
-        // we need to re-calculate the summary after every new resultsCollector
-        this.statistics.calculateSummary()
     }
-
-
 
     // stuff delegated to subclasses
     // ************************************
