@@ -1,5 +1,8 @@
-package org.aim42.htmlsanitycheck.collect
+package org.aim42.htmlsanitycheck.report
 
+import org.aim42.htmlsanitycheck.collect.Finding
+import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import spock.lang.Specification
 
 /************************************************************************
@@ -22,51 +25,19 @@ import spock.lang.Specification
  *
  *********************************************************************** */
 
-class PageSummaryCalculationSpec extends Specification {
+class SummaryCalculationSpec extends Specification {
 
     def "CalculateSimpleSummarySpec"() {
 
-        setup:
 
-        SingleCheckResults singleCheckResults = new SingleCheckResults()
-        SinglePageResults pageResults = new SinglePageResults()
-        Finding finding = new Finding()
-
-        when:
-        singleCheckResults.incNrOfChecks()
-        pageResults.addResultsForSingleCheck(singleCheckResults)
-
-
-        then:
-        pageResults.howManyCheckersHaveRun() == 1
-        pageResults.percentSuccessful() == 100
-
-        when:
-        singleCheckResults.addFinding( finding )
-
-        then:
-        pageResults.percentSuccessful() == 0
-
+        expect:
+        SummarizerUtil.percentSuccessful(0, 0) == 100
     }
 
     def "CalculateSummarySpec"(int nrChecks, int nrFindings, int successRate) {
+        expect:
 
-        setup:
-
-        SingleCheckResults singleCheckResults = new SingleCheckResults()
-        SinglePageResults pageResults = new SinglePageResults()
-
-        when:
-            singleCheckResults.nrOfItemsChecked = nrChecks
-            setNrOfFindings( nrFindings, singleCheckResults )
-            pageResults.addResultsForSingleCheck( singleCheckResults )
-
-        then:
-            pageResults.howManyCheckersHaveRun() == 1
-            pageResults.totalNrOfFindings() == nrFindings
-            pageResults.totalNrOfItemsChecked() == nrChecks
-
-            pageResults.percentSuccessful() == successRate
+        SummarizerUtil.percentSuccessful(nrChecks, nrFindings) == successRate
 
         where:
         nrChecks | nrFindings | successRate
@@ -91,8 +62,8 @@ class PageSummaryCalculationSpec extends Specification {
 
         when:
         singleCheckResults.nrOfItemsChecked = nrChecks
-        setNrOfFindings( nrFindings, singleCheckResults )
-        pageResults.addResultsForSingleCheck( singleCheckResults )
+        setNrOfFindings(nrFindings, singleCheckResults)
+        pageResults.addResultsForSingleCheck(singleCheckResults)
 
         then:
         pageResults.howManyCheckersHaveRun() == 1
@@ -110,11 +81,11 @@ class PageSummaryCalculationSpec extends Specification {
 
     }
     // helper method
-    def void setNrOfFindings( int nrOfFindings, SingleCheckResults scr) {
-         Finding finding = new Finding("a finding")
+    def void setNrOfFindings(int nrOfFindings, SingleCheckResults scr) {
+        Finding finding = new Finding("a finding")
 
-        for (int i = 0; i < nrOfFindings; i++ ) {
-           scr.addFinding( finding )
+        for (int i = 0; i < nrOfFindings; i++) {
+            scr.addFinding(finding)
         }
     }
 }

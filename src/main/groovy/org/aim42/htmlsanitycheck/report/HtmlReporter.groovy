@@ -1,67 +1,69 @@
 // see end-of-file for license information
 package org.aim42.htmlsanitycheck.report
 
+import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.collect.SinglePageResults
+
 /**
  * write the findings report to HTML
  */
-public class FindingsHtmlReporter extends FindingsForPageReporter {
+public class HtmlReporter extends Reporter {
 
     FileWriter writer
 
-    FindingsHtmlReporter() {
+    HtmlReporter() {
         super()
     }
 
 
     @Override
-    void initializeReport() {
+    void initReport() {
+        // TODO: creation of output html file is broken - FIXME
+
         String userDir = System.getProperty("user.dir");
         String CheckDirPath = userDir + "/build/";
         String CheckReportFileName = "index.html"
         writer = new FileWriter(CheckDirPath + CheckReportFileName)
 
-        writer.write
-        '''
-        <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-    <meta httpEquiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Test results - Test Summary</title>
+        writer.write """
+            <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+            <html><head><meta httpEquiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>HTML Sanity Check Results</title>
     <link href="css/base-style.css" rel="stylesheet" type="text/css"/>
     <link href="css/style.css" rel="stylesheet" type="text/css"/>
-</head>
-<body>
-<div id="content">
-        '''
+    </head><body><div id="content">"""
     }
-
-    @Override
-    void reportHeader() {
-
-    }
-
 
     @Override
     void reportOverallSummary() {
-        writeSummaryPrefix()
-//        writeSummary(imageFindings.pageResults,
-//                imageFindings.findings.size())
-//        writeSummary(internalLinkFindings.pageResults,
-//                internalLinkFindings.findings.size())
-//
-        writeSummaryPostfix(percentSuccessful())
+        int percentageSuccessful = SummarizerUtil.percentSuccessful( totalNrOfChecks(), totalNrOfFindings())
+
+        writer.write "<h1>Summary</h1>"
+
+        println "checked ${totalNrOfChecks()} items on ${totalNrOfPages()} pages, "
+        println "found   ${totalNrOfFindings()}, $percentageSuccessful% successful."
+        println "-" * 50
+
+    }
+
+    @Override
+    void reportPageFindings(SinglePageResults pageResult) {
+
+    }
+
+    // report the results for a single page
+    private void reportSingleCheckSummary( SingleCheckResults checkResults ) {
+
+
     }
 
 
+
     void writeSummary(String what, int howMany) {
-        writer.write '''
-               <td>
-                   <div class="infoBox">
+        writer.write """<td><div class="infoBox">
                        <div class="counter">$howMany</div>
                        <p>$what</p>
-                   </div>
-               </td>
-'''
+                   </div></td>"""
     }
 
     void writeSummaryPostfix(int percentage) {
@@ -95,19 +97,11 @@ public class FindingsHtmlReporter extends FindingsForPageReporter {
                             <tr>'''
     }
 
-    @Override
-    void reportSingleCheckSummary() {
 
-    }
 
     @Override
     void closeReport() {
-        writer.write
-        '''
-    </div>
-</body>
-</html>
-'''
+        writer.write """</div></body></html>"""
     }
 }
 

@@ -47,26 +47,6 @@ class SinglePageResults {
 }
 
 
-    /**
-     * returns the percentage of successful checks.
-     *
-     * Edge case:
-     * 0 checks -> 100% successful
-     *
-     */
-    public int percentSuccessful() {
-
-        int totalChecks = totalNrOfItemsChecked()
-
-        // base case: if no checks performed, 100% successful
-        if (totalChecks <= 0) {
-            return 100
-        }
-        // at least one check was performed, calculate percentage
-        else {
-            return 100 - (100 * totalNrOfFindings()) / totalChecks
-        }
-    }
 
 
     /**

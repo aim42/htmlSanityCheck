@@ -13,7 +13,7 @@ class PageReporterTest extends GroovyTestCase {
     SingleCheckResults singleCheckResults
     Finding singleFinding
 
-    FindingsForPageReporter reporter
+    Reporter reporter
 
 
     int expected
@@ -27,7 +27,7 @@ class PageReporterTest extends GroovyTestCase {
         singleFinding = new Finding()
 
         // create empty Reporter without findings
-        reporter = new FindingsForPageConsoleReporter( new SinglePageResults() )
+        reporter = new ConsoleReporter( new SinglePageResults() )
 
     }
 

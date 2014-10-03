@@ -10,11 +10,11 @@ package org.aim42.htmlsanitycheck.collect
 
 class SingleCheckResults {
 
-    protected String whatIsChecked    // i.e. "Missing Local Images Check"
+    public String whatIsChecked    // i.e. "Missing Local Images Check"
 
     // source-item is checked against target-item
-    protected String sourceItemName   // i.e. image-src-attribute, anchor/link
-    protected String targetItemName   // i.e. local-image-file, id/bookmark
+    public String sourceItemName   // i.e. image-src-attribute, anchor/link
+    public String targetItemName   // i.e. local-image-file, id/bookmark
 
     public int nrOfItemsChecked
 
