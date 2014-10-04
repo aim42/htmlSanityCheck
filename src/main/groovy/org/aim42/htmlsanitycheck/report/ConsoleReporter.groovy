@@ -25,7 +25,9 @@ import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
 class ConsoleReporter extends Reporter {
 
-
+    public ConsoleReporter( SinglePageResults spr ) {
+        super( spr )
+    }
 
     @Override
     void initReport() {

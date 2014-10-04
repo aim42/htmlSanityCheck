@@ -8,7 +8,7 @@ import org.junit.Test
 // see end-of-file for license information
 
 
-class PageReporterTest extends GroovyTestCase {
+class ConsoleReporterTest extends GroovyTestCase {
 
     SingleCheckResults singleCheckResults
     Finding singleFinding
@@ -37,10 +37,10 @@ class PageReporterTest extends GroovyTestCase {
 
         whatToExpect = "Empty reporter has no findings"
         expected = 0
-        actual = reporter.pageResults.totalNrOfFindings()
+        actual = reporter.totalNrOfFindings()
         assertEquals(whatToExpect, expected, actual)
 
-        actual = reporter.pageResults.totalNrOfItemsChecked()
+        actual = reporter.totalNrOfChecks()
         whatToExpect = "Empty reporter has no checks performed"
         assertEquals(whatToExpect, expected, actual)
     }
