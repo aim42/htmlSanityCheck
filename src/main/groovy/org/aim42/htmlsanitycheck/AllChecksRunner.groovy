@@ -65,7 +65,6 @@ class AllChecksRunner {
 
      */
 
-    // TODO: remove imagesDir
     public AllChecksRunner(
             File fileToCheck,
             File checkingResultsDir,
@@ -102,14 +101,14 @@ class AllChecksRunner {
      */
     public PerRunResults performAllChecks() {
 
-        //logger.info(this.toString())
+        logger.info "entered performAllChecks"
 
         // TODO: this works for just ONE file...
         resultsForAllPages.addPageResults(
                 performAllChecksForOneFile(fileToCheck))
 
         //
-        // reportCheckingResultsOnConsole()
+        reportCheckingResultsOnConsole()
     }
 
     /**
