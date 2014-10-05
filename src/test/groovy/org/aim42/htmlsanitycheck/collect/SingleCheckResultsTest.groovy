@@ -69,18 +69,12 @@ class SingleCheckResultsTest extends GroovyTestCase {
     @Test
     public void testCheckTwoImageTagsOneMissingFile() {
 
-        String oneGoodOneBadImageHTML =
-
-                '''
-          <html>
-             $HTML_HEAD
-              <body>
+        String oneGoodOneBadImageHTML = """<html><body>
                    <h1>dummy-heading-1</h1>
                    <img src="./images/aim42.png" >
                    <img src="./images/test_xyz_uvw.jpg" >
-              </body>
-           </html>
-                '''
+              </body></html>"""
+
         HtmlPage htmlPage = new HtmlPage(oneGoodOneBadImageHTML)
 
         List<HtmlElement> images = htmlPage.getAllImageTags()

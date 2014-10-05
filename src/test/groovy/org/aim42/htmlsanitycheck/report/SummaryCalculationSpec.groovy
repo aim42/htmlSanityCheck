@@ -67,8 +67,8 @@ class SummaryCalculationSpec extends Specification {
 
         then:
         pageResults.howManyCheckersHaveRun() == 1
-        pageResults.totalNrOfFindings() == nrFindings
-        pageResults.totalNrOfItemsChecked() == nrChecks
+        pageResults.nrOfFindingsOnPage() == nrFindings
+        pageResults.nrOfItemsCheckedOnPage() == nrChecks
 
 
         where:
@@ -80,8 +80,10 @@ class SummaryCalculationSpec extends Specification {
         10       | 2
 
     }
+
+
     // helper method
-    def void setNrOfFindings(int nrOfFindings, SingleCheckResults scr) {
+    private void setNrOfFindings(int nrOfFindings, SingleCheckResults scr) {
         Finding finding = new Finding("a finding")
 
         for (int i = 0; i < nrOfFindings; i++) {

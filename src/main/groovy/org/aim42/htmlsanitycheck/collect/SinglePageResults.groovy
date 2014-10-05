@@ -11,25 +11,38 @@ class SinglePageResults {
     public String pageFileName // from where we read the HTML
     public String pageFilePath // the complete path from where we read
     public String pageTitle    // as given in the <title> attribute
-    public int    pageSize     // size in byte
+    public int pageSize     // size in byte
 
 
     public List<SingleCheckResults> singleCheckResults
 
+
+    // some variants for construction
     public SinglePageResults() {
         this.singleCheckResults = new ArrayList<SingleCheckResults>()
-
+        this.pageFileName = ""
+        this.pageFilePath = ""
+        this.pageTitle = ""
+        this.pageSize = 0
+    }
+    
+    public SinglePageResults( SingleCheckResults scr ) {
+        this()
+        this.singleCheckResults.add( scr )
     }
 
-    public void addResultsForSingleCheck( SingleCheckResults resultsForSingleCheck ) {
-        assert singleCheckResults != null
 
-        singleCheckResults.add( resultsForSingleCheck )
+    /**
+    * allows to add the results of a single check
+    **/
+    public void addResultsForSingleCheck(SingleCheckResults resultsForSingleCheck) {
 
+        singleCheckResults.add(resultsForSingleCheck)
     }
+
 
     // query the results
-    public int totalNrOfItemsChecked() {
+    public int nrOfItemsCheckedOnPage() {
         int nrOfItemsChecked = 0
         singleCheckResults.each {
             nrOfItemsChecked += it.nrOfItemsChecked
@@ -38,16 +51,13 @@ class SinglePageResults {
 
     }
 
-    public int totalNrOfFindings() {
+    public int nrOfFindingsOnPage() {
         int nrOfFindings = 0
         singleCheckResults.each {
             nrOfFindings += it.nrOfProblems()
         }
         return nrOfFindings
-}
-
-
-
+    }
 
     /**
      * returns the number of distinct checker types that have run
@@ -58,7 +68,6 @@ class SinglePageResults {
         return singleCheckResults.size()
     }
 }
-
 
 /************************************************************************
  * This is free software - without ANY guarantee!

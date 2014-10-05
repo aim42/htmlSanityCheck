@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.report
 
+import groovy.transform.InheritConstructors
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
@@ -23,6 +24,7 @@ import org.aim42.htmlsanitycheck.collect.SinglePageResults
  *
  *********************************************************************** */
 
+@InheritConstructors
 class ConsoleReporter extends Reporter {
 
     public ConsoleReporter( SinglePageResults spr ) {
@@ -39,7 +41,8 @@ class ConsoleReporter extends Reporter {
 
     @Override
     void reportOverallSummary() {
-        int percentageSuccessful = SummarizerUtil.percentSuccessful( totalNrOfChecks(), totalNrOfFindings())
+        int percentageSuccessful =
+                SummarizerUtil.percentSuccessful( totalNrOfChecks(), totalNrOfFindings())
 
         println "Summary:"
         println "========"
