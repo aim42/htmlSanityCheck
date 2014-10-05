@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.report
 
+import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
 /**
@@ -19,7 +20,25 @@ abstract class Reporter {
      * create the reporter
      */
     public Reporter() {
+        this( new SinglePageResults() )
+    }
+
+    /**
+     * primarily for testing: create with just one instance of SingleCheckResults
+     * @param pageResults
+     */
+    public Reporter( SinglePageResults singlePageResults ) {
         this.createdOnDate = new Date().format('dd. MMMM YYYY, HH:mm')
+        this.pageResults = new ArrayList<SinglePageResults>( )
+        this.pageResults.add( singlePageResults )
+
+    }
+
+    /**
+     * add checking results for one page
+     */
+    public addCheckingResultsForOnePage( SinglePageResults singlePageResults) {
+        pageResults.add( singlePageResults )
     }
 
     /**
@@ -50,19 +69,19 @@ abstract class Reporter {
     }
 
     protected int totalNrOfChecks() {
-        int total = 0
+        int totalNrOfChecks = 0
         pageResults.each { pageResult ->
-            total += pageResult.totalNrOfItemsChecked()
+            totalNrOfChecks += pageResult.nrOfItemsCheckedOnPage()
         }
-        return total
+        return totalNrOfChecks
     }
 
     protected int totalNrOfFindings() {
         int totalFindings = 0
         pageResults.each { pageResult ->
-            totalFindings += pageResult.totalNrOfFindings()
+            totalFindings += pageResult.nrOfFindingsOnPage()
         }
-
+        return totalFindings
     }
 
     // delegate *real* work to subclasses
