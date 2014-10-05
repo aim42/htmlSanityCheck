@@ -18,7 +18,7 @@ class SummarizerUtil {
         }
         // at least one check was performed, calculate percentage
         else {
-            return 100 - (100 * totalNrOfFindings()) / totalChecks
+            return 100 - (100 * totalNrOfFindings) / totalChecks
         }
     }
 }
