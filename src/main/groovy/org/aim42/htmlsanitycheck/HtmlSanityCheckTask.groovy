@@ -56,7 +56,6 @@ class HtmlSanityCheckTask extends DefaultTask {
         // ======================================
         def allChecksRunner = new AllChecksRunner(
                 fileToCheck,
-                imageDir,
                 checkingResultsDir,
                 checkExternalLinks
         )
@@ -73,7 +72,6 @@ class HtmlSanityCheckTask extends DefaultTask {
         logger.info "=" * 70
         logger.info "Parameters given to sanityCheck plugin from gradle buildfile..."
         logger.info "File to check   : $fileToCheck"
-        logger.info "Image dir       : $imageDir"
         logger.info "Results dir     : $checkingResultsDir"
         logger.info "Check externals : $checkExternalLinks"
 
