@@ -37,9 +37,9 @@ class AllChecksRunnerTest extends GroovyTestCase {
         int expected = 4
         assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
 
-        assertEquals("expected 0 items checked", 0, pageResults.totalNrOfItemsChecked())
+        assertEquals("expected 0 items checked", 0, pageResults.nrOfItemsCheckedOnPage())
 
-        assertEquals("expected 0 findings", 0, pageResults.totalNrOfFindings())
+        assertEquals("expected 0 findings", 0, pageResults.nrOfFindingsOnPage())
 
         assertEquals("expected hsc title", "hsc", pageResults.pageTitle)
 
@@ -72,9 +72,9 @@ class AllChecksRunnerTest extends GroovyTestCase {
         int expected = 4
         assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
 
-        assertEquals("expected 2 items checked", 2, pageResults.totalNrOfItemsChecked())
+        assertEquals("expected 2 items checked", 2, pageResults.nrOfItemsCheckedOnPage())
 
-        assertEquals("expected 2 findings", 2, pageResults.totalNrOfFindings())
+        assertEquals("expected 2 findings", 2, pageResults.nrOfFindingsOnPage())
 
     }
 
