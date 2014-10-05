@@ -8,32 +8,44 @@ package org.aim42.htmlsanitycheck.collect
  */
 class PerRunResults {
 
-    private ArrayList<SinglePageResults> listOfPageResults
+    private ArrayList<SinglePageResults> resultsForAllPages
 
     SingleCheckResults unusedImagesResultsCollector
 
 
     public PerRunResults() {
-        this.listOfPageResults = new ArrayList<SinglePageResults>()
+        this.resultsForAllPages = new ArrayList<SinglePageResults>()
+
 
     }
 
     /**
      * adds one kind of checking results.
-     * @param pageResults: checking results for a single HTML page
+     * @param pageResults : checking results for a single HTML page
      */
-    public void addPageResults( SinglePageResults pageResults ) {
-        assert listOfPageResults != null
+    public void addPageResults(SinglePageResults pageResults) {
+        assert resultsForAllPages != null
 
-        listOfPageResults.add(pageResults)
+        resultsForAllPages.add(pageResults)
     }
 
     /**
      *
      * @return how many distinct CheckingResultCollectors have been added (so far)?
      */
-    public int howManyPagesChecked() {
-        return listOfPageResults.size()
+    public int nrOfPagesChecked() {
+        return resultsForAllPages.size()
+    }
+
+    /**
+     * returns the total number of checks performed on all pages
+     */
+    public int nrOfChecksPerformedOnAllPages() {
+        int nrOfChecks = 0
+        resultsForAllPages.each { singlePageResults ->
+            nrOfChecks += singlePageResults.nrOfItemsCheckedOnPage()
+        }
+        return nrOfChecks
     }
 
 
