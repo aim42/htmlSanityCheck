@@ -3,7 +3,7 @@ package org.aim42.htmlsanitycheck.collect
 import org.junit.Before
 import org.junit.Test
 
-class SinglePageResultTest extends GroovyTestCase {
+class SinglePageResultsTest extends GroovyTestCase {
     final static String HTML_HEAD = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <head></head><html>'
 
     final static String HTML = """$HTML_HEAD<body><title>Faulty Dragon</title></body>
@@ -62,9 +62,9 @@ class SinglePageResultTest extends GroovyTestCase {
         singlePageResults.addResultsForSingleCheck(singleCheckResults)
 
         assertEquals("expected $nrOfChecks checks on SinglePageChecks",
-                nrOfChecks, singlePageResults.totalNrOfItemsChecked())
+                nrOfChecks, singlePageResults.nrOfItemsCheckedOnPage())
         assertEquals("expected $nrOfChecks findings on SinglePageChecks",
-                nrOfChecks, singlePageResults.totalNrOfFindings())
+                nrOfChecks, singlePageResults.nrOfFindingsOnPage())
 
     }
 
@@ -112,11 +112,11 @@ class SinglePageResultTest extends GroovyTestCase {
 
         int expectedNrOfFindings =nrOfFindings * nrOfCheckers
         assertEquals("expected $expectedNrOfFindings findings on SinglePageChecks",
-                expectedNrOfFindings, singlePageResults.totalNrOfFindings())
+                expectedNrOfFindings, singlePageResults.nrOfFindingsOnPage())
 
         int expectedNrOfChecks = nrOfCheckers * nrOfChecks
         assertEquals( "expected $expectedNrOfChecks checks on SinglePageChecks",
-                expectedNrOfChecks, singlePageResults.totalNrOfItemsChecked())
+                expectedNrOfChecks, singlePageResults.nrOfItemsCheckedOnPage())
     }
 
 }
