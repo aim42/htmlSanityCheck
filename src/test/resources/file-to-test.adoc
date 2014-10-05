@@ -10,7 +10,20 @@ Via the following directive, the image directory is set to "./images":
 :imagesdir: ./images
 
 
-== Internal Links
+== What is tested here
+
+This file serves as _smoketest_ for kbd:[htmlSC], as it deliberately forces
+the (asciidoc) html generator to create the following errors within the html
+output:
+
+* Broken cross reference (missing link target for internal link). See section <<Cross-References>>.
+* <<Missing-Images>>
+* <<Duplicate-Id>> (dupliate link target)
+* Missing local resource (missing link to local file)
+
+
+
+== Cross-References, a.k.a. _Internal Links_
 
 
 * A link to the subheading below: <<aim42, title>>.
@@ -24,7 +37,8 @@ This plugin has been created in context of the <<aim42>> project
 === aim42 Architecture Improvement
 
 
-== Images
+[[Missing-Images]]
+== Missing Images
 One image from the image directory - created with this asciidoc:
 ----
 image::aim42.png["alternate-text", title="aim42-logo", width="150"]
@@ -43,7 +57,9 @@ image::missing-image-urjk8ybepw8.jpg["missing...", title="missing-image"]
 image::missing-image-urjk8ybepw8.jpg["missing...", title="missing-image"]
 
 
+[[Duplicate-Id]]
 == Duplicate ID's or Bookmarks
+
 In Asciidoc, ID's are defined using double brackets
 ----
 [[some-anchor]]
