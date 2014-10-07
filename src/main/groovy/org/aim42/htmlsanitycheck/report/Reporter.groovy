@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.report
 
+import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
@@ -10,17 +11,20 @@ import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
 abstract class Reporter {
 
-    private ArrayList<SinglePageResults> pageResults
+    // nonsense - need that only once...
+    // TODO: rewrite tests to work with PerRunResults
+    protected ArrayList<SinglePageResults> pageResults
 
-    public String createdOnDate
+    // subclasses need to access runResults...
+    protected PerRunResults runResults
 
-    //private SingleCheckResults unusedImagesResult
+    protected String createdOnDate
 
     /**
      * create the reporter
      */
     public Reporter() {
-        this( new SinglePageResults() )
+        this.createdOnDate = new Date().format('dd. MMMM YYYY, HH:mm')
     }
 
     /**
@@ -28,11 +32,23 @@ abstract class Reporter {
      * @param pageResults
      */
     public Reporter( SinglePageResults singlePageResults ) {
-        this.createdOnDate = new Date().format('dd. MMMM YYYY, HH:mm')
         this.pageResults = new ArrayList<SinglePageResults>( )
         this.pageResults.add( singlePageResults )
 
     }
+
+    /**
+     * Usually a Reporter instance shall be constructed with its appropriate
+     * @see PerRunResults, as the latter contains all findings.
+     * @param runResults
+     */
+    public Reporter( PerRunResults runResults ) {
+        this()
+        this.runResults = runResults
+        this.pageResults = runResults.getResultsForAllPages()
+
+    }
+
 
     /**
      * add checking results for one page
@@ -64,6 +80,11 @@ abstract class Reporter {
         }
     }
 
+    protected void reportPageFindings( SinglePageResults singlePageResults ) {
+        reportPageSummary( singlePageResults )
+        reportPageDetails( singlePageResults )
+    }
+
     protected int totalNrOfPages() {
       return pageResults.size()
     }
@@ -93,8 +114,12 @@ abstract class Reporter {
 
     abstract protected void reportOverallSummary()
 
-    abstract protected void reportPageFindings(SinglePageResults pageResult)
+    abstract protected void reportPageSummary( SinglePageResults pageResult )
 
+    abstract protected void reportPageDetails( SinglePageResults pageResult )
+
+    abstract protected void reportSingleCheckSummary( SingleCheckResults singleCheckResults )
+    abstract protected void reportSingleCheckDetails( SingleCheckResults singleCheckResults )
 
     protected void closeReport() {
         // default: do nothing

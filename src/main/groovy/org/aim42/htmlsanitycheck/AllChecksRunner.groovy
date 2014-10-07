@@ -5,6 +5,8 @@ import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
+import org.aim42.htmlsanitycheck.report.ConsoleReporter
+import org.aim42.htmlsanitycheck.report.Reporter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -70,25 +72,26 @@ class AllChecksRunner {
             File checkingResultsDir,
             Boolean checkExternalResources
     ) {
+        this.resultsForAllPages = new PerRunResults()
+
         this.fileToCheck = fileToCheck
         this.checkingResultsDir = checkingResultsDir
         this.checkExternalResources = checkExternalResources
         this.baseDirPath = fileToCheck.getParent()
-
-        this.resultsForAllPages = new PerRunResults()
 
         logger.info("AlLChecksRunner created")
     }
 
     // TODO: maybe chain constructors here...
     public AllChecksRunner(File singleFileToCheck) {
+        this.resultsForAllPages = new PerRunResults()
+
         this.fileToCheck = singleFileToCheck
         this.checkingResultsDir = singleFileToCheck.parentFile
         this.checkExternalResources = false
 
         this.baseDirPath = fileToCheck.getParent()
 
-        this.resultsForAllPages = new PerRunResults()
 
         logger.info("checking file", singleFileToCheck.canonicalPath)
 
@@ -98,6 +101,9 @@ class AllChecksRunner {
      * performs all available checks
      * on pageToCheck
      * TODO: enhance to support FileSet instead of just one file
+     *
+     * TODO: simplify checking... collect all checker instances in one collection,
+     * then iteratively call it.performCheck() on those...
      */
     public PerRunResults performAllChecks() {
 
@@ -107,7 +113,10 @@ class AllChecksRunner {
         resultsForAllPages.addPageResults(
                 performAllChecksForOneFile(fileToCheck))
 
-        //
+        // after all checks, stop the timer...
+        resultsForAllPages.stopTimer()
+
+        // and then report the results
         reportCheckingResultsOnConsole()
     }
 
@@ -141,20 +150,12 @@ class AllChecksRunner {
 
     /**
      * reports results on stdout
-     * TODO: this is now completely broken - FIXME
+     * TODO:
      */
     private void reportCheckingResultsOnConsole() {
-        /* def results = new ArrayList<SingleCheckResults>( Arrays.asList(
-                         imageCheckingResults,
-                         crossReferencesCheckingResults,
-                         duplicateIdsCheckingResults,
-                         missingLocalResourcesCheckingResults ))
+        Reporter reporter = new ConsoleReporter( resultsForAllPages )
 
-         logger.info "results = " + results
-
-         new FindingsForPageConsoleReporter(results).reportPageFindings()
- */
-        //reporter.reportPageFindings()
+        reporter.reportFindings()
 
     }
 

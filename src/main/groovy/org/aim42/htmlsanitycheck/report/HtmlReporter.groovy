@@ -47,19 +47,26 @@ public class HtmlReporter extends Reporter {
     }
 
     @Override
-    void reportPageFindings(SinglePageResults pageResult) {
+    void reportPageSummary(SinglePageResults pageResult) {
 
     }
 
-    // report the results for a single page
-    private void reportSingleCheckSummary( SingleCheckResults checkResults ) {
+    @Override
+    void reportPageDetails(SinglePageResults pageResult) {
 
+    }
+
+    @Override
+    protected void reportSingleCheckSummary( SingleCheckResults singleCheckResults) {
+
+    }
+
+    protected void reportSingleCheckDetails( SingleCheckResults checkResults  ) {
 
     }
 
 
-
-    void writeSummary(String what, int howMany) {
+        void writeSummary(String what, int howMany) {
         writer.write """<td><div class="infoBox">
                        <div class="counter">$howMany</div>
                        <p>$what</p>
@@ -67,8 +74,7 @@ public class HtmlReporter extends Reporter {
     }
 
     void writeSummaryPostfix(int percentage) {
-        writer.write '''
- </tr>
+        writer.write """</tr>
                         </table>
                     </div>
                 </td>
@@ -80,21 +86,18 @@ public class HtmlReporter extends Reporter {
                     </div>
                 </td>
             </tr>
-        </table>
-'''
+        </table>"""
     }
 
     private void writeSummaryPrefix() {
-        writer.write
-        '''
-   <h1>Test Summary</h1>
+        writer.write """<h1>Test Summary</h1>
     <div id="summary">
         <table>
             <tr>
                 <td>
                     <div class="summaryGroup">
                         <table>
-                            <tr>'''
+                            <tr>"""
     }
 
 

@@ -10,14 +10,61 @@ class PerRunResults {
 
     private ArrayList<SinglePageResults> resultsForAllPages
 
+    // unused images is the only check concerning all pages...
     SingleCheckResults unusedImagesResultsCollector
 
+    // checking time is important - therefore we maintain a timer
+    private Long startedCheckingTimeMillis
+    private Long finishedCheckingTimeMillis
 
+    // magic number - also used in tests
+    private final static Long TIMER_STILL_RUNNING = 42
+    public final static Long ILLEGAL_TIMER = -7353315
+
+
+    /**
+     * constructs a container for all checking results, including:
+     * + checking results for every page (contained in @see SinglePageResults instances)
+     * + results for the rather quirky @see UnusedImagesChecker
+     * + a simple timer to validate the checks ran fast enough
+     */
     public PerRunResults() {
+        this.startedCheckingTimeMillis = System.currentTimeMillis()
+        this.finishedCheckingTimeMillis = TIMER_STILL_RUNNING
+
         this.resultsForAllPages = new ArrayList<SinglePageResults>()
 
-
     }
+
+    /**
+     * return the List of results for the pages
+     */
+    public ArrayList<SinglePageResults> getResultsForAllPages() {
+        return resultsForAllPages
+    }
+
+    /**
+     * stop the checking timer
+     */
+    public void stopTimer() {
+        finishedCheckingTimeMillis = System.currentTimeMillis()
+    }
+
+    /**
+     * query the timer
+    *  if timer has not yet been stopped - return a crazy number
+     */
+    public Long checkingTookHowManyMillis() {
+        Long itTookSoLong
+        if (finishedCheckingTimeMillis == TIMER_STILL_RUNNING)
+            itTookSoLong = ILLEGAL_TIMER // if read upside down: "Sie Esel"
+        else
+            itTookSoLong = finishedCheckingTimeMillis - startedCheckingTimeMillis
+
+        return itTookSoLong
+    }
+
+
 
     /**
      * adds one kind of checking results.

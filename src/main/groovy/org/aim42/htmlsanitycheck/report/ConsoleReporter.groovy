@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.report
 
 import groovy.transform.InheritConstructors
+import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
@@ -27,14 +28,23 @@ import org.aim42.htmlsanitycheck.collect.SinglePageResults
 @InheritConstructors
 class ConsoleReporter extends Reporter {
 
+    // for testing purposes, allow creation with PageResults
     public ConsoleReporter( SinglePageResults spr ) {
         super( spr )
     }
 
+    // from AllChecksRunner - create ConsoleReporter with PerRunResults
+    public ConsoleReporter( PerRunResults runResults ) {
+        super( runResults )
+    }
+
+
     @Override
     void initReport() {
+        Long millis = runResults.checkingTookHowManyMillis()
+
         println "********* HTML Sanity Checker findings report *********"
-        println "created on $createdOnDate"
+        println "created on $createdOnDate, checking took $millis msecs."
         println ""
     }
 
@@ -46,6 +56,7 @@ class ConsoleReporter extends Reporter {
 
         String pageStr = (totalNrOfPages() > 1) ? "pages" : "page"
         String issueStr = (totalNrOfFindings() > 1) ? "issues" : "issue"
+
         println "Summary:"
         println "========"
         println "checked ${totalNrOfChecks()} items on ${totalNrOfPages()} $pageStr, "
@@ -55,13 +66,22 @@ class ConsoleReporter extends Reporter {
 
 
     @Override
-    void reportPageFindings(SinglePageResults pageResult) {
-          reportSingleCheckSummary( pageResult )
+    void reportPageSummary( SinglePageResults pageResult ) {
+        println "page filename   :" + pageResult.pageFileName
+        println "page title      :" + pageResult.pageTitle
+        println "page size (byte):" + pageResult.pageSize
+    }
+
+    @Override
+    void reportPageDetails( SinglePageResults pageResults ) {
+        pageResults.singleCheckResults.each { resultForOneCheck ->
+            reportSingleCheckSummary( resultForOneCheck )
+        }
 
     }
 
-
-    private void reportSingleCheckSummary( SingleCheckResults checkResults ) {
+    @Override
+    protected void reportSingleCheckSummary( SingleCheckResults checkResults ) {
         println "\nDetails:\n"
 
         checkResults.each { result ->
@@ -76,6 +96,10 @@ class ConsoleReporter extends Reporter {
         }  // each result
     }
 
+    @Override
+    protected void reportSingleCheckDetails( SingleCheckResults checkResults  ) {
+
+    }
 
     @Override
     void closeReport() {
