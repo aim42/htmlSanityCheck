@@ -44,10 +44,12 @@ class ConsoleReporter extends Reporter {
         int percentageSuccessful =
                 SummarizerUtil.percentSuccessful( totalNrOfChecks(), totalNrOfFindings())
 
+        String pageStr = (totalNrOfPages() > 1) ? "pages" : "page"
+        String issueStr = (totalNrOfFindings() > 1) ? "issues" : "issue"
         println "Summary:"
         println "========"
-        println "checked ${totalNrOfChecks()} items on ${totalNrOfPages()} pages, "
-        println "found   ${totalNrOfFindings()}, $percentageSuccessful% successful."
+        println "checked ${totalNrOfChecks()} items on ${totalNrOfPages()} $pageStr, "
+        println "found ${totalNrOfFindings()} $issueStr, $percentageSuccessful% successful."
         println "-" * 50
     }
 
