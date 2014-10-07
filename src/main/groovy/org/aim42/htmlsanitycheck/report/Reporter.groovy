@@ -75,14 +75,10 @@ abstract class Reporter {
 
     private void reportAllPages() {
         pageResults.each { pageResult ->
-            reportPageFindings(pageResult)
-
+            reportPageSummary( pageResult )
+            reportPageDetails( pageResult )
+            reportPageFooter()
         }
-    }
-
-    protected void reportPageFindings( SinglePageResults singlePageResults ) {
-        reportPageSummary( singlePageResults )
-        reportPageDetails( singlePageResults )
     }
 
     protected int totalNrOfPages() {
@@ -115,8 +111,8 @@ abstract class Reporter {
     abstract protected void reportOverallSummary()
 
     abstract protected void reportPageSummary( SinglePageResults pageResult )
-
     abstract protected void reportPageDetails( SinglePageResults pageResult )
+    abstract protected void reportPageFooter( )
 
     abstract protected void reportSingleCheckSummary( SingleCheckResults singleCheckResults )
     abstract protected void reportSingleCheckDetails( SingleCheckResults singleCheckResults )

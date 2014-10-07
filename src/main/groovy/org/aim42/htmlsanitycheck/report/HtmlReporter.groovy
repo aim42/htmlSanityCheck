@@ -38,7 +38,7 @@ public class HtmlReporter extends Reporter {
     void reportOverallSummary() {
         int percentageSuccessful = SummarizerUtil.percentSuccessful( totalNrOfChecks(), totalNrOfFindings())
 
-        writer.write "<h1>Summary</h1>"
+        writer.write "<h1>Summary of all pages</h1>"
 
         println "checked ${totalNrOfChecks()} items on ${totalNrOfPages()} pages, "
         println "found   ${totalNrOfFindings()}, $percentageSuccessful% successful."
@@ -48,11 +48,22 @@ public class HtmlReporter extends Reporter {
 
     @Override
     void reportPageSummary(SinglePageResults pageResult) {
+        println "filename   : " + pageResult.pageFileName
+        println "page path  : " + pageResult.pageFilePath
+        println "page title : " + pageResult.pageTitle
+        println "page size  : " + pageResult.pageSize + " bytes"
 
+        writer.write "<h2> </h2"
     }
 
     @Override
     void reportPageDetails(SinglePageResults pageResult) {
+
+    }
+
+    @Override
+    protected void reportPageFooter() {
+        writer.write "="*50 + "<p>"
 
     }
 

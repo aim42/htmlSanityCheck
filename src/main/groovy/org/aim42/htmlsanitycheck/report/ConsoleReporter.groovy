@@ -57,8 +57,8 @@ class ConsoleReporter extends Reporter {
         String pageStr = (totalNrOfPages() > 1) ? "pages" : "page"
         String issueStr = (totalNrOfFindings() > 1) ? "issues" : "issue"
 
-        println "Summary:"
-        println "========"
+        println "Summary for all pages:"
+        println "======================"
         println "checked ${totalNrOfChecks()} items on ${totalNrOfPages()} $pageStr, "
         println "found ${totalNrOfFindings()} $issueStr, $percentageSuccessful% successful."
         println "-" * 50
@@ -67,9 +67,10 @@ class ConsoleReporter extends Reporter {
 
     @Override
     void reportPageSummary( SinglePageResults pageResult ) {
-        println "page filename   :" + pageResult.pageFileName
-        println "page title      :" + pageResult.pageTitle
-        println "page size (byte):" + pageResult.pageSize
+        println "Summary for file ${pageResult.pageFileName}\n"
+        println "page path  : " + pageResult.pageFilePath
+        println "page title : " + pageResult.pageTitle
+        println "page size  : " + pageResult.pageSize + " bytes"
     }
 
     @Override
@@ -81,23 +82,28 @@ class ConsoleReporter extends Reporter {
     }
 
     @Override
-    protected void reportSingleCheckSummary( SingleCheckResults checkResults ) {
-        println "\nDetails:\n"
+    protected void reportPageFooter() {
+        println "="*50
+    }
 
+    @Override
+    protected void reportSingleCheckSummary( SingleCheckResults checkResults ) {
+        println "\n"
+        println "-"*50
         checkResults.each { result ->
             println "Results for ${result.whatIsChecked}"
             println "${result.nrOfItemsChecked} $result.sourceItemName checked,"
             println "${result.nrOfProblems()} $result.targetItemName found.\n"
-            result.findings.each {
-                println it.toString()
-            }
-
-            println "-" * 50
-        }  // each result
+        }
     }
 
     @Override
     protected void reportSingleCheckDetails( SingleCheckResults checkResults  ) {
+        checkResults.findings.each { finding ->
+            println finding.toString()
+        }
+
+        println "-" * 50
 
     }
 
