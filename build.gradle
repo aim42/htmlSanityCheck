@@ -17,7 +17,8 @@ repositories {
 
 dependencies {
     compile gradleApi()
-    compile localGroovy()
+    // need to have groovy compatible to spockframework
+    compile 'org.codehaus.groovy:groovy-all:2.3.7'
 
     // jsoup is our awesome html parser, see jsoup.org
     compile 'org.jsoup:jsoup:1.7.3'
