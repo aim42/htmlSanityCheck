@@ -59,11 +59,39 @@ public class HtmlReporter extends Reporter {
         String pageStr = (totalNrOfPages() > 1) ? "pages" : "page"
         String issueStr = (totalNrOfFindings() > 1) ? "issues" : "issue"
 
+
         writer << "<h1>Summary of all pages</h1>"
 
-        writer << "checked ${totalNrOfChecks()} items on ${totalNrOfPages()} $pageStr, "
-        writer << "found ${totalNrOfFindings()} $issueStr, $percentageSuccessful% successful."
-        writer << "<p>"
+        // outer table
+        writer << """<table><tr><td><div class="summaryGroup">"""
+
+        // left table with pages, checks, findings + timing
+        writer << " <table>\n<tr>"
+        // pages
+        writer << """<td>\n<div class=\"infoBox\" id=\"pages\">\n
+                        <div class=\"counter\">${totalNrOfPages()}</div>\n
+                <p>$pageStr</p></div></td>"""
+
+        // checks
+        writer << """<td>\n<div class=\"infoBox\" id=\"checks\">\n
+                        <div class=\"counter\">${totalNrOfChecks()}</div>\n
+                <p>checks</p></div></td>"""
+
+        // findings/issues
+        writer << """<td>\n<div class=\"infoBox\" id=\"findings\">\n
+                        <div class=\"counter\">${totalNrOfFindings()}</div>\n
+                <p>$issueStr</p></div></td>"""
+
+        // end left table
+        writer << """</tr></table></div></td>"""
+
+        writer << """ <td>
+        <div class="infoBox failures" id="successRate">
+        <div class="percent">$percentageSuccessful%</div><p>successful</p>
+        </div></td>"""
+
+        writer << """</tr></table></div>"""
+
 
         // TODO: table of all pages-checked incl. links to details
 
@@ -84,7 +112,7 @@ public class HtmlReporter extends Reporter {
 
     @Override
     protected void reportPageFooter() {
-        writer << "br" + "=" * 50 + "<br><p>"
+        writer << "<hr><p>"
 
     }
 
@@ -101,13 +129,11 @@ public class HtmlReporter extends Reporter {
     }
 
     protected void reportSingleCheckDetails(SingleCheckResults checkResults) {
-        writer << """< """
+        writer << """ <p>"""
         checkResults.findings.each { finding ->
             writer << finding.toString()
         }
-
-        writer << "<p>" + "-" * 50
-
+        writer << "<p>"
     }
 
     /**
