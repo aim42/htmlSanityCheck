@@ -25,17 +25,10 @@ abstract class Reporter {
      */
     public Reporter() {
         this.createdOnDate = new Date().format('dd. MMMM YYYY, HH:mm')
-    }
-
-    /**
-     * primarily for testing: create with just one instance of SingleCheckResults
-     * @param pageResults
-     */
-    public Reporter( SinglePageResults singlePageResults ) {
-        this.pageResults = new ArrayList<SinglePageResults>( )
-        this.pageResults.add( singlePageResults )
 
     }
+
+
 
     /**
      * Usually a Reporter instance shall be constructed with its appropriate
@@ -75,11 +68,19 @@ abstract class Reporter {
 
     private void reportAllPages() {
         pageResults.each { pageResult ->
-            reportPageSummary( pageResult )
-            reportPageDetails( pageResult )
-            reportPageFooter()
+            reportPageSummary( pageResult ) // delegated to subclass
+            reportPageDetails( pageResult ) // implemented below
+            reportPageFooter()              // delegated to subclass
         }
     }
+
+    protected void reportPageDetails( SinglePageResults pageResults ) {
+        pageResults.singleCheckResults.each { resultForOneCheck ->
+            reportSingleCheckSummary( resultForOneCheck )
+            reportSingleCheckDetails( resultForOneCheck )
+        }
+    }
+
 
     protected int totalNrOfPages() {
       return pageResults.size()
@@ -111,7 +112,6 @@ abstract class Reporter {
     abstract protected void reportOverallSummary()
 
     abstract protected void reportPageSummary( SinglePageResults pageResult )
-    abstract protected void reportPageDetails( SinglePageResults pageResult )
     abstract protected void reportPageFooter( )
 
     abstract protected void reportSingleCheckSummary( SingleCheckResults singleCheckResults )

@@ -1,6 +1,7 @@
 // see end-of-file for license information
 package org.aim42.htmlsanitycheck.report
 
+import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
@@ -9,23 +10,33 @@ import org.aim42.htmlsanitycheck.collect.SinglePageResults
  */
 public class HtmlReporter extends Reporter {
 
-    FileWriter writer
+    //
+    private final static REPORT_FILENAME = "index.html"
+    private String resultsOutputDir
 
-    HtmlReporter() {
-        super()
+    // the completeOutputFilePath will be set by
+    private String completeOutputFilePath
+
+    private FileWriter writer
+
+
+    HtmlReporter(PerRunResults runResults, String outputDir) {
+        super(runResults)
+        this.resultsOutputDir = outputDir
     }
 
 
     @Override
     void initReport() {
-        // TODO: creation of output html file is broken - FIXME
 
-        String userDir = System.getProperty("user.dir");
-        String CheckDirPath = userDir + "/build/";
-        String CheckReportFileName = "index.html"
-        writer = new FileWriter(CheckDirPath + CheckReportFileName)
+        // determine a path where we can write our output file...
+        completeOutputFilePath = determineOutputFilePath(resultsOutputDir, REPORT_FILENAME)
 
-        writer.write """
+        // init the private writer object
+        writer = initWriter(completeOutputFilePath)
+
+
+        writer << """
             <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
             <html><head><meta httpEquiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>HTML Sanity Check Results</title>
@@ -34,58 +45,100 @@ public class HtmlReporter extends Reporter {
     </head><body><div id="content">"""
     }
 
+    /*
+    create and open a FileWriter to write the generated HTML
+     */
+    private FileWriter initWriter(String directoryAndFileName) {
+        writer = new FileWriter( directoryAndFileName )
+
+    }
+
     @Override
     void reportOverallSummary() {
-        int percentageSuccessful = SummarizerUtil.percentSuccessful( totalNrOfChecks(), totalNrOfFindings())
+        int percentageSuccessful = SummarizerUtil.percentSuccessful(totalNrOfChecks(), totalNrOfFindings())
+        String pageStr = (totalNrOfPages() > 1) ? "pages" : "page"
+        String issueStr = (totalNrOfFindings() > 1) ? "issues" : "issue"
 
-        writer.write "<h1>Summary of all pages</h1>"
+        writer << "<h1>Summary of all pages</h1>"
 
-        println "checked ${totalNrOfChecks()} items on ${totalNrOfPages()} pages, "
-        println "found   ${totalNrOfFindings()}, $percentageSuccessful% successful."
-        println "-" * 50
+        writer << "checked ${totalNrOfChecks()} items on ${totalNrOfPages()} $pageStr, "
+        writer << "found ${totalNrOfFindings()} $issueStr, $percentageSuccessful% successful."
+        writer << "<p>"
+
+        // TODO: table of all pages-checked incl. links to details
+
 
     }
 
     @Override
     void reportPageSummary(SinglePageResults pageResult) {
-        println "filename   : " + pageResult.pageFileName
-        println "page path  : " + pageResult.pageFilePath
-        println "page title : " + pageResult.pageTitle
-        println "page size  : " + pageResult.pageSize + " bytes"
 
-        writer.write "<h2> </h2"
-    }
-
-    @Override
-    void reportPageDetails(SinglePageResults pageResult) {
+        writer.write "<h2>Results for ${pageResult.pageFileName} </h2>"
+        writer << "filename   : " + pageResult.pageFileName
+        writer << "located : " + pageResult.pageFilePath
+        writer << "page size  : " + pageResult.pageSize + " bytes"
 
     }
+
+
 
     @Override
     protected void reportPageFooter() {
-        writer.write "="*50 + "<p>"
+        writer << "br" + "=" * 50 + "<br><p>"
 
     }
+
+
 
     @Override
-    protected void reportSingleCheckSummary( SingleCheckResults singleCheckResults) {
+    protected void reportSingleCheckSummary(SingleCheckResults singleCheckResults) {
+        singleCheckResults.each { result ->
+            writer << "<h3>Results for ${result.whatIsChecked}</h3>"
+            writer << "${result.nrOfItemsChecked} $result.sourceItemName checked,"
+            writer << "${result.nrOfProblems()} $result.targetItemName found.\n"
+
+        }
+    }
+
+    protected void reportSingleCheckDetails(SingleCheckResults checkResults) {
+        writer << """< """
+        checkResults.findings.each { finding ->
+            writer << finding.toString()
+        }
+
+        writer << "<p>" + "-" * 50
 
     }
 
-    protected void reportSingleCheckDetails( SingleCheckResults checkResults  ) {
+    /**
+     * tries to find a writable directory. First tries dirName,
+     * if that does not work takes User.dir as second choice.
+     * @param dirName : e.g. /Users/aim42/projects/htmlsc/build/check
+     * @param fileName : default "index.html"
+     * @return complete path to a writable file that does not currently exist.
+     */
+    private String determineOutputFilePath(String dirName, String fileName) {
+        String realPath = "${dirName}${File.separator}"
 
+        File realDir = new File(realPath)
+
+        if (realDir.isDirectory() && realDir.canWrite()) {
+            realPath = realPath + fileName
+        }
+        else realPath = System.getProperty("user.dir") + File.separator + fileName
+
+        return realPath
     }
 
-
-        void writeSummary(String what, int howMany) {
-        writer.write """<td><div class="infoBox">
+    void writeSummary(String what, int howMany) {
+        writer << """<td><div class="infoBox">
                        <div class="counter">$howMany</div>
                        <p>$what</p>
                    </div></td>"""
     }
 
     void writeSummaryPostfix(int percentage) {
-        writer.write """</tr>
+        writer << """</tr>
                         </table>
                     </div>
                 </td>
@@ -101,7 +154,7 @@ public class HtmlReporter extends Reporter {
     }
 
     private void writeSummaryPrefix() {
-        writer.write """<h1>Test Summary</h1>
+        writer << """<h1>Test Summary</h1>
     <div id="summary">
         <table>
             <tr>
@@ -112,10 +165,12 @@ public class HtmlReporter extends Reporter {
     }
 
 
-
     @Override
     void closeReport() {
-        writer.write """</div></body></html>"""
+        writer << """</div></body></html>"""
+        writer.flush()
+
+        println "wrote report to ${resultsOutputDir}${File.separatorChar}$REPORT_FILENAME"
     }
 }
 

@@ -1,11 +1,13 @@
 package org.aim42.htmlsanitycheck
 
+import aQute.bnd.maven.support.Repo
 import org.aim42.htmlsanitycheck.check.*
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.report.ConsoleReporter
+import org.aim42.htmlsanitycheck.report.HtmlReporter
 import org.aim42.htmlsanitycheck.report.Reporter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -118,6 +120,7 @@ class AllChecksRunner {
 
         // and then report the results
         reportCheckingResultsOnConsole()
+        reportCheckingResultsAsHTML( checkingResultsDir.absolutePath )
     }
 
     /**
@@ -157,6 +160,17 @@ class AllChecksRunner {
 
         reporter.reportFindings()
 
+    }
+
+    /**
+     * report results in HTML file(s)
+     */
+    private void reportCheckingResultsAsHTML( String resultsDir ) {
+
+        // TODO: handle file i/o issues, as creating the html output file can go wrong!!
+        //
+        Reporter reporter = new HtmlReporter( resultsForAllPages, resultsDir)
+        reporter.reportFindings()
     }
 
     /**

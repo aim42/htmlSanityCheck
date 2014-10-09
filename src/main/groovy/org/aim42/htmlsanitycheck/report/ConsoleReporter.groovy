@@ -28,10 +28,6 @@ import org.aim42.htmlsanitycheck.collect.SinglePageResults
 @InheritConstructors
 class ConsoleReporter extends Reporter {
 
-    // for testing purposes, allow creation with PageResults
-    public ConsoleReporter( SinglePageResults spr ) {
-        super( spr )
-    }
 
     // from AllChecksRunner - create ConsoleReporter with PerRunResults
     public ConsoleReporter( PerRunResults runResults ) {
@@ -71,15 +67,10 @@ class ConsoleReporter extends Reporter {
         println "page path  : " + pageResult.pageFilePath
         println "page title : " + pageResult.pageTitle
         println "page size  : " + pageResult.pageSize + " bytes"
-    }
-
-    @Override
-    void reportPageDetails( SinglePageResults pageResults ) {
-        pageResults.singleCheckResults.each { resultForOneCheck ->
-            reportSingleCheckSummary( resultForOneCheck )
-        }
 
     }
+
+
 
     @Override
     protected void reportPageFooter() {

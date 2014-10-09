@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.report
 
 import org.aim42.htmlsanitycheck.collect.Finding
+import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.junit.Before
@@ -14,6 +15,7 @@ class ConsoleReporterTest extends GroovyTestCase {
     Finding singleFinding
     SingleCheckResults singleCheckResults
     SinglePageResults  singlePageResults
+    PerRunResults      runResults
 
     Reporter reporter
 
@@ -27,8 +29,11 @@ class ConsoleReporterTest extends GroovyTestCase {
 
         singlePageResults = new SinglePageResults()
 
+        runResults = new PerRunResults()
+        runResults.addPageResults(singlePageResults)
+
         // create empty Reporter without findings
-        reporter = new ConsoleReporter( singlePageResults )
+        reporter = new ConsoleReporter( runResults )
 
     }
 
