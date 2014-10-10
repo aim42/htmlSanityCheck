@@ -1,7 +1,7 @@
 // gradle build script for html sanity check
 // =========================================
 group = 'org.aim42'
-version = '0.2.0-SNAPSHOT'
+version = '0.3.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'groovy'
@@ -32,6 +32,7 @@ dependencies {
     //
     testCompile "org.spockframework:spock-core:1.0-groovy-2.3-SNAPSHOT"
 
+
 }
 
 buildscript {
@@ -41,7 +42,7 @@ buildscript {
 
     dependencies {
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
-                  "org.codenarc:CodeNarc:0.17"
+                  "org.codenarc:CodeNarc:0.17"             
     }
 
 }
@@ -51,6 +52,7 @@ codenarc {
 }
 // don't let codenarc violations break the build...
 [codenarcMain, codenarcTest]*.ignoreFailures = true
+
 
 uploadArchives.dependsOn 'clean'
 
