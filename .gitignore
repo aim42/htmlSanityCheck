@@ -8,3 +8,8 @@ gradle-app.setting
 .gradle
 htmlsanitycheck-doc.sublime-project
 htmlsanitycheck-doc.sublime-workspace
+gen-html/css/base-style.css
+gen-html/htc/css3-pie-1.0beta3.htc
+src/main/resources/htmlsc-style.css
+gen-html/index.html
+gen-html/css/style.css
