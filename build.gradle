@@ -6,6 +6,7 @@ version = '0.2.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven'
+apply plugin: 'codenarc'
 
 
 repositories {
@@ -40,10 +41,16 @@ buildscript {
 
     dependencies {
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
+                  "org.codenarc:CodeNarc:0.17"
     }
 
 }
 
+codenarc {
+    configFile = file('src/config/codenarc.groovy')
+}
+// don't let codenarc violations break the build...
+[codenarcMain, codenarcTest]*.ignoreFailures = true
 
 uploadArchives.dependsOn 'clean'
 
