@@ -60,7 +60,7 @@ public class HtmlReporter extends Reporter {
         Float f = runResults.checkingTookHowManyMillis() / 1000
         String duration = f.trunc(3).toString() + "sec"
 
-        writer << "<h1>Summary of all pages</h1>"
+        writer << "<h1>HTML Sanity Check Results </h1>"
 
         writer << infoBoxHeader()
 
@@ -85,6 +85,7 @@ public class HtmlReporter extends Reporter {
 
         // TODO: table of all pages-checked incl. links to details
 
+        writer << "<hr>"
 
     }
 
@@ -114,16 +115,42 @@ public class HtmlReporter extends Reporter {
     }
 
     private static String infoBoxFooter() {
-        """</tr></table></div>"""
+        """</tr></table><p>"""
     }
 
 
     @Override
     void reportPageSummary(SinglePageResults pageResult) {
 
-        writer << "<h2>Results for ${pageResult.pageFileName} </h2>"
+        writer << """<h2>Results for ${pageResult.pageFileName} </h2>"""
+
         writer << "located : " + pageResult.pageFilePath
-        writer << "page size  : " + pageResult.pageSize + " bytes"
+        writer << "page size  : " + pageResult.pageSize + " bytes<p>"
+
+        // generate the InfoBox for this page
+
+        int nrOfItemsChecked = pageResult.nrOfItemsCheckedOnPage()
+        int nrOfFindings     = pageResult.nrOfFindingsOnPage()
+
+        int percentageSuccessful =
+                SummarizerUtil.percentSuccessful(
+                        nrOfItemsChecked,
+                        nrOfFindings)
+        String issueStr = (nrOfFindings > 1) ? "issues" : "issue"
+        //String pageId   =
+
+        writer << infoBoxHeader()
+        // checks
+        writer << infoBoxColumn( "checks", nrOfItemsChecked.toString(), "checks")
+
+        // findings/issues
+        writer << infoBoxColumn( "findings", nrOfFindings.toString(), issueStr)
+        // end left table
+        writer << infoBoxSeparator()
+
+        writer << infoBoxPercentage( percentageSuccessful )
+
+        writer << infoBoxFooter()
 
     }
 
