@@ -1,6 +1,5 @@
 package org.aim42.htmlsanitycheck
 
-import aQute.bnd.maven.support.Repo
 import org.aim42.htmlsanitycheck.check.*
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults

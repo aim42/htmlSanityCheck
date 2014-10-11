@@ -1,10 +1,9 @@
 // see end-of-file for license information
 package org.aim42.htmlsanitycheck.report
 
+
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
-import org.aim42.htmlsanitycheck.collect.SinglePageResults
-
 /**
  * write the findings report to HTML
  */
@@ -47,8 +46,9 @@ public class HtmlReporter extends Reporter {
     /*
     create and open a FileWriter to write the generated HTML
      */
+
     private FileWriter initWriter(String directoryAndFileName) {
-        writer = new FileWriter( directoryAndFileName )
+        writer = new FileWriter(directoryAndFileName)
 
     }
 
@@ -57,56 +57,75 @@ public class HtmlReporter extends Reporter {
         int percentageSuccessful = SummarizerUtil.percentSuccessful(totalNrOfChecks(), totalNrOfFindings())
         String pageStr = (totalNrOfPages() > 1) ? "pages" : "page"
         String issueStr = (totalNrOfFindings() > 1) ? "issues" : "issue"
-
+        Float f = runResults.checkingTookHowManyMillis() / 1000
+        String duration = f.trunc(3).toString() + "sec"
 
         writer << "<h1>Summary of all pages</h1>"
 
-        // outer table
-        writer << """<table><tr><td><div class="summaryGroup">"""
+        writer << infoBoxHeader()
 
-        // left table with pages, checks, findings + timing
-        writer << " <table>\n<tr>"
         // pages
-        writer << """<td>\n<div class=\"infoBox\" id=\"pages\">\n
-                        <div class=\"counter\">${totalNrOfPages()}</div>\n
-                <p>$pageStr</p></div></td>"""
+        writer << infoBoxColumn( "pages", totalNrOfPages().toString(), pageStr)
 
         // checks
-        writer << """<td>\n<div class=\"infoBox\" id=\"checks\">\n
-                        <div class=\"counter\">${totalNrOfChecks()}</div>\n
-                <p>checks</p></div></td>"""
+        writer << infoBoxColumn( "checks", totalNrOfChecks().toString(), "checks")
 
         // findings/issues
-        writer << """<td>\n<div class=\"infoBox\" id=\"findings\">\n
-                        <div class=\"counter\">${totalNrOfFindings()}</div>\n
-                <p>$issueStr</p></div></td>"""
+        writer << infoBoxColumn( "findings", totalNrOfFindings().toString(), issueStr)
+
+        // timer
+        writer << infoBoxColumn( "duration", duration, "duration")
 
         // end left table
-        writer << """</tr></table></div></td>"""
+        writer << infoBoxSeparator()
 
-        writer << """ <td>
-        <div class="infoBox failures" id="successRate">
-        <div class="percent">$percentageSuccessful%</div><p>successful</p>
-        </div></td>"""
+        writer << infoBoxPercentage( percentageSuccessful )
 
-        writer << """</tr></table></div>"""
-
+        writer << infoBoxFooter()
 
         // TODO: table of all pages-checked incl. links to details
 
 
     }
 
+    private static String infoBoxHeader() {
+        // outer table
+        return """<table><tr><td><div class="summaryGroup">
+                      <table>\n<tr>"""
+    }
+
+
+    private static String infoBoxColumn(String id, String countStr, String label) {
+        return """<td>\n<div class=\"infoBox\" id=\"$id\">\n
+                        <div class=\"counter\">$countStr</div>\n
+                <p>$label</p></div></td>"""
+    }
+
+    private static String infoBoxSeparator() {
+        return """</tr></table></div></td>"""
+    }
+
+    private static String infoBoxPercentage( int percentageSuccessful ) {
+        String percentageClass = (percentageSuccessful != 100) ? "infoBox failures" : "infoBox success"
+        return """ <td>
+           <div class="$percentageClass" id="successRate">
+           <div class="percent">$percentageSuccessful%</div><p>successful</p>
+           </div></td>"""
+    }
+
+    private static String infoBoxFooter() {
+        """</tr></table></div>"""
+    }
+
+
     @Override
     void reportPageSummary(SinglePageResults pageResult) {
 
-        writer.write "<h2>Results for ${pageResult.pageFileName} </h2>"
-        writer << "filename   : " + pageResult.pageFileName
+        writer << "<h2>Results for ${pageResult.pageFileName} </h2>"
         writer << "located : " + pageResult.pageFilePath
         writer << "page size  : " + pageResult.pageSize + " bytes"
 
     }
-
 
 
     @Override
@@ -116,11 +135,10 @@ public class HtmlReporter extends Reporter {
     }
 
 
-
     @Override
     protected void reportSingleCheckSummary(SingleCheckResults singleCheckResults) {
         singleCheckResults.each { result ->
-            writer << "<h3>Results for ${result.whatIsChecked}</h3>"
+            writer << "<h3>${result.whatIsChecked}</h3>"
             writer << "${result.nrOfItemsChecked} $result.sourceItemName checked,"
             writer << "${result.nrOfProblems()} $result.targetItemName found.\n"
 
@@ -149,51 +167,16 @@ public class HtmlReporter extends Reporter {
 
         if (realDir.isDirectory() && realDir.canWrite()) {
             realPath = realPath + fileName
-        }
-        else realPath = System.getProperty("user.dir") + File.separator + fileName
+        } else realPath = System.getProperty("user.dir") + File.separator + fileName
 
         return realPath
-    }
-
-    void writeSummary(String what, int howMany) {
-        writer << """<td><div class="infoBox">
-                       <div class="counter">$howMany</div>
-                       <p>$what</p>
-                   </div></td>"""
-    }
-
-    void writeSummaryPostfix(int percentage) {
-        writer << """</tr>
-                        </table>
-                    </div>
-                </td>
-                <td>
-                    <div class="infoBox success" id="successRate">
-                        <div class="percent">$percentage%
-                        </div>
-                        <p>successful</p>
-                    </div>
-                </td>
-            </tr>
-        </table>"""
-    }
-
-    private void writeSummaryPrefix() {
-        writer << """<h1>Test Summary</h1>
-    <div id="summary">
-        <table>
-            <tr>
-                <td>
-                    <div class="summaryGroup">
-                        <table>
-                            <tr>"""
     }
 
 
     @Override
     void closeReport() {
         writer << """<div id="footer"><p>Generated by
-               <a href="http://www.aim42.org">htmlSanityChecker</a> at ${}</p>
+               <a href="http://www.aim42.org">htmlSanityChecker</a> at ${createdOnDate}</p>
                  </div>"""
         writer << """</div></body></html>"""
         writer.flush()
@@ -201,6 +184,7 @@ public class HtmlReporter extends Reporter {
         println "wrote report to ${resultsOutputDir}${File.separatorChar}$REPORT_FILENAME"
     }
 }
+import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
 /*======================================================================
 
