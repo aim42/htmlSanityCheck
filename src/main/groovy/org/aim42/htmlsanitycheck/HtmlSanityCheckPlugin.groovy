@@ -14,7 +14,7 @@ class HtmlSanityCheckPlugin implements Plugin<Project> {
 
         project.task( HTML_SANITY_CHECK,
                 type: HtmlSanityCheckTask,
-                description: "performs various semantic checks on html files",
+                description: "performs semantic checks on html files",
                 group: 'Check')
 
     }
