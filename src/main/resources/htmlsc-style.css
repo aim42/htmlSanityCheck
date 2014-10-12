@@ -128,20 +128,23 @@ table {
     /* min-width: 350px;
     */
     width: auto !important;
+
 }
 
 th {
     padding: 10px 20px 10px 20px;
     font-size: 90%;
-}
-
-
-th {
     background-color: #fffde7;
 }
+
 
 td {
     white-space: nowrap;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+
+.logo {
+    float: right;
 }

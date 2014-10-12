@@ -55,6 +55,7 @@ public class HtmlReporter extends Reporter {
     @Override
     void reportOverallSummary() {
 
+        writer << "<img class='logo' src='https://github.com/aim42/htmlSanityCheck/blob/master/htmlsanitycheck-logo.png' alt='htmlSC' align='right'/>"
         writer << "<h1>HTML Sanity Check Results </h1>"
 
         writer << overallSummaryInfoBox()
