@@ -12,3 +12,7 @@ gen-html/css/base-style.css
 gen-html/htc/css3-pie-1.0beta3.htc
 gen-html/index.html
 gen-html/css/style.css
+gen-html/with-failures/css/base-style.css
+gen-html/with-failures/htc/css3-pie-1.0beta3.htc
+gen-html/with-failures/index.html
+gen-html/with-failures/css/style.css
