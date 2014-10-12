@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory
 
 class AllChecksRunner {
 
+    private Collection<File> filesToCheck
+    
     // we process one single input file
     private File fileToCheck
 
