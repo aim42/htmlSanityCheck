@@ -3,9 +3,8 @@
 package org.aim42.htmlsanitycheck
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.*
-
-import javax.inject.Inject
 
 /**
  * Entry class for the gradle-plugin.
@@ -15,28 +14,44 @@ import javax.inject.Inject
  */
 class HtmlSanityCheckTask extends DefaultTask {
 
-    // currently we only support checking a SINGLE FILE
-    // will make this a FileCollection soon
-    @InputFile
-    File fileToCheck
+    // we support checking a SINGLE FILE
+    @Optional
+    @InputFile File oneFileToCheck
+
+    // we also support checking several named files
+    @Optional
+    @InputFiles FileCollection someFilesToCheck
+
+    @Optional
+    @InputDirectory File theDirToCheck
+
 
     // where do we store checking results
     @Optional
-    @OutputDirectory
-    File checkingResultsDir
+    @OutputDirectory File checkingResultsDir
 
     // shall we also check external resources?
     @Optional
     Boolean checkExternalLinks = false
 
 
+    // after input validation,
+    private ArrayList<File> filesToCheck
 
-    // use constructor to care for _run-always_
+    /**
+     * Sets sensible defaults for important attributes.
+     *
+     * Ensures that task is _run-always_,
+     * by setting outputs.upToDateWhen to false.
+     */
     HtmlSanityCheckTask() {
 
-        // Never consider this up to date.
+        // Never consider this task up-to-date.
         // thx https://github.com/stevesaliman/gradle-cobertura-plugin/commit/d61191f7d5f4e8e89abcd5f3839a210985526648
         outputs.upToDateWhen { false }
+
+        // give sensible default for output directory
+        checkingResultsDir = new File(project.buildDir, '/report/htmlchecks/')
     }
 
     /**
@@ -52,10 +67,12 @@ class HtmlSanityCheckTask extends DefaultTask {
         // ======================================
         // TODO: validate parameter
 
+        // TODO: adjust pathnames if running on Windows(tm)
+
         // create an AllChecksRunner...
         // ======================================
         def allChecksRunner = new AllChecksRunner(
-                fileToCheck,
+                oneFileToCheck,
                 checkingResultsDir,
                 checkExternalLinks
         )
@@ -68,10 +85,15 @@ class HtmlSanityCheckTask extends DefaultTask {
     }
 
 
+    private void validateInputFiles() {
+
+    }
+
+
     private void logBuildParameter() {
         logger.info "=" * 70
         logger.info "Parameters given to sanityCheck plugin from gradle buildfile..."
-        logger.info "File to check   : $fileToCheck"
+        logger.info "Files to check  : $someFilesToCheck"
         logger.info "Results dir     : $checkingResultsDir"
         logger.info "Check externals : $checkExternalLinks"
 
