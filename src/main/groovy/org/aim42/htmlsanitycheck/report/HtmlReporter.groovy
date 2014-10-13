@@ -232,7 +232,7 @@ public class HtmlReporter extends Reporter {
     /**
      * tries to find a writable directory. First tries dirName,
      * if that does not work takes User.dir as second choice.
-     * @param dirName : e.g. /Users/aim42/projects/htmlsc/build/check
+     * @param dirName : e.g. /Users/aim42/projects/htmlsc/build/report/htmlchecks
      * @param fileName : default "index.html"
      * @return complete path to a writable file that does not currently exist.
      */
