@@ -4,6 +4,7 @@ package org.aim42.filesystem
 
 
 class FileCollector {
+
     // (?i): ignore-case
     // htm(l): either htm or html
     // at least one character left of the dot
@@ -14,16 +15,35 @@ class FileCollector {
         (file.name ==~ HTML_FILE_EXTENSION_PATTERN)
     }
 
+
     public static Boolean isHtmlFile( File file ) {
         return isHtmlFile( file.absolutePath )
     }
 
+    /**
+     * checks if @param fileName represents a valid html file,
+     * ignoring the files' content!
+     * @param fileName
+     * @return
+     */
     public static Boolean isHtmlFile( String fileName ) {
         return (fileName ==~ HTML_FILE_EXTENSION_PATTERN)
     }
 
+    /**
+     * returns all html files in a given directory
+     * @param dir where to look for matching files
+     * @return all files with appropriate extension
+     */
+    public static Set<File> getAllHtmlFilesFromDirectory( File dir ) {
+        Set<File> files = new HashSet<File>()
 
+        dir.eachFileMatch(HTML_FILE_EXTENSION_PATTERN) { file ->
+            files.add(file)
+        }
 
+        return files
+    }
 }
 
 

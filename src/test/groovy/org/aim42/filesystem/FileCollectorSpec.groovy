@@ -1,14 +1,20 @@
 package org.aim42.filesystem
 
+import org.gradle.api.file.FileCollection
+
 // see end-of-file for license information
 import spock.lang.Specification
 import spock.lang.Unroll
 
 class FileCollectorSpec extends Specification {
+    File tempDir
+
+    def setup() {
+        tempDir = File.createTempDir()
+    }
 
 
     // we can identify html files
-    @Unroll
     def "IsHtmlFile"( String fileName, Boolean isHtml ) {
 
         expect:
@@ -32,6 +38,30 @@ class FileCollectorSpec extends Specification {
     }
 
 
+    def "we can collect html files from a given directory"( Set<String> files, int htmlFileCount ) {
+        Set<File> collectedFiles
+        File f
+
+        when:
+            // create defined files under tempDir
+            files.each { fileName ->
+            f = new File(tempDir, fileName)
+            f << "some content"
+        }
+
+            collectedFiles = FileCollector.getAllHtmlFilesFromDirectory( tempDir )
+
+        then:
+            collectedFiles.size() == htmlFileCount //find the file we just created
+
+        where:
+
+        files                | htmlFileCount
+        ["a.html"]           | 1
+        ["a.html", "b.html"] | 2
+        ["a.htm", "b.txt"]   | 1
+        ["a.htm", "b.htm", "c.txt", "d.html"] | 3
+    }
 
 }
 
