@@ -5,44 +5,63 @@ package org.aim42.htmlsanitycheck
 import org.gradle.api.file.FileCollection
 import org.gradle.api.internal.file.collections.SimpleFileCollection
 import spock.lang.Specification
-
+import spock.lang.Unroll
 
 
 class HtmlSanityCheckTaskSpec extends Specification {
 
-    private FileCollection emptyFileCollection
-
-    def setup() {
-        emptyFileCollection = new SimpleFileCollection()
-    }
-
-
-    /**
+    /*
      * giving no srcFiles and no srcDir is absurd...
      *
      */
+
+    def "configuring no files to check is absurd"(File srcDir, FileCollection srcDocs) {
+
+        when:
+        HtmlSanityCheckTask.validateInputs(srcDir, srcDocs)
+
+
+        then:
+        thrown IllegalArgumentException
+
+        where:
+
+        srcDir                                | srcDocs
+        null                                  | null
+        new File("/_non/existing/directory/") | null
+
+        new File("/_non/existing/directory/") | new SimpleFileCollection()
+
+        // existing but empty directory is absurd too...
+        File.createTempDir() | new SimpleFileCollection()
+
+        // existing directory with nonexisting files too...
+        File.createTempDir() | new SimpleFileCollection(
+                new File("non-existing", "blurb"))
+    }
+
+    // this spec is a syntactic variation of the data (table-)driven test
     def "No directory and no files make no sense"() {
-
-
         File noFile // deliberately left null...
 
         when:
-        HtmlSanityCheckTask.validateInputs( noFile, emptyFileCollection)
+        HtmlSanityCheckTask.validateInputs(noFile, new SimpleFileCollection())
 
         then:
         thrown(IllegalArgumentException)
     }
 
     def "Nonexisting directory makes no sense"() {
-        File nonExistingDir = new File( "/_non/existing/directory/")
-
+        File nonExistingDir = new File("/_non/existing/directory/")
 
         when:
-        HtmlSanityCheckTask.validateInputs( nonExistingDir, emptyFileCollection )
+        HtmlSanityCheckTask.validateInputs(nonExistingDir, new SimpleFileCollection())
 
-        then: thrown IllegalArgumentException
+        then:
+        thrown IllegalArgumentException
 
     }
+
 
 }
 

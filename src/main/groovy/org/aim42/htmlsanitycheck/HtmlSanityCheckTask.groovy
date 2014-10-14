@@ -19,16 +19,19 @@ import org.gradle.api.tasks.*
  */
 class HtmlSanityCheckTask extends DefaultTask {
 
-
     //
     // we support checking several named files
-    @Optional @InputFiles private FileCollection sourceDocuments
+    @Optional
+    @InputFiles
+    private FileCollection sourceDocuments
 
     // or all (html) files in a directory
-    @InputDirectory File sourceDir
+    @InputDirectory
+    File sourceDir
 
     // where do we store checking results
-    @Optional @OutputDirectory
+    @Optional
+    @OutputDirectory
     File checkingResultsDir
 
     // shall we also check external resources?
@@ -37,7 +40,6 @@ class HtmlSanityCheckTask extends DefaultTask {
 
     //
     private FileCollection allFilesToCheck
-
 
     /**
      * Sets sensible defaults for important attributes.
@@ -71,7 +73,6 @@ class HtmlSanityCheckTask extends DefaultTask {
         // if we have no valid input file, abort with exception
         allFilesToCheck = validateAndCollectInputFiles(sourceDir, sourceDocuments)
 
-
         // create output directory for checking results
         checkingResultsDir.mkdirs()
 
@@ -97,13 +98,11 @@ class HtmlSanityCheckTask extends DefaultTask {
      * we need at least one html file as input, maybe several
      * @param srcDirectory must exist and be non-empty (if no srcDocument is defined)
      * @param srcDocuments may be empty (if srcDirectory is defined)
-     * @return (basically a Set) of files
+     * @return ( basically a Set ) of files
      */
-    public FileCollection validateInputFiles( File srcDirectory, FileCollection srcDocuments) {
+    public FileCollection validateInputFiles(File srcDirectory, FileCollection srcDocuments) {
         // throw exception if input combination does not make sense
-        validateInputs( srcDirectory, srcDocuments)
-
-
+        validateInputs(srcDirectory, srcDocuments)
 
 
     }
@@ -114,15 +113,30 @@ class HtmlSanityCheckTask extends DefaultTask {
      * @param srcDir
      * @param srcDocs
      */
-    public static Boolean validateInputs( File srcDir, FileCollection srcDocs) {
-        // no srcDir was given and empty FileCollection
-        if ((!srcDir) && (srcDocs.empty))
-            throw new IllegalArgumentException( "both sourceDir and sourceDocs must not be empty")
+    public static Boolean validateInputs(File srcDir, FileCollection srcDocs) {
 
+        // cannot check if both input params are null
+        if ((srcDir == null) && (srcDocs == null)) {
+            throw new IllegalArgumentException("both sourceDir and sourceDocs were null")
+        }
+
+        // no srcDir was given and empty FileCollection
+        if ((!srcDir) && (srcDocs.empty)) {
+            throw new IllegalArgumentException("both sourceDir and sourceDocs must not be empty")
+        }
         // non-existing srcDir is absurd too
-        if ((!srcDir.exists()))
-            throw new IllegalArgumentException( "given sourceDir $srcDir does not exist.")
+        if ((!srcDir.exists())) {
+            throw new IllegalArgumentException("given sourceDir $srcDir does not exist.")
+        }
+
+        // if srcDir exists but is empty... no good :-(
+        if ((srcDir.exists())
+                && (srcDir.isDirectory())
+                && (srcDir.directorySize() == 0)) {
+            throw new IllegalArgumentException("given sourceDir $srcDir is empty")
+        }
     }
+
 
 
     private void logBuildParameter() {
