@@ -135,6 +135,12 @@ class HtmlSanityCheckTask extends DefaultTask {
                 && (srcDir.directorySize() == 0)) {
             throw new IllegalArgumentException("given sourceDir $srcDir is empty")
         }
+
+        // if srcDir exists but does not contain any html file... no good
+        if ((srcDir.exists())
+             ) {
+        }
+
     }
 
 

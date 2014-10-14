@@ -5,10 +5,50 @@ package org.aim42.htmlsanitycheck
 import org.gradle.api.file.FileCollection
 import org.gradle.api.internal.file.collections.SimpleFileCollection
 import spock.lang.Specification
-import spock.lang.Unroll
 
 
 class HtmlSanityCheckTaskSpec extends Specification {
+
+    private final static HTML_HEADER = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <head></head><html>"""
+
+    private File tempDir
+    private File htmlFile
+    private File nonHtmlFile
+
+
+    def "configuring a single html file is ok"() {
+
+        given:
+            tempDir = File.createTempDir()
+            htmlFile = new File( tempDir, "a.html")
+            htmlFile << HTML_HEADER
+
+        when:
+            HtmlSanityCheckTask.validateInputs(tempDir, new SimpleFileCollection( htmlFile))
+
+        then:
+            htmlFile.exists()
+            tempDir.isDirectory()
+            tempDir.directorySize() > 0
+            notThrown( Exception )
+
+    }
+
+
+    def "configuring a single non-html file is not ok"() {
+        given:
+            tempDir = File.createTempDir()
+            nonHtmlFile = new File( tempDir, "zypern.txt")
+            nonHtmlFile << "this is no html"
+
+        when:
+            HtmlSanityCheckTask.validateInputs(tempDir, new SimpleFileCollection( nonHtmlFile))
+
+        then:
+            thrown IllegalArgumentException
+
+    }
+
 
     /*
      * giving no srcFiles and no srcDir is absurd...
@@ -36,8 +76,8 @@ class HtmlSanityCheckTaskSpec extends Specification {
         File.createTempDir() | new SimpleFileCollection()
 
         // existing directory with nonexisting files too...
-        File.createTempDir() | new SimpleFileCollection(
-                new File("non-existing", "blurb"))
+        File.createTempDir() | new SimpleFileCollection( new File("non-existing", "blurb"))
+
     }
 
     // this spec is a syntactic variation of the data (table-)driven test
