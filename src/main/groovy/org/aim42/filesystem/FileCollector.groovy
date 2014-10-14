@@ -1,7 +1,10 @@
 package org.aim42.filesystem
 
+import groovy.io.FileType
+
 // see end-of-file for license information
 
+// TODO: add exclude-patterns
 
 class FileCollector {
 
@@ -17,7 +20,8 @@ class FileCollector {
 
 
     public static Boolean isHtmlFile( File file ) {
-        return isHtmlFile( file.absolutePath )
+        return (   isHtmlFile( file.absolutePath )
+                && file.isFile())
     }
 
     /**
@@ -38,8 +42,11 @@ class FileCollector {
     public static Set<File> getAllHtmlFilesFromDirectory( File dir ) {
         Set<File> files = new HashSet<File>()
 
-        dir.eachFileMatch(HTML_FILE_EXTENSION_PATTERN) { file ->
-            files.add(file)
+        dir.eachFileRecurse(FileType.FILES) { file ->
+            if (isHtmlFile( file )) {
+               // add only files, not directories
+               files.add(file)
+            }
         }
 
         return files

@@ -13,59 +13,91 @@ class FileCollectorSpec extends Specification {
         tempDir = File.createTempDir()
     }
 
-
     // we can identify html files
-    def "IsHtmlFile"( String fileName, Boolean isHtml ) {
+    def "IsHtmlFile"(String fileName, Boolean isHtml) {
 
         expect:
-        FileCollector.isHtmlFile( fileName ) == isHtml
+        FileCollector.isHtmlFile(fileName) == isHtml
 
         where:
-        fileName     | isHtml
-        "test.html"  | true
-        "test.htm"   | true
-        "test.HTML"  | true
-        "TEST.HTM"   | true
-        "test.txt"   | false
-        "html.txt"   | false
-        "/test.htm"  | true
-        "/test.txt"  | false
-        "/a/b/c.html"| true
-        ".htm"       | false
-        ".html"      | false
-        "a.html"     | true
+        fileName      | isHtml
+        "test.html"   | true
+        "test.htm"    | true
+        "test.HTML"   | true
+        "TEST.HTM"    | true
+        "test.txt"    | false
+        "html.txt"    | false
+        "/test.htm"   | true
+        "/test.txt"   | false
+        "/a/b/c.html" | true
+        ".htm"        | false
+        ".html"       | false
+        "a.html"      | true
 
     }
 
 
-    def "we can collect html files from a given directory"( Set<String> files, int htmlFileCount ) {
+    def "we can collect html files from a given directory"(Set<String> files, int htmlFileCount) {
         Set<File> collectedFiles
         File f
 
         when:
-            // create defined files under tempDir
-            files.each { fileName ->
-            f = new File(tempDir, fileName)
-            f << "some content"
+        // create defined files under tempDir
+        files.each { fileName ->
+            f = new File(tempDir, fileName) << "some content"
         }
 
-            collectedFiles = FileCollector.getAllHtmlFilesFromDirectory( tempDir )
+        collectedFiles = FileCollector.getAllHtmlFilesFromDirectory(tempDir)
 
-        then:
-            collectedFiles.size() == htmlFileCount //find the file we just created
+        then:  //find the file we just created
+        collectedFiles.size() == htmlFileCount
+
 
         where:
 
-        files                | htmlFileCount
-        ["a.html"]           | 1
-        ["a.html", "b.html"] | 2
-        ["a.htm", "b.txt"]   | 1
+        files                                 | htmlFileCount
+        ["a.html"]                            | 1
+        ["a.html", "b.html"]                  | 2
+        ["a.htm", "b.txt"]                    | 1
         ["a.htm", "b.htm", "c.txt", "d.html"] | 3
     }
 
+    def "we can collect files recursively from subdirectories"(
+            String      subDirs,
+            Set<String> files,
+            int         htmlFileCount) {
+
+        File dir
+        File file
+
+        when:
+        // create defined directories
+        dir = new File(tempDir, subDirs)
+        dir.mkdirs()
+        // in the newly created directory, create some files
+        files.each { fileName ->
+            file = new File(dir, fileName) << "some content"
+        }
+
+        // get all the html files from this directory tree
+        Set<File> collectedFiles = FileCollector.getAllHtmlFilesFromDirectory(tempDir)
+
+        then:
+        collectedFiles.size() == htmlFileCount //find the file we just created
+
+        where:
+        subDirs     |    files              | htmlFileCount
+        "/a"        | ["a.htm"]             | 1
+        "/a"        | ["a.htm", "b.htm"]    | 2
+        "/a"        | ["a.htm", "b.txt"]    | 1
+        "/a/b"      | ["a.htm"]             | 1
+        "/a/b/c"    | ["a.htm", "b.htm"]    | 2
+    }
+
+
+    def 
+
 }
-
-
 
 /*========================================================================
  Copyright 2014 Gernot Starke and aim42 contributors
