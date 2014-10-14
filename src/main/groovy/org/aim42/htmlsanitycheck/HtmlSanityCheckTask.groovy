@@ -1,9 +1,12 @@
-// see end-of-file for license information
-
 package org.aim42.htmlsanitycheck
+
+import org.aim42.filesystem.FileCollector
+
+// see end-of-file for license information
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
+import org.gradle.api.internal.file.collections.SimpleFileCollection
 import org.gradle.api.tasks.*
 
 /**
@@ -11,32 +14,30 @@ import org.gradle.api.tasks.*
  * Handles parameter-passing from gradle build scripts,
  * initializes the {link AllChecksRunner},
  * which does all the work.
+ *
+ *
  */
 class HtmlSanityCheckTask extends DefaultTask {
 
-    // we support checking a SINGLE FILE
-    @Optional
-    @InputFile File oneFileToCheck
 
-    // we also support checking several named files
-    @Optional
-    @InputFiles FileCollection someFilesToCheck
+    //
+    // we support checking several named files
+    @Optional @InputFiles private FileCollection sourceDocuments
 
-    @Optional
-    @InputDirectory File theDirToCheck
-
+    // or all (html) files in a directory
+    @InputDirectory File sourceDir
 
     // where do we store checking results
-    @Optional
-    @OutputDirectory File checkingResultsDir
+    @Optional @OutputDirectory
+    File checkingResultsDir
 
     // shall we also check external resources?
     @Optional
     Boolean checkExternalLinks = false
 
+    //
+    private FileCollection allFilesToCheck
 
-    // after input validation,
-    private ArrayList<File> filesToCheck
 
     /**
      * Sets sensible defaults for important attributes.
@@ -52,6 +53,10 @@ class HtmlSanityCheckTask extends DefaultTask {
 
         // give sensible default for output directory
         checkingResultsDir = new File(project.buildDir, '/report/htmlchecks/')
+
+        // we start with an empty (input)FileCollection
+        allFilesToCheck = new SimpleFileCollection()
+
     }
 
     /**
@@ -63,16 +68,19 @@ class HtmlSanityCheckTask extends DefaultTask {
 
         logBuildParameter()
 
-        // validate parameters
-        // ======================================
-        // TODO: validate parameter
+        // if we have no valid input file, abort with exception
+        allFilesToCheck = validateAndCollectInputFiles(sourceDir, sourceDocuments)
 
-        // TODO: adjust pathnames if running on Windows(tm)
+
+        // create output directory for checking results
+        checkingResultsDir.mkdirs()
+
+        // TODO: unclear: do we need to adjust pathnames if running on Windows(tm)??
 
         // create an AllChecksRunner...
         // ======================================
         def allChecksRunner = new AllChecksRunner(
-                oneFileToCheck,
+                allFilesToCheck,
                 checkingResultsDir,
                 checkExternalLinks
         )
@@ -84,16 +92,44 @@ class HtmlSanityCheckTask extends DefaultTask {
 
     }
 
+    /**
+     * checks plausibility of input parameters:
+     * we need at least one html file as input, maybe several
+     * @param srcDirectory must exist and be non-empty (if no srcDocument is defined)
+     * @param srcDocuments may be empty (if srcDirectory is defined)
+     * @return (basically a Set) of files
+     */
+    public FileCollection validateInputFiles( File srcDirectory, FileCollection srcDocuments) {
+        // throw exception if input combination does not make sense
+        validateInputs( srcDirectory, srcDocuments)
 
-    private void validateInputFiles() {
 
+
+
+    }
+
+    /**
+     * Examples for acceptable param combinations:
+     * 1.) "/Users/xxx/projects/build", "[a.html, b.html]"
+     * @param srcDir
+     * @param srcDocs
+     */
+    public static Boolean validateInputs( File srcDir, FileCollection srcDocs) {
+        // no srcDir was given and empty FileCollection
+        if ((!srcDir) && (srcDocs.empty))
+            throw new IllegalArgumentException( "both sourceDir and sourceDocs must not be empty")
+
+        // non-existing srcDir is absurd too
+        if ((!srcDir.exists()))
+            throw new IllegalArgumentException( "given sourceDir $srcDir does not exist.")
     }
 
 
     private void logBuildParameter() {
         logger.info "=" * 70
         logger.info "Parameters given to sanityCheck plugin from gradle buildfile..."
-        logger.info "Files to check  : $someFilesToCheck"
+        logger.info "Files to check  : $sourceDocuments"
+        logger.info "Source directory: $sourceDir"
         logger.info "Results dir     : $checkingResultsDir"
         logger.info "Check externals : $checkExternalLinks"
 
