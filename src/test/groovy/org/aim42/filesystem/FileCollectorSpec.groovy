@@ -95,7 +95,52 @@ class FileCollectorSpec extends Specification {
     }
 
 
-    def 
+    def "we can collect files from nested directory trees"(Set dirsAndFiles, int htmlFileCount) {
+
+        File dir, file
+
+        when:
+        dirsAndFiles.each { aDir, fileSet ->
+            dir = new File(tempDir, (String) aDir)
+            dir.mkdirs()
+            fileSet.each { fileName ->
+                file = new File((File)dir, (String) fileName) << "some content"
+            }
+
+        }
+        Set<File> collectedFiles = FileCollector.getAllHtmlFilesFromDirectory(tempDir)
+
+        then:
+        collectedFiles.size() == htmlFileCount //find the file we just created
+
+
+        where:
+        dirsAndFiles              | htmlFileCount
+        [["/a", ["a.htm"]]]             | 1
+        [["/a", ["a1.htm", "a2.htm"]]]  | 2
+
+        // two directories, same level
+        [["/a", ["a1.htm", "a2.htm"]],
+         ["/b", ["b1.htm", "b2.htm"]]]  | 4
+
+        // nested directories, two files each
+        [["/a", ["a1.htm", "a2.htm"]],
+         ["/a/b", ["ab1.htm", "ab2.htm"]]]  | 4
+
+        // nested directories, some files each
+        [["/a",     ["a1.htm", "a2.htm"]],
+         ["/a/b",   ["ab1.htm", "ab2.txt"]],
+         ["/a/b/c", ["abc1.htm", "ab2c.htm", "tt.txt"]]]  | 5
+
+        // nested directories, some files each
+        [["/a",       ["t1.htm"]],
+         ["/a/b",     ["ab2.htm"]],
+         ["/a/b/c",   ["abc1.html", "abc2.HTM", "abc3.HTM"]],
+         ["/a/b/d",   ["abcd1.html"]],
+         ["/a/b/c/d/e", ["abcde1.htm", "abcde2.html", "abcde3.HTM"]],
+         ["/a/b/c/d/f", ["nested.htm"]] ]  | 10
+
+    }
 
 }
 
