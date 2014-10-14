@@ -2,9 +2,13 @@ package org.aim42.filesystem
 
 // see end-of-file for license information
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class FileCollectorSpec extends Specification {
 
+
+    // we can identify html files
+    @Unroll
     def "IsHtmlFile"( String fileName, Boolean isHtml ) {
 
         expect:
@@ -21,8 +25,13 @@ class FileCollectorSpec extends Specification {
         "/test.htm"  | true
         "/test.txt"  | false
         "/a/b/c.html"| true
+        ".htm"       | false
+        ".html"      | false
+        "a.html"     | true
 
     }
+
+
 
 }
 
