@@ -3,7 +3,7 @@ package org.aim42.filesystem
 // see end-of-file for license information
 import spock.lang.Specification
 
-class FileCollectorTest extends Specification {
+class FileCollectorSpec extends Specification {
 
     def "IsHtmlFile"( String fileName, Boolean isHtml ) {
 
