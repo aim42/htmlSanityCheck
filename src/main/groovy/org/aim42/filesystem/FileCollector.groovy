@@ -42,7 +42,7 @@ class FileCollector {
     public static Set<File> getConfiguredHtmlFiles( File srcDir, FileCollection sourceDocs) {
         // first case: no document names given -> return all html files
         // in directory tree
-        if (sourceDocs.empty) {
+        if ( (sourceDocs == null) || (sourceDocs?.empty)) {
             return getAllHtmlFilesFromDirectory( srcDir )
         }
         else return getAllConfiguredHtmlFiles( srcDir, sourceDocs)

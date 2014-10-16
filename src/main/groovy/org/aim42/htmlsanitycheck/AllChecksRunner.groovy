@@ -29,13 +29,8 @@ import org.slf4j.LoggerFactory
 
 class AllChecksRunner {
 
+    // we check a collection of files:
     private Collection<File> filesToCheck
-    
-    // we process one single input file
-    private File fileToCheck
-
-    // our base directory: image-links within HTML are supposed to be relative to this
-    private String baseDirPath
 
     // where do we put our results
     private File checkingResultsDir
@@ -63,7 +58,6 @@ class AllChecksRunner {
      *
      * @param fileToCheck all available checks are run against this file
      *        from this we can deduce the baseDirPath
-     * TODO: enhance to fileSet
 
      * @param
      * @param checkingResultsDir
@@ -71,39 +65,24 @@ class AllChecksRunner {
      */
 
     public AllChecksRunner(
-            File fileToCheck,
+            Collection<File> filesToCheck,
             File checkingResultsDir,
             Boolean checkExternalResources
     ) {
         this.resultsForAllPages = new PerRunResults()
 
-        this.fileToCheck = fileToCheck
-        this.checkingResultsDir = checkingResultsDir
+        this.filesToCheck           = filesToCheck
+        this.checkingResultsDir     = checkingResultsDir
         this.checkExternalResources = checkExternalResources
-        this.baseDirPath = fileToCheck.getParent()
 
         logger.info("AlLChecksRunner created")
     }
 
-    // TODO: maybe chain constructors here...
-    public AllChecksRunner(File singleFileToCheck) {
-        this.resultsForAllPages = new PerRunResults()
 
-        this.fileToCheck = singleFileToCheck
-        this.checkingResultsDir = singleFileToCheck.parentFile
-        this.checkExternalResources = false
-
-        this.baseDirPath = fileToCheck.getParent()
-
-
-        logger.info("checking file", singleFileToCheck.canonicalPath)
-
-    }
 
     /**
      * performs all available checks
      * on pageToCheck
-     * TODO: enhance to support FileSet instead of just one file
      *
      * TODO: simplify checking... collect all checker instances in one collection,
      * then iteratively call it.performCheck() on those...
@@ -112,9 +91,12 @@ class AllChecksRunner {
 
         logger.info "entered performAllChecks"
 
-        // TODO: this works for just ONE file...
-        resultsForAllPages.addPageResults(
-                performAllChecksForOneFile(fileToCheck))
+        filesToCheck.each { file ->
+
+            resultsForAllPages.addPageResults(
+                    performAllChecksForOneFile( file ))
+        }
+
 
         // after all checks, stop the timer...
         resultsForAllPages.stopTimer()
@@ -132,6 +114,7 @@ class AllChecksRunner {
     public SinglePageResults performAllChecksForOneFile(File thisFile) {
 
         pageToCheck = parseHtml(thisFile)
+        String baseDir = thisFile.parent
 
         SinglePageResults resultsCollector =
                 new SinglePageResults(
@@ -143,10 +126,10 @@ class AllChecksRunner {
 
         // the actual checks
         resultsCollector.with {
-            addResultsForSingleCheck(missingImageFilesCheck())
+            addResultsForSingleCheck(missingImageFilesCheck( baseDir ))
             addResultsForSingleCheck(duplicateIdCheck())
             addResultsForSingleCheck(brokenCrossReferencesCheck())
-            addResultsForSingleCheck(missingLocalResourcesCheck())
+            addResultsForSingleCheck(missingLocalResourcesCheck( baseDir ))
         }
 
         return resultsCollector
@@ -181,11 +164,11 @@ class AllChecksRunner {
      * the img-src attribute looks like src="images/test.jpg" or
      * src="file://image.jpg"
      */
-    private SingleCheckResults missingImageFilesCheck() {
+    private SingleCheckResults missingImageFilesCheck(String baseDir) {
 
         missingImagesChecker = new MissingImageFilesChecker(
                 pageToCheck: pageToCheck,
-                baseDirPath: baseDirPath
+                baseDirPath: baseDir
         )
 
         return missingImagesChecker.performCheck()
@@ -218,10 +201,10 @@ class AllChecksRunner {
      * referenced local HTML files.
      */
 
-    private SingleCheckResults missingLocalResourcesCheck() {
+    private SingleCheckResults missingLocalResourcesCheck(String baseDir) {
         missingLocalResourcesChecker = new MissingLocalResourcesChecker(
                 pageToCheck: pageToCheck,
-                baseDirPath: baseDirPath
+                baseDirPath: baseDir
         )
         return missingLocalResourcesChecker.performCheck()
 

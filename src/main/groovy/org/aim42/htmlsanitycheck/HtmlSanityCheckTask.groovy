@@ -70,7 +70,7 @@ class HtmlSanityCheckTask extends DefaultTask {
         logBuildParameter()
 
         // if we have no valid input file, abort with exception
-        if (isValidConfiguration( sourceDir, sourceDocuments )) {
+        if (isValidConfiguration(sourceDir, sourceDocuments)) {
 
             allFilesToCheck = FileCollector.getConfiguredHtmlFiles(sourceDir, sourceDocuments)
 
@@ -81,27 +81,26 @@ class HtmlSanityCheckTask extends DefaultTask {
 
             // TODO: unclear: do we need to adjust pathnames if running on Windows(tm)??
 
-            logger.warn("buildfile-info", sourceDocuments.getFiles().toString())
+            logger.warn("buildfile-info", sourceDocuments?.getFiles().toString())
+            logger.warn("allFilesToCheck" + allFilesToCheck.toString(), "")
+
             // create an AllChecksRunner...
-            // ======================================
-//            def allChecksRunner = new AllChecksRunner(
-//                    allFilesToCheck,
-//                    checkingResultsDir,
-//                    checkExternalLinks
-//            )
+            def allChecksRunner = new AllChecksRunner(
+                    allFilesToCheck,
+                    checkingResultsDir,
+                    checkExternalLinks
+            )
 
             // perform the actual checks
-            // ======================================
-            //allChecksRunner.performAllChecks()
-        }
-        else
-        logger.warn( """Fatal configuration errors preventing checks:\n
+            allChecksRunner.performAllChecks()
+
+        } else
+            logger.warn("""Fatal configuration errors preventing checks:\n
               sourceDir : $sourceDir \n
               sourceDocs: $sourceDocuments\n""", "fatal error")
 
 
     }
-
 
     /**
      * checks plausibility of input parameters:
@@ -113,7 +112,7 @@ class HtmlSanityCheckTask extends DefaultTask {
 
         // cannot check if source director is null (= unspecified)
         if ((srcDir == null)) {
-            throw new MisconfigurationException( "source directory must not be null" )
+            throw new MisconfigurationException("source directory must not be null")
         }
 
         // cannot check if both input params are null
@@ -122,8 +121,9 @@ class HtmlSanityCheckTask extends DefaultTask {
         }
 
         // no srcDir was given and empty FileCollection
-        if ((!srcDir) && (srcDocs?.empty)) {
-            throw new IllegalArgumentException("both sourceDir and sourceDocs must not be empty")
+        if ((!srcDir) && (srcDocs != null)) {
+            if ((srcDocs?.empty))
+                throw new IllegalArgumentException("both sourceDir and sourceDocs must not be empty")
         }
         // non-existing srcDir is absurd too
         if ((!srcDir.exists())) {
@@ -134,13 +134,13 @@ class HtmlSanityCheckTask extends DefaultTask {
         if ((srcDir.exists())
                 && (srcDir.isDirectory())
                 && (srcDir.directorySize() == 0)) {
-            throw new IllegalArgumentException("given sourceDir "  + srcDir + " is empty")
+            throw new IllegalArgumentException("given sourceDir " + srcDir + " is empty")
         }
 
         // if srcDir exists but does not contain any html file... no good
         if ((srcDir.exists())
-              && (srcDir.isDirectory())
-              && (FileCollector.getAllHtmlFilesFromDirectory(srcDir).size() == 0)) {
+                && (srcDir.isDirectory())
+                && (FileCollector.getAllHtmlFilesFromDirectory(srcDir).size() == 0)) {
             throw new MisconfigurationException("no html file found in", srcDir)
         }
 
@@ -148,7 +148,6 @@ class HtmlSanityCheckTask extends DefaultTask {
         // the configuration seems to be valid..
         return true
     }
-
 
 
     private void logBuildParameter() {

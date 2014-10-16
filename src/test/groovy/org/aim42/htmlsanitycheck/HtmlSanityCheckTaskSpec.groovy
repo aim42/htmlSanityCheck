@@ -20,11 +20,10 @@ class HtmlSanityCheckTaskSpec extends Specification {
 
         given:
             tempDir = File.createTempDir()
-            htmlFile = new File( tempDir, "a.html")
-            htmlFile << HTML_HEADER
+            htmlFile = new File( tempDir, "a.html") << HTML_HEADER
 
         when:
-            HtmlSanityCheckTask.validateInputs(tempDir, new SimpleFileCollection( htmlFile))
+            HtmlSanityCheckTask.isValidConfiguration(tempDir, new SimpleFileCollection( htmlFile))
 
         then:
             htmlFile.exists()
@@ -38,17 +37,15 @@ class HtmlSanityCheckTaskSpec extends Specification {
     def "configuring a single non-html file is not ok"() {
         given:
             tempDir = File.createTempDir()
-            nonHtmlFile = new File( tempDir, "zypern.txt")
-            nonHtmlFile << "this is no html"
+            nonHtmlFile = new File( tempDir, "zypern.txt") << "this is no html"
 
         when:
-            HtmlSanityCheckTask.validateInputs(tempDir, new SimpleFileCollection( nonHtmlFile))
+            HtmlSanityCheckTask.isValidConfiguration(tempDir, new SimpleFileCollection( nonHtmlFile))
 
         then:
-            thrown IllegalArgumentException
+            thrown MisconfigurationException
 
     }
-
 
     /*
      * giving no srcFiles and no srcDir is absurd...
@@ -58,19 +55,19 @@ class HtmlSanityCheckTaskSpec extends Specification {
     def "configuring no files to check is absurd"(File srcDir, FileCollection srcDocs) {
 
         when:
-        HtmlSanityCheckTask.validateInputs(srcDir, srcDocs)
+        HtmlSanityCheckTask.isValidConfiguration(srcDir, srcDocs)
 
 
         then:
-        thrown IllegalArgumentException
+        thrown Exception
+
 
         where:
 
-        srcDir                                | srcDocs
-        null                                  | null
-        new File("/_non/existing/directory/") | null
-
-        new File("/_non/existing/directory/") | new SimpleFileCollection()
+        srcDir                        | srcDocs
+        null                          | null
+        new File("/_non/exis_/d_ir/") | null
+        new File("/_non/exis_/d_ir/") | new SimpleFileCollection()
 
         // existing but empty directory is absurd too...
         File.createTempDir() | new SimpleFileCollection()
@@ -82,20 +79,19 @@ class HtmlSanityCheckTaskSpec extends Specification {
 
     // this spec is a syntactic variation of the data (table-)driven test
     def "No directory and no files make no sense"() {
-        File noFile // deliberately left null...
 
         when:
-        HtmlSanityCheckTask.validateInputs(noFile, new SimpleFileCollection())
+        HtmlSanityCheckTask.isValidConfiguration(null, new SimpleFileCollection())
 
         then:
-        thrown(IllegalArgumentException)
+        thrown MisconfigurationException
     }
 
     def "Nonexisting directory makes no sense"() {
         File nonExistingDir = new File("/_non/existing/directory/")
 
         when:
-        HtmlSanityCheckTask.validateInputs(nonExistingDir, new SimpleFileCollection())
+        HtmlSanityCheckTask.isValidConfiguration(nonExistingDir, new SimpleFileCollection())
 
         then:
         thrown IllegalArgumentException
