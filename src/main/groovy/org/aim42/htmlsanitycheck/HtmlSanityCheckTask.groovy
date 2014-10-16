@@ -6,7 +6,6 @@ import org.aim42.filesystem.FileCollector
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
-import org.gradle.api.internal.file.collections.SimpleFileCollection
 import org.gradle.api.tasks.*
 
 /**
@@ -39,7 +38,7 @@ class HtmlSanityCheckTask extends DefaultTask {
     Boolean checkExternalLinks = false
 
     //
-    private FileCollection allFilesToCheck
+    private Set<File> allFilesToCheck
 
     /**
      * Sets sensible defaults for important attributes.
@@ -56,8 +55,8 @@ class HtmlSanityCheckTask extends DefaultTask {
         // give sensible default for output directory
         checkingResultsDir = new File(project.buildDir, '/report/htmlchecks/')
 
-        // we start with an empty (input)FileCollection
-        allFilesToCheck = new SimpleFileCollection()
+        // we start with an empty Set
+        allFilesToCheck = new HashSet<File>()
 
     }
 
@@ -71,49 +70,51 @@ class HtmlSanityCheckTask extends DefaultTask {
         logBuildParameter()
 
         // if we have no valid input file, abort with exception
-        allFilesToCheck = validateAndCollectInputFiles(sourceDir, sourceDocuments)
+        if (isValidConfiguration( sourceDir, sourceDocuments )) {
 
-        // create output directory for checking results
-        checkingResultsDir.mkdirs()
+            allFilesToCheck = FileCollector.getConfiguredHtmlFiles(sourceDir, sourceDocuments)
 
-        // TODO: unclear: do we need to adjust pathnames if running on Windows(tm)??
+            // create output directory for checking results
+            checkingResultsDir.mkdirs()
+            assert checkingResultsDir.isDirectory()
+            assert checkingResultsDir.canWrite()
 
-        // create an AllChecksRunner...
-        // ======================================
-        def allChecksRunner = new AllChecksRunner(
-                allFilesToCheck,
-                checkingResultsDir,
-                checkExternalLinks
-        )
+            // TODO: unclear: do we need to adjust pathnames if running on Windows(tm)??
 
-        // perform the actual checks
-        // ======================================
-        allChecksRunner.performAllChecks()
+            logger.warn("buildfile-info", sourceDocuments.getFiles().toString())
+            // create an AllChecksRunner...
+            // ======================================
+//            def allChecksRunner = new AllChecksRunner(
+//                    allFilesToCheck,
+//                    checkingResultsDir,
+//                    checkExternalLinks
+//            )
+
+            // perform the actual checks
+            // ======================================
+            //allChecksRunner.performAllChecks()
+        }
+        else
+        logger.warn( """Fatal configuration errors preventing checks:\n
+              sourceDir : $sourceDir \n
+              sourceDocs: $sourceDocuments\n""", "fatal error")
 
 
     }
+
 
     /**
      * checks plausibility of input parameters:
      * we need at least one html file as input, maybe several
-     * @param srcDirectory must exist and be non-empty (if no srcDocument is defined)
-     * @param srcDocuments may be empty (if srcDirectory is defined)
-     * @return ( basically a Set ) of files
-     */
-    public FileCollection validateInputFiles(File srcDirectory, FileCollection srcDocuments) {
-        // throw exception if input combination does not make sense
-        validateInputs(srcDirectory, srcDocuments)
-
-
-    }
-
-    /**
-     * Examples for acceptable param combinations:
-     * 1.) "/Users/xxx/projects/build", "[a.html, b.html]"
      * @param srcDir
-     * @param srcDocs
+     * @param srcDocs needs to be of type {@link FileCollection} to be Gradle-compliant
      */
-    public static Boolean validateInputs(File srcDir, FileCollection srcDocs) {
+    public static Boolean isValidConfiguration(File srcDir, FileCollection srcDocs) {
+
+        // cannot check if source director is null (= unspecified)
+        if ((srcDir == null)) {
+            throw new MisconfigurationException( "source directory must not be null" )
+        }
 
         // cannot check if both input params are null
         if ((srcDir == null) && (srcDocs == null)) {
@@ -121,26 +122,31 @@ class HtmlSanityCheckTask extends DefaultTask {
         }
 
         // no srcDir was given and empty FileCollection
-        if ((!srcDir) && (srcDocs.empty)) {
+        if ((!srcDir) && (srcDocs?.empty)) {
             throw new IllegalArgumentException("both sourceDir and sourceDocs must not be empty")
         }
         // non-existing srcDir is absurd too
         if ((!srcDir.exists())) {
-            throw new IllegalArgumentException("given sourceDir $srcDir does not exist.")
+            throw new IllegalArgumentException("given sourceDir " + srcDir + " does not exist.")
         }
 
         // if srcDir exists but is empty... no good :-(
         if ((srcDir.exists())
                 && (srcDir.isDirectory())
                 && (srcDir.directorySize() == 0)) {
-            throw new IllegalArgumentException("given sourceDir $srcDir is empty")
+            throw new IllegalArgumentException("given sourceDir "  + srcDir + " is empty")
         }
 
         // if srcDir exists but does not contain any html file... no good
         if ((srcDir.exists())
-             ) {
+              && (srcDir.isDirectory())
+              && (FileCollector.getAllHtmlFilesFromDirectory(srcDir).size() == 0)) {
+            throw new MisconfigurationException("no html file found in", srcDir)
         }
 
+        // if no exception has been thrown until now,
+        // the configuration seems to be valid..
+        return true
     }
 
 
