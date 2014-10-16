@@ -1,6 +1,7 @@
 package org.aim42.filesystem
 
 import groovy.io.FileType
+import org.gradle.api.file.FileCollection
 
 // see end-of-file for license information
 
@@ -35,7 +36,22 @@ class FileCollector {
     }
 
     /**
-     * returns all html files in a given directory
+     * returns all configured html files as Set<File>
+     *
+     */
+    public static Set<File> getConfiguredHtmlFiles( File srcDir, FileCollection sourceDocs) {
+        // first case: no document names given -> return all html files
+        // in directory tree
+        if (sourceDocs.empty) {
+            return getAllHtmlFilesFromDirectory( srcDir )
+        }
+        else return getAllConfiguredHtmlFiles( srcDir, sourceDocs)
+    }
+
+
+    /**
+     * returns all html files in a given directory.
+     * (recursively looks in subdirectories)
      * @param dir where to look for matching files
      * @return all files with appropriate extension
      */
@@ -51,6 +67,22 @@ class FileCollector {
 
         return files
     }
+
+    /**
+     * returns all configured html files, that is all files
+     * configured in @param srcDocs below the @param srcDir
+     */
+    public static Set<File> getAllConfiguredHtmlFiles( File srcDir, FileCollection srcDocs) {
+        Set<File> files = new HashSet<File>()
+
+        srcDocs.each { configuredFile ->
+            files.add( new File( srcDir, configuredFile.canonicalPath))
+        }
+
+        return files
+
+    }
+
 }
 
 
