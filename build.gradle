@@ -38,6 +38,7 @@ buildscript {
     }
 
     dependencies {
+        classpath gradleApi()
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
                   "org.codenarc:CodeNarc:0.17"
     }
