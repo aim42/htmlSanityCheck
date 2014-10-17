@@ -1,10 +1,13 @@
 package org.aim42.filesystem
 
+import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
+import org.gradle.api.file.FileTree
+import org.gradle.api.internal.file.collections.SimpleFileCollection
+import org.gradle.testfixtures.ProjectBuilder
 
 // see end-of-file for license information
 import spock.lang.Specification
-import spock.lang.Unroll
 
 class FileCollectorSpec extends Specification {
     File tempDir
@@ -63,9 +66,9 @@ class FileCollectorSpec extends Specification {
     }
 
     def "we can collect files recursively from subdirectories"(
-            String      subDirs,
+            String subDirs,
             Set<String> files,
-            int         htmlFileCount) {
+            int htmlFileCount) {
 
         File dir
         File file
@@ -86,28 +89,20 @@ class FileCollectorSpec extends Specification {
         collectedFiles.size() == htmlFileCount //find the file we just created
 
         where:
-        subDirs     |    files              | htmlFileCount
-        "/a"        | ["a.htm"]             | 1
-        "/a"        | ["a.htm", "b.htm"]    | 2
-        "/a"        | ["a.htm", "b.txt"]    | 1
-        "/a/b"      | ["a.htm"]             | 1
-        "/a/b/c"    | ["a.htm", "b.htm"]    | 2
+        subDirs  | files              | htmlFileCount
+        "/a"     | ["a.htm"]          | 1
+        "/a"     | ["a.htm", "b.htm"] | 2
+        "/a"     | ["a.htm", "b.txt"] | 1
+        "/a/b"   | ["a.htm"]          | 1
+        "/a/b/c" | ["a.htm", "b.htm"] | 2
     }
 
 
-    def "we can collect files from nested directory trees"(Set dirsAndFiles, int htmlFileCount) {
+    def "we can collect all files from nested directory trees"(Set dirsAndFiles, int htmlFileCount) {
 
-        File dir, file
 
         when:
-        dirsAndFiles.each { aDir, fileSet ->
-            dir = new File(tempDir, (String) aDir)
-            dir.mkdirs()
-            fileSet.each { fileName ->
-                file = new File((File)dir, (String) fileName) << "some content"
-            }
-
-        }
+        createDirsAndFiles(dirsAndFiles)
         Set<File> collectedFiles = FileCollector.getAllHtmlFilesFromDirectory(tempDir)
 
         then:
@@ -115,33 +110,103 @@ class FileCollectorSpec extends Specification {
 
 
         where:
-        dirsAndFiles              | htmlFileCount
-        [["/a", ["a.htm"]]]             | 1
-        [["/a", ["a1.htm", "a2.htm"]]]  | 2
+        dirsAndFiles                   | htmlFileCount
+        [["/a", ["a.htm"]]]            | 1
+        [["/a", ["a1.htm", "a2.htm"]]] | 2
 
         // two directories, same level
         [["/a", ["a1.htm", "a2.htm"]],
-         ["/b", ["b1.htm", "b2.htm"]]]  | 4
+         ["/b", ["b1.htm", "b2.htm"]]] | 4
 
         // nested directories, two files each
         [["/a", ["a1.htm", "a2.htm"]],
-         ["/a/b", ["ab1.htm", "ab2.htm"]]]  | 4
+         ["/a/b", ["ab1.htm", "ab2.htm"]]] | 4
 
         // nested directories, some files each
-        [["/a",     ["a1.htm", "a2.htm"]],
-         ["/a/b",   ["ab1.htm", "ab2.txt"]],
-         ["/a/b/c", ["abc1.htm", "ab2c.htm", "tt.txt"]]]  | 5
+        [["/a", ["a1.htm", "a2.htm"]],
+         ["/a/b", ["ab1.htm", "ab2.txt"]],
+         ["/a/b/c", ["abc1.htm", "ab2c.htm", "tt.txt"]]] | 5
 
         // nested directories, some files each
-        [["/a",       ["t1.htm"]],
-         ["/a/b",     ["ab2.htm"]],
-         ["/a/b/c",   ["abc1.html", "abc2.HTM", "abc3.HTM"]],
-         ["/a/b/d",   ["abcd1.html"]],
+        [["/a", ["t1.htm"]],
+         ["/a/b", ["ab2.htm"]],
+         ["/a/b/c", ["abc1.html", "abc2.HTM", "abc3.HTM"]],
+         ["/a/b/d", ["abcd1.html"]],
          ["/a/b/c/d/e", ["abcde1.htm", "abcde2.html", "abcde3.HTM"]],
-         ["/a/b/c/d/f", ["nested.htm"]] ]  | 10
+         ["/a/b/c/d/f", ["nested.htm"]]] | 10
 
     }
 
+    def "if we configure just a directory all contained html files are taken"(
+            Set dirsAndFiles,
+            int htmlFileCount) {
+
+        FileCollection emptyFileCollection
+
+        setup:
+        emptyFileCollection = new SimpleFileCollection()
+
+
+        when:
+        createDirsAndFiles(dirsAndFiles)
+
+        // "mock" a configuration
+        Set<File> collectedFiles =
+                FileCollector.getConfiguredHtmlFiles(tempDir, emptyFileCollection)
+
+        then:
+        collectedFiles.size() == htmlFileCount //find the file we just created
+
+
+        where:
+        dirsAndFiles                   | htmlFileCount
+        [["/a", ["a.htm"]]]            | 1
+        [["/a", ["a1.htm", "a2.htm"]]] | 2
+
+        // nested directories, some files each
+        [["/a", ["t1.htm", "t2.txt", "html.pdf", "h2o.doc"]],
+         ["/a/b", ["ab2.htm", "t3.txt"]],
+         ["/a/b/c", ["abc1.html", "t4.txt", "abc2.HTM", "abc3.HTM"]],
+         ["/a/b/d", ["abcd1.html", "t5.adoc"]],
+         ["/a/b/c/d/e", ["abcde1.htm", "abcde2.html", "abcde3.HTM"]],
+         ["/a/b/c/d/f", ["nested.htm"]]] | 10
+
+    }
+
+    def "we can configure selected files in a FileCollection"() {
+
+        setup:
+        def project = ProjectBuilder.builder().build()
+        def definedFiles =project.files ( tempDir, new File("a.html"))
+
+
+        when:
+        println "these are the defined files"
+
+        println definedFiles.files
+
+
+
+        then: true
+    }
+
+    /*
+    helper method to create temporary directories and files within those
+    Expects @param dirsAndFiles to look like
+    [["/a", ["a.htm"]]]
+     */
+
+    private void createDirsAndFiles(Set dirsAndFiles) {
+        File dir, file
+        dirsAndFiles.each { aDir, fileSet ->
+            dir = new File(tempDir, (String) aDir)
+            dir.mkdirs()
+            fileSet.each { fileName ->
+                file = new File((File) dir, (String) fileName) << "some content"
+            }
+
+        }
+    }
 }
 
 /*========================================================================
