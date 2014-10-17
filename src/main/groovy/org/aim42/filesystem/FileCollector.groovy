@@ -12,7 +12,7 @@ class FileCollector {
     // (?i): ignore-case
     // htm(l): either htm or html
     // at least one character left of the dot
-    public  final static def HTML_FILE_EXTENSION_PATTERN = ~/(?i).+\.htm(l)?$/
+    public final static def HTML_FILE_EXTENSION_PATTERN = ~/(?i).+\.htm(l)?$/
 
     public final static Closure<Boolean> INCLUDE_HTML_FILES = { File file ->
         // allow only html or htm files
@@ -20,8 +20,8 @@ class FileCollector {
     }
 
 
-    public static Boolean isHtmlFile( File file ) {
-        return (   isHtmlFile( file.absolutePath )
+    public static Boolean isHtmlFile(File file) {
+        return (isHtmlFile(file.absolutePath)
                 && file.isFile())
     }
 
@@ -31,7 +31,7 @@ class FileCollector {
      * @param fileName
      * @return
      */
-    public static Boolean isHtmlFile( String fileName ) {
+    public static Boolean isHtmlFile(String fileName) {
         return (fileName ==~ HTML_FILE_EXTENSION_PATTERN)
     }
 
@@ -39,15 +39,15 @@ class FileCollector {
      * returns all configured html files as Set<File>
      *
      */
-    public static Set<File> getConfiguredHtmlFiles( File srcDir, FileCollection sourceDocs) {
+    public static Set<File> getConfiguredHtmlFiles(
+            File srcDir,
+            Set<String> sourceDocs) {
         // first case: no document names given -> return all html files
         // in directory tree
-        if ( (sourceDocs == null) || (sourceDocs?.empty)) {
-            return getAllHtmlFilesFromDirectory( srcDir )
-        }
-        else return getAllConfiguredHtmlFiles( srcDir, sourceDocs)
+        if ((sourceDocs == null) || (sourceDocs?.empty)) {
+            return getAllHtmlFilesFromDirectory(srcDir)
+        } else return getAllConfiguredHtmlFiles(srcDir, sourceDocs)
     }
-
 
     /**
      * returns all html files in a given directory.
@@ -55,13 +55,13 @@ class FileCollector {
      * @param dir where to look for matching files
      * @return all files with appropriate extension
      */
-    public static Set<File> getAllHtmlFilesFromDirectory( File dir ) {
+    public static Set<File> getAllHtmlFilesFromDirectory(File dir) {
         Set<File> files = new HashSet<File>()
 
         dir.eachFileRecurse(FileType.FILES) { file ->
-            if (isHtmlFile( file )) {
-               // add only files, not directories
-               files.add(file)
+            if (isHtmlFile(file)) {
+                // add only files, not directories
+                files.add(file)
             }
         }
 
@@ -69,14 +69,17 @@ class FileCollector {
     }
 
     /**
-     * returns all configured html files, that is all files
-     * configured in @param srcDocs below the @param srcDir
+     * returns all configured html files from @param srcDocs
+     * which really exist below @param srcDocs
      */
-    public static Set<File> getAllConfiguredHtmlFiles( File srcDir, FileCollection srcDocs) {
+    public static Set<File> getAllConfiguredHtmlFiles(File srcDir, Set<String> srcDocs) {
         Set<File> files = new HashSet<File>()
 
-        srcDocs.each { configuredFile ->
-            files.add( new File( srcDir, configuredFile.canonicalPath))
+        srcDocs.each { configuredFileName ->
+            File file = new File( srcDir, configuredFileName)
+            if (file.exists()) {
+                files.add( file )
+            }
         }
 
         return files
@@ -84,7 +87,6 @@ class FileCollector {
     }
 
 }
-
 
 /*========================================================================
  Copyright 2014 Gernot Starke and aim42 contributors

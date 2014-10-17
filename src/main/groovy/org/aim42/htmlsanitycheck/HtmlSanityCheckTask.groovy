@@ -21,8 +21,7 @@ class HtmlSanityCheckTask extends DefaultTask {
     //
     // we support checking several named files
     @Optional
-    @InputFiles
-    private FileCollection sourceDocuments
+    @Input Set<String> sourceDocuments
 
     // or all (html) files in a directory
     @InputDirectory
@@ -81,7 +80,7 @@ class HtmlSanityCheckTask extends DefaultTask {
 
             // TODO: unclear: do we need to adjust pathnames if running on Windows(tm)??
 
-            logger.warn("buildfile-info", sourceDocuments?.getFiles().toString())
+            logger.warn("buildfile-info", sourceDocuments?.toString())
             logger.warn("allFilesToCheck" + allFilesToCheck.toString(), "")
 
             // create an AllChecksRunner...
@@ -108,7 +107,7 @@ class HtmlSanityCheckTask extends DefaultTask {
      * @param srcDir
      * @param srcDocs needs to be of type {@link FileCollection} to be Gradle-compliant
      */
-    public static Boolean isValidConfiguration(File srcDir, FileCollection srcDocs) {
+    public static Boolean isValidConfiguration(File srcDir, Set<String> srcDocs) {
 
         // cannot check if source director is null (= unspecified)
         if ((srcDir == null)) {
@@ -144,7 +143,8 @@ class HtmlSanityCheckTask extends DefaultTask {
             throw new MisconfigurationException("no html file found in", srcDir)
         }
 
-        // if no exception has been thrown until now,
+
+       // if no exception has been thrown until now,
         // the configuration seems to be valid..
         return true
     }

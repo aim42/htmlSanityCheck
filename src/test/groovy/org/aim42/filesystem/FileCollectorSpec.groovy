@@ -98,7 +98,9 @@ class FileCollectorSpec extends Specification {
     }
 
 
-    def "we can collect all files from nested directory trees"(Set dirsAndFiles, int htmlFileCount) {
+    def "we can collect all files from nested directory trees"(
+            Set dirsAndFiles,
+            int htmlFileCount) {
 
 
         when:
@@ -141,10 +143,10 @@ class FileCollectorSpec extends Specification {
             Set dirsAndFiles,
             int htmlFileCount) {
 
-        FileCollection emptyFileCollection
+        Set<String> emptyFileCollection
 
         setup:
-        emptyFileCollection = new SimpleFileCollection()
+        emptyFileCollection = new HashSet<String>()
 
 
         when:
@@ -173,21 +175,33 @@ class FileCollectorSpec extends Specification {
 
     }
 
-    def "we can configure selected files in a FileCollection"() {
+    def "we can configure selected files in a FileCollection"(
+            Set dirsAndFiles,
+            int htmlFileCount ) {
 
         setup:
         def project = ProjectBuilder.builder().build()
-        def definedFiles =project.files ( tempDir, new File("a.html"))
 
 
         when:
-        println "these are the defined files"
+        createDirsAndFiles(dirsAndFiles)
 
-        println definedFiles.files
+        // we configure just ONE file
+        Set<String> definedFiles = ["a1.html"]
 
 
+        // "mock" a configuration
+        Set<File> collectedFiles =
+                FileCollector.getConfiguredHtmlFiles(tempDir, definedFiles )
 
-        then: true
+
+        then:
+        collectedFiles.size() == 1
+
+        where:
+        dirsAndFiles                   | htmlFileCount
+        [["/a", ["a1.htm", "a2.htm"]]] | 2
+
     }
 
     /*
