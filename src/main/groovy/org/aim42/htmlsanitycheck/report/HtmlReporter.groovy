@@ -221,7 +221,7 @@ public class HtmlReporter extends Reporter {
     protected void reportSingleCheckSummary(SingleCheckResults singleCheckResults) {
         singleCheckResults.each { result ->
             writer << "<h3>${result.whatIsChecked}</h3>"
-            writer << "${result.nrOfItemsChecked} $result.sourceItemName checked,"
+            writer << "${result.nrOfItemsChecked} $result.sourceItemName checked, "
             writer << "${result.nrOfProblems()} $result.targetItemName found.\n"
 
         }
