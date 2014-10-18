@@ -21,6 +21,20 @@ class SummarizerUtil {
             return 100 - (100 * totalNrOfFindings) / totalChecks
         }
     }
+
+    /**
+     * rounds one down to at most 3 digits with two decimalplaces,
+     * e.g. from
+     * 33450 to 33.45, from 1_234_566 to 1.23
+     */
+    public static float threeDigitTwoDecimalPlaces( int bigNumber ) {
+
+
+        if (bigNumber >= 1_000_000)
+            return Math.round( bigNumber.div(10_000)).div(100)
+        else return Math.round( bigNumber.div(10)).div(100)
+
+    }
 }
 
 
