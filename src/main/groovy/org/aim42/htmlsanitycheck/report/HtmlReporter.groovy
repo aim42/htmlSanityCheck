@@ -160,10 +160,9 @@ public class HtmlReporter extends Reporter {
 
     private static String infoBoxPercentage( int percentageSuccessful ) {
         String percentageClass = (percentageSuccessful != 100) ? "infoBox failures" : "infoBox success"
-        return """ <td>
-           <div class="$percentageClass" id="successRate">
-           <div class="percent">$percentageSuccessful%</div><p>successful</p>
-           </div></td>"""
+        return """ <td><div class="$percentageClass" id="successRate">
+    <div class="percent">$percentageSuccessful%</div><p>successful</p>
+    </div></td>"""
     }
 
     private static String infoBoxFooter() {
@@ -227,7 +226,17 @@ public class HtmlReporter extends Reporter {
     @Override
     protected void reportSingleCheckSummary(SingleCheckResults singleCheckResults) {
         singleCheckResults.each { result ->
-            writer << "<h3>${result.whatIsChecked}</h3>"
+            // colorize failed checks with failure-class
+            String failureClassBegin = ""
+            String failureClassEnd   = ""
+
+            if (result.nrOfProblems() > 0) {
+                failureClassBegin = "<div class=\"failures\">"
+                failureClassEnd   = "</div>"
+            }
+
+            writer << "${failureClassBegin}<h3>${result.whatIsChecked}</h3>${failureClassEnd}"
+
             writer << "${result.nrOfItemsChecked} $result.sourceItemName checked, "
             writer << "${result.nrOfProblems()} $result.targetItemName found.\n"
 
