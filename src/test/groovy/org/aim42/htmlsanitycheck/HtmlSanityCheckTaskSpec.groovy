@@ -23,7 +23,7 @@ class HtmlSanityCheckTaskSpec extends Specification {
             htmlFile = new File( tempDir, "a.html") << HTML_HEADER
 
         when:
-            HtmlSanityCheckTask.isValidConfiguration(tempDir, ["a.html"])
+            HtmlSanityCheckTask.isValidConfiguration(tempDir, new HashSet(["a.html"]))
 
         then:
             htmlFile.exists()
@@ -40,7 +40,7 @@ class HtmlSanityCheckTaskSpec extends Specification {
             nonHtmlFile = new File( tempDir, "zypern.txt") << "this is no html"
 
         when:
-            HtmlSanityCheckTask.isValidConfiguration(tempDir, ["zypern.txt"])
+            HtmlSanityCheckTask.isValidConfiguration(tempDir, new HashSet(["zypern.txt"]))
 
         then:
             thrown MisconfigurationException
@@ -67,7 +67,7 @@ class HtmlSanityCheckTaskSpec extends Specification {
         srcDir                        | srcDocs
         null                          | null
         new File("/_non/exis_/d_ir/") | null
-        new File("/_non/exis_/d_ir/") | []
+        new File("/_non/exis_/d_ir/") | new HashSet<String>()
 
         // existing but empty directory is absurd too...
         File.createTempDir() | []
@@ -81,7 +81,7 @@ class HtmlSanityCheckTaskSpec extends Specification {
     def "No directory and no files make no sense"() {
 
         when:
-        HtmlSanityCheckTask.isValidConfiguration(null, [])
+        HtmlSanityCheckTask.isValidConfiguration(null, new HashSet<String>() )
 
         then:
         thrown MisconfigurationException
@@ -91,7 +91,7 @@ class HtmlSanityCheckTaskSpec extends Specification {
         File nonExistingDir = new File("/_non/existing/directory/")
 
         when:
-        HtmlSanityCheckTask.isValidConfiguration(nonExistingDir, [])
+        HtmlSanityCheckTask.isValidConfiguration(nonExistingDir, new HashSet<String>())
 
         then:
         thrown IllegalArgumentException
