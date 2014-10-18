@@ -16,5 +16,5 @@ class CreateLinkUtil {
 
         return stringWithNonWordChars.replaceAll( regex, "X")
     }
-    
+
 }

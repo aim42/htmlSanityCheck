@@ -127,8 +127,11 @@ public class HtmlReporter extends Reporter {
         int percentageSuccessful =
                 SummarizerUtil.percentSuccessful(spr.nrOfItemsCheckedOnPage(), spr.nrOfFindingsOnPage())
 
+        String pageHref =
+                CreateLinkUtil.convertToLink( spr.pageFileName )
+
         return """<tr><td class="$classStr">
-                  <a href=\" \">${spr.pageFileName}</a></td>
+                  <a href=\"#${pageHref}\">${spr.pageFileName}</a></td>
                   <td class="number">${spr.nrOfItemsCheckedOnPage()}</td>
                   <td class="number">${spr.nrOfFindingsOnPage()}</td>
                   <td class="number $classStr">$percentageSuccessful%</td>
@@ -171,10 +174,13 @@ public class HtmlReporter extends Reporter {
     @Override
     void reportPageSummary(SinglePageResults pageResult) {
 
-        writer << """<h1>Results for ${pageResult.pageFileName} </h1>"""
+        String pageID =
+                CreateLinkUtil.convertToLink( pageResult.pageFileName)
 
-        writer << "located : " + pageResult.pageFilePath
-        writer << "page size  : " + pageResult.pageSize + " bytes<p>"
+        writer << """<h1 id=\"${pageID}\">Results for ${pageResult.pageFileName} </h1>"""
+
+        writer << "location : ${pageResult.pageFilePath} <p>"
+        writer << "    size : ${pageResult.pageSize} bytes<p>"
 
         // generate the InfoBox for this page
 
