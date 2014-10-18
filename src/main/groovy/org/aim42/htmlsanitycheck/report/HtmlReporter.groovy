@@ -180,7 +180,6 @@ public class HtmlReporter extends Reporter {
         writer << """<h1 id=\"${pageID}\">Results for ${pageResult.pageFileName} </h1>"""
 
         writer << "location : ${pageResult.pageFilePath} <p>"
-        writer << "    size : ${pageResult.pageSize} bytes<p>"
 
         // generate the InfoBox for this page
 
@@ -192,9 +191,12 @@ public class HtmlReporter extends Reporter {
                         nrOfItemsChecked,
                         nrOfFindings)
         String issueStr = (nrOfFindings > 1) ? "issues" : "issue"
-        //String pageId   =
 
         writer << infoBoxHeader()
+
+        // size
+        writer << infoBoxColumn( "size", pageResult.pageSize + "bytes", "size" )
+
         // checks
         writer << infoBoxColumn( "checks", nrOfItemsChecked.toString(), "checks")
 
