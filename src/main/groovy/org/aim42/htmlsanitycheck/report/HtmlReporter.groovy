@@ -67,7 +67,6 @@ public class HtmlReporter extends Reporter {
 
         // TODO: table of all pages-checked incl. links to details
 
-        writer << BACK_TO_TOP_LINK
         writer << "<hr>"
 
     }
@@ -176,8 +175,7 @@ public class HtmlReporter extends Reporter {
 
     private static String infoBoxFooter() {
         return """
-</tr></table><p>
-$BACK_TO_TOP_LINK
+</tr></table>
 """
     }
 
