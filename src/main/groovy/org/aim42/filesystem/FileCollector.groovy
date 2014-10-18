@@ -1,7 +1,6 @@
 package org.aim42.filesystem
 
 import groovy.io.FileType
-import org.gradle.api.file.FileCollection
 
 // see end-of-file for license information
 

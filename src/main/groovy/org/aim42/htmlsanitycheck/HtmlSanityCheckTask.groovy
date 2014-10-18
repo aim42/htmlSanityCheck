@@ -119,7 +119,7 @@ class HtmlSanityCheckTask extends DefaultTask {
             throw new IllegalArgumentException("both sourceDir and sourceDocs were null")
         }
 
-        // no srcDir was given and empty FileCollection
+        // no srcDir was given and empty SrcDocs
         if ((!srcDir) && (srcDocs != null)) {
             if ((srcDocs?.empty))
                 throw new IllegalArgumentException("both sourceDir and sourceDocs must not be empty")
