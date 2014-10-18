@@ -195,7 +195,12 @@ public class HtmlReporter extends Reporter {
         writer << infoBoxHeader()
 
         // size
-        writer << infoBoxColumn( "size", pageResult.pageSize + "bytes", "size" )
+        int pageSize = pageResult.pageSize
+        String sizeUnit = (pageSize >= 1_000_000) ? "MByte" : "kByte"
+
+        String pageSizeStr = SummarizerUtil.threeDigitTwoDecimalPlaces( pageSize )
+
+        writer << infoBoxColumn( "size", pageSizeStr, sizeUnit )
 
         // checks
         writer << infoBoxColumn( "checks", nrOfItemsChecked.toString(), "checks")
