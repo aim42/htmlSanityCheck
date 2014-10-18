@@ -25,7 +25,7 @@ import spock.lang.Specification
  *
  *********************************************************************** */
 
-class SummaryCalculationSpec extends Specification {
+class SummarizerUtilSpec extends Specification {
 
     def "CalculateSimpleSummarySpec"() {
 
