@@ -23,10 +23,11 @@ class AllChecksRunnerTest extends GroovyTestCase {
         String HTML = """$HTML_HEAD<body><title>hsc</title></body></html>"""
 
         // create file with proper html content
-        tmpFile = File.createTempFile("testfile", ".html")
-        tmpFile.write(HTML)
+        tmpFile = File.createTempFile("testfile", ".html") <<HTML
 
-        allChecksRunner = new AllChecksRunner(tmpFile)
+        // wrap tmpFile in Collection to comply to AllChecksRunner API
+        allChecksRunner = new AllChecksRunner( new HashSet<File>( [tmpFile] ) )
+
         SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile(tmpFile)
 
         // expectation:
@@ -57,10 +58,12 @@ class AllChecksRunnerTest extends GroovyTestCase {
                 </html>"""
 
         // create file
-        tmpFile = File.createTempFile("testfile", ".html")
-        tmpFile.write(HTML)
+        tmpFile = File.createTempFile("testfile", ".html") << HTML
 
-        allChecksRunner = new AllChecksRunner( tmpFile )
+        allChecksRunner = new AllChecksRunner(
+                new HashSet<File>( [tmpFile] ),
+                File.createTempDir( "testdir", ""),
+                false)
 
         SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile( tmpFile )
 

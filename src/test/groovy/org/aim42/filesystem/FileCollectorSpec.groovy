@@ -175,32 +175,30 @@ class FileCollectorSpec extends Specification {
 
     }
 
-    def "we can configure selected files in a FileCollection"(
-            Set dirsAndFiles,
-            int htmlFileCount ) {
-
-        setup:
-        def project = ProjectBuilder.builder().build()
+    def "we can configure selected files"(
+            Set otherDirsAndFiles,
+            Set<String> configuredFiles ) {
 
 
         when:
-        createDirsAndFiles(dirsAndFiles)
+        createDirsAndFiles( otherDirsAndFiles )
 
-        // we configure just ONE file
-        Set<String> definedFiles = ["a1.html"]
+
+        createDirsAndFiles( new HashSet([["", configuredFiles]]))
 
 
         // "mock" a configuration
         Set<File> collectedFiles =
-                FileCollector.getConfiguredHtmlFiles(tempDir, definedFiles )
-
+                FileCollector.getConfiguredHtmlFiles(tempDir, configuredFiles )
 
         then:
         collectedFiles.size() == 1
 
         where:
-        dirsAndFiles                   | htmlFileCount
-        [["/a", ["a1.htm", "a2.htm"]]] | 2
+        otherDirsAndFiles              | configuredFiles
+
+        // two unused files o1 and o2, one real oneFile.html
+        [["", ["o1.htm", "o2.htm"]]]   | new HashSet(["oneFile.html"])
 
     }
 

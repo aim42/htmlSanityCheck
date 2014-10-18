@@ -56,12 +56,9 @@ class AllChecksRunner {
     /**
      * runs all available checks on the file
      *
-     * @param fileToCheck all available checks are run against this file
-     *        from this we can deduce the baseDirPath
-
-     * @param
-     * @param checkingResultsDir
-
+     * @param filesToCheck all available checks are run against these files
+     * @param checkingResultsDir where to put resulting test-report
+     * @param checkExternalResources if enabled, we also check remote links
      */
 
     public AllChecksRunner(
@@ -71,14 +68,24 @@ class AllChecksRunner {
     ) {
         this.resultsForAllPages = new PerRunResults()
 
-        this.filesToCheck           = filesToCheck
-        this.checkingResultsDir     = checkingResultsDir
+        this.filesToCheck = filesToCheck
+        this.checkingResultsDir = checkingResultsDir
         this.checkExternalResources = checkExternalResources
 
         logger.info("AlLChecksRunner created")
     }
 
-
+    /**
+     * for testing purposes we provide a convenience constructor
+     * with just the files to check... and supply a temporary directory
+     *
+     * @param filesToCheck
+     */
+    public AllChecksRunner(Collection<File> filesToCheck) {
+        this( filesToCheck,
+              File.createTempDir("temporary", "diretory"),
+              false)
+    }
 
     /**
      * performs all available checks
@@ -94,16 +101,15 @@ class AllChecksRunner {
         filesToCheck.each { file ->
 
             resultsForAllPages.addPageResults(
-                    performAllChecksForOneFile( file ))
+                    performAllChecksForOneFile(file))
         }
-
 
         // after all checks, stop the timer...
         resultsForAllPages.stopTimer()
 
         // and then report the results
         reportCheckingResultsOnConsole()
-        reportCheckingResultsAsHTML( checkingResultsDir.absolutePath )
+        reportCheckingResultsAsHTML(checkingResultsDir.absolutePath)
     }
 
     /**
@@ -126,10 +132,10 @@ class AllChecksRunner {
 
         // the actual checks
         resultsCollector.with {
-            addResultsForSingleCheck(missingImageFilesCheck( baseDir ))
+            addResultsForSingleCheck(missingImageFilesCheck(baseDir))
             addResultsForSingleCheck(duplicateIdCheck())
             addResultsForSingleCheck(brokenCrossReferencesCheck())
-            addResultsForSingleCheck(missingLocalResourcesCheck( baseDir ))
+            addResultsForSingleCheck(missingLocalResourcesCheck(baseDir))
         }
 
         return resultsCollector
@@ -140,7 +146,7 @@ class AllChecksRunner {
      * TODO:
      */
     private void reportCheckingResultsOnConsole() {
-        Reporter reporter = new ConsoleReporter( resultsForAllPages )
+        Reporter reporter = new ConsoleReporter(resultsForAllPages)
 
         reporter.reportFindings()
 
@@ -149,11 +155,11 @@ class AllChecksRunner {
     /**
      * report results in HTML file(s)
      */
-    private void reportCheckingResultsAsHTML( String resultsDir ) {
+    private void reportCheckingResultsAsHTML(String resultsDir) {
 
         // TODO: handle file i/o issues, as creating the html output file can go wrong!!
         //
-        Reporter reporter = new HtmlReporter( resultsForAllPages, resultsDir)
+        Reporter reporter = new HtmlReporter(resultsForAllPages, resultsDir)
         reporter.reportFindings()
     }
 
