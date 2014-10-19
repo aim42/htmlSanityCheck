@@ -55,7 +55,7 @@ ruleset {
     ConfusingMethodName
     ConfusingMultipleReturns
     ConfusingTernary
-    ConsecutiveBlankLines
+    //ConsecutiveBlankLines
     ConsecutiveLiteralAppends
     ConsecutiveStringConcatenation
     ConstantAssertExpression
@@ -195,7 +195,7 @@ ruleset {
     ParameterName
     ParameterReassignment
     PrintStackTrace
-    Println
+    //Println
     PrivateFieldCouldBeFinal
     PropertyName
     PublicFinalizeMethod
@@ -275,11 +275,11 @@ ruleset {
     UnnecessaryDefInVariableDeclaration
     UnnecessaryDotClass
     UnnecessaryDoubleInstantiation
-    UnnecessaryElseStatement
+    //UnnecessaryElseStatement
     UnnecessaryFail
     UnnecessaryFinalOnPrivateMethod
     UnnecessaryFloatInstantiation
-    UnnecessaryGString
+    //UnnecessaryGString
     UnnecessaryGetter
     UnnecessaryGroovyImport
     UnnecessaryIfStatement
@@ -294,10 +294,10 @@ ruleset {
     UnnecessaryOverridingMethod
     UnnecessaryPackageReference
     UnnecessaryParenthesesForMethodCallWithClosure
-    UnnecessaryPublicModifier
-    UnnecessaryReturnKeyword
+    //UnnecessaryPublicModifier
+    //UnnecessaryReturnKeyword
     UnnecessarySelfAssignment
-    UnnecessarySemicolon
+    //UnnecessarySemicolon
     UnnecessaryStringInstantiation
     UnnecessarySubstring
     UnnecessaryTernaryExpression
