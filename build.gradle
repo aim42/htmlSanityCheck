@@ -1,7 +1,5 @@
 // gradle build script for html sanity check
 // =========================================
-group = 'org.aim42'
-version = '0.2.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'groovy'
@@ -40,6 +38,7 @@ buildscript {
     }
 
     dependencies {
+        classpath gradleApi()
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
                   "org.codenarc:CodeNarc:0.17"
     }
@@ -144,8 +143,15 @@ task arc42(
 ) << { }
 
 
-
 /*
+ * Copyright 2012-2014 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights

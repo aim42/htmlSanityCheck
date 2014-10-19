@@ -10,13 +10,15 @@ import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 public class HtmlReporter extends Reporter {
 
     //
-    private final static REPORT_FILENAME = "index.html"
+    private final static String REPORT_FILENAME = "index.html"
     private String resultsOutputDir
 
-    // the completeOutputFilePath will be set by
     private String completeOutputFilePath
 
     private FileWriter writer
+
+    private final static String BACK_TO_TOP_LINK =
+    "<div id=\"backtotoplink\"><a href=\"#top\" align=\"right\">back to top</a></div>"
 
 
     HtmlReporter(PerRunResults runResults, String outputDir) {
@@ -36,12 +38,13 @@ public class HtmlReporter extends Reporter {
 
 
         writer << """
-            <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-            <html><head><meta httpEquiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>HTML Sanity Check Results</title>
-    <link href="htmlsc-style.css" rel="stylesheet" type="text/css"/>
-    </head><body><div id="content">"""
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><meta httpEquiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>HTML Sanity Check Results</title>
+<link href="htmlsc-style.css" rel="stylesheet" type="text/css"/>
+</head><body><div id="content">"""
     }
+
 
     /*
     create and open a FileWriter to write the generated HTML
@@ -56,7 +59,7 @@ public class HtmlReporter extends Reporter {
     void reportOverallSummary() {
 
         writer << "<img class='logo' src='https://github.com/aim42/htmlSanityCheck/blob/master/htmlsanitycheck-logo.png' alt='htmlSC' align='right'/>"
-        writer << "<h1>HTML Sanity Check Results </h1>"
+        writer << "<h1 id=\"top\">HTML Sanity Check Results </h1>"
 
         writer << overallSummaryInfoBox()
 
@@ -104,13 +107,14 @@ public class HtmlReporter extends Reporter {
     }
 
     private static String allPagesSummaryTableHead() {
-        return """<table><thead><tr>
-                  <th>Page</th>
-                  <th>Checks</th>
-                  <th>Findings</th>
-                  <th>Success rate</th>
-                  </tr>
-                  </thead><tbody>"""
+        return """
+<table><thead><tr>
+<th>Page</th>
+<th>Checks</th>
+<th>Findings</th>
+<th>Success rate</th>
+</tr>
+</thead><tbody>"""
 
     }
 
@@ -127,12 +131,16 @@ public class HtmlReporter extends Reporter {
         int percentageSuccessful =
                 SummarizerUtil.percentSuccessful(spr.nrOfItemsCheckedOnPage(), spr.nrOfFindingsOnPage())
 
-        return """<tr><td class="$classStr">
-                  <a href=\" \">${spr.pageFileName}</a></td>
-                  <td class="number">${spr.nrOfItemsCheckedOnPage()}</td>
-                  <td class="number">${spr.nrOfFindingsOnPage()}</td>
-                  <td class="number $classStr">$percentageSuccessful%</td>
-                </tr>"""
+        String pageHref =
+                CreateLinkUtil.convertToLink( spr.pageFileName )
+
+        return """
+<tr><td class="$classStr">
+<a href=\"#${pageHref}\">${spr.pageFileName}</a></td>
+<td class="number">${spr.nrOfItemsCheckedOnPage()}</td>
+<td class="number">${spr.nrOfFindingsOnPage()}</td>
+<td class="number $classStr">$percentageSuccessful%</td>
+</tr>"""
     }
 
     private static String allPagesSummaryTableFooter() {
@@ -140,15 +148,17 @@ public class HtmlReporter extends Reporter {
     }
     private static String infoBoxHeader() {
         // outer table
-        return """<table><tr><td><div class="summaryGroup">
-                      <table>\n<tr>"""
+        return """
+<table><tr><td><div class="summaryGroup">
+<table>\n<tr>"""
     }
 
 
     private static String infoBoxColumn(String id, String countStr, String label) {
-        return """<td>\n<div class=\"infoBox\" id=\"$id\">\n
-                        <div class=\"counter\">$countStr</div>\n
-                <p>$label</p></div></td>"""
+        return """
+<td>\n<div class=\"infoBox\" id=\"$id\">\n
+<div class=\"counter\">$countStr</div>\n
+<p>$label</p></div></td>"""
     }
 
     private static String infoBoxSeparator() {
@@ -157,23 +167,28 @@ public class HtmlReporter extends Reporter {
 
     private static String infoBoxPercentage( int percentageSuccessful ) {
         String percentageClass = (percentageSuccessful != 100) ? "infoBox failures" : "infoBox success"
-        return """ <td>
-           <div class="$percentageClass" id="successRate">
-           <div class="percent">$percentageSuccessful%</div><p>successful</p>
-           </div></td>"""
+        return """
+<td><div class="$percentageClass" id="successRate">
+<div class="percent">$percentageSuccessful%</div><p>successful</p>
+</div></td>"""
     }
 
     private static String infoBoxFooter() {
-        return """</tr></table><p>"""
+        return """
+</tr></table>
+"""
     }
 
 
     @Override
     void reportPageSummary(SinglePageResults pageResult) {
 
-        writer << """<h1>Results for ${pageResult.pageFileName} </h1>"""
+        String pageID =
+                CreateLinkUtil.convertToLink( pageResult.pageFileName)
 
-        writer << "located : " + pageResult.pageFilePath
+        writer << """<h1 id=\"${pageID}\">Results for ${pageResult.pageFileName} </h1>"""
+
+        writer << "location : ${pageResult.pageFilePath} <p>"
 
         // generate the InfoBox for this page
 
@@ -189,7 +204,12 @@ public class HtmlReporter extends Reporter {
         writer << infoBoxHeader()
 
         // size
-        writer << infoBoxColumn( "size", pageResult.pageSize + "bytes", "size" )
+        int pageSize = pageResult.pageSize
+        String sizeUnit = (pageSize >= 1_000_000) ? "MByte" : "kByte"
+
+        String pageSizeStr = SummarizerUtil.threeDigitTwoDecimalPlaces( pageSize )
+
+        writer << infoBoxColumn( "size", pageSizeStr, sizeUnit )
 
         // checks
         writer << infoBoxColumn( "checks", nrOfItemsChecked.toString(), "checks")
@@ -202,6 +222,8 @@ public class HtmlReporter extends Reporter {
         writer << infoBoxPercentage( percentageSuccessful )
 
         writer << infoBoxFooter()
+
+        writer << BACK_TO_TOP_LINK
 
     }
 
@@ -216,8 +238,18 @@ public class HtmlReporter extends Reporter {
     @Override
     protected void reportSingleCheckSummary(SingleCheckResults singleCheckResults) {
         singleCheckResults.each { result ->
-            writer << "<h3>${result.whatIsChecked}</h3>"
-            writer << "${result.nrOfItemsChecked} $result.sourceItemName checked,"
+            // colorize failed checks with failure-class
+            String failureClassBegin = ""
+            String failureClassEnd   = ""
+
+            if (result.nrOfProblems() > 0) {
+                failureClassBegin = "<div class=\"failures\">"
+                failureClassEnd   = "</div>"
+            }
+
+            writer << "${failureClassBegin}<h3>${result.whatIsChecked}</h3>${failureClassEnd}"
+
+            writer << "${result.nrOfItemsChecked} $result.sourceItemName checked, "
             writer << "${result.nrOfProblems()} $result.targetItemName found.\n"
 
         }
@@ -234,7 +266,7 @@ public class HtmlReporter extends Reporter {
     /**
      * tries to find a writable directory. First tries dirName,
      * if that does not work takes User.dir as second choice.
-     * @param dirName : e.g. /Users/aim42/projects/htmlsc/build/check
+     * @param dirName : e.g. /Users/aim42/projects/htmlsc/build/report/htmlchecks
      * @param fileName : default "index.html"
      * @return complete path to a writable file that does not currently exist.
      */

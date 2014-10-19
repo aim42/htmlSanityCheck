@@ -49,7 +49,10 @@ h2 {
 }
 
 
-
+#backtotoplink {
+    margin-right: 10px;
+    text-align: right;
+}
 
 
 #summary {

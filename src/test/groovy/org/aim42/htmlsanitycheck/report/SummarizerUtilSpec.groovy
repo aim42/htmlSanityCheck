@@ -25,7 +25,24 @@ import spock.lang.Specification
  *
  *********************************************************************** */
 
-class SummaryCalculationSpec extends Specification {
+class SummarizerUtilSpec extends Specification {
+
+    def "rounding to smaller unit"(int bigNumber, float smallNumber) {
+        expect:
+            SummarizerUtil.threeDigitTwoDecimalPlaces( bigNumber ) == smallNumber
+
+        where:
+
+        bigNumber  | smallNumber
+              100  |   0.10
+           33_000  |  33.00
+           33_123  |  33.12
+          456_789  | 456.79
+        1_234_567  |   1.23
+       11_234_560  |  11.23
+    }
+
+
 
     def "CalculateSimpleSummarySpec"() {
 

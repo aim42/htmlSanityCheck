@@ -1,24 +1,31 @@
-// see end-of-file for license information
-
 package org.aim42.htmlsanitycheck
 
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.*
+import org.aim42.filesystem.FileCollector
 
-import javax.inject.Inject
+// see end-of-file for license information
+
+import org.gradle.api.DefaultTask
+import org.gradle.api.file.FileCollection
+import org.gradle.api.tasks.*
 
 /**
  * Entry class for the gradle-plugin.
  * Handles parameter-passing from gradle build scripts,
  * initializes the {link AllChecksRunner},
  * which does all the work.
+ *
+ *
  */
 class HtmlSanityCheckTask extends DefaultTask {
 
-    // currently we only support checking a SINGLE FILE
-    // will make this a FileCollection soon
-    @InputFile
-    File fileToCheck
+    //
+    // we support checking several named files
+    @Optional
+    @Input Set<String> sourceDocuments
+
+    // or all (html) files in a directory
+    @InputDirectory
+    File sourceDir
 
     // where do we store checking results
     @Optional
@@ -29,14 +36,27 @@ class HtmlSanityCheckTask extends DefaultTask {
     @Optional
     Boolean checkExternalLinks = false
 
+    //
+    private Set<File> allFilesToCheck
 
-
-    // use constructor to care for _run-always_
+    /**
+     * Sets sensible defaults for important attributes.
+     *
+     * Ensures that task is _run-always_,
+     * by setting outputs.upToDateWhen to false.
+     */
     HtmlSanityCheckTask() {
 
-        // Never consider this up to date.
+        // Never consider this task up-to-date.
         // thx https://github.com/stevesaliman/gradle-cobertura-plugin/commit/d61191f7d5f4e8e89abcd5f3839a210985526648
         outputs.upToDateWhen { false }
+
+        // give sensible default for output directory
+        checkingResultsDir = new File(project.buildDir, '/report/htmlchecks/')
+
+        // we start with an empty Set
+        allFilesToCheck = new HashSet<File>()
+
     }
 
     /**
@@ -48,30 +68,93 @@ class HtmlSanityCheckTask extends DefaultTask {
 
         logBuildParameter()
 
-        // validate parameters
-        // ======================================
-        // TODO: validate parameter
+        // if we have no valid input file, abort with exception
+        if (isValidConfiguration(sourceDir, sourceDocuments)) {
 
-        // create an AllChecksRunner...
-        // ======================================
-        def allChecksRunner = new AllChecksRunner(
-                fileToCheck,
-                checkingResultsDir,
-                checkExternalLinks
-        )
+            allFilesToCheck = FileCollector.getConfiguredHtmlFiles(sourceDir, sourceDocuments)
 
-        // perform the actual checks
-        // ======================================
-        allChecksRunner.performAllChecks()
+            // create output directory for checking results
+            checkingResultsDir.mkdirs()
+            assert checkingResultsDir.isDirectory()
+            assert checkingResultsDir.canWrite()
+
+            // TODO: unclear: do we need to adjust pathnames if running on Windows(tm)??
+
+            logger.warn("buildfile-info", sourceDocuments?.toString())
+            logger.warn("allFilesToCheck" + allFilesToCheck.toString(), "")
+
+            // create an AllChecksRunner...
+            def allChecksRunner = new AllChecksRunner(
+                    allFilesToCheck,
+                    checkingResultsDir,
+                    checkExternalLinks
+            )
+
+            // perform the actual checks
+            allChecksRunner.performAllChecks()
+
+        } else
+            logger.warn("""Fatal configuration errors preventing checks:\n
+              sourceDir : $sourceDir \n
+              sourceDocs: $sourceDocuments\n""", "fatal error")
 
 
+    }
+
+    /**
+     * checks plausibility of input parameters:
+     * we need at least one html file as input, maybe several
+     * @param srcDir
+     * @param srcDocs needs to be of type {@link FileCollection} to be Gradle-compliant
+     */
+    public static Boolean isValidConfiguration(File srcDir, Set<String> srcDocs) {
+
+        // cannot check if source director is null (= unspecified)
+        if ((srcDir == null)) {
+            throw new MisconfigurationException("source directory must not be null")
+        }
+
+        // cannot check if both input params are null
+        if ((srcDir == null) && (srcDocs == null)) {
+            throw new IllegalArgumentException("both sourceDir and sourceDocs were null")
+        }
+
+        // no srcDir was given and empty SrcDocs
+        if ((!srcDir) && (srcDocs != null)) {
+            if ((srcDocs?.empty))
+                throw new IllegalArgumentException("both sourceDir and sourceDocs must not be empty")
+        }
+        // non-existing srcDir is absurd too
+        if ((!srcDir.exists())) {
+            throw new IllegalArgumentException("given sourceDir " + srcDir + " does not exist.")
+        }
+
+        // if srcDir exists but is empty... no good :-(
+        if ((srcDir.exists())
+                && (srcDir.isDirectory())
+                && (srcDir.directorySize() == 0)) {
+            throw new IllegalArgumentException("given sourceDir " + srcDir + " is empty")
+        }
+
+        // if srcDir exists but does not contain any html file... no good
+        if ((srcDir.exists())
+                && (srcDir.isDirectory())
+                && (FileCollector.getAllHtmlFilesFromDirectory(srcDir).size() == 0)) {
+            throw new MisconfigurationException("no html file found in", srcDir)
+        }
+
+
+       // if no exception has been thrown until now,
+        // the configuration seems to be valid..
+        return true
     }
 
 
     private void logBuildParameter() {
         logger.info "=" * 70
         logger.info "Parameters given to sanityCheck plugin from gradle buildfile..."
-        logger.info "File to check   : $fileToCheck"
+        logger.info "Files to check  : $sourceDocuments"
+        logger.info "Source directory: $sourceDir"
         logger.info "Results dir     : $checkingResultsDir"
         logger.info "Check externals : $checkExternalLinks"
 

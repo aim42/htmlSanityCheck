@@ -59,14 +59,22 @@ apply plugin: 'htmlSanityCheck'
 
 == Usage
 
-The plugin adds a new task named `sanityCheckHtml`.
+The plugin adds a new task named `htmlSanityCheck`.
 
-This task exposes a single property as part of its configuration
+This task exposes a few properties as part of its configuration:
 
 [horizontal]
-sourceDir:: where the html file is located. Type: File. Default: `build/docs`.
-sourceDocumentName:: an override to process a single source file. Type: File.
-Defaults to index.html`
+sourceDir:: (mandatory) directory where the html files are located. Type: File. Default: `build/docs`.
+sourceDocumentNames:: (optional) an override to process several source files, which may be a subset of all
+                      files available in [x-]`${sourceDir}`. Type: FileCollection.
+                      Defaults to all files in [x-]`${sourceDir}`.
+
+checkingResultsDir:: (optional) directory where the checking results written to.
+                      Defaults to `${sourceDir}/report/htmlchecks/`
+
+checkExternalLinks:: (optional, planned) if set to "true", external references are checked too.
+                      Defaults to `false` (currently not implemented)
+
 
 .build.gradle
 [source,groovy]
@@ -74,13 +82,18 @@ Defaults to index.html`
 // append below the line: apply plugin: 'sanityCheckHtml'
 
 sanityCheckHtml {
-    outputDir = new File("$buildDir/docs")
+    sourceDir = new File( "$buildDir/docs/" )
+    sourceDocumentNames = files(  new File( hsc_arc42.html),
+                                  new File( hsc_devguide.html),
+                                  new File( hsc_index.html) )
+    checkingResultsDir = new File("$buildDir/reports/")
 }
 ----
 
+
 == Types of Sanity Checks
 
-=== Broken Internal Links
+=== Broken Cross References (aka Broken Internal Links)
 
 Finds all '<a href="XYZ">' where XYZ is not defined.
 
@@ -93,6 +106,7 @@ Finds all '<a href="XYZ">' where XYZ is not defined.
 ----
 
 In this example, the bookmark is _misspelled_.
+
 TODO: If an anchor XYZ is undefined, the plugin will look for _similar_ definitions
 (using a sophisticated string-similarity algorithm).
 
@@ -103,6 +117,9 @@ these files is checked by the plugin.
 
 === Multiple Definitions of Bookmarks or ID's
 If any is defined more than once, any anchor linking to it will be confused :-)
+
+=== Missing Local Resources
+All files (e.g. downloads) referenced from html.
 
 === Broken External Links
 *planned*
@@ -127,7 +144,7 @@ This tiny piece rests on incredible groundwork:
 
 * IntelliJ IDEA - my (Gernot) best (programming) friend.
 
-* Of course, Groovy, Gradle and JUnit.
+* Of course, Groovy, Gradle, JUnit and Spockframework.
 
 
 == Ideas and Origin
@@ -135,7 +152,7 @@ This tiny piece rests on incredible groundwork:
 * The plugin heavily relies on code provided by the {gradle-url}[Gradle project].
 
 * Inspiration on code organization, implementation and testing of the plugin
-came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by .
+came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by [@AAlmiray].
 
 * Code for string similarity calculation by
   https://github.com/rrice/java-string-similarity[Ralph Rice].

@@ -1,8 +1,8 @@
 ruleset {
 
     description '''
-        A Sample Groovy RuleSet containing all CodeNarc Rules
-        You can use this as a template for your own custom RuleSet.
+        A Groovy RuleSet containing *many* CodeNarc Rules.
+        Based upon the *sample* ruleset from the CodeNarc website.
         Just delete the rules that you don't want to include.
         '''
 
@@ -16,7 +16,7 @@ ruleset {
     AssignmentInConditional
     BigDecimalInstantiation
     BitwiseOperatorInConditional
-    BlankLineBeforePackage
+    // BlankLineBeforePackage
     BooleanGetBoolean
     BooleanMethodReturnsNull
     BracesForClass
@@ -65,8 +65,8 @@ ruleset {
     CouldBeElvis
     CoupledTestCase
     DeadCode
-    DirectConnectionManagement
-    DoubleCheckedLocking
+    //DirectConnectionManagement
+    //DoubleCheckedLocking
     DoubleNegative
     DuplicateCaseStatement
     DuplicateImport
