@@ -47,7 +47,7 @@ buildscript {
 }
 
 codenarc {
-    configFile = file('src/config/codenarc.groov')
+    configFile = file('src/config/codenarc.groovy')
 }
 // don't let codenarc violations break the build...
 [codenarcMain, codenarcTest]*.ignoreFailures = true
