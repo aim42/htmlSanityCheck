@@ -1,9 +1,10 @@
 // see end-of-file for license information
 package org.aim42.htmlsanitycheck.report
 
-
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.collect.SinglePageResults
+
 /**
  * write the findings report to HTML
  */
@@ -18,7 +19,7 @@ public class HtmlReporter extends Reporter {
     private FileWriter writer
 
     private final static String BACK_TO_TOP_LINK =
-    "<div id=\"backtotoplink\"><a href=\"#top\" align=\"right\">back to top</a></div>"
+            "<div id=\"backtotoplink\"><a href=\"#top\" align=\"right\">back to top</a></div>"
 
 
     HtmlReporter(PerRunResults runResults, String outputDir) {
@@ -39,12 +40,11 @@ public class HtmlReporter extends Reporter {
 
         writer << """
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html><head><meta httpEquiv="Content-Type" content="text/html; charset=utf-8"/>
+<html><head><meta httpEquiv="Content-Type" content="text/html"; charset="utf-8"/>
 <title>HTML Sanity Check Results</title>
 <link href="htmlsc-style.css" rel="stylesheet" type="text/css"/>
-</head><body><div id="content">"""
+</head><body id="top"><div id="content">"""
     }
-
 
     /*
     create and open a FileWriter to write the generated HTML
@@ -58,8 +58,8 @@ public class HtmlReporter extends Reporter {
     @Override
     void reportOverallSummary() {
 
-        writer << "<img class='logo' src='https://github.com/aim42/htmlSanityCheck/blob/master/htmlsanitycheck-logo.png' alt='htmlSC' align='right'/>"
-        writer << "<h1 id=\"top\">HTML Sanity Check Results </h1>"
+        writer << "<img class=\"logo\" src=\"htmlsanitycheck-logo.png\" alt=\"htmlSC\" align=\"right\"/>"
+        writer << "<h1>HTML Sanity Check Results </h1>"
 
         writer << overallSummaryInfoBox()
 
@@ -79,104 +79,106 @@ public class HtmlReporter extends Reporter {
         String duration = f.trunc(3).toString() + "sec"
 
 
-        return ( infoBoxHeader()
-            // pages
-        + infoBoxColumn( "pages", totalNrOfPages().toString(), pageStr)
-            // checks
-        + infoBoxColumn( "checks", totalNrOfChecks().toString(), "checks")
-            // findings/issues
-        + infoBoxColumn( "findings", totalNrOfFindings().toString(), issueStr)
-            // timer
-        + infoBoxColumn( "duration", duration, "duration")
+        return (infoBoxHeader()
+                // pages
+                + infoBoxColumn("pages", totalNrOfPages().toString(), pageStr)
+                // checks
+                + infoBoxColumn("checks", totalNrOfChecks().toString(), "checks")
+                // findings/issues
+                + infoBoxColumn("findings", totalNrOfFindings().toString(), issueStr)
+                // timer
+                + infoBoxColumn("duration", duration, "duration")
 
-        + infoBoxSeparator()
+                + infoBoxSeparator()
 
-        + infoBoxPercentage( percentageSuccessful )
+                + infoBoxPercentage(percentageSuccessful)
 
-        + infoBoxFooter() )
+                + infoBoxFooter())
     }
 
     // TODO: write summary table for pages
     private String allPagesSummaryTable() {
 
         return ("<h2>Results by Page </h2>" +
-        allPagesSummaryTableHead() +
-        allPagesSummaryTableBody() +
-        allPagesSummaryTableFooter())
+                allPagesSummaryTableHead() +
+                allPagesSummaryTableBody() +
+                allPagesSummaryTableFooter())
 
     }
 
     private static String allPagesSummaryTableHead() {
         return """
-<table><thead><tr>
-<th>Page</th>
-<th>Checks</th>
-<th>Findings</th>
-<th>Success rate</th>
-</tr>
-</thead><tbody>"""
+<table>
+   <thead>
+     <tr>
+       <th>Page</th> <th>Checks</th> <th>Findings</th> <th>Success rate</th>
+     </tr>
+   </thead>
+   <tbody>"""
 
     }
 
     private String allPagesSummaryTableBody() {
         String resultStr = ""
         pageResults.each { pageResult ->
-            resultStr += pageSummaryTableLine( pageResult )
+            resultStr += pageSummaryTableLine(pageResult)
         }
         return resultStr
     }
 
-    private String pageSummaryTableLine( SinglePageResults spr ) {
+    private String pageSummaryTableLine(SinglePageResults spr) {
         String classStr = (spr.nrOfFindingsOnPage() == 0) ? "success" : "failures"
         int percentageSuccessful =
                 SummarizerUtil.percentSuccessful(spr.nrOfItemsCheckedOnPage(), spr.nrOfFindingsOnPage())
 
         String pageHref =
-                CreateLinkUtil.convertToLink( spr.pageFileName )
+                CreateLinkUtil.convertToLink(spr.pageFileName)
 
         return """
-<tr><td class="$classStr">
-<a href=\"#${pageHref}\">${spr.pageFileName}</a></td>
-<td class="number">${spr.nrOfItemsCheckedOnPage()}</td>
-<td class="number">${spr.nrOfFindingsOnPage()}</td>
-<td class="number $classStr">$percentageSuccessful%</td>
-</tr>"""
+      <tr>
+        <td class="$classStr"><a href=\"#${pageHref}\">${spr.pageFileName}</a></td>
+        <td class="number">${spr.nrOfItemsCheckedOnPage()}</td>
+        <td class="number">${spr.nrOfFindingsOnPage()}</td>
+        <td class="number $classStr">$percentageSuccessful%</td>
+      </tr>"""
     }
 
     private static String allPagesSummaryTableFooter() {
-        return """</tbody></table>"""
+        return """\n
+    </tbody>
+  </table>"""
     }
+
     private static String infoBoxHeader() {
         // outer table
-        return """
+        return """\n
 <table><tr><td><div class="summaryGroup">
 <table>\n<tr>"""
     }
 
 
     private static String infoBoxColumn(String id, String countStr, String label) {
-        return """
-<td>\n<div class=\"infoBox\" id=\"$id\">\n
-<div class=\"counter\">$countStr</div>\n
-<p>$label</p></div></td>"""
-    }
+        return """\n
+    <td>\n<div class=\"infoBox\" id=\"$id\"><div class=\"counter\">\n
+      $countStr</div><p>\n
+      $label</p></div>\n
+    </td>"""
+ }
 
     private static String infoBoxSeparator() {
-        return """</tr></table></div></td>"""
+        return "</tr>\n</table></div></td  >\n"
     }
 
-    private static String infoBoxPercentage( int percentageSuccessful ) {
+    private static String infoBoxPercentage(int percentageSuccessful) {
         String percentageClass = (percentageSuccessful != 100) ? "infoBox failures" : "infoBox success"
         return """
-<td><div class="$percentageClass" id="successRate">
-<div class="percent">$percentageSuccessful%</div><p>successful</p>
-</div></td>"""
+    <td><div class="$percentageClass" id="successRate">\n
+        <div class="percent">$percentageSuccessful%</div><p>successful</p></div>
+    </td>"""
     }
 
     private static String infoBoxFooter() {
-        return """
-</tr></table>
-"""
+        return "</tr></table>\n\n"
     }
 
 
@@ -184,16 +186,16 @@ public class HtmlReporter extends Reporter {
     void reportPageSummary(SinglePageResults pageResult) {
 
         String pageID =
-                CreateLinkUtil.convertToLink( pageResult.pageFileName)
+                CreateLinkUtil.convertToLink(pageResult.pageFileName)
 
-        writer << """<h1 id=\"${pageID}\">Results for ${pageResult.pageFileName} </h1>"""
+        writer << """\n\n<h1 id=\"${pageID}\">Results for ${pageResult.pageFileName} </h1>\n"""
 
-        writer << "location : ${pageResult.pageFilePath} <p>"
+        writer << """location : ${pageResult.pageFilePath} <p>"""
 
         // generate the InfoBox for this page
 
         int nrOfItemsChecked = pageResult.nrOfItemsCheckedOnPage()
-        int nrOfFindings     = pageResult.nrOfFindingsOnPage()
+        int nrOfFindings = pageResult.nrOfFindingsOnPage()
 
         int percentageSuccessful =
                 SummarizerUtil.percentSuccessful(
@@ -207,19 +209,19 @@ public class HtmlReporter extends Reporter {
         int pageSize = pageResult.pageSize
         String sizeUnit = (pageSize >= 1_000_000) ? "MByte" : "kByte"
 
-        String pageSizeStr = SummarizerUtil.threeDigitTwoDecimalPlaces( pageSize )
+        String pageSizeStr = SummarizerUtil.threeDigitTwoDecimalPlaces(pageSize)
 
-        writer << infoBoxColumn( "size", pageSizeStr, sizeUnit )
+        writer << infoBoxColumn("size", pageSizeStr, sizeUnit)
 
         // checks
-        writer << infoBoxColumn( "checks", nrOfItemsChecked.toString(), "checks")
+        writer << infoBoxColumn("checks", nrOfItemsChecked.toString(), "checks")
 
         // findings/issues
-        writer << infoBoxColumn( "findings", nrOfFindings.toString(), issueStr)
+        writer << infoBoxColumn("findings", nrOfFindings.toString(), issueStr)
         // end left table
         writer << infoBoxSeparator()
 
-        writer << infoBoxPercentage( percentageSuccessful )
+        writer << infoBoxPercentage(percentageSuccessful)
 
         writer << infoBoxFooter()
 
@@ -240,27 +242,29 @@ public class HtmlReporter extends Reporter {
         singleCheckResults.each { result ->
             // colorize failed checks with failure-class
             String failureClassBegin = ""
-            String failureClassEnd   = ""
+            String failureClassEnd = ""
 
             if (result.nrOfProblems() > 0) {
                 failureClassBegin = "<div class=\"failures\">"
-                failureClassEnd   = "</div>"
+                failureClassEnd = "</div>"
             }
 
-            writer << "${failureClassBegin}<h3>${result.whatIsChecked}</h3>${failureClassEnd}"
+            writer << "\n${failureClassBegin}<h3>${result.whatIsChecked}</h3>${failureClassEnd}"
 
-            writer << "${result.nrOfItemsChecked} $result.sourceItemName checked, "
+            writer << "\n\n${result.nrOfItemsChecked} $result.sourceItemName checked, "
             writer << "${result.nrOfProblems()} $result.targetItemName found.\n"
 
         }
     }
 
     protected void reportSingleCheckDetails(SingleCheckResults checkResults) {
-        writer << """ <p>"""
-        checkResults.findings.each { finding ->
-            writer << finding.toString() + "<p>"
+        if (checkResults.findings.size() > 0) {
+            writer << "\n  <ul>"
+            checkResults.findings.each { finding ->
+                writer << """\n      <li> ${finding.toString()} </li>"""
+            }
+            writer << "\n  </ul>\n"
         }
-        writer << "<p>"
     }
 
     /**
@@ -285,17 +289,16 @@ public class HtmlReporter extends Reporter {
 
     @Override
     void closeReport() {
-        writer << """<div id="footer"><p>Generated by
-               <a href="http://www.aim42.org">htmlSanityChecker</a> at ${createdOnDate}</p>
-                 </div>"""
-        writer << """</div></body></html>"""
+        writer << """
+<div id="footer">
+  Generated by <a href="http://www.aim42.org">htmlSanityChecker</a> at ${createdOnDate}
+</div>"""
+        writer << "</div></body></html>"
         writer.flush()
 
         println "wrote report to ${resultsOutputDir}${File.separatorChar}$REPORT_FILENAME"
     }
 }
-import org.aim42.htmlsanitycheck.collect.SinglePageResults
-
 /*======================================================================
 
 Copyright 2014 Gernot Starke and aim42 contributors
