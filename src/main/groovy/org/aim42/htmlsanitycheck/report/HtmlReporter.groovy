@@ -18,9 +18,6 @@ public class HtmlReporter extends Reporter {
 
     private FileWriter writer
 
-    private final static String BACK_TO_TOP_LINK =
-            "<div id=\"backtotoplink\"><a href=\"#top\" align=\"right\">back to top</a></div>"
-
 
     HtmlReporter(PerRunResults runResults, String outputDir) {
         super(runResults)
@@ -212,7 +209,8 @@ function scrollToTop() {
         String percentageClass = (percentageSuccessful != 100) ? "infoBox failures" : "infoBox success"
         return """
     <td><div class="$percentageClass" id="successRate">\n
-        <div class="percent">$percentageSuccessful%</div><p>successful</p></div>
+        <div class="percent">$percentageSuccessful%</div>
+        successful</div>
     </td>"""
     }
 
@@ -263,8 +261,6 @@ function scrollToTop() {
         writer << infoBoxPercentage(percentageSuccessful)
 
         writer << infoBoxFooter()
-
-        writer << BACK_TO_TOP_LINK
 
     }
 
