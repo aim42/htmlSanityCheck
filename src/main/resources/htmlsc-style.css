@@ -4,8 +4,12 @@
  */
 
 body {
-    margin: 0;
+    margin:  0;
     padding: 0;
+    padding-left: 50px;
+    padding-right: 100px;
+    padding-top: 30px;
+    padding-bottom: 30px;
     font-family: sans-serif;
     font-size: 12pt;
 }
@@ -14,14 +18,8 @@ body, a, a:visited {
     color: #303030;
 }
 
-#content {
-    padding-left: 50px;
-    padding-right: 50px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-}
 
-#content h1 {
+h1 {
     font-size: 160%;
     margin-bottom: 10px;
 }
@@ -49,12 +47,6 @@ h2 {
 }
 
 
-#backtotoplink {
-    margin-right: 10px;
-    text-align: right;
-}
-
-
 #summary {
     margin-top: 30px;
     margin-bottom: 40px;
@@ -70,7 +62,7 @@ h2 {
 
 
 .infoBox {
-    width: 110px;
+    width: 100px;
     padding-top: 15px;
     padding-bottom: 15px;
     text-align: center;
@@ -86,14 +78,11 @@ h2 {
     margin-bottom: 8px;
 }
 
-#duration {
-    width: 125px;
-}
 
 #successRate, .summaryGroup {
     border: solid 2px #d0d0d0;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
 
 }
 
@@ -130,14 +119,12 @@ div.failures, #successRate.failures {
 
 table {
     border-collapse: collapse;
-    /* min-width: 350px;
-    */
     width: auto !important;
 
 }
 
 th {
-    padding: 10px 20px 10px 20px;
+    padding: 10px 10px 10px 10px;
     font-size: 90%;
     background-color: #fffde7;
 }
