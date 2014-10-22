@@ -1,0 +1,14 @@
+[[checking-domain]]
+=== HTML Checking Domain Model
+
+image::HTML_Checking_Domain.png["HTML Checking Domain Model", title="HTML Checking Domain Model"]
+
+[options="header", cols="1,4"]
+.Domain Model
+|===
+| Domain Entity | Description
+| Link          | link 
+|===
+
+
+
