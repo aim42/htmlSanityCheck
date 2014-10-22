@@ -28,16 +28,16 @@ as follows:
 
 [source, groovy]
  /**
-     * main entry point for reporting - to be called when a report is requested
-     *
-     * Uses template-method to delegate most concrete implementations to subclasses
-     */
+  * main entry point for reporting - to be called when a report is requested
+  * Uses template-method to delegate concrete implementations to subclasses
+ */
     public void reportFindings() {
         initReport()            // <1>
         reportOverallSummary()  // <2>
         reportAllPages()        // <3>
         closeReport()           // <4>
     }
+
     private void reportAllPages() {
         pageResults.each { pageResult ->
             reportPageSummary( pageResult ) // <5>
@@ -48,9 +48,22 @@ as follows:
         }
     }
 
+<1> initialize the report, e.g. create and open the file, copy css-, javascript and image files.
 
-[WARNING]
-This section needs to be written.
+<2> create the overall summary, with the overall success percentage and a list of all checked pages with their success rate.
+
+<3> iterate over all pages 
+
+<4> write report footer - in HTML report also create back-to-top-link
+
+<5> report the nr of checks and problems plus the success rate
+
+<6> for every check, report a summary and <7> all detailed findings.
+
+<7> for every checked page, create a footer, pagebreak or similar to graphically distringuish
+pages between each other.
+
+
 
 
 === Styling the Reporting Output
@@ -59,6 +72,8 @@ This section needs to be written.
 based upon css styling re-used from the Gradle JUnit plugin.
 * Stylesheets, a minimized version of JQuery javascript library plus some icons
 are copied at report-generation time from the jar-file to the report output directory.
+
+* Styling the back-to-top arror/button is done as a combination of JavaScript plus some css styling, as described in http://www.webtipblog.com/adding-scroll-top-button-website/.
 
 
 ==== Attributions

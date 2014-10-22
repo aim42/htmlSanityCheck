@@ -7,7 +7,10 @@ image::HTML_Checking_Domain.png["HTML Checking Domain Model", title="HTML Checki
 .Domain Model
 |===
 | Domain Entity | Description
-| Link          | link 
+| Link          | link
+| Link Target   | the target of any (hyper)link, e.g. heading or any other a part of  
+					a html document, any internal or external resource
+| 					
 |===
 
 
