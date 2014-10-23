@@ -24,6 +24,7 @@ hyperlinks, anchors and id's - as those are often manually maintained.
 .Broken Cross References:: Cross-references (internal links) can be broken,
 e.g. due to missing or misspelled link-target.
 See <<BrokenCrossReferencesChecker>>
+
 .Missing image files: Referenced image files can be missing or misspelled. See <<MissingImageFilesChecker>>.
 
 .Missing local resources: Referenced local resources (other than images) can be missing or misspelled.
@@ -95,7 +96,6 @@ Important terms (*domain terms*) of html sanity checking is documented in a (sma
 | R-7  | unused-images          | check for files in image-directories that are not referenced by any
                                   of the HTML files in this _run_
 | R-8  | illegal link targets   | Checks for malformed or illegal anchors (link targets).
-| R-9  | broken external links  | Checks external (e.g. http, https, ftp etc.) links 
 |===
 
 
@@ -152,6 +152,7 @@ Gradle, command-line and a graphical client have to be supported.
 |===
 | Role | Description | Goal, Intention
 
+| Documentation author      | writes documentation with Html output | wants to check that the resulting document contains good links, image references
 | [[arc42_user]] arc42 user | uses the arc42 template for architecture documentation
 | wants a small but practical example of _how to apply arc42_.
 

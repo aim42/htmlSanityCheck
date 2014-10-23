@@ -6,31 +6,30 @@ image::HTML_Checking_Domain.png["HTML Checking Domain Model", title="HTML Checki
 
 [options="header", cols="1,4"]
 .Domain Model
-| Term          | Description
-| Anchor            | Html element to create ->Links. Contain link-targets in the form <a href="link-target">.
-| Cross reference   | link from one part of the document to another part within the same document.
-                        A special form of ->internal-link, with a ->link-target in the same document.
-| HTML Page     |  A single chunk of HTML, mostly regarded as a single file. Shall comply
-					to standard HTML syntax. Minimal requirement: Our HTML parser can successfully parse this page.
-| external link     | link to another page or resource at another domain.
-| id                | identifier for a specific part of a document, e.g. +++<h2 id="#someHeader">+++
-| internal link     | link to another section of the same page or to another page of the same domain
-| Link              | Any a reference in the html document that lets you display or activate another
-                        part of this document (internal ink) or another document, image or resource
-                        (can be either local or external link).
-                        Every link leads from the _link source_ to the _link target_
-| Link Target   | the target of any (hyper)link, e.g. heading or any other a part of  
-					a html document, any internal or external resource (identified by URI). 
- 
-| local resource    | local file, either other html files or other filetypes (e.g. pdf, docx)
-
-| Run Result    | The overall results of checking a number of pages (at least one page).
-| Single Page Result | A collection of all checks of a single -> HTML Page.
-
-| URI               | Universal Resource Identifier. Defined in http://www.ietf.org/rfc/rfc2396.txt[RFC-2396] The ultimate source of truth concerning link syntax and semantic.
-
-
 |===
-
+| Term              | Description
+| Anchor            | Html element to create ->Links. Contain link-targets in the form `<a href="link-target">`
+| Cross reference   | link from one part of the document to another part within the same document.
+                       A special form of ->internal-link, with a ->link-target in the same document.
+| external link     | link to another page or resource at another domain.
+| Finding           | Description of a problem found by one ->Checker within the ->Html Page.
+| Html Element      | HTML pages (documents) are made up by HTML elements, .e.g. `<a href="link target">`, `<img src="image.png">` and others. See the http://www.w3schools.com/html/html_elements.asp[W3-Consortium]
+| HTML Page         |  A single chunk of HTML, mostly regarded as a single file. Shall comply
+					   to standard HTML syntax. Minimal requirement: Our HTML parser can successfully parse this page. Contains ->Html Elements. Also called _html document_.
+| id                | Identifier for a specific part of a document, e.g. `<h2 id="#someHeader">`.
+						Often used to describe ->link targets.
+| internal link     | link to another section of the same page or to another page of the same domain. 
+						Also called _local link_.
+| Link              | Any a reference in the ->html page that lets you display or activate another
+                        part of this document (internal ink) or another document, image or resource
+                        (can be either ->internal (local) or ->external link).
+                        Every link leads from the _link source_ to the _link target_
+| Link Target       | the target of any ->link, e.g. heading or any other a part of  
+					 a html document, any internal or external resource (identified by URI). Expressed by ->id  
+| local resource    | local file, either other html files or other filetypes (e.g. pdf, docx)
+| Run Result        | The overall results of checking a number of pages (at least one page).
+| Single Page Result| A collection of all checks of a single -> HTML Page.
+| URI               | Universal Resource Identifier. Defined in http://www.ietf.org/rfc/rfc2396.txt[RFC-2396]. The ultimate source of truth concerning link syntax and semantic.
+|===
 
 

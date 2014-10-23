@@ -6,7 +6,8 @@
 image::hsc-whitebox.png["Whitebox", title="Whitebox (Overall system)"]
 
 Rationale::
-_reasons for this structure_
+
+* 
 
 
 Contained Blackboxes::
@@ -22,7 +23,7 @@ enabling arbitrary gradle builds to use kbd:[HtmlSC] functionality.
 
 | Reporter
 | outputs the collected checking results to configurable
-destinations, e.g. StdOut or a html file.
+destinations, e.g. StdOut or a Html file.
 |===
 
 
