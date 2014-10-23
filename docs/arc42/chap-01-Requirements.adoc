@@ -37,7 +37,7 @@ which is the desired target.
   See <<IllegalLinkChecker
 
 .Broken external links: External links can be broken due to myriads of reasons: misspelled, link-target currently offline,
- illegal link syntax. See <<BrokenExternalLinksChecker>>
+ illegal link syntax. See <<BrokenExternalLinksChecker>>.
 
 .Missing Alt Attribute in Image Tags: Images missing an alt-attribute.
 
@@ -45,28 +45,9 @@ which is the desired target.
 Checking and reporting these errors and flaws is the central _business requirement_ of kbd:[HtmlSC].
 
 
-[options="header", cols="2,6"]
-.Important Terms
 
-|===
-| Term              | Description
-| Anchor            | Html element to create ->Links. Contain link-targets in the form <a href="link-target">.
-| Cross reference   | link from one part of the document to another part within the same document.
-                        A special form of ->internal-link, with a ->link-target in the same document.
-| external link     | link to another page or resource at another domain.
-| id                | identifier for a specific part of a document, e.g. +++<h2 id="#someHeader">+++
-| internal link     | link to another section of the same page or to another page of the same domain
-| Link              | Any a reference in the html document that lets you display or activate another
-                        part of this document (internal ink) or another document, image or resource
-                        (can be either local or external link).
-                        Every link leads from the _link source_ to the _link target_
-| link-target       | Either a location in the current document (identified by ->id), another document (identified by URI)
-                        or another resource to view or download.
-| local resource    | local file, either other html files or other filetypes (e.g. pdf, docx)
-| URI               | Universal Resource Identifier. Defined in http://www.ietf.org/rfc/rfc2396.txt[RFC-2396]
-                      The ultimate source of truth concerning link syntax and semantic.
-
-|===
+Important terms (*domain terms*) of html sanity checking is documented in a (small) 
+<<HTML Checking Domain Model, domain model>>.
 
 
 
@@ -90,29 +71,31 @@ Checking and reporting these errors and flaws is the central _business requireme
 |===
 
 
+[requiredChecks]
 ==== Types of Sanity Checks
+
 
 [options="header", cols="1,3,8"]
 .Required Checks
 |===
-| ID | Check | Description
-| [MissingImageFiles]      R-1 | missing image files | Check all image tags if the referenced
+| ID  | Check | Description
+| R-1 | missing image files   | Check all image tags if the referenced
                                   image files exist.
                                   See <<MissingImageFilesChecker>>
-| [BrokenCrossReferences]  R-2 | broken internal links | Check all internal links from anchor-tags
+| R-2 | broken internal links | Check all internal links from anchor-tags
                                   (href="XYZ") if the link targets "XYZ" are defined.
                                   See <<BrokenCrossReferencesChecker>>
-| [MissingLocalResources]  R-3  | missing local files, either other html-files, pdf's or similar.
+| R-3 | missing local files   | either other html-files, pdf's or similar.
                                   See <<MissingLocalResourcesChecker>>
-| [DuplicateLinkTargets]   R-4  | duplicate link targets | Check all bookmark definitions
+| R-4  | duplicate link targets | Check all bookmark definitions
                                   (... id="XYZ") whether the id's ("XYZ") are unique.
                                   See <<DuplicateLinkTargetsChecker>>
-|                          R-5  | Malformed links | Check all links for syntactical correctness
-| [MissingImgAltAttribute] R-6  | missing alt-attribute in image-tags.
-                                  See <<MissingImgAltAttributeChecker>>
-| [UnusedImages]           R-7  | check for files in image-directories that are not referenced by any
+| R-5  | Malformed links        | Check all links for syntactical correctness
+| R-6  | missing alt-attribute  | in image-tags.  See <<MissingImgAltAttributeChecker>>
+| R-7  | unused-images          | check for files in image-directories that are not referenced by any
                                   of the HTML files in this _run_
-| [IllegalAnchors]         R-8  |
+| R-8  | illegal link targets   | Checks for malformed or illegal anchors (link targets).
+| R-9  | broken external links  | Checks external (e.g. http, https, ftp etc.) links 
 |===
 
 

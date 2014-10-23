@@ -43,7 +43,7 @@ image::template-method.png["Template Method", title="Template-Method Overview"]
 
 ==== MissingImageFilesChecker
 
-[small]#Adresses requirement <<MissingImageFiles>>.#
+[small]#Adresses requirement <<Types of Sanity Checks, R1>>.#
 
 The (little) problem with checking images is their path: Consider the following
 HTML fragment (from the file +testme.html+:
@@ -70,7 +70,7 @@ _directory arithmetic_ to get the +absolutePathToImageFile+:
 
 ==== BrokenCrossReferencesChecker
 
-[small]#Adresses requirement <<BrokenCrossReferences>>.#
+[small]#Adresses requirement <<Types of Sanity Checks, R-2>>.#
 
 Cross references are document-internal links where the +href="link-target" from the html anchor
 tag has no prefix like +http+, +https+, +ftp+, +telnet+, +mailto+, +file+ and such.
@@ -80,7 +80,7 @@ Only links with prefix +#+ shall be taken into account, e.g. +<a href="#internal
 
 ==== DuplicateLinkTargetsChecker
 
-[small]#Adresses requirement <<DuplicateLinkTargets>>.#
+[small]#Adresses requirement <<Types of Sanity Checks, R-4>>.#
 
 Sections, especially headings, can be made link-targets by adding the +id="#xyz"+ element,
 yielding for example html headings like the following example.
@@ -95,9 +95,12 @@ Problems occur if the same link target is defined several times (also shown belo
 
 ==== MissingLocalResourcesChecker
 
-[small]#Adresses requirement <<MissingLocalResources>>.#
+[small]#Adresses requirement <<Types of Sanity Checks, R-3>>.#
 
 
 ==== BrokenExternalLinksChecker
 
-[small]#Adresses requirement <<BrokenExternalLinks>>.#
+[small]#Adresses requirement <<Types of Sanity Checks, R-9>>.#
+
+Problem here are networking issues, latency and http return codes. This checker is planned,
+but currently not implemented.
