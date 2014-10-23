@@ -7,7 +7,12 @@ image::hsc-whitebox.png["Whitebox", title="Whitebox (Overall system)"]
 
 Rationale::
 
-* 
+We used _functional decomposition_ to separate responsibilities:
+
+* <<checker_blackbox, CheckerCore>> shall encapsulate checking logic and Html parsing/processing.
+* all kinds of outputs (console, html-file, graphical) shall be handled in a separate component 
+  (`Reporter`)
+* Implementation of Gradle specific stuff shall be encapsulated.
 
 
 Contained Blackboxes::
@@ -82,8 +87,11 @@ Files::
 image::CheckerCore-Whitebox.png["Whitebox", title="CheckerCore (Whitebox)"]
 
 Rationale::
-_reasons for this structure_
+This structures follows a strictly functional decomposition:
 
+* parsing and handling html input
+* checking 
+* collecting checking results
 
 Contained Blackboxes::
 
@@ -98,7 +106,7 @@ for all checking algorithms.
 | Facade to the different Checker instances. Provides a (parameter-driven)
 command-line interface.
 
-| ResultsCollector
+| <<ResultsCollector>>
 | Collects all checking results.
 
 | HtmlParser
@@ -113,3 +121,35 @@ within the (parsed) html.
 The abstract Checker provides a uniform interface (public void check())
 to different checking algorithms. It is based upon the <<checking-concept,
 concept of extensible checking algorithms>>.
+
+
+
+
+=== Building Blocks - Level 3
+
+==== ResultsCollector (Whitebox)
+
+
+image::ResultsCollector.png["Whitebox", title="Results Collector (Whitebox)"]
+
+Rationale::
+This structures follows the hierarchy of checks:
+
+Managing results for:
+
+. a number of pages/documents
+. a single page  
+. a single check within a page
+
+
+
+Contained Blackboxes::
+
+[cols="1,4"]
+.Results-Collector building blocks
+|===
+| Per-Run-Results      | results for potentially many Html pages/documents.
+| Single-Page-Results  | results for a single page
+| Single-Check-Results | results for a single type of check (e.g. missing-images check)
+| Finding              | a single finding, (e.g. "image 'logo.png' misssing")
+|===
