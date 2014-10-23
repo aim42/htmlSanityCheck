@@ -6,7 +6,7 @@ package org.aim42.htmlsanitycheck.collect
  * Can keep results spanning more than one file (e.g. unused-image-files).
  *
  */
-class PerRunResults {
+class PerRunResults implements RunResults {
 
     private ArrayList<SinglePageResults> resultsForAllPages
 
@@ -39,6 +39,7 @@ class PerRunResults {
     /**
      * return the List of results for the pages
      */
+    @Override
     public ArrayList<SinglePageResults> getResultsForAllPages() {
         return resultsForAllPages
     }
@@ -54,6 +55,7 @@ class PerRunResults {
      * query the timer
     *  if timer has not yet been stopped - return a crazy number
      */
+    @Override
     public Long checkingTookHowManyMillis() {
         Long itTookSoLong
         if (finishedCheckingTimeMillis == TIMER_STILL_RUNNING)
@@ -80,6 +82,7 @@ class PerRunResults {
      *
      * @return how many distinct CheckingResultCollectors have been added (so far)?
      */
+    @Override
     public int nrOfPagesChecked() {
         return resultsForAllPages.size()
     }
@@ -87,6 +90,7 @@ class PerRunResults {
     /**
      * returns the total number of checks performed on all pages
      */
+    @Override
     public int nrOfChecksPerformedOnAllPages() {
         int nrOfChecks = 0
         resultsForAllPages.each { singlePageResults ->
