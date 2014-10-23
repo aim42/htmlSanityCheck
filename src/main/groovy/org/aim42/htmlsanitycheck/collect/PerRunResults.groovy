@@ -99,6 +99,18 @@ class PerRunResults implements RunResults {
         return nrOfChecks
     }
 
+    /**
+     * returns the total number of findings on all pages
+     */
+    @Override
+    public int nrOfFindingsOnAllPages() {
+        int totalNrOfFindings = 0
+        resultsForAllPages.each { pageResult ->
+            totalNrOfFindings += pageResult.nrOfFindingsOnPage()
+        }
+        return totalNrOfFindings
+    }
+
 
 }
 /************************************************************************

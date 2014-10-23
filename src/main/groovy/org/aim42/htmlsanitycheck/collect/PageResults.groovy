@@ -20,17 +20,14 @@ package org.aim42.htmlsanitycheck.collect
  *
  *********************************************************************** */
 
-// tag::RunResultInterface[]
-public interface RunResults {
+// tag::PageResultInterface[]
+public interface PageResults {
 
-    public Long checkingTookHowManyMillis()
+    public int nrOfItemsCheckedOnPage()
 
-    public ArrayList<SinglePageResults> getResultsForAllPages()
+    public int nrOfFindingsOnPage()
 
-    public int nrOfPagesChecked()
+    public int howManyCheckersHaveRun()
 
-    public int nrOfChecksPerformedOnAllPages()
-
-    public int nrOfFindingsOnAllPages()
-}
-// end::RunResultInterface[]
+    }
+// end::PageResultInterface[]

@@ -6,7 +6,7 @@ package org.aim42.htmlsanitycheck.collect
  * Contains information about the page itself, e.g. its filename and title.
  * Instances of this class will be contained in {@link SingleCheckResults}
  */
-class SinglePageResults {
+class SinglePageResults implements PageResults {
 
     public String pageFileName // from where we read the HTML
     public String pageFilePath // the complete path from where we read
@@ -42,6 +42,7 @@ class SinglePageResults {
 
 
     // query the results
+    @Override
     public int nrOfItemsCheckedOnPage() {
         int nrOfItemsChecked = 0
         singleCheckResults.each {
@@ -51,6 +52,7 @@ class SinglePageResults {
 
     }
 
+    @Override
     public int nrOfFindingsOnPage() {
         int nrOfFindings = 0
         singleCheckResults.each {
@@ -64,6 +66,7 @@ class SinglePageResults {
      * (by the number of SingleCheckResults available)
      * @return
      */
+    @Override
     public int howManyCheckersHaveRun() {
         return singleCheckResults.size()
     }

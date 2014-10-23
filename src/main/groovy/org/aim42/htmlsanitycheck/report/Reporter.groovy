@@ -87,19 +87,11 @@ abstract class Reporter {
     }
 
     protected int totalNrOfChecks() {
-        int totalNrOfChecks = 0
-        pageResults.each { pageResult ->
-            totalNrOfChecks += pageResult.nrOfItemsCheckedOnPage()
-        }
-        return totalNrOfChecks
+        return runResults.nrOfChecksPerformedOnAllPages()
     }
 
     protected int totalNrOfFindings() {
-        int totalFindings = 0
-        pageResults.each { pageResult ->
-            totalFindings += pageResult.nrOfFindingsOnPage()
-        }
-        return totalFindings
+        return runResults.nrOfFindingsOnAllPages()
     }
 
     // delegate *real* work to subclasses
