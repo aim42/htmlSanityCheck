@@ -107,12 +107,12 @@ for all checking algorithms.
 command-line interface.
 
 | <<ResultsCollector>>
-| Collects all checking results.
+| Collects all checking results. Its interface `Results` is contained in the 
+<<ResultsCollector, whitebox description>>
 
 | HtmlParser
 | Encapsulates html parsing, provides methods to search
 within the (parsed) html.
-
 |===
 
 
@@ -129,27 +129,49 @@ concept of extensible checking algorithms>>.
 
 ==== ResultsCollector (Whitebox)
 
-
 image::ResultsCollector.png["Whitebox", title="Results Collector (Whitebox)"]
 
 Rationale::
-This structures follows the hierarchy of checks:
+This structures follows the hierarchy of checks - namely managing results for:
 
-Managing results for:
-
-. a number of pages/documents
-. a single page  
-. a single check within a page
-
+. a number of pages/documents, containing:
+. a single page, each containing many  
+. single checks within a page
 
 
 Contained Blackboxes::
 
-[cols="1,4", options=""]
-.Results-Collector building blocks
+[cols="1,4" options=""]
+.ResultsCollector building blocks
 |===
-| Per-Run-Results      | results for potentially many Html pages/documents.
-| Single-Page-Results  | results for a single page
-| Single-Check-Results | results for a single type of check (e.g. missing-images check)
-| Finding              | a single finding, (e.g. "image 'logo.png' misssing")
+| Per-Run Results
+| results for potentially many Html pages/documents.
+
+| Single-Page-Results  
+| results for a single page
+
+| Single-Check-Results 
+| results for a single type of check (e.g. missing-images check)
+
+| Finding              
+| a single finding, (e.g. "image 'logo.png' misssing"). Can hold suggestions
+and (planned for future releases) the responsible html element.
 |===
+
+
+
+===== Interface `Results`
+
+The `Result`interface is used by all clients 
+(especially `Reporter`subclasses, graphical and command-line
+clients) to access checking results.
+
+
+[source, groovy]
+.Interface RunResults
+----
+include::../../src/main/groovy/org/aim42/htmlsanitycheck/collect/RunResults.groovy[]
+----
+
+
+
