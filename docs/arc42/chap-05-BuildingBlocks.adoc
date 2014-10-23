@@ -145,7 +145,7 @@ Managing results for:
 
 Contained Blackboxes::
 
-[cols="1,4"]
+[cols="1,4", options=""]
 .Results-Collector building blocks
 |===
 | Per-Run-Results      | results for potentially many Html pages/documents.
