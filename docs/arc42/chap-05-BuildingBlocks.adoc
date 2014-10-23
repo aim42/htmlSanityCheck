@@ -170,7 +170,7 @@ clients) to access checking results.
 [source, groovy]
 .Interface RunResults
 ----
-include::../../src/main/groovy/org/aim42/htmlsanitycheck/collect/RunResults.groovy[]
+include::{sourcepath}/htmlsanitycheck/collect/RunResults.groovy[tags=RunResultInterface]
 ----
 
 
