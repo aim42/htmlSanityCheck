@@ -24,15 +24,26 @@ image::htmlsanitycheck-overview.png["Overview", title="Overview"]
 kbd:[HtmlSC] can perform various content and semantic checks on HTML files,
 e.g. check for missing images, broken internal links, duplicate targets etc.
 
-It is open source software and provides the following kinds of documentation:
+It is open source software and provides documentation for the following
+types of stakeholders:
 
-[cols="1,4"]
+[cols="2,2,4", options="header"]
 |===
+| Stakeholder 
+| Documentation
+| Content
+
+| Asciidoc, Markdown etc. author
+| User Guide
+| (planned) intended for writers and authors, explains
+  how to check your (generated) html
+
 | link:DevelopmentGuide.html[Development Guide]
-| Info for software developers,
-  setup of development environment,
+| software developers,
+| Describes development environment,
   building kbd:[HtmlSC] and its documentation.
 
+| arc42-user, (methodical) software developer or architect
 | link:hsc_arc42.html[Architecture Documentation] 
 | http://github.com/arc42[arc42]-based documentation,
   with requirements, quality-goals,
@@ -40,9 +51,6 @@ It is open source software and provides the following kinds of documentation:
   concepts. Created as an example
   for http://arc42.de[arc42].
 
-| User Guide
-| (planned) intended for writers and authors, explains
-  how to check your (generated) html
 |===
 
 The {project-url}[repository is located on Github].
@@ -51,5 +59,6 @@ The {project-url}[repository is located on Github].
 image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
 image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[issues]
+
 
 "External resources" icon from http://openclipart.org/detail/179896/world-wide-web-by-gr8dan-179896[openclipart]

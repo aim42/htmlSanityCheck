@@ -8,7 +8,7 @@ package org.aim42.htmlsanitycheck.collect
  * @author Gernot Starke <gs@gernotstarke.de>
  */
 
-class SingleCheckResults {
+class SingleCheckResults implements CheckResults {
 
     public String whatIsChecked    // i.e. "Missing Local Images Check"
 
@@ -56,6 +56,22 @@ class SingleCheckResults {
     public void incNrOfChecks() {
         nrOfItemsChecked += 1
     }
+
+    /**
+     * @return a description of what is checked
+     */
+    @Override
+    public String description() {
+        return whatIsChecked
+    }
+
+
+    @Override
+    public  ArrayList<Finding> getFindings() {
+        return findings
+    }
+
+
 
     /**
      *

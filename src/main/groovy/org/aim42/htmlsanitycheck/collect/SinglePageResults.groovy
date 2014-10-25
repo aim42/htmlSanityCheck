@@ -41,6 +41,23 @@ class SinglePageResults implements PageResults {
     }
 
 
+    // overhead for Groovy code - but useful for Interface documentation
+    @Override
+    public String getPageTitle() {
+        return pageTitle
+    }
+
+    @Override
+    public String getPageFileName() {
+        return pageFileName
+    }
+
+    @Override
+    public String getPageFilePath() {
+        return pageFilePath
+    }
+
+
     // query the results
     @Override
     public int nrOfItemsCheckedOnPage() {

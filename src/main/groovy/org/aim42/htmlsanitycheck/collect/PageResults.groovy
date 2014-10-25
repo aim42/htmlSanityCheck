@@ -23,10 +23,20 @@ package org.aim42.htmlsanitycheck.collect
 // tag::PageResultInterface[]
 public interface PageResults {
 
+    // what's the title of this page?
+    public String getPageTitle()
+
+    // what's the filename and path?
+    public String getPageFileName()
+    public String getPageFilePath()
+
+        // how many items have been checked?
     public int nrOfItemsCheckedOnPage()
 
+    // how many problems were found on this page?
     public int nrOfFindingsOnPage()
 
+    // how many different checks have run on this page?
     public int howManyCheckersHaveRun()
 
     }

@@ -163,7 +163,7 @@ and (planned for future releases) the responsible html element.
 ===== Interface `Results`
 
 The `Result` interface is used by all clients 
-(especially `Reporter`subclasses, graphical and command-line
+(especially `Reporter` subclasses, graphical and command-line
 clients) to access checking results. It consists of three distinct APIs for
 overall `RunResults`, single-page results (`PageResults`) and single-check results
 (`CheckResults`). See the interface definitions below - taken from the Groovy-sourcecode:
@@ -188,5 +188,6 @@ include::{sourcepath}/htmlsanitycheck/collect/PageResults.groovy[tags=PageResult
 [source, groovy]
 .Interface CheckResults
 ----
+include::{sourcepath}/htmlsanitycheck/collect/CheckResults.groovy[tags=CheckResultsInterface]
 ----
 

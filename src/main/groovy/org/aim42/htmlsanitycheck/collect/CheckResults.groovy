@@ -20,22 +20,15 @@ package org.aim42.htmlsanitycheck.collect
  *
  *********************************************************************** */
 
-// tag::RunResultInterface[]
-public interface RunResults {
+// tag::CheckResultsInterface[]
+public interface CheckResults {
 
-    // returns results for all pages which have been checked
-    public ArrayList<SinglePageResults> getResultsForAllPages()
+    // return a description of what is checked
+    // (e.g. "Missing Images Checker" or "Broken Cross-References Checker"
+    public String description()
 
-    // how many pages were checked in this run?
-    public int nrOfPagesChecked()
+    // returns all findings/problems found during this check
+    public  ArrayList<Finding> getFindings()
 
-    // how many checks were performed in all?
-    public int nrOfChecksPerformedOnAllPages()
-
-    // how many findings (errors and issues) were found in all?
-    public int nrOfFindingsOnAllPages()
-
-    // how long took checking (in milliseconds)?
-    public Long checkingTookHowManyMillis()
-}
-// end::RunResultInterface[]
+    }
+// end::CheckResultsInterface[]
