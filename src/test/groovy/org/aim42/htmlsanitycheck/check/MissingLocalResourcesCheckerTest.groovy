@@ -18,6 +18,15 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
         collector = new SingleCheckResults()
     }
 
+    @Test
+    public void testExistingLocalResourceIsFound() {
+        // 1.) create tmp directory D1 with subdir D2
+        // 2.) create local resource file F1 in subdir D2
+        // 3.) create tmp html file linking to F1 in directory D1
+        // check that no issue is found
+        assert false
+    }
+
 
     @Test
     public void testCrossReferenceIsNotChecked() {
