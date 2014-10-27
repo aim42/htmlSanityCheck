@@ -20,11 +20,34 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
     @Test
     public void testExistingLocalResourceIsFound() {
-        // 1.) create tmp directory D1 with subdir D2
-        // 2.) create local resource file F1 in subdir D2
-        // 3.) create tmp html file linking to F1 in directory D1
-        // check that no issue is found
-        assert false
+        // 1.) create tmp directory d1 with subdir d2
+        File d1 = File.createTempDir()
+        File d2 = new File(d1 , "/d2")
+        d2.mkdirs()
+
+        // 2.) create local resource file f1 in subdir d2
+        final String fname = "fname.html"
+        File f1 = new File( d2, fname) << HTMLHEAD
+
+        assertEquals( "created an artificial file","d2/fname.html",
+                f1.canonicalPath - d1.canonicalPath - "/")
+
+        // 3.) create tmp html file "index.html" linking to f1 in directory d1
+        File index = new File( d1, "index.html") << HTMLHEAD
+        index << """<a href="d2/$fname">link to local resource"</a></body></html>"""
+
+        // 4.) check
+        htmlPage = new HtmlPage( index )
+
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker(
+                pageToCheck: htmlPage )
+        collector = missingLocalResourcesChecker.performCheck()
+
+        // assert that no issue is found (== the local resource d2/fname.html is found)
+        assertEquals( "expected zero finding", 0, collector.nrOfProblems())
+        assertEquals( "expected one check", 0, collector.nrOfItemsChecked)
+
+
     }
 
 
