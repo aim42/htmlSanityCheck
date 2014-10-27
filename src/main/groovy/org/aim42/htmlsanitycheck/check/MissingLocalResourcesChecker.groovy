@@ -36,8 +36,15 @@ class MissingLocalResourcesChecker extends Checker {
             URLUtil.isLocalResource( it )
         }
 
-        logger.info( "local resources", localResources )
+        logger.info """local resources: $localResources"""
 
+        // make sure we have a non-null baseDir
+        // (for html pages given as "string", this should be "")
+        if (baseDirPath == null) {
+            baseDirPath = ""
+        }
+
+        // perform the actual checks
         checkAllLocalResources()
 
         return checkingResults
@@ -59,7 +66,8 @@ class MissingLocalResourcesChecker extends Checker {
         // bookkeeping:
         checkingResults.incNrOfChecks()
 
-        File localFile = new File( localResource );
+        // we need the baseDir for robust checking of local resources...
+        File localFile = new File( baseDirPath, localResource );
 
         if (!localFile.exists() ) {
             String findingText = "local resource \"$localResource\" missing"
