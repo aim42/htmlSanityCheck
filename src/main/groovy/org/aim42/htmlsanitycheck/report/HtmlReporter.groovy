@@ -4,6 +4,8 @@ package org.aim42.htmlsanitycheck.report
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
+import org.apache.commons.lang.StringUtils
+import org.gradle.util.GFileUtils
 
 /**
  * write the findings report to HTML
@@ -352,9 +354,12 @@ function scrollToTop() {
     https://github.com/gradle/gradle/blob/master/subprojects/performance/src/testFixtures/groovy/org/gradle/performance/results/ReportGenerator.java#L50-50
 
      */
-    private void copyResourceFromJarToDirectory( String resourceName, File outputDir) {
-
+    private void copyResourceFromJarToDirectory(String resourceName, File outputDirectory) {
+        URL resource = getClass().getClassLoader().getResource("org/gradle/reporting/" + resourceName);
+        String dir = StringUtils.substringAfterLast(resourceName, ".");
+        GFileUtils.copyURLToFile(resource, new File(outputDirectory, dir + "/" + resourceName));
     }
+
 }
 /*======================================================================
 
