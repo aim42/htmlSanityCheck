@@ -68,7 +68,7 @@ pages between each other.
 
 
 
-=== Styling the Reporting Output
+==== Styling the Reporting Output
 
 * The HtmlReporter explicitly generates css classes together with the html elements,
 based upon css styling re-used from the Gradle JUnit plugin.
@@ -76,6 +76,14 @@ based upon css styling re-used from the Gradle JUnit plugin.
 are copied at report-generation time from the jar-file to the report output directory.
 
 * Styling the back-to-top arror/button is done as a combination of JavaScript plus some css styling, as described in http://www.webtipblog.com/adding-scroll-top-button-website/.
+
+
+==== Copy Required Resources to Output Directory
+
+When creating the HTML report, we need to copy the required resource files (css, JavaScript)
+to the output directory.
+
+The appropriate copy method was re-used from the https://github.com/gradle/gradle/blob/master/subprojects/performance/src/testFixtures/groovy/org/gradle/performance/results/ReportGenerator.java#L50-50[Gradle sources].
 
 
 ==== Attributions
