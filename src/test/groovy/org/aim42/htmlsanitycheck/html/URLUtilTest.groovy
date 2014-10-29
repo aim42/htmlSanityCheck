@@ -1,6 +1,5 @@
 package org.aim42.htmlsanitycheck.html
 
-import org.aim42.htmlsanitycheck.html.URLUtil
 import org.junit.Test
 
 // see end-of-file for license information
@@ -64,9 +63,9 @@ class URLUtilTest extends GroovyTestCase {
 
     @Test
     public void testRelativeFilePath() {
-       List<String> paths = ["./$IMG", "../$IMG", "$IMG",
-                             "../../$IMG", "$IMG", "#$IMG",
-                            "images/aim42-logo.png"
+        List<String> paths = ["./$IMG", "../$IMG", "$IMG",
+                              "../../$IMG", "$IMG", "#$IMG",
+                              "images/aim42-logo.png"
         ]
 
         paths.each { url ->
@@ -80,23 +79,22 @@ class URLUtilTest extends GroovyTestCase {
     @Test
     public void testLocalResources() {
         List<String> locals = ["file://test.html", "test.html", "./test.html",
-                                "down/loads/test.htm", "test.htm", "test.HTM",
-                                "../down/loads/test.docx",
-                                "test.docx", "test.pdf", "./test.docx"]
+                               "down/loads/test.htm", "test.htm", "test.HTM",
+                               "../down/loads/test.docx",
+                               "test.docx", "test.pdf", "./test.docx"]
 
         locals.each { it ->
-            assertTrue("$it not recognized as local resource", URLUtil.isLocalResource( it ))
+            assertTrue("$it not recognized as local resource", URLUtil.isLocalResource(it))
         }
 
 
         List<String> remotes = ["http://google.com", "mailto:/hello@example.com",
                                 "ftp://file.html", "https://github.com"]
         remotes.each {
-            assertFalse("$it recognized as local resource", URLUtil.isLocalResource( it ))
+            assertFalse("$it recognized as local resource", URLUtil.isLocalResource(it))
         }
 
     }
-
 
     /**
      * tests if cross-references (intra-document-links) are recognized
@@ -105,7 +103,7 @@ class URLUtilTest extends GroovyTestCase {
     public void testSimpleStringIsCrossReference() {
         List<String> crossRefs = ["#xref", "#A1B2c3", "#abcdefghijklmnopqrsuvwyz"]
 
-        crossRefs.each  { cf ->
+        crossRefs.each { cf ->
             //log.info(cf)
             assertTrue("$cf legal cross-reference not recognized",
                     URLUtil.isCrossReference(cf))
@@ -127,6 +125,25 @@ class URLUtilTest extends GroovyTestCase {
 
 
     }
+
+    // tag::GenericURIExample[]
+    @Test
+    public void testGenericURISyntax() {
+        // based upon an example from the Oracle(tm) Java tutorial:
+        // http://docs.oracle.com/javase/tutorial/networking/urls/urlInfo.html
+        def aURL =
+                new URL("http://example.com:42/docs/tutorial/index.html?name=aim42#INTRO");
+        aURL.with {
+            assert getProtocol() == "http"
+            assert getAuthority() == "example.com:42"
+            assert getHost() == "example.com"
+            assert getPort() == 42
+            assert getPath() == "/docs/tutorial/index.html"
+            assert getQuery() == "name=aim42"
+            assert getRef() == "INTRO"
+        }
+    }
+    // end::GenericURIExample[]
 
 
 }

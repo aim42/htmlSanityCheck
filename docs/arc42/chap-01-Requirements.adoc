@@ -18,17 +18,20 @@ kbd:[HtmlSC] can run from the command line or as {gradle-url}-plugin.
 [Terminology]
 ==== Terminology: What Can Go Wrong in HTML Files?
 
-Apart from purely syntactical errors, many things can go wrong in html, especially with respect to
-hyperlinks, anchors and id's - as those are often manually maintained.
+Apart from purely syntactical errors, many things can go wrong in html, especially with respect to hyperlinks, anchors and id's - as those are often manually maintained.
+
+Primary sources of problems are bad links (in technical terms: URIs). For further information, see the <<InformationOnUris, background information on URIs>>. 
+
 
 .Broken Cross References:: Cross-references (internal links) can be broken,
-e.g. due to missing or misspelled link-target.
+e.g. due to missing or misspelled link-targets.
 See <<BrokenCrossReferencesChecker>>
 
-.Missing image files: Referenced image files can be missing or misspelled. See <<MissingImageFilesChecker>>.
+.Missing image files: Referenced image files can be missing or misspelled. 
+See <<MissingImageFilesChecker>>.
 
 .Missing local resources: Referenced local resources (other than images) can be missing or misspelled.
-  See <<MissingLocalResourcesChecker>>
+See <<MissingLocalResourcesChecker>>
 
 .Duplicate link targets: link-targets can occur several times with the same name - so the browser cannot know
 which is the desired target.
@@ -165,3 +168,47 @@ Gradle, command-line and a graphical client have to be supported.
 | wants an example of pragmatic architecture documentation and arc42 usage
 
 |===
+
+[[InformationOnUris]]
+=== Background Information on URIs
+
+The generic structure of a Uniform Resource Identifier consists of
+the following parts: 
++++[type][://][subdomain][domain][port][path][file][query][hash]+++
+
+An example, visualized:
+
+image::uri-generic-example.png[]
+
+The ```java.net.URL``` class contains a generic parser for URLs and URIs.
+See the following snippet, taken from the unit test class URLUtilTest.groovy:
+
+
+[source, groovy]
+.Generic URI Structure
+----
+include::{testpath}/htmlsanitycheck/html/URLUtilTest.groovy[tags=GenericURIExample]
+
+----  
+
+
+URIs are used to *reference* other ressources. 
+For kbd:htmlSC it is useful to distinguish between internal (== local)and external references:
+
+* Internal references, a.k.a. Cross-References
+* External references
+
+
+==== Intra-Document URIs
+
+a file... ref can be an internal link, or a URI without protocoll...
+
+
+==== References on URIs and HTML Syntax
+
+* http://www.ietf.org/rfc/rfc2396.txt[IETF RFC-2396 on URI Syntax]: The 
+fundamental reference!
+* http://www.w3.org/TR/html401/struct/links.html#h-12.2.4[W3C HTML Reference]
+* http://en.wikipedia.org/wiki/URI_scheme#Generic_syntax[Wikipedia on URI-Schemes]
+
+

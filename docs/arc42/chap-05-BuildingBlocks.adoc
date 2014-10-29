@@ -127,6 +127,7 @@ concept of extensible checking algorithms>>.
 
 === Building Blocks - Level 3
 
+[[ResultsCollector]]
 ==== ResultsCollector (Whitebox)
 
 image::ResultsCollector.png["Whitebox", title="Results Collector (Whitebox)"]
