@@ -33,10 +33,15 @@ public class HtmlReporter extends Reporter {
         // determine a path where we can write our output file...
         completeOutputFilePath = determineOutputFilePath(resultsOutputDir, REPORT_FILENAME)
 
+        copyRequiredResourceFiles( completeOutputFilePath )
+
         // init the private writer object
-        writer = initWriter(completeOutputFilePath)
+        writer = createWriter(completeOutputFilePath)
 
+        initWriterWithHtmlHeader()
+    }
 
+    private initWriterWithHtmlHeader() {
         writer << """
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head><meta httpEquiv="Content-Type" content="text/html"; charset="utf-8"/>
@@ -84,10 +89,18 @@ function scrollToTop() {
     }
 
     /*
-    create and open a FileWriter to write the generated HTML
+    * copy css, javaScript and image/icon files to the html output directory,
+    *
      */
+    private void  copyRequiredResourceFiles( String outputDirectory ) {}
 
-    private FileWriter initWriter(String directoryAndFileName) {
+
+
+    /*
+    create and open a FileWriter to write the generated HTML
+    */
+
+    private FileWriter createWriter(String directoryAndFileName) {
         writer = new FileWriter(directoryAndFileName)
 
     }
@@ -355,7 +368,7 @@ function scrollToTop() {
 
      */
     private void copyResourceFromJarToDirectory(String resourceName, File outputDirectory) {
-        URL resource = getClass().getClassLoader().getResource("org/gradle/reporting/" + resourceName);
+        URL resource = getClass().getClassLoader().getResource("resources/" + resourceName);
         String dir = StringUtils.substringAfterLast(resourceName, ".");
         GFileUtils.copyURLToFile(resource, new File(outputDirectory, dir + "/" + resourceName));
     }
