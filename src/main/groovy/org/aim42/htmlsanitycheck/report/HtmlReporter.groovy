@@ -4,7 +4,6 @@ package org.aim42.htmlsanitycheck.report
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
-import org.apache.commons.lang.StringUtils
 import org.gradle.util.GFileUtils
 
 /**
@@ -33,13 +32,40 @@ public class HtmlReporter extends Reporter {
         // determine a path where we can write our output file...
         completeOutputFilePath = determineOutputFilePath(resultsOutputDir, REPORT_FILENAME)
 
-        copyRequiredResourceFiles( completeOutputFilePath )
-
         // init the private writer object
-        writer = createWriter(completeOutputFilePath)
+        writer = createWriter( completeOutputFilePath )
 
         initWriterWithHtmlHeader()
+
+
+        // we have a writer, therefore an existing output directory!
+
+        def requiredResourceFiles = ["arrow-up.png", "htmlsanitycheck-logo.png",
+                                     "htmlsc-style.css", "scroll.css",
+                                     "jquery.min.js"]
+        copyRequiredResourceFiles( resultsOutputDir, requiredResourceFiles )
     }
+
+
+    /*
+    we need some static files next to the report html.. css, js and logo stuff.
+
+    Originally I posted this as a question to the gradle forum:
+    http://forums.gradle.org/gradle/topics/-html-checking-plugin-how-to-copy-required-css-to-output-directory
+
+    Answers were:
+    http://stackoverflow.com/questions/10308221/how-to-copy-file-inside-jar-to-outside-the-jar
+
+    https://github.com/gradle/gradle/blob/master/subprojects/performance/src/testFixtures/groovy/org/gradle/performance/results/ReportGenerator.java#L50-50
+
+     */
+    private void copyResourceFromJarToDirectory(String resourceName, File outputDirectory) {
+        URL resource = getClass().getClassLoader().getResource(resourceName);
+        // String dir = StringUtils.substringAfterLast(resourceName, ".");
+        //GFileUtils.copyURLToFile(resource, new File(outputDirectory, dir + "/" + resourceName));
+        GFileUtils.copyURLToFile(resource, new File(outputDirectory, resourceName));
+    }
+
 
     private initWriterWithHtmlHeader() {
         writer << """
@@ -92,7 +118,14 @@ function scrollToTop() {
     * copy css, javaScript and image/icon files to the html output directory,
     *
      */
-    private void  copyRequiredResourceFiles( String outputDirectory ) {}
+    private void  copyRequiredResourceFiles( String outputDirectoryPath, List<String> requiredResources ) {
+        File outputDir = new File( outputDirectoryPath )
+
+        requiredResources.each {  resource ->
+            copyResourceFromJarToDirectory( resource, outputDir )
+        }
+
+    }
 
 
 
@@ -114,8 +147,6 @@ function scrollToTop() {
         writer << overallSummaryInfoBox()
 
         writer << allPagesSummaryTable()
-
-        // TODO: table of all pages-checked incl. links to details
 
         writer << "<hr>"
 
@@ -333,6 +364,9 @@ function scrollToTop() {
             realPath = realPath + fileName
         } else realPath = System.getProperty("user.dir") + File.separator + fileName
 
+        // make sure we really have an existing file!
+        assert realDir.exists()
+
         return realPath
     }
 
@@ -355,23 +389,6 @@ function scrollToTop() {
     }
 
 
-    /*
-    we need some static files next to the report html.. css, js and logo stuff.
-
-    Originally I posted this as a question to the gradle forum:
-    http://forums.gradle.org/gradle/topics/-html-checking-plugin-how-to-copy-required-css-to-output-directory
-
-    Anwsers were:
-    http://stackoverflow.com/questions/10308221/how-to-copy-file-inside-jar-to-outside-the-jar
-
-    https://github.com/gradle/gradle/blob/master/subprojects/performance/src/testFixtures/groovy/org/gradle/performance/results/ReportGenerator.java#L50-50
-
-     */
-    private void copyResourceFromJarToDirectory(String resourceName, File outputDirectory) {
-        URL resource = getClass().getClassLoader().getResource("resources/" + resourceName);
-        String dir = StringUtils.substringAfterLast(resourceName, ".");
-        GFileUtils.copyURLToFile(resource, new File(outputDirectory, dir + "/" + resourceName));
-    }
 
 }
 /*======================================================================
