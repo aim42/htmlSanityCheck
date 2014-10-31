@@ -67,6 +67,20 @@ class HtmlPage {
     }
 
     /**
+     * builds an immutable list of '<img src="xxx" alt="yz">,
+     * where "yz" is non-empty.
+
+     * @return
+     */
+    public final ArrayList<HtmlElement> getAllImageTagsWithNonEmptyAltAttribute() {
+        // formerly Elements elements = document?.getElementsByTag("img")
+        Elements elements = document?.select("img[alt~=a]")
+
+        return toHtmlElementsCollection( elements )
+
+    }
+
+    /**
      * builds a list of all '<a href="XYZ"> tags
      * @return ArrayList of all hrefs, including the "#"
      */

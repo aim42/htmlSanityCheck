@@ -23,7 +23,7 @@ class HtmlPageTest extends GroovyTestCase {
      */
     final static String LOCAL_PATH = "/src/test/resources/"
 
-    final static String HTML_HEAD = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <head></head><html>'
+    final static String HTML_HEAD = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <html><head></head>'
 
 
     final String HTML_WITH_IMG_TAG =
@@ -352,9 +352,9 @@ class HtmlPageTest extends GroovyTestCase {
             link = "#link$i"
             assertTrue("expect $link in results, but wasn't", hrefs.contains(link))
         }
-
-
     }
+
+
 
 }
 
