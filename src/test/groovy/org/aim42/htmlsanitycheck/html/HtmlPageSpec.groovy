@@ -25,33 +25,70 @@ import spock.lang.Specification
 class HtmlPageSpec extends Specification {
 
     private final String HTML_HEAD = "<!DOCTYPE HTML> <html><head></head><body>"
-    private final String HTML_END  = "</body></html>"
+    private final String HTML_END = "</body></html>"
 
     private HtmlPage htmlPage
     private ArrayList qualifiedImageTags
 
-    def "get image tags with non-empty alt attributes"(int nrOfAltAttributes, String imageTags )
-    {
-
+    def "get image tags with non-empty alt attributes"(int nrOfAltAttributes, String imageTags) {
         when:
         String html = HTML_HEAD + imageTags + HTML_END
 
-        htmlPage = new HtmlPage( html )
+        htmlPage = new HtmlPage(html)
         qualifiedImageTags = htmlPage.getAllImageTagsWithNonEmptyAltAttribute()
 
         then:
-            qualifiedImageTags.size() == nrOfAltAttributes
+        qualifiedImageTags.size() == nrOfAltAttributes
 
         where:
 
         nrOfAltAttributes | imageTags
-                       0  | """<img src="a.jpg">"""
-                       0  | """<img src="a.jpg" alt="" >"""   // pathological case: empty alt attribute
-                       1  | """<img src="a.jpg" alt="a" >"""
-                       2  | """<img src="a.jpg" alt="a" >  <img src="b.png" alt="b" """
+        0                 | """<img src="a.jpg"> """
+        0                 | """<img src="a.jpg" alt=""> """   // pathological case: empty alt attribute
+        0                 | """<img src="a.jpg" alt="" >  <img src="b.png" alt> """
+
+        1                 | """<img src="a.jpg" alt="a" > """
+        2                 | """<img src="a.jpg" alt="a" >  <img src="b.png" alt="b"> """
+        2                 | """<img src="a.jpg" alt="a-a aa a" >  <img src="b.png" alt="22"> """
+
+        3                 | """ <img alt="1" >
+                                <img src="" alt="2">
+                                <img src="t.doc" alt="r"> """
+
+    }
 
 
 
-        }
+    /*
+    here: missing alt-attribute either
+    - alt-attribute not present (e.g. <img src="a.jpg"> or
+    - alt-attribute empty
+     */
+    def "get image tags with missing alt attributes"(int missingAltAttrs, String imageTags) {
+        when:
+        String html = HTML_HEAD + imageTags + HTML_END
+
+        htmlPage = new HtmlPage(html)
+        qualifiedImageTags = htmlPage.getAllImageTagsWithMissingAltAttribute()
+
+        then:
+        qualifiedImageTags.size() == missingAltAttrs
+
+        where:
+
+        missingAltAttrs | imageTags
+        1                 | """<img src="a.jpg"> """
+        1                 | """<img src="a.jpg" alt=""> """   // pathological case: empty alt attribute
+        2                 | """<img src="a.jpg" alt="" >  <img src="b.png" alt> """
+
+        0                 | """<img src="a.jpg" alt="a" > """
+        0                 | """<img src="a.jpg" alt="a" >  <img src="b.png" alt="b"> """
+        0                 | """<img src="a.jpg" alt="a-a aa a" >  <img src="b.png" alt="22"> """
+
+        0                 | """ <img alt="1" >
+                                <img src="" alt="2">
+                                <img src="t.doc" alt="r"> """
+
+    }
 
 }
