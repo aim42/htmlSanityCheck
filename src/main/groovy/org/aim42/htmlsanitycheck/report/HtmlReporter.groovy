@@ -360,7 +360,7 @@ function scrollToTop() {
             String dir = StringUtils.substringAfterLast(resourceName, ".");
             GFileUtils.copyURLToFile(resource, new File(outputDirectory, dir + "/" + resourceName));
         }
-    }
+
 }
 /*======================================================================
 
