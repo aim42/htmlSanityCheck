@@ -26,6 +26,15 @@ class HtmlElement {
     }
 
     /**
+     * @return XYZ for <img src="..." alt="XYZ">
+     */
+    public String getImageAltAttribute() {
+        if (element.tagName().equals("img"))
+            element.attr("alt")
+        else return ""
+    }
+
+    /**
      * @return XYZ for 'a href="XYZ"' tags
      */
     public String getHrefAttribute() {
