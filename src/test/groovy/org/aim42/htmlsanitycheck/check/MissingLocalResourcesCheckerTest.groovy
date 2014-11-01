@@ -1,13 +1,13 @@
 package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.junit.Before
 import org.junit.Test
 
 class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
-    private final static String HTMLHEAD = "<html><head></head><body>"
 
     Checker missingLocalResourcesChecker
     HtmlPage htmlPage
@@ -78,7 +78,7 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
         // 2.) create local resource file f2 in subdir d2
         final String fname = "fname.html"
-        File f2 = new File(d2, fname) << HTMLHEAD
+        File f2 = new File(d2, fname) << HtmlConst.HTML_HEAD
 
         assertEquals("created an artificial file", "d2/fname.html",
                 f2.canonicalPath - d1.canonicalPath - "/")
@@ -86,18 +86,17 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
         assertTrue("newly created artificial file exists", f2.exists())
 
         // 3.) create tmp html file "index.html" linking to f2 in directory d1
-        File index = new File(d1, "index.html") << HTMLHEAD
+        File index = new File(d1, "index.html") << HtmlConst.HTML_HEAD
         return [index, fname, d1]
     }
 
 
     @Test
     public void testCrossReferenceIsNotChecked() {
-        String HTML = """$HTMLHEAD
+        String HTML = """${HtmlConst.HTML_HEAD}
             <h1>dummy-heading-1</h1>
             <a href="#aim42">aim42</a>
-           </body>
-         </html>"""
+           ${HtmlConst.HTML_END}"""
 
         htmlPage = new HtmlPage( HTML )
 
@@ -115,12 +114,11 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
     @Test
     public void testReferenceToLocalFileIsChecked() {
-        String HTML = """$HTMLHEAD
+        String HTML = """${HtmlConst.HTML_HEAD}
             <h1>dummy-heading-1</h1>
             <a href="a_nonexisting_doc_uh7mP0R3YfR2__.pdf">nonexisting-doc</a>
             <a href="no/nex/ist/ing/dire/tory/test.pdf">another nonexisting download</a>
-           </body>
-         </html>"""
+           ${HtmlConst.HTML_END}"""
 
         htmlPage = new HtmlPage( HTML )
 

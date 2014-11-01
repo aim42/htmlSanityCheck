@@ -67,6 +67,28 @@ class HtmlPage {
     }
 
     /**
+     * builds an immutable list of '<img src="xxx" alt="yz">,
+     * where "yz" is non-empty.
+     */
+    public final ArrayList<HtmlElement> getAllImageTagsWithNonEmptyAltAttribute() {
+        // regex "\S" matches any word
+        Elements elements = document?.select("img[alt~=(\\S)]")
+
+        return toHtmlElementsCollection( elements )
+    }
+
+    /**
+     * builds an immutable list of <img...> tags, where
+     * the alt-tag is missing or empty ("").
+     */
+    public final ArrayList<HtmlElement> getAllImageTagsWithMissingAltAttribute() {
+        Elements elements =  document?.select( "img") -  document?.select("img[alt~=(\\S)]")
+
+        return toHtmlElementsCollection( elements )
+    }
+
+
+    /**
      * builds a list of all '<a href="XYZ"> tags
      * @return ArrayList of all hrefs, including the "#"
      */

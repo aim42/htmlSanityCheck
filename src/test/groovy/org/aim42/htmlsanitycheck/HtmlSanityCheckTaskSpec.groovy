@@ -70,10 +70,10 @@ class HtmlSanityCheckTaskSpec extends Specification {
         new File("/_non/exis_/d_ir/") | new HashSet<String>()
 
         // existing but empty directory is absurd too...
-        File.createTempDir() | []
+        File.createTempDir()          | []
 
         // existing directory with nonexisting files too...
-        File.createTempDir() | ["non.existing", "blurb.htm"]
+        File.createTempDir()          | ["non.existing", "blurb.htm"]
 
     }
 

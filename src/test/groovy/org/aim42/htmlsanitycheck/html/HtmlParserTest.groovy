@@ -9,7 +9,6 @@ import org.junit.Test
 
 class HtmlParserTest extends GroovyTestCase {
 
-    final static String HTML_HEAD = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <head></head><html>'
 
     final static String LOCAL_IMG_SRC = "images/test_xyz_uvw.jpg"
     final static String REMOTE_IMG_SRC = "https://www.google.com/images/srpr/logo11w.png"
@@ -17,12 +16,10 @@ class HtmlParserTest extends GroovyTestCase {
 
 
     final String HTML_WITH_IMG_TAG =
-          """
-           $HTML_HEAD
+          """${HtmlConst.HTML_HEAD}
               <body>
                    <img src="$LOCAL_IMG_SRC" >
-              </body>
-           </html>"""
+              ${HtmlConst.HTML_END}"""
 
 
     @Test
@@ -63,13 +60,12 @@ class HtmlParserTest extends GroovyTestCase {
 
     @Test
     public void testGetSrcAttributeFromRemoteImageTag() {
-        String HTML = """$HTML_HEAD <body>
+        String HTML = """${HtmlConst.HTML_HEAD} <body>
 
             <img src="$REMOTE_IMG_SRC" >
             <img src="$LOCAL_IMG_SRC" >
 
-         </body>
-         </html>"""
+         ${HtmlConst.HTML_END}"""
 
         HtmlPage htmlPage = new HtmlPage( HTML )
 
@@ -85,12 +81,11 @@ class HtmlParserTest extends GroovyTestCase {
     @Test
     public void testGetHrefFromAnchorTag() {
         final String REMOTE_URL = "http://github.com/aim42"
-        final String HTML = """$HTML_HEAD <body>
+        final String HTML = """${HtmlConst.HTML_HEAD} <body>
             <a href=$REMOTE_URL ></a>
             <a href="" ></a>
             <a href="#local"></a>
-         </body>
-         </html>"""
+         ${HtmlConst.HTML_END}"""
 
 
         HtmlPage htmlPage = new HtmlPage( HTML )

@@ -57,6 +57,14 @@ class SingleCheckResults implements CheckResults {
         nrOfItemsChecked += 1
     }
 
+    public void addNrOfChecks( int nrOfChecksToAdd ) {
+        nrOfItemsChecked += nrOfChecksToAdd
+    }
+
+    public void setNrOfChecks( int nrOfChecks ) {
+        nrOfItemsChecked = nrOfChecks
+    }
+
     /**
      * @return a description of what is checked
      */
