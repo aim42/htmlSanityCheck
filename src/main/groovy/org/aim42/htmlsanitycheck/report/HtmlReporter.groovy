@@ -33,8 +33,9 @@ public class HtmlReporter extends Reporter {
         completeOutputFilePath = determineOutputFilePath(resultsOutputDir, REPORT_FILENAME)
 
         // init the private writer object
-        writer = initWriter(completeOutputFilePath)
+        writer = createWriter(completeOutputFilePath)
 
+        initWriterWithHtmlHeader()
 
 
         // we have a writer, therefore an existing output directory!
@@ -388,24 +389,7 @@ function scrollToTop() {
     }
 
 
-    /*
-    we need some static files next to the report html.. css, js and logo stuff.
 
-    Originally I posted this as a question to the gradle forum:
-    http://forums.gradle.org/gradle/topics/-html-checking-plugin-how-to-copy-required-css-to-output-directory
-
-    Anwsers were:
-
-    http://stackoverflow.com/questions/10308221/how-to-copy-file-inside-jar-to-outside-the-jar
-
-    https://github.com/gradle/gradle/blob/master/subprojects/performance/src/testFixtures/groovy/org/gradle/performance/results/ReportGenerator.java#L50-50
-
-     */
-    private void copyResourceFromJarToDirectory( String resourceName, File outputDirectory) {
-            URL resource = getClass().getClassLoader().getResource("org/gradle/reporting/" + resourceName);
-            String dir = StringUtils.substringAfterLast(resourceName, ".");
-            GFileUtils.copyURLToFile(resource, new File(outputDirectory, dir + "/" + resourceName));
-        }
 
 }
 /*======================================================================
