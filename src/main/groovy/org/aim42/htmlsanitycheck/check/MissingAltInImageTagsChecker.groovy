@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.html.HtmlElement
 
 /************************************************************************
  * This is free software - without ANY guarantee!
@@ -22,15 +23,47 @@ import org.aim42.htmlsanitycheck.collect.SingleCheckResults
  *
  *********************************************************************** */
 
+/**
+ * checks for missing or empty alt-attributes in image tags.
+ *
+ */
 class MissingAltInImageTagsChecker extends Checker {
+
 
     @Override
     protected void initCheckingResultsDescription() {
-
+        checkingResults.whatIsChecked = "Missing alt-attribute declaration in image tags"
+        checkingResults.sourceItemName = "image tags"
+        checkingResults.targetItemName = "missing alt attributes"
     }
+
 
     @Override
     protected SingleCheckResults check() {
-        return null
+        // the number of checks is calculated by counting
+        // ALL image tags:
+        checkingResults.setNrOfChecks( pageToCheck.getAllImageTags().size())
+
+        // see HtmlPageSpec for behavior: missing or empty alt-attributes are included...
+        pageToCheck.getAllImageTagsWithMissingAltAttribute().each { element ->
+            reportSingleImageTagWithMissingAlt(element)
+        }
+
+        return checkingResults
     }
+
+    /*
+
+     */
+
+    private void reportSingleImageTagWithMissingAlt(HtmlElement element) {
+
+        String imageName = element.imageSrcAttribute
+
+        String findingText = """image \"$imageName\" is missing alt-attribute"""
+
+        checkingResults.newFinding(findingText)
+
+    }
+
 }

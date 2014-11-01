@@ -1,21 +1,20 @@
 package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import spock.lang.Specification
+import spock.lang.Subject
+
 
 class MissingAltInImageTagsCheckerSpec extends Specification {
 
-    final static String HTML_HEADER = "<!DOCTYPE HTML> <head></head><html><body>"
-    final static String HTML_FOOTER = "</body></html>"
-
-
+    @Subject
     public Checker missingAltInImageTagsChecker
+
+
     private HtmlPage htmlPage
     private SingleCheckResults collector
-
-
-
 
     /**
      * data-driven test to specify behavior of MissingAltInImageTagsChecker
@@ -25,7 +24,7 @@ class MissingAltInImageTagsCheckerSpec extends Specification {
     def "missingAltAttributeLeadsToFinding"(int nrOfFindings, int nrOfChecks, String imageTags) {
 
         given:
-        String html = HTML_HEADER + imageTags + HTML_FOOTER
+        String html = HtmlConst.HTML_HEAD + imageTags + HtmlConst.HTML_END
         htmlPage = new HtmlPage( html )
 
 
@@ -36,6 +35,8 @@ class MissingAltInImageTagsCheckerSpec extends Specification {
 
         then:
         collector.nrOfProblems() == nrOfFindings
+        collector.nrOfItemsChecked == nrOfChecks
+
 
         where:
 

@@ -82,7 +82,7 @@ class BrokenCrossReferencesChecker extends Checker {
 
             // we found a broken link!
 
-            // now count occurences - how often is it referenced
+            // now count occurrences - how often is it referenced
             int nrOfReferences = hrefList.findAll{  it == href }.size()
 
             String findingText = "link target \"$linkTarget\" missing (reference count $nrOfReferences)"

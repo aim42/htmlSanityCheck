@@ -2,37 +2,14 @@ package org.aim42.htmlsanitycheck.html
 
 import spock.lang.Specification
 
-/************************************************************************
- * This is free software - without ANY guarantee!
- *
- *
- * Copyright 2013, Dr. Gernot Starke, arc42.org
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- *********************************************************************** */
-
 class HtmlPageSpec extends Specification {
-
-    private final String HTML_HEAD = "<!DOCTYPE HTML> <html><head></head><body>"
-    private final String HTML_END = "</body></html>"
 
     private HtmlPage htmlPage
     private ArrayList qualifiedImageTags
 
     def "get image tags with non-empty alt attributes"(int nrOfAltAttributes, String imageTags) {
         when:
-        String html = HTML_HEAD + imageTags + HTML_END
+        String html = HtmlConst.HTML_HEAD + imageTags + HtmlConst.HTML_END
 
         htmlPage = new HtmlPage(html)
         qualifiedImageTags = htmlPage.getAllImageTagsWithNonEmptyAltAttribute()
@@ -57,16 +34,15 @@ class HtmlPageSpec extends Specification {
 
     }
 
-
-
     /*
     here: missing alt-attribute either
     - alt-attribute not present (e.g. <img src="a.jpg"> or
     - alt-attribute empty
      */
+
     def "get image tags with missing alt attributes"(int missingAltAttrs, String imageTags) {
         when:
-        String html = HTML_HEAD + imageTags + HTML_END
+        String html = HtmlConst.HTML_HEAD + imageTags + HtmlConst.HTML_END
 
         htmlPage = new HtmlPage(html)
         qualifiedImageTags = htmlPage.getAllImageTagsWithMissingAltAttribute()
@@ -77,18 +53,40 @@ class HtmlPageSpec extends Specification {
         where:
 
         missingAltAttrs | imageTags
-        1                 | """<img src="a.jpg"> """
-        1                 | """<img src="a.jpg" alt=""> """   // pathological case: empty alt attribute
-        2                 | """<img src="a.jpg" alt="" >  <img src="b.png" alt> """
+        1               | """<img src="a.jpg"> """
+        1               | """<img src="a.jpg" alt=""> """   // pathological case: empty alt attribute
+        2               | """<img src="a.jpg" alt="" >  <img src="b.png" alt> """
 
-        0                 | """<img src="a.jpg" alt="a" > """
-        0                 | """<img src="a.jpg" alt="a" >  <img src="b.png" alt="b"> """
-        0                 | """<img src="a.jpg" alt="a-a aa a" >  <img src="b.png" alt="22"> """
+        0               | """<img src="a.jpg" alt="a" > """
+        0               | """<img src="a.jpg" alt="a" >  <img src="b.png" alt="b"> """
+        0               | """<img src="a.jpg" alt="a-a aa a" >  <img src="b.png" alt="22"> """
 
-        0                 | """ <img alt="1" >
+        0               | """ <img alt="1" >
                                 <img src="" alt="2">
                                 <img src="t.doc" alt="r"> """
 
     }
 
 }
+
+
+
+/************************************************************************
+ * This is free software - without ANY guarantee!
+ *
+ *
+ * Copyright 2013, Dr. Gernot Starke, arc42.org
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *********************************************************************** */

@@ -43,7 +43,7 @@ class AllChecksRunner {
     private Checker undefinedCrossReferencesChecker
     private Checker duplicateIdChecker
     private Checker missingLocalResourcesChecker
-
+    private Checker missingAltAttributesChecker
 
     private HtmlPage pageToCheck
 
@@ -83,7 +83,7 @@ class AllChecksRunner {
      */
     public AllChecksRunner(Collection<File> filesToCheck) {
         this( filesToCheck,
-              File.createTempDir("temporary", "diretory"),
+              File.createTempDir("temporary", "directory"),
               false)
     }
 
@@ -136,6 +136,7 @@ class AllChecksRunner {
             addResultsForSingleCheck(duplicateIdCheck())
             addResultsForSingleCheck(brokenCrossReferencesCheck())
             addResultsForSingleCheck(missingLocalResourcesCheck(baseDir))
+            addResultsForSingleCheck(missingAltAttributesCheck())
         }
 
         return resultsCollector
@@ -157,8 +158,6 @@ class AllChecksRunner {
      */
     private void reportCheckingResultsAsHTML(String resultsDir) {
 
-        // TODO: handle file i/o issues, as creating the html output file can go wrong!!
-        //
         Reporter reporter = new HtmlReporter(resultsForAllPages, resultsDir)
         reporter.reportFindings()
     }
@@ -213,7 +212,18 @@ class AllChecksRunner {
                 baseDirPath: baseDir
         )
         return missingLocalResourcesChecker.performCheck()
+    }
 
+
+    /**
+     * checks for missing or empty alt-attributes in image tags
+     */
+    private SingleCheckResults missingAltAttributesCheck() {
+        missingAltAttributesChecker = new MissingAltInImageTagsChecker(
+                pageToCheck: pageToCheck
+        )
+
+        return missingAltAttributesChecker.performCheck()
     }
 
     /**
