@@ -3,8 +3,12 @@
 
 apply plugin: 'java'
 apply plugin: 'groovy'
-apply plugin: 'maven'
-apply plugin: 'codenarc'
+
+apply from: 'gradle/code-coverage.gradle'
+apply from: 'gradle/code-quality.gradle'
+
+apply from: 'gradle/publishing.gradle'
+
 
 
 repositories {
@@ -16,6 +20,7 @@ repositories {
 
 dependencies {
     compile gradleApi()
+
     // need to have groovy compatible to spockframework
     compile 'org.codehaus.groovy:groovy-all:2.3.6'
 
@@ -27,8 +32,11 @@ dependencies {
     // mockito needed to test string similarity
     testCompile "org.mockito:mockito-all:1.9.5"
 
-    //
-    testCompile "org.spockframework:spock-core:1.0-groovy-2.3-SNAPSHOT"
+    // Spockframework for BDD (specification-based testing)
+    testCompile("org.spockframework:spock-core:1.0-groovy-2.3-SNAPSHOT") {
+        exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+    }
+
 
 }
 
@@ -40,7 +48,10 @@ buildscript {
     dependencies {
         classpath gradleApi()
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
-                  "org.codenarc:CodeNarc:0.17"
+        classpath "org.codenarc:CodeNarc:0.17"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
+
     }
 
 }
@@ -51,15 +62,24 @@ codenarc {
 // don't let codenarc violations break the build...
 [codenarcMain, codenarcTest]*.ignoreFailures = true
 
-uploadArchives.dependsOn 'clean'
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: uri('../repo'))
-        }
-    }
+tasks.withType(JavaCompile) {
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
 }
+
+task sourceJar(type: Jar) {
+    group 'Build'
+    description 'An archive of the source code'
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+jar.finalizedBy sourceJar
+
+artifacts {
+    sourceJar
+}
+
 
 
 // ###############################
