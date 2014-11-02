@@ -1,5 +1,5 @@
 = image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Checker
-:version: 0.1.0.SNAPSHOT
+:version: 0.5.0
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
@@ -27,13 +27,14 @@ It can be used as Gradle plugin or as standalone Java/Groovy app. A simple UI
 is planned for a future release.
 
 
-WARNING: The Gradle plugin is still unfinished!
 
 Status:
 image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
 image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[issues]
 
+
+image::https://api.bintray.com/packages/gernotstarke/HtmlSanityCheck/htmlSanityCheck/images/download.svg[link="https://bintray.com/gernotstarke/HtmlSanityCheck/htmlSanityCheck/_latestVersion"]
 
 
 == Installation
@@ -79,9 +80,9 @@ checkExternalLinks:: (optional, planned) if set to "true", external references a
 .build.gradle
 [source,groovy]
 ----
-// append below the line: apply plugin: 'sanityCheckHtml'
+// append below the line: apply plugin: 'htmlSanityCheck'
 
-sanityCheckHtml {
+htmlSanityCheck {
     sourceDir = new File( "$buildDir/docs/" )
     sourceDocumentNames = files(  new File( hsc_arc42.html),
                                   new File( hsc_devguide.html),
@@ -107,11 +108,8 @@ Finds all '<a href="XYZ">' where XYZ is not defined.
 
 In this example, the bookmark is _misspelled_.
 
-TODO: If an anchor XYZ is undefined, the plugin will look for _similar_ definitions
-(using a sophisticated string-similarity algorithm).
 
-
-=== Missing Images
+=== Missing Images Files
 Images, referenced in '<img src="XYZ"...' tags, refer to external files. The existence of
 these files is checked by the plugin.
 
@@ -126,9 +124,6 @@ All files (e.g. downloads) referenced from html.
 
 Although external links might suffer from network issues or site maintenance,
 checks are still possible...
-
-=== Broken ImageMap Links
-*planned*
 
 
 == Technical Documentation
@@ -157,7 +152,7 @@ came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by [@AA
 * Code for string similarity calculation by
   https://github.com/rrice/java-string-similarity[Ralph Rice].
 
-* Initial implementation by {gernotstarke}[Gernot Starke].
+* Initial implementation, maintenance and documentation by {gernotstarke}[Gernot Starke].
 
 == Development
 Several sources provided help during development:
@@ -174,3 +169,9 @@ Please report {plugin-issues}[issues or suggestions].
 
 Want to improve the plugin: Fork our {plugin-url}[repository] and
 send a pull request.
+
+== Licence
+Currently code is published under the Apache-2.0 licence,
+documentation under Creative-Commons-Sharealike-4.0.
+
+Some day I'll unify that :-)
