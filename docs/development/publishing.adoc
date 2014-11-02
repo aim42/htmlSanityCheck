@@ -1,0 +1,4 @@
+=== Publishing kbd:htmlSC Releases
+
+==== Handling (Secret) Credentials
+We use Etienne Studers awesome Gradle-Credentials plugin

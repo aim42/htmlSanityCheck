@@ -51,7 +51,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.aim42:htmlSanityCheck-gradle-plugin:{version}'
+        classpath 'org.aim42:htmlSanityCheck:{version}'
     }
 }
 

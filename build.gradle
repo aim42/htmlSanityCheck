@@ -1,14 +1,26 @@
 // gradle build script for html sanity check
 // =========================================
 
-apply plugin: 'java'
-apply plugin: 'groovy'
 
-apply from: 'gradle/code-coverage.gradle'
-apply from: 'gradle/code-quality.gradle'
 
-apply from: 'gradle/publishing.gradle'
+buildscript {
+    repositories {
+        jcenter()
+    }
 
+    dependencies {
+        classpath gradleApi()
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
+        classpath "org.codenarc:CodeNarc:0.17"
+        //classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
+
+    }
+}
+
+plugins {
+    id 'nu.studer.credentials' version '1.0.1'
+}
 
 
 repositories {
@@ -16,6 +28,14 @@ repositories {
     mavenCentral()
     maven {url "http://oss.sonatype.org/content/repositories/snapshots/"}
 }
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+
+apply from: 'gradle/code-coverage.gradle'
+apply from: 'gradle/code-quality.gradle'
+
+apply from: 'gradle/publishing.gradle'
 
 
 dependencies {
@@ -36,25 +56,10 @@ dependencies {
     testCompile("org.spockframework:spock-core:1.0-groovy-2.3-SNAPSHOT") {
         exclude group: 'org.codehaus.groovy', module: 'groovy-all'
     }
-
-
 }
 
-buildscript {
-    repositories {
-        jcenter()
-    }
 
-    dependencies {
-        classpath gradleApi()
-        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
-        classpath "org.codenarc:CodeNarc:0.17"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
 
-    }
-
-}
 
 codenarc {
     configFile = file('src/config/codenarc.groovy')
