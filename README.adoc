@@ -32,10 +32,11 @@ Status:
 image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
 image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[issues]
-
-
 image::https://api.bintray.com/packages/gernotstarke/HtmlSanityCheck/htmlSanityCheck/images/download.svg[link="https://bintray.com/gernotstarke/HtmlSanityCheck/htmlSanityCheck/_latestVersion"]
 
+
+WARNING: due to (temporary) configuration problems with bintray/jcenter, the
+gradle plugin does not work as described below. Hotfix is under way.
 
 == Installation
 
