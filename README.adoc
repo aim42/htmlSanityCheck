@@ -34,6 +34,8 @@ image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={pro
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[issues]
 
 
+image::https://api.bintray.com/packages/gernotstarke/HtmlSanityCheck/htmlSanityCheck/images/download.svg[link="https://bintray.com/gernotstarke/HtmlSanityCheck/htmlSanityCheck/_latestVersion"]
+
 
 == Installation
 
