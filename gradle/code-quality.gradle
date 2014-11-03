@@ -16,6 +16,15 @@
 
 apply plugin: 'findbugs'
 apply plugin: 'jdepend'
+apply plugin: 'codenarc'
+
+
+codenarc {
+    configFile = file('src/config/codenarc.groovy')
+}
+// don't let codenarc violations break the build...
+[codenarcMain, codenarcTest]*.ignoreFailures = true
+
 
 def configDir = new File(buildscript.sourceFile.parentFile.parentFile, 'config')
 ext.checkstyleConfigDir = "$configDir/checkstyle"

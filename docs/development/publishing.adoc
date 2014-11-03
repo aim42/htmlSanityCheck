@@ -1,4 +1,38 @@
 === Publishing kbd:htmlSC Releases
 
+==== Automating the Upload of a Gradle Plugin
+Puh - handling Bintray or JCenter is
+http://java.dzone.com/articles/enjoy-bintray-and-use-it-pain[not funny].
+
 ==== Handling (Secret) Credentials
-We use Etienne Studers awesome Gradle-Credentials plugin
+We use Etienne Studers awesome
+https://github.com/etiennestuder/gradle-credentials-plugin[Gradle-Credentials plugin]
+to allow automatic deployment to public portals (like Bintray, JCenter and/or Gradle-Plugin-Portal)
+and keep the appropriate passwords/API-keys secret.
+
+Brief instructions below - for details see the
+https://github.com/etiennestuder/gradle-credentials-plugin[credentials plugin]
+
+. integrate the plugin in the buildfile
+. get the required credentials from the Bintray website (or wherever you want to publish artifacts)
+. add the required credentials:
++
+[source]
+----
+> gradle addCredentials --key bintrayUserName --value <your-Bintray-username>
+:addCredentials
+
+BUILD SUCCESSFUL
+
+> gradle addCredentials --key bintrayApiKey --value <some-long-key>
+----
+. Within the buildfile you can now access these credentials as follows:
++
+[source]
+----
+// include these lines in your build.gradle:
+println "Username        : " + credentials.bintrayUserName
+println "Bintray API Key : " + credentials.bintrayApiKey
+----
+
+
