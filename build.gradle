@@ -29,7 +29,8 @@ buildscript {
         classpath "org.codenarc:CodeNarc:0.17"
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
 
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
+ 
+        //classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
         classpath "nu.studer:gradle-plugindev-plugin:1.0.3"
         classpath "nu.studer:gradle-credentials-plugin:1.0.1"
     }
@@ -43,8 +44,8 @@ dependencies {
 
     // jsoup is our awesome html parser, see jsoup.org
     compile 'org.jsoup:jsoup:1.7.3'
-
-    compile "nu.studer:java-ordered-properties:1.0.1"
+    
+    //compile "nu.studer:java-ordered-properties:1.0.1"
 
     testCompile 'junit:junit:4.11'
 
