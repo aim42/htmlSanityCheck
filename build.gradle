@@ -1,7 +1,23 @@
 // gradle build script for html sanity check
 // =========================================
 
+apply plugin: 'java'
+apply plugin: 'groovy'
 
+apply plugin: 'org.asciidoctor.gradle.asciidoctor'
+
+apply from: 'gradle/code-coverage.gradle'
+apply from: 'gradle/code-quality.gradle'
+
+apply from: 'gradle/publishing.gradle'
+apply plugin: 'maven'
+
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {url "http://oss.sonatype.org/content/repositories/snapshots/"}
+}
 
 buildscript {
     repositories {
@@ -12,31 +28,14 @@ buildscript {
         classpath gradleApi()
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
         classpath "org.codenarc:CodeNarc:0.17"
-        //classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
 
+ 
+        //classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
+        classpath "nu.studer:gradle-plugindev-plugin:1.0.3"
+        classpath "nu.studer:gradle-credentials-plugin:1.0.1"
     }
 }
-
-plugins {
-    id 'nu.studer.credentials' version '1.0.1'
-}
-
-
-repositories {
-    jcenter()
-    mavenCentral()
-    maven {url "http://oss.sonatype.org/content/repositories/snapshots/"}
-}
-
-apply plugin: 'java'
-apply plugin: 'groovy'
-
-apply from: 'gradle/code-coverage.gradle'
-apply from: 'gradle/code-quality.gradle'
-
-apply from: 'gradle/publishing.gradle'
-
 
 dependencies {
     compile gradleApi()
@@ -46,7 +45,7 @@ dependencies {
 
     // jsoup is our awesome html parser, see jsoup.org
     compile 'org.jsoup:jsoup:1.7.3'
-
+    
     testCompile 'junit:junit:4.11'
 
     // mockito needed to test string similarity
@@ -58,33 +57,14 @@ dependencies {
     }
 }
 
-
-
-
-codenarc {
-    configFile = file('src/config/codenarc.groovy')
+// local repo for testing purposes...
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+        }
+    }
 }
-// don't let codenarc violations break the build...
-[codenarcMain, codenarcTest]*.ignoreFailures = true
-
-tasks.withType(JavaCompile) {
-    sourceCompatibility = 1.6
-    targetCompatibility = 1.6
-}
-
-task sourceJar(type: Jar) {
-    group 'Build'
-    description 'An archive of the source code'
-    classifier 'sources'
-    from sourceSets.main.allSource
-}
-
-jar.finalizedBy sourceJar
-
-artifacts {
-    sourceJar
-}
-
 
 
 // ###############################
@@ -106,22 +86,7 @@ def outputPath = "$buildDir/docs"
 def reportPath = "$buildDir/report/"
 
 
-task info(
-    description: "info on several paths"
-  ) <<
-{
-  println "project.name = " + project.name
-  println "projectDir = " + projectDir
-  println "buildDir = " + buildDir
-  println "="*50
-  println "asciidoc src files: " + asciidocSrcPath
-  println "source images: " + srcImagesPath
-  println "asciidoc output: " + outputPath
-  println "reportPath = " + reportPath
-}
 
-
-apply plugin: 'org.asciidoctor.gradle.asciidoctor'
 
 // the files we process
 def hsc_arc42 = asciidocSrcPath + "/hsc_arc42.adoc"

@@ -47,6 +47,10 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
 
     @Test
+    /**
+     * a "complex" local reference is an anchor of the form <a href="dir/file.html#anchor>...
+     *
+     */
     public void testExistingComplexLocalReferenceIsFound() {
 
         def (File index, String fname, File d1) = createNestedTempDirWithFile()
@@ -71,7 +75,7 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
     }
 
     private List createNestedTempDirWithFile() {
-// 1.) create tmp directory d1 with subdir d2
+        // 1.) create tmp directory d1 with subdir d2
         File d1 = File.createTempDir()
         File d2 = new File(d1, "/d2")
         d2.mkdirs()

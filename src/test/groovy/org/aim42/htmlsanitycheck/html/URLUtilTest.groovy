@@ -116,7 +116,8 @@ class URLUtilTest extends GroovyTestCase {
                               "api/doc/Checker.html",
                               "images/xref", "Anotherfile.html",
                               "Somefile.docx",
-                              "downloads/Somefile.pdf"]
+                              "downloads/Somefile.pdf,",
+                              "api/Checker.html#anchor"]
 
         paths.each { path ->
             assertFalse("$path recognized as cross-reference",

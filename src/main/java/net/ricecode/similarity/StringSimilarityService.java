@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Ralph Allan Rice <ralph.rice@gmail.com>
+ * Copyright (c) 2010 Ralph Allan Rice ralph.rice@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@ import java.util.List;
 
 /**
  * A service that performs string similarity calculations.
- * @author Ralph Allan Rice <ralph.rice@gmail.com>
+ * @author Ralph Allan Rice ralph.rice@gmail.com
  *
  */
 public interface StringSimilarityService {
