@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Ralph Allan Rice <ralph.rice@gmail.com>
+ * Copyright (c) 2010 Ralph Allan Rice ralph.rice@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ package net.ricecode.similarity;
 /**
  * A strategy that uses the Jaro-Winkler Distance to calculate the similarity of two strings.
  * 
- * @author Ralph Allan Rice <ralph.rice@gmail.com>
+ * @author Ralph Allan Rice ralph.rice@gmail.com
  * @see <a href="http://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance">About Jaro-Winkler Distance</a>
  */
 public class JaroWinklerStrategy extends JaroStrategy implements SimilarityStrategy {
