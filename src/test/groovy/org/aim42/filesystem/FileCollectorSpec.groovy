@@ -36,6 +36,7 @@ class FileCollectorSpec extends Specification {
         ".htm"        | false
         ".html"       | false
         "a.html"      | true
+        //"test.html#anchor" | true
 
     }
 

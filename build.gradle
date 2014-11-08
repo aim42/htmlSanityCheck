@@ -10,6 +10,7 @@ apply from: 'gradle/code-coverage.gradle'
 apply from: 'gradle/code-quality.gradle'
 
 apply from: 'gradle/publishing.gradle'
+apply plugin: 'maven'
 
 
 repositories {
@@ -45,8 +46,6 @@ dependencies {
     // jsoup is our awesome html parser, see jsoup.org
     compile 'org.jsoup:jsoup:1.7.3'
     
-    //compile "nu.studer:java-ordered-properties:1.0.1"
-
     testCompile 'junit:junit:4.11'
 
     // mockito needed to test string similarity
@@ -58,7 +57,14 @@ dependencies {
     }
 }
 
-
+// local repo for testing purposes...
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+        }
+    }
+}
 
 
 // ###############################
