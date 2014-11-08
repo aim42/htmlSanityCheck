@@ -44,7 +44,7 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.6'
 
     // jsoup is our awesome html parser, see jsoup.org
-    compile 'org.jsoup:jsoup:1.7.3'
+    compile 'org.jsoup:jsoup:1.8.1'
     
     testCompile 'junit:junit:4.11'
 
