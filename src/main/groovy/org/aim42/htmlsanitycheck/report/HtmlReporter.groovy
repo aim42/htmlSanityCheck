@@ -320,17 +320,12 @@ function scrollToTop() {
 
     @Override
     protected void reportSingleCheckSummary(SingleCheckResults singleCheckResults) {
+
         singleCheckResults.each { result ->
-            // colorize failed checks with failure-class
-            String failureClassBegin = ""
-            String failureClassEnd = ""
+            // colorize failed checks with failure-class, successful with success-class
+            String headerClass = (result.nrOfProblems() > 0) ? "failures" : "success"
 
-            if (result.nrOfProblems() > 0) {
-                failureClassBegin = "<div class=\"failures\">"
-                failureClassEnd = "</div>"
-            }
-
-            writer << "\n${failureClassBegin}<h3>${result.whatIsChecked}</h3>${failureClassEnd}"
+            writer << """\n<div class="${headerClass}"><h3>${result.whatIsChecked}</h3></div>"""
 
             writer << "\n\n${result.nrOfItemsChecked} $result.sourceItemName checked, "
             writer << "${result.nrOfProblems()} $result.targetItemName found.\n"
