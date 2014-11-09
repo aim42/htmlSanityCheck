@@ -6,7 +6,6 @@
 
 :asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin
 
-
 :asciidoc-url: http://asciidoctor.org
 :gradle-url: http://gradle.org/
 
