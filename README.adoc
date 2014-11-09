@@ -32,8 +32,6 @@ image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={pro
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[issues]
 image:https://api.bintray.com/packages/gernotstarke/HtmlSanityCheck/HtmlSanityCheck/images/download.svg[link="https://bintray.com/gernotstarke/HtmlSanityCheck/HtmlSanityCheck/_latestVersion"]
 
-WARNING: due to (temporary) configuration problems with bintray/jcenter, the
-gradle plugin does not work as described below. Hotfix is under way.
 
 == Installation
 
@@ -65,7 +63,7 @@ This task exposes a few properties as part of its configuration:
 [horizontal]
 sourceDir:: (mandatory) directory where the html files are located. Type: File. Default: `build/docs`.
 sourceDocuments:: (optional) an override to process several source files, which may be a subset of all
-                      files available in [x-]`${sourceDir}`. Type: FileCollection.
+                      files available in [x-]`${sourceDir}`. Type: Set.
                       Defaults to all files in [x-]`${sourceDir}`.
 
 checkingResultsDir:: (optional) directory where the checking results written to.
