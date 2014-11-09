@@ -54,7 +54,7 @@ buildscript {
     }
 }
 
-apply plugin: 'org.aim42.HtmlSanityCheck'
+apply plugin: 'org.aim42.htmlSanityCheck'
 ----
 
 == Usage
@@ -76,18 +76,26 @@ checkExternalLinks:: (optional, planned) if set to "true", external references a
                       Defaults to `false` (currently not implemented)
 
 
-.build.gradle
+.build.gradle (real-world example)
 [source,groovy]
 ----
-// append below the line: apply plugin: 'htmlSanityCheck'
+apply plugin: 'org.aim42.htmlSanityCheck'
 
 htmlSanityCheck {
-    sourceDir = new File( "$buildDir/docs/" )
-    sourceDocumentNames = files(  new File( hsc_arc42.html),
-                                  new File( hsc_devguide.html),
-                                  new File( hsc_index.html) )
-    checkingResultsDir = new File("$buildDir/reports/")
+    dependsOn asciidoctor, copyImages
+
+    sourceDir = new File( "$buildDir/docs" )
+
+    // files to check - in Set-notation
+    sourceDocuments = [ "one-file.html", "another-file.html", "index.html"]
+
+    // where to put results of sanityChecks...
+    checkingResultsDir = new File( "$buildDir/report/htmlchecks" )
+    checkExternalLinks = false
 }
+
+htmlSanityCheck.mustRunAfter asciidoctor
+
 ----
 
 
@@ -118,11 +126,17 @@ If any is defined more than once, any anchor linking to it will be confused :-)
 === Missing Local Resources
 All files (e.g. downloads) referenced from html.
 
+=== Missing Alt-tags in Images
+Image-tags should contain an alt-attribute that the browser displays when the original image
+file cannot be found or cannot be rendered. Having alt-attributes is good and defensive style.
+
+
 === Broken External Links
 *planned*
 
 Although external links might suffer from network issues or site maintenance,
 checks are still possible...
+
 
 
 == Technical Documentation
