@@ -1,5 +1,5 @@
 = image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
-:version: 0.6.0
+:version: 0.8.0
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
@@ -47,11 +47,11 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.aim42:htmlSanityCheck:{version}'
+        classpath 'org.aim42:{project}:{version}'
     }
 }
 
-apply plugin: 'org.aim42.htmlSanityCheck'
+apply plugin: 'org.aim42.{project}'
 ----
 
 == Usage
