@@ -1,5 +1,5 @@
 = image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
-:version: 0.6.0
+:version: 0.8.0
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
@@ -28,6 +28,7 @@ is planned for a future release.
 
 
 image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
+image:http://img.shields.io/:semver-{version}-green.svg["Semantic Versioning", link="http://semver.org"]
 image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[issues]
 image:https://api.bintray.com/packages/gernotstarke/HtmlSanityCheck/HtmlSanityCheck/images/download.svg[link="https://bintray.com/gernotstarke/HtmlSanityCheck/HtmlSanityCheck/_latestVersion"]
@@ -47,11 +48,11 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.aim42:htmlSanityCheck:{version}'
+        classpath 'org.aim42:{project}:{version}'
     }
 }
 
-apply plugin: 'org.aim42.htmlSanityCheck'
+apply plugin: 'org.aim42.{project}'
 ----
 
 == Usage
