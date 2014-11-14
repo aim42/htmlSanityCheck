@@ -3,36 +3,20 @@
 
 apply plugin: 'java'
 apply plugin: 'groovy'
+apply plugin: 'maven'
 
 apply plugin: 'org.asciidoctor.gradle.asciidoctor'
 
-apply from: 'gradle/code-coverage.gradle'
-apply from: 'gradle/code-quality.gradle'
-
-apply from: 'gradle/publishing.gradle'
-apply plugin: 'maven'
+//apply from: 'gradle/code-coverage.gradle'
+//apply from: 'gradle/code-quality.gradle'
+//apply from: 'gradle/publishing.gradle'
 
 
 repositories {
     jcenter()
     mavenCentral()
-    maven {url "http://oss.sonatype.org/content/repositories/snapshots/"}
-}
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        classpath gradleApi()
-        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
-        classpath "org.codenarc:CodeNarc:0.17"
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
-
-        classpath "nu.studer:gradle-plugindev-plugin:1.0.3"
-        classpath "nu.studer:gradle-credentials-plugin:1.0.1"
-    }
+    //mavenLocal()
+    //maven {url "http://oss.sonatype.org/content/repositories/snapshots/"}
 }
 
 dependencies {
@@ -43,7 +27,7 @@ dependencies {
 
     // jsoup is our awesome html parser, see jsoup.org
     compile 'org.jsoup:jsoup:1.8.1'
-    
+
     testCompile 'junit:junit:4.11'
 
     // mockito needed to test string similarity
@@ -55,6 +39,24 @@ dependencies {
     }
 }
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath gradleApi()
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
+        //classpath "org.codenarc:CodeNarc:0.17"
+        //classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
+
+        classpath "nu.studer:gradle-plugindev-plugin:1.0.3"
+        classpath "nu.studer:gradle-credentials-plugin:1.0.1"
+    }
+}
+
+
+
 // local repo for testing purposes...
 uploadArchives {
     repositories {
@@ -65,69 +67,6 @@ uploadArchives {
 }
 
 
-// ###############################
-//
-// AsciiDoc stuff
-//
-// ###############################
-
-// location of AsciiDoc files
-def asciidocSrcPath = "$projectDir/docs"
-
-// location of images used in AsciiDoc documentation
-def srcImagesPath = "$asciidocSrcPath/images"
-
-// results of asciidoc compilitation (HTML) is stored
-def outputPath = "$buildDir/docs"
-
-// where HTMLSanityCheck checkingresults ares stored
-def reportPath = "$buildDir/report/"
-
-
-
-
-// the files we process
-def hsc_arc42 = asciidocSrcPath + "/hsc_arc42.adoc"
-def hsc_devguide = asciidocSrcPath + "/DevelopmentGuide.adoc"
-def hsc_index = asciidocSrcPath + "/index.adoc"
-
-
-asciidoctor {
-    outputDir = new File(outputPath)
-    sourceDir = file( asciidocSrcPath )
-    sourceDocumentNames = files(  new File( hsc_arc42),
-                                  new File( hsc_devguide),
-                                  new File( hsc_index) )
-
-        options = [
-        attributes: [
-            backend     : 'html5',
-            doctype     : 'book',
-            icons       : 'font',
-            sectlink    : true,
-            sectanchors : true
-        ]
-    ]
-}
-
-
-defaultTasks 'arc42'
-
-task copyImages(
-    type: Copy,
-    description: 'copy images into build output folder'
-) {
-    from srcImagesPath
-    into outputPath +'/images/'
-    include( '**/*.jpg', '**/*.png', '**/*.svg')
-}
-
-
-
-task arc42(
-    dependsOn: [copyImages, asciidoctor],
-    description: 'collects all required tasks for creating arc42 documentation'
-) << { }
 
 
 /*
