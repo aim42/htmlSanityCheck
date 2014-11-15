@@ -1,0 +1,55 @@
+// build file for documentation
+//
+
+apply plugin: 'org.asciidoctor.gradle.asciidoctor'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
+    }
+}
+
+def srcImagesPath = "./images"
+def outputPath    = "$buildDir/docs"
+
+asciidoctor {
+    outputDir = new File( outputPath )
+    sourceDir = file( "docs" )
+    sourceDocumentNames = files(
+            new File( "docs/hsc_arc42.adoc" ),
+            new File( "docs/DevelopmentGuide.adoc"),
+            new File( "docs/index.adoc") )
+
+    options = [
+            attributes: [
+                    backend     : 'html5',
+                    doctype     : 'book',
+                    icons       : 'font',
+                    sectlink    : true,
+                    sectanchors : true
+            ]
+    ]
+}
+
+
+defaultTasks 'doc42'
+
+task copyImages(
+        type: Copy,
+        description: 'copy images into build output folder'
+) {
+    from srcImagesPath
+    into outputPath +'/images/'
+    include( '**/*.jpg', '**/*.png', '**/*.svg')
+}
+
+
+
+task doc42(
+        dependsOn: [copyImages, asciidoctor],
+        description: 'performs all required tasks for creating documentation'
+) << { }
+
