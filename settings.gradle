@@ -1,8 +1,13 @@
-// configuration of the gradle-multiproject-build:
-//
-// htmlSanityCheck consists of several sub-projects
+// configuration of the gradle-multi project build
+// ===============================================
+
 include "documentation",  // obvious...
         "core",           // checking algorithms,
         "gradle-plugin"   // gradle specific configuration and glue-code
+
+// set plugin-name
+// otherwise plugin artifact would just be called "gradle-plugin"
+project(":gradle-plugin").name = "htmlSanityCheck"
+
 
 println 'html Sanity Check build initialization ....'

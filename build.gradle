@@ -1,10 +1,17 @@
 // gradle build script for html sanity check
 // =========================================
 
+
 // configure all source projects, but NOT :documentation
 configure( allprojects - project( ':documentation')) {
     apply plugin: 'java'
     apply plugin: 'groovy'
+
+    group = 'org.aim42'
+    version = '0.8.3'
+
+    sourceCompatibility  = 1.7
+    targetCompatibility  = 1.7
 
     repositories {
         jcenter()
@@ -33,7 +40,13 @@ project( ':core') {
 
 }
 
-
+class Version {
+    int major, minor, revision
+    boolean release
+    String toString() {
+        "$major.$minor.$revision${release ? '' : '-SNAPSHOT'}"
+        }
+}
 
 /*
  * Copyright 2012-2014 the original author or authors.
