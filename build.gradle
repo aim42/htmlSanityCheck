@@ -1,7 +1,38 @@
 // gradle build script for html sanity check
 // =========================================
 
-// currently we have no common build logic :-(
+// configure all source projects, but NOT :documentation
+configure( allprojects - project( ':documentation')) {
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven {url "http://oss.sonatype.org/content/repositories/snapshots/"}
+    }
+
+    dependencies {
+
+        compile gradleApi()
+
+        // need to have groovy compatible to spockframework
+        compile 'org.codehaus.groovy:groovy-all:2.3.6'
+
+        testCompile 'junit:junit:4.11'
+
+        // Spockframework for BDD (specification-based testing)
+        testCompile("org.spockframework:spock-core:1.0-groovy-2.3-SNAPSHOT") {
+            exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+        }
+    }
+}
+
+// specific for subproject ':core'
+project( ':core') {
+
+}
+
 
 
 /*

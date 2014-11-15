@@ -1,8 +1,6 @@
 // gradle build script for html sanity check gradle plugin
 // =========================================
 
-apply plugin: 'java'
-apply plugin: 'groovy'
 apply plugin: 'maven'
 
 
@@ -11,30 +9,10 @@ apply plugin: 'maven'
 //apply from: 'gradle/publishing.gradle'
 
 
-repositories {
-    jcenter()
-    mavenCentral()
-    maven {url "http://oss.sonatype.org/content/repositories/snapshots/"}
-}
-
 dependencies {
-    compile gradleApi()
+    // plugin requires core
+    compile project(':core')
 
-    // need to have groovy compatible to spockframework
-    compile 'org.codehaus.groovy:groovy-all:2.3.6'
-
-    // jsoup is our awesome html parser, see jsoup.org
-    compile 'org.jsoup:jsoup:1.8.1'
-
-    testCompile 'junit:junit:4.11'
-
-    // mockito needed to test string similarity
-    testCompile "org.mockito:mockito-all:1.9.5"
-
-    // Spockframework for BDD (specification-based testing)
-    testCompile("org.spockframework:spock-core:1.0-groovy-2.3-SNAPSHOT") {
-        exclude group: 'org.codehaus.groovy', module: 'groovy-all'
-    }
 }
 
 buildscript {
@@ -64,7 +42,6 @@ uploadArchives {
         }
     }
 }
-
 
 
 

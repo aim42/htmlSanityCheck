@@ -4,3 +4,5 @@
 include "documentation",  // obvious...
         "core",           // checking algorithms,
         "gradle-plugin"   // gradle specific configuration and glue-code
+
+println 'html Sanity Check build initialization ....'
