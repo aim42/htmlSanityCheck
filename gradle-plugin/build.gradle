@@ -1,36 +1,46 @@
-// gradle build script for html sanity check
+// gradle build script for html sanity check gradle plugin
 // =========================================
 
-// configure all source projects, but NOT :documentation
-configure( allprojects - project( ':documentation')) {
-    apply plugin: 'java'
-    apply plugin: 'groovy'
+apply plugin: 'maven'
 
+
+//apply from: 'gradle/code-coverage.gradle'
+//apply from: 'gradle/code-quality.gradle'
+//apply from: 'gradle/publishing.gradle'
+
+
+dependencies {
+    // plugin requires core
+    compile project(':core')
+
+}
+
+buildscript {
     repositories {
         jcenter()
-        mavenCentral()
-        maven {url "http://oss.sonatype.org/content/repositories/snapshots/"}
+
     }
 
     dependencies {
+        classpath gradleApi()
+        //classpath "org.codenarc:CodeNarc:0.17"
+        //classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
 
-        compile gradleApi()
+        classpath "nu.studer:gradle-plugindev-plugin:1.0.3"
+        classpath "nu.studer:gradle-credentials-plugin:1.0.1"
 
-        // need to have groovy compatible to spockframework
-        compile 'org.codehaus.groovy:groovy-all:2.3.6'
-
-        testCompile 'junit:junit:4.11'
-
-        // Spockframework for BDD (specification-based testing)
-        testCompile("org.spockframework:spock-core:1.0-groovy-2.3-SNAPSHOT") {
-            exclude group: 'org.codehaus.groovy', module: 'groovy-all'
-        }
     }
 }
 
-// specific for subproject ':core'
-project( ':core') {
 
+
+// local repo for testing purposes...
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../../repo'))
+        }
+    }
 }
 
 

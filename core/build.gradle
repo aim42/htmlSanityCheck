@@ -1,0 +1,13 @@
+// gradle build script for subproject "core"
+
+dependencies {
+
+    // jsoup is our awesome html parser, see jsoup.org
+    compile 'org.jsoup:jsoup:1.8.1'
+
+    // mockito needed to test string similarity
+    testCompile "org.mockito:mockito-all:1.9.5"
+
+}
+
+
