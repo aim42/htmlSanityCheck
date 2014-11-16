@@ -82,7 +82,9 @@ class URLUtilTest extends GroovyTestCase {
                                "down/loads/test.htm", "test.htm", "test.HTM",
                                "../down/loads/test.docx",
                                "test.docx", "test.pdf", "./test.docx",
-                                "test.html#anchor"]
+                                "test.html#anchor",
+                                "file://test.html#anchor",
+                                "./docs/test.html#anchor"]
 
         locals.each { it ->
             assertTrue("$it not recognized as local resource", URLUtil.isLocalResource(it))
