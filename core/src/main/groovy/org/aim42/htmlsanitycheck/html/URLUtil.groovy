@@ -26,22 +26,39 @@ class URLUtil {
     /**
      * Checks if this String represents a local resource, either:
      *   (1) "file://path/filename.ext" or
-     *   (2) contains a path-separator, e.g. "directory/filename.ext" or
-     *   (3) is directory with
-     *   (3) "directory"
+     *   (2) is a path, e.g. "directory/filename.ext" or directory or
+     *
+     *  @see class URLUtilSpec for details
      */
     public static boolean isLocalResource(String link) {
+
+        if ((link == null) || (link == "" )) return false
+
         if (URLUtil.isRemoteURL(link))
             return false
-        else return (
+        else {
+          URI aUri = new URI( link )
+          if (isLinkToFile(aUri)) return true // (1)
+          if (aUri.getPath() != "") return true // (2)
+            else return false
+        }
+
+           /* old, buggy return (
                 (link ==~ (/^(?i)(file):\/\/.*$/))  // (1)
                  ||
                 (link.contains(File.separatorChar.toString()) ) //
                 ||
                 ( link ==~/^[\w|\/,\s-]+\.[A-Za-z]{3,4}$/ )
-             )
+             )*/
     }
 
+    /*
+    ** helper to identify "file scheme"
+     */
+    private static Boolean isLinkToFile(URI aUri) {
+
+        aUri?.getScheme()?.toUpperCase() == "FILE"
+    }
 
     /**
      * Checks if this String represents a cross-reference,

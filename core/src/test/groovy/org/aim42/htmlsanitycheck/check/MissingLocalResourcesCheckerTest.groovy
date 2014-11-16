@@ -53,45 +53,33 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
      */
     public void testExistingComplexLocalReferenceIsFound() {
 
-        def (File index, String fname, File d1) = createNestedTempDirWithFile()
+       def (File index, String fname, File d1) = createNestedTempDirWithFile()
 
         index << """<a href="d2/$fname#anchor">link to local resource"</a></body></html>"""
 
         assertTrue( "newly created html file exists", index.exists())
 
-
-        // 4.) check
         htmlPage = new HtmlPage( index )
+
+        // htmlPage shall contain ONE local resource / local-reference
+        int nrOfLocalReferences = htmlPage.getAllHrefStrings().size()
+        assertEquals( "expected one reference", 1, nrOfLocalReferences)
+
+        // reference contained in htmlPage shall be "d2/$fname#anchor"
+        String localReference = htmlPage.getAllHrefStrings().first()
+        assertEquals( "expected d2/fname#anchor", "d2/$fname#anchor", localReference)
+
 
         missingLocalResourcesChecker = new MissingLocalResourcesChecker(
                 pageToCheck: htmlPage,
                 baseDirPath: d1.canonicalPath )
         collector = missingLocalResourcesChecker.performCheck()
 
-        // assert that no issue is found (== the local resource d2/fname.html is found)
+        // assert that no issue is found
+        // (== the existinglocal resource d2/fname.html is found)
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
         assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
 
-    }
-
-    private List createNestedTempDirWithFile() {
-        // 1.) create tmp directory d1 with subdir d2
-        File d1 = File.createTempDir()
-        File d2 = new File(d1, "/d2")
-        d2.mkdirs()
-
-        // 2.) create local resource file f2 in subdir d2
-        final String fname = "fname.html"
-        File f2 = new File(d2, fname) << HtmlConst.HTML_HEAD
-
-        assertEquals("created an artificial file", "d2/fname.html",
-                f2.canonicalPath - d1.canonicalPath - "/")
-
-        assertTrue("newly created artificial file exists", f2.exists())
-
-        // 3.) create tmp html file "index.html" linking to f2 in directory d1
-        File index = new File(d1, "index.html") << HtmlConst.HTML_HEAD
-        return [index, fname, d1]
     }
 
 
@@ -136,6 +124,35 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
         assertEquals( "expected $expected checks", expected, collector.nrOfItemsChecked)
 
     }
+
+
+    /*
+    helper to created nested directory structure
+     */
+
+    private List createNestedTempDirWithFile() {
+        // 1.) create tmp directory d1 with subdir d2
+        File d1 = File.createTempDir()
+        File d2 = new File(d1, "/d2")
+        d2.mkdirs()
+
+        // 2.) create local resource file f2 in subdir d2
+        final String fname = "fname.html"
+        File f2 = new File(d2, fname) << HtmlConst.HTML_HEAD
+
+        assertEquals("created an artificial file", "d2/fname.html",
+                f2.canonicalPath - d1.canonicalPath - "/")
+
+        assertTrue("newly created artificial file exists", f2.exists())
+
+        // 3.) create tmp html file "index.html" linking to f2 in directory d1
+        File index = new File(d1, "index.html") << HtmlConst.HTML_HEAD
+
+        return [index, fname, d1]
+    }
+
+
+
 }
 
 
