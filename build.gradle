@@ -8,7 +8,7 @@ configure( allprojects - project( ':documentation')) {
     apply plugin: 'groovy'
 
     group = 'org.aim42'
-    version = '0.8.3'
+    version = '0.8.4'
 
     //sourceCompatibility  = 1.7
     //targetCompatibility  = 1.7
