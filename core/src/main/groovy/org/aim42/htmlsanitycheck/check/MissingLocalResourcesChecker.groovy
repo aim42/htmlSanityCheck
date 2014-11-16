@@ -58,6 +58,13 @@ class MissingLocalResourcesChecker extends Checker {
     }
 
 
+    /*
+    @param localResource can be either:
+    - file.ext
+    - dir/file.ext
+    - file:/dir/file.ext
+    - file.ext#anchor
+     */
     private void checkSingleLocalResource( String localResource )  {
         // the localResource is either path+filename  or filename or directory
 
@@ -66,8 +73,11 @@ class MissingLocalResourcesChecker extends Checker {
         // bookkeeping:
         checkingResults.incNrOfChecks()
 
+        // we need to strip the localResource of #anchor-parts
+        String localResourcePath = new URI( localResource ).getPath()
+
         // we need the baseDir for robust checking of local resources...
-        File localFile = new File( baseDirPath, localResource );
+        File localFile = new File( baseDirPath, localResourcePath );
 
         if (!localFile.exists() ) {
             String findingText = "local resource \"$localResource\" missing"
