@@ -3,6 +3,8 @@
 
 apply plugin: 'maven'
 
+// TODO:
+// apply plugin: 'java-gradle-plugin'
 
 //apply from: 'gradle/code-coverage.gradle'
 //apply from: 'gradle/code-quality.gradle'
@@ -12,6 +14,7 @@ apply plugin: 'maven'
 dependencies {
     // plugin requires core
     compile project(':core')
+    archives project(':core')
 
 }
 
@@ -32,10 +35,8 @@ buildscript {
     }
 }
 
-
-
 // local repo for testing purposes...
-uploadArchives {
+uploadArchives() {
     repositories {
         mavenDeployer {
             repository(url: uri('../../repo'))

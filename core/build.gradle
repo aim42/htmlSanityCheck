@@ -3,11 +3,15 @@
 dependencies {
 
     // jsoup is our awesome html parser, see jsoup.org
-    compile 'org.jsoup:jsoup:1.8.1'
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.8.1'
 
     // mockito needed to test string similarity
     testCompile "org.mockito:mockito-all:1.9.5"
 
+}
+
+artifacts {
+    archives jar
 }
 
 

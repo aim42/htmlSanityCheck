@@ -1,14 +1,17 @@
 // gradle build script for html sanity check
 // =========================================
 
+subprojects() {
+    group = 'org.aim42'
+    def version = '0.8.4'
+}
 
 // configure all source projects, but NOT :documentation
-configure( allprojects - project( ':documentation')) {
+configure(allprojects - project(':documentation')) {
     apply plugin: 'java'
     apply plugin: 'groovy'
 
-    group = 'org.aim42'
-    version = '0.8.4'
+    archivesBaseName = "htmlSanityCheck"
 
     //sourceCompatibility  = 1.7
     //targetCompatibility  = 1.7
@@ -16,11 +19,10 @@ configure( allprojects - project( ':documentation')) {
     repositories {
         jcenter()
         mavenCentral()
-        maven {url "http://oss.sonatype.org/content/repositories/snapshots/"}
+        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
     }
 
     dependencies {
-
         compile gradleApi()
 
         // need to have groovy compatible to spockframework
@@ -32,20 +34,34 @@ configure( allprojects - project( ':documentation')) {
         testCompile("org.spockframework:spock-core:1.0-groovy-2.3-SNAPSHOT") {
             exclude group: 'org.codehaus.groovy', module: 'groovy-all'
         }
+    } // dependencies
+
+
+}
+
+subprojects.each {
+    subproject -> evaluationDependsOn(subproject.path)
+}
+
+// combine the jars from subprojects into single jar
+// for distribution
+
+task allJar(type: Jar, dependsOn: (allprojects - project(':documentation')).jar) {
+    baseName = "htmlSanityCheck"
+    subprojects.each {
+        subproject ->
+            from subproject.configurations.archives.allArtifacts.files.collect {
+                zipTree(it)
+            }
     }
 }
 
-// specific for subproject ':core'
-project( ':core') {
-
+artifacts {
+    archives allJar
 }
 
-class Version {
-    int major, minor, revision
-    boolean release
-    String toString() {
-        "$major.$minor.$revision${release ? '' : '-SNAPSHOT'}"
-        }
+// specific for subproject ':core'
+project(':core') {
 }
 
 /*
