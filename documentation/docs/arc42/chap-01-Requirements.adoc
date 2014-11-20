@@ -38,7 +38,7 @@ which is the desired target.
   See <<DuplicateLinkTargetsChecker>>.
 
 .Illegal links:: The links (aka anchors or URIs) can contain illegal characters or violate HTML link syntax.
-  See <<IllegalLinkChecker
+  See <<IllegalLinkChecker>>
 
 .Broken external links: External links can be broken due to myriads of reasons: misspelled, link-target currently offline,
  illegal link syntax. See <<BrokenExternalLinksChecker>>.
@@ -87,7 +87,7 @@ Important terms (*domain terms*) of html sanity checking is documented in a (sma
                                   image files exist.
                                   See <<MissingImageFilesChecker>>
 | R-2 | broken internal links | Check all internal links from anchor-tags
-                                  (href="XYZ") if the link targets "XYZ" are defined.
+                                  (href="#XYZ") if the link targets "XYZ" are defined.
                                   See <<BrokenCrossReferencesChecker>>
 | R-3 | missing local files   | either other html-files, pdf's or similar.
                                   See <<MissingLocalResourcesChecker>>
