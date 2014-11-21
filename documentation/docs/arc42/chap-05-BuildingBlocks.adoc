@@ -84,7 +84,7 @@ Files::
 ==== _CheckerCore_ (Whitebox)
 
 
-image::CheckerCore-Whitebox.png["Whitebox", title="CheckerCore (Whitebox)"]
+image::hsc_core.png["Whitebox", title="HSC_Core (Whitebox)"]
 
 Rationale::
 This structures follows a strictly functional decomposition:
