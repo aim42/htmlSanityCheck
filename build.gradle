@@ -3,7 +3,7 @@
 
 subprojects() {
     group = 'org.aim42'
-    def version = '0.8.4'
+    def version = '0.8.5'
 }
 
 // configure all source projects, but NOT :documentation
@@ -39,26 +39,6 @@ configure(allprojects - project(':documentation')) {
 
 }
 
-subprojects.each {
-    subproject -> evaluationDependsOn(subproject.path)
-}
-
-// combine the jars from subprojects into single jar
-// for distribution
-
-task allJar(type: Jar, dependsOn: (allprojects - project(':documentation')).jar) {
-    baseName = "htmlSanityCheck"
-    subprojects.each {
-        subproject ->
-            from subproject.configurations.archives.allArtifacts.files.collect {
-                zipTree(it)
-            }
-    }
-}
-
-artifacts {
-    archives allJar
-}
 
 // specific for subproject ':core'
 project(':core') {

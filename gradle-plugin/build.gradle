@@ -13,9 +13,7 @@ apply plugin: 'maven'
 
 dependencies {
     // plugin requires core
-    compile project(':core')
-    archives project(':core')
-
+    compile project('hsc-:core')
 }
 
 buildscript {

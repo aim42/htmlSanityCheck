@@ -2,7 +2,7 @@
 // ===============================================
 
 include "documentation",  // obvious...
-        "core",           // checking algorithms,
+        "hsc-core",       // checking algorithms, reporting
         "gradle-plugin"   // gradle specific configuration and glue-code
 
 // set plugin-name
