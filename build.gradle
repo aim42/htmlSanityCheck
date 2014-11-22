@@ -8,8 +8,9 @@ subprojects() {
 
 // configure all source projects, but NOT :documentation
 configure(allprojects - project(':documentation')) {
-    apply plugin: 'java'
     apply plugin: 'groovy'
+    //apply from: 'gradle/code-coverage.gradle'
+    //apply from: 'gradle/code-quality.gradle'
 
     archivesBaseName = "htmlSanityCheck"
 
@@ -37,11 +38,6 @@ configure(allprojects - project(':documentation')) {
     } // dependencies
 
 
-}
-
-
-// specific for subproject ':core'
-project(':core') {
 }
 
 /*

@@ -6,14 +6,14 @@ apply plugin: 'maven'
 // TODO:
 // apply plugin: 'java-gradle-plugin'
 
-//apply from: 'gradle/code-coverage.gradle'
-//apply from: 'gradle/code-quality.gradle'
-//apply from: 'gradle/publishing.gradle'
+
+apply plugin: 'nu.studer.plugindev'
+apply plugin: 'nu.studer.credentials'
 
 
 dependencies {
     // plugin requires core
-    compile project('hsc-:core')
+    compile project(':hsc-core')
 }
 
 buildscript {
@@ -31,6 +31,31 @@ buildscript {
         classpath "nu.studer:gradle-credentials-plugin:1.0.1"
 
     }
+}
+
+
+
+plugindev {
+    pluginId 'org.aim42.HtmlSanityCheck'
+    pluginName "htmlSanityCheck"
+    pluginDescription 'Html Sanity Check: performs various semantic checks on html files, e.g. broken internal links, missing images, missing local resources etc.'
+    pluginImplementationClass 'org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin'
+    pluginLicenses 'Apache-2.0'
+    pluginTags 'gradle', 'plugin', 'html', 'check'
+    authorId 'gernotstarke'
+    authorName 'Dr. Gernot Starke'
+    authorEmail 'gs@gernotstarke.de'
+    projectUrl 'https://github.com/aim42/htmlSanityCheck'
+    projectInceptionYear '2014'
+    done()
+}
+
+bintray {
+    user = credentials.bintrayUserName
+    key = credentials.bintrayApiKey
+    pkg.repo = 'HtmlSanityCheck'
+    dryRun = false
+    publish = false
 }
 
 // local repo for testing purposes...

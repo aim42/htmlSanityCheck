@@ -7,10 +7,14 @@ buildscript {
     }
     dependencies {
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6"
+        classpath "nu.studer:gradle-credentials-plugin:1.0.1"
+
     }
 }
 
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'nu.studer.credentials'
+apply plugin: 'java'
 
 
 dependencies {
@@ -24,39 +28,47 @@ dependencies {
 }
 
 
+
+
+
 bintray {
-    user = 'bintray_user'
-    key = 'bintray_api_key'
-
-    publications = ['mavenStuff'] //When uploading Maven-based publication files
-
-    dryRun = true //Whether to run this as dry-run, without deploying
-    publish = false //If version should be auto published after an upload
-
+    user = credentials.bintrayUserName
+    key = credentials.bintrayApiKey
+    pkg.repo = 'HtmlSanityCheck'
+    dryRun = true
+    publish = false
     pkg {
-        repo = 'myrepo'
-        userOrg = 'myorg' //An optional organization name when the repo belongs to one of the user's orgs
-        name = 'mypkg'
-        desc = 'what a fantastic package indeed!'
-        websiteUrl = 'https://github.com/bintray/gradle-bintray-plugin'
-        issueTrackerUrl = 'https://github.com/bintray/gradle-bintray-plugin/issues'
-        vcsUrl = 'https://github.com/bintray/gradle-bintray-plugin.git'
+        repo = "HtmlSanityCheck"
+        name = 'hsc-core'
+        desc = 'core package to perform semantic html checking'
+        websiteUrl = 'https://github.com/aim42/htmlSanityCheck'
+        issueTrackerUrl = 'https://github.com/aim42/htmlSanityCheck/issues'
+        vcsUrl = 'https://github.com/aim42/htmlSanityCheck.git'
         licenses = ['Apache-2.0']
-        labels = ['gear', 'gore', 'gorilla']
+        labels = ['groovy', 'html', 'check']
         publicDownloadNumbers = true
-        attributes= ['a': ['ay1', 'ay2'], 'b': ['bee'], c: 'cee'] //Optional package-level attributes
         //Optional version descriptor
         version {
-            name = '1.3-Final' //Bintray logical version name
+            name = '0.8.5' //Bintray logical version name
             desc = 'optional, version-specific description'
             released  = 'optional, date of the version release' //2 possible values: date in the format of 'yyyy-MM-dd'T'HH:mm:ss.SSSZZ' OR a java.util.Date instance
-            vcsTag = '1.3.0'
-            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin'] //Optional version-level attributes
-            gpg {
-                sign = true //Determines whether to GPG sign the files. The default is false
-                passphrase = 'optional, the passphrase for GPG signing'
-            }
+            vcsTag = '0.8.5'
         }
     }
 }
+
+
+// just for instructional purpose:
+// -------------------------------
+
+// read credentials at build time, assuming credentials have already been
+// written to the file system through Gradle task before via
+// gradle addCredentials --key bintrayUserName --value <username>
+
+// uncomment the following lines to see the (locally) stored credentials
+
+// println "Username        : " + credentials.bintrayUserName
+// println "Bintray API Key : " + credentials.bintrayApiKey
+
+
 
