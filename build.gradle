@@ -3,7 +3,7 @@
 
 subprojects() {
     group = 'org.aim42'
-    def version = '0.8.5'
+    version = '0.7.1'
 }
 
 // configure all source projects, but NOT :documentation

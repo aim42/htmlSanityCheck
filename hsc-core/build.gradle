@@ -14,6 +14,7 @@ buildscript {
 
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'nu.studer.credentials'
+apply plugin: 'maven-publish'
 apply plugin: 'java'
 
 
@@ -27,15 +28,66 @@ dependencies {
 
 }
 
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'HTML Sanity Check Core',
+                'Implementation-Version': version,
+                'Built-By': System.getProperty('user.name'),
+                'Built-Date': new Date(),
+                'Built-JDK': System.getProperty('java.version'),
+                'Built-Gradle': gradle.gradleVersion
+    }
+}
+
+
+def pomConfig = {
+    name project.name
+    description project.project_description
+    url project.project_url
+    inceptionYear '2014'
+
+    scm { url project.project_scm }
 
 
 
+    developers {
+        developer {
+            id 'gernotstarke'
+            name 'Gernot Starke'
+            url 'http://www.gernotstarke.de/'
+            email 'gs@gernotstarke.de'
+            roles { role 'Developer' }
+        }
+    }
+
+    contributors {
+        contributor {
+            name 'Ralf Mueller'
+            email 'ralf.d.mueller@gmail.com'
+        }
+
+    }
+}
+
+publishing {
+    publications {
+        mavenCustom(MavenPublication) {
+            from components.java
+
+            pom.withXml {
+                asNode().children().last() + pomConfig
+            }
+        }
+    }
+}
 
 bintray {
     user = credentials.bintrayUserName
     key = credentials.bintrayApiKey
-    dryRun = true
-    publish = false
+    publications = ['mavenCustom'] // see publications closure
+
+    dryRun = false
+    publish = true
     pkg {
         repo = "HtmlSanityCheck"
         name = 'hsc-core'
@@ -48,14 +100,11 @@ bintray {
         publicDownloadNumbers = true
         //Optional version descriptor
         version {
-            name = '0.8.5' //Bintray logical version name
+            name = version //Bintray logical version name
             desc = 'first public version of hsc-core'
-            released  = new java.util.Date() //2 possible values: date in the format of 'yyyy-MM-dd'T'HH:mm:ss.SSSZZ' OR a java.util.Date instance
-            vcsTag = '0.8.5'
         }
     }
 }
-
 
 // just for instructional purpose:
 // -------------------------------
