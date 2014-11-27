@@ -3,7 +3,7 @@
 
 subprojects() {
     group = 'org.aim42'
-    version = '0.7.1'
+    def versionID = '0.7.1'
 }
 
 // configure all source projects, but NOT :documentation
@@ -12,12 +12,9 @@ configure(allprojects - project(':documentation')) {
     //apply from: 'gradle/code-coverage.gradle'
     //apply from: 'gradle/code-quality.gradle'
 
-    archivesBaseName = "htmlSanityCheck"
+    //archivesBaseName = "htmlSanityCheck"
 
-    //sourceCompatibility  = 1.7
-    //targetCompatibility  = 1.7
-
-    repositories {
+     repositories {
         jcenter()
         mavenCentral()
         maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }

@@ -10,10 +10,12 @@ apply plugin: 'maven'
 apply plugin: 'nu.studer.plugindev'
 apply plugin: 'nu.studer.credentials'
 
+version = project.project_version
 
 dependencies {
     // plugin requires core
     compile project(':hsc-core')
+
 }
 
 buildscript {
@@ -37,15 +39,15 @@ buildscript {
 
 plugindev {
     pluginId 'org.aim42.HtmlSanityCheck'
-    pluginName "htmlSanityCheck"
+    pluginName "HtmlSanityCheck"
     pluginDescription 'Html Sanity Check: performs various semantic checks on html files, e.g. broken internal links, missing images, missing local resources etc.'
     pluginImplementationClass 'org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin'
     pluginLicenses 'Apache-2.0'
     pluginTags 'gradle', 'plugin', 'html', 'check'
     authorId 'gernotstarke'
-    authorName 'Dr. Gernot Starke'
+    authorName project.project_vendor
     authorEmail 'gs@gernotstarke.de'
-    projectUrl 'https://github.com/aim42/htmlSanityCheck'
+    projectUrl project.project_url
     projectInceptionYear '2014'
     done()
 }
@@ -55,7 +57,7 @@ bintray {
     key = credentials.bintrayApiKey
     pkg.repo = 'HtmlSanityCheck'
     dryRun = false
-    publish = false
+    publish = true
 }
 
 // local repo for testing purposes...

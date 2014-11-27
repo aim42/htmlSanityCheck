@@ -31,7 +31,7 @@ dependencies {
 jar {
     manifest {
         attributes 'Implementation-Title': 'HTML Sanity Check Core',
-                'Implementation-Version': version,
+                'Implementation-Version': project.project_version,
                 'Built-By': System.getProperty('user.name'),
                 'Built-Date': new Date(),
                 'Built-JDK': System.getProperty('java.version'),
@@ -100,7 +100,7 @@ bintray {
         publicDownloadNumbers = true
         //Optional version descriptor
         version {
-            name = version //Bintray logical version name
+            name = project.project_version //Bintray logical version name
             desc = 'first public version of hsc-core'
         }
     }
