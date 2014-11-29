@@ -1,5 +1,6 @@
 // configuration of the gradle-multi project build
 // ===============================================
+println '(settings.gradle) initialization'
 
 include "documentation",  // obvious...
         "hsc-core",       // checking algorithms, reporting
@@ -7,7 +8,6 @@ include "documentation",  // obvious...
 
 // set plugin-name
 // otherwise plugin artifact would just be called "gradle-plugin"
-project(":gradle-plugin").name = "htmlSanityCheck"
+project(":gradle-plugin").name = "HtmlSanityCheck-gradle-plugin"
+project(":hsc-core").name = "HtmlSanityCheck-core"
 
-
-println 'html Sanity Check build initialization ....'
