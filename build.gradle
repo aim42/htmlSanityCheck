@@ -9,15 +9,17 @@ subprojects() {
 }
 
 // disable the crazy super-strict doclint tool in Java 8
-
+// thanx, @jodastephen
+// http://blog.joda.org/2014/02/turning-off-doclint-in-jdk-8-javadoc.html
 if (JavaVersion.current().isJava8Compatible()) {
     allprojects {
         tasks.withType(Javadoc) {
-//noinspection SpellCheckingInspection
             options.addStringOption('Xdoclint:none', '-verbose')
         }
     }
 }
+
+
 // configure all source projects, but NOT :documentation
 configure(allprojects - project(':documentation')) {
     apply plugin: 'groovy'
