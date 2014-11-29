@@ -1,9 +1,9 @@
 // gradle build script for html sanity check
 // =========================================
+println '(top-level build.gradle) initialization'
 
 subprojects() {
     group = 'org.aim42'
-    def versionID = '0.7.1'
 }
 
 // configure all source projects, but NOT :documentation
@@ -12,7 +12,7 @@ configure(allprojects - project(':documentation')) {
     //apply from: 'gradle/code-coverage.gradle'
     //apply from: 'gradle/code-quality.gradle'
 
-    //archivesBaseName = "htmlSanityCheck"
+    targetCompatibility = "1.7"
 
      repositories {
         jcenter()
