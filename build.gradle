@@ -1,20 +1,35 @@
 // gradle build script for html sanity check
 // =========================================
 println '(top-level build.gradle) initialization'
+println "compiling with Java " + System.getProperty("java.version")
+
 
 subprojects() {
     group = 'org.aim42'
 }
 
+// disable the crazy super-strict doclint tool in Java 8
+
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+//noinspection SpellCheckingInspection
+            options.addStringOption('Xdoclint:none', '-verbose')
+        }
+    }
+}
 // configure all source projects, but NOT :documentation
 configure(allprojects - project(':documentation')) {
     apply plugin: 'groovy'
     //apply from: 'gradle/code-coverage.gradle'
     //apply from: 'gradle/code-quality.gradle'
 
-    targetCompatibility = "1.7"
+    targetCompatibility = project.language_level
+    sourceCompatibility = project.language_level
 
-     repositories {
+
+
+    repositories {
         jcenter()
         mavenCentral()
         maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
