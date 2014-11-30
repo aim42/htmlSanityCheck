@@ -71,6 +71,10 @@ def pomConfig = {
     }
 }
 
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
 publishing {
     publications {
         mavenCustom(MavenPublication) {
@@ -81,6 +85,10 @@ publishing {
 
             pom.withXml {
                 asNode().children().last() + pomConfig
+            }
+
+            artifact sourceJar {
+                classifier "sources"
             }
         }
     }
