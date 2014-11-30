@@ -1,5 +1,5 @@
 = image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
-:version: 0.8.0
+:version: 0.5.3
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
@@ -10,7 +10,7 @@
 :gradle-url: http://gradle.org/
 
 :gernotstarke: https://github.com/gernotstarke
-:project: htmlSanityCheck
+:project: HtmlSanityCheck-gradle-plugin
 :project-url: https://github.com/aim42/htmlSanityCheck
 :project-issues: https://github.com/aim42/htmlSanityCheck/issues
 :project-bugs: https://github.com/aim42/htmlSanityCheck/issues?q=is%3Aopen+is%3Aissue+label%3Abug
@@ -22,8 +22,8 @@ It can be helpful in case of html generated from e.g. {asciidoc-url}[Asciidoctor
 Markdown or other formats - as converters usually don't check for missing images
 or broken links.
 
-It can be used as Gradle plugin or as standalone Java/Groovy app. A simple UI
-is planned for a future release.
+It can be used as Gradle plugin. Standalone Java and graphical UI
+are planned for a future releases.
 
 
 
@@ -77,7 +77,7 @@ checkExternalLinks:: (optional, planned) if set to "true", external references a
 .build.gradle (real-world example)
 [source,groovy]
 ----
-apply plugin: 'org.aim42.htmlSanityCheck'
+apply plugin: 'org.aim42.HtmlSanityCheck-gradle-plugin'
 
 htmlSanityCheck {
     dependsOn asciidoctor, copyImages

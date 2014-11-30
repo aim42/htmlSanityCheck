@@ -187,7 +187,7 @@ See the following snippet, taken from the unit test class URLUtilTest.groovy:
 [source, groovy]
 .Generic URI Structure
 ----
-include::{testpath}/htmlsanitycheck/html/URLUtilTest.groovy[tags=GenericURIExample]
+include::{coretestpath}/htmlsanitycheck/html/URLUtilTest.groovy[tags=GenericURIExample]
 
 ----  
 

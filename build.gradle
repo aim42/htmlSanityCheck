@@ -1,26 +1,44 @@
 // gradle build script for html sanity check
 // =========================================
+println '(top-level build.gradle) initialization'
+println """compiling with Java ${System.getProperty("java.version")} to language level ${project.project_language_level}"""
+println "building project version " + project.project_version
 
+subprojects() {
+    group = project.project_bintray_org
+    version = project.project_version
+
+}
+
+// disable the crazy super-strict doclint tool in Java 8
+// thanx, @jodastephen
+// http://blog.joda.org/2014/02/turning-off-doclint-in-jdk-8-javadoc.html
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-verbose')
+        }
+    }
+}
 
 // configure all source projects, but NOT :documentation
-configure( allprojects - project( ':documentation')) {
-    apply plugin: 'java'
+configure(allprojects - project(':documentation')) {
     apply plugin: 'groovy'
 
-    group = 'org.aim42'
-    version = '0.8.4'
+    //apply from: 'gradle/code-coverage.gradle'
+    //apply from: 'gradle/code-quality.gradle'
 
-    //sourceCompatibility  = 1.7
-    //targetCompatibility  = 1.7
 
-    repositories {
+    targetCompatibility = project.project_language_level
+    sourceCompatibility = project.project_language_level
+
+   repositories {
         jcenter()
         mavenCentral()
-        maven {url "http://oss.sonatype.org/content/repositories/snapshots/"}
+        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
     }
 
     dependencies {
-
         compile gradleApi()
 
         // need to have groovy compatible to spockframework
@@ -32,21 +50,15 @@ configure( allprojects - project( ':documentation')) {
         testCompile("org.spockframework:spock-core:1.0-groovy-2.3-SNAPSHOT") {
             exclude group: 'org.codehaus.groovy', module: 'groovy-all'
         }
+    } // dependencies
+
+    // common buildscript configuration
+    buildscript {
+        repositories {}
+        dependencies {}
+
     }
-}
-
-// specific for subproject ':core'
-project( ':core') {
-
-}
-
-class Version {
-    int major, minor, revision
-    boolean release
-    String toString() {
-        "$major.$minor.$revision${release ? '' : '-SNAPSHOT'}"
-        }
-}
+} // source-project configuration
 
 /*
  * Copyright 2012-2014 the original author or authors.

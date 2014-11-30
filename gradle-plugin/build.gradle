@@ -1,24 +1,22 @@
 // gradle build script for html sanity check gradle plugin
 // =========================================
+println "  (configuration of subproject $project.name) "
+
 
 apply plugin: 'maven'
 
-
-//apply from: 'gradle/code-coverage.gradle'
-//apply from: 'gradle/code-quality.gradle'
-//apply from: 'gradle/publishing.gradle'
-
+// to publish on Gradle plugin portal
+apply plugin: 'nu.studer.plugindev'
+apply plugin: 'nu.studer.credentials'
 
 dependencies {
-    // plugin requires core
-    compile project(':core')
-
+    // gradle-plugin requires core
+    compile project(':HtmlSanityCheck-core')
 }
 
 buildscript {
     repositories {
         jcenter()
-
     }
 
     dependencies {
@@ -33,9 +31,31 @@ buildscript {
 }
 
 
+plugindev {
+    pluginId 'org.aim42.HtmlSanityCheck-gradle-plugin'
+    pluginName project.name
+    pluginDescription 'Html Sanity Check: performs various semantic checks on html files, e.g. broken internal links, missing images, missing local resources etc.'
+    pluginImplementationClass 'org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin'
+    pluginLicenses project.project_license
+    pluginTags 'gradle', 'plugin', 'html', 'check'
+    authorId project.project_author_id
+    authorName project.project_vendor
+    authorEmail project.project_author_email
+    projectUrl project.project_url
+    projectInceptionYear project.project_inception_year
+    done()
+}
+
+bintray {
+    user = credentials.bintrayUserName
+    key = credentials.bintrayApiKey
+    pkg.repo = project.project_bintray_repo
+    dryRun = false
+    publish = true
+}
 
 // local repo for testing purposes...
-uploadArchives {
+uploadArchives() {
     repositories {
         mavenDeployer {
             repository(url: uri('../../repo'))

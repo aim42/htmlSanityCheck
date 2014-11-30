@@ -1,7 +1,9 @@
 // build file for documentation
-//
+println "  (configuration of subproject $project.name) "
+
 
 apply plugin: 'org.asciidoctor.gradle.asciidoctor'
+//apply plugin: 'distribution'
 
 buildscript {
     repositories {
@@ -12,6 +14,7 @@ buildscript {
     }
 }
 
+// asciidoc stuff
 def srcImagesPath = "./images"
 def outputPath    = "$buildDir/docs"
 
@@ -53,3 +56,13 @@ task doc42(
         description: 'performs all required tasks for creating documentation'
 ) << { }
 
+
+// configure what's to be included in the doc-distribution
+//distributions {
+//    main {
+//        baseName = 'htmlSC-documentation'
+//        contents {
+//            from { outputPath }
+//        }
+//    }
+//}

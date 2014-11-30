@@ -20,7 +20,7 @@ Contained Blackboxes::
 [cols="1,3" options=""]
 .HtmlSanityChecker building blocks
 |===
-| <<checker_blackbox, CheckerCore>> | core: html parsing and sanity checking, file handling
+| <<checker_blackbox, HSC_Core>> | hsc_core: html parsing and sanity checking, file handling
 | HSC Gradle Plugin | integrates the Gradle build tool with kbd:[HtmlSC],
 enabling arbitrary gradle builds to use kbd:[HtmlSC] functionality.
 | HSC Command Line Interface | (not documented)
@@ -49,9 +49,9 @@ corresponding image directories.
 
 
 [[checker_blackbox]]
-==== _CheckerCore_ (Blackbox)
+==== _HSC Core_ (Blackbox)
 
-Intent/Responsibility:: Checker contains the core functions
+Intent/Responsibility:: HSC_Core contains the core functions
 to perform the various sanity checks. It parses the html file
 into a DOM-like in-memory representation, which is then
 used to perform the actual checks.
@@ -60,7 +60,7 @@ used to perform the actual checks.
 Interfaces::
 
 [cols="2,4", options="header"]
-.CheckerCore Interfaces
+.HSC_Core Interfaces
 |===
 | Interface (From-To) | Description
 
@@ -81,10 +81,10 @@ Files::
 
 === Building Blocks - Level 2
 
-==== _CheckerCore_ (Whitebox)
+==== _HSC-Core_ (Whitebox)
 
 
-image::CheckerCore-Whitebox.png["Whitebox", title="CheckerCore (Whitebox)"]
+image::hsc-core.png["Whitebox", title="HSC-Core (Whitebox)"]
 
 Rationale::
 This structures follows a strictly functional decomposition:
@@ -96,7 +96,7 @@ This structures follows a strictly functional decomposition:
 Contained Blackboxes::
 
 [cols="1,4" options=""]
-.CheckerCore building blocks
+.HSC-Core building blocks
 |===
 | Checker
 | abstract class, used in form of the template-pattern. Shall be subclassed
@@ -110,9 +110,16 @@ command-line interface.
 | Collects all checking results. Its interface `Results` is contained in the 
 <<ResultsCollector, whitebox description>>
 
+| <<Reporter>>
+| Reporst checking results to either console or an html file.
+
 | HtmlParser
 | Encapsulates html parsing, provides methods to search
 within the (parsed) html.
+
+| Suggester
+| in case of checking issues, suggests alternatives by comparing the faulty element 
+to the one present in the html file. 
 |===
 
 
@@ -174,7 +181,7 @@ overall `RunResults`, single-page results (`PageResults`) and single-check resul
 [source, groovy]
 .Interface RunResults
 ----
-include::{sourcepath}/htmlsanitycheck/collect/RunResults.groovy[tags=RunResultInterface]
+include::{coresourcepath}/htmlsanitycheck/collect/RunResults.groovy[tags=RunResultInterface]
 ----
 
 
@@ -182,13 +189,13 @@ include::{sourcepath}/htmlsanitycheck/collect/RunResults.groovy[tags=RunResultIn
 [source, groovy]
 .Interface PageResults
 ----
-include::{sourcepath}/htmlsanitycheck/collect/PageResults.groovy[tags=PageResultInterface]
+include::{coresourcepath}/htmlsanitycheck/collect/PageResults.groovy[tags=PageResultInterface]
 ----
 
 
 [source, groovy]
 .Interface CheckResults
 ----
-include::{sourcepath}/htmlsanitycheck/collect/CheckResults.groovy[tags=CheckResultsInterface]
+include::{coresourcepath}/htmlsanitycheck/collect/CheckResults.groovy[tags=CheckResultsInterface]
 ----
 
