@@ -93,6 +93,7 @@ bintray {
 
     dryRun = false
     publish = true
+
     pkg {
         repo = project.project_bintray_repo
         name = project.name
