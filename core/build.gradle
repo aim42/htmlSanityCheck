@@ -17,6 +17,7 @@ buildscript {
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'nu.studer.credentials'
 apply plugin: 'maven-publish'
+apply plugin: 'maven'
 apply plugin: 'java'
 
 
@@ -106,6 +107,16 @@ bintray {
         publicDownloadNumbers = true
 
     }
+
+    // local repo for testing purposes...
+    uploadArchives() {
+        repositories {
+            mavenDeployer {
+                repository(url: uri('../../repo'))
+            }
+        }
+    }
+
 }
 
 // just for instructional purpose:
