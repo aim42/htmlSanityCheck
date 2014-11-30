@@ -55,8 +55,8 @@ bintray {
     user = credentials.bintrayUserName
     key = credentials.bintrayApiKey
     pkg.repo = project.project_bintray_repo
-    dryRun = project.dryRun
-    publish = project.publish
+    dryRun = false
+    publish = true
 }
 
 // local repo for testing purposes...
