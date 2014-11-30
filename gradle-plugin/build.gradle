@@ -1,27 +1,22 @@
 // gradle build script for html sanity check gradle plugin
 // =========================================
+println "  (configuration of subproject $project.name) "
+
 
 apply plugin: 'maven'
 
-// TODO:
-// apply plugin: 'java-gradle-plugin'
-
-
+// to publish on Gradle plugin portal
 apply plugin: 'nu.studer.plugindev'
 apply plugin: 'nu.studer.credentials'
 
-version = project.project_version
-
 dependencies {
-    // plugin requires core
-    compile project(':hsc-core')
-
+    // gradle-plugin requires core
+    compile project(':HtmlSanityCheck-core')
 }
 
 buildscript {
     repositories {
         jcenter()
-
     }
 
     dependencies {
@@ -39,16 +34,16 @@ buildscript {
 
 plugindev {
     pluginId 'org.aim42.HtmlSanityCheck'
-    pluginName "HtmlSanityCheck"
+    pluginName project.name
     pluginDescription 'Html Sanity Check: performs various semantic checks on html files, e.g. broken internal links, missing images, missing local resources etc.'
     pluginImplementationClass 'org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin'
-    pluginLicenses 'Apache-2.0'
+    pluginLicenses project.project_license
     pluginTags 'gradle', 'plugin', 'html', 'check'
-    authorId 'gernotstarke'
+    authorId project.project_authorId
     authorName project.project_vendor
-    authorEmail 'gs@gernotstarke.de'
+    authorEmail project.project_author_email
     projectUrl project.project_url
-    projectInceptionYear '2014'
+    projectInceptionYear project.project_inception_year
     done()
 }
 

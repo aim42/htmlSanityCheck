@@ -1,4 +1,6 @@
-// gradle build script for subproject "hsc-core"
+// gradle build script for subproject "core"
+println "  (configuration of subproject $project.name) "
+
 
 buildscript {
     repositories {
@@ -44,7 +46,7 @@ def pomConfig = {
     name project.name
     description project.project_description
     url project.project_url
-    inceptionYear '2014'
+    inceptionYear project.project_inception_year
 
     scm { url project.project_scm }
 
@@ -52,10 +54,10 @@ def pomConfig = {
 
     developers {
         developer {
-            id 'gernotstarke'
-            name 'Gernot Starke'
+            id project.project_authorId
+            name project.project_vendor
             url 'http://www.gernotstarke.de/'
-            email 'gs@gernotstarke.de'
+            email project.project_author_email
             roles { role 'Developer' }
         }
     }
@@ -72,6 +74,9 @@ def pomConfig = {
 publishing {
     publications {
         mavenCustom(MavenPublication) {
+            groupId project.project_bintray_org
+            artifactId project.name
+            version project.project_version
             from components.java
 
             pom.withXml {
@@ -89,19 +94,20 @@ bintray {
     dryRun = false
     publish = true
     pkg {
-        repo = "HtmlSanityCheck"
-        name = 'hsc-core'
+        repo = project.project_bintray_repo
+        name = project.name
         desc = 'core package to perform semantic html checking'
-        websiteUrl = 'https://github.com/aim42/htmlSanityCheck'
-        issueTrackerUrl = 'https://github.com/aim42/htmlSanityCheck/issues'
-        vcsUrl = 'https://github.com/aim42/htmlSanityCheck.git'
-        licenses = ['Apache-2.0']
+        websiteUrl = project.project_url
+        issueTrackerUrl = project.project_issues_url
+        vcsUrl = project.project_scm
+        licenses = [project.project_license]
         labels = ['groovy', 'html', 'check']
         publicDownloadNumbers = true
+
         //Optional version descriptor
         version {
             name = project.project_version //Bintray logical version name
-            desc = 'first public version of hsc-core'
+            desc = project.version_description
         }
     }
 }

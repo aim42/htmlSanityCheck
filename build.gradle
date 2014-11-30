@@ -1,6 +1,8 @@
 // gradle build script for html sanity check
 // =========================================
 println '(top-level build.gradle) initialization'
+println """compiling with Java ${System.getProperty("java.version")} to language level ${project.project_language_level}"""
+println "building project version " + project.project_version
 
 subprojects() {
     group = 'org.aim42'
@@ -12,7 +14,8 @@ configure(allprojects - project(':documentation')) {
     //apply from: 'gradle/code-coverage.gradle'
     //apply from: 'gradle/code-quality.gradle'
 
-    targetCompatibility = "1.7"
+    targetCompatibility = project.project_language_level
+    sourceCompatibility = project.project_language_level
 
      repositories {
         jcenter()
@@ -33,8 +36,6 @@ configure(allprojects - project(':documentation')) {
             exclude group: 'org.codehaus.groovy', module: 'groovy-all'
         }
     } // dependencies
-
-
 }
 
 /*

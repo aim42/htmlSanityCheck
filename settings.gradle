@@ -2,12 +2,13 @@
 // ===============================================
 println '(settings.gradle) initialization'
 
+
 include "documentation",  // obvious...
-        "hsc-core",       // checking algorithms, reporting
+        "core",       // checking algorithms, reporting
         "gradle-plugin"   // gradle specific configuration and glue-code
 
 // set plugin-name
 // otherwise plugin artifact would just be called "gradle-plugin"
 project(":gradle-plugin").name = "HtmlSanityCheck-gradle-plugin"
-project(":hsc-core").name = "HtmlSanityCheck-core"
+project(":core").name = "HtmlSanityCheck-core"
 
