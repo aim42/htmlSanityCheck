@@ -54,7 +54,7 @@ def pomConfig = {
 
     developers {
         developer {
-            id project.project_authorId
+            id project.project_author_id
             name project.project_vendor
             url 'http://www.gernotstarke.de/'
             email project.project_author_email
@@ -104,11 +104,6 @@ bintray {
         labels = ['groovy', 'html', 'check']
         publicDownloadNumbers = true
 
-        //Optional version descriptor
-        version {
-            name = project.project_version //Bintray logical version name
-            desc = project.version_description
-        }
     }
 }
 

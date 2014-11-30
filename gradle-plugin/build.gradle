@@ -31,15 +31,14 @@ buildscript {
 }
 
 
-
 plugindev {
-    pluginId 'org.aim42.HtmlSanityCheck'
+    pluginId 'org.aim42.HtmlSanityCheck-gradle-plugin'
     pluginName project.name
     pluginDescription 'Html Sanity Check: performs various semantic checks on html files, e.g. broken internal links, missing images, missing local resources etc.'
     pluginImplementationClass 'org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin'
     pluginLicenses project.project_license
     pluginTags 'gradle', 'plugin', 'html', 'check'
-    authorId project.project_authorId
+    authorId project.project_author_id
     authorName project.project_vendor
     authorEmail project.project_author_email
     projectUrl project.project_url
@@ -50,7 +49,7 @@ plugindev {
 bintray {
     user = credentials.bintrayUserName
     key = credentials.bintrayApiKey
-    pkg.repo = 'HtmlSanityCheck'
+    pkg.repo = project.project_bintray_repo
     dryRun = false
     publish = true
 }

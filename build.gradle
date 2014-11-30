@@ -1,11 +1,25 @@
 // gradle build script for html sanity check
 // =========================================
 println '(top-level build.gradle) initialization'
-println """compiling with Java ${System.getProperty("java.version")} to language level ${project.project_language_level}"""
+println """compiling with Java ${System.getProperty("java.version")}
+ to language level ${project.project_language_level}"""
 println "building project version " + project.project_version
 
 subprojects() {
-    group = 'org.aim42'
+    group = project.project_bintray_org
+    version = project.project_version
+
+}
+
+// disable the crazy super-strict doclint tool in Java 8
+// thanx, @jodastephen
+// http://blog.joda.org/2014/02/turning-off-doclint-in-jdk-8-javadoc.html
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-verbose')
+        }
+    }
 }
 
 // configure all source projects, but NOT :documentation
@@ -13,6 +27,7 @@ configure(allprojects - project(':documentation')) {
     apply plugin: 'groovy'
     //apply from: 'gradle/code-coverage.gradle'
     //apply from: 'gradle/code-quality.gradle'
+
 
     targetCompatibility = project.project_language_level
     sourceCompatibility = project.project_language_level
