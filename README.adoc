@@ -23,13 +23,13 @@ Markdown or other formats - as converters usually don't check for missing images
 or broken links.
 
 It can be used as Gradle plugin. Standalone Java and graphical UI
-are planned for a future releases.
+are planned for future releases.
 
 
 
 image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
 image:http://img.shields.io/:semver-{version}-green.svg["Semantic Versioning", link="http://semver.org"]
-image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
+//image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[issues]
 image:https://api.bintray.com/packages/gernotstarke/HtmlSanityCheck/HtmlSanityCheck-gradle-plugin/images/download.svg[link="https://bintray.com/gernotstarke/HtmlSanityCheck/HtmlSanityCheck-gradle-plugin/_latestVersion"]
 
@@ -79,8 +79,6 @@ checkExternalLinks:: (optional, planned) if set to "true", external references a
 apply plugin: 'org.aim42.HtmlSanityCheck-gradle-plugin'
 
 htmlSanityCheck {
-    dependsOn asciidoctor, copyImages
-
     sourceDir = new File( "$buildDir/docs" )
 
     // files to check - in Set-notation
@@ -90,9 +88,6 @@ htmlSanityCheck {
     checkingResultsDir = new File( "$buildDir/report/htmlchecks" )
     checkExternalLinks = false
 }
-
-htmlSanityCheck.mustRunAfter asciidoctor
-
 ----
 
 
