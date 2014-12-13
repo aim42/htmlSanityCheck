@@ -1,0 +1,43 @@
+
+== Context
+
+=== Business Context
+
+image::hsc-context.png["Business Context", title="Business Context"]
+
+[options="header", cols="1,4"]
+.Business Context
+|===
+| Neighbour | Description
+| user | documents software with toolchain that generates html. Wants to ensure that
+links within this html are valid.
+| build system |
+| local html files | kbd:[HtmlSC] reads and parses local html files and
+performs sanity checks within those.
+| local image files | kbd:[HtmlSC] checks if linked images exist as (local) files.
+| external web resources | Optionally kbd:[HtmlSC] can be configured to check for the existance
+of external web resources. Due to the nature of web systems, this check might need a significant
+amount of time and might yield invalid results due to network and latency issues.
+|===
+
+
+=== Deployment Context
+
+The following diagram shows the participating computers ({node}) with their technical connections plus the major {artifact} of kbd:[HtmlSC], the hsc-plugin-binary.
+
+
+image::deployment-context.png["Deployment Context", title="Deployment Context"]
+
+[options="header", cols="1,3"]
+.Deployment Context
+|===
+| Node / Artifact | Description
+| {node} hsc-development | where development of kbd:[HtmlSC] takes place
+| {artifact} hsc-plugin-binary | Compiled and packaged version of kbd:[HtmlSC] including required dependencies. 
+| {node} artifact repository (https://bintray.com/bintray/jcenter[Bintray]) | global public _cloud_ repository for binary artifacts, similar to http://search.maven.org/[mavenCentral].  kbd:[HtmlSC] binaries are uploaded to this server.
+| {node} hsc user computer | where arbitrary documentation takes place with html as output formats.
+| {artifact} build.gradle | Gradle build script configuring (among other things) the kbd:[HtmlSC] plugin to perform the Html checking.
+|===
+
+
+Details see <<deployment-view, deployment view>>.

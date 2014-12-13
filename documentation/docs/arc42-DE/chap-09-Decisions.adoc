@@ -1,0 +1,55 @@
+:numbered:
+
+:jsoup-url: http://jsoup.org[jsoup HTML parser]
+
+== Design Decisions
+
+=== Checking of external links postponed
+In the current {revision} we won't check external links.
+These checks have been postponed to later versions.
+
+
+
+=== HTML Parsing with jsoup
+To check HTML we parse it into an internal (DOM-like) representation.
+For this task we use {jsoup-url}, an open-source parser without
+external dependencies.
+
+To quote from the jsoup website:
+
+[quote]
+jsoup is a Java library for working with real-world HTML.
+It provides a very convenient API for extracting and manipulating data,
+using the best of DOM, CSS, and jquery-like methods.
+
+
+Goals of this decision::
+Check HTML programatically by using an existing API that provides access and finder
+methods to the DOM-tree of the file(s) to be checked.
+
+Decision Criteria::
+* few dependencies, so the kbd:[HtmlSC] binary stays as small as possible.
+* accessor and finder methods to find images, links and link-targets within the DOM tree.
+
+Alternatives::
+
+* HTTPUnit: a testing framework for web applications and -sites. Its main focus is web testing and it suffers from a large number of dependencies.
+* jsoup: a plain HTML parser without any dependencies (!) and a rich api to
+access all HTML elements in DOM-like syntax.
+
+
+Find details on how kbd:[HtmlSC] implements HTML parsing in the
+<<html-encapsulation, HTML encapsulation concept>>.
+
+
+=== String Similarity Checking with http://wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance[Jaro-Winkler-Distance]
+
+The small https://github.com/rrice/java-string-similarity[java-string-similarity] library (by Ralph Allen Rice) contains implementations of several similarity-calculation algorithms. As it is *not available* as public binary,
+we use the sources instead, primarily:
+
+  net.ricecode.similarity.JaroWinklerStrategyTest
+  net.ricecode.similarity.JaroWinklerStrategy
+
+[NOTE]
+The actual implementation of the similarity comparison has been postponed
+to a later release of kbd:[HtmlSC]

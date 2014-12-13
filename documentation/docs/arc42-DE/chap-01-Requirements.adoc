@@ -1,0 +1,227 @@
+:numbered:
+== Einführung und Ziele
+
+
+[[requirements]]
+=== Anforderungen
+
+==== Grundlegendes Nutzungsszenario
+
+. Ein Benutzer konfiguriert den Ort (Verzeichnis und Dateiname) von
+HTML-Dateien.
+. kbd:[HtmlSC] führt diverse semantische Prüfungen (Plausibilitätsprüfungen,
+  _Sanity-Checks_) dieses HTMLs durch und
+. berichtet diese Ergebnisse entweder auf der Kommandozeile oder als einen
+ausführlichen HTML Report.
+
+kbd:[HtmlSC] kann von der Kommandozeile oder als {gradle-url}-Plugin
+genutzt werden.
+
+
+[Terminology]
+==== Grundbegriffe: Welche Arten von Problemen gibt es in HTML Dokumenten?
+
+Abgesehen von rein syntaktischen Fehlern können diverse weitere
+Klassen von Problemen in HTML Dateien auftreten.
+Hauptursache sind falsche Verweise (technisch gesehen: URIs).
+
+Siehe dazu auch die
+<<InformationOnUris, Hintergrundinformationen zu URIs>>.
+
+.Falsche interne Verweise:: Seiten- bzw. dokumentinterne Verweise zeigen
+auf nicht-existierende oder falsch geschriebene Verweiseziele.
+Siehe auch <<BrokenCrossReferencesChecker>>
+
+.Fehlende Bilder: Referenzierte Bilddateien fehlen oder
+sind falsch geschrieben.
+Siehe auch <<MissingImageFilesChecker>>.
+
+.Fehlende lokale Dateien: Referenzierte lokale Dateien (ausser Bildern)
+fehlen oder sind falsch geschrieben.
+Siehe auch <<MissingLocalResourcesChecker>>
+
+.Doppelte Verweiseziele: Verweisziele kommen in Dokumenten mehrfach
+vor. Browser können dann nicht entscheiden, welches dieser Ziele
+wirklich gemeint ist.
+Siehe auch <<DuplicateLinkTargetsChecker>>.
+
+.Illegale Veweise:: Die Verweise (URIs) enthalten ungültige Zeichen
+oder verletzten die HTML Syntax.
+  Siehe <<IllegalLinkChecker>>
+
+.Falsche externe Verweise: Externe Verweise können aus unterschiedlichen
+Gründen fehlschlagen, unter anderem können Verweisziele offline sein.
+Siehe <<BrokenExternalLinksChecker>>.
+
+.Fehlende Alt Attribute in Bildreferenzen (Image Tags):: In Bildverweisen
+(image tags) fehlt das alt-Attribut.
+
+Das überprüfen dieser Fehler und die Erstellung entsprechender Prüfberichte
+ist die zentrale _Geschäftsfunktion_ von kbd:[HtmlSC].
+
+
+Wesentliche Begriffe (Fachbegriffe, _domain terms_) sind
+finden Sie im <<HTML Checking Domain Model, Domänen Model>> dokumentiert.
+
+
+
+==== Funktionalität
+
+
+[options="header", cols="1,3,8"]
+.Allgemeine Anforderungen
+|===
+| ID  | Funktion | Beschreibung
+| G-1 | prüfe einzelne HTML Datei | kbd:[HtmlSC] muss eine einzelne
+              HTML Datei prüfen können. Dateiname und Verzeichnis sind konfigurierbar.
+| G-2 | {gradle-url}-Plugin | kbd:[HtmlSC] can be run as {gradle-url}-plugin.
+| G-3 | Nutzung über Kommandozeile | kbd:[HtmlSC] kann über die Kommandozeile
+ aufgerufen werden, mit Konfiguration über explizite Parameter
+| G-4 | Konfigurierbare Ausgabe | Die Ausgaben von kbd:[HtmlSC] kann entweder
+         über Standardausgabe (stdout) oder in eine HTML-Datei erfolgen.
+| G-5 | Frei und Open Source | kbd:[HtmlSC] und alle für Entwicklung und Ablauf
+notwendigen Bibliotheken und Frameworks sind frei verfügbar, beispielsweise
+mit der  https://creativecommons.org/licenses/by-sa/4.0/[CC-SA-4 Lizenz].
+| G-6 | Verfügbar über öffentliche Repositories, wie Bintray or JCenter.
+| G-7 | prüfe mehrere HTML-Dateien | kbd:[HtmlSC] kann mehrere HTML-Dateien in einem
+einzigen _Ablauf_ überprüfen und einen gemeinsamen Ergebnisreport erzeugen.
+(Das ist nützlich für z.B. API-Dokumentation, in der viele HTML-Dateien sich gegenseitig
+  referenzieren)
+|===
+
+
+[requiredChecks]
+==== Typen von Plausibilitätsprüfungen
+
+
+[options="header", cols="1,3,8"]
+.Notwendige Prüfungen
+|===
+| ID  | Check | Description
+| R-1 | missing image files   | Check all image tags if the referenced
+                                  image files exist.
+                                  See <<MissingImageFilesChecker>>
+| R-2 | broken internal links | Check all internal links from anchor-tags
+                                  (href="#XYZ") if the link targets "XYZ" are defined.
+                                  See <<BrokenCrossReferencesChecker>>
+| R-3 | missing local files   | either other html-files, pdf's or similar.
+                                  See <<MissingLocalResourcesChecker>>
+| R-4  | duplicate link targets | Check all bookmark definitions
+                                  (... id="XYZ") whether the id's ("XYZ") are unique.
+                                  See <<DuplicateLinkTargetsChecker>>
+| R-5  | Malformed links        | Check all links for syntactical correctness
+| R-6  | missing alt-attribute  | in image-tags.  See <<MissingImgAltAttributeChecker>>
+| R-7  | unused-images          | check for files in image-directories that are not referenced by any
+                                  of the HTML files in this _run_
+| R-8  | illegal link targets   | Checks for malformed or illegal anchors (link targets).
+|===
+
+
+[options="header", cols="1,3,8"]
+.Optional Checks
+|===
+| ID | Check  | Description
+| Opt-1 | missing external images | Check externally referenced images for availability
+| Opt-2 | broken external links | Check external links for both syntax and availability
+|===
+
+
+==== Reporting and Output Requirements
+
+
+[options="header", cols="1,3,8"]
+.Reporting Requirements
+|===
+| ID  | Requirement | Description
+| R-1 | various output formats | checking output in plaintext and HTML
+| R-2 | output to stdout | kbd:[HtmlSC] can output results on stdout (the console)
+| R-3 | configurable file output | kbd:[HtmlSC] can store results in
+                                  file in configurable directories
+|===
+
+
+
+
+
+[[quality-goals]]
+=== Quality Goals
+
+[options="header", cols="1,2,6"]
+.Quality-Goals
+|===
+| Priority | Quality-Goal | Scenario
+| 1        | Correctness  | Every broken internal link (crossreference) is found.
+| 1        | Correctness  | Every missing local image is found.
+| 2        | Flexibility  | multiple checking algorithms, report formats and clients. At least
+Gradle, command-line and a graphical client have to be supported.
+| 2        | Safety       | Content of the files to be checked is _never_ altered.
+| 2        | Correctness  | Correctness of every checker is automatically tested for positive AND negative
+                            cases
+| 2        | Correctness  | Every reporting format is tested: Reports must exactly reflect checking results.
+| 3        | Performance  | Check of 100kB html file performed under 10 secs
+(excluding gradle startup)
+|===
+
+
+=== Stakeholder
+
+[options="header", cols="2,4,5"]
+.Stakeholder
+|===
+| Role | Description | Goal, Intention
+
+| Documentation author      | writes documentation with Html output | wants to check that the resulting document contains good links, image references
+| [[arc42_user]] arc42 user | uses the arc42 template for architecture documentation
+| wants a small but practical example of _how to apply arc42_.
+
+| aim42 contributor
+| contributes to aim42 methode-guide
+| check generated html code to ensure links and images are correct during
+(gradle-based) build process
+
+| software developer |
+| wants an example of pragmatic architecture documentation and arc42 usage
+
+|===
+
+[[InformationOnUris]]
+=== Background Information on URIs
+
+The generic structure of a Uniform Resource Identifier consists of
+the following parts:
++++[type][://][subdomain][domain][port][path][file][query][hash]+++
+
+An example, visualized:
+
+image::uri-generic-example.png[]
+
+The ```java.net.URL``` class contains a generic parser for URLs and URIs.
+See the following snippet, taken from the unit test class URLUtilTest.groovy:
+
+
+[source, groovy]
+.Generic URI Structure
+----
+include::{coretestpath}/htmlsanitycheck/html/URLUtilTest.groovy[tags=GenericURIExample]
+
+----
+
+
+URIs are used to *reference* other ressources.
+For kbd:htmlSC it is useful to distinguish between internal (== local)and external references:
+
+* Internal references, a.k.a. Cross-References
+* External references
+
+
+==== Intra-Document URIs
+
+a file... ref can be an internal link, or a URI without protocoll...
+
+
+==== References on URIs and HTML Syntax
+
+* http://www.ietf.org/rfc/rfc2396.txt[IETF RFC-2396 on URI Syntax]: The
+fundamental reference!
+* http://www.w3.org/TR/html401/struct/links.html#h-12.2.4[W3C HTML Reference]
+* http://en.wikipedia.org/wiki/URI_scheme#Generic_syntax[Wikipedia on URI-Schemes]
