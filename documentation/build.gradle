@@ -2,15 +2,15 @@
 println "  (configuration of subproject $project.name) "
 
 
-apply plugin: 'org.asciidoctor.gradle.asciidoctor'
-//apply plugin: 'distribution'
+apply plugin: 'org.asciidoctor.convert'
+
 
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
     }
 }
 
@@ -21,20 +21,16 @@ def outputPath    = "$buildDir/docs"
 asciidoctor {
     outputDir = new File( outputPath )
     sourceDir = file( "docs" )
-    sourceDocumentNames = files(
-            new File( "docs/hsc_arc42.adoc" ),
-            new File( "docs/DevelopmentGuide.adoc"),
-            new File( "docs/index.adoc") )
+    sources { include  "hsc_arc42.adoc" ,
+                       "DevelopmentGuide.adoc",
+                       "index.adoc" }
 
-    options = [
-            attributes: [
-                    backend     : 'html5',
-                    doctype     : 'book',
-                    icons       : 'font',
-                    sectlink    : true,
-                    sectanchors : true
-            ]
-    ]
+    options backends: ['html5'],
+            doctype: 'book',
+            icons: 'font',
+            sectlink: true,
+            sectanchors: true
+
 }
 
 
