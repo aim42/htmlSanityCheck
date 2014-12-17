@@ -1,0 +1,11 @@
+HtmlSanityCheck - ChangeLog
+
+
+Dec.
+
+V.0.8.0-SNAPSHOT
+#62 upgraded to AsciiDoctor-Gradle-Plugin-1.5.2 (from 1.5.0)
+#60 upgraded to jsoup parser v. 1.8.1 (from 1.7.3)
+
+V.0.5.3 (first public version)
+functional as Gradle-plugin
