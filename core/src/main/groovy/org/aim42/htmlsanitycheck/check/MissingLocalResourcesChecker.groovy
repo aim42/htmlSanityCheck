@@ -7,6 +7,10 @@ import org.slf4j.LoggerFactory
 
 class MissingLocalResourcesChecker extends Checker {
 
+    public static final String MLRC_MESSAGE_PREFIX  = "local resource "
+    public static final String MLRC_MESSAGE_MISSING = "missing"
+    public static final String MLRC_REFCOUNT        = " (reference count "
+
     // members are initialized in implicit constructor
     private List<String> localResources
 
@@ -80,7 +84,7 @@ class MissingLocalResourcesChecker extends Checker {
         File localFile = new File( baseDirPath, localResourcePath );
 
         if (!localFile.exists() ) {
-            String findingText = "local resource \"$localResource\" missing"
+            String findingText = """$MLRC_MESSAGE_PREFIX + \"$localResource\" + $MLRC_MESSAGE_MISSING"""
             checkingResults.newFinding(findingText)
         }
     }
