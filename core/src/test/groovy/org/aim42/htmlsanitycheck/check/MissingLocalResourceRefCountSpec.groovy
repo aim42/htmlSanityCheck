@@ -3,15 +3,22 @@ package org.aim42.htmlsanitycheck.check
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class MissingLocalResourceRefCountSpec extends Specification {
 
+    private static final String LOCAL_RESOURCE_NAME = "ExistingLocalResource.html"
+
+    // missing local resource name
+    private static final String MIS_LOC_RES = "MissingLocalResource.html"
+
+    private static final String badLocalRef =  """<a href="${MIS_LOC_RES}">missing</a>"""
+
+
     private File tmpDir
     private File tmpHtmlFile
-    private File tmpLocalResource
+    private File tmpLocalResourceFile
 
-    // missing resource name
-    private static final String mrn = "MissingLocalResource.html"
 
     /*
      * data-driven test to specify behavior of MissingLocalResourceChecker reference counter:
@@ -24,52 +31,72 @@ class MissingLocalResourceRefCountSpec extends Specification {
      * @param nrOfFindings
      * @param resultingText
      */
-    def "MLR checker has reference counter"( int nrOfFindings,
-                                             int nrOfChecks,
-                                             String htmlSnippet,
-                                             String resultingSuffix) {
+
+    @Unroll
+    def "MLR checker has reference counter"(int nrOfFindings,
+                                            int nrOfChecks,
+                                            String htmlSnippet,
+                                            String result) {
 
         given:
 
         String html = HtmlConst.HTML_HEAD + htmlSnippet + HtmlConst.HTML_END
-        HtmlPage htmlPage = new HtmlPage( html )
+        HtmlPage htmlPage = new HtmlPage(html)
 
-        [tmpHtmlFile, tmpDir] = createTempLocalResources("index.html", html, "localResource.html")
+        (tmpHtmlFile, tmpDir, tmpLocalResourceFile) = createTempLocalResources("index.html", html, LOCAL_RESOURCE_NAME)
 
         when:
-        missingLocalResourceChecker = new MissingLocalResourcesChecker(
-                pageToCheck: htmlPage)
-        collector = missingLocalResourcesChecker.performCheck()
+        def missingLocalResourcesChecker = new MissingLocalResourcesChecker(
+                pageToCheck: htmlPage,
+                baseDirPath: tmpDir )
+        def collector = missingLocalResourcesChecker.performCheck()
+
 
         then:
+
+        // our temporary  files still exists
+        tmpHtmlFile.exists()
+        tmpLocalResourceFile.exists()
+
+
         collector.nrOfProblems() == nrOfFindings
         collector.nrOfItemsChecked == nrOfChecks
+
+        if (nrOfFindings > 0) {
+            // we specify only the FIRST message
+            collector.findings.first().item == result
+        }
 
 
         where:
 
-        nrOfFindings | nrOfChecks | htmlSnippet |  resultingSuffix
-      //  0            | 1          | """<a href="${lrfname}">existing</a>""" |  """"""
-        1            | 1          | """<a href="${mrn}">missing</a>"""      |  """local resource ${mrn} missing"""
+        nrOfFindings | nrOfChecks | htmlSnippet | result
+        0 | 1 | """<a href="./${LOCAL_RESOURCE_NAME}">existing</a>"""|  """"""
+        1 | 1 | badLocalRef | """local resource ${MIS_LOC_RES} missing"""
+        2 | 2 | badLocalRef*2 | """local resource ${MIS_LOC_RES} missing"""
 
     }
 
     /*
     * helper to create local resource
      */
-    def List createTempLocalResources( String htmlFileName, String htmlContent, String localResourceName ) {
+
+    def List createTempLocalResources(String htmlFileName, String htmlContent, String localResourceName) {
         // 1.) create tmp directory tmpDir
         File tmpDir = File.createTempDir()
 
         // 2.) create local resource file localResourceFile
         File localResourceFile = new File(tmpDir, localResourceName) << "someContent"
 
-       assertTrue("newly created artificial file exists", localResourceFile.exists())
+        // make sure the just-created (local resource) file really exists
+        assert localResourceFile.exists()
 
         // 3.) create tmp html file "index.html" linking to localResourceFile in directory tmpDir
-        File indexFile = new File(tmpDir, htmlFileName ) << htmlContent
+        File indexFile = new File(tmpDir, htmlFileName) << htmlContent
 
-        return [indexFile, tmpDir]
+        assert indexFile.exists()
+
+        return [indexFile, tmpDir, localResourceFile]
     }
 }
 
