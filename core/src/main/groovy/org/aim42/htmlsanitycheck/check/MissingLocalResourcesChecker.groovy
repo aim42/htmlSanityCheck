@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 
 class MissingLocalResourcesChecker extends Checker {
 
-    public static final String MLRC_MESSAGE_PREFIX  = "local resource "
+    public static final String MLRC_MESSAGE_PREFIX  = "local resource"
     public static final String MLRC_MESSAGE_MISSING = "missing"
-    public static final String MLRC_REFCOUNT        = " (reference count "
+    public static final String MLRC_REFCOUNT        = ", reference count:"
 
     // members are initialized in implicit constructor
     private List<String> localResources
@@ -40,7 +40,7 @@ class MissingLocalResourcesChecker extends Checker {
             URLUtil.isLocalResource( it )
         }
 
-        logger.info """local resources: $localResources"""
+        logger.debug """local resources: ${localResources}"""
 
         // make sure we have a non-null baseDir
         // (for html pages given as "string", this should be "")
@@ -72,7 +72,7 @@ class MissingLocalResourcesChecker extends Checker {
     private void checkSingleLocalResource( String localResource )  {
         // the localResource is either path+filename  or filename or directory
 
-        //logger.info( "resource to be checked: ", localResource )
+        logger.debug( "single resource to be checked: + $localResource" )
 
         // bookkeeping:
         checkingResults.incNrOfChecks()
@@ -84,7 +84,7 @@ class MissingLocalResourcesChecker extends Checker {
         File localFile = new File( baseDirPath, localResourcePath );
 
         if (!localFile.exists() ) {
-            String findingText = """$MLRC_MESSAGE_PREFIX + \"$localResource\" + $MLRC_MESSAGE_MISSING"""
+            String findingText = """$MLRC_MESSAGE_PREFIX \"${localResource}\" $MLRC_MESSAGE_MISSING"""
             checkingResults.newFinding(findingText)
         }
     }
