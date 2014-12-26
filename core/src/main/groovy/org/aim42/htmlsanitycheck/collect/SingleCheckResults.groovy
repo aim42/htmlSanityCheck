@@ -37,12 +37,21 @@ class SingleCheckResults implements CheckResults {
 
     /**
      * add a single finding to the collection,
-     * based upon whatToCheck.
      * @param message: what kind of finding is it?
      */
     public void newFinding( String message ) {
         addFinding( new Finding( message ), 1)
     }
+
+    /**
+     * add a single finding to the collection,
+     * @param message: what kind of finding is it?
+     * @param nrOfOccurrences: how often does this occur?
+     */
+    public void newFinding( String message, int nrOfOccurrences ) {
+        addFinding( new Finding( message ), nrOfOccurrences)
+    }
+
 
     /**
      * add a single finding to the collection of Finding instances
@@ -106,10 +115,10 @@ class SingleCheckResults implements CheckResults {
 
     /**
      *
-     * @return ( int ) the nr of issues found for this checkingResults.
+     * @return ( int ) the nr of issues/findings found for this checkingResults.
      */
     public int nrOfProblems() {
-        return findings.size()
+        return nrOfIssues
     }
 
 

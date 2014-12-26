@@ -9,7 +9,7 @@ class MissingLocalResourcesChecker extends Checker {
 
     public static final String MLRC_MESSAGE_PREFIX  = "local resource"
     public static final String MLRC_MESSAGE_MISSING = "missing"
-    public static final String MLRC_REFCOUNT        = ", reference count:"
+    public static final String MLRC_REFCOUNT        = ", reference count: "
 
     // List of the local resources referenced in anchor tags
     private List<String> localResourcesList
@@ -56,14 +56,14 @@ class MissingLocalResourcesChecker extends Checker {
         }
 
         // perform the actual checks
-        checkAllLocalResources()
+        checkAllLocalResources( localResourcesSet )
 
         return checkingResults
 
     }
 
-    private void checkAllLocalResources() {
-        localResourcesList.each { localResource ->
+    private void checkAllLocalResources( Set<String> localResources ) {
+        localResources.each { localResource ->
             checkSingleLocalResource( localResource )
         }
     }
@@ -99,12 +99,12 @@ class MissingLocalResourcesChecker extends Checker {
             if (nrOfOccurrences > 1)
                 findingText += MLRC_REFCOUNT + nrOfOccurrences
 
-            checkingResults.newFinding(findingText)
+            // add Finding to our current checking results, increment nrOfFindings by nrOfOccurrences
+            checkingResults.newFinding(findingText, nrOfOccurrences)
         }
     }
 
-    // helper to count occurrences of a localResource
-    private void
+
 }
 
 

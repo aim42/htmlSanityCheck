@@ -80,9 +80,10 @@ class MissingLocalResourceRefCountSpec extends Specification {
         1 | 1 | badLocalRef | """${msgPrefix} "${MIS_LOC_RES}" ${msgMissing}"""
 
         // two bad local references to the same file -> reference count == 2
-        2 | 2 | badLocalRef*2 | """${msgPrefix} ${MIS_LOC_RES} ${msgMissing}${msgRefCount} 2"""
+        1 | 2 | badLocalRef*2 | """${msgPrefix} "${MIS_LOC_RES}" ${msgMissing}${msgRefCount}2"""
 
-        //
+        // five bad local references to the same file -> reference count == 5
+        1 | 5 | badLocalRef*5 | """${msgPrefix} "${MIS_LOC_RES}" ${msgMissing}${msgRefCount}5"""
     }
 
     /*
