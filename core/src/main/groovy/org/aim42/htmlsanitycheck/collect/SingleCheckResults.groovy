@@ -2,8 +2,8 @@
 
 package org.aim42.htmlsanitycheck.collect
 /**
- * collects results for a specific checking field
- * (i.e. missing images).
+ * collects results for a specific type of @see Checker
+ * (i.e. missing images, broken cross-references).
  *
  * @author Gernot Starke <gs@gernotstarke.de>
  */
@@ -17,6 +17,7 @@ class SingleCheckResults implements CheckResults {
     public String targetItemName   // i.e. local-image-file, id/bookmark
 
     public int nrOfItemsChecked
+    private int nrOfIssues
 
     public ArrayList<Finding> findings
 
@@ -29,6 +30,7 @@ class SingleCheckResults implements CheckResults {
     public SingleCheckResults() {
 
         this.nrOfItemsChecked = 0
+        this.nrOfIssues = 0
         this.findings = new ArrayList<Finding>()
     }
 
@@ -39,7 +41,7 @@ class SingleCheckResults implements CheckResults {
      * @param message: what kind of finding is it?
      */
     public void newFinding( String message ) {
-        addFinding( new Finding( message ))
+        addFinding( new Finding( message ), 1)
     }
 
     /**
@@ -48,6 +50,15 @@ class SingleCheckResults implements CheckResults {
      */
     public void addFinding(Finding singleFinding) {
         findings.add(singleFinding)
+        incNrOfIssues()
+    }
+
+    /**
+     * add single Finding with multiple occurrences
+     */
+    public void addFinding( Finding singleFinding, int nrOfOccurrences ) {
+        findings.add( singleFinding )
+        addNrOfIssues( nrOfOccurrences )
     }
 
     /**
@@ -64,6 +75,18 @@ class SingleCheckResults implements CheckResults {
     public void setNrOfChecks( int nrOfChecks ) {
         nrOfItemsChecked = nrOfChecks
     }
+
+    /**
+     * bookkeeping on the number of issues
+     */
+    public void incNrOfIssues() {
+        nrOfIssues += 1
+    }
+
+    public void addNrOfIssues( int nrOfIssuesToAdd ) {
+        nrOfIssues += nrOfIssuesToAdd
+    }
+
 
     /**
      * @return a description of what is checked

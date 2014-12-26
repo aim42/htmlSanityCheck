@@ -76,12 +76,13 @@ class MissingLocalResourceRefCountSpec extends Specification {
         where:
 
         nrOfChecks | nrOfFindings | htmlSnippet | result
-        // one bad local reference:
+         // one bad local reference:
         1 | 1 | badLocalRef | """${msgPrefix} "${MIS_LOC_RES}" ${msgMissing}"""
 
         // two bad local references to the same file -> reference count == 2
         2 | 2 | badLocalRef*2 | """${msgPrefix} ${MIS_LOC_RES} ${msgMissing}${msgRefCount} 2"""
 
+        //
     }
 
     /*

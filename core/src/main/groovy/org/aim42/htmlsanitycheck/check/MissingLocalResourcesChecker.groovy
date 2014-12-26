@@ -11,8 +11,12 @@ class MissingLocalResourcesChecker extends Checker {
     public static final String MLRC_MESSAGE_MISSING = "missing"
     public static final String MLRC_REFCOUNT        = ", reference count:"
 
-    // members are initialized in implicit constructor
-    private List<String> localResources
+    // List of the local resources referenced in anchor tags
+    private List<String> localResourcesList
+
+    // unique local references - every one is unique
+    // created from the List of all by toSet() method
+    private Set<String> localResourcesSet
 
     // we need to know the baseDir of the html file, so we can check
     // for local resources either with relative or absolute paths
@@ -36,11 +40,14 @@ class MissingLocalResourcesChecker extends Checker {
         List<String> allHrefs = pageToCheck.getAllHrefStrings()
 
         // now filter out all local resources
-        localResources = allHrefs.findAll {
+        localResourcesList = allHrefs.findAll {
             URLUtil.isLocalResource( it )
         }
 
-        logger.debug """local resources: ${localResources}"""
+        // filter duplicates by reducing to set
+        localResourcesSet = localResourcesList.toSet()
+
+        logger.debug """local resources set: ${localResourcesSet}"""
 
         // make sure we have a non-null baseDir
         // (for html pages given as "string", this should be "")
@@ -56,7 +63,7 @@ class MissingLocalResourcesChecker extends Checker {
     }
 
     private void checkAllLocalResources() {
-        localResources.each { localResource ->
+        localResourcesList.each { localResource ->
             checkSingleLocalResource( localResource )
         }
     }
@@ -85,9 +92,19 @@ class MissingLocalResourcesChecker extends Checker {
 
         if (!localFile.exists() ) {
             String findingText = """$MLRC_MESSAGE_PREFIX \"${localResource}\" $MLRC_MESSAGE_MISSING"""
+
+            // how often is localResource referenced?
+            int nrOfOccurrences = localResourcesList.count( localResource )
+
+            if (nrOfOccurrences > 1)
+                findingText += MLRC_REFCOUNT + nrOfOccurrences
+
             checkingResults.newFinding(findingText)
         }
     }
+
+    // helper to count occurrences of a localResource
+    private void
 }
 
 
