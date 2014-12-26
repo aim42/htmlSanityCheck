@@ -1,12 +1,13 @@
 package org.aim42.htmlsanitycheck.html
 
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /************************************************************************
  * This is free software - without ANY guarantee!
  *
  *
- * Copyright 2013, Dr. Gernot Starke, arc42.org
+ * Copyright 2013-2015, Dr. Gernot Starke, arc42.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,8 @@ import spock.lang.Specification
 
 class URLUtilSpec extends Specification {
 
+
+    @Unroll
     def "identify local resource links"(boolean isLocal, String link) {
 
         expect:
@@ -51,6 +54,8 @@ class URLUtilSpec extends Specification {
         false   | ""
         false   | null
         false   | "ftp://acm.org"
+        false   | "http://10.0.0.1/index.html"
+        //false   | "//10.0.0.1/index.html"
 
     }
 }
