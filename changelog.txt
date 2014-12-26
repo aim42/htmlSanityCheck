@@ -4,8 +4,12 @@ HtmlSanityCheck - ChangeLog
 Dec.
 
 V.0.8.0-SNAPSHOT
-#62 upgraded to AsciiDoctor-Gradle-Plugin-1.5.2 (from 1.5.0)
+#42 reference counter for "missing local ref checker"
 #60 upgraded to jsoup parser v. 1.8.1 (from 1.7.3)
+#62 upgraded to AsciiDoctor-Gradle-Plugin-1.5.2 (from 1.5.0)
+#65 nicer message for reference-counter
+#66 log message now have appropriate level (most are .debug now)
+#68 corrected illogical reference-counter values (now one bad link counts as one problem)
 
 V.0.5.3 (first public version)
 functional as Gradle-plugin
