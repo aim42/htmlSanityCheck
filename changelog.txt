@@ -6,6 +6,9 @@ Dec.
 V.0.8.0-SNAPSHOT
 #62 upgraded to AsciiDoctor-Gradle-Plugin-1.5.2 (from 1.5.0)
 #60 upgraded to jsoup parser v. 1.8.1 (from 1.7.3)
+#42 local resource checker now has reference count
+#68 corrected reference counter for broken cross references (n occurrences are now counted as n issues)
+#65 nicer message for reference counter
 
 V.0.5.3 (first public version)
 functional as Gradle-plugin
