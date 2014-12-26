@@ -72,7 +72,7 @@ class AllChecksRunner {
         this.checkingResultsDir = checkingResultsDir
         this.checkExternalResources = checkExternalResources
 
-        logger.info("AlLChecksRunner created")
+        logger.debug("AlLChecksRunner created")
     }
 
     /**
@@ -96,7 +96,7 @@ class AllChecksRunner {
      */
     public PerRunResults performAllChecks() {
 
-        logger.info "entered performAllChecks"
+        logger.debug "entered performAllChecks"
 
         filesToCheck.each { file ->
 
@@ -177,7 +177,6 @@ class AllChecksRunner {
         )
 
         return missingImagesChecker.performCheck()
-        //logger.info imageCheckingResults.toString()
     }
 
     /**
