@@ -81,13 +81,15 @@ class BrokenCrossReferencesChecker extends Checker {
         if (!listOfIds.contains( linkTarget )) {
 
             // we found a broken link!
+            String findingText = "link target \"$linkTarget\" missing"
 
             // now count occurrences - how often is it referenced
             int nrOfReferences = hrefList.findAll{  it == href }.size()
+            if (nrOfReferences > 1) {
+                findingText += ", reference count: $nrOfReferences"
+            }
 
-            String findingText = "link target \"$linkTarget\" missing (reference count $nrOfReferences)"
-
-            checkingResults.newFinding(findingText)
+            checkingResults.newFinding(findingText, nrOfReferences)
         }
 
     }
