@@ -69,7 +69,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
         assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)
 
         String actual = collector.findings.first()
-        String expected = "link target \"nonexisting\" missing (reference count 1)"
+        String expected = "link target \"nonexisting\" missing"
         String message = "expected $expected"
 
         assertEquals(message, expected, actual)
@@ -122,14 +122,14 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
         // first finding: aim42 link missing
         String actual = collector.findings.first()
-        String expected = "link target \"arc42\" missing (reference count 1)"
+        String expected = "link target \"arc42\" missing"
         String message = "expected $expected"
 
         assertEquals(message, expected, actual)
 
         // second finding: arc42 link missing
         actual = collector.findings[1]
-        expected = "link target \"aim42\" missing (reference count 1)"
+        expected = "link target \"aim42\" missing"
         assertEquals(message, expected, actual)
     }
 
@@ -152,12 +152,12 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
         collector = undefinedInternalLinksChecker.performCheck()
 
-        assertEquals( "expected one finding", 1, collector.nrOfProblems())
+        assertEquals( "expected five findings", 5, collector.nrOfProblems())
         assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
 
         // finding: aim42 link missing, reference count 5
         String actual = collector.findings.first()
-        String expected = "link target \"aim42\" missing (reference count 5)"
+        String expected = "link target \"aim42\" missing, reference count: 5"
         String message = "expected $expected"
 
         assertEquals(message, expected, actual)
