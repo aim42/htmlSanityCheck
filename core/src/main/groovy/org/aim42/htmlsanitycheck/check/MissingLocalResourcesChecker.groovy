@@ -7,8 +7,16 @@ import org.slf4j.LoggerFactory
 
 class MissingLocalResourcesChecker extends Checker {
 
-    // members are initialized in implicit constructor
-    private List<String> localResources
+    public static final String MLRC_MESSAGE_PREFIX  = "local resource"
+    public static final String MLRC_MESSAGE_MISSING = "missing"
+    public static final String MLRC_REFCOUNT        = ", reference count: "
+
+    // List of the local resources referenced in anchor tags
+    private List<String> localResourcesList
+
+    // unique local references - every one is unique
+    // created from the List of all by toSet() method
+    private Set<String> localResourcesSet
 
     // we need to know the baseDir of the html file, so we can check
     // for local resources either with relative or absolute paths
@@ -32,11 +40,14 @@ class MissingLocalResourcesChecker extends Checker {
         List<String> allHrefs = pageToCheck.getAllHrefStrings()
 
         // now filter out all local resources
-        localResources = allHrefs.findAll {
+        localResourcesList = allHrefs.findAll {
             URLUtil.isLocalResource( it )
         }
 
-        logger.info """local resources: $localResources"""
+        // filter duplicates by reducing to set
+        localResourcesSet = localResourcesList.toSet()
+
+        logger.debug """local resources set: ${localResourcesSet}"""
 
         // make sure we have a non-null baseDir
         // (for html pages given as "string", this should be "")
@@ -45,13 +56,13 @@ class MissingLocalResourcesChecker extends Checker {
         }
 
         // perform the actual checks
-        checkAllLocalResources()
+        checkAllLocalResources( localResourcesSet )
 
         return checkingResults
 
     }
 
-    private void checkAllLocalResources() {
+    private void checkAllLocalResources( Set<String> localResources ) {
         localResources.each { localResource ->
             checkSingleLocalResource( localResource )
         }
@@ -68,7 +79,7 @@ class MissingLocalResourcesChecker extends Checker {
     private void checkSingleLocalResource( String localResource )  {
         // the localResource is either path+filename  or filename or directory
 
-        //logger.info( "resource to be checked: ", localResource )
+        logger.debug( "single resource to be checked: + $localResource" )
 
         // bookkeeping:
         checkingResults.incNrOfChecks()
@@ -80,10 +91,20 @@ class MissingLocalResourcesChecker extends Checker {
         File localFile = new File( baseDirPath, localResourcePath );
 
         if (!localFile.exists() ) {
-            String findingText = "local resource \"$localResource\" missing"
-            checkingResults.newFinding(findingText)
+            String findingText = """$MLRC_MESSAGE_PREFIX \"${localResource}\" $MLRC_MESSAGE_MISSING"""
+
+            // how often is localResource referenced?
+            int nrOfOccurrences = localResourcesList.count( localResource )
+
+            if (nrOfOccurrences > 1)
+                findingText += MLRC_REFCOUNT + nrOfOccurrences
+
+            // add Finding to our current checking results, increment nrOfFindings by nrOfOccurrences
+            checkingResults.newFinding(findingText, nrOfOccurrences)
         }
     }
+
+
 }
 
 
