@@ -34,6 +34,8 @@ class MissingImageFilesChecker extends Checker {
         //get list of all image-tags "<img..." in html file
         images = pageToCheck.getAllImageTags()
 
+        logger.debug("images to check: ${images}")
+
         checkAllImages()
 
         return checkingResults
@@ -50,9 +52,6 @@ class MissingImageFilesChecker extends Checker {
 
     private void checkSingleLocalImage(HtmlElement image) {
         String relativePathToCurrentImage = image.getImageSrcAttribute()
-
-        //logger.info( "image: " + image)
-        //logger.info( "relPathToCurImage: \n$relativePathToCurrentImage")
 
         // check only "local" image references
         // (that is, NO remote URL)

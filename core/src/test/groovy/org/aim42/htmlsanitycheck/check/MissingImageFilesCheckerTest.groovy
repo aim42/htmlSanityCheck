@@ -39,7 +39,7 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
 
         checkingResults = new SingleCheckResults()
 
-        logger.info( "imagesDir: $imagesDir")
+        logger.debug( "imagesDir: $imagesDir")
     }
 
 
