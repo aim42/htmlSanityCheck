@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.html
 
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /************************************************************************
  * This is free software - without ANY guarantee!
@@ -46,11 +47,38 @@ class URLUtilSpec extends Specification {
         true    | "dira/file.html"
         true    | "dira/dirb/file.html"
         true    | "dira/dirb/file.html#anchor"
+        true    | "//index.html"
+
         false   | "http://index.html"
         false   | "mailto:alan.turing@acm.org"
         false   | ""
         false   | null
         false   | "ftp://acm.org"
+
+        false   | "10.0.0.1/index.html"  // this is a valid REMOTE address, defaults to http or https
+        true    | "//10.0.0.1/index.html" // this a valid LOCAL path, as no scheme is given!!
+    }
+
+
+    @Unroll
+    def "check for valid ip address"(boolean isValidIP, String ipa) {
+        expect:
+        URLUtil.isValidIP(ipa) == isValidIP
+
+        where:
+
+        isValidIP | ipa
+        true      | "0.0.0.0"
+        true      | "255.255.255.255"
+        true      | "127.0.0.1"
+
+        false     | "a.b.c.d"
+        false     | "192.102.100"
+        false     | "1.2.3.400"
+        false     | "1.2.3"
+        false     | "1.2"
+        false     | "110"
+
 
     }
 }
