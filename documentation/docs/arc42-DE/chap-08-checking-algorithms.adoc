@@ -1,0 +1,115 @@
+[[template-method]]
+=== Flexible Checking Algorithms
+kbd:[HtmlSC] uses the {template-method-pattern} to enable flexible checking algorithms:
+
+[quote, http://sourcemaking.com/design_patterns/template_method]
+The Template Method defines a skeleton of an algorithm in an operation, and defers some steps to subclasses.
+
+We achieve that by defining the skeleton of the checking algorithm in one operation, deferring the specific checking algorithm steps to subclasses.
+
+The invariant steps are implemented in the abstract base class, while the variant checking algorithms have to be provided by the subclasses.
+
+[source, groovy]
+    /**
+    ** template method for performing a single type of checks
+     * on the given @see HtmlPage.
+     *
+     * Prerequisite: pageToCheck has been successfully parsed,
+     * prior to constructing this Checker instance.
+    **/
+    public CheckingResultsCollector performCheck() {
+        // assert prerequisite
+        assert pageToCheck != null
+        initResults()
+        return check() // execute the actual checking algorithm
+    }
+
+
+
+image::template-method.png["Template Method", title="Template-Method Overview"]
+
+[options="header", cols="1,4"]
+.Template Method
+|===
+| Component | Description
+| Checker                           | _abstract_ base class, containing the template method +check()+
+                                        plus the public method +performCheck()+
+| <<ImageFileExistChecker>>         | checks if referenced local image files exist
+| <<BrokenCrossReferencesChecker>>  | checks if cross references (links referenced within the page) exist
+| <<DuplicateIdChecker>>            | checks if any id has multiple definitions
+| MissingAltTagsForImagesChecker    | (planned) checks if there are image tags without alt-attributes.
+|===
+
+
+==== MissingImageFilesChecker
+
+[small]#Adresses requirement <<Types of Sanity Checks, R1>>.#
+
+The (little) problem with checking images is their path: Consider the following
+HTML fragment (from the file +testme.html+:
+
+
+[source, html]
+<img src="./images/one-image.jpg">
+
+
+This image file ("one-image.jpg") has to be located relative to the directory
+containing the corresponding HTML file.
+
+Therefore the expected absolute path of the "one-image.jpg" has to be determined
+from the absolute path of the html file under test.
+
+We check for existing files using the usual Java api, but have to do some
+_directory arithmetic_ to get the +absolutePathToImageFile+:
+
+[source, java]
+  File f = new File( absolutePathToImageFile );
+  if(f.exists() && !f.isDirectory())
+
+
+
+==== BrokenCrossReferencesChecker
+
+[small]#Adresses requirement <<Types of Sanity Checks, R-2>>.#
+
+Cross references are document-internal links where the +href="link-target" from the html anchor
+tag has no prefix like +http+, +https+, +ftp+, +telnet+, +mailto+, +file+ and such.
+
+Only links with prefix +#+ shall be taken into account, e.g. +<a href="#internalLink">+.
+
+
+==== DuplicateLinkTargetsChecker
+
+[small]#Adresses requirement <<Types of Sanity Checks, R-4>>.#
+
+Sections, especially headings, can be made link-targets by adding the +id="#xyz"+ element,
+yielding for example html headings like the following example.
+
+Problems occur if the same link target is defined several times (also shown below).
+
+[source,html]
+  <h2 id="seealso">First Heading</h2>
+  <h2 id="seealso">Second Heading</h2>
+  <a href="#seealso">Duplicate definition - where shall I go now?</a>
+
+
+==== MissingLocalResourcesChecker
+
+[small]#Adresses requirement <<Types of Sanity Checks, R-3>>.#
+
+Current limitation: Does *NOT* check references-with-anchors of the following form:
+
+[source,html]
+  <a href="api/core/Artifact.html#mvcGroupInit">GroupInit</a>
+
+containing both a local (file) reference plus an internal anchor +#mvcGroupInit+
+
+
+
+
+==== BrokenExternalLinksChecker
+
+[small]#Adresses requirement <<Types of Sanity Checks, R-9>>.#
+
+Problem here are networking issues, latency and http return codes. This checker is planned,
+but currently not implemented.

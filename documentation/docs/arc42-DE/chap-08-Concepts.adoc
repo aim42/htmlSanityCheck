@@ -1,0 +1,92 @@
+
+== Technical and Crosscutting Concepts
+
+include::chap-08-checking-domain.adoc[]
+include::chap-08-gradle-plugin.adoc[]
+
+include::chap-08-checking-algorithms.adoc[]
+include::chap-08-html-encapsulation.adoc[]
+
+
+
+[[reporting-concept]]
+=== Flexible Reporting
+kbd:[HtmlSC] allows for different output formats:
+
+* formats (HTML and text) and
+* destinations (file and console)
+
+
+The reporting subsystem uses the template method pattern to allow different output formats
+(e.g. Console and HTML). The overall structure of reports is always the same:
+
+Graphical clients can use the API of the reporting subsystem to display
+reports in arbitrary formats.
+
+The (generic and abstract) reporting is implemented in the abstract Reporter class
+as follows:
+
+[source, groovy]
+/**
+ * main entry point for reporting - to be called when a report is requested
+ * Uses template-method to delegate concrete implementations to subclasses
+*/
+    public void reportFindings() {
+        initReport()            // <1>
+        reportOverallSummary()  // <2>
+        reportAllPages()        // <3>
+        closeReport()           // <4>
+    }
+//
+    private void reportAllPages() {
+        pageResults.each { pageResult ->
+            reportPageSummary( pageResult ) // <5>
+            pageResult.singleCheckResults.each { resultForOneCheck ->
+               reportSingleCheckSummary( resultForOneCheck )  // <6>
+               reportSingleCheckDetails( resultForOneCheck )  // <7>  
+               reportPageFooter()                             // <8>
+        }
+    }
+
+<1> initialize the report, e.g. create and open the file, copy css-, javascript and image files.
+
+<2> create the overall summary, with the overall success percentage and a list of all checked pages with their success rate.
+
+<3> iterate over all pages 
+
+<4> write report footer - in HTML report also create back-to-top-link
+
+<5> for a single page, report the nr of checks and problems plus the success rate 
+
+<6> for every singleCheck on that page, report a summary and 
+
+<7> all detailed findings for a singleCheck.
+
+<8> for every checked page, create a footer, pagebreak or similar to graphically distringuish
+pages between each other.
+
+
+
+
+==== Styling the Reporting Output
+
+* The HtmlReporter explicitly generates css classes together with the html elements,
+based upon css styling re-used from the Gradle JUnit plugin.
+* Stylesheets, a minimized version of JQuery javascript library plus some icons
+are copied at report-generation time from the jar-file to the report output directory.
+
+* Styling the back-to-top arror/button is done as a combination of JavaScript plus some css styling, as described in http://www.webtipblog.com/adding-scroll-top-button-website/.
+
+
+==== Copy Required Resources to Output Directory
+
+When creating the HTML report, we need to copy the required resource files (css, JavaScript)
+to the output directory.
+
+The appropriate copy method was re-used from the https://github.com/gradle/gradle/blob/master/subprojects/performance/src/testFixtures/groovy/org/gradle/performance/results/ReportGenerator.java#L50-50[Gradle sources].
+
+
+==== Attributions
+Credits for the arrow-icon https://www.iconfinder.com/icons/118743/arrow_up_icon
+
+
