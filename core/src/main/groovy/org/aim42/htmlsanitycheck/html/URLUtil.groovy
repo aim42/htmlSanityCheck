@@ -38,6 +38,7 @@ class URLUtil {
 
     }
 
+
     /**
      * Checks if this String represents a local resource, either:
      *   (1) "file://path/filename.ext" or
@@ -58,7 +59,7 @@ class URLUtil {
           return (
             (isLinkToFile(aUri)) // (1)
             ||
-            (link ==~ (/^\/\/.*$/))
+            (link ==~ (/^\/\/.*$/))   (3)
             ||
             (aUri.getPath() != "") // (2)
             )
