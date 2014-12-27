@@ -52,6 +52,7 @@ class MissingLocalResourcesChecker extends Checker {
         // make sure we have a non-null baseDir
         // (for html pages given as "string", this should be "")
         if (baseDirPath == null) {
+            logger.info "no baseDir given, set to empty string."
             baseDirPath = ""
         }
 
@@ -62,6 +63,9 @@ class MissingLocalResourcesChecker extends Checker {
 
     }
 
+    /*
+    * iterate over the SET of all local resources
+     */
     private void checkAllLocalResources( Set<String> localResources ) {
         localResources.each { localResource ->
             checkSingleLocalResource( localResource )
@@ -70,6 +74,8 @@ class MissingLocalResourcesChecker extends Checker {
 
 
     /*
+    check a single resource:
+
     @param localResource can be either:
     - file.ext
     - dir/file.ext
@@ -90,18 +96,26 @@ class MissingLocalResourcesChecker extends Checker {
         // we need the baseDir for robust checking of local resources...
         File localFile = new File( baseDirPath, localResourcePath );
 
+        // action required if resource does not exist
         if (!localFile.exists() ) {
-            String findingText = """$MLRC_MESSAGE_PREFIX \"${localResource}\" $MLRC_MESSAGE_MISSING"""
-
-            // how often is localResource referenced?
-            int nrOfOccurrences = localResourcesList.count( localResource )
-
-            if (nrOfOccurrences > 1)
-                findingText += MLRC_REFCOUNT + nrOfOccurrences
-
-            // add Finding to our current checking results, increment nrOfFindings by nrOfOccurrences
-            checkingResults.newFinding(findingText, nrOfOccurrences)
+            handleNonexistingLocalResource( localResource )
         }
+    }
+
+    /*
+     create error message and reference count
+    */
+    private handleNonexistingLocalResource(String nonExistingLocalResource) {
+        String findingText = """$MLRC_MESSAGE_PREFIX \"${nonExistingLocalResource}\" $MLRC_MESSAGE_MISSING"""
+
+        // how often is localResource referenced?
+        int nrOfOccurrences = localResourcesList.count(nonExistingLocalResource)
+
+        if (nrOfOccurrences > 1)
+            findingText += MLRC_REFCOUNT + nrOfOccurrences
+
+        // add Finding to our current checking results, increment nrOfFindings by nrOfOccurrences
+        checkingResults.newFinding(findingText, nrOfOccurrences)
     }
 
 
