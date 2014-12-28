@@ -63,9 +63,9 @@ class HtmlPage {
      * builds a list of all imageMaps
      * @return ArrayList of imageMaps
      */
-    public final Elements getAllImageMaps() {
+    public final ArrayList<Element> getAllImageMaps() {
         Elements elements = document?.select("map")
-        return elements
+        return toHtmlElementsCollection(elements)
     }
 
 
