@@ -7,6 +7,49 @@ class HtmlPageSpec extends Specification {
     private HtmlPage htmlPage
     private ArrayList qualifiedImageTags
 
+    private ArrayList imageMaps
+
+    // find all imageMaps within htmlPage
+    def "find all ImageMaps within htmlPage"(int nrOfIMaps, String imageMaps) {
+        when:
+        String html = HtmlConst.HTML_HEAD + imageMaps + HtmlConst.HTML_END
+
+        htmlPage = new HtmlPage( html )
+        imageMaps = htmlPage.getAllImageMaps()
+
+        then:
+        imageMaps.size() == nrOfIMaps
+
+        where:
+
+        nrOfIMaps | imageMaps
+        0    | """<a href="#test">test</a>"""
+
+        // ===================================================
+
+        1    | """<img src="image.gif" usemap="#mymap">
+<map name="mymap">
+    <area shape="rect" coords="0,0,1,1" href="#test1" >
+    <area shape="circle" coords="0,1,1" href="#test2">
+</map> """
+
+        // ===================================================
+
+        2    | """<img src="image.jpg" usemap="#yourmap>
+<map name="yourmap">
+    <area shape="rect" coords="0,0,1,1" href="#test1" >
+    <area shape="circle" coords="0,1,1" href="#test2">
+</map>
+<img src="image.jpg" usemap="#mymap>
+<map name="mymap">
+    <area shape="rect" coords="0,0,1,1" href="#test1" >
+</map>
+"""
+    }
+
+
+
+
     def "get image tags with non-empty alt attributes"(int nrOfAltAttributes, String imageTags) {
         when:
         String html = HtmlConst.HTML_HEAD + imageTags + HtmlConst.HTML_END
