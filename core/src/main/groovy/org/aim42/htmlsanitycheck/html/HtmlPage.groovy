@@ -2,6 +2,7 @@ package org.aim42.htmlsanitycheck.html
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
 // see end-of-file for license information
@@ -30,7 +31,10 @@ class HtmlPage {
         document = Jsoup.parse(text, "UTF-8")
     }
 
-
+    /**
+     * @param file
+     * @return an HtmlPage
+     */
     public HtmlPage(File file) {
         assert file.exists()
         document = Jsoup.parse(file, "UTF-8")
@@ -39,9 +43,9 @@ class HtmlPage {
     /**
      * get document meta info (e.g. filename, title, size etc.)
      */
-     public int getDocumentSize() {
-         return document.toString().length()
-     }
+    public int getDocumentSize() {
+        return document.toString().length()
+    }
 
     public String getDocumentTitle() {
         return document.title()
@@ -54,6 +58,17 @@ class HtmlPage {
     public String getDocument() {
         return document.toString()
     }
+
+    /**
+     * builds a list of all imageMaps
+     * @return ArrayList of imageMaps
+     */
+    public final Elements getAllImageMaps() {
+        Elements elements = document?.select("map")
+        return elements
+    }
+
+
     /**
      * builds a list from all '<img src="XYZ"/>' tags
      * @return immutable ArrayList
@@ -61,7 +76,7 @@ class HtmlPage {
     public final ArrayList<HtmlElement> getAllImageTags() {
         Elements elements = document?.getElementsByTag("img")
 
-        return toHtmlElementsCollection( elements )
+        return toHtmlElementsCollection(elements)
 
         // alternative: document?.getElementsByTag("img").asList()
     }
@@ -74,7 +89,7 @@ class HtmlPage {
         // regex "\S" matches any word
         Elements elements = document?.select("img[alt~=(\\S)]")
 
-        return toHtmlElementsCollection( elements )
+        return toHtmlElementsCollection(elements)
     }
 
     /**
@@ -82,11 +97,10 @@ class HtmlPage {
      * the alt-tag is missing or empty ("").
      */
     public final ArrayList<HtmlElement> getAllImageTagsWithMissingAltAttribute() {
-        Elements elements =  document?.select( "img") -  document?.select("img[alt~=(\\S)]")
+        Elements elements = document?.select("img") - document?.select("img[alt~=(\\S)]")
 
-        return toHtmlElementsCollection( elements )
+        return toHtmlElementsCollection(elements)
     }
-
 
     /**
      * builds a list of all '<a href="XYZ"> tags
@@ -95,7 +109,7 @@ class HtmlPage {
     public final ArrayList<HtmlElement> getAllAnchorHrefs() {
         Elements elements = document.select("a[href]")
 
-        return toHtmlElementsCollection( elements )
+        return toHtmlElementsCollection(elements)
     }
 
     /**
@@ -103,16 +117,14 @@ class HtmlPage {
      * @return ArrayList of all hrefs
      */
     public final ArrayList<HtmlElement> getAllIds() {
-        Elements elements = document.getElementsByAttribute( "id")
+        Elements elements = document.getElementsByAttribute("id")
 
-        return toHtmlElementsCollection( elements )
+        return toHtmlElementsCollection(elements)
     }
-
-
 
     /**
      *
-     * @return ArrayList<String> of all href-attributes
+     * @return ArrayList < String >  of all href-attributes
      *
      * common pitfalls with hrefs:
      * - local hrefs start with # (like "#appendix")
@@ -121,7 +133,7 @@ class HtmlPage {
      * - hrefs might start with file://
      * - href might be empty string (nobody knows wtf this is good for, but html parsers usually accept it)
      */
-    public final ArrayList<String> getAllHrefStrings( ) {
+    public final ArrayList<String> getAllHrefStrings() {
         Elements elements = document.select("a[href]")
 
         ArrayList<String> hrefStrings = new ArrayList<>()
@@ -130,28 +142,27 @@ class HtmlPage {
             String href = element.attr("href")
 
             //hrefStrings.add( normalizeHrefString( href ))
-            hrefStrings.add( href )
+            hrefStrings.add(href)
         }
 
         return hrefStrings
     }
 
-
     /*
      convert href to string
      */
-    private String normalizeHrefString( String href ) {
+
+    private String normalizeHrefString(String href) {
         String normalizedHref
 
         // local href, starting with "#" (e.g. #appendix or #_appendix
         if (href.startsWith("#")) {
-           normalizedHref =  href[1..-1] // cut off first letter
+            normalizedHref = href[1..-1] // cut off first letter
         }
         // empty href might be treated differently one day...
-        else if (href=="") {
+        else if (href == "") {
             normalizedHref = ""
-        }
-        else normalizedHref = href
+        } else normalizedHref = href
 
         return normalizedHref
     }
@@ -161,12 +172,12 @@ class HtmlPage {
      */
 
     public final ArrayList<String> getAllIdStrings() {
-        Elements elements = document.getElementsByAttribute( "id")
+        Elements elements = document.getElementsByAttribute("id")
 
         ArrayList<String> idList = new ArrayList<>()
 
         elements.each { element ->
-            idList.add( element.attr("id"))
+            idList.add(element.attr("id"))
         }
 
         return idList
@@ -175,7 +186,7 @@ class HtmlPage {
     /**
      * convert JSoup Elements to ArrayList<HtmlElement>
      */
-    private final ArrayList<HtmlElement> toHtmlElementsCollection( Elements elements ) {
+    private final ArrayList<HtmlElement> toHtmlElementsCollection(Elements elements) {
 
         ArrayList<HtmlElement> arrayList = new ArrayList<>()
 

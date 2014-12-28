@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.html
 
+import org.jsoup.select.Elements
 import spock.lang.Specification
 
 class HtmlPageSpec extends Specification {
@@ -7,12 +8,12 @@ class HtmlPageSpec extends Specification {
     private HtmlPage htmlPage
     private ArrayList qualifiedImageTags
 
-    private ArrayList imageMaps
+    private Elements imageMaps
 
     // find all imageMaps within htmlPage
-    def "find all ImageMaps within htmlPage"(int nrOfIMaps, String imageMaps) {
+    def "find all ImageMaps within htmlPage"(int nrOfIMaps, String imageMapString) {
         when:
-        String html = HtmlConst.HTML_HEAD + imageMaps + HtmlConst.HTML_END
+        String html = HtmlConst.HTML_HEAD + imageMapString + HtmlConst.HTML_END
 
         htmlPage = new HtmlPage( html )
         imageMaps = htmlPage.getAllImageMaps()
@@ -22,7 +23,7 @@ class HtmlPageSpec extends Specification {
 
         where:
 
-        nrOfIMaps | imageMaps
+        nrOfIMaps | imageMapString
         0    | """<a href="#test">test</a>"""
 
         // ===================================================
@@ -35,12 +36,12 @@ class HtmlPageSpec extends Specification {
 
         // ===================================================
 
-        2    | """<img src="image.jpg" usemap="#yourmap>
+        2    | """<img src="image.jpg" usemap="#yourmap">
 <map name="yourmap">
     <area shape="rect" coords="0,0,1,1" href="#test1" >
     <area shape="circle" coords="0,1,1" href="#test2">
 </map>
-<img src="image.jpg" usemap="#mymap>
+<img src="image.jpg" usemap="#mymap">
 <map name="mymap">
     <area shape="rect" coords="0,0,1,1" href="#test1" >
 </map>
