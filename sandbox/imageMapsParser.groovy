@@ -1,6 +1,24 @@
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
+import org.jsoup.nodes.Element
+
+def Elements getHrefsForMap( Elements maps, String mapName ) {
+   
+}
+
+def Elements getAreasForMap( Element map ) {
+    return map.children().select("area")
+}
+
+def Elements getImagesForMap( Document doc, String mapName ) {
+  return doc?.getElementsByAttributeValue("usemap", "#" + mapName)
+}
+
+
+def Elements getMaps( Document doc ) {
+    return  doc?.select("map")
+}
 
 String HTML_HEAD = "<!DOCTYPE HTML> <html><head></head><body>"
 String HTML_END = "</body></html>"
@@ -24,25 +42,35 @@ String html= HTML_HEAD + imageMap + HTML_END
 
 Document doc = Jsoup.parse(html, "UTF-8" );
 
-Elements maps = doc.select("map"); 
+maps =  getMaps( doc )
 
-println "nr of elements: ${maps.size()}"
+
+
+println "="*80
+Elements yourMap = doc.select("map[name=yourMap]")
+println "yourmap = " + yourMap
+println "="*80
+
+println "nr of maps: ${maps.size()}"
 
 //println maps
 
-maps.each  { element ->
+maps.each  { oneMap ->
 
-        String name = element.attr("name")
+        String name = oneMap.attr("name")
         // find maps that are NOT referenced by images
-        Elements imageElements = doc.getElementsByAttributeValue("usemap", "#" + element.attr("name"));
+        Elements imageElements = getImagesForMap( doc, name );
+        
         if(imageElements.size() == 0) {
-                print element.attr("name")
-                println " has no image"
+                print name + " not referenced by any image."
         }
        
        // find areas within map
-        Elements areas = element.children().select("area")
+        Elements areas = getAreasForMap( oneMap )
+        
         println areas.size() + " areas found for map $name "
+        
+        // find hrefs within areas
         ArrayList hrefs = new ArrayList()
         areas.each { area ->
            hrefs += area.attr("href")
@@ -52,6 +80,8 @@ maps.each  { element ->
 println "*"*50
 
 
+
 //println maps.first()
 //println maps.first().getClass()
+
 
