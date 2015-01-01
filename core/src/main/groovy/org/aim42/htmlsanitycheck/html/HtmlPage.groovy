@@ -2,7 +2,6 @@ package org.aim42.htmlsanitycheck.html
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
 // see end-of-file for license information
@@ -63,11 +62,10 @@ class HtmlPage {
      * builds a list of all imageMaps
      * @return ArrayList of imageMaps
      */
-    public final ArrayList<Element> getAllImageMaps() {
+    public final ArrayList<HtmlElement> getAllImageMaps() {
         Elements elements = document?.select("map")
         return toHtmlElementsCollection(elements)
     }
-
 
     /**
      * builds a list from all '<img src="XYZ"/>' tags
@@ -148,8 +146,63 @@ class HtmlPage {
         return hrefStrings
     }
 
+    /**
+     * @return immutable List of img-tags with "usemap=xyz" declaration
+     */
+    public final ArrayList<HtmlElement> getGetImagesWithUsemapDeclaration() {
+        Elements elements = document?.select("img[usemap]")
+
+        return toHtmlElementsCollection(elements)
+    }
+
+    /**
+     * collect all area-elements for a given map
+     * @param mapName
+     * @return
+     */
+    ArrayList<HtmlElement> getAllAreasForMap(String mapName) {
+        Elements elements = document.getElementsByAttributeValue("map", "mapName")
+        return toHtmlElementsCollection(elements)
+    }
+
+/**
+ * collect all hrefs from areas for a given map
+ * @param mapName
+ * @return
+ */
+
+/**
+ * getAllIdStrings return ArrayList<String> of all id="xyz" definitions
+ */
+
+    public final ArrayList<String> getAllIdStrings() {
+        Elements elements = document.getElementsByAttribute("id")
+
+        ArrayList<String> idList = new ArrayList<>()
+
+        elements.each { element ->
+            idList.add(element.attr("id"))
+        }
+
+        return idList
+    }
+
+/**
+ * convert JSoup Elements to ArrayList<HtmlElement>
+ */
+    private final ArrayList<HtmlElement> toHtmlElementsCollection(Elements elements) {
+
+        ArrayList<HtmlElement> arrayList = new ArrayList<>()
+
+        elements.each { element ->
+            arrayList.add(new HtmlElement(element))
+        }
+
+        return arrayList
+    }
+
     /*
-     convert href to string
+      convert href to string
      */
 
     private String normalizeHrefString(String href) {
@@ -167,39 +220,8 @@ class HtmlPage {
         return normalizedHref
     }
 
-    /**
-     * getAllIdStrings return ArrayList<String> of all id="xyz" definitions
-     */
-
-    public final ArrayList<String> getAllIdStrings() {
-        Elements elements = document.getElementsByAttribute("id")
-
-        ArrayList<String> idList = new ArrayList<>()
-
-        elements.each { element ->
-            idList.add(element.attr("id"))
-        }
-
-        return idList
-    }
-
-    /**
-     * convert JSoup Elements to ArrayList<HtmlElement>
-     */
-    private final ArrayList<HtmlElement> toHtmlElementsCollection(Elements elements) {
-
-        ArrayList<HtmlElement> arrayList = new ArrayList<>()
-
-        elements.each { element ->
-            arrayList.add(new HtmlElement(element))
-        }
-
-        return arrayList
-
-    }
 
 }
-
 /*========================================================================
  Copyright 2014 Gernot Starke and aim42 contributors
 
