@@ -15,7 +15,7 @@ class HtmlPageSpec extends Specification {
         when:
         String html = HtmlConst.HTML_HEAD + imageMapString + HtmlConst.HTML_END
 
-        htmlPage = new HtmlPage( html )
+        htmlPage = new HtmlPage(html)
         imageMaps = htmlPage.getAllImageMaps()
 
         then:
@@ -24,11 +24,11 @@ class HtmlPageSpec extends Specification {
         where:
 
         nrOfIMaps | imageMapString
-        0    | """<a href="#test">test</a>"""
+        0         | """<a href="#test">test</a>"""
 
         // ===================================================
 
-        1    | """<img src="image.gif" usemap="#mymap">
+        1 | """<img src="image.gif" usemap="#mymap">
 <map name="mymap">
     <area shape="rect" coords="0,0,1,1" href="#test1" >
     <area shape="circle" coords="0,1,1" href="#test2">
@@ -36,7 +36,7 @@ class HtmlPageSpec extends Specification {
 
         // ===================================================
 
-        2    | """<img src="image.jpg" usemap="#yourmap">
+        2 | """<img src="image.jpg" usemap="#yourmap">
 <map name="yourmap">
     <area shape="rect" coords="0,0,1,1" href="#test1" >
     <area shape="circle" coords="0,1,1" href="#test2">
@@ -48,7 +48,41 @@ class HtmlPageSpec extends Specification {
 """
     }
 
+    // find the area-tags within a named imageMap
+    def "find all area tags within imageMap"() {
+        when:
+        String html = HtmlConst.HTML_HEAD + imageMapString + HtmlConst.HTML_END
 
+        htmlPage = new HtmlPage(html)
+        imageMaps = htmlPage.getAllImageMaps()
+
+        then:
+        true
+
+        where:
+
+        nrOfAreas | mapName | imageMapString
+
+        // 2 areas in one imageMap
+        2 | "mymap" | """<img src="image.gif" usemap="#mymap">
+<map name="mymap">
+    <area shape="rect" coords="0,0,1,1" href="#test1" >
+    <area shape="circle" coords="0,1,1" href="#test2">
+</map> """
+
+        // 1 area in named map, 2 in other
+        1 | "mymap" | """<img src="image.gif" usemap="#mymap">
+<map name="mymap">
+    <area shape="circle" coords="0,1,1" href="#test2">
+</map>
+<img src="image.jpg" usemap="#yourmap">
+<map name="yourmap">
+    <area shape="rect" coords="0,0,1,1" href="#test1" >
+    <area shape="circle" coords="0,1,1" href="#test2">
+</map>"""
+
+
+    }
 
 
     def "get image tags with non-empty alt attributes"(int nrOfAltAttributes, String imageTags) {
@@ -112,8 +146,6 @@ class HtmlPageSpec extends Specification {
     }
 
 }
-
-
 
 /************************************************************************
  * This is free software - without ANY guarantee!
