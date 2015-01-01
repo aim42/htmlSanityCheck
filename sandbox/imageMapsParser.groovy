@@ -20,6 +20,17 @@ def Elements getMaps( Document doc ) {
     return  doc?.select("map")
 }
 
+
+def ArrayList<String> getHrefsForMap( Element map) {
+   ArrayList<String> hrefs = new ArrayList()
+   
+   getAreasForMap( map )?.each{ area ->
+       hrefs += area.attr("href")
+   }
+   return hrefs
+}
+
+
 String HTML_HEAD = "<!DOCTYPE HTML> <html><head></head><body>"
 String HTML_END = "</body></html>"
 String imageMap = """
@@ -57,31 +68,29 @@ println "nr of maps: ${maps.size()}"
 
 maps.each  { oneMap ->
 
-        String name = oneMap.attr("name")
-        // find maps that are NOT referenced by images
-        Elements imageElements = getImagesForMap( doc, name );
-        
-        if(imageElements.size() == 0) {
-                print name + " not referenced by any image."
-        }
+   String name = oneMap.attr("name")
+   
+   // 1.) find maps that are NOT referenced by images
+   Elements imageElements = getImagesForMap( doc, name );
+   if(imageElements.size() == 0) {
+       print name + " not referenced by any image."
+   }
        
-       // find areas within map
-        Elements areas = getAreasForMap( oneMap )
+
+   // 2.) are there any areas defined in the map?
+   Elements areas = getAreasForMap( oneMap )
+   println areas.size() + " areas found for map $name "
+ 
         
-        println areas.size() + " areas found for map $name "
-        
-        // find hrefs within areas
-        ArrayList hrefs = new ArrayList()
-        areas.each { area ->
-           hrefs += area.attr("href")
-        }   
-        println "hrefs = " + hrefs
+   // 3.) are there hrefs defined within areas?
+   ArrayList<String> hrefs = getHrefsForMap( oneMap )
+   println "hrefs = " + hrefs
+ 
+ 
+   // 4.) checker needs to verify these hrefs...
+   // TODO
+   
  }
+
+
 println "*"*50
-
-
-
-//println maps.first()
-//println maps.first().getClass()
-
-
