@@ -19,6 +19,7 @@ import spock.lang.Specification
  *
  * 5.) has every area-tag one non-empty href attribute?
  *
+ * 6.) are the href's valid links (internal or external)
  */
 class ImageMapParserSpec extends Specification {
 
