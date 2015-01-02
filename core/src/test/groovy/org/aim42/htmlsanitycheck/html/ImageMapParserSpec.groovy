@@ -12,13 +12,89 @@ import spock.lang.Specification
  *     * getAllImageMaps
  *     * getAllImagesWithUsemapReferences
  *
+ * 2.)
+ *
  */
 class ImageMapParserSpec extends Specification {
 
     private HtmlPage htmlPage
 
-    private ArrayList<HtmlElement> imageMaps
-    private ArrayList<HtmlElement> imageTagsWithUsemap
+
+
+    // find all imageMaps within htmlPage
+    def "find all ImageMaps within htmlPage"(int nrOfIMaps, String imageMapString) {
+        ArrayList<HtmlElement> imageMaps = new ArrayList()
+
+        when:
+        String html = HtmlConst.HTML_HEAD + imageMapString + HtmlConst.HTML_END
+
+        htmlPage = new HtmlPage(html)
+        imageMaps = htmlPage.getAllImageMaps()
+
+        then:
+        imageMaps.size() == nrOfIMaps
+
+        where:
+
+        nrOfIMaps | imageMapString
+        0 | """<smap href="no"></smap>"""
+        0 | """<maps><mad></mad></maps>"""
+        0 | """<a href="#test">test</a>"""
+        0 | ONE_IMAGE_NO_MAP
+        1 | ONE_IMG_ONE_MAP_TWO_AREAS
+        2 | TWO_IMAGE_TWO_MAPS
+        3 | FOUR_IMAGES_THREE_MAPS
+
+    }
+
+    // find all img-tags with usemap-reference
+    //@Unroll
+    def "find all image tags with usemap declaration"(int nrOfImgs, String htmlBody ) {
+        ArrayList<HtmlElement> imageTagsWithUsemap
+
+        when:
+        String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
+        htmlPage = new HtmlPage(html)
+        imageTagsWithUsemap = htmlPage.getImagesWithUsemapDeclaration()
+
+        then:
+        nrOfImgs == imageTagsWithUsemap.size()
+
+        where:
+        nrOfImgs | htmlBody
+        1        | ONE_IMAGE_NO_MAP
+        1        | ONE_IMG_ONE_MAP_ONE_AREA
+        2        | TWO_IMAGE_TWO_MAPS
+        4        | FOUR_IMAGES_THREE_MAPS
+        0        | """<img src="image.jpg" alt="test">"""
+    }
+
+    // find the area-tags within a named imageMap
+    def "find all area tags within imageMap"() {
+        ArrayList<HtmlElement> hrefsInMap
+        when:
+        String html = HtmlConst.HTML_HEAD + imageMapString + HtmlConst.HTML_END
+
+        htmlPage = new HtmlPage(html)
+        hrefsInMap = htmlPage.getAllAreasForMap(mapName)
+
+
+        then:
+        //hrefsInMap.size() == nrOfAreas
+        false
+
+        where:
+
+        nrOfAreas | mapName | imageMapString
+
+        // 2 areas in one imageMap
+        2 | "mymap" | ONE_IMG_ONE_MAP_TWO_AREAS
+
+        // 1 area in named map, 2 in other
+        1 | "mymap" | ONE_IMG_ONE_MAP_ONE_AREA
+
+
+    }
 
 
     private static final String ONE_IMG_ONE_MAP_TWO_AREAS =
@@ -50,77 +126,25 @@ class ImageMapParserSpec extends Specification {
     private static final String ONE_IMAGE_NO_MAP =
             """<img src="image.jpg" usemap="#yourmap">  """
 
-    // find all imageMaps within htmlPage
-    def "find all ImageMaps within htmlPage"(int nrOfIMaps, String imageMapString) {
-        ArrayList<HtmlElement> imageMaps = new ArrayList()
-
-        when:
-        String html = HtmlConst.HTML_HEAD + imageMapString + HtmlConst.HTML_END
-
-        htmlPage = new HtmlPage(html)
-        imageMaps = htmlPage.getAllImageMaps()
-
-        then:
-        imageMaps.size() == nrOfIMaps
-
-        where:
-
-        nrOfIMaps | imageMapString
-        0 | """<a href="#test">test</a>"""
-        0 | ONE_IMAGE_NO_MAP
-        1 | ONE_IMG_ONE_MAP_TWO_AREAS
-        2 | TWO_IMAGE_TWO_MAPS
 
 
-    }
-
-    // find all img-tags with usemap-reference
-    //@Unroll
-    def "find all image tags with usemap declaration"(String htmlBody, int nrOfImgs) {
-
-        when:
-        String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
-        htmlPage = new HtmlPage(html)
-        imageTagsWithUsemap = htmlPage.getImagesWithUsemapDeclaration()
-
-        then:
-        nrOfImgs == imageTagsWithUsemap.size()
-
-        where:
-        nrOfImgs | htmlBody
-        1        | ONE_IMAGE_NO_MAP
-        1        | ONE_IMG_ONE_MAP_ONE_AREA
-        2        | TWO_IMAGE_TWO_MAPS
-        0        | """<img src="image.jpg" alt="test">"""
-    }
-
-    // find the area-tags within a named imageMap
-    def "find all area tags within imageMap"() {
-        ArrayList<HtmlElement> hrefsInMap
-        when:
-        String html = HtmlConst.HTML_HEAD + imageMapString + HtmlConst.HTML_END
-
-        htmlPage = new HtmlPage(html)
-        hrefsInMap = htmlPage.getAllAreasForMap(mapName)
-
-
-        then:
-        //hrefsInMap.size() == nrOfAreas
-        false
-
-        where:
-
-        nrOfAreas | mapName | imageMapString
-
-        // 2 areas in one imageMap
-        2 | "mymap" | ONE_IMG_ONE_MAP_TWO_AREAS
-
-        // 1 area in named map, 2 in other
-        1 | "mymap" | ONE_IMG_ONE_MAP_ONE_AREA
-
-
-    }
-
+    private static final String FOUR_IMAGES_THREE_MAPS =
+            """<img src="image1.jpg" usemap="#map1">
+<map name="map1">
+    <area shape="rect" coords="0,0,1,1" href="#test1">
+    <area shape="circle" coords="0,1,1" href="#test2">
+</map>
+<img src="image2.jpg" usemap="#map2">
+<map name="map2">
+    <area shape="rect" coords="0,0,1,1" href="#test1">
+</map>
+<img src="image3.jpg" usemap="#map3">
+<map name="map3">
+    <area shape="rect" coords="0,0,1,1" href="#test1">
+    <area shape="rect" coords="1,1,1,1" href="#test2">
+</map>
+<img src="image4.jpg" usemap="#map4">
+"""
 
 
 }
