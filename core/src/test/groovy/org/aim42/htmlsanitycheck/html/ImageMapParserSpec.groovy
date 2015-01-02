@@ -4,15 +4,20 @@ import org.jsoup.select.Elements
 import spock.lang.Specification
 
 /**
- * specifies ImageMap Checking
+ * specifies ImageMap Parsing - prerequisites for the ImageMapChecker
  *
  * (correct) imageMaps in HTML files need to fulfill the following conditions:
  * 1.) every map is referenced by at least one img
- *     we need the following methods for that:
+ * 2.) is every map-name referenced in an image present in the page?
+ * 3.) is every map-name unique?
+ *    for 1-3  we need the following methods for that:
  *     * getAllImageMaps
  *     * getAllImagesWithUsemapReferences
  *
- * 2.)
+ * 4.) is at least one area-tag defined for every map?
+ *     * getAllAreaTagsForMapName
+ *
+ * 5.) has every area-tag one non-empty href attribute?
  *
  */
 class ImageMapParserSpec extends Specification {
