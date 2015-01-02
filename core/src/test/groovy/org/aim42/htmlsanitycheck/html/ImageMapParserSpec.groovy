@@ -27,7 +27,7 @@ class ImageMapParserSpec extends Specification {
 
 
     // find all imageMaps within htmlPage
-    def "find all ImageMaps within htmlPage"(int nrOfIMaps, String imageMapString) {
+    def "find all maps within page"(int nrOfIMaps, String imageMapString) {
         ArrayList<HtmlElement> imageMaps = new ArrayList()
 
         when:
@@ -52,6 +52,7 @@ class ImageMapParserSpec extends Specification {
 
     }
 
+
     // find all img-tags with usemap-reference
     //@Unroll
     def "find all image tags with usemap declaration"(int nrOfImgs, String htmlBody ) {
@@ -73,6 +74,7 @@ class ImageMapParserSpec extends Specification {
         4        | FOUR_IMAGES_THREE_MAPS
         0        | """<img src="image.jpg" alt="test">"""
     }
+
 
     // find the area-tags within a named imageMap
     def "find all areas within map"(int nrOfAreas, String mapName, String htmlBody) {
@@ -101,6 +103,34 @@ class ImageMapParserSpec extends Specification {
     }
 
 
+    // find the area-tags within a named imageMap
+    def "find all hrefs within map"(int nrOfHrefs, String mapName, String htmlBody, ArrayList<String> hrefs) {
+        ArrayList<String> hrefsInMap
+
+        when:
+        String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
+
+        htmlPage = new HtmlPage(html)
+        hrefsInMap = htmlPage.getAllHrefsForMapName( mapName )
+
+        then:
+        // size matters
+        nrOfHrefs == hrefsInMap.size()
+
+
+
+        where:
+
+        nrOfHrefs | mapName | htmlBody  | hrefs
+
+        // 2 areas in one imageMap               |
+        2 | "mymap" | ONE_IMG_ONE_MAP_TWO_AREAS  | ["#test1", "#test2"]
+
+        // 1 area in named map, 2 in other
+        1 | "mymap" | ONE_IMG_ONE_MAP_ONE_AREA   | ["#test1"]
+
+    }
+
     private static final String ONE_IMG_ONE_MAP_TWO_AREAS =
             """<img src="image.gif" usemap="#mymap">
 <map name="mymap">
@@ -123,7 +153,7 @@ class ImageMapParserSpec extends Specification {
 </map>
 <img src="image.jpg" usemap="#mymap">
 <map name="mymap">
-    <area shape="rect" coords="0,0,1,1" href="#test1" >
+    <area shape="rect" coords="1,1,1,1" href="#test3" >
 </map>
 """
 

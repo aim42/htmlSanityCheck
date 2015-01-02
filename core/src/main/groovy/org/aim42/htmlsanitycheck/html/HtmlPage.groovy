@@ -152,7 +152,7 @@ class HtmlPage {
     public final ArrayList<HtmlElement> getImagesWithUsemapDeclaration() {
         Elements elements = document?.select("img[usemap]")
 
-        return toHtmlElementsCollection( elements )
+        return toHtmlElementsCollection(elements)
     }
 
     /**
@@ -161,27 +161,34 @@ class HtmlPage {
      *
      * collect all area elements for a given map.
      * If more than one map exists with this name, areas
-     * for all maps are combined into
+     * for all maps are combined into one.
      * @param mapName name of the map
      * @return
      */
     ArrayList<HtmlElement> getAllAreasForMapName(String mapName) {
         // get all maps with name==mapName
-        Elements elements = document?.select("map[name=${mapName}]")
+        Elements mapsWithName = document?.select("map[name=${mapName}]")
 
         ArrayList<HtmlElement> areas = new ArrayList()
 
-        elements.each { map ->
+        mapsWithName.each { map ->
             areas += map.children().select("area")
         }
-        return toHtmlElementsCollection(elements)
+        return areas
     }
 
-/**
- * collect all hrefs from areas for a given map
- * @param mapName
- * @return
- */
+
+    public final ArrayList<String> getAllHrefsForMapName( String mapName ) {
+        ArrayList<String> hrefs = new ArrayList()
+
+        ArrayList<HtmlElement> areas = getAllAreasForMapName( mapName )
+
+        areas?.each{ area ->
+            hrefs += area.attr("href")
+        }
+
+        return hrefs
+    }
 
 /**
  * getAllIdStrings return ArrayList<String> of all id="xyz" definitions

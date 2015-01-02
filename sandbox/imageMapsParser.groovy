@@ -3,16 +3,12 @@ import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.jsoup.nodes.Element
 
+def Elements getAreasForMapName( Document doc, String mapName )
 
 def Elements getAreasForMap( Element map ) {
+    println "getAreasForMap: " + map
+    println "areas: " + map.children.select("area")
     return map.children().select("area")
-}
-
-
-// doc might contain more than one map with same name!
-// (it's a check to determine uniqueness of map-names)
-def Elements getMapsByName( String mapName ) {
-
 }
 
 
