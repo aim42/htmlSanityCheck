@@ -156,12 +156,24 @@ class HtmlPage {
     }
 
     /**
-     * collect all area-elements for a given map
-     * @param mapName
+     * html-map has the following form:
+     * <map name="mapName"><area...><area...></map>
+     *
+     * collect all area elements for a given map.
+     * If more than one map exists with this name, areas
+     * for all maps are combined into
+     * @param mapName name of the map
      * @return
      */
-    ArrayList<HtmlElement> getAllAreasForMap(String mapName) {
-        Elements elements = document.getElementsByAttributeValue("map", "mapName")
+    ArrayList<HtmlElement> getAllAreasForMapName(String mapName) {
+        // get all maps with name==mapName
+        Elements elements = document?.select("map[name=${mapName}]")
+
+        ArrayList<HtmlElement> areas = new ArrayList()
+
+        elements.each { map ->
+            areas += map.children().select("area")
+        }
         return toHtmlElementsCollection(elements)
     }
 

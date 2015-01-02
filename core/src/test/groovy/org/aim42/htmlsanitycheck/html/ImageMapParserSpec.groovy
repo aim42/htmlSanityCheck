@@ -15,7 +15,7 @@ import spock.lang.Specification
  *     * getAllImagesWithUsemapReferences
  *
  * 4.) is at least one area-tag defined for every map?
- *     * getAllAreaTagsForMapName
+ *     * getAllAreasForMap
  *
  * 5.) has every area-tag one non-empty href attribute?
  *
@@ -75,22 +75,21 @@ class ImageMapParserSpec extends Specification {
     }
 
     // find the area-tags within a named imageMap
-    def "find all area tags within imageMap"() {
-        ArrayList<HtmlElement> hrefsInMap
+    def "find all areas within map"(int nrOfAreas, String mapName, String htmlBody) {
+        ArrayList<HtmlElement> areasInMap
+
         when:
-        String html = HtmlConst.HTML_HEAD + imageMapString + HtmlConst.HTML_END
+        String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
 
         htmlPage = new HtmlPage(html)
-        hrefsInMap = htmlPage.getAllAreasForMap(mapName)
-
+        areasInMap = htmlPage.getAllAreasForMapName(mapName)
 
         then:
-        //hrefsInMap.size() == nrOfAreas
-        false
+        nrOfAreas == areasInMap.size()
 
         where:
 
-        nrOfAreas | mapName | imageMapString
+        nrOfAreas | mapName | htmlBody
 
         // 2 areas in one imageMap
         2 | "mymap" | ONE_IMG_ONE_MAP_TWO_AREAS
