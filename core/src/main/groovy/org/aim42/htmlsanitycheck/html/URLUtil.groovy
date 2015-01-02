@@ -57,9 +57,9 @@ class URLUtil {
           URI aUri = new URI( link )
 
           return (
-            (isLinkToFile(aUri)) // (1)
+            (isLinkToFile( aUri )) // (1)
             ||
-            (link ==~ (/^\/\/.*$/))   (3)
+            (link ==~ (/^\/\/.*$/))  // (3)
             ||
             (aUri.getPath() != "") // (2)
             )
