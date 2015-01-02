@@ -3,16 +3,25 @@ import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.jsoup.nodes.Element
 
-def Elements getHrefsForMap( Elements maps, String mapName ) {
-   
-}
 
 def Elements getAreasForMap( Element map ) {
     return map.children().select("area")
 }
 
+
+// doc might contain more than one map with same name!
+// (it's a check to determine uniqueness of map-names)
+def Elements getMapsByName( String mapName ) {
+
+}
+
+
 def Elements getImagesForMap( Document doc, String mapName ) {
   return doc?.getElementsByAttributeValue("usemap", "#" + mapName)
+}
+
+def Elements getImagesWithUsemapDeclaration( Document doc ) {
+  return doc?.select("img[usemap]")
 }
 
 
@@ -47,6 +56,9 @@ String imageMap = """
 <map name="map42">
     <area shape="rect" coords="0,0,82,126" href="#test1">
 </map> 
+
+<img src="image.jpg" usemap="#oneMap">
+
 """
 
 String html= HTML_HEAD + imageMap + HTML_END
@@ -55,7 +67,7 @@ Document doc = Jsoup.parse(html, "UTF-8" );
 
 maps =  getMaps( doc )
 
-
+println getImagesWithUsemapDeclaration( doc )
 
 println "="*80
 Elements yourMap = doc.select("map[name=yourMap]")
