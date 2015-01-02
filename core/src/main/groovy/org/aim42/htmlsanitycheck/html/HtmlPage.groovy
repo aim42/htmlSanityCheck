@@ -149,10 +149,10 @@ class HtmlPage {
     /**
      * @return immutable List of img-tags with "usemap=xyz" declaration
      */
-    public final ArrayList<HtmlElement> getGetImagesWithUsemapDeclaration() {
+    public final ArrayList<HtmlElement> getImagesWithUsemapDeclaration() {
         Elements elements = document?.select("img[usemap]")
 
-        return toHtmlElementsCollection(elements)
+        return toHtmlElementsCollection( elements )
     }
 
     /**
