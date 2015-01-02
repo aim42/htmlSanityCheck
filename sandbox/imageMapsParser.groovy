@@ -29,6 +29,9 @@ def Elements getMaps( Document doc ) {
     return  doc?.select("map")
 }
 
+def Elements getMapsByName( Document doc, String mapName ) {
+    return doc.select("""map[name=${mapName}]""")
+}
 
 def ArrayList<String> getHrefsForMap( Element map) {
    ArrayList<String> hrefs = new ArrayList()
@@ -70,8 +73,9 @@ maps =  getMaps( doc )
 println getImagesWithUsemapDeclaration( doc )
 
 println "="*80
-Elements yourMap = doc.select("map[name=yourMap]")
-println "yourmap = " + yourMap
+
+Elements yourMap = getMapsByName( doc, "yourMap" )
+println "getMapByName( yourmap ) = " + yourMap
 println "="*80
 
 println "nr of maps: ${maps.size()}"
