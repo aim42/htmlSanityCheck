@@ -1,41 +1,100 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
 
 /**
- * checks imageMaps:
- * 1.) Are all map-tags referenced by at least ONE image?
- * 2.) Do all map-tags contain at least one area?
- * 3.) Do all area-Elements contain at least one href?
- * 4.) are all href-Elements in the area valid?
+ * principal checks on imageMap usage:
  *
+ 1.) for every usemap-reference there is one map
+ 2.) every map is referenced by at least one image
+ 3.) every every map name is unique
+ 4.) every area-tag has one non-empty href attribute
+ 5.) every href points to valid target (broken-links check)
+ *
+ * @see www.w3schools.com/tags/tag_map.asp
  */
 class ImageMapChecker extends Checker {
 
+    ArrayList<HtmlElement> maps
+    ArrayList<String> mapNames    // y with <map name="y">
+
+    ArrayList<HtmlElement> imagesWithUsemapRefs
+    ArrayList<String> usemapNames // x with referenced by <img... usemap="x">
+
+    ArrayList<HtmlElement> areas
 
     @Override
     protected void initCheckingResultsDescription() {
         checkingResults.whatIsChecked = "Consistency of ImageMaps"
         checkingResults.sourceItemName = "imageMap"
-        checkingResults.targetItemName = "missing alt attributes"
+        checkingResults.targetItemName = "map/area and usemap-references"
     }
-
 
     @Override
     protected SingleCheckResults check() {
-        // the number of checks is calculated by counting
-        // ALL image tags:
-        //checkingResults.setNrOfChecks( pageToCheck.getAllImageTags().size())
 
-        //pageToCheck.getAllImageTagsWithMissingAltAttribute().each { element ->
-        //    reportSingleImageTagWithMissingAlt(element)
-        //}
+        readImageMapAttributesFromHtml()
+
+        isThereOneMapForEveryUsemapReference()
+
+        //isEveryMapReferencedByImage()
+
+        //isEveryMapNameUnique() // check for duplicate map names
+
+        //everyAreaTagHasHref()
+
+        //checkForBrokenHrefLinks() // the major check
 
         return checkingResults
     }
 
 
+    /*
+    * <img src="x" usemap="y">...
+    * a.) if there is no map named "y" -> problem
+    * b.) if there are more maps named "y" -> problem
+     */
+    private void isThereOneMapForEveryUsemapReference() {
+        String usemapRef
+        String imageName
+        int mapCount
+        String findingText
+
+        imagesWithUsemapRefs.each { imageTag ->
+            usemapRef = imageTag.getUsemapRef()
+            mapCount = mapNames.findAll{ it == usemapRef }?.size()
+
+            checkingResults.incNrOfChecks()
+
+            if (mapCount == 0) {
+                // no map found, despite img-tag usemap-reference
+                imageName = imageTag.getImageSrcAttribute()
+               findingText = "ImageMap ${usemapRef} (referenced by image ${imageName}) missing."
+               checkingResults.addFinding( new Finding( findingText ))
+            } else if (mapCount > 1 ) {
+                // more than one map for this image
+                findingText = "Too many (${mapCount}) ImageMaps (${mapCount}) named ${usemapRef} exist."
+                checkingResults.addFinding( new Finding( findingText ))
+            }
+        }
+    }
+
+    /*
+    set all the interesting variables
+     */
+    private void readImageMapAttributesFromHtml() {
+        // get all <img src="x" usemap="y">
+        imagesWithUsemapRefs = pageToCheck.getImagesWithUsemapDeclaration()
+
+        // get all <map name="z">...
+        maps = pageToCheck.getAllImageMaps()
+
+        // get the names of all maps
+        mapNames = pageToCheck.getAllMapNames()
+
+    }
 
 
 }
