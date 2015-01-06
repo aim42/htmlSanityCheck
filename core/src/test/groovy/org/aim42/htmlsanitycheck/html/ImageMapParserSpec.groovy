@@ -1,7 +1,7 @@
 package org.aim42.htmlsanitycheck.html
 
-import org.jsoup.select.Elements
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * specifies ImageMap Parsing - prerequisites for the ImageMapChecker
@@ -25,9 +25,8 @@ class ImageMapParserSpec extends Specification {
 
     private HtmlPage htmlPage
 
-
-
     // find all imageMaps within htmlPage
+    @Unroll
     def "find all maps within page"(int nrOfIMaps, String imageMapString) {
         ArrayList<HtmlElement> imageMaps = new ArrayList()
 
@@ -43,20 +42,19 @@ class ImageMapParserSpec extends Specification {
         where:
 
         nrOfIMaps | imageMapString
-        0 | """<smap href="no"></smap>"""
-        0 | """<maps><mad></mad></maps>"""
-        0 | """<a href="#test">test</a>"""
-        0 | ONE_IMAGE_NO_MAP
-        1 | ONE_IMG_ONE_MAP_TWO_AREAS
-        2 | TWO_IMAGE_TWO_MAPS
-        3 | FOUR_IMAGES_THREE_MAPS
+        0         | """<smap href="no"></smap>"""
+        0         | """<maps><mad></mad></maps>"""
+        0         | """<a href="#test">test</a>"""
+        0         | ONE_IMAGE_NO_MAP
+        1         | ONE_IMG_ONE_MAP_TWO_AREAS
+        2         | TWO_IMAGE_TWO_MAPS
+        3         | FOUR_IMAGES_THREE_MAPS
 
     }
 
-
     // find all img-tags with usemap-reference
-    //@Unroll
-    def "find all image tags with usemap declaration"(int nrOfImgs, String htmlBody ) {
+    @Unroll
+    def "find all image tags with usemap declaration"(int nrOfImgs, String htmlBody) {
         ArrayList<HtmlElement> imageTagsWithUsemap
 
         when:
@@ -76,6 +74,34 @@ class ImageMapParserSpec extends Specification {
         0        | """<img src="image.jpg" alt="test">"""
     }
 
+
+    /* find all mapNames (Strings...)
+    **
+    */
+
+    @Unroll
+    def "find all map names within page"(String htmlBody, ArrayList<String> names) {
+        ArrayList<String> mapNames
+
+        when:
+        String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
+
+        htmlPage = new HtmlPage(html)
+        mapNames = htmlPage.getAllMapNames()
+
+        then:
+        mapNames.size() == names.size()
+        mapNames.each { mapName ->
+            names.contains(mapName)
+        }
+
+        where:
+
+        htmlBody                 | names
+        ONE_IMG_ONE_MAP_ONE_AREA | ["mymap"]
+        TWO_IMAGE_TWO_MAPS       | ["mymap", "yourmap"]
+
+    }
 
     // find the area-tags within a named imageMap
     def "find all areas within map"(int nrOfAreas, String mapName, String htmlBody) {
@@ -104,6 +130,34 @@ class ImageMapParserSpec extends Specification {
     }
 
 
+    // get all mapnames
+    def "get all map names"(String htmlBody, ArrayList<String> mapNames) {
+       ArrayList<String> mapNamesFound
+
+        when:
+        String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
+        htmlPage = new HtmlPage( html )
+
+        mapNamesFound = htmlPage.getAllMapNames()
+
+        then:
+        mapNamesFound.size() == mapNames.size()
+        mapNamesFound.each { mapName ->
+            mapNames.contains( mapName)
+        }
+
+        where:
+        htmlBody | mapNames
+
+        // 2 areas in one imageMap               |
+         ONE_IMG_ONE_MAP_TWO_AREAS | ["mymap"]
+
+        TWO_IMAGE_TWO_MAPS | ["mymap", "yourmap"]
+
+    }
+
+
+
     // find the area-tags within a named imageMap
     def "find all hrefs within map"(int nrOfHrefs, String mapName, String htmlBody, ArrayList<String> hrefs) {
         ArrayList<String> hrefsInMap
@@ -112,7 +166,7 @@ class ImageMapParserSpec extends Specification {
         String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
 
         htmlPage = new HtmlPage(html)
-        hrefsInMap = htmlPage.getAllHrefsForMapName( mapName )
+        hrefsInMap = htmlPage.getAllHrefsForMapName(mapName)
 
         then:
         // size matters
@@ -122,13 +176,13 @@ class ImageMapParserSpec extends Specification {
 
         where:
 
-        nrOfHrefs | mapName | htmlBody  | hrefs
+        nrOfHrefs | mapName | htmlBody | hrefs
 
         // 2 areas in one imageMap               |
-        2 | "mymap" | ONE_IMG_ONE_MAP_TWO_AREAS  | ["#test1", "#test2"]
+        2 | "mymap" | ONE_IMG_ONE_MAP_TWO_AREAS | ["#test1", "#test2"]
 
         // 1 area in named map, 2 in other
-        1 | "mymap" | ONE_IMG_ONE_MAP_ONE_AREA   | ["#test1"]
+        1 | "mymap" | ONE_IMG_ONE_MAP_ONE_AREA | ["#test1"]
 
     }
 
@@ -160,7 +214,6 @@ class ImageMapParserSpec extends Specification {
 
     private static final String ONE_IMAGE_NO_MAP =
             """<img src="image.jpg" usemap="#yourmap">  """
-
 
 
     private static final String FOUR_IMAGES_THREE_MAPS =
