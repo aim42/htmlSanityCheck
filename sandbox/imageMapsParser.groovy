@@ -3,11 +3,14 @@ import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.jsoup.nodes.Element
 
-def Elements getAreasForMapName( Document doc, String mapName )
+def Elements getAreasForMapName( Document doc, String mapName ) {
+}
+
+
 
 def Elements getAreasForMap( Element map ) {
     println "getAreasForMap: " + map
-    println "areas: " + map.children.select("area")
+    println "areas: " + map.children().select("area")
     return map.children().select("area")
 }
 
