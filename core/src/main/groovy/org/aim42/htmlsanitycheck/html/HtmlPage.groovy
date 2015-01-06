@@ -68,6 +68,20 @@ class HtmlPage {
     }
 
     /**
+     * @return list of all imageMap-names
+     */
+    public final ArrayList<String> getAllMapNames() {
+        ArrayList<String> mapNames = new ArrayList()
+
+        Elements maps = document?.select("map")
+
+        maps.each { map ->
+            mapNames.add( map.attr("name"))
+        }
+        return mapNames
+    }
+
+    /**
      * builds a list from all '<img src="XYZ"/>' tags
      * @return immutable ArrayList
      */
@@ -155,6 +169,8 @@ class HtmlPage {
         return toHtmlElementsCollection(elements)
     }
 
+
+
     /**
      * html-map has the following form:
      * <map name="mapName"><area...><area...></map>
@@ -218,25 +234,6 @@ class HtmlPage {
         }
 
         return arrayList
-    }
-
-    /*
-      convert href to string
-     */
-
-    private String normalizeHrefString(String href) {
-        String normalizedHref
-
-        // local href, starting with "#" (e.g. #appendix or #_appendix
-        if (href.startsWith("#")) {
-            normalizedHref = href[1..-1] // cut off first letter
-        }
-        // empty href might be treated differently one day...
-        else if (href == "") {
-            normalizedHref = ""
-        } else normalizedHref = href
-
-        return normalizedHref
     }
 
 
