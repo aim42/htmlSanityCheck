@@ -38,17 +38,18 @@ class ImageMapsCheckerSpec extends Specification {
         collector = imageMapsChecker.performCheck()
 
         then:
-        collector.nrOfProblems() == nrOfFindings
         collector.nrOfItemsChecked == nrOfChecks
+        collector.nrOfProblems() == nrOfFindings
 
         where:
 
         nrOfChecks | nrOfFindings | imageMapStr
-        //0          | 0          | """<img src="x.jpg">"""
-        2          | 0          | ONE_IMAGE_WITH_MAP
-        //1          | 1          | ONE_IMAGE_NO_MAP
-        //1          | 1          | ONE_IMAGE_TWO_MAPS
-
+        0          | 0          | """<img src="x.jpg">"""
+        1          | 0          | ONE_IMAGE_WITH_MAP
+        1          | 1          | ONE_IMAGE_NO_MAP
+        1          | 1          | ONE_IMAGE_TWO_MAPS
+        2          | 1          | TWO_IMAGES_ONE_MAP
+        2          | 2          | TWO_IMAGES_NO_MAP
     }
 
 
@@ -67,13 +68,26 @@ class ImageMapsCheckerSpec extends Specification {
 
     private static final String ONE_IMAGE_NO_MAP = """<img src="image.jpg" usemap="#yourmap"> """
     private static final String ONE_IMAGE_WITH_MAP =
-           ONE_IMAGE_NO_MAP +
-"""<map name="yourmap">
+"""
+  <img src="image.jpg" usemap="#map1">
+  <map name="map1">
     <area shape="rect" coords="0,0,1,1" href="#test1" >
     <area shape="circle" coords="0,1,1" href="#test2">
 </map>"""
 
+    private static final String TWO_IMAGES_ONE_MAP =
+"""<img src="image1.jpg" usemap="#map1">
+   <img src="image2.jpg" usemap="#map2">
+   <map name="map1">
+     <area shape="rect" coords="0,0,1,1" href="#test1" >
+     <area shape="circle" coords="0,1,1" href="#test2">
+</map>
+"""
 
+    private static final String TWO_IMAGES_NO_MAP =
+"""<img src="image1.jpg" usemap="#map1">
+   <img src="image2.jpg" usemap="#map2">
+"""
 
 
 }
