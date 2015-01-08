@@ -26,7 +26,7 @@ class ImageMapsCheckerSpec extends Specification {
      */
 
     @Unroll
-    def "is there one map for every usemap"(int nrOfChecks, int nrOfFindings, String imageMapStr  ) {
+    def "one map for every reference"(int nrOfChecks, int nrOfFindings, String imageMapStr  ) {
 
         given:
         String html = HtmlConst.HTML_HEAD + imageMapStr + HtmlConst.HTML_END
@@ -40,6 +40,7 @@ class ImageMapsCheckerSpec extends Specification {
         then:
         collector.nrOfItemsChecked == nrOfChecks
         collector.nrOfProblems() == nrOfFindings
+        // TODO: check finding messages
 
         where:
 
@@ -50,6 +51,31 @@ class ImageMapsCheckerSpec extends Specification {
         1          | 1          | ONE_IMAGE_TWO_MAPS
         2          | 1          | TWO_IMAGES_ONE_MAP
         2          | 2          | TWO_IMAGES_NO_MAP
+    }
+
+    // look for "dangling maps"
+    @Unroll
+    def "every map is referenced"(int nrOfChecks, int nrOfFindings, String imageMapStr  ) {
+
+        given:
+        String html = HtmlConst.HTML_HEAD + imageMapStr + HtmlConst.HTML_END
+        htmlPage = new HtmlPage( html )
+
+
+        when:
+        imageMapsChecker = new ImageMapChecker( pageToCheck: htmlPage)
+        collector = imageMapsChecker.performCheck()
+
+        then:
+        collector.nrOfItemsChecked == nrOfChecks
+        collector.nrOfProblems() == nrOfFindings
+        // TODO: need to check the finding text
+
+        where:
+
+        nrOfChecks | nrOfFindings | imageMapStr
+        0          | 0          | """<img src="x.jpg">"""
+
     }
 
 

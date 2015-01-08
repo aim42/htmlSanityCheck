@@ -14,16 +14,18 @@ import org.aim42.htmlsanitycheck.html.HtmlElement
  5.) every href points to valid target (broken-links check)
  *
  * @see www.w3schools.com/tags/tag_map.asp
- */
+ **/
 class ImageMapChecker extends Checker {
 
-    ArrayList<HtmlElement> maps
-    ArrayList<String> mapNames    // y with <map name="y">
+    private ArrayList<HtmlElement> maps
+    private ArrayList<String> mapNames    // y with <map name="y">
 
-    ArrayList<HtmlElement> imagesWithUsemapRefs
-    ArrayList<String> usemapNames // x with referenced by <img... usemap="x">
+    private ArrayList<HtmlElement> imagesWithUsemapRefs
+    private ArrayList<String> usemapRefs // x with referenced by <img... usemap="x">
 
-    ArrayList<HtmlElement> areas
+    private ArrayList<HtmlElement> areas
+    private String findingText
+
 
     @Override
     protected void initCheckingResultsDescription() {
@@ -39,7 +41,7 @@ class ImageMapChecker extends Checker {
 
         isThereOneMapForEveryUsemapReference()
 
-        //isEveryMapReferencedByImage()
+        isEveryMapReferencedByImage()
 
         //isEveryMapNameUnique() // check for duplicate map names
 
@@ -60,7 +62,6 @@ class ImageMapChecker extends Checker {
         String usemapRef
         String imageName
         int mapCount
-        String findingText
 
         imagesWithUsemapRefs.each { imageTag ->
             usemapRef = imageTag.getUsemapRef()
@@ -81,6 +82,26 @@ class ImageMapChecker extends Checker {
         }
     }
 
+   /*
+   * <img src="x" usemap="y">
+   * <map name="y">...
+   * a.) if there is no image referencing "y" -> problem
+    */
+    private void isEveryMapReferencedByImage() {
+
+        mapNames.each { mapName ->
+            checkingResults.incNrOfChecks()
+
+            // if mapName is NOT contained in usemapRefs -> problem
+            if (!usemapRefs.contains(mapName)) {
+                findingText = "Map ${mapName} not referenced by any image."
+                checkingResults.addFinding( new Finding( findingText ))
+
+            }
+
+        }
+    }
+
     /*
     set all the interesting variables
      */
@@ -94,6 +115,8 @@ class ImageMapChecker extends Checker {
         // get the names of all maps
         mapNames = pageToCheck.getAllMapNames()
 
+        // get all referenced maps from image tags with usemap-attribute
+        usemapRefs = pageToCheck.getAllUsemapRefs()
     }
 
 

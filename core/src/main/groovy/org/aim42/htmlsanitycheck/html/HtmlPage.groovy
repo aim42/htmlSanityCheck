@@ -76,9 +76,22 @@ class HtmlPage {
         Elements maps = document?.select("map")
 
         maps.each { map ->
-            mapNames.add( map.attr("name"))
+            mapNames.add(map.attr("name"))
         }
         return mapNames
+    }
+
+    /**
+     * @return list of all usemap-references y with <img src="x" usemap="y"
+     */
+    public final ArrayList<String> getAllUsemapRefs() {
+        ArrayList<String> usemapRefs = new ArrayList()
+
+        getImagesWithUsemapDeclaration().each { image ->
+            usemapRefs.add(image.getUsemapRef())
+
+        }
+
     }
 
     /**
@@ -169,8 +182,6 @@ class HtmlPage {
         return toHtmlElementsCollection(elements)
     }
 
-
-
     /**
      * html-map has the following form:
      * <map name="mapName"><area...><area...></map>
@@ -194,12 +205,12 @@ class HtmlPage {
     }
 
 
-    public final ArrayList<String> getAllHrefsForMapName( String mapName ) {
+    public final ArrayList<String> getAllHrefsForMapName(String mapName) {
         ArrayList<String> hrefs = new ArrayList()
 
-        ArrayList<HtmlElement> areas = getAllAreasForMapName( mapName )
+        ArrayList<HtmlElement> areas = getAllAreasForMapName(mapName)
 
-        areas?.each{ area ->
+        areas?.each { area ->
             hrefs += area.attr("href")
         }
 

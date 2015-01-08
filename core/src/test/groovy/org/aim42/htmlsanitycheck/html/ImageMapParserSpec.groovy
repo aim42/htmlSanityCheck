@@ -103,6 +103,34 @@ class ImageMapParserSpec extends Specification {
 
     }
 
+    /* find all mapNames (Strings...)
+  **
+  */
+
+    @Unroll
+    def "find all usemap referenced within page"(String htmlBody, ArrayList<String> names) {
+        ArrayList<String> usemapRefs
+
+        when:
+        String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
+
+        htmlPage = new HtmlPage(html)
+        usemapRefs = htmlPage.getAllUsemapRefs()
+
+        then:
+        usemapRefs.size() == names.size()
+        usemapRefs.each { mapName ->
+            names.contains(mapName)
+        }
+
+        where:
+
+        htmlBody                 | names
+        ONE_IMG_ONE_MAP_ONE_AREA | ["mymap"]
+        TWO_IMAGE_TWO_MAPS       | ["mymap", "yourmap"]
+         """<img src="x" usemap="#test"> <img src="y"> """ | ["test"]
+    }
+
     // find the area-tags within a named imageMap
     def "find all areas within map"(int nrOfAreas, String mapName, String htmlBody) {
         ArrayList<HtmlElement> areasInMap
