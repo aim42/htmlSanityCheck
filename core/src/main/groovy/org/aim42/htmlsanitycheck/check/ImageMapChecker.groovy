@@ -76,7 +76,7 @@ class ImageMapChecker extends Checker {
                checkingResults.addFinding( new Finding( findingText ))
             } else if (mapCount > 1 ) {
                 // more than one map for this image
-                findingText = "Too many (${mapCount}) ImageMaps (${mapCount}) named ${usemapRef} exist."
+                findingText = "Too many (${mapCount}) ImageMaps named ${usemapRef} exist."
                 checkingResults.addFinding( new Finding( findingText ))
             }
         }
@@ -117,6 +117,8 @@ class ImageMapChecker extends Checker {
 
         // get all referenced maps from image tags with usemap-attribute
         usemapRefs = pageToCheck.getAllUsemapRefs()
+
+
     }
 
 

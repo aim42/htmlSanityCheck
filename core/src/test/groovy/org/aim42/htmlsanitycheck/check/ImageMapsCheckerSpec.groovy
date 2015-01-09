@@ -1,13 +1,13 @@
 package org.aim42.htmlsanitycheck.check
 
+
+
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
+import org.bouncycastle.crypto.encodings.ISO9796d1Encoding
 import spock.lang.Specification
 import spock.lang.Subject
-import spock.lang.Unroll
-
-
 class ImageMapsCheckerSpec extends Specification {
 
     @Subject
@@ -26,84 +26,55 @@ class ImageMapsCheckerSpec extends Specification {
      */
 
     @Unroll
-    def "one map for every reference"(int nrOfChecks, int nrOfFindings, String imageMapStr  ) {
+    def "find image map issues"(int nrOfFindings, String imageMapStr, String msg  ) {
 
         given:
         String html = HtmlConst.HTML_HEAD + imageMapStr + HtmlConst.HTML_END
         htmlPage = new HtmlPage( html )
-
 
         when:
         imageMapsChecker = new ImageMapChecker( pageToCheck: htmlPage)
         collector = imageMapsChecker.performCheck()
 
         then:
-        collector.nrOfItemsChecked == nrOfChecks
         collector.nrOfProblems() == nrOfFindings
-        // TODO: check finding messages
+        if (nrOfFindings>0) {
+            collector.findings.contains(msg)
+        }
 
         where:
 
-        nrOfChecks | nrOfFindings | imageMapStr
-        0          | 0          | """<img src="x.jpg">"""
-        1          | 0          | ONE_IMAGE_WITH_MAP
-        1          | 1          | ONE_IMAGE_NO_MAP
-        1          | 1          | ONE_IMAGE_TWO_MAPS
-        2          | 1          | TWO_IMAGES_ONE_MAP
-        2          | 2          | TWO_IMAGES_NO_MAP
-    }
+        nrOfFindings | imageMapStr           | msg
+        0          | """<img src="x.jpg">""" | ""
+        // a correct imagemap
+        0          | IMG1 + MAP1 + ID1       | ""
 
-    // look for "dangling maps"
-    @Unroll
-    def "every map is referenced"(int nrOfChecks, int nrOfFindings, String imageMapStr  ) {
+        // image with usemap-ref but no map!
+        1          | IMG1    | "ImageMap yourmap (referenced by image image1.jpg) missing."
 
-        given:
-        String html = HtmlConst.HTML_HEAD + imageMapStr + HtmlConst.HTML_END
-        htmlPage = new HtmlPage( html )
-
-
-        when:
-        imageMapsChecker = new ImageMapChecker( pageToCheck: htmlPage)
-        collector = imageMapsChecker.performCheck()
-
-        then:
-        collector.nrOfItemsChecked == nrOfChecks
-        collector.nrOfProblems() == nrOfFindings
-        // TODO: need to check the finding text
-
-        where:
-
-        nrOfChecks | nrOfFindings | imageMapStr
-        0          | 0          | """<img src="x.jpg">"""
-
+        1          | ONE_IMAGE_TWO_MAPS | "Too many (2) ImageMaps named map1 exist."
+//        1          | TWO_IMAGES_ONE_MAP | ""
+//        2          | TWO_IMAGES_NO_MAP  | ""
     }
 
 
 
-    // bad: too many maps for on
-    private static final String ONE_IMAGE_TWO_MAPS =
-            """<img src="image.jpg" usemap="#yourmap">
-<map name="yourmap">
-    <area shape="rect" coords="0,0,1,1" href="#test1" >
-    <area shape="circle" coords="0,1,1" href="#test2">
-</map>
-<map name="yourmap">
-    <area shape="rect" coords="1,1,1,1" href="#test3" >
+    private static final String ID1 =  """<h2 id="id1">aim42 header</h2>"""
+
+    private static final String IMG1 = """<img src="image1.jpg" usemap="#map1">"""
+    private static final String IMG2 = """<img src="image2.jpg" usemap="#map2">"""
+
+    private static final String MAP1 =
+"""<map name="map1">
+    <area shape="rect" coords="0,0,1,1" href="#id1" >
 </map>
 """
 
-    private static final String ONE_IMAGE_NO_MAP = """<img src="image.jpg" usemap="#yourmap"> """
-    private static final String ONE_IMAGE_WITH_MAP =
-"""
-  <img src="image.jpg" usemap="#map1">
-  <map name="map1">
-    <area shape="rect" coords="0,0,1,1" href="#test1" >
-    <area shape="circle" coords="0,1,1" href="#test2">
-</map>"""
+
+
 
     private static final String TWO_IMAGES_ONE_MAP =
-"""<img src="image1.jpg" usemap="#map1">
-   <img src="image2.jpg" usemap="#map2">
+            """<img src="image1.jpg" usemap="#map1">
    <map name="map1">
      <area shape="rect" coords="0,0,1,1" href="#test1" >
      <area shape="circle" coords="0,1,1" href="#test2">
@@ -111,12 +82,13 @@ class ImageMapsCheckerSpec extends Specification {
 """
 
     private static final String TWO_IMAGES_NO_MAP =
-"""<img src="image1.jpg" usemap="#map1">
+            """<img src="image1.jpg" usemap="#map1">
    <img src="image2.jpg" usemap="#map2">
 """
 
 
 }
+import spock.lang.Unroll
 
 /************************************************************************
  * This is free software - without ANY guarantee!
