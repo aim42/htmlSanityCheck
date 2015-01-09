@@ -55,12 +55,12 @@ class HtmlElement {
      * @return x for '<img src="y" usemap="x">
      */
     public String getUsemapRef() {
-        String tmpUsemapRef
+        String tmpUsemapRef = ""
 
         if (element.tagName().equals("img")) {
-             return HtmlElement.normalizeHrefString( element.attr("usemap") )
+             tmpUsemapRef = HtmlElement.normalizeHrefString( element.attr("usemap") )
         }
-        else return ""
+        return tmpUsemapRef
     }
 
     @Override
