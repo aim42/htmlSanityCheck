@@ -85,13 +85,13 @@ class HtmlPage {
      * @return list of all usemap-references y with <img src="x" usemap="y"
      */
     public final ArrayList<String> getAllUsemapRefs() {
-        ArrayList<String> usemapRefs = new ArrayList()
+        ArrayList<String> usemapRefs = new ArrayList<String>()
 
         getImagesWithUsemapDeclaration().each { image ->
             usemapRefs.add(image.getUsemapRef())
 
         }
-
+        return usemapRefs
     }
 
     /**
