@@ -74,7 +74,6 @@ class ImageMapParserSpec extends Specification {
         0        | """<img src="image.jpg" alt="test">"""
     }
 
-
     /* find all mapNames (Strings...)
     **
     */
@@ -119,16 +118,20 @@ class ImageMapParserSpec extends Specification {
 
         then:
         usemapRefs.size() == names.size()
-        usemapRefs.each { mapName ->
-            names.contains(mapName)
+
+        if (usemapRefs.size() > 0) {
+            usemapRefs.each { mapName ->
+                names.contains(mapName)
+            }
         }
 
         where:
 
-        htmlBody                 | names
-        ONE_IMG_ONE_MAP_ONE_AREA | ["mymap"]
-        TWO_IMAGE_TWO_MAPS       | ["mymap", "yourmap"]
-         """<img src="x" usemap="#test"> <img src="y"> """ | ["test"]
+        htmlBody                                          | names
+        ONE_IMG_ONE_MAP_ONE_AREA                          | ["mymap"]
+        TWO_IMAGE_TWO_MAPS                                | ["mymap", "yourmap"]
+        """<img src="x" usemap="#test"> <img src="y"> """ | ["test"]
+        """<img src="x.jpg"> """                          | []
     }
 
     // find the area-tags within a named imageMap
@@ -157,34 +160,31 @@ class ImageMapParserSpec extends Specification {
 
     }
 
-
     // get all mapnames
     def "get all map names"(String htmlBody, ArrayList<String> mapNames) {
-       ArrayList<String> mapNamesFound
+        ArrayList<String> mapNamesFound
 
         when:
         String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
-        htmlPage = new HtmlPage( html )
+        htmlPage = new HtmlPage(html)
 
         mapNamesFound = htmlPage.getAllMapNames()
 
         then:
         mapNamesFound.size() == mapNames.size()
         mapNamesFound.each { mapName ->
-            mapNames.contains( mapName)
+            mapNames.contains(mapName)
         }
 
         where:
         htmlBody | mapNames
 
         // 2 areas in one imageMap               |
-         ONE_IMG_ONE_MAP_TWO_AREAS | ["mymap"]
+        ONE_IMG_ONE_MAP_TWO_AREAS | ["mymap"]
 
         TWO_IMAGE_TWO_MAPS | ["mymap", "yourmap"]
 
     }
-
-
 
     // find the area-tags within a named imageMap
     def "find all hrefs within map"(int nrOfHrefs, String mapName, String htmlBody, ArrayList<String> hrefs) {
