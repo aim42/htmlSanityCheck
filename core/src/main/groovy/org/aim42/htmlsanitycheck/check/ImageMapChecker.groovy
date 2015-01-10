@@ -76,7 +76,7 @@ class ImageMapChecker extends Checker {
                checkingResults.addFinding( new Finding( findingText ))
             } else if (mapCount > 1 ) {
                 // more than one map for this image
-                findingText = "Too many (${mapCount}) ImageMaps named ${usemapRef} exist."
+                findingText = "${mapCount} imagemaps with identical name (${usemapRef}) exist."
                 checkingResults.addFinding( new Finding( findingText ))
             }
         }
@@ -94,7 +94,7 @@ class ImageMapChecker extends Checker {
 
             // if mapName is NOT contained in usemapRefs -> problem
             if (!usemapRefs.contains(mapName)) {
-                findingText = "Map ${mapName} not referenced by any image."
+                findingText = "Imagemap ${mapName} not referenced by any image."
                 checkingResults.addFinding( new Finding( findingText ))
 
             }

@@ -5,25 +5,16 @@ package org.aim42.htmlsanitycheck.check
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
-import org.bouncycastle.crypto.encodings.ISO9796d1Encoding
 import spock.lang.Specification
-import spock.lang.Subject
+import spock.lang.Unroll
+
 class ImageMapsCheckerSpec extends Specification {
 
-    @Subject
     public Checker imageMapsChecker
-
 
     private HtmlPage htmlPage
     private SingleCheckResults collector
 
-    /**
-     * specify behavior of isThereOneMapForEveryUsemapReference()
-     * @param html
-     * @param nrOfChecks
-     * @param nrOfFindings
-     *
-     */
 
     @Unroll
     def "find image map issues"(int nrOfFindings, String imageMapStr, String msg  ) {
@@ -38,22 +29,23 @@ class ImageMapsCheckerSpec extends Specification {
 
         then:
         collector.nrOfProblems() == nrOfFindings
-        if (nrOfFindings>0) {
-            collector.findings.contains(msg)
-        }
+        collector.findings.contains(msg)
 
         where:
 
         nrOfFindings | imageMapStr           | msg
-        0          | """<img src="x.jpg">""" | ""
+        //0          | """<img src="x.jpg">""" | ""
         // a correct imagemap
-        0          | IMG1 + MAP1 + ID1       | ""
+        //0          | IMG1 + MAP1 + ID1       | ""
 
         // image with usemap-ref but no map!
         1          | IMG1    | "ImageMap yourmap (referenced by image image1.jpg) missing."
 
-        1          | ONE_IMAGE_TWO_MAPS | "Too many (2) ImageMaps named map1 exist."
-//        1          | TWO_IMAGES_ONE_MAP | ""
+        // one image but TWO maps with identical name
+        1          | IMG1 + MAP1 + MAP1 + ID1 | "2 imagemaps with identical name (map1) exist."
+
+        // no image, one map that is not referenced
+        1          | MAP1 + ID1 | "Imagemap map1 not referenced by any image."
 //        2          | TWO_IMAGES_NO_MAP  | ""
     }
 
@@ -88,7 +80,6 @@ class ImageMapsCheckerSpec extends Specification {
 
 
 }
-import spock.lang.Unroll
 
 /************************************************************************
  * This is free software - without ANY guarantee!
