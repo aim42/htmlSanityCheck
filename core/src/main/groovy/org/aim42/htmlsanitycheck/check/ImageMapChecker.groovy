@@ -72,11 +72,11 @@ class ImageMapChecker extends Checker {
             if (mapCount == 0) {
                 // no map found, despite img-tag usemap-reference
                 imageName = imageTag.getImageSrcAttribute()
-               findingText = "ImageMap ${usemapRef} (referenced by image ${imageName}) missing."
+               findingText = """ImageMap "${usemapRef}" (referenced by image "${imageName}") missing."""
                checkingResults.addFinding( new Finding( findingText ))
             } else if (mapCount > 1 ) {
                 // more than one map for this image
-                findingText = "${mapCount} imagemaps with identical name (${usemapRef}) exist."
+                findingText = """${mapCount} imagemaps with identical name "${usemapRef}" exist."""
                 checkingResults.addFinding( new Finding( findingText ))
             }
         }
@@ -94,16 +94,14 @@ class ImageMapChecker extends Checker {
 
             // if mapName is NOT contained in usemapRefs -> problem
             if (!usemapRefs.contains(mapName)) {
-                findingText = "Imagemap ${mapName} not referenced by any image."
+                findingText = """Imagemap "${mapName}" not referenced by any image."""
                 checkingResults.addFinding( new Finding( findingText ))
-
             }
-
         }
     }
 
     /*
-    set all the interesting variables
+     set all the interesting attributes
      */
     private void readImageMapAttributesFromHtml() {
         // get all <img src="x" usemap="y">
@@ -117,8 +115,6 @@ class ImageMapChecker extends Checker {
 
         // get all referenced maps from image tags with usemap-attribute
         usemapRefs = pageToCheck.getAllUsemapRefs()
-
-
     }
 
 
