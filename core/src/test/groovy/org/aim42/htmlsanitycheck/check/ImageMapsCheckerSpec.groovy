@@ -1,7 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
 
-
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
@@ -17,52 +16,60 @@ class ImageMapsCheckerSpec extends Specification {
 
 
     @Unroll
-    def "find image map issues"(int nrOfFindings, String imageMapStr, String msg  ) {
+    def "find image map issues"(int nrOfFindings, String imageMapStr, String msg) {
 
         given:
         String html = HtmlConst.HTML_HEAD + imageMapStr + HtmlConst.HTML_END
-        htmlPage = new HtmlPage( html )
+        htmlPage = new HtmlPage(html)
 
         when:
-        imageMapsChecker = new ImageMapChecker( pageToCheck: htmlPage)
+        imageMapsChecker = new ImageMapChecker(pageToCheck: htmlPage)
         collector = imageMapsChecker.performCheck()
 
         then:
-        collector.nrOfProblems() == nrOfFindings
-        collector.findings.contains(msg)
+        collector?.nrOfProblems() == nrOfFindings
+        if (nrOfFindings > 0) {
+            collector?.getFindingMessages()?.contains(msg)
+        }
+
 
         where:
 
-        nrOfFindings | imageMapStr           | msg
-        //0          | """<img src="x.jpg">""" | ""
+        nrOfFindings | imageMapStr             | msg
+        // no imagemap, no check, no problem
+        0            | """<img src="x.jpg">""" | ""
+
         // a correct imagemap
-        //0          | IMG1 + MAP1 + ID1       | ""
+        0          | IMG1 + MAP1 + ID1       | ""
 
         // image with usemap-ref but no map!
-        1          | IMG1    | "ImageMap yourmap (referenced by image image1.jpg) missing."
+        1 | IMG1 | """ImageMap "map1" (referenced by image "image1.jpg") missing."""
 
         // one image but TWO maps with identical name
-        1          | IMG1 + MAP1 + MAP1 + ID1 | "2 imagemaps with identical name (map1) exist."
+        1 | IMG1 + MAP1 + MAP1 + ID1 | """2 imagemaps with identical name "map1" exist."""
 
-        // no image, one map that is not referenced
-        1          | MAP1 + ID1 | "Imagemap map1 not referenced by any image."
-//        2          | TWO_IMAGES_NO_MAP  | ""
+        // no image, dangling map
+        1 | MAP1 + ID1 | """Imagemap "map1" not referenced by any image."""
+
+        // empty map
+        1 | IMG1 + MAP1_EMPTY | "Empty imagemap \"map1\" (no area attribute)."
     }
 
 
-
-    private static final String ID1 =  """<h2 id="id1">aim42 header</h2>"""
+    private static final String ID1 = """<h2 id="id1">aim42 header</h2>"""
 
     private static final String IMG1 = """<img src="image1.jpg" usemap="#map1">"""
     private static final String IMG2 = """<img src="image2.jpg" usemap="#map2">"""
 
     private static final String MAP1 =
-"""<map name="map1">
+            """<map name="map1">
     <area shape="rect" coords="0,0,1,1" href="#id1" >
 </map>
 """
-
-
+    private static final String MAP1_EMPTY =
+            """<map name="map1">
+</map>
+"""
 
 
     private static final String TWO_IMAGES_ONE_MAP =
