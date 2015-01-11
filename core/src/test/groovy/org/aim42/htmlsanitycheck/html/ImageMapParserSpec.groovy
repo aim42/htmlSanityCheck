@@ -74,8 +74,9 @@ class ImageMapParserSpec extends Specification {
         0        | """<img src="image.jpg" alt="test">"""
     }
 
-    /* find all mapNames (Strings...)
-    **
+    /**
+    ** find all mapNames (Strings...),
+     * by inspecting the map-tags
     */
 
     @Unroll
@@ -90,22 +91,20 @@ class ImageMapParserSpec extends Specification {
 
         then:
         mapNames.size() == names.size()
-        mapNames.each { mapName ->
-            names.contains(mapName)
-        }
+        mapNames == names
 
         where:
 
         htmlBody                 | names
         ONE_IMG_ONE_MAP_ONE_AREA | ["mymap"]
-        TWO_IMAGE_TWO_MAPS       | ["mymap", "yourmap"]
-
+        TWO_IMAGE_TWO_MAPS       | ["yourmap", "mymap"]
+        """map map map """       | []
     }
 
-    /* find all mapNames (Strings...)
-  **
-  */
-
+    /**
+     * find the usemap refs,
+     * by searching the img-tags for usemap-attributes
+     */
     @Unroll
     def "find all usemap referenced within page"(String htmlBody, ArrayList<String> names) {
         ArrayList<String> usemapRefs
@@ -119,17 +118,13 @@ class ImageMapParserSpec extends Specification {
         then:
         usemapRefs.size() == names.size()
 
-        if (usemapRefs.size() > 0) {
-            usemapRefs.each { mapName ->
-                names.contains(mapName)
-            }
-        }
+        usemapRefs == names
 
         where:
 
         htmlBody                                          | names
         ONE_IMG_ONE_MAP_ONE_AREA                          | ["mymap"]
-        TWO_IMAGE_TWO_MAPS                                | ["mymap", "yourmap"]
+        TWO_IMAGE_TWO_MAPS                                | ["yourmap", "mymap"]
         """<img src="x" usemap="#test"> <img src="y"> """ | ["test"]
         """<img src="x.jpg"> """                          | []
     }
