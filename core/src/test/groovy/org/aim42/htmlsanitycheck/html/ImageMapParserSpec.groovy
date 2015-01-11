@@ -99,6 +99,8 @@ class ImageMapParserSpec extends Specification {
         ONE_IMG_ONE_MAP_ONE_AREA | ["mymap"]
         TWO_IMAGE_TWO_MAPS       | ["yourmap", "mymap"]
         """map map map """       | []
+        FOUR_IMAGES_THREE_MAPS   | ["map1", "map2", "map3"]
+
     }
 
     /**
@@ -106,7 +108,7 @@ class ImageMapParserSpec extends Specification {
      * by searching the img-tags for usemap-attributes
      */
     @Unroll
-    def "find all usemap referenced within page"(String htmlBody, ArrayList<String> names) {
+    def "find all usemap references within page"(String htmlBody, ArrayList<String> names) {
         ArrayList<String> usemapRefs
 
         when:
@@ -127,6 +129,7 @@ class ImageMapParserSpec extends Specification {
         TWO_IMAGE_TWO_MAPS                                | ["yourmap", "mymap"]
         """<img src="x" usemap="#test"> <img src="y"> """ | ["test"]
         """<img src="x.jpg"> """                          | []
+        FOUR_IMAGES_THREE_MAPS                            | ["map1", "map2", "map3", "map4"]
     }
 
     // find the area-tags within a named imageMap
@@ -155,31 +158,6 @@ class ImageMapParserSpec extends Specification {
 
     }
 
-    // get all mapnames
-    def "get all map names"(String htmlBody, ArrayList<String> mapNames) {
-        ArrayList<String> mapNamesFound
-
-        when:
-        String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
-        htmlPage = new HtmlPage(html)
-
-        mapNamesFound = htmlPage.getAllMapNames()
-
-        then:
-        mapNamesFound.size() == mapNames.size()
-        mapNamesFound.each { mapName ->
-            mapNames.contains(mapName)
-        }
-
-        where:
-        htmlBody | mapNames
-
-        // 2 areas in one imageMap               |
-        ONE_IMG_ONE_MAP_TWO_AREAS | ["mymap"]
-
-        TWO_IMAGE_TWO_MAPS | ["mymap", "yourmap"]
-
-    }
 
     // find the area-tags within a named imageMap
     def "find all hrefs within map"(int nrOfHrefs, String mapName, String htmlBody, ArrayList<String> hrefs) {
