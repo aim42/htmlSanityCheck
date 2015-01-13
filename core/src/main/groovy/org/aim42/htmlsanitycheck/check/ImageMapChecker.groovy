@@ -13,7 +13,7 @@ import org.aim42.htmlsanitycheck.html.HtmlElement
  4.) every area-tag has one non-empty href attribute
  5.) every href points to valid target (broken-links check)
  *
- * @see www.w3schools.com/tags/tag_map.asp
+ * see also: http://www.w3schools.com/tags/tag_map.asp
  **/
 class ImageMapChecker extends Checker {
 
@@ -23,7 +23,6 @@ class ImageMapChecker extends Checker {
     private ArrayList<HtmlElement> imagesWithUsemapRefs
     private ArrayList<String> usemapRefs // x with referenced by <img... usemap="x">
 
-    private ArrayList<HtmlElement> areas
     private String findingText
 
 
@@ -39,13 +38,15 @@ class ImageMapChecker extends Checker {
 
         readImageMapAttributesFromHtml()
 
-        isThereOneMapForEveryUsemapReference()
+        checkBrokenImageMapReferences()
+
+        checkDuplicateMapNames()
 
         isEveryMapReferencedByImage()
 
-        //isEveryMapNameUnique() // check for duplicate map names
+        checkDanglingMaps()
 
-        //everyAreaTagHasHref()
+        checkEmptyMaps()
 
         //checkForBrokenHrefLinks() // the major check
 
@@ -54,11 +55,69 @@ class ImageMapChecker extends Checker {
 
 
     /*
+     search for maps that are NOT referenced by any image-tag
+     */
+    private void checkDanglingMaps() {
+
+        mapNames.each { mapName ->
+            checkingResults.incNrOfChecks()
+
+            // check if mapName is contained in collection of usemap-references
+            if (!usemapRefs.contains(mapName)) {
+                findingText = """ImageMap "${mapName}" not referenced by any image. """
+            }
+        }
+    }
+
+
+
+
+    /*
+     search for maps that are NOT referenced by any image-tag
+     */
+    private void checkEmptyMaps() {
+        ArrayList<HtmlElement> areas = new ArrayList<HtmlElement>()
+
+        mapNames.each { mapName ->
+            areas = pageToCheck.getAllAreasForMapName(mapName)
+
+            checkingResults.incNrOfChecks()
+
+            // empty map?
+            if (areas.size() == 0) {
+                findingText = """Imagemap "${mapName}" has no area tags."""
+                checkingResults.addFinding(new Finding(findingText))
+            }
+        }
+    }
+
+    /*
+    check for duplicate map names
+     */
+    private void checkDuplicateMapNames() {
+        int mapNameCount
+
+        Set<String> mapNameSet = mapNames.toSet()
+
+        mapNameSet.each { mapName ->
+            mapNameCount = mapNames.count( mapName )
+
+            checkingResults.incNrOfChecks()
+
+            if (mapNameCount > 1) {
+                // more than one map with this name
+                findingText = """${mapNameCount} imagemaps with identical name "${mapName}" exist."""
+                checkingResults.addFinding(new Finding(findingText))
+            }
+        }
+    }
+
+    /*
     * <img src="x" usemap="y">...
     * a.) if there is no map named "y" -> problem
     * b.) if there are more maps named "y" -> problem
      */
-    private void isThereOneMapForEveryUsemapReference() {
+    private void checkBrokenImageMapReferences() {
         String usemapRef
         String imageName
         int mapCount
@@ -74,10 +133,6 @@ class ImageMapChecker extends Checker {
                 imageName = imageTag.getImageSrcAttribute()
                findingText = """ImageMap "${usemapRef}" (referenced by image "${imageName}") missing."""
                checkingResults.addFinding( new Finding( findingText ))
-            } else if (mapCount > 1 ) {
-                // more than one map for this image
-                findingText = """${mapCount} imagemaps with identical name "${usemapRef}" exist."""
-                checkingResults.addFinding( new Finding( findingText ))
             }
         }
     }
