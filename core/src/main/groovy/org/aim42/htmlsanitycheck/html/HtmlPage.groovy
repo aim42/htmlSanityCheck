@@ -192,7 +192,7 @@ class HtmlPage {
      * @param mapName name of the map
      * @return
      */
-    ArrayList<HtmlElement> getAllAreasForMapName(String mapName) {
+    public final ArrayList<HtmlElement> getAllAreasForMapName(String mapName) {
         // get all maps with name==mapName
         Elements mapsWithName = document?.select("map[name=${mapName}]")
 
