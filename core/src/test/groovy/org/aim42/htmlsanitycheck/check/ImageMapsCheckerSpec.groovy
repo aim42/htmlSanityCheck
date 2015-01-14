@@ -33,7 +33,7 @@ class ImageMapsCheckerSpec extends Specification {
 
         where:
 
-        nrOfFindings | imageMapStr             | msg
+        nrOfFindings | imageMapStr | msg
         // no imagemap, no check, no problem
         //0            | """<img src="x.jpg">""" | ""
 
@@ -53,7 +53,7 @@ class ImageMapsCheckerSpec extends Specification {
         1 | IMG1 + MAP1_EMPTY | "Imagemap \"map1\" has no area tags."
 
         // href link target missing
-       // 1 | IMG1 + MAP1 + ID2 | "Link \"id1\" in imagemap \"map1\" is broken."
+        // 1 | IMG1 + MAP1 + ID2 | "Link \"id1\" in imagemap \"map1\" is broken."
     }
 
 

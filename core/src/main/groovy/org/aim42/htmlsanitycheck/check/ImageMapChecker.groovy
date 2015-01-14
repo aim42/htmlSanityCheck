@@ -3,6 +3,7 @@ package org.aim42.htmlsanitycheck.check
 import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
+import org.aim42.htmlsanitycheck.html.URLUtil
 
 /**
  * principal checks on imageMap usage:
@@ -22,6 +23,8 @@ class ImageMapChecker extends Checker {
 
     private ArrayList<HtmlElement> imagesWithUsemapRefs
     private ArrayList<String> usemapRefs // x with referenced by <img... usemap="x">
+
+    private ArrayList<String> listOfIds
 
     private String findingText
 
@@ -140,9 +143,6 @@ class ImageMapChecker extends Checker {
     TODO: currently this checks only for INTERNAL links, enhance to arbitrary links
      */
     private void  checkForBrokenHrefLinks() {
-        // list of all id="XYZ"
-        List<String> listOfIds    = pageToCheck.getAllIdStrings()
-
         ArrayList<HtmlElement> areaHrefs = new ArrayList<String>()
 
         mapNames.each { mapName ->
@@ -162,10 +162,40 @@ class ImageMapChecker extends Checker {
             checkingResults.incNrOfChecks()
 
             // do the actual checking
+            if (URLUtil.isCrossReference( href )) {
+                checkLocalHref(href, mapName, areaHrefs)
+            }
+
+        }
+    }
+
+    /*
+    check if href has valid local target
+    TODO: currently restricted to LOCAL references
+    TODO: remove duplication to BrokenCrossReferencesChecker
+    */
+    private void checkLocalHref( String href, String mapName,ArrayList<String> areaHrefs ) {
+        // strip href of its leading "#"
+        String linkTarget = (href.startsWith("#")) ? href[1..-1] : href
+
+
+        if (!listOfIds.contains( linkTarget )) {
+
+            // we found a broken link!
+             findingText = """ImageMap "${mapName}" refers to issing link target \"$linkTarget\""""
+
+            // now count occurrences - how often is it referenced
+            int nrOfReferences = areaHrefs.findAll{  it == href }.size()
+            if (nrOfReferences > 1) {
+                findingText += ", reference count: $nrOfReferences."
+            } else findingText += "."
+
+            checkingResults.newFinding(findingText, nrOfReferences)
         }
 
-
     }
+
+
     /*
      set all the interesting attributes
      */
@@ -181,6 +211,10 @@ class ImageMapChecker extends Checker {
 
         // get all referenced maps from image tags with usemap-attribute
         usemapRefs = pageToCheck.getAllUsemapRefs()
+
+        // list of all id="XYZ"
+        listOfIds    = pageToCheck.getAllIdStrings()
+
     }
 
 
