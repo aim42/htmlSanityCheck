@@ -42,13 +42,11 @@ class ImageMapChecker extends Checker {
 
         checkDuplicateMapNames()
 
-        isEveryMapReferencedByImage()
-
         checkDanglingMaps()
 
         checkEmptyMaps()
 
-        //checkForBrokenHrefLinks() // the major check
+        checkForBrokenHrefLinks() // the major check
 
         return checkingResults
     }
@@ -137,24 +135,37 @@ class ImageMapChecker extends Checker {
         }
     }
 
-   /*
-   * <img src="x" usemap="y">
-   * <map name="y">...
-   * a.) if there is no image referencing "y" -> problem
-    */
-    private void isEveryMapReferencedByImage() {
+    /*
+    check for broken href links.
+    TODO: currently this checks only for INTERNAL links, enhance to arbitrary links
+     */
+    private void  checkForBrokenHrefLinks() {
+        // list of all id="XYZ"
+        List<String> listOfIds    = pageToCheck.getAllIdStrings()
+
+        ArrayList<HtmlElement> areaHrefs = new ArrayList<String>()
 
         mapNames.each { mapName ->
-            checkingResults.incNrOfChecks()
-
-            // if mapName is NOT contained in usemapRefs -> problem
-            if (!usemapRefs.contains(mapName)) {
-                findingText = """Imagemap "${mapName}" not referenced by any image."""
-                checkingResults.addFinding( new Finding( findingText ))
-            }
+            checkAreaHrefsForMapName(mapName)
         }
     }
 
+    /*
+    for a specific mapName, check all its contained  areaHrefs
+     */
+    private void checkAreaHrefsForMapName( String mapName) {
+        ArrayList<String> areaHrefs = pageToCheck.getAllHrefsForMapName(mapName)
+
+        // if this List is empty -> the map is empty
+        // TODO replace checkEmptyMaps with additional check here
+        areaHrefs.each { href ->
+            checkingResults.incNrOfChecks()
+
+            // do the actual checking
+        }
+
+
+    }
     /*
      set all the interesting attributes
      */
