@@ -27,8 +27,8 @@ class ImageMapsCheckerSpec extends Specification {
         collector = imageMapsChecker.performCheck()
 
         then:
-        collector?.nrOfProblems() == nrOfFindings
         collector?.getFindingMessages()?.contains(msg)
+        collector?.nrOfProblems() == nrOfFindings
 
 
         where:
@@ -51,10 +51,14 @@ class ImageMapsCheckerSpec extends Specification {
 
         // empty map
         1 | IMG1 + MAP1_EMPTY | "Imagemap \"map1\" has no area tags."
+
+        // href link target missing
+       // 1 | IMG1 + MAP1 + ID2 | "Link \"id1\" in imagemap \"map1\" is broken."
     }
 
 
     private static final String ID1 = """<h2 id="id1">aim42 header</h2>"""
+    private static final String ID2 = """<h2 id="foo" >bad header</h2>"""
 
     private static final String IMG1 = """<img src="image1.jpg" usemap="#map1">"""
     private static final String IMG2 = """<img src="image2.jpg" usemap="#map2">"""
