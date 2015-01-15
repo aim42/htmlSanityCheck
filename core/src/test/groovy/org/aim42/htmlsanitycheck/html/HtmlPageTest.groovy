@@ -23,7 +23,7 @@ class HtmlPageTest extends GroovyTestCase {
      */
     final static String LOCAL_PATH = "/src/test/resources/"
 
-    final static String HTML_HEAD = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <html><head></head>'
+    final static String HTML_HEAD = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <html><head></head>"""
 
 
     final String HTML_WITH_IMG_TAG =
@@ -251,10 +251,10 @@ class HtmlPageTest extends GroovyTestCase {
         final String LOC1 = "file://path/filename.html"
         final String LOC2 = "dir/ectory/filename.pdf"
 
-        String HTML = """$HTML_HEAD<body>
+        String HTML = """${HTML_HEAD}<body>
              <h1>dummy-heading-1</h1>
-             <a href="$LOC1">a local file resource</a>
-             <a href="$LOC2">another local resource</a>
+             <a href="${LOC1}">a local file resource</a>
+             <a href="${LOC2}">another local resource</a>
              <a href="#crossref">a cross reference</a>
         </body></html>"""
 
@@ -265,7 +265,7 @@ class HtmlPageTest extends GroovyTestCase {
 
         // now filter the local resources
         List<String> localHrefStrings = hrefs.findAll { hrefString ->
-            URLUtil.isLocalResource(hrefString)
+            URLUtil.isLocalResource( hrefString )
         }
 
         assertEquals("expected 2 local resources", 2, localHrefStrings.size())

@@ -1,0 +1,5 @@
+This directory contains scripts and files
+to experiment with jsoup parser...
+
+Load them into groovyConsole
+(don't forget to add jsoup.jar to the classpath)
