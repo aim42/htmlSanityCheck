@@ -1,11 +1,13 @@
 package org.aim42.htmlsanitycheck.html
 
+import org.jsoup.select.Elements
 import spock.lang.Specification
 
 class HtmlPageSpec extends Specification {
 
     private HtmlPage htmlPage
     private ArrayList qualifiedImageTags
+
 
     def "get image tags with non-empty alt attributes"(int nrOfAltAttributes, String imageTags) {
         when:
@@ -68,8 +70,6 @@ class HtmlPageSpec extends Specification {
     }
 
 }
-
-
 
 /************************************************************************
  * This is free software - without ANY guarantee!

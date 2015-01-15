@@ -40,8 +40,7 @@ class HtmlElement {
     public String getHrefAttribute() {
         if (element.tagName().equals("a")) {
             return element.attr("href")
-            }
-        else return ""
+        } else return ""
     }
 
     /**
@@ -52,11 +51,42 @@ class HtmlElement {
 
     }
 
+    /**
+     * @return x for '<img src="y" usemap="x">
+     */
+    public String getUsemapRef() {
+        String tmpUsemapRef = ""
+
+        if (element.tagName().equals("img")) {
+             tmpUsemapRef = HtmlElement.normalizeHrefString( element.attr("usemap") )
+        }
+        return tmpUsemapRef
+    }
 
     @Override
     public String toString() {
         return element.toString()
     }
+
+    /*
+     convert href to string
+    */
+
+    private static String normalizeHrefString(String href) {
+        String normalizedHref
+
+        // local href, starting with "#" (e.g. #appendix or #_appendix
+        if (href.startsWith("#")) {
+            normalizedHref = href[1..-1] // cut off first letter
+        }
+        // empty href might be treated differently one day...
+        else if (href == "") {
+            normalizedHref = ""
+        } else normalizedHref = href
+
+        return normalizedHref
+    }
+
 }
 
 /*========================================================================
@@ -75,4 +105,3 @@ class HtmlElement {
  See the License for the specific language governing permissions and
  limitations under the License.
  ========================================================================*/
-

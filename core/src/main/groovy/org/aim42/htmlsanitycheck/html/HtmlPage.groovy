@@ -30,7 +30,10 @@ class HtmlPage {
         document = Jsoup.parse(text, "UTF-8")
     }
 
-
+    /**
+     * @param file
+     * @return an HtmlPage
+     */
     public HtmlPage(File file) {
         assert file.exists()
         document = Jsoup.parse(file, "UTF-8")
@@ -39,9 +42,9 @@ class HtmlPage {
     /**
      * get document meta info (e.g. filename, title, size etc.)
      */
-     public int getDocumentSize() {
-         return document.toString().length()
-     }
+    public int getDocumentSize() {
+        return document.toString().length()
+    }
 
     public String getDocumentTitle() {
         return document.title()
@@ -54,6 +57,43 @@ class HtmlPage {
     public String getDocument() {
         return document.toString()
     }
+
+    /**
+     * builds a list of all imageMaps
+     * @return ArrayList of imageMaps
+     */
+    public final ArrayList<HtmlElement> getAllImageMaps() {
+        Elements elements = document?.select("map")
+        return toHtmlElementsCollection(elements)
+    }
+
+    /**
+     * @return list of all imageMap-names
+     */
+    public final ArrayList<String> getAllMapNames() {
+        ArrayList<String> mapNames = new ArrayList()
+
+        Elements maps = document?.select("map")
+
+        maps.each { map ->
+            mapNames.add(map.attr("name"))
+        }
+        return mapNames
+    }
+
+    /**
+     * @return list of all usemap-references y with <img src="x" usemap="y"
+     */
+    public final ArrayList<String> getAllUsemapRefs() {
+        ArrayList<String> usemapRefs = new ArrayList<String>()
+
+        getImagesWithUsemapDeclaration().each { image ->
+            usemapRefs.add(image.getUsemapRef())
+
+        }
+        return usemapRefs
+    }
+
     /**
      * builds a list from all '<img src="XYZ"/>' tags
      * @return immutable ArrayList
@@ -61,7 +101,7 @@ class HtmlPage {
     public final ArrayList<HtmlElement> getAllImageTags() {
         Elements elements = document?.getElementsByTag("img")
 
-        return toHtmlElementsCollection( elements )
+        return toHtmlElementsCollection(elements)
 
         // alternative: document?.getElementsByTag("img").asList()
     }
@@ -74,7 +114,7 @@ class HtmlPage {
         // regex "\S" matches any word
         Elements elements = document?.select("img[alt~=(\\S)]")
 
-        return toHtmlElementsCollection( elements )
+        return toHtmlElementsCollection(elements)
     }
 
     /**
@@ -82,11 +122,10 @@ class HtmlPage {
      * the alt-tag is missing or empty ("").
      */
     public final ArrayList<HtmlElement> getAllImageTagsWithMissingAltAttribute() {
-        Elements elements =  document?.select( "img") -  document?.select("img[alt~=(\\S)]")
+        Elements elements = document?.select("img") - document?.select("img[alt~=(\\S)]")
 
-        return toHtmlElementsCollection( elements )
+        return toHtmlElementsCollection(elements)
     }
-
 
     /**
      * builds a list of all '<a href="XYZ"> tags
@@ -95,7 +134,7 @@ class HtmlPage {
     public final ArrayList<HtmlElement> getAllAnchorHrefs() {
         Elements elements = document.select("a[href]")
 
-        return toHtmlElementsCollection( elements )
+        return toHtmlElementsCollection(elements)
     }
 
     /**
@@ -103,16 +142,14 @@ class HtmlPage {
      * @return ArrayList of all hrefs
      */
     public final ArrayList<HtmlElement> getAllIds() {
-        Elements elements = document.getElementsByAttribute( "id")
+        Elements elements = document.getElementsByAttribute("id")
 
-        return toHtmlElementsCollection( elements )
+        return toHtmlElementsCollection(elements)
     }
-
-
 
     /**
      *
-     * @return ArrayList<String> of all href-attributes
+     * @return ArrayList < String >  of all href-attributes
      *
      * common pitfalls with hrefs:
      * - local hrefs start with # (like "#appendix")
@@ -121,7 +158,7 @@ class HtmlPage {
      * - hrefs might start with file://
      * - href might be empty string (nobody knows wtf this is good for, but html parsers usually accept it)
      */
-    public final ArrayList<String> getAllHrefStrings( ) {
+    public final ArrayList<String> getAllHrefStrings() {
         Elements elements = document.select("a[href]")
 
         ArrayList<String> hrefStrings = new ArrayList<>()
@@ -130,52 +167,76 @@ class HtmlPage {
             String href = element.attr("href")
 
             //hrefStrings.add( normalizeHrefString( href ))
-            hrefStrings.add( href )
+            hrefStrings.add(href)
         }
 
         return hrefStrings
     }
 
-
-    /*
-     convert href to string
+    /**
+     * @return immutable List of img-tags with "usemap=xyz" declaration
      */
-    private String normalizeHrefString( String href ) {
-        String normalizedHref
+    public final ArrayList<HtmlElement> getImagesWithUsemapDeclaration() {
+        Elements elements = document?.select("img[usemap]")
 
-        // local href, starting with "#" (e.g. #appendix or #_appendix
-        if (href.startsWith("#")) {
-           normalizedHref =  href[1..-1] // cut off first letter
-        }
-        // empty href might be treated differently one day...
-        else if (href=="") {
-            normalizedHref = ""
-        }
-        else normalizedHref = href
-
-        return normalizedHref
+        return toHtmlElementsCollection(elements)
     }
 
     /**
-     * getAllIdStrings return ArrayList<String> of all id="xyz" definitions
+     * html-map has the following form:
+     * <map name="mapName"><area...><area...></map>
+     *
+     * collect all area elements for a given map.
+     * If more than one map exists with this name, areas
+     * for all maps are combined into one.
+     * @param mapName name of the map
+     * @return
      */
+    public final ArrayList<HtmlElement> getAllAreasForMapName(String mapName) {
+        // get all maps with name==mapName
+        Elements mapsWithName = document?.select("map[name=${mapName}]")
+
+        ArrayList<HtmlElement> areas = new ArrayList()
+
+        mapsWithName.each { map ->
+            areas += map.children().select("area")
+        }
+        return areas
+    }
+
+
+    public final ArrayList<String> getAllHrefsForMapName(String mapName) {
+        ArrayList<String> hrefs = new ArrayList()
+
+        ArrayList<HtmlElement> areas = getAllAreasForMapName(mapName)
+
+        areas?.each { area ->
+            hrefs += area.attr("href")
+        }
+
+        return hrefs
+    }
+
+/**
+ * getAllIdStrings return ArrayList<String> of all id="xyz" definitions
+ */
 
     public final ArrayList<String> getAllIdStrings() {
-        Elements elements = document.getElementsByAttribute( "id")
+        Elements elements = document.getElementsByAttribute("id")
 
         ArrayList<String> idList = new ArrayList<>()
 
         elements.each { element ->
-            idList.add( element.attr("id"))
+            idList.add(element.attr("id"))
         }
 
         return idList
     }
 
-    /**
-     * convert JSoup Elements to ArrayList<HtmlElement>
-     */
-    private final ArrayList<HtmlElement> toHtmlElementsCollection( Elements elements ) {
+/**
+ * convert JSoup Elements to ArrayList<HtmlElement>
+ */
+    private final ArrayList<HtmlElement> toHtmlElementsCollection(Elements elements) {
 
         ArrayList<HtmlElement> arrayList = new ArrayList<>()
 
@@ -184,11 +245,10 @@ class HtmlPage {
         }
 
         return arrayList
-
     }
 
-}
 
+}
 /*========================================================================
  Copyright 2014 Gernot Starke and aim42 contributors
 

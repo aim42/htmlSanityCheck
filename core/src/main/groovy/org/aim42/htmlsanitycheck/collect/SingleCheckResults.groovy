@@ -111,6 +111,18 @@ class SingleCheckResults implements CheckResults {
         return findings
     }
 
+    /**
+     * return a collection of finding-messages
+     * (used to simplify testing)
+     */
+    public ArrayList<String> getFindingMessages() {
+        ArrayList<String> messages = new ArrayList<String>()
+
+        findings.each { finding ->
+            messages.add( finding.item )
+        }
+        return messages
+    }
 
 
     /**

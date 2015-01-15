@@ -2,7 +2,6 @@
 // =========================================
 println "  (configuration of subproject $project.name) "
 
-
 apply plugin: 'maven'
 
 // to publish on Gradle plugin portal
