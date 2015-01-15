@@ -65,7 +65,8 @@ class ImageMapChecker extends Checker {
 
             // check if mapName is contained in collection of usemap-references
             if (!usemapRefs.contains(mapName)) {
-                findingText = """ImageMap "${mapName}" not referenced by any image. """
+                findingText = """ImageMap "${mapName}" not referenced by any image."""
+                checkingResults.addFinding(new Finding(findingText))
             }
         }
     }
@@ -86,7 +87,7 @@ class ImageMapChecker extends Checker {
 
             // empty map?
             if (areas.size() == 0) {
-                findingText = """Imagemap "${mapName}" has no area tags."""
+                findingText = """ImageMap "${mapName}" has no area tags."""
                 checkingResults.addFinding(new Finding(findingText))
             }
         }
@@ -182,7 +183,7 @@ class ImageMapChecker extends Checker {
         if (!listOfIds.contains( linkTarget )) {
 
             // we found a broken link!
-             findingText = """ImageMap "${mapName}" refers to issing link target \"$linkTarget\""""
+             findingText = """ImageMap "${mapName}" refers to missing link \"$linkTarget\""""
 
             // now count occurrences - how often is it referenced
             int nrOfReferences = areaHrefs.findAll{  it == href }.size()

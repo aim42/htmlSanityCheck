@@ -47,13 +47,13 @@ class ImageMapsCheckerSpec extends Specification {
         1 | IMG1 + MAP1 + MAP1 + ID1 | """2 imagemaps with identical name "map1" exist."""
 
         // no image, dangling map
-        1 | MAP1 + ID1 | """Imagemap "map1" not referenced by any image."""
+        1 | MAP1 + ID1 | """ImageMap "map1" not referenced by any image."""
 
         // empty map
-        1 | IMG1 + MAP1_EMPTY | "Imagemap \"map1\" has no area tags."
+        1 | IMG1 + MAP1_EMPTY | "ImageMap \"map1\" has no area tags."
 
         // href link target missing
-        // 1 | IMG1 + MAP1 + ID2 | "Link \"id1\" in imagemap \"map1\" is broken."
+        1 | IMG1 + MAP1 + ID2 | "ImageMap \"map1\" refers to missing link \"id1\"."
     }
 
 
