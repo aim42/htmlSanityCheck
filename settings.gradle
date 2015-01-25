@@ -10,5 +10,5 @@ include "documentation",  // obvious...
 // set plugin-name
 // otherwise plugin artifact would just be called "gradle-plugin"
 project(":gradle-plugin").name = "HtmlSanityCheck-gradle-plugin"
-project(":core").name = "HtmlSanityCheck-core"
+//project(":core").name = "HtmlSanityCheck-core"
 
