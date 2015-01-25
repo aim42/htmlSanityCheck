@@ -10,7 +10,7 @@
 :gradle-url: http://gradle.org/
 
 :gernotstarke: https://github.com/gernotstarke
-:project: HtmlSanityCheck-gradle-plugin
+:project: htmlSanityCheck
 :project-url: https://github.com/aim42/htmlSanityCheck
 :project-issues: https://github.com/aim42/htmlSanityCheck/issues
 :project-bugs: https://github.com/aim42/htmlSanityCheck/issues?q=is%3Aopen+is%3Aissue+label%3Abug
@@ -31,7 +31,7 @@ image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommo
 image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[link={project-issues}]
 image:https://api.bintray.com/packages/gernotstarke/HtmlSanityCheck/HtmlSanityCheck-gradle-plugin/images/download.svg[link="https://bintray.com/gernotstarke/HtmlSanityCheck/HtmlSanityCheck-gradle-plugin/_latestVersion"]
-image:https://img.shields.io/badge/last_update-{docdate}-ff69b4.svg[]
+image:https://img.shields.io/badge/last_update-Jan_25_2015-ff69b4.svg[link={project-url}]
 
 == Installation
 
