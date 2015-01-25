@@ -15,6 +15,28 @@ class URLUtil {
     protected static final Pattern  ip_address_pattern = ~/(([01]?\d\d?|2[0-4]\d|25[0-5])\.){3}([01]?\d\d?|2[0-4]\d|25[0-5]).*$/
 
     /**
+     * Checks if this String represents a valid URI/URL
+     * @param link
+     * @return boolean
+     */
+    public static boolean isValidURL( String link ) {
+        boolean isValid = false
+
+        try {
+            URI aUri = new URL( link ).toURI()
+            isValid = true
+        }
+        catch (MalformedURLException e) {
+           // ignore
+
+        }
+        catch (URISyntaxException e1) {
+           // ignore too
+        }
+
+    }
+
+    /**
      * Checks if this String represents a remote URL
      * (startsWith http, https, ftp, telnet...)
      * @param link
