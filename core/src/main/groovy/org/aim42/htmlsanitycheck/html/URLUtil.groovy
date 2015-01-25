@@ -12,26 +12,27 @@ class URLUtil {
     // the foundation for the ip_address_pattern:
     // http://stackoverflow.com/questions/5667371/validate-ipv4-address-in-java and
     // http://groovy.codehaus.org/Regular+Expressions
-    protected static final Pattern  ip_address_pattern = ~/(([01]?\d\d?|2[0-4]\d|25[0-5])\.){3}([01]?\d\d?|2[0-4]\d|25[0-5]).*$/
+    protected static
+    final Pattern ip_address_pattern = ~/(([01]?\d\d?|2[0-4]\d|25[0-5])\.){3}([01]?\d\d?|2[0-4]\d|25[0-5]).*$/
 
     /**
      * Checks if this String represents a valid URI/URL
      * @param link
      * @return boolean
      */
-    public static boolean isValidURL( String link ) {
+    public static boolean isValidURL(String link) {
         boolean isValid = false
 
         try {
-            URI aUri = new URL( link ).toURI()
+            URI aUri = new URL(link).toURI()
             isValid = true
         }
         catch (MalformedURLException e) {
-           // ignore
+            // ignore
 
         }
         catch (URISyntaxException e1) {
-           // ignore too
+            // ignore too
         }
 
     }
@@ -60,30 +61,32 @@ class URLUtil {
 
     }
 
-
     /**
      * Checks if this String represents a local resource, either:
      *   (1) "file://path/filename.ext" or
      *   (2) is a path, e.g. "directory/filename.ext" or directory or
      *   (3) starts with //, e.g. "index.html"
      *
-     *  @see class URLUtilSpec for details
+     * @see class URLUtilSpec for details
      */
     public static boolean isLocalResource(String link) {
 
-        if ((link == null) || (link == "" )) return false
+        // handle corner cases
+        if ((link == null) ||
+                (link == "") ||
+                !URLUtil.isValidURL(link)) return false
 
         if (URLUtil.isRemoteURL(link))
             return false
         else {
-          URI aUri = new URI( link )
+            URI aUri = new URI(link)
 
-          return (
-            (isLinkToFile( aUri )) // (1)
-            ||
-            (link ==~ (/^\/\/.*$/))  // (3)
-            ||
-            (aUri.getPath() != "") // (2)
+            return (
+                    (isLinkToFile(aUri)) // (1)
+                            ||
+                            (link ==~ (/^\/\/.*$/))  // (3)
+                            ||
+                            (aUri.getPath() != "") // (2)
             )
         }
 
@@ -92,6 +95,7 @@ class URLUtil {
     /*
     ** helper to identify "file scheme"
      */
+
     private static Boolean isLinkToFile(URI aUri) {
 
         aUri?.getScheme()?.toUpperCase() == "FILE"
@@ -126,14 +130,13 @@ class URLUtil {
 //         )
     }
 
-
     /**
      * validate an IP address
      * @see URLUtilSpec for details
      * @param ipa - the candidate ip address
      */
     public static boolean isValidIP(String ipa) {
-       return ipa ==~ /^(([01]?\d\d?|2[0-4]\d|25[0-5])\.){3}([01]?\d\d?|2[0-4]\d|25[0-5])$/
+        return ipa ==~ /^(([01]?\d\d?|2[0-4]\d|25[0-5])\.){3}([01]?\d\d?|2[0-4]\d|25[0-5])$/
     }
 }
 
