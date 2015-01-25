@@ -25,6 +25,23 @@ import spock.lang.Unroll
 
 class URLUtilSpec extends Specification {
 
+    @Unroll
+    def "identify invalid links"(boolean isValid, String link) {
+        expect:
+        URLUtil.isValidURL( link ) == isValid
+
+        where:
+
+        isValid | link
+        true    | "http://arc42.de/index.html"
+        true    | "#localRef"
+        true    | "images/image.jpg"
+        true    | "file://images/image.jpg"
+
+        false   | "#Context Analysis"
+        false   | "//10.0.0.1/index.html"
+
+    }
 
     @Unroll
     def "identify local resource links"(boolean isLocal, String link) {
@@ -49,7 +66,8 @@ class URLUtilSpec extends Specification {
         true    | "dira/file.html"
         true    | "dira/dirb/file.html"
         true    | "dira/dirb/file.html#anchor"
-        true    | "//index.html"
+
+        false   | "//index.html"
 
         false   | "#Context Analysis" // regression test for  issue #70
 
@@ -59,10 +77,10 @@ class URLUtilSpec extends Specification {
         false   | null
         false   | "ftp://acm.org"
         false   | "http://10.0.0.1/index.html"
-        //false   | "//10.0.0.1/index.html"
+        false   | "//10.0.0.1/index.html"
 
         false   | "10.0.0.1/index.html"  // this is a valid REMOTE address, defaults to http or https
-        true    | "//10.0.0.1/index.html" // this a valid LOCAL path, as no scheme is given!!
+        false    | "//10.0.0.1/index.html" // invalid syntax, scheme missing!!
     }
 
 
