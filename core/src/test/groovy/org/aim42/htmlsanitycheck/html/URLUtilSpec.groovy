@@ -51,6 +51,8 @@ class URLUtilSpec extends Specification {
         true    | "dira/dirb/file.html#anchor"
         true    | "//index.html"
 
+        false   | "#Context Analysis" // regression test for  issue #70
+
         false   | "http://index.html"
         false   | "mailto:alan.turing@acm.org"
         false   | ""
