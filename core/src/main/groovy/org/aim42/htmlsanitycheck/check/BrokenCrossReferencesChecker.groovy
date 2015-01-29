@@ -46,7 +46,7 @@ class BrokenCrossReferencesChecker extends Checker {
 
         // for all hrefSet check if the corresponding id exists
         hrefSet.each { href ->
-            if (URLUtil.isValidURL(href))
+            //if (URLUtil.isValidURL(href))
                 checkSingleInternalLink( href )
         }
     }
