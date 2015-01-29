@@ -5,6 +5,16 @@
 [[requirements]]
 === Requirements Overview
 
+
+
+.Sample Report
+|===
+| The overall goal of kbd:[HtmlSC] is to create neat and clear reports,
+showing errors within HTML files - like shown in figure <<fig-sample>>
+| image::sample-hsc-report.jpg[]
+
+
+
 ==== Basic Usage
 
 . A user configures the location (directory and filename) of an HTML file,
