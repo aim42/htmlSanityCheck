@@ -34,7 +34,7 @@ asciidoctor {
 }
 
 
-defaultTasks 'doc42'
+defaultTasks 'arc42'
 
 task copyImages(
         type: Copy,
@@ -47,7 +47,7 @@ task copyImages(
 
 
 
-task doc42(
+task arc42(
         dependsOn: [copyImages, asciidoctor],
         description: 'performs all required tasks for creating documentation'
 ) << { }
