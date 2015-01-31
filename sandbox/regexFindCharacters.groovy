@@ -1,10 +1,24 @@
-String aString1 = "#Context Analysis"
+String aString = "#Context Analysis"
 
-String illegalCharsRegex = / |!/
+// invalid
+assert containsInvalidChars( "#Context Analysis" ) == true
+assert containsInvalidChars( " " ) == true
 
-def m = aString =~ illegalCharsRegex
+// valid
+assert containsInvalidChars( "#ContextAnalysis" ) == false
+assert containsInvalidChars( "#Context-Analysis" ) == false
+assert containsInvalidChars( "#Context_Analysis" ) == false
 
-if (!(aString =~ illegalCharsRegex)) {                                                         
-    println "chars not found"
- }
-else println "found"
+
+def boolean containsInvalidChars( String aString ) {
+   String illegalCharsRegex = / |!/
+
+   if (!(aString =~ illegalCharsRegex)) {
+      println "chars not found"
+      return false
+   }
+   else { 
+      println "found"
+      return true
+   }   
+}
