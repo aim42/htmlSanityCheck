@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.html
 
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 /**
@@ -21,6 +22,9 @@ class URLUtil {
      * @return boolean
      */
     public static boolean isValidURL(String link) {
+        // TODO: refactor this code to use  org.apache.commons.validator.routines.*
+
+        // TODO: this fails for cross-references - but should not!
         boolean isValid = false
 
         try {
@@ -45,8 +49,6 @@ class URLUtil {
 
     public static boolean isRemoteURL(String link) {
         // simple regular expression to match http://, https:// and ftp://
-        //
-
 
         return (link ==~ (/^(?i)(https?|ftp|telnet|ssh|ssl|gopher|localhost):\/\/.*$/)
                 ||
@@ -58,8 +60,8 @@ class URLUtil {
                 // special case for URLs starting with a valid IP address
                 ip_address_pattern.matcher(link).matches()
         )
-
     }
+
 
     /**
      * Checks if this String represents a local resource, either:
@@ -92,6 +94,26 @@ class URLUtil {
 
     }
 
+    /**
+     * helper to identify invalid characters in link
+     * @param aLink
+     */
+    public static boolean containsInvalidChars( String aLink ) {
+        // TODO finding illegal chars with a regex is overly simple,
+        // as different chars are allowed in different parts of an URI...
+        // simple solution works for htmlSanityCheck
+
+
+        String illegalCharsRegex = / |!|\*|\$/
+
+        Matcher matcher = (aLink =~ illegalCharsRegex)
+
+        // assert matcher instanceof Matcher
+
+        return matcher.find()
+    }
+
+
     /*
     ** helper to identify "file scheme"
      */
@@ -108,26 +130,10 @@ class URLUtil {
      */
     public static boolean isCrossReference(String xref) {
 
-        // xref CAN NOT be a cross-reference if one of the following is true:
-        // (1) xref contains a path separator ('\' on Mac/Unix, '/' on Windows),
-        // (2) xref is a remoteURL (starts with http or similar protocol identifiers)
-        // (3) contains ".html" or ".htm" as suffix
-        // (4) is a filename... very simple test: contains a "."
-
-        // the simple test is if the xref starts with "#", though :-)
+         // the simple test is if the xref starts with "#"
 
         return xref.startsWith("#")
 
-//        String upped = xref.toUpperCase()
-//
-//        return ! (xref.contains(File.separatorChar.toString())     // (1)
-//                 ||
-//                 URLUtil.isRemoteURL( xref )                       // (2)
-//                 ||
-//                 upped.endsWith("HTML") || upped.endsWith("HTM")   // (3)
-//                 ||
-//                 xref.contains(".")                                // (4)
-//         )
     }
 
     /**
