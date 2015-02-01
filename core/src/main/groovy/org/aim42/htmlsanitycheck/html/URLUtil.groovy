@@ -27,18 +27,21 @@ class URLUtil {
         // TODO: this fails for cross-references - but should not!
         boolean isValid = false
 
-        try {
-            URI aUri = new URL(link).toURI()
-            isValid = true
-        }
-        catch (MalformedURLException e) {
-            // ignore
+        if (isCrossReference(link)) {
+            return true
+        } else {
+            try {
+                URI aUri = new URL(link).toURI()
+                isValid = true
+            }
+            catch (MalformedURLException e) {
+                // ignore
 
+            }
+            catch (URISyntaxException e1) {
+                // ignore too
+            }
         }
-        catch (URISyntaxException e1) {
-            // ignore too
-        }
-
     }
 
     /**
@@ -62,7 +65,6 @@ class URLUtil {
         )
     }
 
-
     /**
      * Checks if this String represents a local resource, either:
      *   (1) "file://path/filename.ext" or
@@ -76,10 +78,8 @@ class URLUtil {
         // handle corner cases
         if ((link == null) ||
                 (link == "") ||
-                !URLUtil.isValidURL(link)) return false
+                !URLUtil.isRemoteURL(link)) return false
 
-        if (URLUtil.isRemoteURL(link))
-            return false
         else {
             URI aUri = new URI(link)
 
@@ -98,7 +98,7 @@ class URLUtil {
      * helper to identify invalid characters in link
      * @param aLink
      */
-    public static boolean containsInvalidChars( String aLink ) {
+    public static boolean containsInvalidChars(String aLink) {
         // TODO finding illegal chars with a regex is overly simple,
         // as different chars are allowed in different parts of an URI...
         // simple solution works for htmlSanityCheck
@@ -112,7 +112,6 @@ class URLUtil {
 
         return matcher.find()
     }
-
 
     /*
     ** helper to identify "file scheme"
@@ -130,9 +129,9 @@ class URLUtil {
      */
     public static boolean isCrossReference(String xref) {
 
-         // the simple test is if the xref starts with "#"
+        // the simple test is if the xref starts with "#"
 
-        return xref.startsWith("#")
+        return ( xref.startsWith("#")  && !containsInvalidChars( xref ) )
 
     }
 

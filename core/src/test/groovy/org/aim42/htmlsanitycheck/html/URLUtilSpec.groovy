@@ -33,7 +33,6 @@ class URLUtilSpec extends Specification {
         isValid | link
         true    | "http://arc42.de/index.html"
         true    | "#localRef"
-        true    | "images/image.jpg"
         true    | "file://images/image.jpg"
 
         false   | "#Context Analysis"
