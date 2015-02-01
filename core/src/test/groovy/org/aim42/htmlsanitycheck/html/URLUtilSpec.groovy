@@ -3,27 +3,25 @@ package org.aim42.htmlsanitycheck.html
 import spock.lang.Specification
 import spock.lang.Unroll
 
-/************************************************************************
- * This is free software - without ANY guarantee!
- *
- *
- * Copyright 2013-2015, Dr. Gernot Starke, arc42.org
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- *********************************************************************** */
-
 class URLUtilSpec extends Specification {
+
+    //@Unroll
+    def "invalid chars in link"(boolean containsInvalidChars, String link) {
+        expect:
+        URLUtil.containsInvalidChars( link ) == containsInvalidChars
+
+        where:
+
+        containsInvalidChars | link
+        false | "#Context-Analysis"
+        false | "#Context_Analysis"
+        false | "#Context--Analysis"
+
+        true  | "#Context Analysis" // regression test, contains blank
+        true  | "*Context-Analysis" // * is not allowed
+    }
+
+
 
     @Unroll
     def "identify invalid links"(boolean isValid, String link) {
@@ -69,7 +67,7 @@ class URLUtilSpec extends Specification {
 
         false   | "//index.html"
 
-        false   | "#Context Analysis" // regression test for  issue #70
+        false   | "#Context Analysis" // regression test for  issue #70, contains blank-character
 
         false   | "http://index.html"
         false   | "mailto:alan.turing@acm.org"
@@ -77,7 +75,6 @@ class URLUtilSpec extends Specification {
         false   | null
         false   | "ftp://acm.org"
         false   | "http://10.0.0.1/index.html"
-        false   | "//10.0.0.1/index.html"
 
         false   | "10.0.0.1/index.html"  // this is a valid REMOTE address, defaults to http or https
         false    | "//10.0.0.1/index.html" // invalid syntax, scheme missing!!
@@ -106,3 +103,24 @@ class URLUtilSpec extends Specification {
 
     }
 }
+
+
+/************************************************************************
+ * This is free software - without ANY guarantee!
+ *
+ *
+ * Copyright 2013-2015, Dr. Gernot Starke, arc42.org
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *********************************************************************** */
