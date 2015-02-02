@@ -76,9 +76,14 @@ class URLUtil {
     public static boolean isLocalResource(String link) {
 
         // handle corner cases
-        if ((link == null) ||
-                (link == "") ||
-                !URLUtil.isRemoteURL(link)) return false
+        if ((link == null)
+                || containsInvalidChars( link )
+                || (link == "")
+                || isCrossReference( link )      // "#link" or similar
+                || isRemoteURL( link )           // "mailto:", "http" etc
+
+        )
+            return false
 
         else {
             URI aUri = new URI(link)

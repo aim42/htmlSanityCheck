@@ -64,7 +64,8 @@ class URLUtilSpec extends Specification {
         true    | "dira/dirb/file.html"
         true    | "dira/dirb/file.html#anchor"
 
-        false   | "//index.html"
+        true    | "//index.html"   // browser assumes "file:" here
+        true    | "//10.0.0.1/index.html" // invalid syntax, scheme missing, but browser defaults to "file"
 
         false   | "#Context Analysis" // regression test for  issue #70, contains blank-character
 
@@ -76,7 +77,7 @@ class URLUtilSpec extends Specification {
         false   | "http://10.0.0.1/index.html"
 
         false   | "10.0.0.1/index.html"  // this is a valid REMOTE address, defaults to http or https
-        false    | "//10.0.0.1/index.html" // invalid syntax, scheme missing!!
+
     }
 
 
