@@ -60,7 +60,7 @@ class BrokenCrossReferencesChecker extends Checker {
         checkingResults.incNrOfChecks()
         if (URLUtil.containsInvalidChars(href)) {
             // we found link with illegal characters!
-            String findingText = "link \"$linkTarget\" contains illegal characters"
+            String findingText = "link \"$href\" contains illegal characters"
             // now count occurrences - how often is it referenced
             int nrOfReferences = countNrOfReferences(href)
             if (nrOfReferences > 1) {

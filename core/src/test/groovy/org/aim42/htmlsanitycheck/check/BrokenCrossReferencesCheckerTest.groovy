@@ -75,6 +75,35 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
         assertEquals(message, expected, actual)
     }
 
+
+    @Test
+    public void testLinkWithIllegalCharacter() {
+        String HTML_WITH_BAD_LINK = '''
+           <html>
+             <head></head>
+              <body>
+                   <h1>dummy-heading-1</h1>
+                   <a href="#Context Analysis">context</a>
+              </body>
+           </html>'''
+
+        htmlPage = new HtmlPage( HTML_WITH_BAD_LINK )
+
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
+                pageToCheck: htmlPage)
+        collector = undefinedInternalLinksChecker.performCheck()
+
+        assertEquals( "expected one finding", 1, collector.nrOfProblems())
+        assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
+
+        String actual = collector.findings.first()
+        String expected = "link \"#Context Analysis\" contains illegal characters"
+        String message = "expected $expected"
+
+        assertEquals(message, expected, actual)
+    }
+
+
     @Test
     public void testTwoGoodLinks() {
         String HTML_WITH_TWO_TAGS_AND_ID = '''
