@@ -1,7 +1,7 @@
 package org.aim42.htmlsanitycheck.check
 
-import org.aim42.htmlsanitycheck.html.URLUtil
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.html.URLUtil
 
 // see end-of-file for license information
 
@@ -14,11 +14,10 @@ class BrokenCrossReferencesChecker extends Checker {
     private Set<String> hrefSet       // a href="XYZ"
 
 
-
     @Override
     protected void initCheckingResultsDescription() {
-        checkingResults.whatIsChecked =  "Broken Internal Links Check"
-        checkingResults.sourceItemName =  "href"
+        checkingResults.whatIsChecked = "Broken Internal Links Check"
+        checkingResults.sourceItemName = "href"
         checkingResults.targetItemName = "missing id"
     }
 
@@ -26,15 +25,14 @@ class BrokenCrossReferencesChecker extends Checker {
     @Override
     protected SingleCheckResults check() {
 
-
         //get list of all a-tags "<a src=..." in html file
         hrefList = pageToCheck.getAllHrefStrings()
-        hrefSet  = hrefList.toSet()
+        hrefSet = hrefList.toSet()
 
         // get list of all id="XYZ"
         listOfIds = pageToCheck.getAllIdStrings()
 
-        checkAllInternalLinks( )
+        checkAllInternalLinks()
 
         return checkingResults
     }
@@ -42,12 +40,13 @@ class BrokenCrossReferencesChecker extends Checker {
     /*
      * check all internal links against the existing id's
      */
+
     private void checkAllInternalLinks() {
 
         // for all hrefSet check if the corresponding id exists
         hrefSet.each { href ->
             //if (URLUtil.isValidURL(href))
-                checkSingleInternalLink( href )
+            checkSingleInternalLink(href)
         }
     }
 
@@ -55,11 +54,23 @@ class BrokenCrossReferencesChecker extends Checker {
     * check a single internal link (href) against the existing id's within
     * the html document
      */
-    private void checkSingleInternalLink( String href ) {
 
+    private void checkSingleInternalLink(String href) {
+
+        checkingResults.incNrOfChecks()
+        if (URLUtil.containsInvalidChars(href)) {
+            // we found link with illegal characters!
+            String findingText = "link \"$linkTarget\" contains illegal characters"
+            // now count occurrences - how often is it referenced
+            int nrOfReferences = countNrOfReferences(href)
+            if (nrOfReferences > 1) {
+                findingText += ", reference count: $nrOfReferences"
+            }
+            checkingResults.newFinding(findingText, nrOfReferences)
+        } else
         // we check only cross-references, that means we exclude
         // remote-urls and references to local files
-        if (URLUtil.isCrossReference( href )) {
+        if (URLUtil.isCrossReference(href)) {
 
             // bookkeeping:
             checkingResults.incNrOfChecks()
@@ -68,24 +79,27 @@ class BrokenCrossReferencesChecker extends Checker {
         }
     }
 
+
+
+
     /**
      * check if the id for the href parameter exists
      *
-     * @param href= "#XYZ" in id="XYZ"
-     **/
+     * @param href = "#XYZ" in id="XYZ"
+     * */
     private void doesLinkTargetExist(String href) {
 
         // strip href of its leading "#"
         String linkTarget = (href.startsWith("#")) ? href[1..-1] : href
 
 
-        if (!listOfIds.contains( linkTarget )) {
+        if (!listOfIds.contains(linkTarget)) {
 
             // we found a broken link!
             String findingText = "link target \"$linkTarget\" missing"
 
             // now count occurrences - how often is it referenced
-            int nrOfReferences = hrefList.findAll{  it == href }.size()
+            int nrOfReferences = countNrOfReferences(href)
             if (nrOfReferences > 1) {
                 findingText += ", reference count: $nrOfReferences"
             }
@@ -93,6 +107,11 @@ class BrokenCrossReferencesChecker extends Checker {
             checkingResults.newFinding(findingText, nrOfReferences)
         }
 
+    }
+
+    private int countNrOfReferences(String href) {
+        int nrOfReferences = hrefList.findAll { it == href }.size()
+        return nrOfReferences
     }
 
 

@@ -41,7 +41,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
 
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
-        assertEquals( "expected zero checks", 0, collector.nrOfItemsChecked)
+        assertEquals( "expected 2 checks", 2, collector.nrOfItemsChecked)
 
     }
 
@@ -66,7 +66,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
         collector = undefinedInternalLinksChecker.performCheck()
 
         assertEquals( "expected one finding", 1, collector.nrOfProblems())
-        assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)
+        assertEquals( "expected four checks", 4, collector.nrOfItemsChecked)
 
         String actual = collector.findings.first()
         String expected = "link target \"nonexisting\" missing"
@@ -96,7 +96,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
         collector = undefinedInternalLinksChecker.performCheck()
 
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
-        assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)
+        assertEquals( "expected four checks", 4, collector.nrOfItemsChecked)
     }
 
     @Test
@@ -118,7 +118,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
         collector = undefinedInternalLinksChecker.performCheck()
 
         assertEquals( "expected two findings", 2, collector.nrOfProblems())
-        assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)
+        assertEquals( "expected four checks", 4, collector.nrOfItemsChecked)
 
         // first finding: aim42 link missing
         String actual = collector.findings.first()
@@ -153,7 +153,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
         collector = undefinedInternalLinksChecker.performCheck()
 
         assertEquals( "expected five findings", 5, collector.nrOfProblems())
-        assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
+        assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)
 
         // finding: aim42 link missing, reference count 5
         String actual = collector.findings.first()
@@ -175,7 +175,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
                 pageToCheck: htmlPage )
         collector = undefinedInternalLinksChecker.performCheck()
 
-        assertEquals( "expected zero checks", 0, collector.nrOfItemsChecked)
+        assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
     }
 
@@ -194,7 +194,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
         collector = undefinedInternalLinksChecker.performCheck()
 
         // for local references, no checks shall be performed
-        assertEquals( "expected that local file is not checked", 0, collector.nrOfItemsChecked)
+        assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
 
     }
 
