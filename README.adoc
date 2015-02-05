@@ -90,6 +90,15 @@ htmlSanityCheck {
 }
 ----
 
+== Typical Output
+
+[cols="1,1",width="50%"]
+|===
+| The overall goal is to create neat and clear reports,
+showing evantual errors within HTML files - as shown in the adjoining figure.
+| image:sample-hsc-report.jpg[width="200", link="./sample-hsc-report.jpg"
+  (click on thumbnail for details)]
+|===
 
 == Types of Sanity Checks
 
