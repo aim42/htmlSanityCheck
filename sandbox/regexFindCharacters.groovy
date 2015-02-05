@@ -1,8 +1,9 @@
 
 // invalid
-assert containsInvalidChars( "#Context Analysis" ) == true
-//assert containsInvalidChars( " " ) == true
-//assert containsInvalidChars( "*Context-Analysis") == true
+
+assert containsInvalidChars( "#Context Analysis" ) 
+assert containsInvalidChars( " " ) 
+assert containsInvalidChars( "*Context-Analysis") 
 
 // valid
 //assert containsInvalidChars( "#ContextAnalysis" ) == false
@@ -15,14 +16,10 @@ public static boolean containsInvalidChars( String aString ) {
 
    
    def m = (aString =~ illegalCharsRegex)
-   // assert m instanceof Matcher
-   
-   println "matcher = " + m
-   println "matcher.find = " + m.find()
    
    print """\"$aString\" """ 
    
-   if (!m) {
+   if (!m.find()) {
       println "does NOT contain illegal chars."
       return false
    }
