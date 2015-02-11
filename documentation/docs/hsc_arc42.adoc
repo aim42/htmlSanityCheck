@@ -20,10 +20,10 @@ data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_0
 
 :author: Dr. Gernot Starke
 :email: gernot.starke@innoq.com
-:date: September 8th 2014
+:date: {docdate}
 
 :project: htmlsanitycheck
-:version: 0.9
+:version: 0.8-SNAPSHOT
 
 // where are images located?
 :imagesdir: ./images
