@@ -1,4 +1,4 @@
-[[template-method]]
+[[checking-concept]]
 === Flexible Checking Algorithms
 kbd:[HtmlSC] uses the {template-method-pattern} to enable flexible checking algorithms:
 
