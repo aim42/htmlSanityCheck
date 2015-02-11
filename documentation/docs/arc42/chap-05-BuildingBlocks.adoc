@@ -10,7 +10,7 @@ Rationale::
 We used _functional decomposition_ to separate responsibilities:
 
 * <<checker_blackbox, CheckerCore>> shall encapsulate checking logic and Html parsing/processing.
-* all kinds of outputs (console, html-file, graphical) shall be handled in a separate component 
+* all kinds of outputs (console, html-file, graphical) shall be handled in a separate component
   (`Reporter`)
 * Implementation of Gradle specific stuff shall be encapsulated.
 
@@ -75,8 +75,8 @@ as described in the Gradle user guide.
 
 
 Files::
-    * +org.aim42.htmlsc.AllChecksRunner+
-    * +org.aim42.htmlsc.HtmlSanityCheckGradlePlugin+
+    * +org.aim42.htmlsanitycheck.AllChecksRunner+
+    * +org.aim42.htmlsanitycheck.HtmlSanityCheckGradlePlugin+
 
 
 === Building Blocks - Level 2
@@ -90,7 +90,7 @@ Rationale::
 This structures follows a strictly functional decomposition:
 
 * parsing and handling html input
-* checking 
+* checking
 * collecting checking results
 
 Contained Blackboxes::
@@ -107,7 +107,7 @@ for all checking algorithms.
 command-line interface.
 
 | <<ResultsCollector>>
-| Collects all checking results. Its interface `Results` is contained in the 
+| Collects all checking results. Its interface `Results` is contained in the
 <<ResultsCollector, whitebox description>>
 
 | <<Reporter>>
@@ -118,8 +118,8 @@ command-line interface.
 within the (parsed) html.
 
 | Suggester
-| in case of checking issues, suggests alternatives by comparing the faulty element 
-to the one present in the html file. 
+| in case of checking issues, suggests alternatives by comparing the faulty element
+to the one present in the html file. Currently not implemented
 |===
 
 
@@ -143,7 +143,7 @@ Rationale::
 This structures follows the hierarchy of checks - namely managing results for:
 
 . a number of pages/documents, containing:
-. a single page, each containing many  
+. a single page, each containing many
 . single checks within a page
 
 
@@ -155,13 +155,13 @@ Contained Blackboxes::
 | Per-Run Results
 | results for potentially many Html pages/documents.
 
-| Single-Page-Results  
+| Single-Page-Results
 | results for a single page
 
-| Single-Check-Results 
+| Single-Check-Results
 | results for a single type of check (e.g. missing-images check)
 
-| Finding              
+| Finding
 | a single finding, (e.g. "image 'logo.png' misssing"). Can hold suggestions
 and (planned for future releases) the responsible html element.
 |===
@@ -170,7 +170,7 @@ and (planned for future releases) the responsible html element.
 
 ===== Interface `Results`
 
-The `Result` interface is used by all clients 
+The `Result` interface is used by all clients
 (especially `Reporter` subclasses, graphical and command-line
 clients) to access checking results. It consists of three distinct APIs for
 overall `RunResults`, single-page results (`PageResults`) and single-check results
@@ -198,4 +198,3 @@ include::{coresourcepath}/htmlsanitycheck/collect/PageResults.groovy[tags=PageRe
 ----
 include::{coresourcepath}/htmlsanitycheck/collect/CheckResults.groovy[tags=CheckResultsInterface]
 ----
-
