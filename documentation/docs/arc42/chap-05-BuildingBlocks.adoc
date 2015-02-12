@@ -65,8 +65,7 @@ Interfaces::
 | Interface (From-To) | Description
 
 | Command Line Interface -> Checker
-| Exposes the #AllChecksRunner class, as described
-in <<allChecksRunner, AllChecksRunner>>.
+| Uses the #AllChecksRunner class.
 
 | Gradle Plugin -> Checker
 | Exposes kbd:[HtmlSC] via a standard Gradle plugin,
