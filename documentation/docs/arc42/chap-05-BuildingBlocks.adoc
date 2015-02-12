@@ -110,7 +110,7 @@ command-line interface.
 | Collects all checking results. Its interface `Results` is contained in the
 <<ResultsCollector, whitebox description>>
 
-| <<Reporter>>
+| Reporter
 | Reporst checking results to either console or an html file.
 
 | HtmlParser
