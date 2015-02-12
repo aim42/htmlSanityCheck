@@ -34,14 +34,14 @@ image::template-method.png["Template Method", title="Template-Method Overview"]
 | Component | Description
 | Checker                           | _abstract_ base class, containing the template method +check()+
                                         plus the public method +performCheck()+
-| <<ImageFileExistChecker>>         | checks if referenced local image files exist
+| <<MissingImageFilesChecker>>      | checks if referenced local image files exist
 | <<BrokenCrossReferencesChecker>>  | checks if cross references (links referenced within the page) exist
 | <<DuplicateIdChecker>>            | checks if any id has multiple definitions
-| MissingAltTagsForImagesChecker    | (planned) checks if there are image tags without alt-attributes.
+| <<MissingImgAltAttributeChecker>> | checks if there are image tags without alt-attributes.
 |===
 
 
-==== ImageFileExistChecker
+==== MissingImageFilesChecker
 
 [small]#Adresses requirement <<Types of Sanity Checks, R1>>.#
 
