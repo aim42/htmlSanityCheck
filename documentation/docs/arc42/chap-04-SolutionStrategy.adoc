@@ -7,5 +7,5 @@ plugin, so it can be used within automated builds. Details are given
 in the <<gradle-plugin-concept, Gradle plugin concept>>.
 
 * Apply the _template-method-pattern_ (see e.g. {template-method-url}) to enable
-** multiple checking algorithms. See the <<template-method, concept for checking algorithms>>.
+** multiple checking algorithms. See the <<checking-concept, concept for checking algorithms>>.
 ** both HTML (file) and text (console) output. See the <<reporting-concept, reporting concept>>.
