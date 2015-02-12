@@ -67,6 +67,11 @@ _directory arithmetic_ to get the +absolutePathToImageFile+:
   if(f.exists() && !f.isDirectory())
 
 
+==== MissingImgAltAttributeChecker
+[small]#Adresses requirement <<Types of Sanity Checks, R-6>>.#
+
+Simple syntactic check: iterates over all <img> tags to check
+if the image has an alt-tag.
 
 ==== BrokenCrossReferencesChecker
 
