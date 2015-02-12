@@ -9,7 +9,7 @@
 [cols="1,1",width="50%"]
 |===
 | The overall goal of kbd:[HtmlSC] is to create neat and clear reports,
-showing evantual errors within HTML files - as shown in the adjoining figure. 
+showing evantual errors within HTML files - as shown in the adjoining figure.
 | image:sample-hsc-report.jpg[width="200", link="images/sample-hsc-report.jpg"
   (click on thumbnail for details)]
 |===
@@ -31,14 +31,14 @@ kbd:[HtmlSC] can run from the command line or as {gradle-url}-plugin.
 
 Apart from purely syntactical errors, many things can go wrong in html, especially with respect to hyperlinks, anchors and id's - as those are often manually maintained.
 
-Primary sources of problems are bad links (in technical terms: URIs). For further information, see the <<InformationOnUris, background information on URIs>>. 
+Primary sources of problems are bad links (in technical terms: URIs). For further information, see the <<InformationOnUris, background information on URIs>>.
 
 
 .Broken Cross References:: Cross-references (internal links) can be broken,
 e.g. due to missing or misspelled link-targets.
 See <<BrokenCrossReferencesChecker>>
 
-.Missing image files: Referenced image files can be missing or misspelled. 
+.Missing image files: Referenced image files can be missing or misspelled.
 See <<MissingImageFilesChecker>>.
 
 .Missing local resources: Referenced local resources (other than images) can be missing or misspelled.
@@ -46,7 +46,7 @@ See <<MissingLocalResourcesChecker>>
 
 .Duplicate link targets: link-targets can occur several times with the same name - so the browser cannot know
 which is the desired target.
-  See <<DuplicateLinkTargetsChecker>>.
+  See <<DuplicateIdChecker>>.
 
 .Illegal links:: The links (aka anchors or URIs) can contain illegal characters or violate HTML link syntax.
   See <<IllegalLinkChecker>>
@@ -61,7 +61,7 @@ Checking and reporting these errors and flaws is the central _business requireme
 
 
 
-Important terms (*domain terms*) of html sanity checking is documented in a (small) 
+Important terms (*domain terms*) of html sanity checking is documented in a (small)
 <<HTML Checking Domain Model, domain model>>.
 
 
@@ -104,7 +104,7 @@ Important terms (*domain terms*) of html sanity checking is documented in a (sma
                                   See <<MissingLocalResourcesChecker>>
 | R-4  | duplicate link targets | Check all bookmark definitions
                                   (... id="XYZ") whether the id's ("XYZ") are unique.
-                                  See <<DuplicateLinkTargetsChecker>>
+                                  See <<DuplicateIdChecker>>
 | R-5  | Malformed links        | Check all links for syntactical correctness
 | R-6  | missing alt-attribute  | in image-tags.  See <<MissingImgAltAttributeChecker>>
 | R-7  | unused-images          | check for files in image-directories that are not referenced by any
@@ -184,7 +184,7 @@ Gradle, command-line and a graphical client have to be supported.
 === Background Information on URIs
 
 The generic structure of a Uniform Resource Identifier consists of
-the following parts: 
+the following parts:
 +++[type][://][subdomain][domain][port][path][file][query][hash]+++
 
 An example, visualized:
@@ -200,10 +200,10 @@ See the following snippet, taken from the unit test class URLUtilTest.groovy:
 ----
 include::{coretestpath}/htmlsanitycheck/html/URLUtilTest.groovy[tags=GenericURIExample]
 
-----  
+----
 
 
-URIs are used to *reference* other ressources. 
+URIs are used to *reference* other ressources.
 For kbd:htmlSC it is useful to distinguish between internal (== local)and external references:
 
 * Internal references, a.k.a. Cross-References
@@ -217,9 +217,7 @@ a file... ref can be an internal link, or a URI without protocoll...
 
 ==== References on URIs and HTML Syntax
 
-* http://www.ietf.org/rfc/rfc2396.txt[IETF RFC-2396 on URI Syntax]: The 
+* http://www.ietf.org/rfc/rfc2396.txt[IETF RFC-2396 on URI Syntax]: The
 fundamental reference!
 * http://www.w3.org/TR/html401/struct/links.html#h-12.2.4[W3C HTML Reference]
 * http://en.wikipedia.org/wiki/URI_scheme#Generic_syntax[Wikipedia on URI-Schemes]
-
-

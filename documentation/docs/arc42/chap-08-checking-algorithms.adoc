@@ -86,7 +86,7 @@ tag has no prefix like +http+, +https+, +ftp+, +telnet+, +mailto+, +file+ and su
 Only links with prefix +#+ shall be taken into account, e.g. +<a href="#internalLink">+.
 
 
-==== DuplicateLinkTargetsChecker
+==== DuplicateIdChecker
 
 [small]#Adresses requirement <<Types of Sanity Checks, R-4>>.#
 
