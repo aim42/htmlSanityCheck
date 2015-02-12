@@ -41,9 +41,12 @@ image::template-method.png["Template Method", title="Template-Method Overview"]
 |===
 
 
-==== MissingImageFilesChecker
+==== ImageFileExistChecker
 
 [small]#Adresses requirement <<Types of Sanity Checks, R1>>.#
+
+Checks if image files referenced in +<img src="someFile.jpg"+ really
+exists on the local filesystem.
 
 The (little) problem with checking images is their path: Consider the following
 HTML fragment (from the file +testme.html+:
@@ -73,8 +76,8 @@ _directory arithmetic_ to get the +absolutePathToImageFile+:
 Simple syntactic check: iterates over all <img> tags to check
 if the image has an alt-tag.
 
-==== BrokenCrossReferencesChecker
 
+==== BrokenCrossReferencesChecker
 [small]#Adresses requirement <<Types of Sanity Checks, R-2>>.#
 
 Cross references are document-internal links where the +href="link-target" from the html anchor
