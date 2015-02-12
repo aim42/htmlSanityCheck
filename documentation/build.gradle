@@ -8,10 +8,20 @@ apply plugin: 'org.asciidoctor.convert'
 buildscript {
     repositories {
         jcenter()
+        maven {
+            name 'Bintray HtmlSanityCheck repo'
+            url 'http://dl.bintray.com/content/gernotstarke/HtmlSanityCheck'
+        }
     }
     dependencies {
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
+
+        classpath (group: 'org.aim42',
+        name: 'HtmlSanityCheck-gradle-plugin',
+        version: '0.5.3')
+
     }
+
 }
 
 // asciidoc stuff
@@ -52,6 +62,39 @@ task arc42(
         description: 'performs all required tasks for creating documentation'
 ) << { }
 
+
+
+apply plugin: 'org.aim42.HtmlSanityCheck-gradle-plugin'
+
+// results of asciidoc compilitation (HTML) is stored
+// (input for htmlSanityCheck)
+def htmlOutputPath = "$buildDir/docs/html5"
+
+
+// where HTMLSanityCheck checking results ares stored
+def checkingResultsPath = "$buildDir/report/htmlchecks"
+
+
+htmlSanityCheck {
+
+    // ensure asciidoctor->html runs first
+    // and images are copied to build directory
+
+    // comment next line to allow checking of other files..
+    dependsOn asciidoctor, copyImages
+
+    sourceDir = new File( htmlOutputPath )
+
+    // files to check, in Set-notation
+    sourceDocuments = [ "hsc_arc42.html", "index.html"]
+
+    // where to put results of sanityChecks...
+    checkingResultsDir = new File( checkingResultsPath )
+
+    // false: restrict checks to local resources
+    // true:  also check external (e.g. http, https...) links.
+    checkExternalLinks = false
+}
 
 // configure what's to be included in the doc-distribution
 //distributions {
