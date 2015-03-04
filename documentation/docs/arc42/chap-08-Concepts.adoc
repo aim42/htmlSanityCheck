@@ -70,9 +70,9 @@ pages between each other.
 
 ==== Styling the Reporting Output
 
-* The HtmlReporter explicitly generates css classes together with the html elements,
+* The `HtmlReporter` explicitly generates css classes together with the html elements,
 based upon css styling re-used from the Gradle JUnit plugin.
-* Stylesheets, a minimized version of JQuery javascript library plus some icons
+* Stylesheets, a minimized version of jQuery javascript library plus some icons
 are copied at report-generation time from the jar-file to the report output directory.
 
 * Styling the back-to-top arrow/button is done as a combination of JavaScript plus some css styling, as described in http://www.webtipblog.com/adding-scroll-top-button-website/.

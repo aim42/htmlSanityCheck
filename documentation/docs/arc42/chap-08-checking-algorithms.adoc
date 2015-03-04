@@ -10,19 +10,19 @@ We achieve that by defining the skeleton of the checking algorithm in one operat
 The invariant steps are implemented in the abstract base class, while the variant checking algorithms have to be provided by the subclasses.
 
 [source, groovy]
-    /**
-     * template method for performing a single type of checks
-     * on the given @see HtmlPage.
-     *
-     * Prerequisite: pageToCheck has been successfully parsed,
-     * prior to constructing this Checker instance.
-    **/
-    public CheckingResultsCollector performCheck() {
-        // assert prerequisite
-        assert pageToCheck != null
-        initResults()
-        return check() // execute the actual checking algorithm
-    }
+/**
+  * template method for performing a single type of checks
+  * on the given @see HtmlPage.
+  *
+  * Prerequisite: pageToCheck has been successfully parsed,
+  * prior to constructing this Checker instance.
+**/
+public CheckingResultsCollector performCheck() {
+    // assert prerequisite
+    assert pageToCheck != null
+    initResults()
+    return check() // execute the actual checking algorithm
+}
 
 
 
@@ -43,16 +43,16 @@ image::template-method.png["Template Method", title="Template-Method Overview"]
 | <<IllegalLinkChecker>>            | checks if links do not violate HTML link syntax
 |===
 
-
+[[MissingImageFilesChecker]]
 ==== MissingImageFilesChecker
 
-[small]#Adresses requirement <<Types of Sanity Checks, R1>>.#
+[small]#Addresses requirement <<requiredChecks, R-1>>.#
 
-Checks if image files referenced in +<img src="someFile.jpg"+ really
-exists on the local filesystem.
+Checks if image files referenced in +<img src="someFile.jpg">+ really
+exists on the local file system.
 
 The (little) problem with checking images is their path: Consider the following
-HTML fragment (from the file +testme.html+:
+HTML fragment (from the file +testme.html+):
 
 
 [source, html]
@@ -65,33 +65,34 @@ containing the corresponding HTML file.
 Therefore the expected absolute path of the "one-image.jpg" has to be determined
 from the absolute path of the html file under test.
 
-We check for existing files using the usual Java api, but have to do some
+We check for existing files using the usual Java API, but have to do some
 _directory arithmetic_ to get the +absolutePathToImageFile+:
 
 [source, java]
-  File f = new File( absolutePathToImageFile );
-  if(f.exists() && !f.isDirectory())
+File f = new File( absolutePathToImageFile );
+if(f.exists() && !f.isDirectory())
 
-
+[[MissingImgAltAttributeChecker]]
 ==== MissingImgAltAttributeChecker
-[small]#Addresses requirement <<Types of Sanity Checks, R-6>>.#
+[small]#Addresses requirement <<requiredChecks, R-6>>.#
 
 Simple syntactic check: iterates over all <img> tags to check
 if the image has an alt-tag.
 
 
+[[BrokenCrossReferencesChecker]]
 ==== BrokenCrossReferencesChecker
-[small]#Addresses requirement <<Types of Sanity Checks, R-2>>.#
+[small]#Addresses requirement <<requiredChecks, R-2>>.#
 
 Cross references are document-internal links where the +href="link-target" from the html anchor
 tag has no prefix like +http+, +https+, +ftp+, +telnet+, +mailto+, +file+ and such.
 
 Only links with prefix +#+ shall be taken into account, e.g. +<a href="#internalLink">+.
 
-
+[[DuplicateIdChecker]]
 ==== DuplicateIdChecker
 
-[small]#Addresses requirement <<Types of Sanity Checks, R-4>>.#
+[small]#Addresses requirement <<requiredChecks, R-4>>.#
 
 Sections, especially headings, can be made link-targets by adding the +id="#xyz"+ element,
 yielding for example html headings like the following example.
@@ -99,36 +100,36 @@ yielding for example html headings like the following example.
 Problems occur if the same link target is defined several times (also shown below).
 
 [source,html]
-  <h2 id="seealso">First Heading</h2>
-  <h2 id="seealso">Second Heading</h2>
-  <a href="#seealso">Duplicate definition - where shall I go now?</a>
+<h2 id="seealso">First Heading</h2>
+<h2 id="seealso">Second Heading</h2>
+<a href="#seealso">Duplicate definition - where shall I go now?</a>
 
-
+[[MissingLocalResourcesChecker]]
 ==== MissingLocalResourcesChecker
 
-[small]#Addresses requirement <<Types of Sanity Checks, R-3>>.#
+[small]#Addresses requirement <<requiredChecks, R-3>>.#
 
 Current limitation: Does *NOT* check references-with-anchors of the following form:
 
 [source,html]
-  <a href="api/core/Artifact.html#mvcGroupInit">GroupInit</a>
+<a href="api/core/Artifact.html#mvcGroupInit">GroupInit</a>
 
 containing both a local (file) reference plus an internal anchor +#mvcGroupInit+
 
 
 
-
+[[BrokenExternalLinksChecker]]
 ==== BrokenExternalLinksChecker
 
-[small]#Addresses requirement <<Types of Sanity Checks, R-9>>.#
+[small]#Addresses requirement <<requiredChecks, R-9>>.#
 
 Problem here are networking issues, latency and HTTP return codes. This checker is planned,
 but currently not implemented.
 
-
+[[IllegalLinkChecker]]
 ==== IllegalLinkChecker
 
-[small]#Addresses requirement <<Types of Sanity Checks, R-5>>.#
+[small]#Addresses requirement <<requiredChecks, R-5>>.#
 
 This checker is planned, but currently not implemented.
 

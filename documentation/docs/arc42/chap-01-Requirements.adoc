@@ -83,7 +83,7 @@ Important terms (*domain terms*) of html sanity checking is documented in a (sma
 |===
 
 
-[requiredChecks]
+[[requiredChecks]]
 ==== Types of Sanity Checks
 
 
@@ -104,9 +104,9 @@ Important terms (*domain terms*) of html sanity checking is documented in a (sma
                                   See <<DuplicateIdChecker>>
 | R-5  | malformed links        | Check all links for syntactical correctness
 | R-6  | missing alt-attribute  | in image-tags.  See <<MissingImgAltAttributeChecker>>
-| R-7  | unused-images          | check for files in image-directories that are not referenced by any
+| R-7  | unused-images          | Check for files in image-directories that are not referenced by any
                                   of the HTML files in this _run_
-| R-8  | illegal link targets   | Checks for malformed or illegal anchors (link targets).
+| R-8  | illegal link targets   | Check for malformed or illegal anchors (link targets).
 |===
 
 
@@ -126,7 +126,7 @@ Important terms (*domain terms*) of html sanity checking is documented in a (sma
 .Reporting Requirements
 |===
 | ID  | Requirement | Description
-| R-1 | various output formats | checking output in plain text and HTML
+| R-1 | various output formats | Checking output in plain text and HTML
 | R-2 | output to stdout | kbd:[HtmlSC] can output results on stdout (the console)
 | R-3 | configurable file output | kbd:[HtmlSC] can store results in file in configurable directories
 |===
@@ -144,7 +144,7 @@ Important terms (*domain terms*) of html sanity checking is documented in a (sma
 | Priority | Quality-Goal | Scenario
 | 1        | Correctness  | Every broken internal link (cross reference) is found.
 | 1        | Correctness  | Every missing local image is found.
-| 2        | Flexibility  | multiple checking algorithms, report formats and clients. At least
+| 2        | Flexibility  | Multiple checking algorithms, report formats and clients. At least
 Gradle, command-line and a graphical client have to be supported.
 | 2        | Safety       | Content of the files to be checked is _never_ altered.
 | 2        | Correctness  | Correctness of every checker is automatically tested for positive AND negative
@@ -187,8 +187,8 @@ An example, visualized:
 
 image::uri-generic-example.png[]
 
-The ```java.net.URL``` class contains a generic parser for URLs and URIs.
-See the following snippet, taken from the unit test class URLUtilTest.groovy:
+The `java.net.URL` class contains a generic parser for URLs and URIs.
+See the following snippet, taken from the unit test class `URLUtilTest.groovy`:
 
 
 [source, groovy]
@@ -200,7 +200,7 @@ include::{coretestpath}/htmlsanitycheck/html/URLUtilTest.groovy[tags=GenericURIE
 
 
 URIs are used to *reference* other resources.
-For kbd:htmlSC it is useful to distinguish between internal (== local)and external references:
+For  kbd:[HtmlSC] it is useful to distinguish between internal (== local)and external references:
 
 * Internal references, a.k.a. Cross-References
 * External references

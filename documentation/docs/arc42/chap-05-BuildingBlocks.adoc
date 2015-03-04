@@ -28,7 +28,7 @@ enabling arbitrary gradle builds to use kbd:[HtmlSC] functionality.
 
 | Reporter
 | outputs the collected checking results to configurable
-destinations, e.g. StdOut or a Html file.
+destinations e.g., stdout or a Html file.
 |===
 
 
@@ -98,7 +98,7 @@ Contained Blackboxes::
 .HSC-Core building blocks
 |===
 | Checker
-| abstract class, used in form of the template-pattern. Shall be subclassed
+| Abstract class, used in form of the template-pattern. Shall be subclassed
 for all checking algorithms.
 
 | AllChecksRunner
@@ -110,21 +110,21 @@ command-line interface.
 <<ResultsCollector, whitebox description>>
 
 | Reporter
-| Reporst checking results to either console or an html file.
+| Reports checking results to either console or an html file.
 
 | HtmlParser
 | Encapsulates html parsing, provides methods to search
 within the (parsed) html.
 
 | Suggester
-| in case of checking issues, suggests alternatives by comparing the faulty element
+| In case of checking issues, suggests alternatives by comparing the faulty element
 to the one present in the html file. Currently not implemented
 |===
 
 
 ==== Checker and xyzChecker Subclasses
 
-The abstract Checker provides a uniform interface (public void check())
+The abstract Checker provides a uniform interface (`public void check()`)
 to different checking algorithms. It is based upon the <<checking-concept,
 concept of extensible checking algorithms>>.
 

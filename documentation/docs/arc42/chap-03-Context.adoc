@@ -15,7 +15,7 @@ links within this html are valid.
 | local html files | kbd:[HtmlSC] reads and parses local html files and
 performs sanity checks within those.
 | local image files | kbd:[HtmlSC] checks if linked images exist as (local) files.
-| external web resources | Optionally kbd:[HtmlSC] can be configured to check for the existence
+| external web resources | kbd:[HtmlSC] can be configured to optionally check for the existence
 of external web resources. Due to the nature of web systems, this check might need a significant
 amount of time and might yield invalid results due to network and latency issues.
 |===
@@ -33,7 +33,7 @@ image::deployment-context.png["Deployment Context", title="Deployment Context"]
 |===
 | Node / Artifact | Description
 | {node} hsc-development | where development of kbd:[HtmlSC] takes place
-| {artifact} hsc-plugin-binary | Compiled and packaged version of kbd:[HtmlSC] including required dependencies. 
+| {artifact} hsc-plugin-binary | compiled and packaged version of kbd:[HtmlSC] including required dependencies. 
 | {node} artifact repository (https://bintray.com/bintray/jcenter[Bintray]) | global public _cloud_ repository for binary artifacts, similar to http://search.maven.org/[mavenCentral].  kbd:[HtmlSC] binaries are uploaded to this server.
 | {node} hsc user computer | where arbitrary documentation takes place with html as output formats.
 | {artifact} build.gradle | Gradle build script configuring (among other things) the kbd:[HtmlSC] plugin to perform the Html checking.
