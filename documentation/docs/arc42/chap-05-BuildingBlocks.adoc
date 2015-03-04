@@ -161,7 +161,7 @@ Contained Blackboxes::
 | results for a single type of check (e.g. missing-images check)
 
 | Finding
-| a single finding, (e.g. "image 'logo.png' misssing"). Can hold suggestions
+| a single finding, (e.g. "image 'logo.png' missing"). Can hold suggestions
 and (planned for future releases) the responsible html element.
 |===
 
@@ -173,7 +173,8 @@ The `Result` interface is used by all clients
 (especially `Reporter` subclasses, graphical and command-line
 clients) to access checking results. It consists of three distinct APIs for
 overall `RunResults`, single-page results (`PageResults`) and single-check results
-(`CheckResults`). See the interface definitions below - taken from the Groovy-sourcecode:
+(`CheckResults`). See the interface definitions below - taken from the Groovy-
+ source code:
 
 
 

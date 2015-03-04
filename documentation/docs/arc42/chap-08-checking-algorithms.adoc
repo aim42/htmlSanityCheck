@@ -11,7 +11,7 @@ The invariant steps are implemented in the abstract base class, while the varian
 
 [source, groovy]
     /**
-    ** template method for performing a single type of checks
+     * template method for performing a single type of checks
      * on the given @see HtmlPage.
      *
      * Prerequisite: pageToCheck has been successfully parsed,
@@ -35,9 +35,12 @@ image::template-method.png["Template Method", title="Template-Method Overview"]
 | Checker                           | _abstract_ base class, containing the template method +check()+
                                         plus the public method +performCheck()+
 | <<MissingImageFilesChecker>>      | checks if referenced local image files exist
+| <<MissingImgAltAttributeChecker>> | checks if there are image tags without alt-attributes
 | <<BrokenCrossReferencesChecker>>  | checks if cross references (links referenced within the page) exist
 | <<DuplicateIdChecker>>            | checks if any id has multiple definitions
-| <<MissingImgAltAttributeChecker>> | checks if there are image tags without alt-attributes.
+| <<MissingLocalResourcesChecker>>  | checks if referenced other resources exist
+| <<BrokenExternalLinksChecker>>    | checks if external links are valid
+| <<IllegalLinkChecker>>            | checks if links do not violate HTML link syntax
 |===
 
 
@@ -71,14 +74,14 @@ _directory arithmetic_ to get the +absolutePathToImageFile+:
 
 
 ==== MissingImgAltAttributeChecker
-[small]#Adresses requirement <<Types of Sanity Checks, R-6>>.#
+[small]#Addresses requirement <<Types of Sanity Checks, R-6>>.#
 
 Simple syntactic check: iterates over all <img> tags to check
 if the image has an alt-tag.
 
 
 ==== BrokenCrossReferencesChecker
-[small]#Adresses requirement <<Types of Sanity Checks, R-2>>.#
+[small]#Addresses requirement <<Types of Sanity Checks, R-2>>.#
 
 Cross references are document-internal links where the +href="link-target" from the html anchor
 tag has no prefix like +http+, +https+, +ftp+, +telnet+, +mailto+, +file+ and such.
@@ -88,7 +91,7 @@ Only links with prefix +#+ shall be taken into account, e.g. +<a href="#internal
 
 ==== DuplicateIdChecker
 
-[small]#Adresses requirement <<Types of Sanity Checks, R-4>>.#
+[small]#Addresses requirement <<Types of Sanity Checks, R-4>>.#
 
 Sections, especially headings, can be made link-targets by adding the +id="#xyz"+ element,
 yielding for example html headings like the following example.
@@ -103,7 +106,7 @@ Problems occur if the same link target is defined several times (also shown belo
 
 ==== MissingLocalResourcesChecker
 
-[small]#Adresses requirement <<Types of Sanity Checks, R-3>>.#
+[small]#Addresses requirement <<Types of Sanity Checks, R-3>>.#
 
 Current limitation: Does *NOT* check references-with-anchors of the following form:
 
@@ -117,7 +120,15 @@ containing both a local (file) reference plus an internal anchor +#mvcGroupInit+
 
 ==== BrokenExternalLinksChecker
 
-[small]#Adresses requirement <<Types of Sanity Checks, R-9>>.#
+[small]#Addresses requirement <<Types of Sanity Checks, R-9>>.#
 
-Problem here are networking issues, latency and http return codes. This checker is planned,
+Problem here are networking issues, latency and HTTP return codes. This checker is planned,
 but currently not implemented.
+
+
+==== IllegalLinkChecker
+
+[small]#Addresses requirement <<Types of Sanity Checks, R-5>>.#
+
+This checker is planned, but currently not implemented.
+

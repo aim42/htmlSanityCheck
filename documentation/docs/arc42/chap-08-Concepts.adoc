@@ -62,7 +62,7 @@ as follows:
 
 <7> all detailed findings for a singleCheck.
 
-<8> for every checked page, create a footer, pagebreak or similar to graphically distringuish
+<8> for every checked page, create a footer, page break or similar to graphically distinguish
 pages between each other.
 
 
@@ -75,7 +75,7 @@ based upon css styling re-used from the Gradle JUnit plugin.
 * Stylesheets, a minimized version of JQuery javascript library plus some icons
 are copied at report-generation time from the jar-file to the report output directory.
 
-* Styling the back-to-top arror/button is done as a combination of JavaScript plus some css styling, as described in http://www.webtipblog.com/adding-scroll-top-button-website/.
+* Styling the back-to-top arrow/button is done as a combination of JavaScript plus some css styling, as described in http://www.webtipblog.com/adding-scroll-top-button-website/.
 
 
 ==== Copy Required Resources to Output Directory

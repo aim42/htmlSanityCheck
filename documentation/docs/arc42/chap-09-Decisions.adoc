@@ -24,7 +24,7 @@ using the best of DOM, CSS, and jquery-like methods.
 
 
 Goals of this decision::
-Check HTML programatically by using an existing API that provides access and finder
+Check HTML programmatically by using an existing API that provides access and finder
 methods to the DOM-tree of the file(s) to be checked.
 
 Decision Criteria::

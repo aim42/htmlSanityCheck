@@ -15,7 +15,7 @@ image::HTML_Checking_Domain.png["HTML Checking Domain Model", title="HTML Checki
 | Finding           | Description of a problem found by one ->Checker within the ->Html Page.
 | Html Element      | HTML pages (documents) are made up by HTML elements, .e.g. `<a href="link target">`, `<img src="image.png">` and others. See the http://www.w3schools.com/html/html_elements.asp[W3-Consortium]
 | HTML Page         |  A single chunk of HTML, mostly regarded as a single file. Shall comply
-					   to standard HTML syntax. Minimal requirement: Our HTML parser can successfully parse this page. Contains ->Html Elements. Also called _html document_.
+					   to standard HTML syntax. Minimal requirement: Our HTML parser can successfully parse this page. Contains ->Html Elements. Also called _html document.
 | id                | Identifier for a specific part of a document, e.g. `<h2 id="#someHeader">`.
 						Often used to describe ->link targets.
 | internal link     | link to another section of the same page or to another page of the same domain. 
