@@ -1,5 +1,5 @@
 = image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
-:version: 0.8.0-SNAPSHOT
+:version: 0.8.0
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
@@ -31,7 +31,7 @@ image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommo
 image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[link={project-issues}]
 image:https://api.bintray.com/packages/gernotstarke/HtmlSanityCheck/HtmlSanityCheck-gradle-plugin/images/download.svg[link="https://bintray.com/gernotstarke/HtmlSanityCheck/HtmlSanityCheck-gradle-plugin/_latestVersion"]
-image:https://img.shields.io/badge/last_update-Jan_25_2015-ff69b4.svg[link={project-url}]
+image:https://img.shields.io/badge/last_update-Mar_02_2015-ff69b4.svg[link={project-url}]
 
 == Installation
 
