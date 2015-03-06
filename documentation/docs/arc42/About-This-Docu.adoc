@@ -12,7 +12,7 @@ reference to {arc42-url}[arc42] or {aim42-url}[aim42]
 (we regard this as _fair-use_).
 
 For real-world projects,
-the relation of code and documentation is oversized.
+the relation of code and documentation is over-sized.
 
 === Disclaimer
 We provide absolutely *no guarantee*,

@@ -20,11 +20,11 @@ To quote from the jsoup website:
 [quote]
 jsoup is a Java library for working with real-world HTML.
 It provides a very convenient API for extracting and manipulating data,
-using the best of DOM, CSS, and jquery-like methods.
+using the best of DOM, CSS, and jQuery-like methods.
 
 
 Goals of this decision::
-Check HTML programatically by using an existing API that provides access and finder
+Check HTML programmatically by using an existing API that provides access and finder
 methods to the DOM-tree of the file(s) to be checked.
 
 Decision Criteria::
@@ -34,8 +34,7 @@ Decision Criteria::
 Alternatives::
 
 * HTTPUnit: a testing framework for web applications and -sites. Its main focus is web testing and it suffers from a large number of dependencies.
-* jsoup: a plain HTML parser without any dependencies (!) and a rich api to
-access all HTML elements in DOM-like syntax.
+* jsoup: a plain HTML parser without any dependencies (!) and a rich API to access all HTML elements in DOM-like syntax.
 
 
 Find details on how kbd:[HtmlSC] implements HTML parsing in the

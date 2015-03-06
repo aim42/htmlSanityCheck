@@ -29,6 +29,5 @@ public interface CheckResults {
 
     // returns all findings/problems found during this check
     public  ArrayList<Finding> getFindings()
-
-    }
+}
 // end::CheckResultsInterface[]

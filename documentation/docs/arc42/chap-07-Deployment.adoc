@@ -16,13 +16,13 @@ image::hsc-deployment.png["Deployment", title="Deployment"]
 | build.gradle    |  Gradle build script configuring (among other things) the kbd:[HtmlSC] plugin to check _some documentation_.
 |===
 
-The three nodes (_computers_) shown in <<img-deployment>> are connected via public internet.
+The three nodes (_computers_) shown in <<img-deployment>> are connected via Internet.
 
 Sanity checker will:
 
-1. be bundled as a single jar.
-2. be uploaded to the Bintray repository, 
-3. referencable within a gradle buildfile.
-4. provide a +main+ method with parameters and options, so all checks can be
+. be bundled as a single jar,
+. be uploaded to the Bintray repository, 
+. referencable within a gradle buildfile,
+. provide a +main+ method with parameters and options, so all checks can be
 called from the command line.
 
