@@ -10,7 +10,7 @@ apply plugin: 'nu.studer.credentials'
 
 dependencies {
     // gradle-plugin requires core
-    compile project(':core')
+    compile project(':HtmlSanityCheck-core')
 }
 
 buildscript {
