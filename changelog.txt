@@ -1,9 +1,18 @@
 HtmlSanityCheck - ChangeLog
 
 
-Dec.
+
+V.0.9.0
+(May 14th 2015)
+
+reverted subproject structure, as it lead to numerous build problems.
+V.0.8.0 could not be published on Bintray due to these issues.
+
+
 
 V.0.8.0-SNAPSHOT
+restructured code into several gradle subprojects.
+
 #29 detect some more variants of URLs, e.g. IP-address prefixed etc.
 #42 reference counter for "missing local ref checker"
 #60 upgraded to jsoup parser v. 1.8.1 (from 1.7.3)
@@ -11,6 +20,7 @@ V.0.8.0-SNAPSHOT
 #65 nicer message for reference-counter
 #66 log message now have appropriate level (most are .debug now)
 #68 corrected reference counter for broken cross references (n occurrences are now counted as n issues)
+
 
 V.0.5.3 (first public version)
 functional as Gradle-plugin
