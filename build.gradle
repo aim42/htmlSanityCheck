@@ -1,63 +1,92 @@
 // gradle build script for html sanity check
 // =========================================
-println '(top-level build.gradle) initialization'
-println """compiling with Java ${System.getProperty("java.version")} to language level ${project.project_language_level}"""
-println "building project version " + project.project_version
-
-subprojects() {
-    group = project.project_bintray_org
-    version = project.project_version
-
+plugins {
+    id 'org.asciidoctor.convert' version '1.5.2'
 }
 
-// disable the crazy super-strict doclint tool in Java 8
-// thanx, @jodastephen
-// http://blog.joda.org/2014/02/turning-off-doclint-in-jdk-8-javadoc.html
-if (JavaVersion.current().isJava8Compatible()) {
-    allprojects {
-        tasks.withType(Javadoc) {
-            options.addStringOption('Xdoclint:none', '-verbose')
-        }
-    }
+version = "0.9.0-SNAPSHOT"
+
+ext {
+    srcDir  = "$projectDir/src/docs"
+    javaVersion = System.getProperty("java.version")
+    currentDate = new Date().format("d. MMM yyyy")
 }
 
-// configure all source projects, but NOT :documentation
-configure(allprojects - project(':documentation')) {
-    apply plugin: 'groovy'
+println "="*50
+print "building " + name 
+println " version " + version
+println "projectDir  : " + projectDir
+println "buildDir    : " + buildDir
+println "Java version: " + javaVersion
+println "="*50
 
-    //apply from: 'gradle/code-coverage.gradle'
-    //apply from: 'gradle/code-quality.gradle'
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+
+repositories {
+       jcenter()
+       mavenCentral()
+}
+
+dependencies {
+
+    compile "org.codehaus.groovy:groovy-all:2.4.1"
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+
+    compile gradleApi()
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.3'
+
+    testCompile 'junit:junit:4.11'
 
 
-    targetCompatibility = project.project_language_level
-    sourceCompatibility = project.project_language_level
+    // jsoup is our awesome html parser, see jsoup.org
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.8.1'
 
-   repositories {
-        jcenter()
-        mavenCentral()
-        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+    // mockito needed to test string similarity
+    testCompile "org.mockito:mockito-all:1.9.5"
+
+} // dependencies
+
+
+
+// ========================================================
+apply plugin: 'org.asciidoctor.convert'
+
+
+
+asciidoctor {
+    outputDir = file( buildDir )
+    sourceDir = file( srcDir )
+    sources  { include "hsc_arc42.adoc",
+                       "index.adoc",
+                       "DevelopmentGuide.adoc" }
+
+    attributes = [
+            doctype: 'book',
+            icons: 'font',
+            toc: 'left',
+            sectlink: true,
+            sectanchors: true,
+            numbered: true,
+            'source-highlighter': 'coderay',
+            'javaVersion': "$javaVersion",
+            'currentDate': "$currentDate" ]
+
+    resources {
+        from("${srcDir}/images") {
+          include '**'
+        }
     }
 
-    dependencies {
-        compile gradleApi()
-
-        // need to have groovy compatible to spockframework
-        compile 'org.codehaus.groovy:groovy-all:2.3.6'
-
-        testCompile 'junit:junit:4.11'
-
-        // Spockframework for BDD (specification-based testing)
-        testCompile("org.spockframework:spock-core:1.0-groovy-2.3-SNAPSHOT") {
-            exclude group: 'org.codehaus.groovy', module: 'groovy-all'
-        }
-    } // dependencies
+} // asciidoctor
 
 
 
-} // source-project configuration
 
 /*
- * Copyright 2012-2014 the original author or authors.
+ * Copyright 2012-2015 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
