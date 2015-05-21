@@ -78,6 +78,7 @@ asciidoctor {
         from("${srcDir}/images") {
           include '**'
         }
+        into "./images"
     }
 
 } // asciidoctor
