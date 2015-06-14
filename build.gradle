@@ -1,11 +1,24 @@
 // gradle build script for html sanity check
 // =========================================
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.0"
+    }
+}
+
+
 plugins {
     id 'org.asciidoctor.convert' version '1.5.2'
 }
 
 group = 'org.aim42'
-version = "0.9.2-SNAPSHOT"
+version = "0.9.3"
 
 ext {
 
@@ -35,8 +48,11 @@ repositories {
 
 dependencies {
 
-    compile "org.codehaus.groovy:groovy-all:2.4.3"
-    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+
+    //compile "org.codehaus.groovy:groovy-all:2.4.3"
+    localGroovy()
+    testCompile("org.spockframework:spock-core:1.0-groovy-2.4")
+            { exclude group: 'org.codehaus.groovy'}
 
     compile gradleApi()
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
@@ -51,6 +67,8 @@ dependencies {
     testCompile "org.mockito:mockito-all:1.9.5"
 
 } // dependencies
+
+
 
 // ========================================================
 apply plugin: 'org.asciidoctor.convert'
@@ -87,6 +105,8 @@ asciidoctor {
 } // asciidoctor
 
 // ==========================================================
+// if you use htmlSanityCheck locally, publish with
+// "gradle uploadToLocalMaven
 
 apply plugin: 'maven-publish'
 
@@ -102,6 +122,26 @@ publishing {
 
     }
 }
+
+// =========================================================
+
+apply plugin: "com.gradle.plugin-publish"
+
+pluginBundle {
+    website = 'https://github.com/aim42/htmlSanityCheck'
+    vcsUrl = 'https://github.com/aim42/htmlSanityCheck'
+    description = 'Checks HTML files for broken links, missing images etc.'
+    tags = ['checks', 'quality', 'documentation', 'html', 'asciidoctor', 'test']
+
+    plugins {
+        htmlSanityCheck {
+            id = 'org.aim42.htmlSanityCheck'
+            displayName = 'htmlSanityCheck plugin'
+
+        }
+    }
+}
+
 
 
 // =========================================================

@@ -1,5 +1,5 @@
 = image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
-:version: 0.8.0
+:version: 0.9.3
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
