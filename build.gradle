@@ -4,17 +4,19 @@ plugins {
     id 'org.asciidoctor.convert' version '1.5.2'
 }
 
+group = 'org.aim42'
 version = "0.9.0-SNAPSHOT"
 
 ext {
+
     srcDir  = "$projectDir/src/docs"
     javaVersion = System.getProperty("java.version")
     currentDate = new Date().format("d. MMM yyyy")
 }
 
 println "="*50
-print "building " + name 
-println " version " + version
+print "building " + name
+println ", version " + version
 println "projectDir  : " + projectDir
 println "buildDir    : " + buildDir
 println "Java version: " + javaVersion
@@ -23,6 +25,8 @@ println "="*50
 
 apply plugin: 'groovy'
 apply plugin: 'java'
+apply plugin: 'java-gradle-plugin'
+
 
 repositories {
        jcenter()
@@ -83,8 +87,28 @@ asciidoctor {
 
 } // asciidoctor
 
+// ==========================================================
+
+apply plugin: 'maven'
+//s
 
 
+//publishing {
+//    repositories {
+//        maven {
+//            // change to point to your repo,
+//            url uri('../../repo')
+//        }
+//    }
+//}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+        }
+    }
+}
 
 /*
  * Copyright 2012-2015 the original author or authors.
