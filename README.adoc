@@ -49,7 +49,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.aim42:{project}:{version}'
+        classpath ('gradle.plugin.org.aim42:{project}:{version}')
     }
 }
 
