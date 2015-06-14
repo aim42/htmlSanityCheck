@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'org.aim42'
-version = "0.9.1-SNAPSHOT"
+version = "0.9.2-SNAPSHOT"
 
 ext {
 
@@ -92,32 +92,32 @@ apply plugin: 'maven-publish'
 
 
 publishing {
-    repositories {
-        maven {
-            // change to point to your repo,
-            url '../repo'
-        }
-    }
     publications {
         mavenJava(MavenPublication) {
             groupId 'org.aim42'
-            artifactId 'htmlSanityCheck'
-            version '0.9.1-SNAPSHOT'
+            artifactId project.name
+            version project.version
             from components.java
         }
 
     }
 }
 
-/* for the "old" maven plugin
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: uri('../repo'))
+
+// =========================================================
+task info(
+        description: "info on path and objects"
+) <<
+        {
+            println "project.name         : " + project.name
+            println "project.version      : " + project.version
+            println "project.path         : " + project.path
+            println "projectDir           : " + projectDir
+            println "groupId              : " + project.group
+            println "buildDir             : " + buildDir
+            println "="*80
         }
-    }
-}
-*/
+
 
 /*
  * Copyright 2012-2015 the original author or authors.
