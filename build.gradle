@@ -5,22 +5,22 @@ plugins {
 }
 
 group = 'org.aim42'
-version = "0.9.0-SNAPSHOT"
+version = "0.9.1-SNAPSHOT"
 
 ext {
 
-    srcDir  = "$projectDir/src/docs"
+    srcDir = "$projectDir/src/docs"
     javaVersion = System.getProperty("java.version")
     currentDate = new Date().format("d. MMM yyyy")
 }
 
-println "="*50
+println "=" * 50
 print "building " + name
 println ", version " + version
 println "projectDir  : " + projectDir
 println "buildDir    : " + buildDir
 println "Java version: " + javaVersion
-println "="*50
+println "=" * 50
 
 
 apply plugin: 'groovy'
@@ -29,13 +29,13 @@ apply plugin: 'java-gradle-plugin'
 
 
 repositories {
-       jcenter()
-       mavenCentral()
+    jcenter()
+    mavenCentral()
 }
 
 dependencies {
 
-    compile "org.codehaus.groovy:groovy-all:2.4.1"
+    compile "org.codehaus.groovy:groovy-all:2.4.3"
     testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
 
     compile gradleApi()
@@ -43,7 +43,6 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.3'
 
     testCompile 'junit:junit:4.11'
-
 
     // jsoup is our awesome html parser, see jsoup.org
     compile group: 'org.jsoup', name: 'jsoup', version: '1.8.1'
@@ -53,34 +52,34 @@ dependencies {
 
 } // dependencies
 
-
-
 // ========================================================
 apply plugin: 'org.asciidoctor.convert'
 
 
 
 asciidoctor {
-    outputDir = file( buildDir )
-    sourceDir = file( srcDir )
-    sources  { include "hsc_arc42.adoc",
-                       "index.adoc",
-                       "DevelopmentGuide.adoc" }
+    outputDir = file(buildDir)
+    sourceDir = file(srcDir)
+    sources {
+        include "hsc_arc42.adoc",
+                "index.adoc",
+                "DevelopmentGuide.adoc"
+    }
 
     attributes = [
-            doctype: 'book',
-            icons: 'font',
-            toc: 'left',
-            sectlink: true,
-            sectanchors: true,
-            numbered: true,
+            doctype             : 'book',
+            icons               : 'font',
+            toc                 : 'left',
+            sectlink            : true,
+            sectanchors         : true,
+            numbered            : true,
             'source-highlighter': 'coderay',
-            'javaVersion': "$javaVersion",
-            'currentDate': "$currentDate" ]
+            'javaVersion'       : "$javaVersion",
+            'currentDate'       : "$currentDate"]
 
     resources {
         from("${srcDir}/images") {
-          include '**'
+            include '**'
         }
         into "./images"
     }
@@ -89,19 +88,28 @@ asciidoctor {
 
 // ==========================================================
 
-apply plugin: 'maven'
-//s
+apply plugin: 'maven-publish'
 
 
-//publishing {
-//    repositories {
-//        maven {
-//            // change to point to your repo,
-//            url uri('../../repo')
-//        }
-//    }
-//}
+publishing {
+    repositories {
+        maven {
+            // change to point to your repo,
+            url '../repo'
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            groupId 'org.aim42'
+            artifactId 'htmlSanityCheck'
+            version '0.9.1-SNAPSHOT'
+            from components.java
+        }
 
+    }
+}
+
+/* for the "old" maven plugin
 uploadArchives {
     repositories {
         mavenDeployer {
@@ -109,6 +117,7 @@ uploadArchives {
         }
     }
 }
+*/
 
 /*
  * Copyright 2012-2015 the original author or authors.
