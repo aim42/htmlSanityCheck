@@ -19,3 +19,4 @@ gen-html/with-failures/css/style.css
 Thumbs.db
 build-plugin.gradle
 build-doc.txt
+.sonar
