@@ -75,10 +75,13 @@ checkExternalLinks:: (optional, planned) if set to "true", external references a
                       Defaults to `false` (currently not implemented)
 
 
-.build.gradle (real-world example)
+
+== Examples
+
+.build.gradle (small example)
 [source,groovy]
 ----
-apply plugin: 'org.aim42.HtmlSanityCheck-gradle-plugin'
+apply plugin: 'org.aim42.htmlSanityCheck'
 
 htmlSanityCheck {
     sourceDir = new File( "$buildDir/docs" )
@@ -92,6 +95,96 @@ htmlSanityCheck {
 }
 ----
 
+
+.build.gradle (extensive example)
+[source, groovy]
+----
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        jcenter()
+    }
+
+    dependencies {
+        classpath (group: 'gradle.plugin.org.aim42',
+                name: 'htmlSanityCheck',
+                version: '0.9.3')
+
+        classpath (group: 'org.asciidoctor',
+                    name: 'asciidoctor-gradle-plugin',
+                    version: '1.5.2')
+    }
+}
+
+// ==== path definitions =====
+// ===========================
+
+// location of AsciiDoc files
+def asciidocSrcPath = "$projectDir/src/asciidoc"
+
+// location of images used in AsciiDoc documentation
+def srcImagesPath = "$asciidocSrcPath/images"
+
+// results of asciidoc compilation (HTML)
+// (input for htmlSanityCheck)
+// this is the default path for asciidoc-gradle-convert
+def htmlOutputPath = "$buildDir/asciidoc/html5"
+
+// images used by generated html
+def targetImagesPath =   htmlOutputPath + "/images"
+
+// where HTMLSanityCheck checking results ares stored
+def checkingResultsPath = "$buildDir/report/htmlchecks"
+
+
+
+apply plugin: 'org.asciidoctor.convert'
+
+asciidoctor {
+    sourceDir = new File( asciidocSrcPath )
+
+    options backends: ['html5'],
+            doctype: 'book',
+            icons: 'font',
+            sectlink: true,
+            sectanchors: true
+
+    resources {
+        from( srcImagesPath )
+        into targetImagesPath
+    }
+
+
+}
+
+apply plugin: 'org.aim42.htmlSanityCheck'
+
+
+htmlSanityCheck {
+
+    // ensure asciidoctor->html runs first
+    // and images are copied to build directory
+
+    dependsOn asciidoctor
+
+    sourceDir = new File( htmlOutputPath )
+
+    // files to check, in Set-notation
+    sourceDocuments = [ "many-errors.html", "no-errors.html"]
+
+    // where to put results of sanityChecks...
+    checkingResultsDir = new File( checkingResultsPath )
+
+    // false: restrict checks to local resources
+    // true:  also check external (e.g. http, https...) links.
+    checkExternalLinks = false
+}
+
+----
+
 == Typical Output
 
 [cols="1,1",width="50%"]
@@ -101,6 +194,8 @@ showing evantual errors within HTML files - as shown in the adjoining figure.
 | image:sample-hsc-report.jpg[width="200", link="./sample-hsc-report.jpg"
   (click on thumbnail for details)]
 |===
+
+
 
 == Types of Sanity Checks
 
