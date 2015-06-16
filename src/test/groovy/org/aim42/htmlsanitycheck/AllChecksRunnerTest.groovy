@@ -67,15 +67,8 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
         SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile( tmpFile )
 
-        // expectation:
-        // 4 checks run
-        // 3 items checked
-        // X findings
-        // title = "Faulty Dragon"
         int expected = 5
         assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
-
-        assertEquals("expected 2 items checked", 2, pageResults.nrOfItemsCheckedOnPage())
 
         assertEquals("expected 2 findings", 2, pageResults.nrOfFindingsOnPage())
 
