@@ -40,6 +40,8 @@ apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'java-gradle-plugin'
 
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
 
 repositories {
     jcenter()
@@ -49,9 +51,8 @@ repositories {
 dependencies {
 
 
-    //compile "org.codehaus.groovy:groovy-all:2.4.3"
     localGroovy()
-    testCompile("org.spockframework:spock-core:1.0-groovy-2.4")
+    testCompile("org.spockframework:spock-core:1.0-groovy-2.3")
             { exclude group: 'org.codehaus.groovy'}
 
     compile gradleApi()
