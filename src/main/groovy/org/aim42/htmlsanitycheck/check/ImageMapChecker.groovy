@@ -144,7 +144,6 @@ class ImageMapChecker extends Checker {
     TODO: currently this checks only for INTERNAL links, enhance to arbitrary links
      */
     private void  checkForBrokenHrefLinks() {
-        ArrayList<HtmlElement> areaHrefs = new ArrayList<String>()
 
         mapNames.each { mapName ->
             checkAreaHrefsForMapName(mapName)
