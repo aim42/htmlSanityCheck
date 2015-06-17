@@ -1,11 +1,12 @@
 HtmlSanityCheck - ChangeLog
 
 
+V.0.9.5
 
-V.0.9.0
 
-
-May 14th 2015 reverted subproject structure, as it lead to numerous build problems.
+V.0.9.3
+June 14th 2015: published on Gradle Plugin Repository
+May 14th 2015: reverted subproject structure, as it lead to numerous build problems.
 
 V.0.8.0 could not be published on Bintray due to these issues.
 

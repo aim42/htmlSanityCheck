@@ -1,0 +1,21 @@
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.7.4.201502262128"
+    // toolVersion = 0.7.5.201505241946
+}
+
+jacocoTestReport {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+
+    // additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+
+
+    reports {
+        xml.enabled = true
+        csv.enabled = false
+        html.enabled = true
+    }
+}
+

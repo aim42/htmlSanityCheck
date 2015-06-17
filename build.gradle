@@ -71,6 +71,16 @@ dependencies {
 
 
 
+tasks.withType(JavaCompile) {
+    sourceCompatibility = rootProject.sourceCompatibility
+    targetCompatibility = rootProject.targetCompatibility
+}
+tasks.withType(GroovyCompile) {
+    sourceCompatibility = rootProject.sourceCompatibility
+    targetCompatibility = rootProject.targetCompatibility
+}
+
+
 // ========================================================
 apply plugin: 'org.asciidoctor.convert'
 
@@ -123,6 +133,9 @@ publishing {
 
     }
 }
+
+// =========================================================
+apply from: "gradle/coverage.gradle"
 
 // =========================================================
 
