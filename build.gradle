@@ -15,6 +15,7 @@ buildscript {
 
 plugins {
     id 'org.asciidoctor.convert' version '1.5.2'
+    id "org.sonarqube" version "1.0"
 }
 
 group = 'org.aim42'
@@ -135,10 +136,15 @@ publishing {
 }
 
 // =========================================================
-apply plugin: 'build-dashboard'
+
+// determine test coverate
 apply from: "gradle/coverage.gradle"
 
+// calculate groovy metrics
 apply from: "gradle/gmetrics.gradle"
+
+// invoke sonar runner
+apply plugin: "org.sonarqube"
 
 
 // =========================================================
