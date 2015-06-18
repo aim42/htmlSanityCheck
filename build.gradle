@@ -138,10 +138,13 @@ publishing {
 // =========================================================
 
 // determine test coverate
-apply from: "gradle/coverage.gradle"
+apply from: "config/coverage.gradle"
 
 // calculate groovy metrics
 apply from: "gradle/gmetrics.gradle"
+
+// dependency analysis
+apply plugin: 'codenarc'
 
 // invoke sonar runner
 apply plugin: "org.sonarqube"
