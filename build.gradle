@@ -140,6 +140,9 @@ publishing {
 // determine test coverate
 apply from: "config/coverage.gradle"
 
+// findbugs, jdepend, codenarc
+apply from: "config/code-quality.gradle"
+
 // calculate groovy metrics
 apply from: "gradle/gmetrics.gradle"
 
