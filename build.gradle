@@ -135,7 +135,11 @@ publishing {
 }
 
 // =========================================================
+apply plugin: 'build-dashboard'
 apply from: "gradle/coverage.gradle"
+
+apply from: "gradle/gmetrics.gradle"
+
 
 // =========================================================
 
@@ -169,6 +173,7 @@ task info(
             println "projectDir           : " + projectDir
             println "groupId              : " + project.group
             println "buildDir             : " + buildDir
+            println "targetCompatibility  : " + rootProject.targetCompatibility
             println "="*80
         }
 
