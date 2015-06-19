@@ -1,11 +1,6 @@
 package org.aim42.htmlsanitycheck
 // see end-of-file for license information
-
-
-import org.gradle.api.file.FileCollection
-import org.gradle.api.internal.file.collections.SimpleFileCollection
 import spock.lang.Specification
-
 
 class HtmlSanityCheckTaskSpec extends Specification {
 
