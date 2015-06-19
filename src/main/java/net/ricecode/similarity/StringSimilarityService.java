@@ -66,4 +66,17 @@ public interface StringSimilarityService {
      * @return A SimilarityScore that has the top value amongst the features, according to the comparator.
      */
     SimilarityScore findTop(List<String> features, String target, Comparator<SimilarityScore> comparator);
+
+
+    // added by Gernot Starke:
+    /**
+     * Finds the n features within a set of given features that best match the target string.
+     * @param features A list of strings containing the features to compare.
+     * @param target The target string to compare against the features.
+     * @param n The (maximum) number of hits to be returned.
+     * @return A list of SimilarityScore instances having the top values amongst the features,
+     *         according to the comparator
+     */
+    List<SimilarityScore> findBestN( List<String> features, String target, int n );
+
 }

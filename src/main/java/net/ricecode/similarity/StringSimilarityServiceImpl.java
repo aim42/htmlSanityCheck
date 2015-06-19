@@ -36,7 +36,7 @@ import java.util.Collections;
  */
 public class StringSimilarityServiceImpl implements StringSimilarityService {
 
-	private SimilarityStrategy strategy;
+	private final SimilarityStrategy strategy;
 
 
     /**
@@ -104,4 +104,31 @@ public class StringSimilarityServiceImpl implements StringSimilarityService {
     	Collections.sort(scores, comparator);
     	return scores.get(0);
     }
+
+    // added by Gernot Starke:
+    /**
+     * Finds the n features within a set of given features that best match the target string.
+     * @param features A list of strings containing the features to compare.
+     * @param target The target string to compare against the features.
+     * @param n The (maximum) number of hits to be returned.
+     * @return A list of SimilarityScore instances having the top values amongst the features,
+     *         according to the comparator
+     */
+    public List<SimilarityScore> findBestN( List<String> features, String target, int n) {
+        if (features.size() == 0) {
+            return null;
+        }
+        if (n < 1) {
+            return null;
+        }
+
+        List<SimilarityScore> scores= scoreAll(features, target);
+        Collections.sort(scores, new DescendingSimilarityScoreComparator());
+
+
+        List<SimilarityScore> result = scores.subList(0,n);
+
+        return result;
+    }
+
 }
