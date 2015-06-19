@@ -37,9 +37,39 @@ println "Java version: " + javaVersion
 println "=" * 50
 
 
+// tag::BuildPlugins[]
 apply plugin: 'groovy'
 apply plugin: 'java'
+
 apply plugin: 'java-gradle-plugin'
+
+apply plugin: 'build-dashboard'
+
+// asciidoctor conversion
+apply plugin: 'org.asciidoctor.convert'
+
+// publish to gradle-plugin-repository
+apply plugin: "com.gradle.plugin-publish"
+
+// publish to (local) maven repo
+apply plugin: 'maven-publish'
+
+// determine test coverate
+apply from: "config/coverage.gradle"
+
+// findbugs, jdepend, codenarc
+apply from: "config/code-quality.gradle"
+
+// calculate groovy metrics
+apply from: "config/gmetrics.gradle"
+
+// dependency analysis
+apply plugin: 'codenarc'
+
+// invoke sonar runner
+apply plugin: "org.sonarqube"
+// end:BuildPlugins[]
+
 
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
@@ -83,8 +113,6 @@ tasks.withType(GroovyCompile) {
 
 
 // ========================================================
-apply plugin: 'org.asciidoctor.convert'
-
 
 
 asciidoctor {
@@ -116,11 +144,11 @@ asciidoctor {
 
 } // asciidoctor
 
+
+
 // ==========================================================
 // if you use htmlSanityCheck locally, publish with
 // "gradle uploadToLocalMaven
-
-apply plugin: 'maven-publish'
 
 
 publishing {
@@ -137,20 +165,6 @@ publishing {
 
 // =========================================================
 
-// determine test coverate
-apply from: "config/coverage.gradle"
-
-// findbugs, jdepend, codenarc
-apply from: "config/code-quality.gradle"
-
-// calculate groovy metrics
-apply from: "gradle/gmetrics.gradle"
-
-// dependency analysis
-apply plugin: 'codenarc'
-
-// invoke sonar runner
-apply plugin: "org.sonarqube"
 
 sonarqube {
     properties {
@@ -162,23 +176,7 @@ sonarqube {
 
 // =========================================================
 
-apply plugin: "com.gradle.plugin-publish"
-
-pluginBundle {
-    website = 'https://github.com/aim42/htmlSanityCheck'
-    vcsUrl = 'https://github.com/aim42/htmlSanityCheck'
-    description = 'Checks HTML files for broken links, missing images etc.'
-    tags = ['checks', 'quality', 'documentation', 'html', 'asciidoctor', 'test']
-
-    plugins {
-        htmlSanityCheck {
-            id = 'org.aim42.htmlSanityCheck'
-            displayName = 'htmlSanityCheck plugin'
-
-        }
-    }
-}
-
+apply from: 'config/publish-gradle-plugin.gradle'
 
 
 // =========================================================
