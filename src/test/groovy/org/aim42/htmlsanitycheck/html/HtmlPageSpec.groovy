@@ -1,6 +1,5 @@
 package org.aim42.htmlsanitycheck.html
 
-import org.jsoup.select.Elements
 import spock.lang.Specification
 
 class HtmlPageSpec extends Specification {

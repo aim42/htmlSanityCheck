@@ -1,14 +1,8 @@
 package org.aim42.filesystem
 
-import org.gradle.api.Project
-import org.gradle.api.file.FileCollection
-import org.gradle.api.file.FileTree
-import org.gradle.api.internal.file.collections.SimpleFileCollection
-import org.gradle.testfixtures.ProjectBuilder
-
-// see end-of-file for license information
 import spock.lang.Specification
 
+// see end-of-file for license information
 class FileCollectorSpec extends Specification {
     File tempDir
 
