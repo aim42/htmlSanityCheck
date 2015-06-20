@@ -115,19 +115,16 @@ public class StringSimilarityServiceImpl implements StringSimilarityService {
      *         according to the comparator
      */
     public List<SimilarityScore> findBestN( List<String> features, String target, int n) {
-        if (features.size() == 0) {
-            return null;
+        List<SimilarityScore> result = new ArrayList<SimilarityScore>();
+
+        if ((features.size() > 0) && (n >= 1)) {
+            List<SimilarityScore> scores = scoreAll(features, target);
+            Collections.sort(scores, new DescendingSimilarityScoreComparator());
+
+            // fails if n> scores.size(): result = scores.subList(0, n);
+            result = scores.subList(0, Math.min(scores.size(), n));
+
         }
-        if (n < 1) {
-            return null;
-        }
-
-        List<SimilarityScore> scores= scoreAll(features, target);
-        Collections.sort(scores, new DescendingSimilarityScoreComparator());
-
-
-        List<SimilarityScore> result = scores.subList(0,n);
-
         return result;
     }
 

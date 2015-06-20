@@ -51,7 +51,7 @@ public class StringSimilarityServiceImplTest {
     }
 
     @Test
-    public void testFindBestN() {
+    public void testFindBestTwo() {
         String target = "McDonalds";
 
         String c1 = "MacMahons";
@@ -63,18 +63,44 @@ public class StringSimilarityServiceImplTest {
         features.add(c2);
         features.add(c3);
 
-        List<SimilarityScore> bestOne = service.findBestN(features, target, 1);
+        List<SimilarityScore> bestTwo = service.findBestN(features, target, 2);
 
-        assertEquals(1, bestOne.size());
 
-        assertEquals( "McDonaldz is expected to be the best match", "McDonaldz",
-                bestOne.get(0).getKey());
+        assertEquals(2, bestTwo.size());
+
+        assertEquals("McDonaldz is expected to be the best match", c3,
+                bestTwo.get(0).getKey());
+
+        assertEquals("McPherson is expected to be the second best match", c2,
+                bestTwo.get(1).getKey());
 
     }
 
+    @Test
+    public void testFindBestZero() {
+        assert features.size() == 0;
+
+        List<SimilarityScore> best = service.findBestN(features, "none", 2);
+
+        assertEquals("empty list of candidates shall yield empty result", 0, best.size());
+
+    }
 
     @Test
-    public void testFindTopInShortList() {
+    public void testFindBestThreeInTooShortList() {
+        String target = "McDonalds";
+
+        features = Arrays.asList("McDommy", "NicClumsy");
+
+        List<SimilarityScore> bestThree = service.findBestN(features, target, 3);
+
+        assertEquals("even if list is too short, valid result is returned", 2, bestThree.size());
+    }
+
+
+
+    @Test
+    public void testFindTopInList() {
         String target = "McDonalds";
 
         String c1 = "MacMahons";
@@ -94,6 +120,8 @@ public class StringSimilarityServiceImplTest {
                 service.findTop(features, target).getKey());
 
     }
+
+
 
 
     @Test
