@@ -93,10 +93,7 @@ dependencies {
     testCompile 'junit:junit:4.11'
 
     // jsoup is our awesome html parser, see jsoup.org
-    compile group: 'org.jsoup', name: 'jsoup', version: '1.8.1'
-
-    // mockito needed to test string similarity
-    testCompile "org.mockito:mockito-all:1.9.5"
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.8.2'
 
 } // dependencies
 
