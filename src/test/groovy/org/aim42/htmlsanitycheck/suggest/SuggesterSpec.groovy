@@ -55,8 +55,24 @@ class SuggesterSpec extends Specification {
         // "Bastiodon" is plausible suggestion
         multipleSuggestion.get(0) == "Bastiodon"
         multipleSuggestion.get(1) == "Baltoy"
-
     }
+
+
+
+    def "Find No Suggestion In Empty Option List"() {
+        given:
+        target = "Bastodon"
+        def emptyOptions = new ArrayList<String>()
+
+        when:
+        List<String> multipleSuggestion = Suggester.determineNSuggestions(target, emptyOptions, 2)
+
+        then:
+        // get no results
+        multipleSuggestion.size() == 0
+    }
+
+
 }
 
 /************************************************************************
