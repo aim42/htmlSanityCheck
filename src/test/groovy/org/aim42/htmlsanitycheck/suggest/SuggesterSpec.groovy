@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.suggest
 
 import spock.lang.Specification
+import spock.lang.Timeout
 
 class SuggesterSpec extends Specification {
 
@@ -72,6 +73,44 @@ class SuggesterSpec extends Specification {
         multipleSuggestion.size() == 0
     }
 
+    @Timeout(1)  // wait max one second
+    def "Find Suggestion in Long Option List" () {
+        final int HALFLENGTH = 1001
+        ArrayList<String> longOptionList = new ArrayList<String>(2 * HALFLENGTH )
+
+        given:
+            target = "HtmlSanitY"
+            String bestSuggestion = "HtmkSanity"   // two differences
+            String secondSuggestion = "htmlSaqqqy" // three differences
+
+            longOptionList.add( secondSuggestion )
+
+        (1..HALFLENGTH).each() {
+            longOptionList.add( RandomStringGenerator.randomString())
+        }
+
+        longOptionList.add(bestSuggestion)
+
+        (1..HALFLENGTH).each() {
+            longOptionList.add( RandomStringGenerator.randomString())
+        }
+
+        when:
+        List<String> multipleSuggestion = Suggester.determineNSuggestions(target, longOptionList, 3)
+
+        then:
+        // get three results
+        multipleSuggestion.size() == 3
+
+        // longOption list is really long :-)
+        longOptionList.size() == (2 * HALFLENGTH + 2)
+
+        // does method find right suggestions?
+        multipleSuggestion.get(0) == bestSuggestion
+        multipleSuggestion.get(1) == secondSuggestion
+
+
+    }
 
 }
 
