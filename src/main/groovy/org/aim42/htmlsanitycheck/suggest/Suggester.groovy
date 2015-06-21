@@ -44,7 +44,9 @@ public class Suggester {
     public static List<String> determineNSuggestions(String target, ArrayList<String> options, int n) {
         service = new StringSimilarityServiceImpl( new JaroWinklerStrategy());
 
-        service.findBestN( options, target, n);
+        // the "*." operator is the coolest thing in groovy:
+        // applies the method to all elements of the collection (usually known as "map")
+        return service.findBestN( options, target, n)*.getKey()
     }
 }
 

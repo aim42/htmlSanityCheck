@@ -26,9 +26,7 @@ class SuggesterSpec extends Specification {
 
     def "Determine One Plausible Suggestion"() {
         given:
-
-        target = "Bastodon"
-
+            target = "Bastodon"
 
         when:
             String singleSuggestion = Suggester.determineSingleSuggestion(target, options)
@@ -39,10 +37,24 @@ class SuggesterSpec extends Specification {
 
             // "Bastiodon" is plausible suggestion
             singleSuggestion == "Bastiodon"
-
     }
 
+
+
     def "DetermineNSuggestions"() {
+        given:
+        target = "Bastodon"
+
+        when:
+        List<String> multipleSuggestion = Suggester.determineNSuggestions(target, options, 2)
+
+        then:
+        // get two results
+        multipleSuggestion.size() == 2
+
+        // "Bastiodon" is plausible suggestion
+        multipleSuggestion.get(0) == "Bastiodon"
+        multipleSuggestion.get(1) == "Baltoy"
 
     }
 }
