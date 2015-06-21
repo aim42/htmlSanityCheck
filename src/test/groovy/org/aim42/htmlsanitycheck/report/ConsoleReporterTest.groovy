@@ -25,7 +25,7 @@ class ConsoleReporterTest extends GroovyTestCase {
     public void setUp() {
         singleCheckResults = new SingleCheckResults()
 
-        singleFinding = new Finding()
+        singleFinding = new Finding("")
 
         singlePageResults = new SinglePageResults()
 
