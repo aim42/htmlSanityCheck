@@ -15,16 +15,39 @@ class Finding {
 
     String item // i.e. which image is missing, which link/anchor is undefined
 
+    int nrOfOccurrences // how often does this specific finding occur in the checked-page
+
     ArrayList<String> suggestions
 
+
     /**
-     * no finding should exist without explanation
-     * @param item
+     * no finding should exist without giving an explanation ("item")
+     * about what went wrong.
+     * @param item An explanation of what went wrong.
      */
     public Finding( String item ) {
         this.item = item
         suggestions = new ArrayList<String>()
     }
+
+    /**
+     * create Finding with explanation and suggestions
+     * @param item explanation what went wrong
+     * @param suggestions what could have been meant
+     */
+    public Finding( String item, ArrayList<String> suggestions ) {
+        this.item = item
+        this.suggestions = suggestions
+    }
+
+    /**
+     * add a single suggestion to the list of suggestions
+     * @param suggestion
+     */
+    public void addSuggestion( String suggestion) {
+        suggestions.add( suggestion )
+    }
+
 
 
     @Override
