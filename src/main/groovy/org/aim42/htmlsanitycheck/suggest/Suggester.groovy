@@ -1,9 +1,12 @@
 package org.aim42.htmlsanitycheck.suggest;
 
+import net.ricecode.similarity.JaroWinklerStrategy;
 import net.ricecode.similarity.SimilarityStrategy;
 import net.ricecode.similarity.StringSimilarityService;
+import net.ricecode.similarity.StringSimilarityServiceImpl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Finds suggestions for a target within a given list of options by applying string-similarity search
@@ -12,23 +15,36 @@ import java.util.ArrayList;
  */
 public class Suggester {
 
-    private static SimilarityStrategy strategy;
     private static StringSimilarityService service;
 
-    public static String determineSingleSuggestion( String target, ArrayList<String> options ) {
-        return "";
+
+    /**
+     * finds a single suggestion for a "target" within a list of options.
+     *
+     * @param target  string not contained in options similarity-compared to every entry in options
+     * @param options list of available options where the suggestion is taken from
+     * @return a suggested alternative for target from the options
+     */
+    public static String determineSingleSuggestion(String target, ArrayList<String> options) {
+
+        service = new StringSimilarityServiceImpl( new JaroWinklerStrategy());
+
+        return service.findTop(options, target).getKey();
     }
 
 
     /**
      * determines at most n suggestions.
-     * @param target string that is not contained in options, similarity-compared to every entry in options
+     *
+     * @param target  string that is not contained in options, similarity-compared to every entry in options
      * @param options list of available options where suggestions are taken from
-     * @param n number of suggestions to return. Should better be lower than options.size()
-     * @return
+     * @param n       number of suggestions to return. Should better be lower than options.size()
+     * @return ArrayList of suggestions
      */
-    public static String determineNSuggestions( String target, ArrayList<String> options, int n) {
-      return "";
+    public static List<String> determineNSuggestions(String target, ArrayList<String> options, int n) {
+        service = new StringSimilarityServiceImpl( new JaroWinklerStrategy());
+
+        service.findBestN( options, target, n);
     }
 }
 
