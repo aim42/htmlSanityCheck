@@ -2,6 +2,8 @@
 
 package org.aim42.htmlsanitycheck.collect
 
+import java.lang.reflect.Array
+
 /**
  * A single "finding" from any check, i.e.:
  * - a missing image file
@@ -10,9 +12,6 @@ package org.aim42.htmlsanitycheck.collect
  */
 class Finding {
 
-    // TODO handle suggestions
-
-
     String item // i.e. which image is missing, which link/anchor is undefined
 
     int nrOfOccurrences // how often does this specific finding occur in the checked-page
@@ -20,14 +19,38 @@ class Finding {
     ArrayList<String> suggestions
 
 
+    public Finding() {
+      this( "" )
+    }
+
     /**
      * no finding should exist without giving an explanation ("item")
      * about what went wrong.
-     * @param item An explanation of what went wrong.
+     * @param item An explanation of what went wrong (i.e. name of missing file)
      */
-    public Finding( String item ) {
+    public Finding(String item) {
+        this( item, 1, new ArrayList<String>(3))
+    }
+
+
+    /**
+     * finding with explanation and several occurences
+     */
+    public Finding( String item, int nrOfOccurrences ) {
+        this( item, nrOfOccurrences, new ArrayList<String>(3))
+    }
+
+
+    /**
+     * most general constructor:
+     * create Finding with explanation and nrOfOccurrences
+     * @param item  An explanation of what went wrong (i.e. name of missing file)
+     * */
+    public Finding(String item, int nrOfOccurrences, ArrayList<String> suggestions) {
         this.item = item
-        suggestions = new ArrayList<String>()
+        this.nrOfOccurrences = nrOfOccurrences
+        this.suggestions = suggestions
+
     }
 
     /**
@@ -35,25 +58,30 @@ class Finding {
      * @param item explanation what went wrong
      * @param suggestions what could have been meant
      */
-    public Finding( String item, ArrayList<String> suggestions ) {
-        this.item = item
-        this.suggestions = suggestions
+    public Finding(String item, ArrayList<String> suggestions) {
+        this( item, 1, suggestions)
     }
 
     /**
      * add a single suggestion to the list of suggestions
      * @param suggestion
      */
-    public void addSuggestion( String suggestion) {
-        suggestions.add( suggestion )
+    public void addSingleSuggestion(String suggestion) {
+        suggestions.add(suggestion)
     }
 
 
+    public void setNrOfOccurences( int nrOfOccurences ) {
+        this.nrOfOccurrences = nrOfOccurrences
+    }
 
     @Override
     public String toString() {
-        return item
+        String refCount = (nrOfOccurrences > 1) ? " (reference count: $nrOfOccurrences)": ""
+        return item + refCount
     }
+
+
 }
 
 /*======================================================================
