@@ -1,23 +1,71 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.suggest.Suggester
 
 
 /**
- * this is just a "marker interface" to tag those checker-subclasses that
+ * Abstract class for those @see Checker subclasses that
  * can propose suggestions, not only identify errors.
+ * Example: MissingImagesChecker might suggest names of existing images
+ * that "could have been meant"
+ *
  */
 abstract class SuggestingChecker extends Checker {
+
+    // valid possibilities for e.g. image-file-names or link-targets
+    ArrayList<String> validPossibilities
+
     @Override
     abstract protected void initCheckingResultsDescription()
+
+    /**  let the instance determine the list of possible values
+     * Examples:
+     * - MissingImageFilesChecker -> collect the names of images files
+     * - BrokenCrossReferencesChecker -> collect all (internal) link targets
+     **/
+    abstract protected void setValidPossibilities()
+
 
     @Override
     abstract protected SingleCheckResults check()
 
+    /**
+     * a little tricky: call performCheck on the superclass and add a little behavior :-)
+     * it's a Template-Method again.
+     * @return List of Findings (SingleCheckResults), but with suggestions for each finding
+     */
+    @Override
+    public SingleCheckResults performCheck() {
+        SingleCheckResults scResults = super.performCheck()
 
+        setValidPossibilities()
+
+        determinSuggestionsForEveryFinding()
+
+        return scResults
+    }
+
+
+    /**
+     * determines suggestions for every Finding agains the list
+     * of valid possibilities
+     */
+    public void determinSuggestionsForEveryFinding() {
+        checkingResults.findings.each { finding ->
+            determineSuggestionsForSingleFinding( finding )
+        }
+    }
+
+    /**
+     *
+     */
+    public void determineSuggestionsForSingleFinding( Finding finding ) {
+        finding.setSuggestions( Suggester.determineNSuggestions(finding.item, validPossibilities, 1))
+
+    }
 }
-
-
 
 /************************************************************************
  * This is free software - without ANY guarantee!
