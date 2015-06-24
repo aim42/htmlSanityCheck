@@ -6,7 +6,7 @@ import org.aim42.htmlsanitycheck.html.URLUtil
 // see end-of-file for license information
 
 
-class BrokenCrossReferencesChecker extends Checker {
+class BrokenCrossReferencesChecker extends SuggestingChecker {
 
 
     private List<String> listOfIds    // id="XYZ"
@@ -21,6 +21,13 @@ class BrokenCrossReferencesChecker extends Checker {
         checkingResults.targetItemName = "missing id"
     }
 
+    @Override
+    /**
+
+     */
+    protected void setValidPossibilities() {
+        validPossibilities = listOfIds
+    }
 
     @Override
     protected SingleCheckResults check() {
@@ -94,20 +101,30 @@ class BrokenCrossReferencesChecker extends Checker {
 
 
         if (!listOfIds.contains(linkTarget)) {
-
             // we found a broken link!
-            String findingText = "link target \"$linkTarget\" missing"
-
-            // now count occurrences - how often is it referenced
-            int nrOfReferences = countNrOfReferences(href)
-            if (nrOfReferences > 1) {
-                findingText += ", reference count: $nrOfReferences"
-            }
-
-            checkingResults.newFinding(findingText, nrOfReferences)
+            handleBrokenLink(linkTarget, href)
         }
 
     }
+
+    // add the broken link to results
+    private void handleBrokenLink(String linkTarget, String href) {
+        String findingText = "link target \"$linkTarget\" missing"
+
+        // TODO: reference count is appended as string - better keep this as separate int value
+
+        // now count occurrences - how often is it referenced
+        int nrOfReferences = countNrOfReferences(href)
+        if (nrOfReferences > 1) {
+            findingText += ", reference count: $nrOfReferences"
+        }
+
+        // determine suggestions "what could have been meant?"
+
+
+        checkingResults.newFinding(findingText, nrOfReferences)
+    }
+
 
     private int countNrOfReferences(String href) {
         int nrOfReferences = hrefList.findAll { it == href }.size()

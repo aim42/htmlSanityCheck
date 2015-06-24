@@ -17,9 +17,14 @@ class SingleCheckResults implements CheckResults {
     public String targetItemName   // i.e. local-image-file, id/bookmark
 
     public int nrOfItemsChecked
-    private int nrOfIssues
 
+    private int nrOfIssues
+    // nrOfIssues can be larger than findings.size(),
+    // if some findings occur more than once
+
+    // the actual findings
     public ArrayList<Finding> findings
+
 
     /**
      * Initialize some members.

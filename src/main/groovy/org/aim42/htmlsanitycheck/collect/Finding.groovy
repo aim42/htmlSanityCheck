@@ -2,8 +2,6 @@
 
 package org.aim42.htmlsanitycheck.collect
 
-import java.lang.reflect.Array
-
 /**
  * A single "finding" from any check, i.e.:
  * - a missing image file
@@ -16,6 +14,7 @@ class Finding {
 
     int nrOfOccurrences // how often does this specific finding occur in the checked-page
 
+    // suggestions are ordered: getAt(0) yields the best, getAt(1) the second and so forth
     ArrayList<String> suggestions
 
 
