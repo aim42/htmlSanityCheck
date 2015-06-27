@@ -42,7 +42,7 @@ class SuggesterSpec extends Specification {
 
 
 
-    def "DetermineNSuggestions"() {
+    def "Determine Multiple Suggestions"() {
         given:
         target = "Bastodon"
 
@@ -108,11 +108,9 @@ class SuggesterSpec extends Specification {
         // does method find right suggestions?
         multipleSuggestion.get(0) == bestSuggestion
         multipleSuggestion.get(1) == secondSuggestion
-
-
     }
 
-}
+
 
 /************************************************************************
  * This is free software - without ANY guarantee!
