@@ -2,6 +2,7 @@ package org.aim42.htmlsanitycheck.suggest
 
 import org.aim42.htmlsanitycheck.check.BrokenCrossReferencesChecker
 import org.aim42.htmlsanitycheck.check.Checker
+import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.junit.Before
@@ -47,18 +48,49 @@ class BrokenCrossReferenceCheckerSuggestionTest extends GroovyTestCase {
                     pageToCheck: htmlPage)
             collector = brokenCrossRefChecker.performCheck()
 
-            String actual = collector.findings.first()
+            Finding onlyFinding  = collector?.findings?.first()
             String expected = "link target \"aim42\" missing"
-            String message = "expected $expected"
+            String message = "expeted $expected"
 
-            assertEquals(message, expected, actual)
-            List<String> options = new ArrayList<String>(Arrays.asList("aim43", "zzz", "uuu"))
+            // expected one finding
+            assertEquals("expected ONE finding", 1, collector.findings.size())
 
-            // now we need to test the BCRC
-            String suggestion = Suggester.determineSingleSuggestion(actual, options)
+            // message shall be "link target aim42 missing
+            assertEquals(message, expected, onlyFinding.item )
 
-            assertEquals("expected aim43 as suggestion", "aim43", suggestion)
+            // checker shall determine aim43 as suggestion
+            assertEquals("expected aim43 as suggestion", "aim43", onlyFinding.suggestions.first())
+
         }
+
+
+    @Test
+    public void testBrokenInternalWithoutSuggestion() {
+        String HTML_WITH_A_TAGS_AND_ID = '''
+           <html>
+             <head></head>
+              <body>
+                   <a href="#aim42">link-to-aim42</a>
+                   <h1>This HTML does not contain any id</h3>
+                     Without other id's, checker must not return any suggestion...
+              </body>
+           </html>'''
+
+        htmlPage = new HtmlPage( HTML_WITH_A_TAGS_AND_ID )
+
+        brokenCrossRefChecker = new BrokenCrossReferencesChecker(
+                pageToCheck: htmlPage)
+        collector = brokenCrossRefChecker.performCheck()
+
+        Finding onlyFinding  = collector?.findings?.first()
+        String expected = "link target \"aim42\" missing"
+        String message = "expeted $expected"
+
+
+        // checker shall determine no as suggestion
+        assertEquals("no suggestion expected", 0, onlyFinding.suggestions.size())
+
+    }
 
 }
 
