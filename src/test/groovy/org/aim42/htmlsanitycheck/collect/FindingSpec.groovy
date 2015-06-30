@@ -36,6 +36,8 @@ class FindingSpec extends Specification {
         result == error + " (reference count: 3)"
 
     }
+
+
 }
 
 /************************************************************************
