@@ -35,7 +35,7 @@ class FileCollectorSpec extends Specification {
     }
 
 
-    def "we can collect html files from a given directory"(Set<String> files, int htmlFileCount) {
+    def "collect html files from given directory"(Set<String> files, int htmlFileCount) {
         Set<File> collectedFiles
         File f
 
@@ -99,7 +99,7 @@ class FileCollectorSpec extends Specification {
 
 
         when:
-        createDirsAndFiles(dirsAndFiles)
+        DirAndFileCreator.createDirsAndFiles(dirsAndFiles, tempDir)
         Set<File> collectedFiles = FileCollector.getAllHtmlFilesFromDirectory(tempDir)
 
         then:
@@ -145,7 +145,7 @@ class FileCollectorSpec extends Specification {
 
 
         when:
-        createDirsAndFiles(dirsAndFiles)
+        DirAndFileCreator.createDirsAndFiles(dirsAndFiles, tempDir)
 
         // "mock" a configuration
         Set<File> collectedFiles =
@@ -176,10 +176,10 @@ class FileCollectorSpec extends Specification {
 
 
         when:
-        createDirsAndFiles( otherDirsAndFiles )
+        DirAndFileCreator.createDirsAndFiles( otherDirsAndFiles, tempDir )
 
 
-        createDirsAndFiles( new HashSet([["", configuredFiles]]))
+        DirAndFileCreator.createDirsAndFiles( new HashSet([["", configuredFiles]]), tempDir)
 
 
         // "mock" a configuration
@@ -197,23 +197,7 @@ class FileCollectorSpec extends Specification {
 
     }
 
-    /*
-    helper method to create temporary directories and files within those
-    Expects @param dirsAndFiles to look like
-    [["/a", ["a.htm"]]]
-     */
 
-    private void createDirsAndFiles(Set dirsAndFiles) {
-        File dir, file
-        dirsAndFiles.each { aDir, fileSet ->
-            dir = new File(tempDir, (String) aDir)
-            dir.mkdirs()
-            fileSet.each { fileName ->
-                file = new File((File) dir, (String) fileName) << "some content"
-            }
-
-        }
-    }
 }
 
 /*========================================================================
