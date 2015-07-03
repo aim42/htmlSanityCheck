@@ -18,6 +18,8 @@ class FileCollector {
         (file.name ==~ HTML_FILE_EXTENSION_PATTERN)
     }
 
+    public final static String IMAGE_FILE_EXTENSION_PATTERN = ~/(?i).+\.(jpg|jpeg|png|gif|bmp|svg)?$/
+
 
     public static Boolean isHtmlFile(File file) {
         return (isHtmlFile(file.absolutePath)
@@ -35,6 +37,16 @@ class FileCollector {
     }
 
     /**
+     * checks if @param fileName represents an image file name,
+     * ignoring the files' content.
+     * @param fileName
+     */
+     public static Boolean isImageFileName( String fileName ) {
+         return (fileName ==~ IMAGE_FILE_EXTENSION_PATTERN)
+     }
+
+
+    /**
      * returns all configured html files as Set<File>
      *
      */
@@ -49,6 +61,20 @@ class FileCollector {
     }
 
     /**
+     * returns all configured image files as Set<File>
+     *
+     */
+    public static Set<File> getConfiguredImageFiles(
+            File srcDir,
+            Set<String> sourceDocs) {
+        // first case: no document names given -> return all html files
+        // in directory tree
+        if ((sourceDocs == null) || (sourceDocs?.empty)) {
+            return getAllImageFilesFromDirectory(srcDir)
+        } else return getAllConfiguredImageFiles(srcDir, sourceDocs)
+    }
+
+    /**
      * returns all html files in a given directory.
      * (recursively looks in subdirectories)
      * @param dir where to look for matching files
@@ -57,15 +83,35 @@ class FileCollector {
     public static Set<File> getAllHtmlFilesFromDirectory(File dir) {
         Set<File> files = new HashSet<File>()
 
+        // scan only files, not directories
         dir.eachFileRecurse(FileType.FILES) { file ->
-            if (isHtmlFile(file)) {
-                // add only files, not directories
+            if ( isHtmlFile( file )) {
                 files.add(file)
             }
         }
 
         return files
     }
+
+    /**
+     * returns all image files in a given directory.
+     * (recursively looks in subdirectories)
+     * @param dir where to look for matching files
+     * @return all files with appropriate extension
+     */
+    public static Set<File> getAllImageFilesFromDirectory(File dir) {
+        Set<File> files = new HashSet<File>()
+
+        // scan only files, not directories
+        dir.eachFileRecurse(FileType.FILES) { file ->
+            if (FileCollector.isImageFileName( file.getName() )) {
+                files.add(file)
+            }
+        }
+
+        return files
+    }
+
 
     /**
      * returns all configured html files from @param srcDocs
@@ -77,6 +123,24 @@ class FileCollector {
         srcDocs.each { configuredFileName ->
             File file = new File( srcDir, configuredFileName)
             if (file.exists()) {
+                files.add( file )
+            }
+        }
+
+        return files
+
+    }
+
+    /**
+     * returns all configured image files from @param srcDocs
+     * which really exist below @param srcDocs
+     */
+    public static Set<File> getAllConfiguredImageFiles(File srcDir, Set<String> srcDocs) {
+        Set<File> files = new HashSet<File>()
+
+        srcDocs.each { configuredFileName ->
+            File file = new File( srcDir, configuredFileName)
+            if (file.exists() && isImageFileName( file.getName() )) {
                 files.add( file )
             }
         }
