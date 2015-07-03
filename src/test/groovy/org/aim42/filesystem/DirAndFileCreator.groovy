@@ -1,5 +1,7 @@
 package org.aim42.filesystem
 
+/** helper class to facilitate testing of file system tests **/
+
 class DirAndFileCreator {
     /*
       helper method to create temporary directories and files within those
