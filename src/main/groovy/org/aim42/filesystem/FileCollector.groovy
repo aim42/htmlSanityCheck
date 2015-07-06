@@ -149,6 +149,12 @@ class FileCollector {
 
     }
 
+    /**
+     * convert Set of Files to Set of file-names without path prefix!
+     */
+    public static Set<String> collectFileNamesFromFiles( Set<File> files ) {
+       return files*.getName()
+    }
 }
 
 /*========================================================================
