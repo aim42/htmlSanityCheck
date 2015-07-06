@@ -1,7 +1,6 @@
 package org.aim42.filesystem
 
 import spock.lang.Specification
-import spock.lang.Unroll
 
 // see end-of-file for license information
 class ImageFileCollectorSpec extends Specification {
@@ -18,17 +17,17 @@ class ImageFileCollectorSpec extends Specification {
         FileCollector.isImageFileName(fileName) == isImage
 
         where:
-        fileName      | isImage
+        fileName     | isImage
         "test.jpg"   | true
-        "test.JPG"    | true
-        "test.JPEG"   | true
-        "TEST.jpeg"    | true
-        "test.png"    | true
-        "html.PNG"    | true
-        "/test.gif"   | true
-        "/test.GIF"   | true
+        "test.JPG"   | true
+        "test.JPEG"  | true
+        "TEST.jpeg"  | true
+        "test.png"   | true
+        "html.PNG"   | true
+        "/test.gif"  | true
+        "/test.GIF"  | true
         "/a/b/c.pdf" | false
-        ".bmp"        | false
+        ".bmp"       | false
         ".svg"       | false
         "a.SVG"      | true
         "a.html"     | false
@@ -36,31 +35,31 @@ class ImageFileCollectorSpec extends Specification {
     }
 
 
-    def "get Images From Directory"() {
+    def "can get Images From Directory"() {
         Set<File> collectedFiles
         File file
 
-        String f1name = "f1.jpg"
-        String f2name = "f2.png"
+        Set<String> fnames = ["f1.jpg", "f2.png", "what a funny filename.png", "NOT-SO fuNNy.PNG"]
 
         when:
-        file = new File(tempDir, f1name)   << "non-binary-content"
-        file = new File(tempDir, f2name)   << "again, some content"
+        fnames.each {
+            new File(tempDir, it) << "some-dummy-content"
+        }
 
-        collectedFiles = FileCollector.getAllImageFilesFromDirectory( tempDir )
+        collectedFiles = FileCollector.getAllImageFilesFromDirectory(tempDir)
 
-        Set<String> collectedFileNames = FileCollector.collectFileNamesFromFiles( collectedFiles )
+        Set<String> collectedFileNames = FileCollector.collectFileNamesFromFiles(collectedFiles)
 
         then:
-            // two files found
-            collectedFiles.size() == 2
+        // two files found
+        collectedFiles.size() == fnames.size()
 
-            collectedFileNames.contains( f1name )
+        fnames.each { fname ->
+            collectedFileNames.contains( fname )
+        }
 
-            collectedFileNames.contains( f2name )
 
     }
-
 
 
     def "Collect image files from given directory"(Set<String> files, int imageFileCount) {
@@ -73,7 +72,7 @@ class ImageFileCollectorSpec extends Specification {
             f = new File(tempDir, fileName) << "some content"
         }
 
-        collectedFiles = FileCollector.getAllImageFilesFromDirectory( tempDir )
+        collectedFiles = FileCollector.getAllImageFilesFromDirectory(tempDir)
 
         then:  // find the file we just created
         collectedFiles.size() == imageFileCount
@@ -81,14 +80,12 @@ class ImageFileCollectorSpec extends Specification {
 
         where:
 
-        files                                 | imageFileCount
-        ["a.jpg"]                             | 1
-        ["a.jpg", "b.png"]                    | 2
-        ["a.jpg", "b.txt"]                    | 1
-        ["a.jpg", "b.jpg", "c.txt", "d.bmp"]  | 3
+        files                                | imageFileCount
+        ["a.jpg"]                            | 1
+        ["a.jpg", "b.png"]                   | 2
+        ["a.jpg", "b.txt"]                   | 1
+        ["a.jpg", "b.jpg", "c.txt", "d.bmp"] | 3
     }
-
-
 
 
     def "if we configure just a directory all contained image files are taken"(
@@ -126,7 +123,6 @@ class ImageFileCollectorSpec extends Specification {
          ["/a/b/c/d/f", ["nested.jpg"]]] | 10
 
     }
-
 
 
 }

@@ -41,10 +41,9 @@ class FileCollector {
      * ignoring the files' content.
      * @param fileName
      */
-     public static Boolean isImageFileName( String fileName ) {
-         return (fileName ==~ IMAGE_FILE_EXTENSION_PATTERN)
-     }
-
+    public static Boolean isImageFileName(String fileName) {
+        return (fileName ==~ IMAGE_FILE_EXTENSION_PATTERN)
+    }
 
     /**
      * returns all configured html files as Set<File>
@@ -85,7 +84,7 @@ class FileCollector {
 
         // scan only files, not directories
         dir.eachFileRecurse(FileType.FILES) { file ->
-            if ( isHtmlFile( file )) {
+            if (isHtmlFile(file)) {
                 files.add(file)
             }
         }
@@ -104,14 +103,13 @@ class FileCollector {
 
         // scan only files, not directories
         dir.eachFileRecurse(FileType.FILES) { file ->
-            if (FileCollector.isImageFileName( file.getName() )) {
+            if (FileCollector.isImageFileName(file.getName())) {
                 files.add(file)
             }
         }
 
         return files
     }
-
 
     /**
      * returns all configured html files from @param srcDocs
@@ -121,9 +119,9 @@ class FileCollector {
         Set<File> files = new HashSet<File>()
 
         srcDocs.each { configuredFileName ->
-            File file = new File( srcDir, configuredFileName)
+            File file = new File(srcDir, configuredFileName)
             if (file.exists()) {
-                files.add( file )
+                files.add(file)
             }
         }
 
@@ -138,10 +136,11 @@ class FileCollector {
     public static Set<File> getAllConfiguredImageFiles(File srcDir, Set<String> srcDocs) {
         Set<File> files = new HashSet<File>()
 
-        srcDocs.each { configuredFileName ->
-            File file = new File( srcDir, configuredFileName)
-            if (file.exists() && isImageFileName( file.getName() )) {
-                files.add( file )
+        srcDocs.each { srcFileName ->
+            // add only existing image files
+            File file = new File(srcDir, srcFileName)
+            if (file.exists() && isImageFileName(file.getName())) {
+                files.add(file)
             }
         }
 
@@ -152,8 +151,11 @@ class FileCollector {
     /**
      * convert Set of Files to Set of file-names without path prefix!
      */
-    public static Set<String> collectFileNamesFromFiles( Set<File> files ) {
-       return files*.getName()
+    public static Set<String> collectFileNamesFromFiles(Set<File> files) {
+        // remark: could also achieve that with java.nio.file.Paths - but getName() seems simpler
+        return files*.getName()
+
+
     }
 }
 
