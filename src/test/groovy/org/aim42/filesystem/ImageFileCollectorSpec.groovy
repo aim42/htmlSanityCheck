@@ -49,8 +49,15 @@ class ImageFileCollectorSpec extends Specification {
 
         collectedFiles = FileCollector.getAllImageFilesFromDirectory( tempDir )
 
+        Set<String> collectedFileNames = FileCollector.collectFileNamesFromFiles( collectedFiles )
+
         then:
+            // two files found
             collectedFiles.size() == 2
+
+            collectedFileNames.contains( f1name )
+
+            collectedFileNames.contains( f2name )
 
     }
 
