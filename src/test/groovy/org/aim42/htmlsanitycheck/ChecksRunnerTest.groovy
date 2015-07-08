@@ -4,7 +4,7 @@ import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.junit.Before
 import org.junit.Test
 
-class AllChecksRunnerTest extends GroovyTestCase {
+class ChecksRunnerTest extends GroovyTestCase {
 
     final static String HTML_HEAD = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <head></head><html>'
 
@@ -14,7 +14,6 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
     @Before
     void setup() {
-        //
 
     }
 
