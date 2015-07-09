@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory
 class AllChecksRunner {
 
     // we check a collection of files:
-    private Collection<File> filesToCheck
+    private Set<File> filesToCheck
 
     // where do we put our results
     private File checkingResultsDir
@@ -62,7 +62,7 @@ class AllChecksRunner {
      */
 
     public AllChecksRunner(
-            Collection<File> filesToCheck,
+            Set<File> filesToCheck,
             File checkingResultsDir,
             Boolean checkExternalResources
     ) {
