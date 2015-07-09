@@ -40,6 +40,16 @@ class HtmlPage {
     }
 
     /**
+     * invokes the parser for the html page
+     * @param input file
+     */
+    public static HtmlPage parseHtml(File fileToCheck) {
+        assert fileToCheck.exists()
+        return new HtmlPage(fileToCheck)
+    }
+
+
+    /**
      * get document meta info (e.g. filename, title, size etc.)
      */
     public int getDocumentSize() {
