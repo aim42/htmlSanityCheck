@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck
 
+import org.aim42.htmlsanitycheck.check.BrokenCrossReferencesChecker
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.junit.Before
 import org.junit.Test
@@ -10,7 +11,7 @@ class ChecksRunnerTest extends GroovyTestCase {
 
     private File tmpFile
 
-    private AllChecksRunner allChecksRunner
+    private ChecksRunner checksRunner
 
     @Before
     void setup() {
@@ -26,9 +27,10 @@ class ChecksRunnerTest extends GroovyTestCase {
         tmpFile = File.createTempFile("testfile", ".html") <<HTML
 
         // wrap tmpFile in Collection to comply to AllChecksRunner API
-        allChecksRunner = new AllChecksRunner( new HashSet<File>( [tmpFile] ) )
+        checksRunner = new ChecksRunner( new HashSet<Class>( [BrokenCrossReferencesChecker.class]),
+                                         new HashSet<File>( [tmpFile] ) )
 
-        SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile(tmpFile)
+        SinglePageResults pageResults = checksRunner.performAllChecksForOneFile(tmpFile)
 
         // expectation:
         // 4 checks run
@@ -60,12 +62,12 @@ class ChecksRunnerTest extends GroovyTestCase {
         // create file
         tmpFile = File.createTempFile("testfile", ".html") << HTML
 
-        allChecksRunner = new AllChecksRunner(
+        checksRunner = new ChecksRunner(
                 new HashSet<File>( [tmpFile] ),
                 File.createTempDir( "testdir", ""),
                 false)
 
-        SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile( tmpFile )
+        SinglePageResults pageResults = checksRunner.performAllChecksForOneFile( tmpFile )
 
         int expected = 5
         assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())

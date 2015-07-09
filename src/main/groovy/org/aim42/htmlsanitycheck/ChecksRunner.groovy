@@ -1,10 +1,14 @@
 package org.aim42.htmlsanitycheck
 
 import org.aim42.htmlsanitycheck.check.Checker
+import org.aim42.htmlsanitycheck.check.CheckerCreator
 import org.aim42.htmlsanitycheck.collect.PerRunResults
+import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import java.lang.reflect.Array
 
 /**
  * runs one or several checks on HTML input
@@ -18,7 +22,7 @@ class ChecksRunner {
     private File checkingResultsDir
 
     // checker instances
-    private List<Checker> checkers
+    private Set<Checker> checkers
 
     private HtmlPage pageToCheck
 
@@ -28,6 +32,72 @@ class ChecksRunner {
     private static Logger logger = LoggerFactory.getLogger(ChecksRunner.class);
 
 
+    // standard constructor
+    public ChecksRunner(
+            Set<Class> checkerCollection,
+            Set<File> filesToCheck,
+            File checkingResultsDir,
+            Boolean checkExternalResources
+    ) {
+        this.resultsForAllPages = new PerRunResults()
+
+        this.filesToCheck = filesToCheck
+        this.checkingResultsDir = checkingResultsDir
+
+        this.checkers = CheckerCreator.createCheckerClassesFrom( checkerCollection )
+
+        logger.debug("ChecksRunner created")
+    }
+
+    /**
+     *  performs all known checks on a single HTML file.
+     *
+     *  Creates a {@link org.aim42.htmlsanitycheck.collect.SinglePageResults} instance to keep checking results.
+     */
+    public SinglePageResults performAllChecksForOneFile(File thisFile) {
+
+        pageToCheck = parseHtml(thisFile)
+        String baseDir = thisFile.parent
+
+        SinglePageResults resultsCollector =
+                new SinglePageResults(
+                        pageFilePath: thisFile.canonicalPath,
+                        pageFileName: thisFile.name,
+                        pageTitle: pageToCheck.getDocumentTitle(),
+                        pageSize: pageToCheck.documentSize
+                )
+
+        // the actual checks
+        resultsCollector.with {
+            addResultsForSingleCheck(missingImageFilesCheck(baseDir))
+            addResultsForSingleCheck(duplicateIdCheck())
+            addResultsForSingleCheck(brokenCrossReferencesCheck())
+            addResultsForSingleCheck(missingLocalResourcesCheck(baseDir))
+            addResultsForSingleCheck(missingAltAttributesCheck())
+        }
+
+        return resultsCollector
+    }
+
+    /**
+     * performs all configured checks on pageToCheck
+     */
+    public PerRunResults performAllChecks() {
+
+        logger.debug "entered performAllChecks"
+
+        filesToCheck.each { file ->
+               resultsForAllPages.addPageResults(
+                    performAllChecksForOneFile(file))
+        }
+
+        // after all checks, stop the timer...
+        resultsForAllPages.stopTimer()
+
+        // and then report the results
+        reportCheckingResultsOnConsole()
+        reportCheckingResultsAsHTML(checkingResultsDir.absolutePath)
+    }
 
 }
 
