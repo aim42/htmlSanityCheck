@@ -119,7 +119,7 @@ class AllChecksRunner {
      */
     public SinglePageResults performAllChecksForOneFile(File thisFile) {
 
-        pageToCheck = parseHtml(thisFile)
+        pageToCheck = HtmlPage.parseHtml(thisFile)
         String baseDir = thisFile.parent
 
         SinglePageResults resultsCollector =
@@ -225,14 +225,6 @@ class AllChecksRunner {
         return missingAltAttributesChecker.performCheck()
     }
 
-    /**
-     * invokes the parser for the html page
-     * @param input file
-     */
-    private static HtmlPage parseHtml(File fileToCheck) {
-        assert fileToCheck.exists()
-        return new HtmlPage(fileToCheck)
-    }
 
     /**
      * runs the checks from the command
