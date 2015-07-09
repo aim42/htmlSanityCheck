@@ -26,7 +26,7 @@ class HtmlPageTest extends GroovyTestCase {
     final static String HTML_HEAD = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <html><head></head>"""
 
 
-    final String HTML_WITH_IMG_TAG =
+    final String HTML_WITH_ONE_IMG_TAG =
             """$HTML_HEAD
               <body>
                    <h1>dummy-heading-1</h1>
@@ -51,6 +51,17 @@ class HtmlPageTest extends GroovyTestCase {
         tmpFile = File.createTempFile("testfile", "html")
     }
 
+    @Test
+    public void testStaticParseHtml() {
+        tmpFile.write(HTML_WITH_TWO_IMG_TAGS)
+
+        htmlPage = HtmlPage.parseHtml(tmpFile)
+
+        // if parsing is successful, should yield two image tag!
+        assertEquals("ONE image expected", 2, htmlPage.getAllImageTags().size())
+
+    }
+
 
     @Test
     public void testGetTwoImagesFromHtml() {
@@ -69,7 +80,7 @@ class HtmlPageTest extends GroovyTestCase {
     @Test
     public void testGetOneImageFromHtml() {
 
-        htmlPage = new HtmlPage(HTML_WITH_IMG_TAG)
+        htmlPage = new HtmlPage(HTML_WITH_ONE_IMG_TAG)
 
         ArrayList images = htmlPage.getAllImageTags()
 
@@ -80,7 +91,7 @@ class HtmlPageTest extends GroovyTestCase {
 
     @Test
     public void testGetOneImageFromHtmlFile() {
-        tmpFile.write(HTML_WITH_IMG_TAG)
+        tmpFile.write(HTML_WITH_ONE_IMG_TAG)
 
         htmlPage = new HtmlPage(tmpFile)
 
@@ -99,8 +110,7 @@ class HtmlPageTest extends GroovyTestCase {
 
         ArrayList images = htmlPage.getAllImageTags()
 
-        // should yield exactly ONE image tag!
-        assertEquals("ONE image expected", 2, images.size())
+        assertEquals("two images expected", 2, images.size())
 
     }
 
@@ -171,9 +181,9 @@ class HtmlPageTest extends GroovyTestCase {
 
     }
 
-    /**
-     * make sure we get the hrefs (id="XYZ") from html
-     **/
+/**
+ * make sure we get the hrefs (id="XYZ") from html
+ **/
     @Test
     public void testGetOneIdFromHtml() {
 
@@ -240,11 +250,11 @@ class HtmlPageTest extends GroovyTestCase {
 
     }
 
-    /*
-     LocalResourceHrefs have one of the following forms:
-       (1) <a href="file://path"> or
-       (2) <a href="directory/file.ext">...
-     */
+/*
+ LocalResourceHrefs have one of the following forms:
+   (1) <a href="file://path"> or
+   (2) <a href="directory/file.ext">...
+ */
 
     @Test
     public void testGetAllLocalResourceHrefStrings() {
@@ -265,7 +275,7 @@ class HtmlPageTest extends GroovyTestCase {
 
         // now filter the local resources
         List<String> localHrefStrings = hrefs.findAll { hrefString ->
-            URLUtil.isLocalResource( hrefString )
+            URLUtil.isLocalResource(hrefString)
         }
 
         assertEquals("expected 2 local resources", 2, localHrefStrings.size())
@@ -316,14 +326,14 @@ class HtmlPageTest extends GroovyTestCase {
 
     }
 
-    /**
-     * Tests thousands of anchor elements
-     *
-     * Due to discussion on StackOverFlow (jsoup tag), the parser might be
-     * restricted to about 4300 links/anchor elements - we verify our upper limit.
-     * http://stackoverflow.com/questions/18573915/jsoup-finds-only-half-of-9000-a-tags-in-the-document
-     * (
-     */
+/**
+ * Tests thousands of anchor elements
+ *
+ * Due to discussion on StackOverFlow (jsoup tag), the parser might be
+ * restricted to about 4300 links/anchor elements - we verify our upper limit.
+ * http://stackoverflow.com/questions/18573915/jsoup-finds-only-half-of-9000-a-tags-in-the-document
+ * (
+ */
     @Test
     public void testManyAnchorTags() {
 
@@ -331,10 +341,10 @@ class HtmlPageTest extends GroovyTestCase {
 
         // create file with proper html content
         tmpFile = File.createTempFile("testfile", "html")
-        tmpFile.write( HTML_HEAD)
-        tmpFile.append( "<body>")
+        tmpFile.write(HTML_HEAD)
+        tmpFile.append("<body>")
 
-        for ( int i = 0; i < NR_OF_ANCHORS; i++) {
+        for (int i = 0; i < NR_OF_ANCHORS; i++) {
             tmpFile.append("<a href=\"#link$i\">link number $i</a>")
         }
         tmpFile.append("</body></html>")
@@ -348,12 +358,11 @@ class HtmlPageTest extends GroovyTestCase {
 
         String link
         // assert we find the correct anchors - all of them
-        for ( int i = 0; i < NR_OF_ANCHORS; i++) {
+        for (int i = 0; i < NR_OF_ANCHORS; i++) {
             link = "#link$i"
             assertTrue("expect $link in results, but wasn't", hrefs.contains(link))
         }
     }
-
 
 
 }
