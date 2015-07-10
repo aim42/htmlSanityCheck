@@ -1,4 +1,4 @@
-package org.aim42.htmlsanitycheck.suggest
+package org.aim42.testutil
 
 
 class RandomStringGenerator {
