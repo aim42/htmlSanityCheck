@@ -3,6 +3,7 @@ package org.aim42.htmlsanitycheck.check
 import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
+import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.html.URLUtil
 
 /**
@@ -28,6 +29,8 @@ class ImageMapChecker extends Checker {
 
     private String findingText
 
+    private HtmlPage pageToCheck
+
 
     @Override
     protected void initCheckingResultsDescription() {
@@ -37,9 +40,11 @@ class ImageMapChecker extends Checker {
     }
 
     @Override
-    protected SingleCheckResults check() {
+    protected SingleCheckResults check(final HtmlPage pageToCheck) {
 
-        readImageMapAttributesFromHtml()
+        this.pageToCheck = pageToCheck
+
+        readImageMapAttributesFromHtml( )
 
         checkBrokenImageMapReferences()
 
@@ -199,7 +204,7 @@ class ImageMapChecker extends Checker {
     /*
      set all the interesting attributes
      */
-    private void readImageMapAttributesFromHtml() {
+    private void readImageMapAttributesFromHtml(  ) {
         // get all <img src="x" usemap="y">
         imagesWithUsemapRefs = pageToCheck.getImagesWithUsemapDeclaration()
 

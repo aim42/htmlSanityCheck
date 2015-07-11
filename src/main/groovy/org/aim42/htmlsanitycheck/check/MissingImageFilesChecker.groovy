@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.html.URLUtil
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
@@ -29,7 +30,7 @@ class MissingImageFilesChecker extends Checker {
 
 
     @Override
-    protected SingleCheckResults check() {
+    protected SingleCheckResults check(final HtmlPage pageToCheck) {
 
         //get list of all image-tags "<img..." in html file
         images = pageToCheck.getAllImageTags()

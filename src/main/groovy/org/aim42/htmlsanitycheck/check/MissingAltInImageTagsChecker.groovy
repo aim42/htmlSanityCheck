@@ -2,6 +2,7 @@ package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
+import org.aim42.htmlsanitycheck.html.HtmlPage
 
 /************************************************************************
  * This is free software - without ANY guarantee!
@@ -39,7 +40,7 @@ class MissingAltInImageTagsChecker extends Checker {
 
 
     @Override
-    protected SingleCheckResults check() {
+    protected SingleCheckResults check( final HtmlPage pageToCheck ) {
         // the number of checks is calculated by counting
         // ALL image tags:
         checkingResults.setNrOfChecks( pageToCheck.getAllImageTags().size())

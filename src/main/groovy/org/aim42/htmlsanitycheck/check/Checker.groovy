@@ -25,7 +25,7 @@ abstract class Checker {
     // internal cross-references etc.
     SingleCheckResults checkingResults
 
-    HtmlPage pageToCheck
+    //HtmlPage pageToCheck
 
 
     /**
@@ -34,7 +34,7 @@ abstract class Checker {
      * Prerequisite: pageToCheck has been successfully parsed,
      * prior to constructing this Checker instance.
     **/
-    public SingleCheckResults performCheck() {
+    public SingleCheckResults performCheck( final HtmlPage pageToCheck ) {
         // assert non-null htmlPage
         assert pageToCheck != null
 
@@ -43,7 +43,7 @@ abstract class Checker {
         // description is set by subclasses
         initCheckingResultsDescription()
 
-        return check() // execute the actual checking algorithm
+        return check( pageToCheck ) // execute the actual checking algorithm
     }
 
 
@@ -60,7 +60,7 @@ abstract class Checker {
      * Called by {@link #performCheck()} as part of the template method pattern.
      * @return collected results of this Checker instance
      */
-    abstract protected SingleCheckResults check( )
+    abstract protected SingleCheckResults check( final HtmlPage pageToCheck )
 
 
 

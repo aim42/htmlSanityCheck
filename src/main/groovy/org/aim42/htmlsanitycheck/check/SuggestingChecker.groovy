@@ -2,6 +2,7 @@ package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.suggest.Suggester
 
 
@@ -29,7 +30,8 @@ abstract class SuggestingChecker extends Checker {
 
 
     @Override
-    abstract protected SingleCheckResults check()
+    abstract protected SingleCheckResults check( final HtmlPage pageToCheck)
+
 
     /**
      * a little tricky: call performCheck on the superclass and add a little behavior :-)
@@ -37,8 +39,8 @@ abstract class SuggestingChecker extends Checker {
      * @return List of Findings (SingleCheckResults), but with suggestions for each finding
      */
     @Override
-    public SingleCheckResults performCheck() {
-        SingleCheckResults scResults = super.performCheck()
+    public SingleCheckResults performCheck(final HtmlPage pageToCheck) {
+        SingleCheckResults scResults = super.performCheck( pageToCheck )
 
         setValidPossibilities()
 

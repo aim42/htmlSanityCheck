@@ -24,13 +24,16 @@ class ChecksRunnerTest extends GroovyTestCase {
         String HTML = """$HTML_HEAD<body><title>hsc</title></body></html>"""
 
         // create file with proper html content
-        tmpFile = File.createTempFile("testfile", ".html") <<HTML
+        tmpFile = File.createTempFile("testfile", ".html") << HTML
+        File tmpFileDir = tmpFile.getParentFile()
 
         // wrap tmpFile in Collection to comply to AllChecksRunner API
-        checksRunner = new ChecksRunner( new HashSet<Class>( [BrokenCrossReferencesChecker.class]),
-                                         new HashSet<File>( [tmpFile] ) )
+        checksRunner = new ChecksRunner(
+                BrokenCrossReferencesChecker.class,
+                tmpFile,
+                tmpFileDir)
 
-        SinglePageResults pageResults = checksRunner.performAllChecksForOneFile(tmpFile)
+        SinglePageResults pageResults = checksRunner.performChecksForOneFile(tmpFile)
 
         // expectation:
         // 4 checks run
@@ -47,7 +50,7 @@ class ChecksRunnerTest extends GroovyTestCase {
         assertEquals("expected hsc title", "hsc", pageResults.pageTitle)
 
         String tmpFileName = tmpFile.name
-        assertEquals("expected $tmpFileName as fileName", tmpFileName, pageResults.pageFileName )
+        assertEquals("expected $tmpFileName as fileName", tmpFileName, pageResults.pageFileName)
     }
 
 
@@ -63,11 +66,11 @@ class ChecksRunnerTest extends GroovyTestCase {
         tmpFile = File.createTempFile("testfile", ".html") << HTML
 
         checksRunner = new ChecksRunner(
-                new HashSet<File>( [tmpFile] ),
-                File.createTempDir( "testdir", ""),
+                new HashSet<File>([tmpFile]),
+                File.createTempDir("testdir", ""),
                 false)
 
-        SinglePageResults pageResults = checksRunner.performAllChecksForOneFile( tmpFile )
+        SinglePageResults pageResults = checksRunner.performChecksForOneFile(tmpFile)
 
         int expected = 5
         assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())

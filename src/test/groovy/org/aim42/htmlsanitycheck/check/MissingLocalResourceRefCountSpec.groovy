@@ -52,10 +52,8 @@ class MissingLocalResourceRefCountSpec extends Specification {
         HtmlPage htmlPage = new HtmlPage( tmpHtmlFile )
 
         when:
-        def missingLocalResourcesChecker = new MissingLocalResourcesChecker(
-                pageToCheck: htmlPage,
-                baseDirPath: tmpDir )
-        SingleCheckResults collector = missingLocalResourcesChecker.performCheck()
+        def missingLocalResourcesChecker = new MissingLocalResourcesChecker( baseDirPath: tmpDir )
+        SingleCheckResults collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
 
         then:

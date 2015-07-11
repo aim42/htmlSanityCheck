@@ -80,12 +80,9 @@ class SingleCheckResultsTest extends GroovyTestCase {
         List<HtmlElement> images = htmlPage.getAllImageTags()
         assertEquals("expected 2 images", 2, images.size())
 
-        checker = new MissingImageFilesChecker(
-                pageToCheck: htmlPage,
-                baseDirPath: imageDir)
+        checker = new MissingImageFilesChecker( baseDirPath: imageDir)
 
-        SingleCheckResults checkingResults =
-                checker.performCheck()
+        SingleCheckResults checkingResults = checker.performCheck( htmlPage )
 
 
         int expected = 2

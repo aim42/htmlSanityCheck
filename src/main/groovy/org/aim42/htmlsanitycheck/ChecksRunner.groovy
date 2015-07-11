@@ -32,6 +32,47 @@ class ChecksRunner {
     private static Logger logger = LoggerFactory.getLogger(ChecksRunner.class);
 
 
+    // convenience constructors, mainly  for tests
+    // ------------------------------------------------
+    public ChecksRunner(Set<Class> checkerCollection,
+                        Set<File> filesToCheck,
+                        File checkingResultsDir ) {
+        this( checkerCollection, filesToCheck, checkingResultsDir, false)
+    }
+
+    // just ONE file to check and distinct directory
+    public ChecksRunner(Set<Class> checkerCollection,
+                        File fileToCheck,
+                        File checkingResultsDir ) {
+        this( checkerCollection, [fileToCheck], checkingResultsDir, false)
+    }
+
+    // with just ONE file to check
+    public ChecksRunner(Set<Class> checkerCollection,
+                        File fileToCheck ) {
+        this( checkerCollection, [fileToCheck], fileToCheck.getParentFile(), false)
+    }
+
+    // with ONE checker and ONE file and target directory
+    public ChecksRunner( Class checkerCollection,
+                         File fileToCheck,
+                         File checkingResultsDir ) {
+        this( [checkerCollection], [fileToCheck], checkingResultsDir, false)
+    }
+
+    // with just ONE checker and ONE file...
+    public ChecksRunner( Class checkerCollection,
+                         File fileToCheck ) {
+        this( [checkerCollection], [fileToCheck], fileToCheck.getParentFile(), false)
+    }
+
+    // with checkers and just ONE file...
+    public ChecksRunner( Class checker,
+                         Set<File> filesToCheck ) {
+        this( [checker], filesToCheck, File.createTempDir(), false)
+    }
+
+
     // standard constructor
     public ChecksRunner(
             Set<Class> checkerCollection,
@@ -46,20 +87,21 @@ class ChecksRunner {
 
         this.checkers = CheckerCreator.createCheckerClassesFrom( checkerCollection )
 
-        logger.debug("ChecksRunner created")
+        logger.debug("ChecksRunner created with ${checkerCollection.size()} checkers for ${filesToCheck.size()} files")
     }
+
 
     /**
      *  performs all known checks on a single HTML file.
      *
      *  Creates a {@link org.aim42.htmlsanitycheck.collect.SinglePageResults} instance to keep checking results.
      */
-    public SinglePageResults performAllChecksForOneFile(File thisFile) {
+    public SinglePageResults performChecksForOneFile(File thisFile) {
 
-        pageToCheck = parseHtml(thisFile)
+        pageToCheck = HtmlPage.parseHtml(thisFile)
         String baseDir = thisFile.parent
 
-        SinglePageResults resultsCollector =
+        SinglePageResults collectedResults =
                 new SinglePageResults(
                         pageFilePath: thisFile.canonicalPath,
                         pageFileName: thisFile.name,
@@ -67,28 +109,36 @@ class ChecksRunner {
                         pageSize: pageToCheck.documentSize
                 )
 
-        // the actual checks
-        resultsCollector.with {
+        // apply every checker
+        checkers.each { checker ->
+            def singleCheckResults = checker.performCheck( pageToCheck )
+
+            collectedResults.addResultsForSingleCheck( singleCheckResults )
+        }
+
+        /*
+        collectedResults.with {
             addResultsForSingleCheck(missingImageFilesCheck(baseDir))
             addResultsForSingleCheck(duplicateIdCheck())
             addResultsForSingleCheck(brokenCrossReferencesCheck())
             addResultsForSingleCheck(missingLocalResourcesCheck(baseDir))
             addResultsForSingleCheck(missingAltAttributesCheck())
         }
+        */
 
-        return resultsCollector
+        return collectedResults
     }
 
     /**
      * performs all configured checks on pageToCheck
      */
-    public PerRunResults performAllChecks() {
+    public PerRunResults performChecks() {
 
-        logger.debug "entered performAllChecks"
+        logger.debug "entered performChecks"
 
         filesToCheck.each { file ->
                resultsForAllPages.addPageResults(
-                    performAllChecksForOneFile(file))
+                    performChecksForOneFile(file))
         }
 
         // after all checks, stop the timer...

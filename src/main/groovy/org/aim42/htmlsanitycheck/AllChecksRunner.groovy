@@ -171,33 +171,26 @@ class AllChecksRunner {
      */
     private SingleCheckResults missingImageFilesCheck(String baseDir) {
 
-        missingImagesChecker = new MissingImageFilesChecker(
-                pageToCheck: pageToCheck,
-                baseDirPath: baseDir
-        )
+        missingImagesChecker = new MissingImageFilesChecker( baseDirPath: baseDir )
 
-        return missingImagesChecker.performCheck()
+        return missingImagesChecker.performCheck( pageToCheck )
     }
 
     /**
      * checks for broken intra-document links (aka cross-references)
      */
     private SingleCheckResults brokenCrossReferencesCheck() {
-        undefinedCrossReferencesChecker = new BrokenCrossReferencesChecker(
-                pageToCheck: pageToCheck
-        )
+        undefinedCrossReferencesChecker = new BrokenCrossReferencesChecker( )
 
-        return undefinedCrossReferencesChecker.performCheck()
+        return undefinedCrossReferencesChecker.performCheck( pageToCheck )
     }
 
     /**
      * checks for duplicate definitions of id's (link-targets)
      */
     private SingleCheckResults duplicateIdCheck() {
-        duplicateIdChecker = new DuplicateIdChecker(
-                pageToCheck: pageToCheck
-        )
-        return duplicateIdChecker.performCheck()
+        duplicateIdChecker = new DuplicateIdChecker()
+        return duplicateIdChecker.performCheck( pageToCheck )
     }
 
     /**
@@ -206,11 +199,8 @@ class AllChecksRunner {
      */
 
     private SingleCheckResults missingLocalResourcesCheck(String baseDir) {
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker(
-                pageToCheck: pageToCheck,
-                baseDirPath: baseDir
-        )
-        return missingLocalResourcesChecker.performCheck()
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker(baseDirPath: baseDir )
+        return missingLocalResourcesChecker.performCheck( pageToCheck )
     }
 
 
@@ -218,11 +208,9 @@ class AllChecksRunner {
      * checks for missing or empty alt-attributes in image tags
      */
     private SingleCheckResults missingAltAttributesCheck() {
-        missingAltAttributesChecker = new MissingAltInImageTagsChecker(
-                pageToCheck: pageToCheck
-        )
+        missingAltAttributesChecker = new MissingAltInImageTagsChecker()
 
-        return missingAltAttributesChecker.performCheck()
+        return missingAltAttributesChecker.performCheck( pageToCheck )
     }
 
 
@@ -245,7 +233,7 @@ class AllChecksRunner {
 }
 
 /*========================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright 2014-2015 Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

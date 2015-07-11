@@ -11,7 +11,7 @@ import org.junit.Test
 class DuplicateIdCheckerTest extends GroovyTestCase {
 
     Checker duplicateIdChecker
-    HtmlPage htmlPage
+    HtmlPage pageToCheck
     SingleCheckResults collector
 
     @Before
@@ -32,12 +32,11 @@ class DuplicateIdCheckerTest extends GroovyTestCase {
               </body>
            </html>'''
 
-        htmlPage = new HtmlPage(HTML_WITH_DUPLICATE_ID)
+        pageToCheck = new HtmlPage(HTML_WITH_DUPLICATE_ID)
 
-        duplicateIdChecker = new DuplicateIdChecker(
-                pageToCheck: htmlPage
-        )
-        collector = duplicateIdChecker.performCheck()
+        duplicateIdChecker = new DuplicateIdChecker()
+
+        collector = duplicateIdChecker.performCheck( pageToCheck )
 
         // expect ONE check, as we check the SET of ids
         assertEquals("expected one check", 1, collector?.nrOfItemsChecked)
@@ -62,12 +61,10 @@ class DuplicateIdCheckerTest extends GroovyTestCase {
               </body>
            </html>'''
 
-        htmlPage = new HtmlPage(HTML_WITH_DUPLICATE_ID)
+        pageToCheck = new HtmlPage(HTML_WITH_DUPLICATE_ID)
 
-        duplicateIdChecker = new DuplicateIdChecker(
-                pageToCheck: htmlPage
-        )
-        collector = duplicateIdChecker.performCheck()
+        duplicateIdChecker = new DuplicateIdChecker()
+        collector = duplicateIdChecker.performCheck( pageToCheck )
 
         // expect THREE checks, as we check the SET of ids
         assertEquals("expected four checks", 4, collector?.nrOfItemsChecked)
@@ -89,9 +86,9 @@ class DuplicateIdCheckerTest extends GroovyTestCase {
               </body>
            </html>'''
 
-        htmlPage = new HtmlPage(HTML_WITH_DUPLICATE_ID)
-        ArrayList tagsWithId = htmlPage.getAllIds()
-        //Set idStringsSet = htmlPage.getAllIdStrings().toSet()
+        pageToCheck = new HtmlPage(HTML_WITH_DUPLICATE_ID)
+        ArrayList tagsWithId = pageToCheck.getAllIds()
+        //Set idStringsSet = pageToCheck.getAllIdStrings().toSet()
 
         assertEquals("Expected 4 tags with ids", 4, tagsWithId.size())
 

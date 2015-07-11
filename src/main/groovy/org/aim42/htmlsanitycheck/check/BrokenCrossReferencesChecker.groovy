@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.html.URLUtil
 
 // see end-of-file for license information
@@ -30,7 +31,7 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
     }
 
     @Override
-    protected SingleCheckResults check() {
+    protected SingleCheckResults check(HtmlPage pageToCheck) {
 
         //get list of all a-tags "<a src=..." in html file
         hrefList = pageToCheck.getAllHrefStrings()

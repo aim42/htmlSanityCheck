@@ -71,11 +71,9 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
         assertEquals( "expected 1 image", 1, images.size())
 
 
-        checker = new MissingImageFilesChecker(
-                pageToCheck: htmlPage,
-                baseDirPath: "")
+        checker = new MissingImageFilesChecker( baseDirPath: "")
 
-        checkingResults = checker.performCheck()
+        checkingResults = checker.performCheck( htmlPage )
 
         // checker must check one item
         int expected = 1
@@ -103,11 +101,9 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
 
         assertNotNull("htmlpage must not be null", htmlPage )
 
-        checker = new MissingImageFilesChecker(
-                pageToCheck: htmlPage,
-                baseDirPath: imagesDir)
+        checker = new MissingImageFilesChecker( baseDirPath: imagesDir)
 
-        checkingResults = checker.performCheck()
+        checkingResults = checker.performCheck( htmlPage )
 
         int expected = 2
         int actual = checkingResults.nrOfItemsChecked

@@ -35,10 +35,8 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
         // 4.) check
         htmlPage = new HtmlPage( index )
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker(
-                pageToCheck: htmlPage,
-                baseDirPath: d1.canonicalPath )
-        collector = missingLocalResourcesChecker.performCheck()
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker( baseDirPath: d1.canonicalPath )
+        collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
         // assert that no issue is found (== the local resource d2/fname.html is found)
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
@@ -61,19 +59,17 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( index )
 
-        // htmlPage shall contain ONE local resource / local-reference
+        // pageToCheck shall contain ONE local resource / local-reference
         int nrOfLocalReferences = htmlPage.getAllHrefStrings().size()
         assertEquals( "expected one reference", 1, nrOfLocalReferences)
 
-        // reference contained in htmlPage shall be "d2/$fname#anchor"
+        // reference contained in pageToCheck shall be "d2/$fname#anchor"
         String localReference = htmlPage.getAllHrefStrings().first()
         assertEquals( "expected d2/fname#anchor", "d2/$fname#anchor", localReference)
 
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker(
-                pageToCheck: htmlPage,
-                baseDirPath: d1.canonicalPath )
-        collector = missingLocalResourcesChecker.performCheck()
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker( baseDirPath: d1.canonicalPath )
+        collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
         // assert that no issue is found
         // (== the existinglocal resource d2/fname.html is found)
@@ -92,9 +88,8 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML )
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker(
-                pageToCheck: htmlPage )
-        collector = missingLocalResourcesChecker.performCheck()
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker()
+        collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
 
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
@@ -114,9 +109,8 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML )
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker(
-                pageToCheck: htmlPage )
-        collector = missingLocalResourcesChecker.performCheck()
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker()
+        collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
         int expected = 2
 

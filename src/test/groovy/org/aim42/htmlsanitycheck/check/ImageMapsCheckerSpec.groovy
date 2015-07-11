@@ -23,8 +23,8 @@ class ImageMapsCheckerSpec extends Specification {
         htmlPage = new HtmlPage(html)
 
         when:
-        imageMapsChecker = new ImageMapChecker(pageToCheck: htmlPage)
-        collector = imageMapsChecker.performCheck()
+        imageMapsChecker = new ImageMapChecker()
+        collector = imageMapsChecker.performCheck( htmlPage )
 
         then:
         collector?.getFindingMessages()?.contains(msg)

@@ -44,9 +44,8 @@ class BrokenCrossReferenceCheckerSuggestionTest extends GroovyTestCase {
 
             htmlPage = new HtmlPage( HTML_WITH_A_TAGS_AND_ID )
 
-            brokenCrossRefChecker = new BrokenCrossReferencesChecker(
-                    pageToCheck: htmlPage)
-            collector = brokenCrossRefChecker.performCheck()
+            brokenCrossRefChecker = new BrokenCrossReferencesChecker()
+            collector = brokenCrossRefChecker.performCheck( htmlPage )
 
             Finding onlyFinding  = collector?.findings?.first()
             String expected = "link target \"aim42\" missing"
@@ -65,7 +64,7 @@ class BrokenCrossReferenceCheckerSuggestionTest extends GroovyTestCase {
 
 
     @Test
-    public void testBrokenInternalWithoutSuggestion() {
+    public void testBrokenInternalLinkWithoutSuggestion() {
         String HTML_WITH_A_TAGS_AND_ID = '''
            <html>
              <head></head>
@@ -78,9 +77,8 @@ class BrokenCrossReferenceCheckerSuggestionTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML_WITH_A_TAGS_AND_ID )
 
-        brokenCrossRefChecker = new BrokenCrossReferencesChecker(
-                pageToCheck: htmlPage)
-        collector = brokenCrossRefChecker.performCheck()
+        brokenCrossRefChecker = new BrokenCrossReferencesChecker()
+        collector = brokenCrossRefChecker.performCheck( htmlPage )
 
         Finding onlyFinding  = collector?.findings?.first()
         String expected = "link target \"aim42\" missing"

@@ -29,9 +29,8 @@ class MissingAltInImageTagsCheckerSpec extends Specification {
 
 
         when:
-        missingAltInImageTagsChecker = new MissingAltInImageTagsChecker(
-                pageToCheck: htmlPage)
-        collector = missingAltInImageTagsChecker.performCheck()
+        missingAltInImageTagsChecker = new MissingAltInImageTagsChecker( )
+        collector = missingAltInImageTagsChecker.performCheck( htmlPage )
 
         then:
         collector.nrOfProblems() == nrOfFindings

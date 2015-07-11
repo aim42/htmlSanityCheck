@@ -35,9 +35,8 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML )
 
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
-                pageToCheck: htmlPage )
-        collector = undefinedInternalLinksChecker.performCheck()
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
+        collector = undefinedInternalLinksChecker.performCheck(htmlPage)
 
 
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
@@ -61,9 +60,8 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML_WITH_A_TAGS_AND_ID )
 
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
-                pageToCheck: htmlPage)
-        collector = undefinedInternalLinksChecker.performCheck()
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
+        collector = undefinedInternalLinksChecker.performCheck(htmlPage)
 
         assertEquals( "expected one finding", 1, collector.nrOfProblems())
         assertEquals( "expected four checks", 4, collector.nrOfItemsChecked)
@@ -89,9 +87,8 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML_WITH_BAD_LINK )
 
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
-                pageToCheck: htmlPage)
-        collector = undefinedInternalLinksChecker.performCheck()
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
+        collector = undefinedInternalLinksChecker.performCheck(htmlPage)
 
         assertEquals( "expected one finding", 1, collector.nrOfProblems())
         assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
@@ -120,9 +117,8 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML_WITH_TWO_TAGS_AND_ID )
 
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
-                pageToCheck: htmlPage )
-        collector = undefinedInternalLinksChecker.performCheck()
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
+        collector = undefinedInternalLinksChecker.performCheck( htmlPage )
 
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
         assertEquals( "expected four checks", 4, collector.nrOfItemsChecked)
@@ -141,10 +137,8 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML_WITH_TWO_LINKS_NO_ID)
 
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
-                pageToCheck: htmlPage )
-
-        collector = undefinedInternalLinksChecker.performCheck()
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
+        collector = undefinedInternalLinksChecker.performCheck(htmlPage)
 
         assertEquals( "expected two findings", 2, collector.nrOfProblems())
         assertEquals( "expected four checks", 4, collector.nrOfItemsChecked)
@@ -176,10 +170,9 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML)
 
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
-                pageToCheck: htmlPage )
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
 
-        collector = undefinedInternalLinksChecker.performCheck()
+        collector = undefinedInternalLinksChecker.performCheck(htmlPage)
 
         assertEquals( "expected five findings", 5, collector.nrOfProblems())
         assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)
@@ -200,9 +193,8 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML )
 
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
-                pageToCheck: htmlPage )
-        collector = undefinedInternalLinksChecker.performCheck()
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
+        collector = undefinedInternalLinksChecker.performCheck(htmlPage)
 
         assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
@@ -217,10 +209,9 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
         """
         htmlPage = new HtmlPage( HTML )
 
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker(
-                pageToCheck: htmlPage
-        )
-        collector = undefinedInternalLinksChecker.performCheck()
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker( )
+
+        collector = undefinedInternalLinksChecker.performCheck( htmlPage )
 
         // for local references, no checks shall be performed
         assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
