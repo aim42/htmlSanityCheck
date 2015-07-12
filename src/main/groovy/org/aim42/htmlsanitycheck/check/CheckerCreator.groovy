@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.check.UnknownCheckerException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -12,19 +13,24 @@ class CheckerCreator {
     private static Logger logger = LoggerFactory.getLogger(CheckerCreator.class);
 
 
-    public static List<Checker> createCheckerClassesFrom( final Set<Class> checkerCollection ) {
-        ArrayList checkers = new ArrayList<Checker>( checkerCollection.size() )
-        checkerCollection.each { checkerClass ->
+    public static Set<Checker> createCheckerClassesFrom(
+            final Set<Class> checkerClasses ) {
+
+        HashSet<Checker> checkers = new HashSet<Checker>( checkerClasses.size() )
+
+        checkerClasses.each { checkerClass ->
             checkers.add( CheckerCreator.createSingleChecker( checkerClass ))
 
         }
 
+        return checkers
+
     }
 
 
-    // TODO: needs some params, like pageToCheck, baseDir, checkExternalResources...
+    // TODO: needs some params,
 
-    private static Checker createSingleChecker( Class checkerClass ) {
+    public static Checker createSingleChecker( final Class checkerClass ) {
         Checker checker
 
         // switch over all possible Checker classes
@@ -40,8 +46,19 @@ class CheckerCreator {
             case ImageMapChecker.class:
                 checker = new ImageMapChecker(); break
 
+            case MissingAltInImageTagsChecker.class:
+                checker = new MissingAltInImageTagsChecker(); break
+
+            case MissingImageFilesChecker.class:
+                checker = new MissingImageFilesChecker(); break
+
+            case MissingLocalResourcesChecker.class:
+                checker = new MissingLocalResourcesChecker();break
+
+
             default:
                 logger.warn( "unknown Checker ${checkerClass.toString()}")
+                throw new UnknownCheckerException( checkerClass.toString() )
 
         }
 
