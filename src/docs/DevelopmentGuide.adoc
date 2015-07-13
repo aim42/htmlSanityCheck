@@ -11,7 +11,17 @@
 === Prerequisites for Gradle Plugin Development
 You should definitely read the original [Gradle User Guide] on custom plugin development.
 
-Some more step-by-step description contained
+
+=== Adding New Checks
+To add new checks you have to subclass from 'org.aim42.htmlsanitycheck.check.Checker'
+and implement the 'performCheck' method - which requires an 'HtmlPage' instance as parameter.
+
+Don't forget to:
+* write a test or spec for your checker - the code in 'test/groovy/org.aim42.htmlsanitycheck.check'
+gives many examples
+* add your checker class to the 'public static AllCheckers' list (Set, to be precise)
+of available checkers. This set is used to configure the 'AllChecksRunner' class.
+
 
 === Directory Structure and Required Files
 
@@ -58,3 +68,5 @@ image:intellij-run-configuration.jpg[]
 
 
 === Uploading to Public Archives
+Currently we use the Gradle Plugin Repository to host the plugin - which is very simple
+to configure for users.
