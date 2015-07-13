@@ -42,9 +42,10 @@ class CheckerCreatorSpec extends Specification {
 
 
         when:
-        checkers = CheckerCreator.createCheckerClassesFrom(
-                [BrokenCrossReferencesChecker.class,
-                 DuplicateIdChecker.class].toSet())
+        LinkedHashSet<Class> checkerClazzes = [BrokenCrossReferencesChecker.class,
+                                               DuplicateIdChecker.class].toSet()
+
+        checkers = CheckerCreator.createCheckerClassesFrom( checkerClazzes )
 
 
         then:

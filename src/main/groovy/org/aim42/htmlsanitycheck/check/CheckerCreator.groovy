@@ -13,10 +13,10 @@ class CheckerCreator {
     private static Logger logger = LoggerFactory.getLogger(CheckerCreator.class);
 
 
-    public static Set<Checker> createCheckerClassesFrom(
+    public static LinkedHashSet<Checker> createCheckerClassesFrom(
             final Set<Class> checkerClasses ) {
 
-        HashSet<Checker> checkers = new HashSet<Checker>( checkerClasses.size() )
+        LinkedHashSet<Checker> checkers = new LinkedHashSet<Checker>( checkerClasses.size() )
 
         checkerClasses.each { checkerClass ->
             checkers.add( CheckerCreator.createSingleChecker( checkerClass ))
