@@ -39,7 +39,7 @@ abstract class SuggestingChecker extends Checker {
      * @return List of Findings (SingleCheckResults), but with suggestions for each finding
      */
     @Override
-    public SingleCheckResults performCheck(final HtmlPage pageToCheck) {
+    public final SingleCheckResults performCheck( HtmlPage pageToCheck) {
         SingleCheckResults scResults = super.performCheck( pageToCheck )
 
         setValidPossibilities()

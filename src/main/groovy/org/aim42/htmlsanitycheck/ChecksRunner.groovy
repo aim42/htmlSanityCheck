@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck
 
+import org.aim42.htmlsanitycheck.check.BrokenCrossReferencesChecker
 import org.aim42.htmlsanitycheck.check.Checker
 import org.aim42.htmlsanitycheck.check.CheckerCreator
 import org.aim42.htmlsanitycheck.collect.PerRunResults
@@ -24,10 +25,9 @@ class ChecksRunner {
     // checker instances
     private Set<Checker> checkers
 
-    private HtmlPage pageToCheck
-
     // keep all results
     private PerRunResults resultsForAllPages
+
 
     private static Logger logger = LoggerFactory.getLogger(ChecksRunner.class);
 
@@ -92,15 +92,16 @@ class ChecksRunner {
 
 
     /**
-     *  performs all known checks on a single HTML file.
+     *  performs all configured checks on a single HTML file.
      *
      *  Creates a {@link org.aim42.htmlsanitycheck.collect.SinglePageResults} instance to keep checking results.
      */
     public SinglePageResults performChecksForOneFile(File thisFile) {
 
-        pageToCheck = HtmlPage.parseHtml(thisFile)
-        String baseDir = thisFile.parent
+        // the currently processed (parsed) HTML page
+        HtmlPage pageToCheck = HtmlPage.parseHtml(thisFile)
 
+        // initialize results for this page
         SinglePageResults collectedResults =
                 new SinglePageResults(
                         pageFilePath: thisFile.canonicalPath,
@@ -109,12 +110,15 @@ class ChecksRunner {
                         pageSize: pageToCheck.documentSize
                 )
 
-        // apply every checker
-        checkers.each { checker ->
-            def singleCheckResults = checker.performCheck( pageToCheck )
+        // apply every checker to this page
+        //checkers.each { checker ->
+        //    def singleCheckResults = checker.performCheck( pageToCheck )
 
-            collectedResults.addResultsForSingleCheck( singleCheckResults )
-        }
+        //}
+
+        def singleCheckResults = new BrokenCrossReferencesChecker().performCheck( pageToCheck )
+
+        collectedResults.addResultsForSingleCheck( singleCheckResults )
 
         /*
         collectedResults.with {
