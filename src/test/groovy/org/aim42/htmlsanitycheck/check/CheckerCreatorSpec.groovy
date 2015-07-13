@@ -37,24 +37,25 @@ class CheckerCreatorSpec extends Specification {
 
 
     def "can create multiple checker instances"() {
-        LinkedHashSet<Checker> checkers
+        List<Checker> checkers
         Checker oneChecker
+
+        setup:
+        ArrayList<Class> checkerClazzes = [BrokenCrossReferencesChecker.class,
+                                           DuplicateIdChecker.class]
 
 
         when:
-        LinkedHashSet<Class> checkerClazzes = [BrokenCrossReferencesChecker.class,
-                                               DuplicateIdChecker.class].toSet()
-
         checkers = CheckerCreator.createCheckerClassesFrom( checkerClazzes )
-
-
         then:
         checkers.size() == 2
+
 
         when:
         oneChecker = checkers.first()
         then:
-        oneChecker instanceof DuplicateIdChecker
+        oneChecker instanceof BrokenCrossReferencesChecker
+
 
         when:
         pMethod = oneChecker.class.getMethod("performCheck", params)
@@ -63,8 +64,13 @@ class CheckerCreatorSpec extends Specification {
 
 
         when:
-        pMethod = checkers.last().class.getMethod("performCheck", params)
+        oneChecker = checkers.last()
+        then:
+        oneChecker instanceof DuplicateIdChecker
 
+
+        when:
+        pMethod = oneChecker.class.getMethod("performCheck", params)
         then:
         notThrown(NoSuchMethodException)
 
