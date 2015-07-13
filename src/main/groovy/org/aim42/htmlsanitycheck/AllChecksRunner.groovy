@@ -13,7 +13,8 @@ import org.slf4j.LoggerFactory
 
 // see end-of-file for license information
 /**
- * Coordinates and runs all available html sanity checks.
+ * Coordinates and runs all available html sanity checks.  Convenience class,
+ * delegates (most) work to an @see ChecksRunner
  * <p>
  * <ol>
  *     <li>parse the html file </li>
@@ -29,29 +30,10 @@ import org.slf4j.LoggerFactory
 
 class AllChecksRunner {
 
-    // we check a collection of files:
-    private Set<File> filesToCheck
-
-    // where do we put our results
-    private File checkingResultsDir
-
-    // TODO: handle checking of external resources
-    private Boolean checkExternalResources = false
-
-    // the checker instances
-    private Checker missingImagesChecker
-    private Checker undefinedCrossReferencesChecker
-    private Checker duplicateIdChecker
-    private Checker missingLocalResourcesChecker
-    private Checker missingAltAttributesChecker
-
-    private HtmlPage pageToCheck
-
-    // keep all results
-    private PerRunResults resultsForAllPages
-
+    private ChecksRunner runner
 
     private static Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
+
 
     /**
      * runs all available checks on the file
@@ -62,17 +44,18 @@ class AllChecksRunner {
      */
 
     public AllChecksRunner(
-            Set<File> filesToCheck,
+            Collection<File> filesToCheck,
             File checkingResultsDir,
             Boolean checkExternalResources
     ) {
-        this.resultsForAllPages = new PerRunResults()
+        super()
 
-        this.filesToCheck = filesToCheck
-        this.checkingResultsDir = checkingResultsDir
-        this.checkExternalResources = checkExternalResources
+        runner = new ChecksRunner( AllCheckers.checkerClazzes,
+                                    filesToCheck,
+                                    checkingResultsDir,
+                                    checkExternalResources)
 
-        logger.debug("AlLChecksRunner created")
+        logger.debug("AllChecksRunner created")
     }
 
     /**
@@ -97,19 +80,8 @@ class AllChecksRunner {
     public PerRunResults performAllChecks() {
 
         logger.debug "entered performAllChecks"
+        runner.performChecks()
 
-        filesToCheck.each { file ->
-
-            resultsForAllPages.addPageResults(
-                    performAllChecksForOneFile(file))
-        }
-
-        // after all checks, stop the timer...
-        resultsForAllPages.stopTimer()
-
-        // and then report the results
-        reportCheckingResultsOnConsole()
-        reportCheckingResultsAsHTML(checkingResultsDir.absolutePath)
     }
 
     /**
@@ -119,99 +91,10 @@ class AllChecksRunner {
      */
     public SinglePageResults performAllChecksForOneFile(File thisFile) {
 
-        pageToCheck = HtmlPage.parseHtml(thisFile)
-        String baseDir = thisFile.parent
-
-        SinglePageResults resultsCollector =
-                new SinglePageResults(
-                        pageFilePath: thisFile.canonicalPath,
-                        pageFileName: thisFile.name,
-                        pageTitle: pageToCheck.getDocumentTitle(),
-                        pageSize: pageToCheck.documentSize
-                )
-
-        // the actual checks
-        resultsCollector.with {
-            addResultsForSingleCheck(missingImageFilesCheck(baseDir))
-            addResultsForSingleCheck(duplicateIdCheck())
-            addResultsForSingleCheck(brokenCrossReferencesCheck())
-            addResultsForSingleCheck(missingLocalResourcesCheck(baseDir))
-            addResultsForSingleCheck(missingAltAttributesCheck())
-        }
-
-        return resultsCollector
-    }
-
-    /**
-     * reports results on stdout
-     * TODO:
-     */
-    private void reportCheckingResultsOnConsole() {
-        Reporter reporter = new ConsoleReporter(resultsForAllPages)
-
-        reporter.reportFindings()
-
-    }
-
-    /**
-     * report results in HTML file(s)
-     */
-    private void reportCheckingResultsAsHTML(String resultsDir) {
-
-        Reporter reporter = new HtmlReporter(resultsForAllPages, resultsDir)
-        reporter.reportFindings()
-    }
-
-    /**
-     * check if the referenced image files exist
-     *
-     * This check is useful only for local images, where
-     * the img-src attribute looks like src="images/test.jpg" or
-     * src="file://image.jpg"
-     */
-    private SingleCheckResults missingImageFilesCheck(String baseDir) {
-
-        missingImagesChecker = new MissingImageFilesChecker( baseDirPath: baseDir )
-
-        return missingImagesChecker.performCheck( pageToCheck )
-    }
-
-    /**
-     * checks for broken intra-document links (aka cross-references)
-     */
-    private SingleCheckResults brokenCrossReferencesCheck() {
-        undefinedCrossReferencesChecker = new BrokenCrossReferencesChecker( )
-
-        return undefinedCrossReferencesChecker.performCheck( pageToCheck )
-    }
-
-    /**
-     * checks for duplicate definitions of id's (link-targets)
-     */
-    private SingleCheckResults duplicateIdCheck() {
-        duplicateIdChecker = new DuplicateIdChecker()
-        return duplicateIdChecker.performCheck( pageToCheck )
-    }
-
-    /**
-     * checks for missing local resources, e.g. download-files or
-     * referenced local HTML files.
-     */
-
-    private SingleCheckResults missingLocalResourcesCheck(String baseDir) {
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker(baseDirPath: baseDir )
-        return missingLocalResourcesChecker.performCheck( pageToCheck )
+        return runner.performChecksForOneFile( thisFile )
     }
 
 
-    /**
-     * checks for missing or empty alt-attributes in image tags
-     */
-    private SingleCheckResults missingAltAttributesCheck() {
-        missingAltAttributesChecker = new MissingAltInImageTagsChecker()
-
-        return missingAltAttributesChecker.performCheck( pageToCheck )
-    }
 
 
     /**
