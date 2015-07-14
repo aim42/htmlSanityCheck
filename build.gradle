@@ -1,6 +1,9 @@
 // gradle build script for html sanity check
 // =========================================
 
+// to process the version-property file, we need the filter
+//import org.apache.tools.ant.filters.*
+
 
 buildscript {
     repositories {
@@ -21,30 +24,15 @@ plugins {
 }
 
 group = 'org.aim42'
-project.version = "0.9.5-SNAPSHOT"
+version = '0.9.6-SNAPSHOT'
+
 
 
 ext {
     srcDir = "$projectDir/src/docs"
     javaVersion = System.getProperty("java.version")
     currentDate = new Date().format("d. MMM yyyy")
-    // this should be taken from org.aim42.htmlsanitycheck.ProductVersion.versionId
-    // versionId = "0.9.5-SNAPSHOT"
 }
-
-apply from: 'config/product-version.gradle'
-
-println "=" * 50
-print "building " + name
-println ",version " + version
-println "projectDir  : " + projectDir
-println "buildDir    : " + buildDir
-println "Java version: " + javaVersion
-println "=" * 50
-
-
-// add the task "productVersion" to every run
-//gradle.startParameter.taskNames = [":productVersion"] + gradle.startParameter.taskNames
 
 
 // tag::BuildPlugins[]
@@ -105,7 +93,7 @@ dependencies {
 } // dependencies
 
 
-
+//
 tasks.withType(JavaCompile) {
     sourceCompatibility = rootProject.sourceCompatibility
     targetCompatibility = rootProject.targetCompatibility
@@ -115,7 +103,12 @@ tasks.withType(GroovyCompile) {
     targetCompatibility = rootProject.targetCompatibility
 }
 
+processResources {
+    inputs.property "version", project.version
+    filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [version: project.version])
+    println "after processResources, version= ${project.version}"
 
+}
 // ========================================================
 
 
@@ -137,7 +130,8 @@ asciidoctor {
             numbered            : true,
             'source-highlighter': 'coderay',
             'javaVersion'       : "$javaVersion",
-            'currentDate'       : "$currentDate"]
+            'currentDate'       : "$currentDate",
+            'versionId'         : "$version" ]
 
     resources {
         from("${srcDir}/images") {
@@ -189,6 +183,7 @@ task info(
 ) <<
         {
             println "project.name         : " + project.name
+            println "version              : " + version
             println "project.version      : " + project.version
             println "project.path         : " + project.path
             println "projectDir           : " + projectDir

@@ -1,25 +1,25 @@
 package org.aim42.htmlsanitycheck
 
-/**
- * provides the current product version,
- * as configured in src/main/resources/product-version.properties.
- * Code proposed by René Gröschke of Gradleware in
- * https://discuss.gradle.org/t/access-constant-from-groovy-class-in-gradle-buildfile/10571/5
- */
-public class ProductVersion {
+import spock.lang.Specification
 
+class ProductVersionTest extends Specification {
 
-    public static String getVersion() {
-        try{
-            final URL resource = ProductVersion.class.getClassLoader().getResource("product-version.properties");
-            Properties props = new Properties()
-            props.load(resource.openConnection().inputStream)
-            return props.getProperty("version");
-        } catch (IOException E) {
-        }
-        return "[unknown]";
+    def "can get Version"() {
+        String version
+        final String badVersion = "--.--.--"
+
+        setup:
+          version = badVersion
+
+        when:
+         version = ProductVersion.getVersion()
+
+        then:
+            version != badVersion
+            version != "version"
+            version != "@version@"
+            version != null
     }
-
 }
 
 /************************************************************************
