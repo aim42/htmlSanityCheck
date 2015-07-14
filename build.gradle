@@ -21,22 +21,30 @@ plugins {
 }
 
 group = 'org.aim42'
-version = "0.9.5-SNAPSHOT"
+project.version = "0.9.5-SNAPSHOT"
+
 
 ext {
-
     srcDir = "$projectDir/src/docs"
     javaVersion = System.getProperty("java.version")
     currentDate = new Date().format("d. MMM yyyy")
+    // this should be taken from org.aim42.htmlsanitycheck.ProductVersion.versionId
+    // versionId = "0.9.5-SNAPSHOT"
 }
+
+apply from: 'config/product-version.gradle'
 
 println "=" * 50
 print "building " + name
-println ", version " + version
+println ",version " + version
 println "projectDir  : " + projectDir
 println "buildDir    : " + buildDir
 println "Java version: " + javaVersion
 println "=" * 50
+
+
+// add the task "productVersion" to every run
+//gradle.startParameter.taskNames = [":productVersion"] + gradle.startParameter.taskNames
 
 
 // tag::BuildPlugins[]
@@ -76,10 +84,7 @@ apply plugin: "org.sonarqube"
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
 
-repositories {
-    jcenter()
-    mavenCentral()
-}
+
 
 dependencies {
 
