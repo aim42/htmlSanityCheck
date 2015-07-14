@@ -64,7 +64,7 @@ apply from: "config/gmetrics.gradle"
 apply plugin: 'codenarc'
 
 // invoke sonar runner
-apply plugin: "org.sonarqube"
+apply from: "config/sonarqube.gradle"
 // end:BuildPlugins[]
 
 
@@ -156,14 +156,6 @@ publishing {
 }
 
 // =========================================================
-
-
-sonarqube {
-    properties {
-        property "sonar.projectKey", "htmlSanityCheck"
-        //property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
-    }
-}
 
 
 // =========================================================
