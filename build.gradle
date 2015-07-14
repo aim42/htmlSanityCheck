@@ -24,7 +24,6 @@ plugins {
 }
 
 group = 'org.aim42'
-version = '0.9.6-SNAPSHOT'
 
 
 
@@ -67,11 +66,6 @@ apply plugin: 'codenarc'
 // invoke sonar runner
 apply plugin: "org.sonarqube"
 // end:BuildPlugins[]
-
-
-sourceCompatibility = '1.7'
-targetCompatibility = '1.7'
-
 
 
 dependencies {
