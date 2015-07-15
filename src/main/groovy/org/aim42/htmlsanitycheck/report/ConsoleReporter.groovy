@@ -41,7 +41,7 @@ class ConsoleReporter extends Reporter {
         Long millis = runResults.checkingTookHowManyMillis()
 
         println "********* HTML Sanity Checker findings report *********"
-        println "created on $createdOnDate by version ${ProductVersion.versionId}"
+        println "created on $createdOnDate by version ${ProductVersion.getVersion()}"
         println "checking took $millis msecs."
         println ""
     }
@@ -94,6 +94,7 @@ class ConsoleReporter extends Reporter {
     protected void reportSingleCheckDetails( SingleCheckResults checkResults  ) {
         checkResults.findings.each { finding ->
             println finding.toString()
+
         }
 
         println "-" * 50
