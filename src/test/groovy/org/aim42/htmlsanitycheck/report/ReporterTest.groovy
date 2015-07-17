@@ -10,7 +10,7 @@ import org.junit.Test
 class ReporterTest extends GroovyTestCase {
 
     @Test
-    public void testCreateReporter() {
+    public void testNothingReportedWithEmptyResults() {
         SinglePageResults spr = new SinglePageResults()
         PerRunResults runResults = new PerRunResults(  )
         runResults.addPageResults(spr)
