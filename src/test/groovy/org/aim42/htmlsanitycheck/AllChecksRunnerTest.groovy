@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck
 
+import org.aim42.htmlsanitycheck.check.AllCheckers
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.junit.Before
 import org.junit.Test
@@ -26,8 +27,8 @@ class AllChecksRunnerTest extends GroovyTestCase {
         // create file with proper html content
         tmpFile = File.createTempFile("testfile", ".html") <<HTML
 
-        // wrap tmpFile in Collection to comply to AllChecksRunner API
-        allChecksRunner = new AllChecksRunner( new HashSet<File>( [tmpFile] ) )
+        // wrap fileToTest in Collection to comply to AllChecksRunner API
+        allChecksRunner = new AllChecksRunner( new LinkedHashSet<File>( [tmpFile] ) )
 
         SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile(tmpFile)
 
@@ -36,7 +37,8 @@ class AllChecksRunnerTest extends GroovyTestCase {
         // 0 items checked
         // 0 findings
         // title = "hsc"
-        int expected = 5
+        int expected = AllCheckers.checkerClazzes.size()
+
         assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
 
         assertEquals("expected 0 items checked", 0, pageResults.nrOfItemsCheckedOnPage())
@@ -62,13 +64,13 @@ class AllChecksRunnerTest extends GroovyTestCase {
         tmpFile = File.createTempFile("testfile", ".html") << HTML
 
         allChecksRunner = new AllChecksRunner(
-                new HashSet<File>( [tmpFile] ),
+                new LinkedHashSet<File>( [tmpFile] ),
                 File.createTempDir( "testdir", ""),
                 false)
 
         SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile( tmpFile )
 
-        int expected = 5
+        int expected = AllCheckers.checkerClazzes.size()
         assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
 
         assertEquals("expected 2 findings", 2, pageResults.nrOfFindingsOnPage())

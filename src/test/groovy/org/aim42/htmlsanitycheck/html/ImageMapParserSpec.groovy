@@ -25,7 +25,7 @@ class ImageMapParserSpec extends Specification {
 
     private HtmlPage htmlPage
 
-    // find all imageMaps within htmlPage
+    // find all imageMaps within pageToCheck
     @Unroll
     def "find all maps within page"(int nrOfIMaps, String imageMapString) {
         ArrayList<HtmlElement> imageMaps = new ArrayList()

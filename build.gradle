@@ -1,11 +1,16 @@
 // gradle build script for html sanity check
 // =========================================
 
+// to process the version-property file, we need the filter
+//import org.apache.tools.ant.filters.*
+
+
 buildscript {
     repositories {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+        jcenter()
     }
     dependencies {
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.0"
@@ -19,22 +24,14 @@ plugins {
 }
 
 group = 'org.aim42'
-version = "0.9.5-SNAPSHOT"
+
+
 
 ext {
-
     srcDir = "$projectDir/src/docs"
     javaVersion = System.getProperty("java.version")
     currentDate = new Date().format("d. MMM yyyy")
 }
-
-println "=" * 50
-print "building " + name
-println ", version " + version
-println "projectDir  : " + projectDir
-println "buildDir    : " + buildDir
-println "Java version: " + javaVersion
-println "=" * 50
 
 
 // tag::BuildPlugins[]
@@ -67,17 +64,9 @@ apply from: "config/gmetrics.gradle"
 apply plugin: 'codenarc'
 
 // invoke sonar runner
-apply plugin: "org.sonarqube"
+apply from: "config/sonarqube.gradle"
 // end:BuildPlugins[]
 
-
-sourceCompatibility = '1.7'
-targetCompatibility = '1.7'
-
-repositories {
-    jcenter()
-    mavenCentral()
-}
 
 dependencies {
 
@@ -98,7 +87,7 @@ dependencies {
 } // dependencies
 
 
-
+//
 tasks.withType(JavaCompile) {
     sourceCompatibility = rootProject.sourceCompatibility
     targetCompatibility = rootProject.targetCompatibility
@@ -108,7 +97,12 @@ tasks.withType(GroovyCompile) {
     targetCompatibility = rootProject.targetCompatibility
 }
 
+processResources {
+    inputs.property "version", project.version
+    filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [version: project.version])
+    println "after processResources, version= ${project.version}"
 
+}
 // ========================================================
 
 
@@ -130,7 +124,8 @@ asciidoctor {
             numbered            : true,
             'source-highlighter': 'coderay',
             'javaVersion'       : "$javaVersion",
-            'currentDate'       : "$currentDate"]
+            'currentDate'       : "$currentDate",
+            'versionId'         : "$version" ]
 
     resources {
         from("${srcDir}/images") {
@@ -163,14 +158,6 @@ publishing {
 // =========================================================
 
 
-sonarqube {
-    properties {
-        property "sonar.projectKey", "htmlSanityCheck"
-        //property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
-    }
-}
-
-
 // =========================================================
 
 apply from: 'config/publish-gradle-plugin.gradle'
@@ -182,6 +169,7 @@ task info(
 ) <<
         {
             println "project.name         : " + project.name
+            println "version              : " + version
             println "project.version      : " + project.version
             println "project.path         : " + project.path
             println "projectDir           : " + projectDir

@@ -24,14 +24,15 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
 
     @Override
     /**
-
+     set valid possibilities, where suggester can choose from.
+     Here: List of (internal) id's, meaning link-targets.
      */
     protected void setValidPossibilities() {
         validPossibilities = listOfIds
     }
 
     @Override
-    protected SingleCheckResults check(HtmlPage pageToCheck) {
+    protected SingleCheckResults check(final HtmlPage pageToCheck) {
 
         //get list of all a-tags "<a src=..." in html file
         hrefList = pageToCheck.getAllHrefStrings()

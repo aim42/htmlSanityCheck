@@ -9,7 +9,7 @@ class ChecksRunnerTest extends GroovyTestCase {
 
     final static String HTML_HEAD = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <head></head><html>'
 
-    private File tmpFile
+    private File fileToTest
 
     private ChecksRunner checksRunner
 
@@ -24,16 +24,15 @@ class ChecksRunnerTest extends GroovyTestCase {
         String HTML = """$HTML_HEAD<body><title>hsc</title></body></html>"""
 
         // create file with proper html content
-        tmpFile = File.createTempFile("testfile", ".html") << HTML
-        File tmpFileDir = tmpFile.getParentFile()
+        fileToTest = File.createTempFile("testfile", ".html") << HTML
 
-        // wrap tmpFile in Collection to comply to AllChecksRunner API
+        // wrap fileToTest in Collection to comply to AllChecksRunner API
         checksRunner = new ChecksRunner(
                 BrokenCrossReferencesChecker.class,
-                tmpFile,
-                tmpFileDir)
+                fileToTest,
+                fileToTest.getParentFile())
 
-        SinglePageResults pageResults = checksRunner.performChecksForOneFile(tmpFile)
+        SinglePageResults pageResults = checksRunner.performChecksForOneFile(fileToTest)
 
         // expectation:
         // 4 checks run
@@ -49,8 +48,8 @@ class ChecksRunnerTest extends GroovyTestCase {
 
         assertEquals("expected hsc title", "hsc", pageResults.pageTitle)
 
-        String tmpFileName = tmpFile.name
-        assertEquals("expected $tmpFileName as fileName", tmpFileName, pageResults.pageFileName)
+        String expectedFileName  = fileToTest.name
+        assertEquals("expected $expectedFileName as fileName", expectedFileName, pageResults.pageFileName)
     }
 
 
@@ -63,14 +62,14 @@ class ChecksRunnerTest extends GroovyTestCase {
                 </html>"""
 
         // create file
-        tmpFile = File.createTempFile("testfile", ".html") << HTML
+        fileToTest = File.createTempFile("testfile", ".html") << HTML
 
         checksRunner = new ChecksRunner(
-                new HashSet<File>([tmpFile]),
-                File.createTempDir("testdir", ""),
-                false)
+                BrokenCrossReferencesChecker.class,
+                fileToTest,
+                fileToTest.getParentFile())
 
-        SinglePageResults pageResults = checksRunner.performChecksForOneFile(tmpFile)
+        SinglePageResults pageResults = checksRunner.performChecksForOneFile(fileToTest)
 
         int expected = 5
         assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())

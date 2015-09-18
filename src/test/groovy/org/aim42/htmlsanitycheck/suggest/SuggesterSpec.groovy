@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.suggest
 
+import org.aim42.testutil.RandomStringGenerator
 import spock.lang.Specification
 import spock.lang.Timeout
 
@@ -27,19 +28,18 @@ class SuggesterSpec extends Specification {
 
     def "Determine One Plausible Suggestion"() {
         given:
-            target = "Bastodon"
+        target = "Bastodon"
 
         when:
-            String singleSuggestion = Suggester.determineSingleSuggestion(target, options)
+        String singleSuggestion = Suggester.determineSingleSuggestion(target, options)
 
         then:
-            // get ONE result
-            singleSuggestion != null
+        // get ONE result
+        singleSuggestion != null
 
-            // "Bastiodon" is plausible suggestion
-            singleSuggestion == "Bastiodon"
+        // "Bastiodon" is plausible suggestion
+        singleSuggestion == "Bastiodon"
     }
-
 
 
     def "Determine Multiple Suggestions"() {
@@ -59,7 +59,6 @@ class SuggesterSpec extends Specification {
     }
 
 
-
     def "Find No Suggestion In Empty Option List"() {
         given:
         target = "Bastodon"
@@ -73,26 +72,27 @@ class SuggesterSpec extends Specification {
         multipleSuggestion.size() == 0
     }
 
-    @Timeout(1)  // wait max one second
-    def "Find Suggestion in Long Option List" () {
+    @Timeout(1)
+    // wait max one second
+    def "Find Suggestion in Long Option List"() {
         final int HALFLENGTH = 1001
-        ArrayList<String> longOptionList = new ArrayList<String>(2 * HALFLENGTH )
+        ArrayList<String> longOptionList = new ArrayList<String>(2 * HALFLENGTH)
 
         given:
-            target = "HtmlSanitY"
-            String bestSuggestion = "HtmkSanity"   // two differences
-            String secondSuggestion = "htmlSaqqqy" // three differences
+        target = "HtmlSanitY"
+        String bestSuggestion = "HtmkSanity"   // two differences
+        String secondSuggestion = "htmlSaqqqy" // three differences
 
-            longOptionList.add( secondSuggestion )
+        longOptionList.add(secondSuggestion)
 
         (1..HALFLENGTH).each() {
-            longOptionList.add( RandomStringGenerator.randomString())
+            longOptionList.add(RandomStringGenerator.randomString())
         }
 
         longOptionList.add(bestSuggestion)
 
         (1..HALFLENGTH).each() {
-            longOptionList.add( RandomStringGenerator.randomString())
+            longOptionList.add(RandomStringGenerator.randomString())
         }
 
         when:
@@ -111,6 +111,30 @@ class SuggesterSpec extends Specification {
     }
 
 
+    // test behavior of suggesting image file names
+    // with strings of different length
+    def "image filename suggester test"() {
+        final String target = "hsc-logo.png"
+        final String bestOption = "hsc-logo.jpg"
+        final String secondOption = "hsclogo.jpg"
+
+        ArrayList<String> optionList = ["arc42-logo.jpg",
+                                        "hsc-logo-shaded.png",
+                                        bestOption,
+                                        secondOption,
+                                        "outside.jpg"]
+
+        when:
+        // suggest the two best matches from the optionList above
+        List<String> multipleSuggestion = Suggester.determineNSuggestions(target, optionList, 2)
+
+        then:
+        multipleSuggestion.size() == 2
+        multipleSuggestion.get(0) == bestOption
+        multipleSuggestion.get(1) == secondOption
+
+    }
+}
 
 /************************************************************************
  * This is free software - without ANY guarantee!
@@ -131,4 +155,3 @@ class SuggesterSpec extends Specification {
  * limitations under the License.
  *
  *********************************************************************** */
-

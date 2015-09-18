@@ -1,10 +1,14 @@
 package org.aim42.htmlsanitycheck
 
+import org.aim42.htmlsanitycheck.check.BrokenCrossReferencesChecker
 import org.aim42.htmlsanitycheck.check.Checker
 import org.aim42.htmlsanitycheck.check.CheckerCreator
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
+import org.aim42.htmlsanitycheck.report.ConsoleReporter
+import org.aim42.htmlsanitycheck.report.HtmlReporter
+import org.aim42.htmlsanitycheck.report.Reporter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -21,34 +25,37 @@ class ChecksRunner {
     // where do we put our results
     private File checkingResultsDir
 
+
+    // TODO: handle checking of external resources
+    private Boolean checkExternalResources = false
+
     // checker instances
     private Set<Checker> checkers
 
-    private HtmlPage pageToCheck
-
     // keep all results
     private PerRunResults resultsForAllPages
+
 
     private static Logger logger = LoggerFactory.getLogger(ChecksRunner.class);
 
 
     // convenience constructors, mainly  for tests
     // ------------------------------------------------
-    public ChecksRunner(Set<Class> checkerCollection,
-                        Set<File> filesToCheck,
+    public ChecksRunner(SortedSet<Class> checkerCollection,
+                        SortedSet<File> filesToCheck,
                         File checkingResultsDir ) {
         this( checkerCollection, filesToCheck, checkingResultsDir, false)
     }
 
     // just ONE file to check and distinct directory
-    public ChecksRunner(Set<Class> checkerCollection,
+    public ChecksRunner(SortedSet<Class> checkerCollection,
                         File fileToCheck,
                         File checkingResultsDir ) {
         this( checkerCollection, [fileToCheck], checkingResultsDir, false)
     }
 
     // with just ONE file to check
-    public ChecksRunner(Set<Class> checkerCollection,
+    public ChecksRunner(SortedSet<Class> checkerCollection,
                         File fileToCheck ) {
         this( checkerCollection, [fileToCheck], fileToCheck.getParentFile(), false)
     }
@@ -68,7 +75,7 @@ class ChecksRunner {
 
     // with checkers and just ONE file...
     public ChecksRunner( Class checker,
-                         Set<File> filesToCheck ) {
+                         SortedSet<File> filesToCheck ) {
         this( [checker], filesToCheck, File.createTempDir(), false)
     }
 
@@ -92,15 +99,16 @@ class ChecksRunner {
 
 
     /**
-     *  performs all known checks on a single HTML file.
+     *  performs all configured checks on a single HTML file.
      *
      *  Creates a {@link org.aim42.htmlsanitycheck.collect.SinglePageResults} instance to keep checking results.
      */
     public SinglePageResults performChecksForOneFile(File thisFile) {
 
-        pageToCheck = HtmlPage.parseHtml(thisFile)
-        String baseDir = thisFile.parent
+        // the currently processed (parsed) HTML page
+        HtmlPage pageToCheck = HtmlPage.parseHtml(thisFile)
 
+        // initialize results for this page
         SinglePageResults collectedResults =
                 new SinglePageResults(
                         pageFilePath: thisFile.canonicalPath,
@@ -109,12 +117,12 @@ class ChecksRunner {
                         pageSize: pageToCheck.documentSize
                 )
 
-        // apply every checker
+        // apply every checker to this page
         checkers.each { checker ->
-            def singleCheckResults = checker.performCheck( pageToCheck )
-
-            collectedResults.addResultsForSingleCheck( singleCheckResults )
+            def singleCheckResults = checker.performCheck(pageToCheck)
+            collectedResults.addResultsForSingleCheck(singleCheckResults)
         }
+            //def singleCheckResults = new BrokenCrossReferencesChecker().performCheck( pageToCheck )
 
         /*
         collectedResults.with {
@@ -147,6 +155,27 @@ class ChecksRunner {
         // and then report the results
         reportCheckingResultsOnConsole()
         reportCheckingResultsAsHTML(checkingResultsDir.absolutePath)
+    }
+
+
+    /**
+     * reports results on stdout
+     * TODO:
+     */
+    private void reportCheckingResultsOnConsole() {
+        Reporter reporter = new ConsoleReporter(resultsForAllPages)
+
+        reporter.reportFindings()
+
+    }
+
+    /**
+     * report results in HTML file(s)
+     */
+    private void reportCheckingResultsAsHTML(String resultsDir) {
+
+        Reporter reporter = new HtmlReporter(resultsForAllPages, resultsDir)
+        reporter.reportFindings()
     }
 
 }

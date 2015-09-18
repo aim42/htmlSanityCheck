@@ -1,0 +1,11 @@
+
+// invoke sonar runner
+apply plugin: "org.sonarqube"
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "htmlSanityCheck"
+        //property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
+    }
+}
+

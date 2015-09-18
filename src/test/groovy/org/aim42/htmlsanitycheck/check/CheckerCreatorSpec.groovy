@@ -8,24 +8,22 @@ import spock.lang.Specification
  */
 class CheckerCreatorSpec extends Specification {
 
-    private Collection<Checker> checkers
-    private Checker oneChecker
 
     private Class[] params
 
-    String  pMethod
+    String pMethod
+
     def setup() {
         // ... takes HtmlPage as parameter
-      params = [HtmlPage.class]
-
+        params = [HtmlPage.class]
     }
 
 
-
     def "can create brokenCrossRefChecker instance"() {
+        Checker oneChecker
 
         when:
-        oneChecker = CheckerCreator.createSingleChecker( BrokenCrossReferencesChecker.class )
+        oneChecker = CheckerCreator.createSingleChecker(BrokenCrossReferencesChecker.class)
 
         // performCheck method returns SingleCheckResults
         def fullDeclaration = "public final org.aim42.htmlsanitycheck.collect.SingleCheckResults org.aim42.htmlsanitycheck.check.SuggestingChecker.performCheck(org.aim42.htmlsanitycheck.html.HtmlPage)"
@@ -33,48 +31,84 @@ class CheckerCreatorSpec extends Specification {
         pMethod = oneChecker.class.getMethod("performCheck", params)
 
         then:
-        notThrown( NoSuchMethodException )
+        notThrown(NoSuchMethodException)
         pMethod == fullDeclaration
     }
 
 
     def "can create multiple checker instances"() {
+        List<Checker> checkers
+        Checker oneChecker
+
+        setup:
+        ArrayList<Class> checkerClazzes = [BrokenCrossReferencesChecker.class,
+                                           DuplicateIdChecker.class]
+
 
         when:
-        checkers = CheckerCreator.createCheckerClassesFrom(
-                [BrokenCrossReferencesChecker.class, DuplicateIdChecker.class].toSet()
-        )
-
-        oneChecker = checkers.first()
-        //pMethod = checker.class.getMethod("performCheck", params)
-
+        checkers = CheckerCreator.createCheckerClassesFrom( checkerClazzes )
         then:
         checkers.size() == 2
 
-/*
-        then:
-        checker instanceof BrokenCrossReferencesChecker
-        notThrown( NoSuchMethodException )
 
         when:
-          pMethod = checkers.last().class.getMethod("performCheck", params)
+        oneChecker = checkers.first()
+        then:
+        oneChecker instanceof BrokenCrossReferencesChecker
+
+
+        when:
+        pMethod = oneChecker.class.getMethod("performCheck", params)
+        then:
+        notThrown(NoSuchMethodException)
+
+
+        when:
+        oneChecker = checkers.last()
+        then:
+        oneChecker instanceof DuplicateIdChecker
+
+
+        when:
+        pMethod = oneChecker.class.getMethod("performCheck", params)
+        then:
+        notThrown(NoSuchMethodException)
+
+    }
+
+
+    def "can create checker with correct supertype"(Class checkerClazz, Class superClazz) {
+        Checker oneChecker
+
+        when:
+        oneChecker = CheckerCreator.createSingleChecker(checkerClazz)
 
         then:
-        notThrown( NoSuchMethodException)
-*/
+        notThrown(NoSuchMethodException)
+        oneChecker.class.getSuperclass() == superClazz
+
+        where:
+
+        checkerClazz                                                 | superClazz
+        org.aim42.htmlsanitycheck.check.BrokenCrossReferencesChecker | org.aim42.htmlsanitycheck.check.SuggestingChecker
+
+        // MIFChecker shall be SuggestingChecker - when issue #113 is fixed!
+        org.aim42.htmlsanitycheck.check.MissingImageFilesChecker     | org.aim42.htmlsanitycheck.check.Checker
+
+        org.aim42.htmlsanitycheck.check.DuplicateIdChecker           | org.aim42.htmlsanitycheck.check.Checker
+        org.aim42.htmlsanitycheck.check.MissingAltInImageTagsChecker | org.aim42.htmlsanitycheck.check.Checker
+        org.aim42.htmlsanitycheck.check.ImageMapChecker              | org.aim42.htmlsanitycheck.check.Checker
+
+
     }
 
-
-    def "can create single checker"( Class checkerClazz, Class superClazz ) {
-
-    }
 
     def "creating unknown checkers throws exception"() {
         when:
-        Checker checker = CheckerCreator.createSingleChecker( java.lang.String.class )
+        Checker checker = CheckerCreator.createSingleChecker(java.lang.String.class)
 
         then:
-        thrown( UnknownCheckerException )
+        thrown(UnknownCheckerException)
     }
 }
 

@@ -77,7 +77,9 @@ class Finding {
     @Override
     public String toString() {
         String refCount = (nrOfOccurrences > 1) ? " (reference count: $nrOfOccurrences)": ""
-        return item + refCount
+        String suggestionStr = (suggestions.size() > 0) ? " (Suggestions: " + suggestions.join(", ") + ")": ""
+
+        return item + refCount + "\n" + suggestionStr
     }
 
 
