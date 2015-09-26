@@ -1,6 +1,8 @@
 :numbered:
 == Introduction and Goals
 
+kbd:[HtmlSC] shall support authors creating digital formats
+with hyperlinks and integration of images and similar resources.
 
 [[requirements]]
 === Requirements Overview
@@ -48,7 +50,7 @@ See <<DuplicateIdChecker>>.
 
 .Illegal links:: The links (aka anchors or URIs) can contain illegal characters or violate HTML link syntax. See <<IllegalLinkChecker>>
 
-.Broken external links: External links can be broken due to myriads of reasons: misspelled, link-target currently offline, illegal link syntax. 
+.Broken external links: External links can be broken due to myriads of reasons: misspelled, link-target currently offline, illegal link syntax.
 See <<BrokenExternalLinksChecker>>.
 
 .Missing Alt Attribute in Image Tags: Images missing an alt-attribute.
@@ -77,7 +79,7 @@ Important terms (*domain terms*) of html sanity checking is documented in a (sma
 | G-4 | configurable output | output can be configured to console or file
 | G-5 | free and open source | all required dependencies shall be compliant
                                to the https://creativecommons.org/licenses/by-sa/4.0/[CC-SA-4 licence].
-| G-6 | available via public repositories | like bintray or jcenter. 
+| G-6 | available via public repositories | like bintray or jcenter.
 | G-7 | configurable to check multiple HTML files | configure a set of files to be processes in a single _run_ and produce a joint report. (useful for e.g. API documentation with many HTML files referencing each other)
 |===
 
