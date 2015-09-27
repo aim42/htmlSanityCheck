@@ -239,7 +239,7 @@ checks are still possible...
 == Technical Documentation
 In addition to checking HTML, this project serves as an example for http://arc42.de[arc42].
 
-Please see our link:documentation/docs/hsc_arc42.adoc[software architecture documentation].
+Please see our link:src/docs/hsc_arc42.adoc[software architecture documentation].
 
 
 == Fundamentals
