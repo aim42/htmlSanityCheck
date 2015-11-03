@@ -1,7 +1,6 @@
 .idea
 *.iml
 *.class
-build
 docs/.gradle
 hsc_diagrams.ldb
 gradle-app.setting
