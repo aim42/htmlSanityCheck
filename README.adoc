@@ -32,6 +32,7 @@ image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommo
 image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[link={project-issues}]
 image:https://img.shields.io/badge/last_update-Jun_15_2015-ff69b4.svg[link={project-url}]
+image:./structure101-logo.png[link="http://structure101.com"]
 
 == Installation
 
@@ -286,3 +287,5 @@ Currently code is published under the Apache-2.0 licence,
 documentation under Creative-Commons-Sharealike-4.0.
 
 Some day I'll unify that :-)
+
+Big thanx to Structure-101 for helping us analyze and restructure our code...
