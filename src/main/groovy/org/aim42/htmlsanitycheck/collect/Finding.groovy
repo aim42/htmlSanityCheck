@@ -79,7 +79,7 @@ class Finding {
         String refCount = (nrOfOccurrences > 1) ? " (reference count: $nrOfOccurrences)": ""
         String suggestionStr = (suggestions.size() > 0) ? " (Suggestions: " + suggestions.join(", ") + ")": ""
 
-        return item + refCount + "\n" + suggestionStr
+        return item + refCount + (suggestionStr ? "\n" + suggestionStr : "")
     }
 
 
