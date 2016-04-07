@@ -8,6 +8,7 @@ import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.report.ConsoleReporter
 import org.aim42.htmlsanitycheck.report.HtmlReporter
+import org.aim42.htmlsanitycheck.report.JUnitXmlReporter
 import org.aim42.htmlsanitycheck.report.Reporter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -25,6 +26,8 @@ class ChecksRunner {
     // where do we put our results
     private File checkingResultsDir
 
+    // where do we put our junit results
+    private File junitResultsDir
 
     // TODO: handle checking of external resources
     private Boolean checkExternalResources = false
@@ -41,21 +44,23 @@ class ChecksRunner {
 
     // convenience constructors, mainly  for tests
     // ------------------------------------------------
-    public ChecksRunner(SortedSet<Class> checkerCollection,
+    public ChecksRunner(Set<Class> checkerCollection,
                         SortedSet<File> filesToCheck,
-                        File checkingResultsDir ) {
-        this( checkerCollection, filesToCheck, checkingResultsDir, false)
+                        File checkingResultsDir,
+						File junitResultsDir) {
+        this( checkerCollection, filesToCheck, checkingResultsDir, junitResultsDir, false)
     }
 
     // just ONE file to check and distinct directory
-    public ChecksRunner(SortedSet<Class> checkerCollection,
+    public ChecksRunner(Set<Class> checkerCollection,
                         File fileToCheck,
-                        File checkingResultsDir ) {
-        this( checkerCollection, [fileToCheck], checkingResultsDir, false)
+                        File checkingResultsDir,
+						File junitResultsDir) {
+        this( checkerCollection, [fileToCheck], checkingResultsDir, junitResultsDir, false)
     }
 
     // with just ONE file to check
-    public ChecksRunner(SortedSet<Class> checkerCollection,
+    public ChecksRunner(Set<Class> checkerCollection,
                         File fileToCheck ) {
         this( checkerCollection, [fileToCheck], fileToCheck.getParentFile(), false)
     }
@@ -63,8 +68,9 @@ class ChecksRunner {
     // with ONE checker and ONE file and target directory
     public ChecksRunner( Class checkerCollection,
                          File fileToCheck,
-                         File checkingResultsDir ) {
-        this( [checkerCollection], [fileToCheck], checkingResultsDir, false)
+                         File checkingResultsDir,
+						 File junitResultsDir) {
+        this( [checkerCollection], [fileToCheck], checkingResultsDir, junitResultsDir, false)
     }
 
     // with just ONE checker and ONE file...
@@ -85,12 +91,14 @@ class ChecksRunner {
             Set<Class> checkerCollection,
             Set<File> filesToCheck,
             File checkingResultsDir,
+			File junitResultsDir,
             Boolean checkExternalResources
     ) {
         this.resultsForAllPages = new PerRunResults()
 
         this.filesToCheck = filesToCheck
         this.checkingResultsDir = checkingResultsDir
+		this.junitResultsDir = junitResultsDir
 
         this.checkers = CheckerCreator.createCheckerClassesFrom( checkerCollection )
 
@@ -155,6 +163,9 @@ class ChecksRunner {
         // and then report the results
         reportCheckingResultsOnConsole()
         reportCheckingResultsAsHTML(checkingResultsDir.absolutePath)
+		if (junitResultsDir) {
+			reportCheckingResultsAsJUnitXml(junitResultsDir.absolutePath)			
+		}
     }
 
 
@@ -178,6 +189,14 @@ class ChecksRunner {
         reporter.reportFindings()
     }
 
+    /**
+     * report results in JUnit XML
+     */
+    private void reportCheckingResultsAsJUnitXml(String resultsDir) {
+
+        Reporter reporter = new JUnitXmlReporter(resultsForAllPages, resultsDir)
+        reporter.reportFindings()
+    }
 }
 
 /************************************************************************
