@@ -34,7 +34,7 @@ import org.aim42.htmlsanitycheck.collect.SinglePageResults
 class JUnitXmlReporter extends Reporter {
 	File outputPath
 
-	public JUnitXmlReporter( PerRunResults runResults, String outputPath) {
+	JUnitXmlReporter( PerRunResults runResults, String outputPath) {
         super( runResults )
 		this.outputPath = new File(outputPath)
     }
@@ -43,7 +43,7 @@ class JUnitXmlReporter extends Reporter {
     void initReport() {
 		if (!outputPath.canWrite() && !outputPath.mkdirs()) {
 			throw new IOException("Cannot create or write to ${outputPath}")
-		}		
+		}
     }
 
     @Override
@@ -73,7 +73,7 @@ class JUnitXmlReporter extends Reporter {
 							failure(
 								type:"${[singleCheckResult.sourceItemName, singleCheckResult.targetItemName].findAll().join(' -> ')}", 
 								message:finding.item, 
-								finding.suggestions?.join(", ") ?: '')
+								finding.suggestions?.join(', ') ?: '')
 						}
 					}
 				}

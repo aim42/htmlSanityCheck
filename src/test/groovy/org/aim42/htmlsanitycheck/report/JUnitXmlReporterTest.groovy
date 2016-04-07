@@ -34,8 +34,8 @@ class JUnitXmlReporterTest extends GroovyTestCase {
         singlePageResults = new SinglePageResults()
 
         runResults = new PerRunResults()
-		
-		outputPath = File.createTempDir()
+
+        outputPath = File.createTempDir()
         reporter = new JUnitXmlReporter( runResults, outputPath.absolutePath )
     }
 
