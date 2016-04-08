@@ -71,7 +71,7 @@ class JUnitXmlReporter extends Reporter {
 					) {
 						singleCheckResult.findings.each { finding ->
 							failure(
-								type:"${[singleCheckResult.sourceItemName, singleCheckResult.targetItemName].findAll().join(' -> ')}", 
+								type:"${[singleCheckResult.sourceItemName, singleCheckResult.targetItemName].findAll().join(' - ')}",
 								message:finding.item, 
 								finding.suggestions?.join(', ') ?: '')
 						}
