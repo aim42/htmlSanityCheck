@@ -13,6 +13,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import java.lang.reflect.Array
+import java.nio.file.Path
 
 /**
  * runs one or several checks on HTML input
@@ -92,11 +93,37 @@ class ChecksRunner {
         this.filesToCheck = filesToCheck
         this.checkingResultsDir = checkingResultsDir
 
-        this.checkers = CheckerCreator.createCheckerClassesFrom( checkerCollection )
+		def params = [baseDirPath: commonPath(filesToCheck).canonicalPath]
+		
+        this.checkers = CheckerCreator.createCheckerClassesFrom( checkerCollection, params )
 
         logger.debug("ChecksRunner created with ${checkerCollection.size()} checkers for ${filesToCheck.size()} files")
     }
 
+	static File commonPath(Collection<File> files) {
+		if (!files) {
+			return null
+		}
+		if (files.size() == 1) {
+			return files.first().parentFile
+		}
+		files.collect { it.toPath() }.inject(files.first().toPath().parent) { Path acc, Path val ->
+			if (!acc || !val) {
+				return null
+			}
+			
+			int idx = 0
+			Path p1 = acc, p2 = val.parent
+			def iter1 = p1.iterator(), iter2 = p2.iterator()
+			while (iter1.hasNext() && iter2.hasNext() && iter1.next() == iter2.next()) {
+				idx++
+			}
+			if (idx == 0) {
+				return null
+			}
+			return p1.subpath(0, idx)
+		}?.toFile()
+	}
 
     /**
      *  performs all configured checks on a single HTML file.

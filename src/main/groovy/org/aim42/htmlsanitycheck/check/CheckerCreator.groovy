@@ -14,12 +14,13 @@ class CheckerCreator {
 
 
     public static ArrayList<Checker> createCheckerClassesFrom(
-            final Collection<Class> checkerClasses ) {
+            final Collection<Class> checkerClasses,
+			final Map<String, Object> params = [:]) {
 
         ArrayList<Checker> checkers = new LinkedHashSet<Checker>( checkerClasses.size() )
 
         checkerClasses.each { checkerClass ->
-            checkers.add( CheckerCreator.createSingleChecker( checkerClass ))
+            checkers.add( CheckerCreator.createSingleChecker( checkerClass, params ))
 
         }
 
@@ -30,7 +31,7 @@ class CheckerCreator {
 
     // TODO: needs some params,
 
-    public static Checker createSingleChecker( final Class checkerClass ) {
+    public static Checker createSingleChecker( final Class checkerClass, final Map<String, Object> params = [:] ) {
         Checker checker
 
         // switch over all possible Checker classes
@@ -61,6 +62,12 @@ class CheckerCreator {
                 throw new UnknownCheckerException( checkerClass.toString() )
 
         }
+		
+		params.each { key, value ->
+			if (checker.hasProperty(key)) {
+				checker[key] = value
+			}
+		}
 
         return checker
 

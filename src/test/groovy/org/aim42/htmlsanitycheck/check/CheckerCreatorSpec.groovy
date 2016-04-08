@@ -110,6 +110,42 @@ class CheckerCreatorSpec extends Specification {
         then:
         thrown(UnknownCheckerException)
     }
+	
+	def "can create MissingImageFilesChecker instance"() {
+        MissingImageFilesChecker oneChecker
+
+        when:
+        oneChecker = CheckerCreator.createSingleChecker(MissingImageFilesChecker.class, [baseDirPath: new File('.').canonicalPath ])
+
+        // performCheck method returns SingleCheckResults
+        def fullDeclaration = "public org.aim42.htmlsanitycheck.collect.SingleCheckResults org.aim42.htmlsanitycheck.check.Checker.performCheck(org.aim42.htmlsanitycheck.html.HtmlPage)"
+
+        pMethod = oneChecker.class.getMethod("performCheck", params)
+
+        then:'performCheck method is present'
+        notThrown(NoSuchMethodException)
+        pMethod == fullDeclaration
+		and:'baseDirPath is present'
+		oneChecker.baseDirPath
+    }
+
+	def "can create MissingLocalResourcesChecker instance"() {
+        MissingLocalResourcesChecker oneChecker
+
+        when:
+        oneChecker = CheckerCreator.createSingleChecker(MissingLocalResourcesChecker.class, [baseDirPath: new File('.').canonicalPath ])
+
+        // performCheck method returns SingleCheckResults
+        def fullDeclaration = "public org.aim42.htmlsanitycheck.collect.SingleCheckResults org.aim42.htmlsanitycheck.check.Checker.performCheck(org.aim42.htmlsanitycheck.html.HtmlPage)"
+
+        pMethod = oneChecker.class.getMethod("performCheck", params)
+
+        then:'performCheck method is present'
+        notThrown(NoSuchMethodException)
+        pMethod == fullDeclaration
+		and:'baseDirPath is present'
+		oneChecker.baseDirPath
+    }
 }
 
 /************************************************************************

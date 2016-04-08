@@ -120,8 +120,40 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
 
     }
 
+    @Test
+    public void testCheckAbsoluteImage() {
+		File tempFolder = File.createTempDir()
 
+		File imageFolder = new File(tempFolder, "images")
+		assertTrue("Cannot create ${imageFolder}", imageFolder.mkdirs())
+		new File(imageFolder, "bg.jpg").bytes = new byte[0]
+		
+		File htmlFile = new File(tempFolder, "index.html")
+		htmlFile.text = """<html><head><title>absolute image test</title></head>
+<body><p><img src="/images/bg.jpg" /></p></body>
+</html>"""
+		
+        htmlPage = new HtmlPage( htmlFile )
 
+        List<HtmlElement> images = htmlPage.getAllImageTags()
+        assertEquals( "expected 1 image", 1, images.size())
+
+        checker = new MissingImageFilesChecker( baseDirPath: tempFolder)
+
+        checkingResults = checker.performCheck( htmlPage )
+
+        int expected = 1
+        int actual = checkingResults.nrOfItemsChecked
+
+        assertEquals("expected $expected images, found $actual",
+                expected, actual)
+
+        expected = 0
+        actual = checkingResults.nrOfProblems()
+
+        assertEquals( "extected $expected finding, found $actual",
+                expected, actual)
+	}
 }
 
 
