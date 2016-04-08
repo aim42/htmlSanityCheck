@@ -2,7 +2,7 @@ HtmlSanityCheck - ChangeLog
 
 
 V.0.9.5
-
+April 8th 2016: Add JUnit XML reporting to support automated tools.
 
 V.0.9.3
 June 14th 2015: published on Gradle Plugin Repository

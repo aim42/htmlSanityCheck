@@ -53,10 +53,11 @@ class JUnitXmlReporter extends Reporter {
     @Override
     void reportPageSummary( SinglePageResults pageResult ) {
 		String name = pageResult.pageFilePath ?: pageResult.pageTitle ?: UUID.randomUUID()
-		String sanitiziedPath = name.replaceAll(~/[^A-Za-z0-9_-]+/, '_')
-		File testOutputFile = new File(outputPath, "TEST-${sanitiziedPath}.xml")
+		String sanitizedPath = name.replaceAll(~/[^A-Za-z0-9_-]+/, '_')
+		File testOutputFile = new File(outputPath, "TEST-${sanitizedPath}.xml")
 		testOutputFile.withWriter { writer ->
 			def builder = new MarkupBuilder(writer)
+			builder.doubleQuotes = true
 			builder.testsuite(
 				tests: pageResult.nrOfItemsCheckedOnPage(),
 				failures: pageResult.nrOfFindingsOnPage(), 
