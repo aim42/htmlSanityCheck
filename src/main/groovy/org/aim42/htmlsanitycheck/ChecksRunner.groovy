@@ -94,7 +94,7 @@ class ChecksRunner {
         this.checkingResultsDir = checkingResultsDir
 
 		def params = [baseDirPath: commonPath(filesToCheck).canonicalPath]
-		
+
         this.checkers = CheckerCreator.createCheckerClassesFrom( checkerCollection, params )
 
         logger.debug("ChecksRunner created with ${checkerCollection.size()} checkers for ${filesToCheck.size()} files")
@@ -107,7 +107,8 @@ class ChecksRunner {
 		if (files.size() == 1) {
 			return files.first().parentFile
 		}
-		files.collect { it.toPath() }.inject(files.first().toPath().parent) { Path acc, Path val ->
+        Path initial = files.first().toPath().parent
+		Path common = files.collect { it.toPath() }.inject(initial) { Path acc, Path val ->
 			if (!acc || !val) {
 				return null
 			}
@@ -121,8 +122,9 @@ class ChecksRunner {
 			if (idx == 0) {
 				return null
 			}
-			return p1.subpath(0, idx)
-		}?.toFile()
+			p1.subpath(0, idx)
+		}
+        common ? (initial?.root ? initial.root.resolve(common).toFile() : common.toFile()) : null
 	}
 
     /**

@@ -90,13 +90,22 @@ class ChecksRunnerTest extends GroovyTestCase {
 	}
 	
 	@Test
-	public void testCommonPathWithThreeFiles() {
+	public void testCommonPathWithThreeRelativeFiles() {
 		assertEquals(new File("a/b"), ChecksRunner.commonPath([
 			new File("a/b/c"),
 			new File("a/b/d"),
 			new File("a/b/e/f")
 		]))
 	}
+
+    @Test
+    public void testCommonPathWithThreeAbsoluteFiles() {
+        assertEquals(new File("/a/b"), ChecksRunner.commonPath([
+                new File("/a/b/c"),
+                new File("/a/b/d"),
+                new File("/a/b/e/f")
+        ]))
+    }
 }
 
 /************************************************************************
