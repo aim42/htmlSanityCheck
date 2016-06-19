@@ -19,3 +19,4 @@ Thumbs.db
 build-plugin.gradle
 build-doc.txt
 .sonar
+/.nb-gradle/

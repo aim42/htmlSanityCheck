@@ -40,12 +40,14 @@ class AllChecksRunner {
      *
      * @param filesToCheck all available checks are run against these files
      * @param checkingResultsDir where to put resulting test-report
+     * @param junitResultsDir where to put resulting JUnit XML
      * @param checkExternalResources if enabled, we also check remote links
      */
 
     public AllChecksRunner(
             Collection<File> filesToCheck,
             File checkingResultsDir,
+			File junitResultsDir,
             Boolean checkExternalResources
     ) {
         super()
@@ -53,6 +55,7 @@ class AllChecksRunner {
         runner = new ChecksRunner( AllCheckers.checkerClazzes,
                                     filesToCheck,
                                     checkingResultsDir,
+									junitResultsDir,
                                     checkExternalResources)
 
         logger.debug("AllChecksRunner created")
@@ -67,6 +70,7 @@ class AllChecksRunner {
     public AllChecksRunner(Collection<File> filesToCheck) {
         this( filesToCheck,
               File.createTempDir("temporary", "directory"),
+			  File.createTempDir("temporary", "junit"),
               false)
     }
 

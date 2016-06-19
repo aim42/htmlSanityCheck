@@ -72,14 +72,14 @@ dependencies {
 
 
     localGroovy()
-    testCompile("org.spockframework:spock-core:1.0-groovy-2.3")
+    testCompile("org.spockframework:spock-core:1.0-groovy-2.4")
             { exclude group: 'org.codehaus.groovy'}
 
     compile gradleApi()
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.3'
 
-    testCompile 'junit:junit:4.11'
+    testCompile 'junit:junit:4.12'
 
     // jsoup is our awesome html parser, see jsoup.org
     compile group: 'org.jsoup', name: 'jsoup', version: '1.8.2'
