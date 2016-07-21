@@ -25,7 +25,7 @@ public class Suggester {
      * @param options list of available options where the suggestion is taken from
      * @return a suggested alternative for target from the options
      */
-    public static String determineSingleSuggestion(String target, ArrayList<String> options) {
+     static String determineSingleSuggestion(String target, ArrayList<String> options) {
 
         service = new StringSimilarityServiceImpl( new JaroWinklerStrategy());
 

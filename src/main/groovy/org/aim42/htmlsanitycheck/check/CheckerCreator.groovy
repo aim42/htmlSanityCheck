@@ -36,6 +36,9 @@ class CheckerCreator {
         // switch over all possible Checker classes
         // in case of new Checkers, this has to be adapted,
         // as Checker constructors will differ in minor details!
+
+        // clearly violates the open-close principle
+
         switch ( checkerClass ) {
             case BrokenCrossReferencesChecker.class:
                 checker = new BrokenCrossReferencesChecker(); break
