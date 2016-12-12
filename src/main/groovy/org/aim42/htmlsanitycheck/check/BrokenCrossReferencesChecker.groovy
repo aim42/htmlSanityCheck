@@ -98,6 +98,10 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
      * */
     private void doesLinkTargetExist(String href) {
 
+        if (href == '#') {
+            return
+        }
+
         // strip href of its leading "#"
         String linkTarget = (href.startsWith("#")) ? href[1..-1] : href
 

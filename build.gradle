@@ -19,13 +19,17 @@ buildscript {
 
 
 plugins {
+    id 'com.gradle.build-scan' version '1.0'
     id 'org.asciidoctor.convert' version '1.5.2'
     id "org.sonarqube" version "1.0"
 }
 
 group = 'org.aim42'
 
-
+buildScan {
+    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
+    licenseAgree = 'yes'
+}
 
 ext {
     srcDir = "$projectDir/src/docs"
@@ -50,6 +54,7 @@ apply plugin: "com.gradle.plugin-publish"
 
 // publish to (local) maven repo
 apply plugin: 'maven-publish'
+apply from: "config/publish-snapshot.gradle"
 
 // determine test coverate
 apply from: "config/coverage.gradle"
@@ -140,7 +145,7 @@ asciidoctor {
 
 // ==========================================================
 // if you use htmlSanityCheck locally, publish with
-// "gradle uploadToLocalMaven
+// "gradle publishToMavenLocal"
 
 
 publishing {
@@ -166,7 +171,7 @@ apply from: 'config/publish-gradle-plugin.gradle'
 // =========================================================
 task info(
         description: "info on path and objects"
-) <<
+) { doLast
         {
             println "project.name         : " + project.name
             println "version              : " + version
@@ -178,7 +183,19 @@ task info(
             println "targetCompatibility  : " + rootProject.targetCompatibility
             println "="*80
         }
+}
 
+task primeCache {
+	group = "staging"
+    doLast {
+      project.rootProject.allprojects.each { subProject ->
+          logger.info "Priming ${subProject.name}, configs = ${subProject.buildscript.configurations*.name}"
+          subProject.buildscript.configurations*.resolve()
+          logger.info "Priming ${subProject.name}, configs = ${subProject.configurations*.name}"
+          subProject.configurations*.resolve()
+      }
+   }
+}
 
 /*
  * Copyright 2012-2015 the original author or authors.

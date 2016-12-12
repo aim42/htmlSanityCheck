@@ -39,6 +39,7 @@ class HtmlSanityCheckTask extends DefaultTask {
 
     // shall we also check external resources?
     @Optional
+	@Input
     Boolean checkExternalLinks = false
 
     //
@@ -101,6 +102,7 @@ class HtmlSanityCheckTask extends DefaultTask {
 					junitResultsDir,
                     checkExternalLinks
             )
+            allChecksRunner.consoleReport = false
 
             // perform the actual checks
             allChecksRunner.performAllChecks()

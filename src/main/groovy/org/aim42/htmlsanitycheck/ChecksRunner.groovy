@@ -9,11 +9,13 @@ import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.report.ConsoleReporter
 import org.aim42.htmlsanitycheck.report.HtmlReporter
 import org.aim42.htmlsanitycheck.report.JUnitXmlReporter
+import org.aim42.htmlsanitycheck.report.LoggerReporter
 import org.aim42.htmlsanitycheck.report.Reporter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import java.lang.reflect.Array
+import java.nio.file.Path
 
 /**
  * runs one or several checks on HTML input
@@ -28,6 +30,9 @@ class ChecksRunner {
 
     // where do we put our junit results
     private File junitResultsDir
+
+	/** Determines if the report is output to the console. */
+	boolean consoleReport = true
 
     // TODO: handle checking of external resources
     private Boolean checkExternalResources = false
@@ -100,11 +105,39 @@ class ChecksRunner {
         this.checkingResultsDir = checkingResultsDir
 		this.junitResultsDir = junitResultsDir
 
-        this.checkers = CheckerCreator.createCheckerClassesFrom( checkerCollection )
+		def params = [baseDirPath: commonPath(filesToCheck).canonicalPath]
+
+        this.checkers = CheckerCreator.createCheckerClassesFrom( checkerCollection, params )
 
         logger.debug("ChecksRunner created with ${checkerCollection.size()} checkers for ${filesToCheck.size()} files")
     }
 
+	static File commonPath(Collection<File> files) {
+		if (!files) {
+			return null
+		}
+		if (files.size() == 1) {
+			return files.first().parentFile
+		}
+        Path initial = files.first().toPath().parent
+		Path common = files.collect { it.toPath() }.inject(initial) { Path acc, Path val ->
+			if (!acc || !val) {
+				return null
+			}
+			
+			int idx = 0
+			Path p1 = acc, p2 = val.parent
+			def iter1 = p1.iterator(), iter2 = p2.iterator()
+			while (iter1.hasNext() && iter2.hasNext() && iter1.next() == iter2.next()) {
+				idx++
+			}
+			if (idx == 0) {
+				return null
+			}
+			p1.subpath(0, idx)
+		}
+        common ? (initial?.root ? initial.root.resolve(common).toFile() : common.toFile()) : null
+	}
 
     /**
      *  performs all configured checks on a single HTML file.
@@ -161,8 +194,13 @@ class ChecksRunner {
         resultsForAllPages.stopTimer()
 
         // and then report the results
-        reportCheckingResultsOnConsole()
-        reportCheckingResultsAsHTML(checkingResultsDir.absolutePath)
+        reportCheckingResultsOnLogger()
+        if (consoleReport) {
+            reportCheckingResultsOnConsole()
+        }
+        if (checkingResultsDir) {
+            reportCheckingResultsAsHTML(checkingResultsDir.absolutePath)
+        }
 		if (junitResultsDir) {
 			reportCheckingResultsAsJUnitXml(junitResultsDir.absolutePath)			
 		}
@@ -175,6 +213,17 @@ class ChecksRunner {
      */
     private void reportCheckingResultsOnConsole() {
         Reporter reporter = new ConsoleReporter(resultsForAllPages)
+
+        reporter.reportFindings()
+
+    }
+
+    /**
+     * reports results to logger
+     * TODO:
+     */
+    private void reportCheckingResultsOnLogger() {
+        Reporter reporter = new LoggerReporter(resultsForAllPages, logger)
 
         reporter.reportFindings()
 

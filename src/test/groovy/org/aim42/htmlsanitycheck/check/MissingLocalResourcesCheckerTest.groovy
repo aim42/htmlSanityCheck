@@ -146,7 +146,40 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
     }
 
 
+    @Test
+    public void testCheckAbsoluteResource() {
+		File tempFolder = File.createTempDir()
 
+		File filesFolder = new File(tempFolder, "files")
+		assertTrue("Cannot create ${filesFolder}", filesFolder.mkdirs())
+		new File(filesFolder, "doc.pdf").bytes = new byte[0]
+		
+		File htmlFile = new File(tempFolder, "index.html")
+		htmlFile.text = """<html><head><title>absolute resource test</title></head>
+<body><p><a href="/files/doc.pdf" /></p></body>
+</html>"""
+		
+        htmlPage = new HtmlPage( htmlFile )
+
+        int nrOfLocalReferences = htmlPage.getAllHrefStrings().size()
+        assertEquals( "expected one reference", 1, nrOfLocalReferences)
+
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker( baseDirPath: tempFolder)
+
+        collector = missingLocalResourcesChecker.performCheck( htmlPage )
+
+        int expected = 1
+        int actual = collector.nrOfItemsChecked
+
+        assertEquals("expected $expected resources, found $actual",
+                expected, actual)
+
+        expected = 0
+        actual = collector.nrOfProblems()
+
+        assertEquals( "extected $expected finding, found $actual",
+                expected, actual)
+	}
 }
 
 

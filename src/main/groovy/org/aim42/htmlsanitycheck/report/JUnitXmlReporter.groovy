@@ -54,7 +54,7 @@ class JUnitXmlReporter extends Reporter {
     void reportPageSummary( SinglePageResults pageResult ) {
 		String name = pageResult.pageFilePath ?: pageResult.pageTitle ?: UUID.randomUUID()
 		String sanitizedPath = name.replaceAll(~/[^A-Za-z0-9_-]+/, '_')
-		File testOutputFile = new File(outputPath, "TEST-${sanitizedPath}.xml")
+		File testOutputFile = new File(outputPath, "TEST-unit-html-${sanitizedPath}.xml")
 		testOutputFile.withWriter { writer ->
 			def builder = new MarkupBuilder(writer)
 			builder.doubleQuotes = true

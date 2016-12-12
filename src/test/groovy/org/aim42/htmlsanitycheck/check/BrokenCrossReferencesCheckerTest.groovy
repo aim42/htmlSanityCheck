@@ -218,6 +218,23 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
     }
 
+    @Test
+    public void testLinkToHashtagShallPass() {
+        String HTML = """$HTMLHEAD
+           <a href="#">internal-link-to-file</a>
+         </body>
+           </html>
+        """
+        htmlPage = new HtmlPage( HTML )
+
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker( )
+
+        collector = undefinedInternalLinksChecker.performCheck( htmlPage )
+
+        assertEquals( "expected checks", 2, collector.nrOfItemsChecked)
+
+    }
+
 }
 
 

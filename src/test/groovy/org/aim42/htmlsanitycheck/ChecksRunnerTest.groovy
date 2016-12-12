@@ -81,6 +81,34 @@ class ChecksRunnerTest extends GroovyTestCase {
 
     }
 
+	@Test
+	public void testCommonPathWithNoFiles() {
+		assertNull(ChecksRunner.commonPath([]))
+	}
+
+	@Test
+	public void testCommonPathWithOneFile() {
+		File f = new File("a/b/c")
+		assertEquals(f.parentFile, ChecksRunner.commonPath([f]))
+	}
+	
+	@Test
+	public void testCommonPathWithThreeRelativeFiles() {
+		assertEquals(new File("a/b"), ChecksRunner.commonPath([
+			new File("a/b/c"),
+			new File("a/b/d"),
+			new File("a/b/e/f")
+		]))
+	}
+
+    @Test
+    public void testCommonPathWithThreeAbsoluteFiles() {
+        assertEquals(new File("/a/b"), ChecksRunner.commonPath([
+                new File("/a/b/c"),
+                new File("/a/b/d"),
+                new File("/a/b/e/f")
+        ]))
+    }
 }
 
 /************************************************************************

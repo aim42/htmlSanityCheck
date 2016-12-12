@@ -61,6 +61,14 @@ class AllChecksRunner {
         logger.debug("AllChecksRunner created")
     }
 
+	boolean getConsoleReport() {
+		runner.consoleReport
+	}
+
+	void setConsoleReport(boolean b) {
+		runner.consoleReport = b
+	}
+
     /**
      * for testing purposes we provide a convenience constructor
      * with just the files to check... and supply a temporary directory
