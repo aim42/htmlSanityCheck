@@ -69,7 +69,11 @@ sourceDocuments:: (optional) an override to process several source files, which 
                       Defaults to all files in [x-]`${sourceDir}`.
 
 checkingResultsDir:: (optional) directory where the checking results written to.
-                      Defaults to `${sourceDir}/report/htmlchecks/`
+                      Defaults to `${buildDir}/report/htmlchecks/`
+
+junitResultsDir:: (optional) directory where the results written to in JUnit XML format. JUnit XML can be
+                  read by many tools including CI environments.
+				  Defaults to `${buildDir}/test-results/htmlchecks/`
 
 checkExternalLinks:: (optional, planned) if set to "true", external references are checked too.
                       Defaults to `false` (currently not implemented)

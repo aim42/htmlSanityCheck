@@ -67,7 +67,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
         assertEquals( "expected four checks", 4, collector.nrOfItemsChecked)
 
         String actual = collector.findings.first()
-        String expected = "link target \"nonexisting\" missing"
+        String expected = "link target \"nonexisting\" missing\n (Suggestions: aim42)"
         String message = "expected $expected"
 
         assertEquals(message, expected, actual)
@@ -215,6 +215,23 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
         // for local references, no checks shall be performed
         assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
+
+    }
+
+    @Test
+    public void testLinkToHashtagShallPass() {
+        String HTML = """$HTMLHEAD
+           <a href="#">internal-link-to-file</a>
+         </body>
+           </html>
+        """
+        htmlPage = new HtmlPage( HTML )
+
+        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker( )
+
+        collector = undefinedInternalLinksChecker.performCheck( htmlPage )
+
+        assertEquals( "expected checks", 2, collector.nrOfItemsChecked)
 
     }
 

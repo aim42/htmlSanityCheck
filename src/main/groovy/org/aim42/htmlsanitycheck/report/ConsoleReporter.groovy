@@ -28,7 +28,7 @@ import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
 @InheritConstructors
 class ConsoleReporter extends Reporter {
-
+    protected Closure printer = { line -> println(line) }
 
     // from AllChecksRunner - create ConsoleReporter with PerRunResults
     public ConsoleReporter( PerRunResults runResults ) {
@@ -40,10 +40,10 @@ class ConsoleReporter extends Reporter {
     void initReport() {
         Long millis = runResults.checkingTookHowManyMillis()
 
-        println "********* HTML Sanity Checker findings report *********"
-        println "created on $createdOnDate by version ${ProductVersion.getVersion()}"
-        println "checking took $millis msecs."
-        println ""
+        printer "********* HTML Sanity Checker findings report *********"
+        printer "created on $createdOnDate by version ${ProductVersion.getVersion()}"
+        printer "checking took $millis msecs."
+        printer ""
     }
 
 
@@ -55,20 +55,20 @@ class ConsoleReporter extends Reporter {
         String pageStr = (totalNrOfPages() > 1) ? "pages" : "page"
         String issueStr = (totalNrOfFindings() > 1) ? "issues" : "issue"
 
-        println "Summary for all pages:"
-        println "======================"
-        println "checked ${totalNrOfChecks()} items on ${totalNrOfPages()} $pageStr, "
-        println "found ${totalNrOfFindings()} $issueStr, $percentageSuccessful% successful."
-        println "-" * 50
+        printer "Summary for all pages:"
+        printer "======================"
+        printer "checked ${totalNrOfChecks()} items on ${totalNrOfPages()} $pageStr, "
+        printer "found ${totalNrOfFindings()} $issueStr, $percentageSuccessful% successful."
+        printer "-" * 50
     }
 
 
     @Override
     void reportPageSummary( SinglePageResults pageResult ) {
-        println "Summary for file ${pageResult.pageFileName}\n"
-        println "page path  : " + pageResult.pageFilePath
-        println "page title : " + pageResult.pageTitle
-        println "page size  : " + pageResult.pageSize + " bytes"
+        printer "Summary for file ${pageResult.pageFileName}\n"
+        printer "page path  : " + pageResult.pageFilePath
+        printer "page title : " + pageResult.pageTitle
+        printer "page size  : " + pageResult.pageSize + " bytes"
 
     }
 
@@ -76,34 +76,34 @@ class ConsoleReporter extends Reporter {
 
     @Override
     protected void reportPageFooter() {
-        println "="*50
+        printer "="*50
     }
 
     @Override
     protected void reportSingleCheckSummary( SingleCheckResults checkResults ) {
-        println "\n"
-        println "-"*50
+        printer "\n"
+        printer "-"*50
         checkResults.each { result ->
-            println "Results for ${result.whatIsChecked}"
-            println "${result.nrOfItemsChecked} $result.sourceItemName checked,"
-            println "${result.nrOfProblems()} $result.targetItemName found.\n"
+            printer "Results for ${result.whatIsChecked}"
+            printer "${result.nrOfItemsChecked} $result.sourceItemName checked,"
+            printer "${result.nrOfProblems()} $result.targetItemName found.\n"
         }
     }
 
     @Override
     protected void reportSingleCheckDetails( SingleCheckResults checkResults  ) {
         checkResults.findings.each { finding ->
-            println finding.toString()
+            printer finding.toString()
 
         }
 
-        println "-" * 50
+        printer "-" * 50
 
     }
 
     @Override
     void closeReport() {
-        println "thanx for using HtmlSanityChecker."
+        printer "thanx for using HtmlSanityChecker."
     }
 
 }

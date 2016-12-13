@@ -23,7 +23,11 @@ class MissingLocalResourcesChecker extends Checker {
     // for local resources either with relative or absolute paths
     private String baseDirPath
 
-
+    /**
+     * True to require files to be referenced and not directories. Useful if the web server doesn't
+     * support a default directory, such as Amazon S3.
+     */
+    private boolean requireFiles = false
 
     // logging stuff
     private static Logger logger = LoggerFactory.getLogger(MissingLocalResourcesChecker.class);
@@ -98,7 +102,7 @@ class MissingLocalResourcesChecker extends Checker {
         File localFile = new File( baseDirPath, localResourcePath );
 
         // action required if resource does not exist
-        if (!localFile.exists() ) {
+        if (!localFile.exists() || (requireFiles && !localFile.isFile())) {
             handleNonexistingLocalResource( localResource )
         }
     }

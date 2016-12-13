@@ -32,8 +32,14 @@ class HtmlSanityCheckTask extends DefaultTask {
     @OutputDirectory
     File checkingResultsDir
 
+    // where do we store junit results
+    @Optional
+    @OutputDirectory
+    File junitResultsDir
+
     // shall we also check external resources?
     @Optional
+	@Input
     Boolean checkExternalLinks = false
 
     //
@@ -53,6 +59,7 @@ class HtmlSanityCheckTask extends DefaultTask {
 
         // give sensible default for output directory
         checkingResultsDir = new File(project.buildDir, '/report/htmlchecks/')
+		junitResultsDir = new File(project.buildDir, '/test-results/htmlchecks/')
 
         // we start with an empty Set
         allFilesToCheck = new HashSet<File>()
@@ -77,6 +84,11 @@ class HtmlSanityCheckTask extends DefaultTask {
             checkingResultsDir.mkdirs()
             assert checkingResultsDir.isDirectory()
             assert checkingResultsDir.canWrite()
+			if (junitResultsDir) {
+				junitResultsDir.mkdirs()
+				assert junitResultsDir.isDirectory()
+				assert junitResultsDir.canWrite()
+			}
 
             // TODO: unclear: do we need to adjust pathnames if running on Windows(tm)??
 
@@ -87,8 +99,10 @@ class HtmlSanityCheckTask extends DefaultTask {
             def allChecksRunner = new AllChecksRunner(
                     allFilesToCheck,
                     checkingResultsDir,
+					junitResultsDir,
                     checkExternalLinks
             )
+            allChecksRunner.consoleReport = false
 
             // perform the actual checks
             allChecksRunner.performAllChecks()
@@ -156,6 +170,7 @@ class HtmlSanityCheckTask extends DefaultTask {
         logger.info "Files to check  : $sourceDocuments"
         logger.info "Source directory: $sourceDir"
         logger.info "Results dir     : $checkingResultsDir"
+        logger.info "JUnit dir       : $junitResultsDir"
         logger.info "Check externals : $checkExternalLinks"
 
     }
