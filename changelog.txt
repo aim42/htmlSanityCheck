@@ -1,7 +1,9 @@
 HtmlSanityCheck - ChangeLog
 
 
-V.0.9.5
+V.0.9.6
+Dec 13th 2016: Fix absolute local image check. #130
+Dec 12th 2016: Gradle plugin sends output to info log.
 April 8th 2016: Add JUnit XML reporting to support automated tools.
 
 V.0.9.3
