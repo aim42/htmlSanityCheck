@@ -28,6 +28,8 @@ plugins {
 }
 
 group = 'org.aim42'
+// Set product version if tag is given on CI
+System.getenv('TRAVIS_TAG')?.eachMatch(/^[0-9]+(\.[0-9]+)*$/) { m -> project.version = m[0] }
 
 buildScan {
     licenseAgreementUrl = 'https://gradle.com/terms-of-service'
