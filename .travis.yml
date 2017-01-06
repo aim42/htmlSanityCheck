@@ -19,5 +19,4 @@ script:
   - ./gradlew check -Dscan
 
 after_success:
-- test ${TRAVIS_TAG} && ./gradlew publishPlugins
-
+- test ${TRAVIS_TAG} && ./gradlew publishPlugins || true
