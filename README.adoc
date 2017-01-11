@@ -1,5 +1,5 @@
 = image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
-:version: 0.9.6-SNAPSHOT
+:version: 0.9.6
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
@@ -31,12 +31,23 @@ are planned for future releases.
 image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
 image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[link={project-issues}]
-image:https://img.shields.io/badge/last_update-Jun_15_2015-ff69b4.svg[link={project-url}]
+image:https://img.shields.io/badge/last_update-Jan_11_2017-ff69b4.svg[link={project-url}]
 image:https://travis-ci.org/aim42/htmlSanityCheck.svg?branch=master["Build Status", link="https://travis-ci.org/aim42/htmlSanityCheck"]
 
 == Installation
 
 Use the following snippet inside a Gradle build file:
+
+.build.gradle
+[source,groovy]
+[subs="attributes"]
+----
+plugins {
+  id 'org.aim42.{project}' version '{version}'
+}
+----
+
+OR
 
 .build.gradle
 [source,groovy]
