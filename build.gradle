@@ -104,12 +104,20 @@ tasks.withType(GroovyCompile) {
     targetCompatibility = rootProject.targetCompatibility
 }
 
+task copyResourceImages(type: Copy) {
+    from('src/main/resources') {
+        include '**/*.png'
+    }
+    into processResources.destinationDir
+}
 processResources {
+    exclude '**/*.png'
     inputs.property "version", project.version
     filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [version: project.version])
-    println "after processResources, version= ${project.version}"
-
+    dependsOn copyResourceImages
+    println "after processResources config, version= ${project.version}"
 }
+
 // ========================================================
 
 

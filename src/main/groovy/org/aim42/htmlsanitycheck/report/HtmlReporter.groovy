@@ -1,6 +1,7 @@
 // see end-of-file for license information
 package org.aim42.htmlsanitycheck.report
 
+import groovy.util.logging.Slf4j
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
@@ -9,6 +10,7 @@ import org.gradle.util.GFileUtils
 /**
  * write the findings report to HTML
  */
+@Slf4j
 public class HtmlReporter extends Reporter {
 
     //
@@ -381,7 +383,7 @@ function scrollToTop() {
         writer << "</body></html>"
         writer.flush()
 
-        println "wrote report to ${resultsOutputDir}${File.separatorChar}$REPORT_FILENAME"
+        log.info "wrote report to ${resultsOutputDir}${File.separatorChar}$REPORT_FILENAME"
     }
 
 

@@ -1,6 +1,10 @@
 HtmlSanityCheck - ChangeLog
 
 
+V.0.9.7
+May 3rd 2017: Fix broken logos in reports. #149
+May 3rd 2017: Clean up three logging statements.
+
 V.0.9.6
 Dec 13th 2016: Fix absolute local image check. #130
 Dec 12th 2016: Gradle plugin sends output to info log.
