@@ -92,8 +92,8 @@ class HtmlSanityCheckTask extends DefaultTask {
 
             // TODO: unclear: do we need to adjust pathnames if running on Windows(tm)??
 
-            logger.warn("buildfile-info", sourceDocuments?.toString())
-            logger.warn("allFilesToCheck" + allFilesToCheck.toString(), "")
+            logger.info("buildfile-info", sourceDocuments?.toString())
+            logger.info("allFilesToCheck" + allFilesToCheck.toString(), "")
 
             // create an AllChecksRunner...
             def allChecksRunner = new AllChecksRunner(
