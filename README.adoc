@@ -1,5 +1,5 @@
 = image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
-:version: 0.9.6
+:version: 0.9.7
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
@@ -127,7 +127,7 @@ buildscript {
     dependencies {
         classpath (group: 'gradle.plugin.org.aim42',
                 name: 'htmlSanityCheck',
-                version: '0.9.6')
+                version: '0.9.7')
 
         classpath (group: 'org.asciidoctor',
                     name: 'asciidoctor-gradle-plugin',
