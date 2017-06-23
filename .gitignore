@@ -22,3 +22,5 @@ build-doc.txt
 build/
 /.nb-gradle/
 setenv.sh
+out
+structure101-settings.javax.hsp
