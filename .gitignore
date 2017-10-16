@@ -24,3 +24,7 @@ build/
 setenv.sh
 out
 structure101-settings.javax.hsp
+s101plugin.properties
+s101plugin.state
+structure101-actions.xml
+structure101-spec.xml
