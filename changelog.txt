@@ -2,6 +2,8 @@ HtmlSanityCheck - ChangeLog
 
 
 V.0.9.7
+Dec 6th 2017: simplified gradle build, removed SonarQube, CodeNarc etc, added ArchUnit tests
+
 May 3rd 2017: Fix broken logos in reports. #149
 May 3rd 2017: Clean up three logging statements.
 
