@@ -24,7 +24,6 @@ plugins {
     id "org.sonarqube" version "1.0"
     id "nebula.lint" version "6.1.4"
     id "com.github.ben-manes.versions" version "0.13.0"
-
 }
 
 group = 'org.aim42'
@@ -91,6 +90,7 @@ dependencies {
     // jsoup is our awesome html parser, see jsoup.org
     compile group: 'org.jsoup', name: 'jsoup', version: '1.8.2'
 
+    testCompile 'com.tngtech.archunit:archunit-junit:0.5.0'
 } // dependencies
 
 
