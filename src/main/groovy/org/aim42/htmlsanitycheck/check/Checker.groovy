@@ -28,6 +28,7 @@ abstract class Checker {
     //HtmlPage pageToCheck
 
 
+    // tag::performCheckTemplateMethod[]
     /**
     ** template method for performing a single type of checks on the given @see HtmlPage.
      *
@@ -45,6 +46,7 @@ abstract class Checker {
 
         return check( pageToCheck ) // execute the actual checking algorithm
     }
+    // end::performCheckTemplateMethod[]
 
 
     /**
@@ -83,5 +85,3 @@ abstract class Checker {
  See the License for the specific language governing permissions and
  limitations under the License.
  ========================================================================*/
-
-
