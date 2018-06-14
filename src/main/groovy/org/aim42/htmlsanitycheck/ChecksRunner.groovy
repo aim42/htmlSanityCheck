@@ -204,6 +204,8 @@ class ChecksRunner {
 		if (junitResultsDir) {
 			reportCheckingResultsAsJUnitXml(junitResultsDir.absolutePath)			
 		}
+
+        return resultsForAllPages
     }
 
 
