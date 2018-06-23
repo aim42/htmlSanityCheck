@@ -38,12 +38,30 @@ public class ArchitectureDependencies {
                 .should().accessClassesThat().resideInAnyPackage( "report");
     }
 
-    @Test
+    //@Test
     public void interfaces_should_not_have_names_ending_with_the_word_interface() {
 
-        noClasses().that().areInterfaces().should().haveNameMatching(".*Interface").check(classes);
+        noClasses().that().areInterfaces()
+                .should().haveNameMatching(".*Interface")
+                .check(classes);
     }
 
+
+    //@Test
+    public void checkers_should_extend_checker() {
+        classes().that().haveNameMatching(".*Checker").should().implement("Checker").check(classes);
+    }
+
+    @Test
+    public void only_suggester_should_call_string_similiarity_library() {
+        noClasses().that().dontHaveSimpleName("Suggester")
+                .and().haveNameNotMatching("..Test")
+                .and().resideInAPackage( "net.ricecode")
+                .should().accessClassesThat()
+                .resideInAPackage("..similarity..")
+                .check(classes);
+        //.haveSimpleNameContaining("StringSimilarityService").check(classes);
+    }
 }
 
 
