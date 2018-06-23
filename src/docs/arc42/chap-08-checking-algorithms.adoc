@@ -1,6 +1,6 @@
 [[checking-concept]]
 === Flexible Checking Algorithms
-kbd:[HtmlSC] uses the {template-method-pattern} to enable flexible checking algorithms:
+kbd:[HtmlSC] uses the template-method-pattern to enable flexible checking algorithms:
 
 [quote, http://sourcemaking.com/design_patterns/template_method]
 The Template Method defines a skeleton of an algorithm in an operation, and defers some steps to subclasses.
@@ -10,20 +10,10 @@ We achieve that by defining the skeleton of the checking algorithm in one operat
 The invariant steps are implemented in the abstract base class, while the variant checking algorithms have to be provided by the subclasses.
 
 [source, groovy]
-/**
-  * template method for performing a single type of checks
-  * on the given @see HtmlPage.
-  *
-  * Prerequisite: pageToCheck has been successfully parsed,
-  * prior to constructing this Checker instance.
-**/
-public CheckingResultsCollector performCheck() {
-    // assert prerequisite
-    assert pageToCheck != null
-    initResults()
-    return check() // execute the actual checking algorithm
-}
-
+.template method "performCheck"
+----
+include::{coresourcepath}/htmlsanitycheck/check/Checker.groovy[tags=performCheckTemplateMethod]
+----
 
 
 image::template-method.png["Template Method", title="Template-Method Overview"]
@@ -132,4 +122,3 @@ but currently not implemented.
 [small]#Addresses requirement <<requiredChecks, R-5>>.#
 
 This checker is planned, but currently not implemented.
-

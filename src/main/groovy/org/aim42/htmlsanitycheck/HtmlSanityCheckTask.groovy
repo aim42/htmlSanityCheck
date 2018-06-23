@@ -5,6 +5,7 @@ import org.aim42.filesystem.FileCollector
 // see end-of-file for license information
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.*
 
@@ -41,6 +42,11 @@ class HtmlSanityCheckTask extends DefaultTask {
     @Optional
 	@Input
     Boolean checkExternalLinks = false
+
+    // fail build on errors?
+    @Optional
+    @Input
+    Boolean failOnErrors = false
 
     //
     private Set<File> allFilesToCheck
@@ -105,14 +111,19 @@ class HtmlSanityCheckTask extends DefaultTask {
             allChecksRunner.consoleReport = false
 
             // perform the actual checks
-            allChecksRunner.performAllChecks()
+            def allChecks = allChecksRunner.performAllChecks()
+
+            // check for findings and fail build if requested
+            def nrOfFindingsOnAllPages = allChecks.nrOfFindingsOnAllPages()
+            logger.debug("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
+
+            if (failOnErrors && nrOfFindingsOnAllPages > 0)
+                throw new GradleException("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
 
         } else
             logger.warn("""Fatal configuration errors preventing checks:\n
               sourceDir : $sourceDir \n
               sourceDocs: $sourceDocuments\n""", "fatal error")
-
-
     }
 
     /**
@@ -172,6 +183,7 @@ class HtmlSanityCheckTask extends DefaultTask {
         logger.info "Results dir     : $checkingResultsDir"
         logger.info "JUnit dir       : $junitResultsDir"
         logger.info "Check externals : $checkExternalLinks"
+        logger.info "Fail on errors  : $failOnErrors"
 
     }
 

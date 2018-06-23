@@ -87,6 +87,9 @@ junitResultsDir:: (optional) directory where the results written to in JUnit XML
                   read by many tools including CI environments.
 				  Defaults to `${buildDir}/test-results/htmlchecks/`
 
+failOnErrors:: (optional) if set to "true", the build will fail if any error was found in the checked pages.
+                      Defaults to `false`
+
 checkExternalLinks:: (optional, planned) if set to "true", external references are checked too.
                       Defaults to `false` (currently not implemented)
 
@@ -108,6 +111,9 @@ htmlSanityCheck {
     // where to put results of sanityChecks...
     checkingResultsDir = new File( "$buildDir/report/htmlchecks" )
     checkExternalLinks = false
+
+    // fail build on errors?
+    failOnErrors = true
 }
 ----
 
