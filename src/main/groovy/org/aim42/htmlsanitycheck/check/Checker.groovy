@@ -44,7 +44,7 @@ abstract class Checker {
         // description is set by subclasses
         initCheckingResultsDescription()
 
-        return check( pageToCheck ) // execute the actual checking algorithm
+        return check( pageToCheck ) // <1> delegate check() to subclass
     }
     // end::performCheckTemplateMethod[]
 
