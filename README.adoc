@@ -27,6 +27,7 @@ It can be used as Gradle plugin. Standalone Java and graphical UI
 are planned for future releases.
 
 
+image:https://badge.waffle.io/aim42/htmlsanitycheck.svg?columns=all[https://waffle.io/aim42/htmlsanitycheck]
 
 image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
 image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
