@@ -27,11 +27,9 @@ It can be used as Gradle plugin. Standalone Java and graphical UI
 are planned for future releases.
 
 
-
-image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
-image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
-image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[link={project-issues}]
-image:https://img.shields.io/badge/last_update-Jan_11_2017-ff69b4.svg[link={project-url}]
+image:https://badge.waffle.io/aim42/htmlsanitycheck.svg?columns=all[https://waffle.io/aim42/htmlsanitycheck]
+image:https://img.shields.io/badge/License-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"]
+image:https://img.shields.io/github/contributors/aim42/htmlsanitycheck.svg
 image:https://travis-ci.org/aim42/htmlSanityCheck.svg?branch=master["Build Status", link="https://travis-ci.org/aim42/htmlSanityCheck"]
 
 == Installation
