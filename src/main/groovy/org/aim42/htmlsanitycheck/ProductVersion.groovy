@@ -1,5 +1,8 @@
 package org.aim42.htmlsanitycheck
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 /**
  * provides the current product version,
  * as configured in src/main/resources/product-version.properties.
@@ -8,14 +11,16 @@ package org.aim42.htmlsanitycheck
  */
 public class ProductVersion {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProductVersion.class);
 
     public static String getVersion() {
         try{
-            final URL resource = ProductVersion.class.getClassLoader().getResource("product-version.properties");
+            final URL RESOURCE = ProductVersion.class.getClassLoader().getResource("product-version.properties");
             Properties props = new Properties()
-            props.load(resource.openConnection().inputStream)
+            props.load(RESOURCE.openConnection().inputStream)
             return props.getProperty("version");
         } catch (IOException E) {
+            logger.debug("ProductVersion cannot be obtained due to IOException.")
         }
         return "[unknown]";
     }

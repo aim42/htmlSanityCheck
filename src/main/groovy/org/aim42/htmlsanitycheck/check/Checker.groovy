@@ -25,8 +25,6 @@ abstract class Checker {
     // internal cross-references etc.
     SingleCheckResults checkingResults
 
-    //HtmlPage pageToCheck
-
 
     // tag::performCheckTemplateMethod[]
     /**
