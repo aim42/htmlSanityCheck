@@ -32,7 +32,7 @@ class AllChecksRunner {
 
     private ChecksRunner runner
 
-    private static Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
+    private static final Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
 
 
     /**
@@ -76,9 +76,10 @@ class AllChecksRunner {
      * @param filesToCheck
      */
     public AllChecksRunner(Collection<File> filesToCheck) {
+        final String prefixTemporary = "temporary"
         this( filesToCheck,
-              File.createTempDir("temporary", "directory"),
-			  File.createTempDir("temporary", "junit"),
+              File.createTempDir(prefixTemporary, "directory"),
+			  File.createTempDir( prefixTemporary, "junit"),
               false)
     }
 
@@ -116,6 +117,8 @@ class AllChecksRunner {
      */
     public static void main(String[] args) {
         // TODO: read parameter from command line
+
+        // empty method is currently marked "prio-2" issue by CodeNarc... we'll ignore that
     }
 
 
