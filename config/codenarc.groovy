@@ -170,12 +170,6 @@ ruleset {
         ExplicitCallToPowerMethod
         ExplicitCallToRightShiftMethod
         ExplicitCallToXorMethod
-        ExplicitHashMapInstantiation
-        ExplicitHashSetInstantiation
-        ExplicitLinkedHashMapInstantiation
-        ExplicitLinkedListInstantiation
-        ExplicitStackInstantiation
-        ExplicitTreeSetInstantiation
         GStringAsMapKey
         GStringExpressionWithinString
         GetterMethodCouldBeProperty
