@@ -2,6 +2,8 @@ package org.aim42.filesystem
 
 import groovy.io.FileType
 
+import java.util.regex.Pattern
+
 // see end-of-file for license information
 
 // TODO: add exclude-patterns
@@ -11,7 +13,7 @@ class FileCollector {
     // (?i): ignore-case
     // htm(l): either htm or html
     // at least one character left of the dot
-    public final static def HTML_FILE_EXTENSION_PATTERN = ~/(?i).+\.htm(l)?$/
+    public final static Pattern HTML_FILE_EXTENSION_PATTERN = ~/(?i).+\.htm(l)?$/
 
     public final static Closure<Boolean> INCLUDE_HTML_FILES = { File file ->
         // allow only html or htm files
@@ -56,7 +58,9 @@ class FileCollector {
         // in directory tree
         if ((sourceDocs == null) || (sourceDocs?.empty)) {
             return getAllHtmlFilesFromDirectory(srcDir)
-        } else return getAllConfiguredHtmlFiles(srcDir, sourceDocs)
+        } else {
+            return getAllConfiguredHtmlFiles(srcDir, sourceDocs)
+        }
     }
 
     /**
@@ -70,7 +74,9 @@ class FileCollector {
         // in directory tree
         if ((sourceDocs == null) || (sourceDocs?.empty)) {
             return getAllImageFilesFromDirectory(srcDir)
-        } else return getAllConfiguredImageFiles(srcDir, sourceDocs)
+        } else {
+            return getAllConfiguredImageFiles(srcDir, sourceDocs)
+        }
     }
 
     /**
@@ -80,7 +86,7 @@ class FileCollector {
      * @return all files with appropriate extension
      */
     public static Set<File> getAllHtmlFilesFromDirectory(File dir) {
-        Set<File> files = new HashSet<File>()
+        Set<File> files = new HashSet<File>()  
 
         // scan only files, not directories
         dir.eachFileRecurse(FileType.FILES) { file ->
