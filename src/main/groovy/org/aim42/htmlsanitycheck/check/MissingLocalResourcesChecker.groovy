@@ -30,7 +30,7 @@ class MissingLocalResourcesChecker extends Checker {
     private boolean requireFiles = false
 
     // logging stuff
-    private static Logger logger = LoggerFactory.getLogger(MissingLocalResourcesChecker.class);
+    private final static Logger logger = LoggerFactory.getLogger(MissingLocalResourcesChecker.class);
 
     @Override
     protected void initCheckingResultsDescription() {

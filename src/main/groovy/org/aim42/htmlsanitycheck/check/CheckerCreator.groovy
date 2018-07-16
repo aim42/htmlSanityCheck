@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 
 class CheckerCreator {
 
-    private static Logger logger = LoggerFactory.getLogger(CheckerCreator.class);
+    private final static Logger logger = LoggerFactory.getLogger(CheckerCreator.class);
 
 
     public static ArrayList<Checker> createCheckerClassesFrom(

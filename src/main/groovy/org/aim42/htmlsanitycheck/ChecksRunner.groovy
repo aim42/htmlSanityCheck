@@ -44,7 +44,7 @@ class ChecksRunner {
     private PerRunResults resultsForAllPages
 
 
-    private static Logger logger = LoggerFactory.getLogger(ChecksRunner.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChecksRunner.class);
 
 
     // convenience constructors, mainly  for tests

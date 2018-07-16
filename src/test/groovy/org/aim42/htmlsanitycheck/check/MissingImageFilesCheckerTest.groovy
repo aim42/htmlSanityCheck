@@ -24,7 +24,7 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
     SingleCheckResults checkingResults
 
     // logging stuff
-    private static Logger logger = LoggerFactory.getLogger(MissingImageFilesCheckerTest.class);
+    private final static Logger logger = LoggerFactory.getLogger(MissingImageFilesCheckerTest.class);
 
 
     @Before
