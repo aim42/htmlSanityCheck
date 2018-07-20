@@ -230,7 +230,7 @@ ruleset {
         ClassNameSameAsSuperclass
         ConfusingMethodName
         FactoryMethodName
-        FieldName
+        // FieldName: proposes fieldNames to be uppercase - don't want that!
         InterfaceName
         InterfaceNameSameAsSuperInterface
         MethodName

@@ -1,7 +1,7 @@
 package org.aim42.htmlsanitycheck
 
+import org.aim42.filesystem.FileUtil
 import org.aim42.htmlsanitycheck.check.AllCheckers
-import org.aim42.htmlsanitycheck.check.BrokenCrossReferencesChecker
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.junit.Before
 import org.junit.Test
@@ -83,18 +83,18 @@ class ChecksRunnerTest extends GroovyTestCase {
 
 	@Test
 	public void testCommonPathWithNoFiles() {
-		assertNull(ChecksRunner.commonPath([]))
+		assertNull(FileUtil.commonPath([]))
 	}
 
 	@Test
 	public void testCommonPathWithOneFile() {
 		File f = new File("a/b/c")
-		assertEquals(f.parentFile, ChecksRunner.commonPath([f]))
+		assertEquals(f.parentFile, FileUtil.commonPath([f]))
 	}
 	
 	@Test
 	public void testCommonPathWithThreeRelativeFiles() {
-		assertEquals(new File("a/b"), ChecksRunner.commonPath([
+		assertEquals(new File("a/b"), FileUtil.commonPath([
 			new File("a/b/c"),
 			new File("a/b/d"),
 			new File("a/b/e/f")
@@ -103,7 +103,7 @@ class ChecksRunnerTest extends GroovyTestCase {
 
     @Test
     public void testCommonPathWithThreeAbsoluteFiles() {
-        assertEquals(new File("/a/b"), ChecksRunner.commonPath([
+        assertEquals(new File("/a/b"), FileUtil.commonPath([
                 new File("/a/b/c"),
                 new File("/a/b/d"),
                 new File("/a/b/e/f")

@@ -1,10 +1,9 @@
 package org.aim42.htmlsanitycheck
 
 import org.aim42.filesystem.FileCollector
+import org.gradle.api.DefaultTask
 
 // see end-of-file for license information
-
-import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.*
@@ -22,7 +21,8 @@ class HtmlSanityCheckTask extends DefaultTask {
     //
     // we support checking several named files
     @Optional
-    @Input Set<String> sourceDocuments
+    @Input
+    Set<String> sourceDocuments
 
     // or all (html) files in a directory
     @InputDirectory
@@ -40,7 +40,7 @@ class HtmlSanityCheckTask extends DefaultTask {
 
     // shall we also check external resources?
     @Optional
-	@Input
+    @Input
     Boolean checkExternalLinks = false
 
     // fail build on errors?
@@ -65,7 +65,7 @@ class HtmlSanityCheckTask extends DefaultTask {
 
         // give sensible default for output directory
         checkingResultsDir = new File(project.buildDir, '/report/htmlchecks/')
-		junitResultsDir = new File(project.buildDir, '/test-results/htmlchecks/')
+        junitResultsDir = new File(project.buildDir, '/test-results/htmlchecks/')
 
         // we start with an empty Set
         allFilesToCheck = new HashSet<File>()
@@ -90,11 +90,11 @@ class HtmlSanityCheckTask extends DefaultTask {
             checkingResultsDir.mkdirs()
             assert checkingResultsDir.isDirectory()
             assert checkingResultsDir.canWrite()
-			if (junitResultsDir) {
-				junitResultsDir.mkdirs()
-				assert junitResultsDir.isDirectory()
-				assert junitResultsDir.canWrite()
-			}
+            if (junitResultsDir) {
+                junitResultsDir.mkdirs()
+                assert junitResultsDir.isDirectory()
+                assert junitResultsDir.canWrite()
+            }
 
             // TODO: unclear: do we need to adjust pathnames if running on Windows(tm)??
 
@@ -105,7 +105,7 @@ class HtmlSanityCheckTask extends DefaultTask {
             def allChecksRunner = new AllChecksRunner(
                     allFilesToCheck,
                     checkingResultsDir,
-					junitResultsDir,
+                    junitResultsDir,
                     checkExternalLinks
             )
             allChecksRunner.consoleReport = false
@@ -117,13 +117,14 @@ class HtmlSanityCheckTask extends DefaultTask {
             def nrOfFindingsOnAllPages = allChecks.nrOfFindingsOnAllPages()
             logger.debug("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
 
-            if (failOnErrors && nrOfFindingsOnAllPages > 0)
+            if (failOnErrors && nrOfFindingsOnAllPages > 0) {
                 throw new GradleException("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
-
-        } else
+            }
+        } else {
             logger.warn("""Fatal configuration errors preventing checks:\n
               sourceDir : $sourceDir \n
               sourceDocs: $sourceDocuments\n""", "fatal error")
+        }
     }
 
     /**
@@ -146,8 +147,9 @@ class HtmlSanityCheckTask extends DefaultTask {
 
         // no srcDir was given and empty SrcDocs
         if ((!srcDir) && (srcDocs != null)) {
-            if ((srcDocs?.empty))
+            if ((srcDocs?.empty)) {
                 throw new IllegalArgumentException("both sourceDir and sourceDocs must not be empty")
+            }
         }
         // non-existing srcDir is absurd too
         if ((!srcDir.exists())) {
@@ -168,8 +170,7 @@ class HtmlSanityCheckTask extends DefaultTask {
             throw new MisconfigurationException("no html file found in", srcDir)
         }
 
-
-       // if no exception has been thrown until now,
+        // if no exception has been thrown until now,
         // the configuration seems to be valid..
         return true
     }
