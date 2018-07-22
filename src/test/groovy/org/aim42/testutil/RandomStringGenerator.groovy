@@ -4,17 +4,18 @@ package org.aim42.testutil
 class RandomStringGenerator {
 
 
-    private static pool = ['a'..'z','A'..'Z',0..9].flatten()
+    private static final pool = ['a'..'z','A'..'Z',0..9].flatten()
 
 
-    public static String randomString() {
+    public static String randomStringLength10() {
         Random rand = new Random(System.currentTimeMillis())
 
-        return (0..10).collect {
+        return (1..10).collect {
             pool[rand.nextInt(pool.size())]
         }.join()
-
     }
+
+
 }
 
 /************************************************************************

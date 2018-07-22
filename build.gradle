@@ -1,4 +1,3 @@
-
 // gradle build script for html sanity check
 // =========================================
 
@@ -15,38 +14,49 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+//        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
     }
 }
 
 plugins {
     id 'org.asciidoctor.convert' version '1.5.3'
-    id "com.github.ben-manes.versions" version "0.13.0"
     id 'groovy'
     id 'java'
+    id "com.gradle.plugin-publish" version "0.9.10"
+    id 'com.gradle.build-scan' version '1.15.1'
 }
 
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-}
+
+    //   localGroovy()
+    testCompile(
+            'junit:junit:4.12',
+            'org.codehaus.groovy:groovy-all:2.4.12',
+            'org.spockframework:spock-core:1.1-groovy-2.4',
+            'com.tngtech.archunit:archunit-junit:0.8.3')
+
+    compile gradleApi()
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.3'
+
+
+    // jsoup is our awesome html parser, see jsoup.org
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
+
+} // dependencies
 
 
 group = 'org.aim42'
 // Set product version if tag is given on CI
 System.getenv('TRAVIS_TAG')?.eachMatch(/^[0-9]+(\.[0-9]+)*$/) { m -> project.version = m[0] }
 
-//buildScan {
-//    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
-//    licenseAgree = 'yes'
-//}
 
 ext {
     srcDir = "$projectDir/src/docs"
     javaVersion = System.getProperty("java.version")
     currentDate = new Date().format("d. MMM yyyy")
 }
-
 
 // tag::BuildPlugins[]
 apply plugin: 'groovy'
@@ -68,46 +78,16 @@ apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'maven-publish'
 apply from: "config/publish-snapshot.gradle"
 
-
 // where to find codenarc rule configuration
 codenarc {
     toolVersion = '1.2'
     configFile = file("${project.projectDir}/config/codenarc.groovy")
     maxPriority2Violations = 300
     maxPriority3Violations = 600
+
 }
+// end:BuildPlugins[]
 
-
-dependencies {
-
-
-    localGroovy()
-    testCompile("org.spockframework:spock-core:1.0-groovy-2.4")
-            { exclude group: 'org.codehaus.groovy'}
-
-    compile gradleApi()
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.3'
-
-    testCompile 'junit:junit:4.12'
-
-    // jsoup is our awesome html parser, see jsoup.org
-    compile group: 'org.jsoup', name: 'jsoup', version: '1.8.2'
-
-    testCompile 'com.tngtech.archunit:archunit-junit:0.8.2'
-    testCompile gradleTestKit()
-} // dependencies
-
-
-//
-//tasks.withType(JavaCompile) {
-//    sourceCompatibility = rootProject.sourceCompatibility
-//    targetCompatibility = rootProject.targetCompatibility
-//}
-//tasks.withType(GroovyCompile) {
-//    sourceCompatibility = rootProject.sourceCompatibility
-//    targetCompatibility = rootProject.targetCompatibility
-//}
 
 task copyResourceImages(type: Copy) {
     from('src/main/resources') {
@@ -145,7 +125,7 @@ asciidoctor {
             'source-highlighter': 'coderay',
             'javaVersion'       : "$javaVersion",
             'currentDate'       : "$currentDate",
-            'versionId'         : "$version" ]
+            'versionId'         : "$version"]
 
     resources {
         from("${srcDir}/images") {
@@ -155,8 +135,6 @@ asciidoctor {
     }
 
 } // asciidoctor
-
-
 
 // ==========================================================
 // if you use htmlSanityCheck locally, publish with
@@ -177,32 +155,37 @@ publishing {
 
 // =========================================================
 
+buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+
+    publishAlways()
+}
 
 // =========================================================
 
 apply from: 'config/publish-gradle-plugin.gradle'
 
-
 // =========================================================
 task info(
         description: "info on path and objects"
-) { doLast
-        {
-            println "project.name         : " + project.name
-            println "version              : " + version
-            println "project.version      : " + project.version
-            println "project.path         : " + project.path
-            println "projectDir           : " + projectDir
-            println "groupId              : " + project.group
-            println "buildDir             : " + buildDir
-            println "targetCompatibility  : " + rootProject.targetCompatibility
-            println "="*80
-        }
+) {
+    doLast
+            {
+                println "project.name         : " + project.name
+                println "version              : " + version
+                println "project.version      : " + project.version
+                println "project.path         : " + project.path
+                println "projectDir           : " + projectDir
+                println "groupId              : " + project.group
+                println "buildDir             : " + buildDir
+                println "targetCompatibility  : " + rootProject.targetCompatibility
+                println "=" * 80
+            }
 }
 
-
 /*
- * Copyright 2012-2015 the original author or authors.
+ * Copyright 2012-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

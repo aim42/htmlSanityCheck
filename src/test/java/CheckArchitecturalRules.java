@@ -1,18 +1,14 @@
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-import com.tngtech.archunit.junit.AnalyzeClasses;
-import com.tngtech.archunit.junit.ArchTest;
-import com.tngtech.archunit.junit.ArchUnitRunner;
 import com.tngtech.archunit.lang.ArchRule;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
-public class ArchitectureDependencies {
+public class CheckArchitecturalRules {
 
 
     private final ClassFileImporter importer = new ClassFileImporter();
@@ -21,7 +17,7 @@ public class ArchitectureDependencies {
 
     @Before
     public void importClasses() {
-        classes = importer.importClasspath(); // imports all classes from the classpath that are not from JARs
+        classes = importer.importPackages("org.aim42");
     }
 
     @Test

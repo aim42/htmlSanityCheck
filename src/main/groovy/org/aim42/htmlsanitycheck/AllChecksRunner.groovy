@@ -34,6 +34,8 @@ class AllChecksRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
 
+    private static final String prefixTemporary = "temporary"
+
 
     /**
      * runs all available checks on the file
@@ -76,9 +78,8 @@ class AllChecksRunner {
      * @param filesToCheck
      */
     public AllChecksRunner(Collection<File> filesToCheck) {
-        final String prefixTemporary = "temporary"
         this( filesToCheck,
-              File.createTempDir(prefixTemporary, "directory"),
+              File.createTempDir( prefixTemporary, "directory"),
 			  File.createTempDir( prefixTemporary, "junit"),
               false)
     }

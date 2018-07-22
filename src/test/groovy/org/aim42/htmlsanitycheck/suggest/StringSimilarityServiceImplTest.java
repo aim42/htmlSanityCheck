@@ -23,7 +23,7 @@
  *
  */
 
-package org.aim42.htmlSanityCheck.suggest;
+package org.aim42.htmlsanitycheck.suggest;
 
 
 import net.ricecode.similarity.*;

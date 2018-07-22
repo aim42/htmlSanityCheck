@@ -86,13 +86,13 @@ class SuggesterSpec extends Specification {
         longOptionList.add(secondSuggestion)
 
         (1..HALFLENGTH).each() {
-            longOptionList.add(RandomStringGenerator.randomString())
+            longOptionList.add(RandomStringGenerator.randomStringLength10())
         }
 
         longOptionList.add(bestSuggestion)
 
         (1..HALFLENGTH).each() {
-            longOptionList.add(RandomStringGenerator.randomString())
+            longOptionList.add(RandomStringGenerator.randomStringLength10())
         }
 
         when:
