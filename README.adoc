@@ -29,7 +29,6 @@ are planned for future releases.
 
 image:https://badge.waffle.io/aim42/htmlsanitycheck.svg?columns=all[https://waffle.io/aim42/htmlsanitycheck]
 image:https://img.shields.io/badge/License-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"]
-image:https://img.shields.io/github/contributors/aim42/htmlsanitycheck.svg
 image:https://travis-ci.org/aim42/htmlSanityCheck.svg?branch=master["Build Status", link="https://travis-ci.org/aim42/htmlSanityCheck"]
 
 == Installation
