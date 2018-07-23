@@ -15,8 +15,10 @@ cache:
     - $HOME/.gradle/wrapper/
 
 install: true
+
 script:
-  - ./gradlew check -Dscan
+  - ./gradlew check --scan -stacktrace
+
 
 after_success:
 - test ${TRAVIS_TAG} && ./gradlew publishPlugins || true
