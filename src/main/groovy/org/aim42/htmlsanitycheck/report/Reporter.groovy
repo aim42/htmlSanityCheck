@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.report
 
+import org.aim42.htmlsanitycheck.ProductVersion
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
@@ -11,20 +12,22 @@ import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
 abstract class Reporter {
 
-    // nonsense - need that only once...
     // TODO: rewrite tests to work with PerRunResults
     protected ArrayList<SinglePageResults> pageResults
 
     // subclasses need to access runResults...
     protected PerRunResults runResults
 
-    protected String createdOnDate
+    protected final String createdOnDate
+    protected final String createdByHSCVersion
+
 
     /**
      * create the reporter
      */
     public Reporter() {
         this.createdOnDate = new Date().format('dd. MMMM YYYY, HH:mm')
+        this.createdByHSCVersion = ProductVersion.version
 
     }
 
