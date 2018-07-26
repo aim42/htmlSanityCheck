@@ -17,7 +17,7 @@ class MissingImageFilesChecker extends Checker {
     private String baseDirPath
 
     // logging stuff
-    private final static Logger logger = LoggerFactory.getLogger(MissingImageFilesChecker.class);
+    private final static Logger logger = LoggerFactory.getLogger(MissingImageFilesChecker);
 
 
     @Override

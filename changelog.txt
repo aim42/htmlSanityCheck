@@ -1,7 +1,8 @@
 HtmlSanityCheck - ChangeLog
 
 V.0.9.8
-July 2018: added CodeNarc V1.2, 
+July 2018: added CodeNarc V1.2, upgraded to gradle 4.9, fixed travis build, improved footer of html report
+
 
 V.0.9.7
 Dec 6th 2017: simplified gradle build, removed SonarQube, CodeNarc etc, added ArchUnit tests
