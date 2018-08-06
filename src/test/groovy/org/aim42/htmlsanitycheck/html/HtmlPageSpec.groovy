@@ -71,7 +71,7 @@ class HtmlPageSpec extends Specification {
     }
 
     @Unroll
-    def "get all external HREF "() {
+    def "detect correct number of external hrefs in anchors '#anchors' "() {
         ArrayList externalLinks
 
         when:
