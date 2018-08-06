@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.html
 
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class HtmlPageSpec extends Specification {
 
@@ -41,9 +42,10 @@ class HtmlPageSpec extends Specification {
     - alt-attribute empty
      */
 
-    def "get image tags with missing alt attributes"(int missingAltAttrs, String imageTags) {
+    @Unroll
+    def "detect missing alt attributes in imageTag '#imageTag'"() {
         when:
-        String html = HtmlConst.HTML_HEAD + imageTags + HtmlConst.HTML_END
+        String html = HtmlConst.HTML_HEAD + imageTag + HtmlConst.HTML_END
 
         htmlPage = new HtmlPage(html)
         qualifiedImageTags = htmlPage.getAllImageTagsWithMissingAltAttribute()
@@ -53,7 +55,7 @@ class HtmlPageSpec extends Specification {
 
         where:
 
-        missingAltAttrs | imageTags
+        missingAltAttrs | imageTag
         1               | """<img src="a.jpg"> """
         1               | """<img src="a.jpg" alt=""> """   // pathological case: empty alt attribute
         2               | """<img src="a.jpg" alt="" >  <img src="b.png" alt> """
@@ -68,6 +70,35 @@ class HtmlPageSpec extends Specification {
 
     }
 
+    @Unroll
+    def "get all external HREF "() {
+        ArrayList externalLinks
+
+        when:
+        String html = HtmlConst.HTML_HEAD + anchors + HtmlConst.HTML_END
+
+        htmlPage = new HtmlPage(html)
+        externalLinks = htmlPage.getAllExternalHrefStringsAsSet()
+
+        then:
+        externalLinks.size() == nrOfExternalLinks
+
+        where:
+
+        nrOfExternalLinks | anchors
+        0                 |"""<img src="a.jpg"> """
+        0                 | """<a href="file://arc42.org">arc42</a>"""
+
+        1                 | """<a href="http://arc42.org">arc42</a>"""
+        1                 | """<a href="http://arc42.org">http</a>"""
+
+        4                 | """<a href="http://arc42.org">arc42</a> and some text
+                                <a href="http://arc42.de">arc42.de</a> and some more text
+                                <a href="https://arc42.org">arc42 over https</a> even more
+                                <a href="local-file.jpg">local file</a> again, text
+                                <a href="http://aim.org">improve</a>"""
+
+    }
 }
 
 /************************************************************************
