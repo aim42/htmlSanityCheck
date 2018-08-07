@@ -64,6 +64,13 @@ class URLUtil {
                 ip_address_pattern.matcher(link).matches()
         )
     }
+
+    /**
+     * Checks if this String represents a data-image-URI
+     * (startsWith "data:image"
+     * @param s
+     * */
+
     static boolean isDataURI(String s) {
         // simple regular expression to match data:image
 

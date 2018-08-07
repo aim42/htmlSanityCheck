@@ -58,7 +58,16 @@ class MissingImageFilesChecker extends Checker {
         // (that is, NO remote URL)
         Boolean isRemoteURL = URLUtil.isRemoteURL(imageSrcAttribute)
         Boolean isDataURI   = URLUtil.isDataURI(imageSrcAttribute)
-        if (!isRemoteURL && !isDataURI) {
+        if (isRemoteURL) {
+            //do nothing. This checks for _local_ images
+        } else if (isDataURI) {
+            // bookkeeping:
+            checkingResults.incNrOfChecks()
+
+            doesDataURIContainData( imageSrcAttribute );
+
+        } else {
+            //we have a simple local image
 
             // bookkeeping:
             checkingResults.incNrOfChecks()
@@ -91,6 +100,23 @@ class MissingImageFilesChecker extends Checker {
 
     }
 
+    /**
+     * check if the given data-URI contains actual data
+     *
+     * Good: "data:image/png;base64,iVBORw0KGgoAAAANSU..."
+     *
+     * Bad: "data:image/jpg;base64,"
+     *
+     * @param dataURI == XYZ in <img src="XYZ">
+     **/
+    private void doesDataURIContainData(String dataURI) {
+        // let's do a simple regexp
+
+        if (dataURI ==~ "^data:image/[a-z]+;base64,") {
+            String findingText = "data-URI image missing"
+            checkingResults.newFinding(findingText)
+        }
+    }
 
 
 }
