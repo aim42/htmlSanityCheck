@@ -127,7 +127,7 @@ class HtmlPageTest extends GroovyTestCase {
         htmlPage = new HtmlPage(new File(filePath))
 
         ArrayList images = htmlPage.getAllImageTags()
-        assertEquals("expected 2 images", 2, images.size())
+        assertEquals("expected 3 images", 3, images.size())
 
     }
 
