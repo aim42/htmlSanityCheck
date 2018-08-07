@@ -64,6 +64,11 @@ class URLUtil {
                 ip_address_pattern.matcher(link).matches()
         )
     }
+    static boolean isDataURI(String s) {
+        // simple regular expression to match data:image
+
+        return (s ==~ (/^(?i)(data:image).*$/))
+    }
 
     /**
      * Checks if this String represents a local resource, either:
@@ -148,6 +153,7 @@ class URLUtil {
     public static boolean isValidIP(String ipa) {
         return ipa ==~ /^(([01]?\d\d?|2[0-4]\d|25[0-5])\.){3}([01]?\d\d?|2[0-4]\d|25[0-5])$/
     }
+
 }
 
 /************************************************************************

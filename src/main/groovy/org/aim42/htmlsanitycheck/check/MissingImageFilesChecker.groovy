@@ -52,16 +52,18 @@ class MissingImageFilesChecker extends Checker {
     }
 
     private void checkSingleLocalImage(HtmlElement image) {
-        String relativePathToCurrentImage = image.getImageSrcAttribute()
+        String imageSrcAttribute = image.getImageSrcAttribute()
 
         // check only "local" image references
         // (that is, NO remote URL)
-        if (!URLUtil.isRemoteURL(relativePathToCurrentImage)) {
+        Boolean isRemoteURL = URLUtil.isRemoteURL(imageSrcAttribute)
+        Boolean isDataURI   = URLUtil.isDataURI(imageSrcAttribute)
+        if (!isRemoteURL && !isDataURI) {
 
             // bookkeeping:
             checkingResults.incNrOfChecks()
 
-            doesImageFileExist( relativePathToCurrentImage );
+            doesImageFileExist( imageSrcAttribute );
         }
     }
 
