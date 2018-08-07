@@ -24,6 +24,7 @@ plugins {
     id 'java'
     id "com.gradle.plugin-publish" version "0.9.10"
     id 'com.gradle.build-scan' version '1.15.1'
+    id "org.aim42.htmlSanityCheck" version "0.9.7"
 }
 
 
@@ -82,6 +83,16 @@ apply from: 'config/codenarc.gradle'
 
 // end:BuildPlugins[]
 
+htmlSanityCheck {
+    sourceDir = new File( buildDir, "html5")
+
+    // files to check - in Set-notation
+    //sourceDocuments = [ "one-file.html", "another-file.html", "index.html"]
+
+    // where to put results of sanityChecks...
+    checkingResultsDir = new File( buildDir, "reports/tests/htmlSanityCheck" )
+    checkExternalLinks = false
+}
 
 task copyResourceImages(type: Copy) {
     from('src/main/resources') {
