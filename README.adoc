@@ -152,7 +152,6 @@ def targetImagesPath =   htmlOutputPath + "/images"
 def checkingResultsPath = "$buildDir/report/htmlchecks"
 
 
-
 apply plugin: 'org.asciidoctor.convert'
 
 asciidoctor {
@@ -190,7 +189,8 @@ htmlSanityCheck {
     // where to put results of sanityChecks...
     checkingResultsDir = new File( checkingResultsPath )
 
-
+   // fail build on errors?
+    failOnErrors = false
 }
 
 ----
@@ -239,11 +239,21 @@ Image-tags should contain an alt-attribute that the browser displays when the or
 file cannot be found or cannot be rendered. Having alt-attributes is good and defensive style.
 
 
-=== Broken External Links
-*planned*
+=== Broken HTTP Links
+The current version contains a somewhat naive implementation that
+gets the HTTP response from a HEAD request and identifies errors
+(status >400) and warnings (status 1xx or 3xx).
 
-Although external links might suffer from network issues or site maintenance,
-checks are still possible...
+Future plans include configurable ranges (as some people might
+want some content behind paywalls NOT to result in errors...)
+
+Localhost or numerical IP addresses are NOT marked as suspicious.
+
+Please comment in case you have additional requirements.
+
+=== Other types of external links
+*planned*: ftp, ntp or other protocols are currently not checked,
+but should...
 
 
 
