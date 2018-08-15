@@ -295,9 +295,13 @@ http://code4reference.com/2012/08/gradle-custom-plugin-part-2/[part 2].
 * Of course, the http://jsoup.org/apidocs/[JSoup API documentation]
 
 == Similar Projects
-The https://github.com/rackerlabs/gradle-linkchecker-plugin[gradle-linkchecker-plugin] is an (open source) gradle plugin
+
+* The https://github.com/rackerlabs/gradle-linkchecker-plugin[gradle-linkchecker-plugin] is an (open source) gradle plugin
 which validates that all links in a local HTML file tree go out to other existing local files or remote web locations.
 It creates a simple text file report and might be a complement to this `HtmlSanityChecker`.
+
+* https://bmuschko.com/blog/golang-with-gradle/[Benjamin Muschko] has created a (go-based) command-line tool
+to check links, called https://github.com/bmuschko/link-verifier[link verifier]
 
 == Contributing
 Please report {plugin-issues}[issues or suggestions].
