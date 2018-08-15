@@ -6,6 +6,20 @@ class FindingSpec extends Specification {
 
     Finding finding
 
+    def "can instantiate Finding with triple-quoted GroovyString"() {
+        given: "a problem description"
+        String problem = "problem"
+        when:
+        finding = new Finding("""${problem}""")
+
+        then:
+        finding.nrOfOccurrences== 1
+
+        and:
+        finding.whatIsTheProblem == problem
+
+    }
+
 
     def "finding toString returns item"() {
         given:
@@ -23,7 +37,7 @@ class FindingSpec extends Specification {
 
     }
 
-    def "finding with multiple occurences returns refcount"() {
+    def "finding with multiple occurrences returns refcount"() {
         given:
         String error = "error"
         finding = new Finding( error, 3)

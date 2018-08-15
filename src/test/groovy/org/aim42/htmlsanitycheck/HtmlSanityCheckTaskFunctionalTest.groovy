@@ -38,7 +38,6 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
             htmlSanityCheck {
                 sourceDir = file( "${htmlFile.parent}" )
                 checkingResultsDir = file( "${buildDir.absolutePath}" )
-                checkExternalLinks = false
             }
         """
 
@@ -70,7 +69,6 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
             htmlSanityCheck {
                 sourceDir = file( "${htmlFile.parent}" )
                 checkingResultsDir = file( "${buildDir.absolutePath}" )
-                checkExternalLinks = false
                 failOnErrors = true
             }
         """

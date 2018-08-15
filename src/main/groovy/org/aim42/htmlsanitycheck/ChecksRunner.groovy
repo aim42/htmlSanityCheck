@@ -46,25 +46,19 @@ class ChecksRunner {
 
     // convenience constructors, mainly  for tests
     // ------------------------------------------------
-    public ChecksRunner(Set<Class> checkerCollection,
-                        SortedSet<File> filesToCheck,
-                        File checkingResultsDir,
-						File junitResultsDir) {
-        this( checkerCollection, filesToCheck, checkingResultsDir, junitResultsDir, false)
-    }
 
     // just ONE file to check and distinct directory
     public ChecksRunner(Set<Class> checkerCollection,
                         File fileToCheck,
                         File checkingResultsDir,
 						File junitResultsDir) {
-        this( checkerCollection, [fileToCheck], checkingResultsDir, junitResultsDir, false)
+        this( checkerCollection, [fileToCheck], checkingResultsDir, junitResultsDir)
     }
 
     // with just ONE file to check
     public ChecksRunner(Set<Class> checkerCollection,
                         File fileToCheck ) {
-        this( checkerCollection, [fileToCheck], fileToCheck.getParentFile(), false)
+        this( checkerCollection, [fileToCheck], fileToCheck.getParentFile())
     }
 
     // with ONE checker and ONE file and target directory
@@ -72,29 +66,28 @@ class ChecksRunner {
                          File fileToCheck,
                          File checkingResultsDir,
 						 File junitResultsDir) {
-        this( [checkerCollection], [fileToCheck], checkingResultsDir, junitResultsDir, false)
+        this( [checkerCollection], [fileToCheck], checkingResultsDir, junitResultsDir)
     }
 
     // with just ONE checker and ONE file...
     public ChecksRunner( Class checkerCollection,
                          File fileToCheck ) {
-        this( [checkerCollection], [fileToCheck], fileToCheck.getParentFile(), false)
+        this( [checkerCollection], [fileToCheck], fileToCheck.getParentFile())
     }
 
-    // with checkers and just ONE file...
+    // with ONE checker and a set of files...
     public ChecksRunner( Class checker,
                          SortedSet<File> filesToCheck ) {
-        this( [checker], filesToCheck, File.createTempDir(), false)
+        this( [checker], filesToCheck, File.createTempDir())
     }
 
 
     // standard constructor
     public ChecksRunner(
             Set<Class> checkerCollection,
-            Set<File> filesToCheck,
+            Collection<File> filesToCheck,
             File checkingResultsDir,
-			File junitResultsDir,
-            Boolean checkExternalResources
+			File junitResultsDir
     ) {
         this.resultsForAllPages = new PerRunResults()
 
@@ -133,17 +126,6 @@ class ChecksRunner {
             def singleCheckResults = checker.performCheck(pageToCheck)
             collectedResults.addResultsForSingleCheck(singleCheckResults)
         }
-            //def singleCheckResults = new BrokenCrossReferencesChecker().performCheck( pageToCheck )
-
-        /*
-        collectedResults.with {
-            addResultsForSingleCheck(missingImageFilesCheck(baseDir))
-            addResultsForSingleCheck(duplicateIdCheck())
-            addResultsForSingleCheck(brokenCrossReferencesCheck())
-            addResultsForSingleCheck(missingLocalResourcesCheck(baseDir))
-            addResultsForSingleCheck(missingAltAttributesCheck())
-        }
-        */
 
         return collectedResults
     }
@@ -192,7 +174,7 @@ class ChecksRunner {
 
     /**
      * reports results to logger
-     * TODO:
+     * TODO: report results to logger
      */
     private void reportCheckingResultsOnLogger() {
         Reporter reporter = new LoggerReporter(resultsForAllPages, logger)
@@ -224,7 +206,7 @@ class ChecksRunner {
  * This is free software - without ANY guarantee!
  *
  *
- * Copyright Dr. Gernot Starke, arc42.org
+ * Copyright Dr. Gernot Starke, aim42.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

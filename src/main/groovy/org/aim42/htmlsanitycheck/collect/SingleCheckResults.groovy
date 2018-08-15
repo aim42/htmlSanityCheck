@@ -10,13 +10,15 @@ package org.aim42.htmlsanitycheck.collect
 
 class SingleCheckResults implements CheckResults {
 
-    public String whatIsChecked    // i.e. "Missing Local Images Check"
+    String whatIsChecked    // i.e. "Missing Local Images Check"
 
-    // source-item is checked against target-item
-    public String sourceItemName   // i.e. image-src-attribute, anchor/link
-    public String targetItemName   // i.e. local-image-file, id/bookmark
+    // source-whatIsTheProblem is checked against target-whatIsTheProblem
+    String sourceItemName   // i.e. image-src-attribute, anchor/link
+    String targetItemName   // i.e. local-image-file, id/bookmark
 
-    public int nrOfItemsChecked
+    String generalRemark    // i.e. "Internet not available"
+
+    int nrOfItemsChecked
 
     private int nrOfIssues
     // nrOfIssues can be larger than findings.size(),
@@ -37,6 +39,7 @@ class SingleCheckResults implements CheckResults {
         this.nrOfItemsChecked = 0
         this.nrOfIssues = 0
         this.findings = new ArrayList<Finding>()
+        this.generalRemark = ""
     }
 
 
@@ -124,7 +127,7 @@ class SingleCheckResults implements CheckResults {
         ArrayList<String> messages = new ArrayList<String>()
 
         findings.each { finding ->
-            messages.add( finding.item )
+            messages.add( finding.whatIsTheProblem )
         }
         return messages
     }
@@ -155,7 +158,7 @@ class SingleCheckResults implements CheckResults {
 }
 
 /*=====================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

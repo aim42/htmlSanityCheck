@@ -68,7 +68,7 @@ class MissingLocalResourceRefCountSpec extends Specification {
         collector.nrOfProblems() == nrOfFindings
 
         // we get the correct finding-message
-        collector.findings.first().item == result
+        collector.findings.first().whatIsTheProblem == result
 
 
         where:

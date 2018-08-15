@@ -10,7 +10,7 @@ package org.aim42.htmlsanitycheck.collect
  */
 class Finding {
 
-    String item // i.e. which image is missing, which link/anchor is undefined
+    String whatIsTheProblem // i.e. which image is missing, which link/anchor is undefined
 
     int nrOfOccurrences // how often does this specific finding occur in the checked-page
 
@@ -23,30 +23,30 @@ class Finding {
     }
 
     /**
-     * no finding should exist without giving an explanation ("item")
+     * no finding should exist without giving an explanation ("whatIsTheProblem")
      * about what went wrong.
-     * @param item An explanation of what went wrong (i.e. name of missing file)
+     * @param whatIsTheProblem An explanation of what went wrong (i.e. name of missing file)
      */
-    public Finding(String item) {
-        this( item, 1, new ArrayList<String>(3))
+    public Finding(String whatIsTheProblem) {
+        this( whatIsTheProblem, 1, new ArrayList<String>(3))
     }
 
 
     /**
      * finding with explanation and several occurences
      */
-    public Finding( String item, int nrOfOccurrences ) {
-        this( item, nrOfOccurrences, new ArrayList<String>(3))
+    public Finding(String whatIsTheProblem, int nrOfOccurrences ) {
+        this( whatIsTheProblem, nrOfOccurrences, new ArrayList<String>(3))
     }
 
 
     /**
      * most general constructor:
      * create Finding with explanation and nrOfOccurrences
-     * @param item  An explanation of what went wrong (i.e. name of missing file)
+     * @param whatIsTheProblem  An explanation of what went wrong (i.e. name of missing file)
      * */
-    public Finding(String item, int nrOfOccurrences, ArrayList<String> suggestions) {
-        this.item = item
+    public Finding(String whatIsTheProblem, int nrOfOccurrences, ArrayList<String> suggestions) {
+        this.whatIsTheProblem = whatIsTheProblem
         this.nrOfOccurrences = nrOfOccurrences
         this.suggestions = suggestions
 
@@ -54,11 +54,11 @@ class Finding {
 
     /**
      * create Finding with explanation and suggestions
-     * @param item explanation what went wrong
+     * @param whatIsTheProblem explanation what went wrong
      * @param suggestions what could have been meant
      */
-    public Finding(String item, ArrayList<String> suggestions) {
-        this( item, 1, suggestions)
+    public Finding(String whatIsTheProblem, ArrayList<String> suggestions) {
+        this( whatIsTheProblem, 1, suggestions)
     }
 
     /**
@@ -79,7 +79,7 @@ class Finding {
         String refCount = (nrOfOccurrences > 1) ? " (reference count: $nrOfOccurrences)": ""
         String suggestionStr = (suggestions.size() > 0) ? " (Suggestions: " + suggestions.join(", ") + ")": ""
 
-        return item + refCount + (suggestionStr ? "\n" + suggestionStr : "")
+        return whatIsTheProblem + refCount + (suggestionStr ? "\n" + suggestionStr : "")
     }
 
 

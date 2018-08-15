@@ -12,7 +12,7 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
 
     private List<String> listOfIds    // id="XYZ"
     private List<String> hrefList
-    private Set<String> hrefSet       // a href="XYZ"
+    private Set<String> hrefSet       // <a href="XYZ"...>
 
 
     @Override
@@ -108,13 +108,15 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
 
         if (!listOfIds.contains(linkTarget)) {
             // we found a broken link!
-            handleBrokenLink(linkTarget, href)
+            addBrokenLinkToResults(linkTarget, href)
         }
 
     }
 
-    // add the broken link to results
-    private void handleBrokenLink(String linkTarget, String href) {
+    /*
+    * bookkeeping the broken links that we found
+     */
+    private void addBrokenLinkToResults(String linkTarget, String href) {
         String findingText = "link target \"$linkTarget\" missing"
 
         // TODO: reference count is appended as string - better keep this as separate int value
