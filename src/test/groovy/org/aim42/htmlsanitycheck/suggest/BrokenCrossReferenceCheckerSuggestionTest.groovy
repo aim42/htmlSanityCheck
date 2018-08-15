@@ -55,7 +55,7 @@ class BrokenCrossReferenceCheckerSuggestionTest extends GroovyTestCase {
             assertEquals("expected ONE finding", 1, collector.findings.size())
 
             // message shall be "link target aim42 missing
-            assertEquals(message, expected, onlyFinding.item )
+            assertEquals(message, expected, onlyFinding.whatIsTheProblem )
 
             // checker shall determine aim43 as suggestion
             assertEquals("expected aim43 as suggestion", "aim43", onlyFinding.suggestions.first())

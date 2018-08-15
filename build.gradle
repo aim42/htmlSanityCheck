@@ -13,9 +13,6 @@ buildscript {
         }
         jcenter()
     }
-    dependencies {
-//        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
-    }
 }
 
 plugins {
@@ -23,27 +20,32 @@ plugins {
     id 'groovy'
     id 'java'
     id "com.gradle.plugin-publish" version "0.9.10"
+
+    // to report build results back to gradle.org
     id 'com.gradle.build-scan' version '1.15.1'
     id "org.aim42.htmlSanityCheck" version "1.0.0-RC-1"
+
 }
 
 
 dependencies {
 
-    //   localGroovy()
     testCompile(
             'junit:junit:4.12',
             'org.codehaus.groovy:groovy-all:2.4.12',
             'org.spockframework:spock-core:1.1-groovy-2.4',
             'com.tngtech.archunit:archunit-junit:0.8.3')
+// need cglib
+//            'com.github.cglib:cglib-nodep:3.2.5')
 
     compile gradleApi()
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.3'
 
-
     // jsoup is our awesome html parser, see jsoup.org
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
+
+    //   gems 'rubygems:asciidoctor-diagram:1.4.0'
 
 } // dependencies
 
@@ -77,7 +79,7 @@ apply plugin: "com.gradle.plugin-publish"
 
 // publish to (local) maven repo
 apply plugin: 'maven-publish'
-apply from: "config/publish-snapshot.gradle"
+//apply from: "config/publish-snapshot.gradle"
 
 apply from: 'config/codenarc.gradle'
 
@@ -114,6 +116,16 @@ processResources {
 
 
 asciidoctor {
+
+    // the jrubyPrepare tasks takes care of loading the gems
+//    dependsOn jrubyPrepare
+
+    // the asciidoctor task depends on this gem
+//    requires = ['asciidoctor-diagram']
+
+    // seems to be important :-)
+//    gemPath = jrubyPrepare.outputDir
+
     outputDir = file(buildDir)
     sourceDir = file(srcDir)
     sources {
@@ -132,7 +144,13 @@ asciidoctor {
             'source-highlighter': 'coderay',
             'javaVersion'       : "$javaVersion",
             'currentDate'       : "$currentDate",
-            'versionId'         : "$version"]
+            'versionId'         : "$version",
+
+            // the following are used for PlantUML integration
+            'allow-uri-read'    : true,
+            'plantUMLDir'       : file("./build/asciidoc/pdf/.").canonicalPath
+    ]
+
 
     resources {
         from("${srcDir}/images") {

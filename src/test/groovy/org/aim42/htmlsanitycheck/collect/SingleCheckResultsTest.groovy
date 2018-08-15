@@ -100,7 +100,7 @@ class SingleCheckResultsTest extends GroovyTestCase {
 
         // we expect the finding to be ./images/test_xyz_uvw.jpg
         String expectedImageSrc = "image \"./images/test_xyz_uvw.jpg\" missing"
-        String actualFinding = checkingResults.findings.first().item
+        String actualFinding = checkingResults.findings.first().whatIsTheProblem
 
         assertEquals("expected \"/images/test_xyz_uvw.jpg\" as finding",
                 expectedImageSrc, actualFinding)

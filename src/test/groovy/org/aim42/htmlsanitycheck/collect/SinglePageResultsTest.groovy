@@ -54,7 +54,7 @@ class SinglePageResultsTest extends GroovyTestCase {
             }
         }
 
-        assertEquals("expect $nrOfChecks item checked on SingleCheckResults",
+        assertEquals("expect $nrOfChecks whatIsTheProblem checked on SingleCheckResults",
                 nrOfChecks, singleCheckResults.nrOfItemsChecked)
         assertEquals("expect $nrOfChecks findings on SingleCheckResults",
                 nrOfChecks, singleCheckResults.nrOfProblems())

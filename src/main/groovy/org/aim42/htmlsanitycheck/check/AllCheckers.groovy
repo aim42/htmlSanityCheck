@@ -23,11 +23,13 @@ package org.aim42.htmlsanitycheck.check
 class AllCheckers {
 
     public final static LinkedHashSet<Class> checkerClazzes =
-            [BrokenCrossReferencesChecker.class,
-             DuplicateIdChecker.class,
-             ImageMapChecker.class,
-             MissingAltInImageTagsChecker.class,
-             MissingImageFilesChecker.class,
-             MissingLocalResourcesChecker.class].toSet()
+            [BrokenCrossReferencesChecker,
+             BrokenHttpLinksChecker,
+             DuplicateIdChecker,
+             ImageMapChecker,
+             MissingAltInImageTagsChecker,
+             MissingImageFilesChecker,
+             MissingLocalResourcesChecker].toSet()
+
 
 }

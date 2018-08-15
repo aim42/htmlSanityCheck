@@ -65,10 +65,10 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
         File testDir = File.createTempDir( "testdir", "")
         allChecksRunner = new AllChecksRunner(
-                new LinkedHashSet<File>( [tmpFile] ),
+                new LinkedHashSet<File>([tmpFile]),
                 testDir,
-				testDir,
-                false)
+                testDir
+        )
 
         SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile( tmpFile )
 

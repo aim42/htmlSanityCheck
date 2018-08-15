@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.junit.Before
 import org.junit.Test
@@ -9,8 +10,6 @@ import org.junit.Test
 
 
 class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
-
-    private final static String HTMLHEAD = "<html><head></head><body>"
 
     Checker undefinedInternalLinksChecker
     HtmlPage htmlPage
@@ -24,14 +23,13 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
     @Test
     public void testExternalLinkShallBeIgnored() {
-        String HTML = """$HTMLHEAD
+        String HTML = """$HtmlConst.HTML_HEAD
 
                    <h1>dummy-heading-1</h1>
                    <a href="http://github.com/aim42">aim42</a>
                    <a href="https://github.com/arc42">arc42</a>
-
-              </body>
-           </html>"""
+              $HtmlConst.HTML_END
+              """
 
         htmlPage = new HtmlPage( HTML )
 
@@ -47,16 +45,14 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
     @Test
     public void testOneGoodOneBrokenLink() {
-        String HTML_WITH_A_TAGS_AND_ID = '''
-           <html>
-             <head></head>
-              <body>
+        String HTML_WITH_A_TAGS_AND_ID = """
+           $HtmlConst.HTML_HEAD
                    <h1>dummy-heading-1</h1>
                    <a href="#aim42">link-to-aim42</a>
                    <h2 id="aim42">aim42 Architecture Improvement</h3>
                    <a href="#nonexisting">non-existing-link</a>
-              </body>
-           </html>'''
+           $HtmlConst.HTML_END
+              """
 
         htmlPage = new HtmlPage( HTML_WITH_A_TAGS_AND_ID )
 
@@ -158,7 +154,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
     @Test
     public void testReferenceCount() {
-        String HTML = """$HTMLHEAD
+        String HTML = """$HtmlConst.HTML_HEAD
                    <a href="#aim42">link-0</a>
                    <a href="#aim42">link-1</a>
                    <a href="#aim42">link-2</a>
@@ -187,7 +183,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
     @Test
     public void testMailtoinkIsIgnored() {
-        String HTML = """$HTMLHEAD
+        String HTML = """$HtmlConst.HTML_HEAD
                    <a href="mailto:chuck.norris@example.org">mail him</a>
               </body></html>"""
 
@@ -202,7 +198,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
     @Test
     public void testLinkToLocalFileShallNotBeChecked() {
-        String HTML = """$HTMLHEAD
+        String HTML = """$HtmlConst.HTML_HEAD
            <a href="api/nonexisting.html">internal-link-to-file</a>
          </body>
            </html>
@@ -220,7 +216,7 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
     @Test
     public void testLinkToHashtagShallPass() {
-        String HTML = """$HTMLHEAD
+        String HTML = """$HtmlConst.HTML_HEAD
            <a href="#">internal-link-to-file</a>
          </body>
            </html>

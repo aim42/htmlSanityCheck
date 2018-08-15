@@ -123,7 +123,7 @@ abstract class Reporter {
  * This is free software - without ANY guarantee!
  *
  *
- * Copyright 2013, Dr. Gernot Starke, arc42.org
+ * Copyright, Dr. Gernot Starke and aim42.org committers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

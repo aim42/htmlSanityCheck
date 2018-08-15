@@ -75,7 +75,7 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
 
         checkingResults = checker.performCheck( htmlPage )
 
-        // checker must check one item
+        // checker must check one whatIsTheProblem
         int expected = 1
         int actual = checkingResults.nrOfItemsChecked
 

@@ -38,10 +38,6 @@ class HtmlSanityCheckTask extends DefaultTask {
     @OutputDirectory
     File junitResultsDir
 
-    // shall we also check external resources?
-    @Optional
-    @Input
-    Boolean checkExternalLinks = false
 
     // fail build on errors?
     @Optional
@@ -105,8 +101,7 @@ class HtmlSanityCheckTask extends DefaultTask {
             def allChecksRunner = new AllChecksRunner(
                     allFilesToCheck,
                     checkingResultsDir,
-                    junitResultsDir,
-                    checkExternalLinks
+                    junitResultsDir
             )
             allChecksRunner.consoleReport = false
 
@@ -118,7 +113,10 @@ class HtmlSanityCheckTask extends DefaultTask {
             logger.debug("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
 
             if (failOnErrors && nrOfFindingsOnAllPages > 0) {
-                throw new GradleException("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
+                def failureMsg = """
+Your build configuration included 'failOnErrors=true', and ${nrOfFindingsOnAllPages} error(s) were found on all checked pages.
+See ${checkingResultsDir} for a detailed report."""
+                throw new GradleException(failureMsg)
             }
         } else {
             logger.warn("""Fatal configuration errors preventing checks:\n
@@ -183,7 +181,6 @@ class HtmlSanityCheckTask extends DefaultTask {
         logger.info "Source directory: $sourceDir"
         logger.info "Results dir     : $checkingResultsDir"
         logger.info "JUnit dir       : $junitResultsDir"
-        logger.info "Check externals : $checkExternalLinks"
         logger.info "Fail on errors  : $failOnErrors"
 
     }

@@ -1,5 +1,5 @@
 = image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
-:version: 0.9.7
+:version: 1.0.0-RC-1
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
@@ -87,9 +87,6 @@ junitResultsDir:: (optional) directory where the results written to in JUnit XML
 failOnErrors:: (optional) if set to "true", the build will fail if any error was found in the checked pages.
                       Defaults to `false`
 
-checkExternalLinks:: (optional, planned) if set to "true", external references are checked too.
-                      Defaults to `false` (currently not implemented)
-
 
 
 == Examples
@@ -107,7 +104,6 @@ htmlSanityCheck {
 
     // where to put results of sanityChecks...
     checkingResultsDir = new File( "$buildDir/report/htmlchecks" )
-    checkExternalLinks = false
 
     // fail build on errors?
     failOnErrors = true
@@ -126,17 +122,14 @@ buildscript {
         }
         jcenter()
     }
-
-    dependencies {
-        classpath (group: 'gradle.plugin.org.aim42',
-                name: 'htmlSanityCheck',
-                version: '0.9.7')
-
-        classpath (group: 'org.asciidoctor',
-                    name: 'asciidoctor-gradle-plugin',
-                    version: '1.5.3')
-    }
 }
+
+
+plugins {
+    id 'org.aim42.htmlsanitycheck' version '1.0.0-RC-1'
+    id 'org.asciidoctor.convert' version '1.5.8'
+}
+
 
 // ==== path definitions =====
 // ===========================
@@ -157,7 +150,6 @@ def targetImagesPath =   htmlOutputPath + "/images"
 
 // where HTMLSanityCheck checking results ares stored
 def checkingResultsPath = "$buildDir/report/htmlchecks"
-
 
 
 apply plugin: 'org.asciidoctor.convert'
@@ -197,9 +189,8 @@ htmlSanityCheck {
     // where to put results of sanityChecks...
     checkingResultsDir = new File( checkingResultsPath )
 
-    // false: restrict checks to local resources
-    // true:  also check external (e.g. http, https...) links.
-    checkExternalLinks = false
+   // fail build on errors?
+    failOnErrors = false
 }
 
 ----
@@ -248,11 +239,21 @@ Image-tags should contain an alt-attribute that the browser displays when the or
 file cannot be found or cannot be rendered. Having alt-attributes is good and defensive style.
 
 
-=== Broken External Links
-*planned*
+=== Broken HTTP Links
+The current version contains a somewhat naive implementation that
+gets the HTTP response from a HEAD request and identifies errors
+(status >400) and warnings (status 1xx or 3xx).
 
-Although external links might suffer from network issues or site maintenance,
-checks are still possible...
+Future plans include configurable ranges (as some people might
+want some content behind paywalls NOT to result in errors...)
+
+Localhost or numerical IP addresses are NOT marked as suspicious.
+
+Please comment in case you have additional requirements.
+
+=== Other types of external links
+*planned*: ftp, ntp or other protocols are currently not checked,
+but should...
 
 
 
@@ -293,6 +294,10 @@ http://code4reference.com/2012/08/gradle-custom-plugin-part-1/[part 1] and
 http://code4reference.com/2012/08/gradle-custom-plugin-part-2/[part 2].
 * Of course, the http://jsoup.org/apidocs/[JSoup API documentation]
 
+== Similar Projects
+The https://github.com/rackerlabs/gradle-linkchecker-plugin[gradle-linkchecker-plugin] is an (open source) gradle plugin
+which validates that all links in a local HTML file tree go out to other existing local files or remote web locations.
+It creates a simple text file report and might be a complement to this `HtmlSanityChecker`.
 
 == Contributing
 Please report {plugin-issues}[issues or suggestions].

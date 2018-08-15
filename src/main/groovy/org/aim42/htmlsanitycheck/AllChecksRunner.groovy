@@ -2,12 +2,7 @@ package org.aim42.htmlsanitycheck
 
 import org.aim42.htmlsanitycheck.check.*
 import org.aim42.htmlsanitycheck.collect.PerRunResults
-import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
-import org.aim42.htmlsanitycheck.html.HtmlPage
-import org.aim42.htmlsanitycheck.report.ConsoleReporter
-import org.aim42.htmlsanitycheck.report.HtmlReporter
-import org.aim42.htmlsanitycheck.report.Reporter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -49,16 +44,14 @@ class AllChecksRunner {
     public AllChecksRunner(
             Collection<File> filesToCheck,
             File checkingResultsDir,
-			File junitResultsDir,
-            Boolean checkExternalResources
+            File junitResultsDir
     ) {
         super()
 
         runner = new ChecksRunner( AllCheckers.checkerClazzes,
                                     filesToCheck,
                                     checkingResultsDir,
-									junitResultsDir,
-                                    checkExternalResources)
+									junitResultsDir)
 
         logger.debug("AllChecksRunner created")
     }
@@ -78,10 +71,10 @@ class AllChecksRunner {
      * @param filesToCheck
      */
     public AllChecksRunner(Collection<File> filesToCheck) {
-        this( filesToCheck,
-              File.createTempDir( prefixTemporary, "directory"),
-			  File.createTempDir( prefixTemporary, "junit"),
-              false)
+        this(filesToCheck,
+                File.createTempDir(prefixTemporary, "directory"),
+                File.createTempDir(prefixTemporary, "junit")
+        )
     }
 
     /**
@@ -132,7 +125,7 @@ class AllChecksRunner {
 }
 
 /*========================================================================
- Copyright 2014-2015 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

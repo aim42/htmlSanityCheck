@@ -64,7 +64,7 @@ abstract class SuggestingChecker extends Checker {
      *
      */
     public void determineSuggestionsForSingleFinding( Finding finding ) {
-        finding.setSuggestions( Suggester.determineNSuggestions(finding.item, validPossibilities, 1))
+        finding.setSuggestions( Suggester.determineNSuggestions(finding.whatIsTheProblem, validPossibilities, 1))
 
     }
 }

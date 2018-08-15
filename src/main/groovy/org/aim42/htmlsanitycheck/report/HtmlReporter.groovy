@@ -320,6 +320,7 @@ function scrollToTop() {
     }
 
 
+    // TODO: add "GeneralRemark" to output, if it exists
     @Override
     protected void reportSingleCheckSummary(SingleCheckResults singleCheckResults) {
 

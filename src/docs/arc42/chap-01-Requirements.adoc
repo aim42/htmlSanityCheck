@@ -20,7 +20,7 @@ showing errors within HTML files - as shown in the adjoining figure.
 
 ==== Basic Usage
 
-. A user configures the location (directory and filename) of an HTML file,
+. A user configures the location (directory and filename) of one or more HTML file(s),
 . and the corresponding images directory.
 . kbd:[HtmlSC] performs various checks on the HTML and
 . reports its results either on the console or as HTML report.
@@ -50,8 +50,8 @@ See <<DuplicateIdChecker>>.
 
 .Illegal links:: The links (aka anchors or URIs) can contain illegal characters or violate HTML link syntax. See <<IllegalLinkChecker>>
 
-.Broken external links: External links can be broken due to myriads of reasons: misspelled, link-target currently offline, illegal link syntax.
-See <<BrokenExternalLinksChecker>>.
+.Broken external links: External http links can be broken due to myriads of reasons: misspelled, link-target currently offline, illegal link syntax.
+See <<BrokenHttpLinksChecker>>.
 
 .Missing Alt Attribute in Image Tags: Images missing an alt-attribute.
 See <<MissingImgAltAttributeChecker>>.

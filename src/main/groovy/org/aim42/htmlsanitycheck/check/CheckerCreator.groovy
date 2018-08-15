@@ -44,6 +44,9 @@ class CheckerCreator {
             case BrokenCrossReferencesChecker.class:
                 checker = new BrokenCrossReferencesChecker(); break
 
+            case BrokenHttpLinksChecker.class:
+                checker = new BrokenHttpLinksChecker(); break
+
             case DuplicateIdChecker.class:
                 checker = new DuplicateIdChecker(); break
 

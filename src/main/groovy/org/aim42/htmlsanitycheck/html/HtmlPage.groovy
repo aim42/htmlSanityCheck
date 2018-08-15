@@ -176,13 +176,24 @@ class HtmlPage {
         elements.each { element ->
             String href = element.attr("href")
 
-            //hrefStrings.add( normalizeHrefString( href ))
             hrefStrings.add(href)
         }
 
         return hrefStrings
     }
 
+    /**
+     * @return immutable set of all href-attributes that start with http or https
+     **/
+    public final Set<String> getAllHttpHrefStringsAsSet() {
+        Elements elements = document.select("a[href]")
+
+        return elements
+                .collect{ it.attr("href")}
+                .findAll{ element -> element.toUpperCase().startsWith("HTTP") }
+                .toSet()
+
+    }
     /**
      * @return immutable List of img-tags with "usemap=xyz" declaration
      */
