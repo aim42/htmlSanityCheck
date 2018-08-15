@@ -23,12 +23,12 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     }
 
     /* executed before every single spec */
+
     def setup() {
         brokenHttpLinksChecker = new BrokenHttpLinksChecker()
 
         collector = new SingleCheckResults()
     }
-
 
     /**
      * checking for internet connectivity is a somewhat brittle - as there's no such thing as "the internet"
@@ -40,12 +40,12 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         expect: "if there is no internet connection, testing should fail"
         NetUtil.isInternetConnectionAvailable() == true
 
-        }
+    }
 
     def "empty page has no errors"() {
         given: "an empty HTML page"
         String HTML = """$HtmlConst.HTML_HEAD $HtmlConst.HTML_END """
-        htmlPage = new HtmlPage( HTML)
+        htmlPage = new HtmlPage(HTML)
 
         when: "page is checked"
         collector = brokenHttpLinksChecker.performCheck(htmlPage)
@@ -65,7 +65,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
                 <a href="https://google.com">google</a>
                 $HtmlConst.HTML_END """
 
-        htmlPage = new HtmlPage( HTML)
+        htmlPage = new HtmlPage(HTML)
 
         when: "page is checked"
         collector = brokenHttpLinksChecker.performCheck(htmlPage)
@@ -75,7 +75,48 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
     }
 
+    def "single bad link is identified as problem"() {
 
+        given: "an HTML page with a single (bad) link"
+        String badhref = "http://arc42.org/ui98jfuhenu87djch"
+        String HTML = """$HtmlConst.HTML_HEAD 
+                <a href=${badhref}>nonexisting arc42 link</a>
+                $HtmlConst.HTML_END """
+
+        htmlPage = new HtmlPage(HTML)
+
+        when: "page is checked"
+        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+        then: "then collector contains the appropriate error message"
+        collector.findings[0].whatIsTheProblem.contains(badhref)
+
+    }
+
+    @Unroll
+    def 'bad link #badLink is identified as problem'() {
+
+        given: "an HTML page with a single (bad) link"
+        String badURL = "https://httpstat.us/${badLink}"
+        String HTML = """$HtmlConst.HTML_HEAD 
+                <a href=${badURL}>${badLink}</a>
+                $HtmlConst.HTML_END """
+
+        htmlPage = new HtmlPage(HTML)
+
+        when: "page is checked"
+        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+        then: "then collector contains the appropriate error message"
+        collector.findings[0].whatIsTheProblem.contains("${badLink}")
+
+        collector.findings[0].whatIsTheProblem.contains("Error: ${badURL}")
+
+        where:
+
+        badLink << [400, 401, 403, 404, 405, 406, 408, 409, 410]
+
+    }
     /**
      * guys from OpenRepose (https://github.com/rackerlabs/gradle-linkchecker-plugin/) came up with the
      * cornercase of "localhost" and "127.0.0.1"
@@ -87,7 +128,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
                          <a href="http://localhost:9001/">localhost</a>
                          $HtmlConst.HTML_END """
 
-        htmlPage = new HtmlPage( HTML)
+        htmlPage = new HtmlPage(HTML)
 
         when: "page is checked"
         collector = brokenHttpLinksChecker.performCheck(htmlPage)
@@ -100,7 +141,6 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
     }
 }
-
 
 /************************************************************************
  * This is free software - without ANY guarantee!

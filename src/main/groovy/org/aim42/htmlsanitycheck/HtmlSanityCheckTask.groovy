@@ -113,7 +113,10 @@ class HtmlSanityCheckTask extends DefaultTask {
             logger.debug("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
 
             if (failOnErrors && nrOfFindingsOnAllPages > 0) {
-                throw new GradleException("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
+                def failureMsg = """
+Your build configuration included 'failOnErrors=true', and ${nrOfFindingsOnAllPages} error(s) were found on all checked pages.
+See ${checkingResultsDir} for a detailed report."""
+                throw new GradleException(failureMsg)
             }
         } else {
             logger.warn("""Fatal configuration errors preventing checks:\n

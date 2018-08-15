@@ -25,7 +25,6 @@ class BrokenHttpLinksChecker extends Checker {
 
     @Override
     protected void initCheckingResultsDescription() {
-
         checkingResults.whatIsChecked = "External links Check"
         checkingResults.sourceItemName = "anchor href attribute"
         checkingResults.targetItemName = "broken external link"
@@ -39,16 +38,13 @@ class BrokenHttpLinksChecker extends Checker {
 
         hrefSet = pageToCheck.getAllHttpHrefStringsAsSet()
 
-        boolean internetAvailable //= NetUtil.internetConnectionAvailable()
-
-
-
+        // if there's no internet, issue a general warning
+        // but continue trying
         if (NetUtil.isInternetConnectionAvailable() == false) {
-            // TODO: add this as a "general remark" in this checkes' results,
             checkingResults.generalRemark = "There seems to be a general problem with internet connectivity, all other checks for http/https links might yield incorrect results!"
         }
 
-        checkAllExternalLinks()
+        checkAllHttpLinks()
 
         return checkingResults
 
@@ -60,11 +56,13 @@ class BrokenHttpLinksChecker extends Checker {
 
     }
 
-
-    private void checkAllExternalLinks() {
+    /**
+     * check all http(s) links
+     * TODO: use GPARS to check several links in parallel, as sequential checking might take too long
+     **/
+    private void checkAllHttpLinks() {
         // for all hrefSet check if the corresponding link is valid
         hrefSet.each { href ->
-            //if (URLUtil.isValidURL(href))
             checkSingleHttpLink(href)
         }
     }
@@ -72,8 +70,7 @@ class BrokenHttpLinksChecker extends Checker {
     /**
      * Check a single external link
      *
-     * TODO: use GPARS to check several links in parallel, as sequential checking might take too long
-     *
+
      */
     protected void checkSingleHttpLink(String href) {
 
@@ -95,14 +92,12 @@ class BrokenHttpLinksChecker extends Checker {
 
                 // interpret response code
                 // TODO: make this configurable
-                decideHowToTreatResponseCode( responseCode, href)
+                decideHowToTreatResponseCode(responseCode, href)
 
             }
-            catch (InterruptedIOException | ConnectException | UnknownHostException exception) {
-            // surely an error
-            }
-            catch (IOException exception) {
-            // surely an error
+            catch (InterruptedIOException | ConnectException | UnknownHostException | IOException exception) {
+                Finding someException = new Finding("""exception ${exception.toString()} with href=${href}""")
+                checkingResults.addFinding(someException)
             }
         }
         catch (MalformedURLException exception) {
@@ -118,25 +113,29 @@ class BrokenHttpLinksChecker extends Checker {
      *
      * @param responseCode
      */
-    protected void decideHowToTreatResponseCode( int responseCode, String href ) {
+    protected void decideHowToTreatResponseCode(int responseCode, String href) {
 
         String problem
 
-        if (!responseCode in NetUtil.HTTP_SUCCESS_CODES) {
+        if (!(responseCode in NetUtil.HTTP_SUCCESS_CODES)) {
 
-            switch (responseCode) {
-                case (responseCode in NetUtil.HTTP_WARNING_CODES): problem = "Warning:"; break;
-                case (responseCode >= 400): problem = "Error:"; break;
-                default: problem = "Error: Unknown response code:"
+            if (NetUtil.HTTP_WARNING_CODES.contains(responseCode)) {
+                    problem = "Warning:" }
+            else if (responseCode >= 400) {
+                problem = "Error:";
+            }
+             else {
+                problem = "Error: Unknown or unclassified response code:"
             }
 
-            problem += """ Link ${href} returned code ${responseCode}."""
+            problem += """ ${href} returned statuscode ${responseCode}."""
 
             checkingResults.addFinding(new Finding(problem))
         }
 
         return
     }
+
 }
 
 /************************************************************************
