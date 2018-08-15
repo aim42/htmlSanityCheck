@@ -29,7 +29,7 @@ image::template-method.png["Template Method", title="Template-Method Overview"]
 | <<BrokenCrossReferencesChecker>>  | checks if cross references (links referenced within the page) exist
 | <<DuplicateIdChecker>>            | checks if any id has multiple definitions
 | <<MissingLocalResourcesChecker>>  | checks if referenced other resources exist
-| <<BrokenExternalLinksChecker>>    | checks if external links are valid
+| <<BrokenHttpLinksChecker>>    | checks if external links are valid
 | <<IllegalLinkChecker>>            | checks if links do not violate HTML link syntax
 |===
 
@@ -108,8 +108,8 @@ containing both a local (file) reference plus an internal anchor +#mvcGroupInit+
 
 
 
-[[BrokenExternalLinksChecker]]
-==== BrokenExternalLinksChecker
+[[BrokenHttpLinksChecker]]
+==== BrokenHttpLinksChecker
 
 [small]#Addresses requirement <<requiredChecks, R-9>>.#
 
