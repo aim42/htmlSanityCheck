@@ -1,5 +1,5 @@
 = image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
-:version: 0.9.7
+:version: 1.0.0-RC-1
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
@@ -104,7 +104,6 @@ htmlSanityCheck {
 
     // where to put results of sanityChecks...
     checkingResultsDir = new File( "$buildDir/report/htmlchecks" )
-    checkExternalLinks = false
 
     // fail build on errors?
     failOnErrors = true
@@ -123,17 +122,14 @@ buildscript {
         }
         jcenter()
     }
-
-    dependencies {
-        classpath (group: 'gradle.plugin.org.aim42',
-                name: 'htmlSanityCheck',
-                version: '0.9.7')
-
-        classpath (group: 'org.asciidoctor',
-                    name: 'asciidoctor-gradle-plugin',
-                    version: '1.5.3')
-    }
 }
+
+
+plugins {
+    id 'org.aim42.htmlsanitycheck' version '1.0.0-RC-1'
+    id 'org.asciidoctor.convert' version '1.5.8'
+}
+
 
 // ==== path definitions =====
 // ===========================
@@ -193,6 +189,7 @@ htmlSanityCheck {
 
     // where to put results of sanityChecks...
     checkingResultsDir = new File( checkingResultsPath )
+
 
 }
 
