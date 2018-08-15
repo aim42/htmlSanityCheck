@@ -35,8 +35,6 @@ dependencies {
             'org.codehaus.groovy:groovy-all:2.4.12',
             'org.spockframework:spock-core:1.1-groovy-2.4',
             'com.tngtech.archunit:archunit-junit:0.8.3')
-// need cglib
-//            'com.github.cglib:cglib-nodep:3.2.5')
 
     compile gradleApi()
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
@@ -85,17 +83,24 @@ apply from: 'config/codenarc.gradle'
 
 // end:BuildPlugins[]
 
-htmlSanityCheck {
-    sourceDir = new File( buildDir, "html5")
 
-    // files to check - in Set-notation
+htmlSanityCheck {
+
+    // ensure asciidoctor->html runs first
+    // and images are copied to build directory
+
+    dependsOn asciidoctor
+
     //sourceDocuments = [ "one-file.html", "another-file.html", "index.html"]
 
-    // where to put results of sanityChecks...
-    checkingResultsDir = new File( buildDir, "reports/tests/htmlSanityCheck" )
+    sourceDir = new File("${buildDir}/html5")
 
-    // don't break the build if html errors are found!
+    // where to put results of sanityChecks...
+    checkingResultsDir = new File( buildDir, "reports/htmlSanityCheck" )
+
+    // fail the build if any error is encountered
     failOnErrors = false
+
 }
 
 task copyResourceImages(type: Copy) {
