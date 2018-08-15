@@ -24,7 +24,7 @@ plugins {
     id 'java'
     id "com.gradle.plugin-publish" version "0.9.10"
     id 'com.gradle.build-scan' version '1.15.1'
-    id "org.aim42.htmlSanityCheck" version "0.9.7"
+    id "org.aim42.htmlSanityCheck" version "1.0.0-RC-1"
 }
 
 
@@ -91,7 +91,9 @@ htmlSanityCheck {
 
     // where to put results of sanityChecks...
     checkingResultsDir = new File( buildDir, "reports/tests/htmlSanityCheck" )
-    checkExternalLinks = false
+
+    // don't break the build if html errors are found!
+    failOnErrors = false
 }
 
 task copyResourceImages(type: Copy) {
