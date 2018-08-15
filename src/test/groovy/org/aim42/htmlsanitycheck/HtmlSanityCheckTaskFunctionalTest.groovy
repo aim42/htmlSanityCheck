@@ -84,7 +84,7 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
 
         then:
         result.task(":htmlSanityCheck").outcome == FAILED
-        result.output.contains("Found 1 error(s) on all checked pages")
+        result.output.contains("1 error(s) were found on all checked pages")
 
         where:
         gradleVersion << GRADLE_VERSIONS
