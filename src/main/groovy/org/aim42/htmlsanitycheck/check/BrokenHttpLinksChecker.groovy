@@ -91,7 +91,6 @@ class BrokenHttpLinksChecker extends Checker {
                 int responseCode = connection.getResponseCode();
 
                 // interpret response code
-                // TODO: make this configurable
                 decideHowToTreatResponseCode(responseCode, href)
 
             }
@@ -109,34 +108,32 @@ class BrokenHttpLinksChecker extends Checker {
     /**
      * response codes other than 200 might be treated as errors or warnings,
      * sometimes even information.
+     *
+     * IF a warning or error is found, a @Finding is added to checkingResults
      * TODO: add configuration and logic to "decideHowToTreatResponseCode"
      *
      * @param responseCode
      */
     protected void decideHowToTreatResponseCode(int responseCode, String href) {
 
-        String problem
+        String problem = ""
 
-        if (!(responseCode in NetUtil.HTTP_SUCCESS_CODES)) {
-
-            if (NetUtil.HTTP_WARNING_CODES.contains(responseCode)) {
-                    problem = "Warning:" }
-            else if (responseCode >= 400) {
-                problem = "Error:";
-            }
-             else {
-                problem = "Error: Unknown or unclassified response code:"
-            }
-
-            problem += """ ${href} returned statuscode ${responseCode}."""
-
-            checkingResults.addFinding(new Finding(problem))
+        switch (responseCode) {
+            case NetUtil.HTTP_SUCCESS_CODES: break
+            case NetUtil.HTTP_WARNING_CODES: problem = "Warning:"; break
+            case (400..520): problem = "Error:"
+            default: problem = "Error: Unknown or unclassified response code:"
         }
 
+        problem += """ ${href} returned statuscode  ${responseCode}."""
+
+        checkingResults.addFinding(new Finding(problem) )
         return
     }
 
 }
+
+
 
 /************************************************************************
  * This is free software - without ANY guarantee!
