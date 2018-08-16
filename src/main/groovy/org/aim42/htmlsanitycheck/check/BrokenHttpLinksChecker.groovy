@@ -83,13 +83,14 @@ class BrokenHttpLinksChecker extends Checker {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("HEAD");
 
-                // TODO add httpConnectionTimeout parameter!!
-                //if (httpConnectionTimeout >= 0) {
-                //    connection.setConnectTimeout(httpConnectionTimeout);
-                //}
+                // httpConnectionTimeout is a configuration parameter
+                // that defaults to 5000 (msec)
+                connection.setConnectTimeout(httpConnectionTimeout);
+
+                // try to connect
                 connection.connect();
                 int responseCode = connection.getResponseCode();
-
+                
                 // interpret response code
                 decideHowToTreatResponseCode(responseCode, href)
 

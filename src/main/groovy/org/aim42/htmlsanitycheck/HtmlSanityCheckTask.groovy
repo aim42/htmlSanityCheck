@@ -44,7 +44,13 @@ class HtmlSanityCheckTask extends DefaultTask {
     @Input
     Boolean failOnErrors = false
 
-    //
+    // configurable timeout for http-requests (used by @BrokenHttpLinksChecker)
+    // defaults to 5000 (msecs)
+    @Optional
+    @Input
+    long httpConnectionTimeout = 5000
+
+
     private Set<File> allFilesToCheck
 
     /**
