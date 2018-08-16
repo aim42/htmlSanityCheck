@@ -85,12 +85,12 @@ class BrokenHttpLinksChecker extends Checker {
 
                 // httpConnectionTimeout is a configuration parameter
                 // that defaults to 5000 (msec)
-                connection.setConnectTimeout(httpConnectionTimeout);
+                //connection.setConnectTimeout(httpConnectionTimeout);
 
                 // try to connect
                 connection.connect();
                 int responseCode = connection.getResponseCode();
-                
+
                 // interpret response code
                 decideHowToTreatResponseCode(responseCode, href)
 

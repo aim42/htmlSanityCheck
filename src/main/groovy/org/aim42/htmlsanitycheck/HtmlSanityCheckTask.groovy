@@ -104,6 +104,8 @@ class HtmlSanityCheckTask extends DefaultTask {
             logger.info("allFilesToCheck" + allFilesToCheck.toString(), "")
 
             // create an AllChecksRunner...
+            // TODO: pass a dictionary instead of single parameters, following the Open-Close principle
+
             def allChecksRunner = new AllChecksRunner(
                     allFilesToCheck,
                     checkingResultsDir,
