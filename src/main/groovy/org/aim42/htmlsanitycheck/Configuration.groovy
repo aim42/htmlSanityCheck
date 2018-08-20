@@ -35,4 +35,11 @@ class Configuration {
         return configurationItems.get( itemName)
     }
 
+    
+    @Override
+    public String toString() {
+        return "Configuration{" +
+                "configurationItems=" + configurationItems +
+                '}';
+    }
 }
