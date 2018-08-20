@@ -12,9 +12,9 @@ import org.gradle.api.tasks.*
  * Entry class for the gradle-plugin.
  * Handles parameter-passing from gradle build scripts,
  * initializes the {link AllChecksRunner},
- * which does all the work.
+ * which does all the checking and reporting work.
  *
- *
+ * @author Gernot Starke
  */
 class HtmlSanityCheckTask extends DefaultTask {
 
@@ -38,7 +38,6 @@ class HtmlSanityCheckTask extends DefaultTask {
     @OutputDirectory
     File junitResultsDir
 
-
     // fail build on errors?
     @Optional
     @Input
@@ -49,6 +48,12 @@ class HtmlSanityCheckTask extends DefaultTask {
     @Optional
     @Input
     long httpConnectionTimeout = 5000
+
+
+    // private stuff
+    // **************************************************************************
+    // configuration object to pass around
+    private Configuration configuration
 
 
     private Set<File> allFilesToCheck
@@ -81,7 +86,10 @@ class HtmlSanityCheckTask extends DefaultTask {
     @TaskAction
     public void sanityCheckHtml() {
 
+        configuration =
         logBuildParameter()
+
+
 
         // if we have no valid input file, abort with exception
         if (isValidConfiguration(sourceDir, sourceDocuments)) {
@@ -179,6 +187,28 @@ See ${checkingResultsDir} for a detailed report."""
         // if no exception has been thrown until now,
         // the configuration seems to be valid..
         return true
+    }
+
+    /**
+     * setup a @Configuration instance containing all given configuration parameters
+     * from the gradle buildfile.
+     *
+     * This method has to be updated in case of new configuration parameters!!
+     *
+     * Note: It does not check this configuration for plausibility or mental health...
+     * @return @Configuration
+     */
+    protected Configuration setupConfiguration() {
+        Configuration myConfig = new Configuration()
+
+        myConfig.addConfigurationItem("sourceDocuments", sourceDocuments)
+        myConfig.addConfigurationItem("sourceDir", sourceDir)
+        myConfig.addConfigurationItem("checkingResultsDir", checkingResultsDir)
+        myConfig.addConfigurationItem("junitResultsDir", junitResultsDir)
+        myConfig.addConfigurationItem("failOnErrors", failOnErrors)
+        myConfig.addConfigurationItem( "httpConnectionTimeout", httpConnectionTimeout)
+
+        return myConfig
     }
 
 

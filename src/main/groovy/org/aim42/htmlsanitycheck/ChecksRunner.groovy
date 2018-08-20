@@ -122,6 +122,7 @@ class ChecksRunner {
                 )
 
         // apply every checker to this page
+        // ToDo: parallelize with GPARS?
         checkers.each { checker ->
             def singleCheckResults = checker.performCheck(pageToCheck)
             collectedResults.addResultsForSingleCheck(singleCheckResults)
