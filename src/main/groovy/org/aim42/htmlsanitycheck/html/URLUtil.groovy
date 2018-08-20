@@ -66,6 +66,18 @@ class URLUtil {
     }
 
     /**
+     * Checks if this String represents a data-image-URI
+     * (startsWith "data:image"
+     * @param s
+     * */
+
+    static boolean isDataURI(String s) {
+        // simple regular expression to match data:image
+
+        return (s ==~ (/^(?i)(data:image).*$/))
+    }
+
+    /**
      * Checks if this String represents a local resource, either:
      *   (1) "file://path/filename.ext" or
      *   (2) is a path, e.g. "directory/filename.ext" or directory or
@@ -148,6 +160,7 @@ class URLUtil {
     public static boolean isValidIP(String ipa) {
         return ipa ==~ /^(([01]?\d\d?|2[0-4]\d|25[0-5])\.){3}([01]?\d\d?|2[0-4]\d|25[0-5])$/
     }
+
 }
 
 /************************************************************************

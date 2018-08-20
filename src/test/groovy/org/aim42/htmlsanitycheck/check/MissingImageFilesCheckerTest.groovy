@@ -97,7 +97,7 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
         htmlPage = new HtmlPage( new File( filePath) )
 
         List<HtmlElement> images = htmlPage.getAllImageTags()
-        assertEquals( "expected 2 images", 2, images.size())
+        assertEquals( "expected 4 images", 4, images.size())
 
         assertNotNull("htmlpage must not be null", htmlPage )
 
@@ -105,14 +105,14 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
 
         checkingResults = checker.performCheck( htmlPage )
 
-        int expected = 2
+        int expected = 4
         int actual = checkingResults.nrOfItemsChecked
 
         assertEquals("expected $expected images, found $actual",
                 expected, actual)
 
         // we have one problem in the file (missing image)
-        expected = 1
+        expected = 2
         actual = checkingResults.nrOfProblems()
 
         assertEquals( "extected $expected finding, found $actual",
