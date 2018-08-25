@@ -43,7 +43,7 @@ dependencies {
     // jsoup is our awesome html parser, see jsoup.org
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 
-    //   gems 'rubygems:asciidoctor-diagram:1.4.0'
+    asciidoctor 'org.asciidoctor:asciidoctorj-diagram:1.5.8'
 
 } // dependencies
 
@@ -163,6 +163,8 @@ asciidoctor {
         }
         into "./images"
     }
+
+    requires = ['asciidoctor-diagram']
 
 } // asciidoctor
 
