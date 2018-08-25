@@ -122,21 +122,13 @@ processResources {
 
 asciidoctor {
 
-    // the jrubyPrepare tasks takes care of loading the gems
-//    dependsOn jrubyPrepare
-
-    // the asciidoctor task depends on this gem
-//    requires = ['asciidoctor-diagram']
-
-    // seems to be important :-)
-//    gemPath = jrubyPrepare.outputDir
 
     outputDir = file(buildDir)
     sourceDir = file(srcDir)
     sources {
         include "hsc_arc42.adoc",
                 "index.adoc",
-                "DevelopmentGuide.adoc"
+                "DevelopmentDocs.adoc"
     }
 
     attributes = [

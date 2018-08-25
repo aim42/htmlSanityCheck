@@ -11,8 +11,8 @@ HSC -> ACR: new AllChecksRunner(cfg)
 activate ACR
 
 ACR -> ACR: allFiles = FileCollector.getConfiguredHtmlFiles()
-ACR -> ACR: allCeckers = getAllCheckersByAnnotation
-ACR -> ACR: checkerz = instantiateCheckers
+ACR -> ACR: allCeckers = CheckerFactory.getAllCheckersByAnnotation
+
 loop allFiles
     loop allCheckers
     participant "Checker" as CHECK <<abstract>>
