@@ -116,7 +116,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
         where:
 
-        badLink << [400, 401, 403, 404, 405, 406, 408, 409, 410]
+        badLink << [400, 401, 403, 404, 405, 406, 408, 409, 410, 429, 431, 500, 501, 502, 503, 504, 505, 506, 507]
 
     }
     /**

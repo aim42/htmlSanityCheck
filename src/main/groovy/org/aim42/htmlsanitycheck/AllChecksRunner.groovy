@@ -1,9 +1,16 @@
 package org.aim42.htmlsanitycheck
 
 import org.aim42.filesystem.FileCollector
+import org.aim42.filesystem.FileUtil
 import org.aim42.htmlsanitycheck.check.*
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
+import org.aim42.htmlsanitycheck.html.HtmlPage
+import org.aim42.htmlsanitycheck.report.ConsoleReporter
+import org.aim42.htmlsanitycheck.report.HtmlReporter
+import org.aim42.htmlsanitycheck.report.JUnitXmlReporter
+import org.aim42.htmlsanitycheck.report.LoggerReporter
+import org.aim42.htmlsanitycheck.report.Reporter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -26,16 +33,29 @@ import org.slf4j.LoggerFactory
 
 class AllChecksRunner {
 
-    private ChecksRunner runner
+    // we check a collection of files:
+    private Collection<File> filesToCheck = new HashSet<File>()
 
-    private HashSet<File> allFilesToCheck = new HashSet<File>()
+    // where do we put our results
+    private File checkingResultsDir
+
+    // where do we put our junit results
+    private File junitResultsDir
+
+    /** Determines if the report is output to the console. */
+    boolean consoleReport = true
+
+    // checker instances
+    private Set<Checker> checkers
+
+    // keep all results
+    private PerRunResults resultsForAllPages
+
 
     private static final Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
 
-    private static final String prefixTemporary = "temporary"
-
     /**
-     * runs all available checks on the file
+     * runs all available checks
      *
      * @param myCfg (supposed to be valid!)
      */
@@ -43,19 +63,29 @@ class AllChecksRunner {
     public AllChecksRunner(Configuration myCfg) {
         super()
 
-        allFilesToCheck = FileCollector.getHtmlFilesToCheck(
+        this.filesToCheck = FileCollector.getHtmlFilesToCheck(
                 myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_sourceDir),
                 myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_sourceDocuments)
         )
 
-        runner = new ChecksRunner(
-                AllCheckers.checkerClazzes,
-                allFilesToCheck,
-                myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_checkingResultsDir),
-                myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_junitResultsDir)
-        )
+        //runner = new ChecksRunner(
+        //        AllCheckers.checkerClazzes,
+        //        allFilesToCheck,
+        //        myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_checkingResultsDir),
+        //        myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_junitResultsDir)
+       // )
 
-        logger.debug("AllChecksRunner created")
+        def params = [baseDirPath: FileUtil.commonPath(filesToCheck).canonicalPath]
+
+        // TODO: #185 (checker classes shall be detected automatically (aka CheckerFactory)
+        this.checkers = CheckerCreator.createCheckerClassesFrom( AllCheckers.checkerClazzes, params )
+
+        this.resultsForAllPages = new PerRunResults()
+
+        this.checkingResultsDir = myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_checkingResultsDir)
+        this.junitResultsDir = myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_junitResultsDir)
+
+        logger.debug("AllChecksRunner created with ${this.checkers.size()} checkers for ${filesToCheck.size()} files")
     }
 
 
@@ -66,22 +96,102 @@ class AllChecksRunner {
      */
     public PerRunResults performAllChecks() {
 
-
         logger.debug "entered performAllChecks"
-        runner.performChecks()
+
+        filesToCheck.each { file ->
+            resultsForAllPages.addPageResults(
+                    performChecksForOneFile(file))
+        }
+
+        // after all checks, stop the timer...
+        resultsForAllPages.stopTimer()
+
+        // and then report the results
+        reportCheckingResultsOnLogger()
+        if (consoleReport) {
+            reportCheckingResultsOnConsole()
+        }
+        if (checkingResultsDir) {
+            reportCheckingResultsAsHTML(checkingResultsDir.absolutePath)
+        }
+        if (junitResultsDir) {
+            reportCheckingResultsAsJUnitXml(junitResultsDir.absolutePath)
+        }
+
+        return resultsForAllPages
+
+    }
+
+
+    /**
+     *  performs all configured checks on a single HTML file.
+     *
+     *  Creates a {@link org.aim42.htmlsanitycheck.collect.SinglePageResults} instance to keep checking results.
+     */
+    protected SinglePageResults performChecksForOneFile(File thisFile) {
+
+        // the currently processed (parsed) HTML page
+        HtmlPage pageToCheck = HtmlPage.parseHtml(thisFile)
+
+        // initialize results for this page
+        SinglePageResults collectedResults =
+                new SinglePageResults(
+                        pageFilePath: thisFile.canonicalPath,
+                        pageFileName: thisFile.name,
+                        pageTitle: pageToCheck.getDocumentTitle(),
+                        pageSize: pageToCheck.documentSize
+                )
+
+        // apply every checker to this page
+        // ToDo: parallelize with GPARS?
+        checkers.each { checker ->
+            def singleCheckResults = checker.performCheck(pageToCheck)
+            collectedResults.addResultsForSingleCheck(singleCheckResults)
+        }
+
+        return collectedResults
+    }
+
+
+    /**
+     * reports results on stdout
+     * TODO:
+     */
+    private void reportCheckingResultsOnConsole() {
+        Reporter reporter = new ConsoleReporter(resultsForAllPages)
+
+        reporter.reportFindings()
 
     }
 
     /**
-     *  performs all known checks on a single HTML file.
-     *
-     *  Creates a {@link SinglePageResults} instance to keep checking results.
+     * reports results to logger
+     * TODO: report results to logger
      */
-    public SinglePageResults performAllChecksForOneFile(File thisFile) {
+    private void reportCheckingResultsOnLogger() {
+        Reporter reporter = new LoggerReporter(resultsForAllPages, logger)
 
-        return runner.performChecksForOneFile(thisFile)
+        reporter.reportFindings()
+
     }
 
+    /**
+     * report results in HTML file(s)
+     */
+    private void reportCheckingResultsAsHTML(String resultsDir) {
+
+        Reporter reporter = new HtmlReporter(resultsForAllPages, resultsDir)
+        reporter.reportFindings()
+    }
+
+    /**
+     * report results in JUnit XML
+     */
+    private void reportCheckingResultsAsJUnitXml(String resultsDir) {
+
+        Reporter reporter = new JUnitXmlReporter(resultsForAllPages, resultsDir)
+        reporter.reportFindings()
+    }
     /**
      * runs the checks from the command
      * line with default settings...

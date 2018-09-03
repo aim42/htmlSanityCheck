@@ -36,7 +36,7 @@ class AllChecksRunnerTest extends GroovyTestCase {
         // wrap fileToTest in Collection to comply to AllChecksRunner API
         allChecksRunner = new AllChecksRunner( myConfig )
 
-        SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile(tmpFile)
+        SinglePageResults pageResults = allChecksRunner.performChecksForOneFile(tmpFile)
 
         // expectation:
         // 4 checks run
@@ -74,7 +74,7 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
         allChecksRunner = new AllChecksRunner( myConfig )
 
-        SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile( tmpFile )
+        SinglePageResults pageResults = allChecksRunner.performChecksForOneFile( tmpFile )
 
         int expected = AllCheckers.checkerClazzes.size()
         assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
