@@ -49,9 +49,9 @@ class HtmlSanityCheckTask extends DefaultTask {
     @Input
     long httpConnectionTimeout = 5000
 
-
     // private stuff
     // **************************************************************************
+
     // configuration object to pass around
     private Configuration configuration
 
@@ -74,8 +74,9 @@ class HtmlSanityCheckTask extends DefaultTask {
         checkingResultsDir = new File(project.buildDir, '/report/htmlchecks/')
         junitResultsDir = new File(project.buildDir, '/test-results/htmlchecks/')
 
+        // TODO: remove
         // we start with an empty Set
-        allFilesToCheck = new HashSet<File>()
+        // allFilesToCheck = new HashSet<File>()
 
     }
 
@@ -86,15 +87,14 @@ class HtmlSanityCheckTask extends DefaultTask {
     @TaskAction
     public void sanityCheckHtml() {
 
-        configuration =
+        // convert gradle config parameters to Configuration instance
+        configuration = setupConfiguration()
+
+        // tell us about these parameters
         logBuildParameter()
 
-
-
-        // if we have no valid input file, abort with exception
-        if (isValidConfiguration(sourceDir, sourceDocuments)) {
-
-            allFilesToCheck = FileCollector.getConfiguredHtmlFiles(sourceDir, sourceDocuments)
+        // if we have no valid configuration, abort with exception
+        if (Configuration.isValidConfiguration(configuration)) {
 
             // create output directory for checking results
             checkingResultsDir.mkdirs()
@@ -112,14 +112,15 @@ class HtmlSanityCheckTask extends DefaultTask {
             logger.info("allFilesToCheck" + allFilesToCheck.toString(), "")
 
             // create an AllChecksRunner...
-            // TODO: pass a dictionary instead of single parameters, following the Open-Close principle
 
-            def allChecksRunner = new AllChecksRunner(
-                    allFilesToCheck,
-                    checkingResultsDir,
-                    junitResultsDir
-            )
-            allChecksRunner.consoleReport = false
+            //def allChecksRunner = new AllChecksRunner(
+            //        allFilesToCheck,
+            //        checkingResultsDir,
+            //        junitResultsDir
+            //)
+
+            def allChecksRunner = new AllChecksRunner( configuration )
+
 
             // perform the actual checks
             def allChecks = allChecksRunner.performAllChecks()
@@ -136,58 +137,10 @@ See ${checkingResultsDir} for a detailed report."""
             }
         } else {
             logger.warn("""Fatal configuration errors preventing checks:\n
-              sourceDir : $sourceDir \n
-              sourceDocs: $sourceDocuments\n""", "fatal error")
+            ${configuration.toString()}""")
         }
     }
 
-    /**
-     * checks plausibility of input parameters:
-     * we need at least one html file as input, maybe several
-     * @param srcDir
-     * @param srcDocs needs to be of type {@link FileCollection} to be Gradle-compliant
-     */
-    public static Boolean isValidConfiguration(File srcDir, Set<String> srcDocs) {
-
-        // cannot check if source director is null (= unspecified)
-        if ((srcDir == null)) {
-            throw new MisconfigurationException("source directory must not be null")
-        }
-
-        // cannot check if both input params are null
-        if ((srcDir == null) && (srcDocs == null)) {
-            throw new IllegalArgumentException("both sourceDir and sourceDocs were null")
-        }
-
-        // no srcDir was given and empty SrcDocs
-        if ((!srcDir) && (srcDocs != null)) {
-            if ((srcDocs?.empty)) {
-                throw new IllegalArgumentException("both sourceDir and sourceDocs must not be empty")
-            }
-        }
-        // non-existing srcDir is absurd too
-        if ((!srcDir.exists())) {
-            throw new IllegalArgumentException("given sourceDir " + srcDir + " does not exist.")
-        }
-
-        // if srcDir exists but is empty... no good :-(
-        if ((srcDir.exists())
-                && (srcDir.isDirectory())
-                && (srcDir.directorySize() == 0)) {
-            throw new IllegalArgumentException("given sourceDir " + srcDir + " is empty")
-        }
-
-        // if srcDir exists but does not contain any html file... no good
-        if ((srcDir.exists())
-                && (srcDir.isDirectory())
-                && (FileCollector.getAllHtmlFilesFromDirectory(srcDir).size() == 0)) {
-            throw new MisconfigurationException("no html file found in", srcDir)
-        }
-
-        // if no exception has been thrown until now,
-        // the configuration seems to be valid..
-        return true
-    }
 
     /**
      * setup a @Configuration instance containing all given configuration parameters
@@ -201,12 +154,15 @@ See ${checkingResultsDir} for a detailed report."""
     protected Configuration setupConfiguration() {
         Configuration myConfig = new Configuration()
 
-        myConfig.addConfigurationItem("sourceDocuments", sourceDocuments)
-        myConfig.addConfigurationItem("sourceDir", sourceDir)
-        myConfig.addConfigurationItem("checkingResultsDir", checkingResultsDir)
-        myConfig.addConfigurationItem("junitResultsDir", junitResultsDir)
-        myConfig.addConfigurationItem("failOnErrors", failOnErrors)
-        myConfig.addConfigurationItem( "httpConnectionTimeout", httpConnectionTimeout)
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, sourceDocuments)
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, sourceDir)
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_checkingResultsDir, checkingResultsDir)
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_junitResultsDir, junitResultsDir)
+
+        // consoleReport is always FALSE for Gradle based builds
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_consoleReport, false)
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_failOnErrors, failOnErrors)
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_httpConnectionTimeout, httpConnectionTimeout)
 
         return myConfig
     }
@@ -227,7 +183,7 @@ See ${checkingResultsDir} for a detailed report."""
 }
 
 /*========================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

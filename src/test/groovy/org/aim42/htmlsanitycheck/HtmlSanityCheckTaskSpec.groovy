@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck
 // see end-of-file for license information
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class HtmlSanityCheckTaskSpec extends Specification {
 
@@ -10,6 +11,12 @@ class HtmlSanityCheckTaskSpec extends Specification {
     private File htmlFile
     private File nonHtmlFile
 
+    private Configuration myConfiguration
+
+    def setup() {
+        myConfiguration = new Configuration()
+    }
+
 
     def "configuring a single html file is ok"() {
 
@@ -17,8 +24,10 @@ class HtmlSanityCheckTaskSpec extends Specification {
             tempDir = File.createTempDir()
             htmlFile = new File( tempDir, "a.html") << HTML_HEADER
 
-        when:
-            HtmlSanityCheckTask.isValidConfiguration(tempDir, new HashSet(["a.html"]))
+        when: "we create a configuration with this single file"
+            myConfiguration.addSourceFileConfiguration(tempDir, new HashSet(["a.html"]))
+
+            Configuration.isValidConfiguration( myConfiguration )
 
         then:
             htmlFile.exists()
@@ -33,9 +42,10 @@ class HtmlSanityCheckTaskSpec extends Specification {
         given:
             tempDir = File.createTempDir()
             nonHtmlFile = new File( tempDir, "zypern.txt") << "this is no html"
+            myConfiguration.addSourceFileConfiguration(tempDir, new HashSet(["zypern.txt"]))
 
         when:
-            HtmlSanityCheckTask.isValidConfiguration(tempDir, new HashSet(["zypern.txt"]))
+            Configuration.isValidConfiguration(myConfiguration)
 
         then:
             thrown MisconfigurationException
@@ -47,14 +57,17 @@ class HtmlSanityCheckTaskSpec extends Specification {
      *
      */
 
-    def "configuring no files to check is absurd"(File srcDir, Set<String> srcDocs) {
+    @Unroll
+    def "configuring file #srcDocs in directory #srcDocs is absurd"() {
 
-        when:
-        HtmlSanityCheckTask.isValidConfiguration(srcDir, srcDocs)
+        given: "configuration with #srcDir and #srcDocs"
+        myConfiguration.addSourceFileConfiguration( srcDir, srcDocs)
 
+        when: "configuration is validated..."
+        def tmpResult = Configuration.isValidConfiguration(myConfiguration)
 
-        then:
-        thrown Exception
+        then: "an exception is thrown"
+        thrown MisconfigurationException
 
 
         where:
@@ -65,39 +78,28 @@ class HtmlSanityCheckTaskSpec extends Specification {
         new File("/_non/exis_/d_ir/") | new HashSet<String>()
 
         // existing but empty directory is absurd too...
-        File.createTempDir()          | []
+        File.createTempDir()          | null
 
         // existing directory with nonexisting files too...
-        File.createTempDir()          | ["non.existing", "blurb.htm"]
+        File.createTempDir()          | ["non.existing", "blurb.htm"].toSet()
 
     }
 
     // this spec is a syntactic variation of the data (table-)driven test
-    def "No directory and no files make no sense"() {
+    def "empty configuration makes no sense"() {
 
         when:
-        HtmlSanityCheckTask.isValidConfiguration(null, new HashSet<String>() )
+        Configuration.isValidConfiguration(myConfiguration )
 
         then:
         thrown MisconfigurationException
-    }
-
-    def "Nonexisting directory makes no sense"() {
-        File nonExistingDir = new File("/_non/existing/directory/")
-
-        when:
-        HtmlSanityCheckTask.isValidConfiguration(nonExistingDir, new HashSet<String>())
-
-        then:
-        thrown IllegalArgumentException
-
     }
 
 
 }
 
 /*========================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

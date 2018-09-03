@@ -13,9 +13,11 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
     private AllChecksRunner allChecksRunner
 
+    private Configuration myConfig
+
     @Before
-    void setup() {
-        //
+    void setUp() {
+        myConfig = new Configuration()
 
     }
 
@@ -27,8 +29,12 @@ class AllChecksRunnerTest extends GroovyTestCase {
         // create file with proper html content
         tmpFile = File.createTempFile("testfile", ".html") <<HTML
 
+        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
+        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile?.getAbsoluteFile().getParent())
+
+
         // wrap fileToTest in Collection to comply to AllChecksRunner API
-        allChecksRunner = new AllChecksRunner( new LinkedHashSet<File>( [tmpFile] ) )
+        allChecksRunner = new AllChecksRunner( myConfig )
 
         SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile(tmpFile)
 
@@ -63,12 +69,10 @@ class AllChecksRunnerTest extends GroovyTestCase {
         // create file
         tmpFile = File.createTempFile("testfile", ".html") << HTML
 
-        File testDir = File.createTempDir( "testdir", "")
-        allChecksRunner = new AllChecksRunner(
-                new LinkedHashSet<File>([tmpFile]),
-                testDir,
-                testDir
-        )
+        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
+        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile?.getAbsoluteFile().getParent())
+
+        allChecksRunner = new AllChecksRunner( myConfig )
 
         SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile( tmpFile )
 
@@ -85,7 +89,7 @@ class AllChecksRunnerTest extends GroovyTestCase {
  * This is free software - without ANY guarantee!
  *
  *
- * Copyright 2014, Dr. Gernot Starke, arc42.org
+ * Copyright Dr. Gernot Starke, arc42.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

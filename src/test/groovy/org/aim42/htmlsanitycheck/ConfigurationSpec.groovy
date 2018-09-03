@@ -34,6 +34,15 @@ class ConfigurationSpec extends Specification {
 
     }
 
+    def "checks if item is already present in configuration"() {
+        when: "we configure a single item"
+        myConfiguration.addConfigurationItem(CI_FileCheck_Name, "test")
+
+        then: "a check finds this item"
+        myConfiguration.checkIfItemPresent(CI_FileCheck_Name) == true
+    }
+
+
     def "unconfigured item yields null result"() {
         given: " a single entry configuration"
         myConfiguration.addConfigurationItem(CI_FileCheck_Name, CI_FileCheck_Value)

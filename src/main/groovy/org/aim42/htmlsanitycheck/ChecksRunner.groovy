@@ -31,9 +31,6 @@ class ChecksRunner {
 	/** Determines if the report is output to the console. */
 	boolean consoleReport = true
 
-    // TODO: handle checking of external resources
-    private Boolean checkExternalResources = false
-
     // checker instances
     private Set<Checker> checkers
 
@@ -55,7 +52,7 @@ class ChecksRunner {
         this( checkerCollection, [fileToCheck], checkingResultsDir, junitResultsDir)
     }
 
-    // with just ONE file to check
+  /*  // with just ONE file to check
     public ChecksRunner(Set<Class> checkerCollection,
                         File fileToCheck ) {
         this( checkerCollection, [fileToCheck], fileToCheck.getParentFile())
@@ -80,7 +77,7 @@ class ChecksRunner {
                          SortedSet<File> filesToCheck ) {
         this( [checker], filesToCheck, File.createTempDir())
     }
-
+*/
 
     // standard constructor
     public ChecksRunner(
@@ -94,6 +91,7 @@ class ChecksRunner {
         this.filesToCheck = filesToCheck
         this.checkingResultsDir = checkingResultsDir
 		this.junitResultsDir = junitResultsDir
+
 
 		def params = [baseDirPath: FileUtil.commonPath(filesToCheck).canonicalPath]
 
