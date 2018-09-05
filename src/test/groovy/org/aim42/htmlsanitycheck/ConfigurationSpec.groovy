@@ -8,14 +8,9 @@ import spock.lang.Unroll
 
 class ConfigurationSpec extends Specification {
 
-    Configuration myConfiguration
-
     final def CI_FileCheck_Name = "fileToCheck"
     final def CI_FileCheck_Value = "index.html"
 
-    def setup() {
-        myConfiguration = new Configuration()
-    }
 
     /**
      * The very basic SmokeTest for configuration items
@@ -24,40 +19,40 @@ class ConfigurationSpec extends Specification {
     def "can add and retrieve single config item"() {
 
         when: "we add a single configuration item"
-        myConfiguration.addConfigurationItem(CI_FileCheck_Name, CI_FileCheck_Value)
+        Configuration.addConfigurationItem(CI_FileCheck_Name, CI_FileCheck_Value)
 
         then: "there is a single entry in our configuration"
-        myConfiguration.nrOfConfigurationItems() == 1
+        Configuration.nrOfConfigurationItems() == 1
 
         and: "we can retrieve this item"
-        myConfiguration.getConfigurationItemByName(CI_FileCheck_Name) == CI_FileCheck_Value
+        Configuration.getConfigItemByName(CI_FileCheck_Name) == CI_FileCheck_Value
 
     }
 
     def "checks if item is already present in configuration"() {
         when: "we configure a single item"
-        myConfiguration.addConfigurationItem(CI_FileCheck_Name, "test")
+        Configuration.addConfigurationItem(CI_FileCheck_Name, "test")
 
         then: "a check finds this item"
-        myConfiguration.checkIfItemPresent(CI_FileCheck_Name) == true
+        Configuration.checkIfItemPresent(CI_FileCheck_Name) == true
     }
 
 
     def "unconfigured item yields null result"() {
         given: " a single entry configuration"
-        myConfiguration.addConfigurationItem(CI_FileCheck_Name, CI_FileCheck_Value)
+        Configuration.addConfigurationItem(CI_FileCheck_Name, CI_FileCheck_Value)
 
         expect: "when a different config item is requested, null is returned"
-        myConfiguration.getConfigurationItemByName("NonExistingItem") == null
+        Configuration.getConfigItemByName("NonExistingItem") == null
     }
 
     @Unroll
     def "can add and retrieve item #itemName of type #itemValue.getClass()"() {
         when: "we add #itemName"
-        myConfiguration.addConfigurationItem(itemName, itemValue)
+        Configuration.addConfigurationItem(itemName, itemValue)
 
         and: "we retrieve that value from our configuration"
-        def value = myConfiguration.getConfigurationItemByName(itemName)
+        def value = Configuration.getConfigItemByName(itemName)
 
 
         then: "we retrieve the correct value"

@@ -7,6 +7,8 @@ import org.aim42.filesystem.FileCollector
 /**
  * Handles (and can verify) configuration options.
  *
+ * Implemented as REGISTRY pattern
+ *
  * This class needs to be updated if additional configuration options are added.
  *
  * Ideas for additional config options:
@@ -20,8 +22,12 @@ import org.aim42.filesystem.FileCollector
 
 class Configuration {
 
+    // the configuration registry instance
+    private static Configuration internalRegistry
+
+
     /*****************************************
-     * possible configuration items
+     * configuration item names
      *
      * NEVER use any string constants for configuration
      * item names within source code!
@@ -52,23 +58,43 @@ class Configuration {
      **************************/
     private Map configurationItems = [:]
 
+
+    // REGISTRY methods
+    // ****************
+    private static synchronized Configuration registry() {
+        if (internalRegistry == null) {
+            internalRegistry = new Configuration();
+        }
+        return internalRegistry;
+    }
+
+    /** retrieve a single configuration item
+     *
+     * @param itemName
+     * @return
+     */
+    public static synchronized Object getConfigItemByName( final String itemName) {
+        return registry().configurationItems.get(itemName)
+    }
+
     // special HtmlSanityChecker methods for mandatory configuration items
     // *******************************************************************
 
     /**
      * convenience method for simplified testing
      */
-    void addSourceFileConfiguration(File srcDir, Set<String> srcDocs) {
-        this.addConfigurationItem(ITEM_NAME_sourceDir, srcDir)
-        this.addConfigurationItem(ITEM_NAME_sourceDocuments, srcDocs)
+    static synchronized void addSourceFileConfiguration(File srcDir, Set<String> srcDocs) {
+        registry().addConfigurationItem(ITEM_NAME_sourceDir, srcDir)
+        registry().addConfigurationItem(ITEM_NAME_sourceDocuments, srcDocs)
     }
+
 
     /**
      * @return true if item is already present, false otherwise
      */
-    boolean checkIfItemPresent(String itemName) {
+    static boolean checkIfItemPresent(String itemName) {
         boolean result = false
-        if (configurationItems.get(itemName) != null) {
+        if (registry().configurationItems.get(itemName) != null) {
             result = true
         }
         return result
@@ -77,8 +103,8 @@ class Configuration {
     /**
      * @return the number of configuration items
      */
-    int nrOfConfigurationItems() {
-        return configurationItems.size()
+    static int nrOfConfigurationItems() {
+        return registry().configurationItems.size()
     }
 
     /** add a single configuration item
@@ -86,18 +112,11 @@ class Configuration {
      * @param itemName
      * @param itemValue
      */
-    void addConfigurationItem(String itemName, Object itemValue) {
-        configurationItems.put(itemName, itemValue)
+    static void addConfigurationItem(String itemName, Object itemValue) {
+        registry().configurationItems.put(itemName, itemValue)
     }
 
-    /** retrieve a single configuration item
-     *
-     * @param itemName
-     * @return
-     */
-    Object getConfigurationItemByName(String itemName) {
-        return configurationItems.get(itemName)
-    }
+
 
     /**
      * checks plausibility of configuration:
