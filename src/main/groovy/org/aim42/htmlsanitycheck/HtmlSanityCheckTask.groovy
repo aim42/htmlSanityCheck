@@ -46,7 +46,7 @@ class HtmlSanityCheckTask extends DefaultTask {
     // defaults to 5000 (msecs)
     @Optional
     @Input
-    long httpConnectionTimeout = 5000
+    int httpConnectionTimeout = 5000
 
     // private stuff
     // **************************************************************************

@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.html.URLUtil
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
@@ -19,6 +20,9 @@ class MissingImageFilesChecker extends Checker {
     // logging stuff
     private final static Logger logger = LoggerFactory.getLogger(MissingImageFilesChecker);
 
+    public MissingImageFilesChecker() {
+        baseDirPath = Configuration.getConfigItemByName( Configuration.ITEM_NAME_sourceDir )
+    }
 
     @Override
     protected void initCheckingResultsDescription() {
@@ -51,6 +55,7 @@ class MissingImageFilesChecker extends Checker {
       }
     }
 
+
     private void checkSingleLocalImage(HtmlElement image) {
         String relativePathToCurrentImage = image.getImageSrcAttribute()
 
@@ -68,7 +73,7 @@ class MissingImageFilesChecker extends Checker {
 
 
     /**
-     * check if the file at relativePathToImageFile exists
+     * check if a single image file exists
      *
     * @param relativePathToImageFile == XYZ in <img src="XYZ">
      **/
@@ -76,9 +81,8 @@ class MissingImageFilesChecker extends Checker {
         // problem: if the relativePath is "./images/fileName.jpg",
         // we need to add the appropriate path prefix...
 
-        String absolutePath = baseDirPath + "/" + relativePathToImageFile //[1..-1]
+        String absolutePath = baseDirPath + "/" + relativePathToImageFile
 
-        //logger.info( "doesFileExist: absolutePath of image: $absolutePath")
 
         File imageFile = new File(absolutePath);
 
@@ -94,7 +98,7 @@ class MissingImageFilesChecker extends Checker {
 }
 
 /*========================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
