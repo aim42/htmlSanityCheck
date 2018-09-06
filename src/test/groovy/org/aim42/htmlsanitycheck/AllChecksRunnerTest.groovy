@@ -13,14 +13,6 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
     private AllChecksRunner allChecksRunner
 
-    private Configuration myConfig
-
-    @Before
-    void setUp() {
-        myConfig = new Configuration()
-
-    }
-
 
     @Test
     public void testSingleCorrectHTMLFile() {
@@ -29,12 +21,12 @@ class AllChecksRunnerTest extends GroovyTestCase {
         // create file with proper html content
         tmpFile = File.createTempFile("testfile", ".html") <<HTML
 
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile?.getAbsoluteFile().getParent())
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile?.getAbsoluteFile().getParent())
 
 
         // wrap fileToTest in Collection to comply to AllChecksRunner API
-        allChecksRunner = new AllChecksRunner( myConfig )
+        allChecksRunner = new AllChecksRunner( )
 
         SinglePageResults pageResults = allChecksRunner.performChecksForOneFile(tmpFile)
 
@@ -69,10 +61,10 @@ class AllChecksRunnerTest extends GroovyTestCase {
         // create file
         tmpFile = File.createTempFile("testfile", ".html") << HTML
 
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile?.getAbsoluteFile().getParent())
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile?.getAbsoluteFile().getParent())
 
-        allChecksRunner = new AllChecksRunner( myConfig )
+        allChecksRunner = new AllChecksRunner(  )
 
         SinglePageResults pageResults = allChecksRunner.performChecksForOneFile( tmpFile )
 

@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.check.UnknownCheckerException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -13,14 +14,12 @@ class CheckerCreator {
     private final static Logger logger = LoggerFactory.getLogger(CheckerCreator.class);
 
 
-    public static ArrayList<Checker> createCheckerClassesFrom(
-            final Collection<Class> checkerClasses,
-			final Map<String, Object> params = [:]) {
+    public static ArrayList<Checker> createCheckerClassesFrom( final Collection<Class> checkerClasses) {
 
-        ArrayList<Checker> checkers = new LinkedHashSet<Checker>( checkerClasses.size() )
+        ArrayList<Checker> checkers = new LinkedHashSet<Checker>(checkerClasses.size())
 
         checkerClasses.each { checkerClass ->
-            checkers.add( CheckerCreator.createSingleChecker( checkerClass, params ))
+            checkers.add(CheckerCreator.createSingleChecker(checkerClass ))
 
         }
 
@@ -29,9 +28,7 @@ class CheckerCreator {
     }
 
 
-    // TODO: needs some params,
-
-    public static Checker createSingleChecker( final Class checkerClass, final Map<String, Object> params = [:] ) {
+    public static Checker createSingleChecker(final Class checkerClass ) {
         Checker checker
 
         // switch over all possible Checker classes
@@ -40,7 +37,7 @@ class CheckerCreator {
 
         // clearly violates the open-close principle
 
-        switch ( checkerClass ) {
+        switch (checkerClass) {
             case BrokenCrossReferencesChecker.class:
                 checker = new BrokenCrossReferencesChecker(); break
 
@@ -60,20 +57,21 @@ class CheckerCreator {
                 checker = new MissingImageFilesChecker(); break
 
             case MissingLocalResourcesChecker.class:
-                checker = new MissingLocalResourcesChecker();break
+                checker = new MissingLocalResourcesChecker(); break
 
 
             default:
-                logger.warn( "unknown Checker ${checkerClass.toString()}")
-                throw new UnknownCheckerException( checkerClass.toString() )
+                logger.warn("unknown Checker ${checkerClass.toString()}")
+                throw new UnknownCheckerException(checkerClass.toString())
 
         }
-		
-		params.each { key, value ->
-			if (checker.hasProperty(key)) {
-				checker[key] = value
-			}
-		}
+
+        // this was a very generic way of configuration:
+        //params.each { key, value ->
+        //	if (checker.hasProperty(key)) {
+        //		checker[key] = value
+        //	}
+        //}
 
         return checker
 

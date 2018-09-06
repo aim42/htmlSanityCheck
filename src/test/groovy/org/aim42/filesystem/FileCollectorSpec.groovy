@@ -19,16 +19,15 @@ class FileCollectorSpec extends Specification {
         // create file with proper html content
         File tmpFile = File.createTempFile("testfile", ".html") << """<body><title>hsc</title></body></html>"""
 
-        Configuration myCfg = new Configuration()
 
-        myCfg.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
-        myCfg.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile?.getAbsoluteFile().getParent())
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile?.getAbsoluteFile().getParent())
 
         when: "we call the collector with that configuration"
         HashSet<File> allFilesToCheck
 
-        def tmpDir = myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_sourceDir)
-        def tmpDocs = myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_sourceDocuments)
+        def tmpDir = Configuration.getConfigItemByName(Configuration.ITEM_NAME_sourceDir)
+        def tmpDocs = Configuration.getConfigItemByName(Configuration.ITEM_NAME_sourceDocuments)
 
         allFilesToCheck = FileCollector.getHtmlFilesToCheck(
                 tmpDir,

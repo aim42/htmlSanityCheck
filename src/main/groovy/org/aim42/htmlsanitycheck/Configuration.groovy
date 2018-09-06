@@ -68,6 +68,13 @@ class Configuration {
         return internalRegistry;
     }
 
+    // constructor to set (some) default values
+    private Configuration() {
+
+      this.configurationItems.put( ITEM_NAME_httpConnectionTimeout, 5000 )
+    }
+
+
     /** retrieve a single configuration item
      *
      * @param itemName
@@ -126,12 +133,12 @@ class Configuration {
      * srcDocs needs to be of type {@link org.gradle.api.file.FileCollection}
      * to be Gradle-compliant
      */
-    public static Boolean isValidConfiguration(Configuration config) {
-        // prior to 1.0.0-RC-2: public static Boolean isValidConfiguration(File srcDir, Set<String> srcDocs) {
+    public static Boolean isValid() {
+        // prior to 1.0.0-RC-2: public static Boolean isValid(File srcDir, Set<String> srcDocs) {
 
         // we need at least srcDir and srcDocs!!
-        File srcDir = config.getConfigurationItemByName(Configuration.ITEM_NAME_sourceDir)
-        Set<String> srcDocs = config.getConfigurationItemByName(Configuration.ITEM_NAME_sourceDocuments)
+        File srcDir = registry().getConfigItemByName(Configuration.ITEM_NAME_sourceDir)
+        Set<String> srcDocs = registry().getConfigItemByName(Configuration.ITEM_NAME_sourceDocuments)
 
         // cannot check if source director is null (= unspecified)
         if ((srcDir == null)) {
@@ -175,9 +182,9 @@ class Configuration {
 
 
     @Override
-    public String toString() {
+    public static String toString() {
         return "Configuration{" +
-                "configurationItems=" + configurationItems +
+                "configurationItems=" + registry().configurationItems +
                 '}';
     }
 }

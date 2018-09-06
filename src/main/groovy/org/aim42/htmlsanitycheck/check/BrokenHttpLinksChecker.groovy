@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
@@ -85,7 +86,9 @@ class BrokenHttpLinksChecker extends Checker {
 
                 // httpConnectionTimeout is a configuration parameter
                 // that defaults to 5000 (msec)
-                //connection.setConnectTimeout(httpConnectionTimeout);
+                connection.setConnectTimeout(
+                        Configuration?.getConfigItemByName( Configuration.ITEM_NAME_httpConnectionTimeout )
+                );
 
                 // try to connect
                 connection.connect();

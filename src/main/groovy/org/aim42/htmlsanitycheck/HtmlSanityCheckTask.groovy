@@ -1,11 +1,10 @@
 package org.aim42.htmlsanitycheck
 
-import org.aim42.filesystem.FileCollector
+
 import org.gradle.api.DefaultTask
 
 // see end-of-file for license information
 import org.gradle.api.GradleException
-import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.*
 
 /**
@@ -52,9 +51,6 @@ class HtmlSanityCheckTask extends DefaultTask {
     // private stuff
     // **************************************************************************
 
-    // configuration object to pass around
-    private Configuration configuration
-
 
     private Set<File> allFilesToCheck
 
@@ -87,14 +83,14 @@ class HtmlSanityCheckTask extends DefaultTask {
     @TaskAction
     public void sanityCheckHtml() {
 
-        // convert gradle config parameters to Configuration instance
-        configuration = setupConfiguration()
+        // convert gradle config parameters to Configuration (registry)
+        setupConfiguration()
 
         // tell us about these parameters
         logBuildParameter()
 
         // if we have no valid configuration, abort with exception
-        if (Configuration.isValidConfiguration(configuration)) {
+        if (Configuration.isValid()) {
 
             // create output directory for checking results
             checkingResultsDir.mkdirs()
@@ -112,17 +108,10 @@ class HtmlSanityCheckTask extends DefaultTask {
             logger.info("allFilesToCheck" + allFilesToCheck.toString(), "")
 
             // create an AllChecksRunner...
-
-            //def allChecksRunner = new AllChecksRunner(
-            //        allFilesToCheck,
-            //        checkingResultsDir,
-            //        junitResultsDir
-            //)
-
-            def allChecksRunner = new AllChecksRunner( configuration )
+            def allChecksRunner = new AllChecksRunner(  )
 
 
-            // perform the actual checks
+            // ... and perform the actual checks
             def allChecks = allChecksRunner.performAllChecks()
 
             // check for findings and fail build if requested
@@ -137,7 +126,7 @@ See ${checkingResultsDir} for a detailed report."""
             }
         } else {
             logger.warn("""Fatal configuration errors preventing checks:\n
-            ${configuration.toString()}""")
+            ${Configuration.toString()}""")
         }
     }
 
@@ -151,20 +140,18 @@ See ${checkingResultsDir} for a detailed report."""
      * Note: It does not check this configuration for plausibility or mental health...
      * @return @Configuration
      */
-    protected Configuration setupConfiguration() {
-        Configuration myConfig = new Configuration()
+    protected void setupConfiguration() {
 
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, sourceDocuments)
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, sourceDir)
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_checkingResultsDir, checkingResultsDir)
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_junitResultsDir, junitResultsDir)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, sourceDocuments)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, sourceDir)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_checkingResultsDir, checkingResultsDir)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_junitResultsDir, junitResultsDir)
 
         // consoleReport is always FALSE for Gradle based builds
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_consoleReport, false)
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_failOnErrors, failOnErrors)
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_httpConnectionTimeout, httpConnectionTimeout)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_consoleReport, false)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_failOnErrors, failOnErrors)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_httpConnectionTimeout, httpConnectionTimeout)
 
-        return myConfig
     }
 
 

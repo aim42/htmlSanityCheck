@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
 
@@ -61,7 +62,6 @@ abstract class Checker {
      * @return collected results of this Checker instance
      */
     abstract protected SingleCheckResults check( final HtmlPage pageToCheck )
-
 
 
 }

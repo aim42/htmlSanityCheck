@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
@@ -26,6 +27,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     /* executed before every single spec */
 
     def setup() {
+
         brokenHttpLinksChecker = new BrokenHttpLinksChecker()
 
         collector = new SingleCheckResults()

@@ -57,33 +57,33 @@ class AllChecksRunner {
     /**
      * runs all available checks
      *
-     * @param myCfg (supposed to be valid!)
      */
 
-    public AllChecksRunner(Configuration myCfg) {
+    public AllChecksRunner() {
         super()
 
         this.filesToCheck = FileCollector.getHtmlFilesToCheck(
-                myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_sourceDir),
-                myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_sourceDocuments)
+                Configuration.getConfigItemByName(Configuration.ITEM_NAME_sourceDir),
+                Configuration.getConfigItemByName (Configuration.ITEM_NAME_sourceDocuments)
         )
 
         //runner = new ChecksRunner(
         //        AllCheckers.checkerClazzes,
         //        allFilesToCheck,
-        //        myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_checkingResultsDir),
-        //        myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_junitResultsDir)
+        //        myConfig.getConfigurationItemByName(Configuration.ITEM_NAME_checkingResultsDir),
+        //        myConfig.getConfigurationItemByName(Configuration.ITEM_NAME_junitResultsDir)
        // )
 
-        def params = [baseDirPath: FileUtil.commonPath(filesToCheck).canonicalPath]
+        // TODO remove: def params = [baseDirPath: FileUtil.commonPath(filesToCheck).canonicalPath]
 
         // TODO: #185 (checker classes shall be detected automatically (aka CheckerFactory)
-        this.checkers = CheckerCreator.createCheckerClassesFrom( AllCheckers.checkerClazzes, params )
+        // CheckerFactory needs the configuration
+        this.checkers = CheckerCreator.createCheckerClassesFrom( AllCheckers.checkerClazzes )
 
         this.resultsForAllPages = new PerRunResults()
 
-        this.checkingResultsDir = myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_checkingResultsDir)
-        this.junitResultsDir = myCfg.getConfigurationItemByName(Configuration.ITEM_NAME_junitResultsDir)
+        this.checkingResultsDir = Configuration.getConfigItemByName(Configuration.ITEM_NAME_checkingResultsDir)
+        this.junitResultsDir = Configuration.getConfigItemByName(Configuration.ITEM_NAME_junitResultsDir)
 
         logger.debug("AllChecksRunner created with ${this.checkers.size()} checkers for ${filesToCheck.size()} files")
     }

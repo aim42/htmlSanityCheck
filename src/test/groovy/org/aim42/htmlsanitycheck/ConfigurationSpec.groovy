@@ -21,10 +21,7 @@ class ConfigurationSpec extends Specification {
         when: "we add a single configuration item"
         Configuration.addConfigurationItem(CI_FileCheck_Name, CI_FileCheck_Value)
 
-        then: "there is a single entry in our configuration"
-        Configuration.nrOfConfigurationItems() == 1
-
-        and: "we can retrieve this item"
+        then: "we can retrieve this item"
         Configuration.getConfigItemByName(CI_FileCheck_Name) == CI_FileCheck_Value
 
     }
