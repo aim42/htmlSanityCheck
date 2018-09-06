@@ -62,7 +62,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     }
 
 
-    def "one syntactically correct http URL yields one check"() {
+    def "one syntactically correct http URL is ok"() {
         given: "an HTML page with a single correct anchor/link"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href="https://google.com">google</a>
@@ -73,15 +73,18 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         when: "page is checked"
         collector = brokenHttpLinksChecker.performCheck(htmlPage)
 
-        then:
+        then: "a single item is checked"
         collector.nrOfItemsChecked == 1
+
+        and: "the result is ok"
+        collector.nrOfProblems() == 0
 
     }
 
     def "single bad link is identified as problem"() {
 
         given: "an HTML page with a single (bad) link"
-        String badhref = "http://arc42.org/ui98jfuhenu87djch"
+        String badhref = "https://arc42.org/ui98jfuhenu87djch"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${badhref}>nonexisting arc42 link</a>
                 $HtmlConst.HTML_END """
@@ -95,6 +98,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         collector.findings[0].whatIsTheProblem.contains(badhref)
 
     }
+
 
     // IntelliJ has problems with testing http connections,
     // so we ignore some tests...

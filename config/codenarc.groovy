@@ -239,7 +239,7 @@ ruleset {
         PackageNameMatchesFilePath
         ParameterName
         PropertyName
-        VariableName
+        //VariableName
 
         // rulesets/security.xml
         FileCreateTempFile

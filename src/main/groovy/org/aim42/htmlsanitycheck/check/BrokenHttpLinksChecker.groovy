@@ -41,9 +41,7 @@ class BrokenHttpLinksChecker extends Checker {
 
         // if there's no internet, issue a general warning
         // but continue trying
-        if (NetUtil.isInternetConnectionAvailable() == false) {
-            checkingResults.generalRemark = "There seems to be a general problem with internet connectivity, all other checks for http/https links might yield incorrect results!"
-        }
+        addWarningIfNoInternetConnection()
 
         checkAllHttpLinks()
 
@@ -53,7 +51,9 @@ class BrokenHttpLinksChecker extends Checker {
 
 
     private void addWarningIfNoInternetConnection() {
-
+        if (NetUtil.isInternetConnectionAvailable() == false) {
+            checkingResults.generalRemark = "There seems to be a general problem with internet connectivity, all other checks for http/https links might yield incorrect results!"
+        }
 
     }
 
@@ -123,7 +123,7 @@ class BrokenHttpLinksChecker extends Checker {
         String problem = ""
 
         switch (responseCode) {
-            case NetUtil.HTTP_SUCCESS_CODES: break
+            case NetUtil.HTTP_SUCCESS_CODES: return
             case NetUtil.HTTP_WARNING_CODES: problem = "Warning:"; break
             case (400..520): problem = "Error:"
             default: problem = "Error: Unknown or unclassified response code:"
