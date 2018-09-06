@@ -70,10 +70,6 @@ class HtmlSanityCheckTask extends DefaultTask {
         checkingResultsDir = new File(project.buildDir, '/report/htmlchecks/')
         junitResultsDir = new File(project.buildDir, '/test-results/htmlchecks/')
 
-        // TODO: remove
-        // we start with an empty Set
-        // allFilesToCheck = new HashSet<File>()
-
     }
 
     /**

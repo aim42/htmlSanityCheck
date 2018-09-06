@@ -24,7 +24,6 @@ class URLUtil {
     public static boolean isValidURL(String link) {
         // TODO: refactor this code to use  org.apache.commons.validator.routines.*
 
-        // TODO: this fails for cross-references - but should not!
         boolean isValid = false
 
         if (isCrossReference(link)) {

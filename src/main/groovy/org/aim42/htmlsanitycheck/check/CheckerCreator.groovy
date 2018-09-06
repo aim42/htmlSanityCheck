@@ -66,13 +66,6 @@ class CheckerCreator {
 
         }
 
-        // this was a very generic way of configuration:
-        //params.each { key, value ->
-        //	if (checker.hasProperty(key)) {
-        //		checker[key] = value
-        //	}
-        //}
-
         return checker
 
     }

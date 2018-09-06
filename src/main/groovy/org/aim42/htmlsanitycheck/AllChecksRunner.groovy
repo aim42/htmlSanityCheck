@@ -67,14 +67,6 @@ class AllChecksRunner {
                 Configuration.getConfigItemByName (Configuration.ITEM_NAME_sourceDocuments)
         )
 
-        //runner = new ChecksRunner(
-        //        AllCheckers.checkerClazzes,
-        //        allFilesToCheck,
-        //        myConfig.getConfigurationItemByName(Configuration.ITEM_NAME_checkingResultsDir),
-        //        myConfig.getConfigurationItemByName(Configuration.ITEM_NAME_junitResultsDir)
-       // )
-
-        // TODO remove: def params = [baseDirPath: FileUtil.commonPath(filesToCheck).canonicalPath]
 
         // TODO: #185 (checker classes shall be detected automatically (aka CheckerFactory)
         // CheckerFactory needs the configuration

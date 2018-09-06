@@ -128,7 +128,8 @@ class CheckerCreatorSpec extends Specification {
         then:'performCheck method is present'
         notThrown(NoSuchMethodException)
         pMethod == fullDeclaration
-
+		and:'baseDirPath is present'
+		oneChecker.baseDirPath
     }
 
 	def "can create MissingLocalResourcesChecker instance"() {
@@ -145,7 +146,8 @@ class CheckerCreatorSpec extends Specification {
         then:'performCheck method is present'
         notThrown(NoSuchMethodException)
         pMethod == fullDeclaration
-
+		and:'baseDirPath is present'
+		oneChecker.baseDirPath
     }
 }
 
