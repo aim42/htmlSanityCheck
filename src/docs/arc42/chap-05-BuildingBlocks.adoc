@@ -1,6 +1,8 @@
 
 == Building Block View
 
+image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-05-BuildingBlocks.adoc, float=right]
+
 === Whitebox HtmlSanityChecker
 
 image::hsc-whitebox.png["Whitebox", title="Whitebox (Overall system)"]
