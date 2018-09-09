@@ -1,4 +1,5 @@
 :numbered:
+ifndef::imagesdir[:imagesdir: ../images]
 == Introduction and Goals
 
 kbd:[HtmlSC] shall support authors creating digital formats

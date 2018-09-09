@@ -1,4 +1,4 @@
-
+ifndef::imagesdir[:imagesdir: ../images]
 == Context
 
 === Business Context

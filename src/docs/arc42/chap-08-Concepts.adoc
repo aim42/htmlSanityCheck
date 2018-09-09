@@ -1,4 +1,4 @@
-
+ifndef::imagesdir[:imagesdir: ../images]
 == Technical and Crosscutting Concepts
 
 include::chap-08-checking-domain.adoc[]
