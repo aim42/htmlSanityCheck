@@ -34,13 +34,16 @@ class URLUtil {
                 isValid = true
             }
             catch (MalformedURLException e) {
+                isValid = false
                 // ignore
 
             }
             catch (URISyntaxException e1) {
-                // ignore too
+                isValid = false
             }
         }
+
+        return isValid
     }
 
     /**
@@ -76,10 +79,10 @@ class URLUtil {
 
         // handle corner cases
         if ((link == null)
-                || containsInvalidChars( link )
+                || containsInvalidChars(link)
                 || (link == "")
-                || isCrossReference( link )      // "#link" or similar
-                || isRemoteURL( link )           // "mailto:", "http" etc
+                || isCrossReference(link)      // "#link" or similar
+                || isRemoteURL(link)           // "mailto:", "http" etc
 
         )
             return false
@@ -135,7 +138,7 @@ class URLUtil {
 
         // the simple test is if the xref starts with "#"
 
-        return ( xref.startsWith("#")  && !containsInvalidChars( xref ) )
+        return (xref.startsWith("#") && !containsInvalidChars(xref))
 
     }
 
