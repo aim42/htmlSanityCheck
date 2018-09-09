@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck
 
 import org.aim42.filesystem.FileCollector
+import org.aim42.inet.NetUtil
 
 // see end-of-file for license information
 
@@ -9,22 +10,33 @@ import org.aim42.filesystem.FileCollector
  *
  * Implemented as REGISTRY pattern
  *
+ *
+ * Explanation for configuring http status codes:
+ * The standard http status codes are defined in class @link NetUtil and can
+ * be overwritten by configuration:
+ *
+ * Example: You want 503 to be ok instead of error:
+ * httpSuccessCodes = [503]
+ *
+ * During configuration initialization, the value(s) of httpSuccessCodes will be:
+ * 1.) set-added to httpSuccessCodes,
+ * 2.) set-subtracted from the warnings and errors.
+ *
+ *
  * This class needs to be updated if additional configuration options are added.
  *
- * Ideas for additional config options:
  *
+ * Ideas for additional config options:
+ * ------------------------------------
  * - verbosity level on console during checks
  *
- * - which HTTP status codes shall result in warnings, and which shall map to errors
- * - list of URLs to exclude from httpLinkchecks
- * - list of hosts to exclude from httpLinkChecks
+ *
  */
 
 class Configuration {
 
     // the configuration registry instance
     private static Configuration internalRegistry
-
 
     /*****************************************
      * configuration item names
@@ -45,11 +57,22 @@ class Configuration {
     // e.g. for Gradle based builds: fail the build if errors are found in Html file(s)
     final static String ITEM_NAME_failOnErrors = "failOnErrors"
 
+    // in case of slow internet connections, this timeout might be helpful
     final static String ITEM_NAME_httpConnectionTimeout = "httpConnectionTimeout"
 
+    // if (ignoreLocalhost == false) localhost-based URLs are marked as "Warning"
+    final static String ITEM_NAME_ignoreLocalhost = "ignoreLocalHost"
+
+    // if (ignoreIPAddresses) then urls with numeric IP addresses are marked as "Warning"
+    final static String ITEM_NAME_ignoreIPAddresses = "ignoreIPAddresses"
+
     // currently unused - planned for future enhancements
-    final static String ITEM_NAME_httpWarningStatusCodes = "httpWarningStatusCodes"
-    final static String ITEM_NAME_httpErrorStatusCodes = "httpErrorStatusCodes"
+    // ==================================================
+
+    final static String ITEM_NAME_httpWarningCodes = "httpWarningCodes"
+    final static String ITEM_NAME_httpErrorCodes = "httpErrorCodes"
+    final static String ITEM_NAME_httpSuccessCodes = "httpSuccessCodes"
+
     final static String ITEM_NAME_urlsToExclude = "urlsToExclude"
     final static String ITEM_NAME_hostsToExclude = "hostsToExclude"
 
@@ -57,7 +80,6 @@ class Configuration {
      * private member
      **************************/
     private Map configurationItems = [:]
-
 
     // REGISTRY methods
     // ****************
@@ -71,16 +93,21 @@ class Configuration {
     // constructor to set (some) default values
     private Configuration() {
 
-      this.configurationItems.put( ITEM_NAME_httpConnectionTimeout, 5000 )
-    }
+        this.configurationItems.put(ITEM_NAME_httpErrorCodes, NetUtil.HTTP_ERROR_CODES)
+        this.configurationItems.put(ITEM_NAME_httpSuccessCodes, NetUtil.HTTP_SUCCESS_CODES)
+        this.configurationItems.put(ITEM_NAME_httpWarningCodes, NetUtil.HTTP_WARNING_CODES)
 
+        this.configurationItems.put(ITEM_NAME_httpConnectionTimeout, 5000)   // 5 secs as default timeout
+        this.configurationItems.put(ITEM_NAME_ignoreIPAddresses, false)      // warning if numerical IP addresses
+        this.configurationItems.put(ITEM_NAME_ignoreLocalhost, false)        // warning if localhost-URLs
+    }
 
     /** retrieve a single configuration item
      *
      * @param itemName
      * @return
      */
-    public static synchronized Object getConfigItemByName( final String itemName) {
+    public static synchronized Object getConfigItemByName(final String itemName) {
         return registry().configurationItems.get(itemName)
     }
 
@@ -94,7 +121,6 @@ class Configuration {
         registry().addConfigurationItem(ITEM_NAME_sourceDir, srcDir)
         registry().addConfigurationItem(ITEM_NAME_sourceDocuments, srcDocs)
     }
-
 
     /**
      * @return true if item is already present, false otherwise
@@ -114,16 +140,74 @@ class Configuration {
         return registry().configurationItems.size()
     }
 
-    /** add a single configuration item
+    /** add a single configuration item, unless its value is null
      *
      * @param itemName
      * @param itemValue
      */
     static void addConfigurationItem(String itemName, Object itemValue) {
-        registry().configurationItems.put(itemName, itemValue)
+        if (itemValue != null) {
+            registry().configurationItems.put(itemName, itemValue)
+        }
+    }
+
+    /**
+     * overwrites httpSuccessCodes configuration
+     */
+    static void overwriteHttpSuccessCodes(Collection<Integer> additionalSuccessCodes) {
+        def errCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
+        def warnCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
+        def successCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
+
+        additionalSuccessCodes.each { code ->
+            successCodes += code // add to success codes
+            errCodes -= code // the new success code cannot be error code any longer
+            warnCodes -= code // neither warning
+        }
+
+        updateSuccessWarningErrorCodesConfiguration(errCodes, warnCodes, successCodes)
+    }
+
+    /**
+     * overwrites httpWarningCodes configuration
+     */
+    static void overwriteHttpWarningCodes(Collection<Integer> additionalWarningCodes) {
+        def errCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
+        def warnCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
+        def successCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
+
+        additionalWarningCodes.each { code ->
+            warnCodes += code // add to warning codes
+            successCodes -= code // remove from success codes
+            errCodes -= code // and remove from error codes
+        }
+
+        updateSuccessWarningErrorCodesConfiguration(errCodes, warnCodes, successCodes)
+    }
+
+    /**
+     * overwrites httpErrorCodes configuration
+     */
+    static void overwriteHttpErrorCodes(Collection<Integer> additionalErrorCodes) {
+        def errCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
+        def warnCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
+        def successCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
+
+        additionalErrorCodes.each { code ->
+            errCodes += code // add to error codes
+            successCodes -= code
+            warnCodes -= code
+        }
+
+        updateSuccessWarningErrorCodesConfiguration(errCodes, warnCodes, successCodes)
     }
 
 
+    private static updateSuccessWarningErrorCodesConfiguration(errCodes, warnCodes, successCodes) {
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_httpErrorCodes, errCodes)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_httpWarningCodes, warnCodes)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_httpSuccessCodes, successCodes)
+    }
 
     /**
      * checks plausibility of configuration:

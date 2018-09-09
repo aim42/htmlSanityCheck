@@ -48,6 +48,24 @@ class HtmlSanityCheckTask extends DefaultTask {
     @Input
     int httpConnectionTimeout = 5000
 
+    // shall localhost-URLs lead to warnings?
+    @Optional
+    @Input
+    boolean ignoreLocalHost = false
+
+    // shall numerical IP addresses lead to warnings?
+    @Optional
+    @Input
+    boolean ignoreIPAddresses = false
+
+    // shall certain http status codes be treated differently from the standard?
+    @Optional
+    @Input
+    Collection<Integer> httpWarningCodes
+    Collection<Integer> httpErrorCodes
+    Collection<Integer> httpSuccessCodes
+
+
     // private stuff
     // **************************************************************************
 
@@ -147,6 +165,10 @@ See ${checkingResultsDir} for a detailed report."""
         Configuration.addConfigurationItem(Configuration.ITEM_NAME_consoleReport, false)
         Configuration.addConfigurationItem(Configuration.ITEM_NAME_failOnErrors, failOnErrors)
         Configuration.addConfigurationItem(Configuration.ITEM_NAME_httpConnectionTimeout, httpConnectionTimeout)
+
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_ignoreLocalhost, ignoreLocalHost)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_ignoreIPAddresses, ignoreIPAddresses)
+
 
     }
 
