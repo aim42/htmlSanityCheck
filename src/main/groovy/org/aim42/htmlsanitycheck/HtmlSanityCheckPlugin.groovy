@@ -3,6 +3,7 @@
 package org.aim42.htmlsanitycheck
 
 import org.gradle.api.Project
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.api.Plugin
 
 
@@ -15,7 +16,7 @@ class HtmlSanityCheckPlugin implements Plugin<Project> {
         project.task( HTML_SANITY_CHECK,
                 type: HtmlSanityCheckTask,
                 description: "performs semantic checks on html files",
-                group: 'Check')
+                group: LifecycleBasePlugin.VERIFICATION_GROUP)
 
     }
 }
