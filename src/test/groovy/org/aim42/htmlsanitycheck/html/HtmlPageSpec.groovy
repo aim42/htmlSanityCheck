@@ -90,6 +90,8 @@ class HtmlPageSpec extends Specification {
         0             | """<img src="a.jpg"> """
         0             | """<a href="file://arc42.org">arc42</a>"""
         0             | """<a href="htpp://">bla</a> """
+        0             | """<a href="http.html">HTTP info</a> """
+        0             | """<a href="https.html">HTTPS info</a> """
 
         1             | """<a href="http://arc42.org">arc42</a>"""
         1             | """<a href="http://arc42.org">http</a>"""
