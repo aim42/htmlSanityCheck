@@ -169,7 +169,10 @@ See ${checkingResultsDir} for a detailed report."""
         Configuration.addConfigurationItem(Configuration.ITEM_NAME_ignoreLocalhost, ignoreLocalHost)
         Configuration.addConfigurationItem(Configuration.ITEM_NAME_ignoreIPAddresses, ignoreIPAddresses)
 
-
+        // in case we have configured specific interpretations of http status codes
+        Configuration.overwriteHttpSuccessCodes( httpSuccessCodes )
+        Configuration.overwriteHttpErrorCodes(   httpErrorCodes )
+        Configuration.overwriteHttpWarningCodes( httpWarningCodes )
     }
 
 
