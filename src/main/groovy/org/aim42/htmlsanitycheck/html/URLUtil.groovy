@@ -126,7 +126,7 @@ class URLUtil {
 
     private static Boolean isLinkToFile(URI aUri) {
 
-        aUri?.getScheme()?.toUpperCase() == "FILE"
+        aUri?.getScheme()?.equalsIgnoreCase("file")
     }
 
     /**
