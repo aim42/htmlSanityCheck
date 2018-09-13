@@ -146,8 +146,9 @@ class CheckerCreatorSpec extends Specification {
         then:'performCheck method is present'
         notThrown(NoSuchMethodException)
         pMethod == fullDeclaration
-		and:'baseDirPath is present'
-		oneChecker.baseDirPath
+		// TODO: for issue #210, we have to review and check the following assertion:
+        //and:'baseDirPath is present'
+		//oneChecker.baseDirPath
     }
 }
 
