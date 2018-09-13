@@ -1,4 +1,4 @@
-
+ifndef::imagesdir[:imagesdir: ../images]
 [[gradle-plugin-concept]]
 === Gradle Plugin Concept and Development
 You should definitely read the original https://gradle.org/docs/current/userguide/userguide.html[Gradle User Guide] on custom plugin development.

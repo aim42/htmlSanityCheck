@@ -1,4 +1,4 @@
-
+ifndef::imagesdir[:imagesdir: ../images]
 [[deployment-view]]
 == Deployment View
 
