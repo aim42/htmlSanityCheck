@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.html
 
+import java.util.regex.Pattern
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
@@ -14,6 +15,12 @@ import org.jsoup.select.Elements
  * Relies on http://jsoup.org parser
  */
 class HtmlPage {
+
+    /**
+     * Pattern to check for HTTP/S scheme, includes the
+     * scheme separator (colon).
+     */
+    private static final Pattern HTTP_SCHEME_PATTERN = ~/(?i)^https?:/
 
     // jsoup Document
     private Document document
@@ -190,7 +197,7 @@ class HtmlPage {
 
         return elements
                 .collect{ it.attr("href")}
-                .findAll{ element -> element.toUpperCase().startsWith("HTTP") }
+                .findAll{ it =~ HTTP_SCHEME_PATTERN }
                 .toSet()
 
     }
