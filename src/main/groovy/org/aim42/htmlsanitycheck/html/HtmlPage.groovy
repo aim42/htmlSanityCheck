@@ -26,6 +26,11 @@ class HtmlPage {
     private Document document
 
     /**
+     * The HTML file.
+     */
+    private File file
+
+    /**
      *
      * @param text html as text (string)
      * @return an HtmlPage
@@ -43,6 +48,7 @@ class HtmlPage {
      */
     public HtmlPage(File file) {
         assert file.exists()
+        this.file = file
         document = Jsoup.parse(file, "UTF-8")
     }
 
@@ -55,6 +61,13 @@ class HtmlPage {
         return new HtmlPage(fileToCheck)
     }
 
+    /**
+     * Gets the file of the HTML page.
+     * @return the file, or null if the HTML is not from a file.
+     */
+    public File getFile() {
+        return file;
+    }
 
     /**
      * get document meta info (e.g. filename, title, size etc.)

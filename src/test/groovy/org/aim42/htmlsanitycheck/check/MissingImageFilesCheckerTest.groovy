@@ -71,7 +71,7 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
         List<HtmlElement> images = htmlPage.getAllImageTags()
         assertEquals( "expected 1 image", 1, images.size())
 
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, "")
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, new File(""))
         checker = new MissingImageFilesChecker( )
 
         checkingResults = checker.performCheck( htmlPage )
@@ -133,7 +133,8 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
 
         assertNotNull("htmlpage must not be null", htmlPage )
 
-        checker = new MissingImageFilesChecker( baseDirPath: imagesDir)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, new File(imagesDir) )
+        checker = new MissingImageFilesChecker()
 
         checkingResults = checker.performCheck( htmlPage )
 
@@ -170,7 +171,8 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
         List<HtmlElement> images = htmlPage.getAllImageTags()
         assertEquals( "expected 1 image", 1, images.size())
 
-        checker = new MissingImageFilesChecker( baseDirPath: tempFolder)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tempFolder )
+        checker = new MissingImageFilesChecker()
 
         checkingResults = checker.performCheck( htmlPage )
 

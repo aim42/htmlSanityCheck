@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
@@ -31,11 +32,12 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
         assertTrue( "newly created html file exists", index.exists())
 
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, d1 )
 
         // 4.) check
         htmlPage = new HtmlPage( index )
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker( baseDirPath: d1.canonicalPath )
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker()
         collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
         // assert that no issue is found (== the local resource d2/fname.html is found)
@@ -57,6 +59,8 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
         assertTrue( "newly created html file exists", index.exists())
 
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, d1 )
+
         htmlPage = new HtmlPage( index )
 
         // pageToCheck shall contain ONE local resource / local-reference
@@ -68,7 +72,7 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
         assertEquals( "expected d2/fname#anchor", "d2/$fname#anchor", localReference)
 
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker( baseDirPath: d1.canonicalPath )
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker()
         collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
         // assert that no issue is found
@@ -159,12 +163,14 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 <body><p><a href="/files/doc.pdf" /></p></body>
 </html>"""
 		
+		Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tempFolder )
+
         htmlPage = new HtmlPage( htmlFile )
 
         int nrOfLocalReferences = htmlPage.getAllHrefStrings().size()
         assertEquals( "expected one reference", 1, nrOfLocalReferences)
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker( baseDirPath: tempFolder)
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker()
 
         collector = missingLocalResourcesChecker.performCheck( htmlPage )
 

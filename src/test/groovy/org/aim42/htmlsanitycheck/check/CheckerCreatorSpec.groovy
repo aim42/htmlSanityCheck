@@ -117,7 +117,7 @@ class CheckerCreatorSpec extends Specification {
         MissingImageFilesChecker oneChecker
 
         when:
-        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, new File('.').canonicalPath)
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, new File('.'))
         oneChecker = CheckerCreator.createSingleChecker(MissingImageFilesChecker.class)
 
         // performCheck method returns SingleCheckResults
@@ -128,14 +128,15 @@ class CheckerCreatorSpec extends Specification {
         then:'performCheck method is present'
         notThrown(NoSuchMethodException)
         pMethod == fullDeclaration
-		and:'baseDirPath is present'
-		oneChecker.baseDirPath
+		and:'baseDir is present'
+		oneChecker.baseDir
     }
 
 	def "can create MissingLocalResourcesChecker instance"() {
         MissingLocalResourcesChecker oneChecker
 
         when:
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, new File('.'))
         oneChecker = CheckerCreator.createSingleChecker(MissingLocalResourcesChecker.class)
 
         // performCheck method returns SingleCheckResults
@@ -146,9 +147,8 @@ class CheckerCreatorSpec extends Specification {
         then:'performCheck method is present'
         notThrown(NoSuchMethodException)
         pMethod == fullDeclaration
-		// TODO: for issue #210, we have to review and check the following assertion:
-        //and:'baseDirPath is present'
-		//oneChecker.baseDirPath
+        and:'baseDir is present'
+        oneChecker.baseDir
     }
 }
 
