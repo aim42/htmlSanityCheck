@@ -84,9 +84,9 @@ class HtmlSanityCheckTask extends DefaultTask {
         // thx https://github.com/stevesaliman/gradle-cobertura-plugin/commit/d61191f7d5f4e8e89abcd5f3839a210985526648
         outputs.upToDateWhen { false }
 
-        // give sensible default for output directory
-        checkingResultsDir = new File(project.buildDir, '/report/htmlchecks/')
-        junitResultsDir = new File(project.buildDir, '/test-results/htmlchecks/')
+        // give sensible default for output directory, see https://github.com/aim42/htmlSanityCheck/issues/205
+        checkingResultsDir = new File(project.buildDir, '/reports/htmlSanityCheck/')
+        junitResultsDir = new File(project.buildDir, '/test-results/htmlSanityCheck/')
 
     }
 
