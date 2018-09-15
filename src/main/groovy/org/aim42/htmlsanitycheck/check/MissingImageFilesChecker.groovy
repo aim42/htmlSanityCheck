@@ -13,15 +13,15 @@ import org.slf4j.LoggerFactory
 
 class MissingImageFilesChecker extends Checker {
 
-    // members are initialized in implicit constructor
     private List<HtmlElement> images
-    private String baseDirPath
+    private File baseDir
+    private File currentDir
 
     // logging stuff
     private final static Logger logger = LoggerFactory.getLogger(MissingImageFilesChecker);
 
     public MissingImageFilesChecker() {
-        baseDirPath = Configuration.getConfigItemByName( Configuration.ITEM_NAME_sourceDir )
+        baseDir = Configuration.getConfigItemByName( Configuration.ITEM_NAME_sourceDir )
     }
 
     @Override
@@ -35,6 +35,7 @@ class MissingImageFilesChecker extends Checker {
 
     @Override
     protected SingleCheckResults check(final HtmlPage pageToCheck) {
+        currentDir = pageToCheck.file?.parentFile ?: baseDir
 
         //get list of all image-tags "<img..." in html file
         images = pageToCheck.getAllImageTags()
@@ -78,13 +79,10 @@ class MissingImageFilesChecker extends Checker {
     * @param relativePathToImageFile == XYZ in <img src="XYZ">
      **/
     private void doesImageFileExist(String relativePathToImageFile) {
-        // problem: if the relativePath is "./images/fileName.jpg",
-        // we need to add the appropriate path prefix...
-
-        String absolutePath = baseDirPath + "/" + relativePathToImageFile
+        File parentDir = relativePathToImageFile?.startsWith("/") ? baseDir : currentDir;
 
 
-        File imageFile = new File(absolutePath);
+        File imageFile = new File(parentDir, relativePathToImageFile);
 
         if (!imageFile.exists() || imageFile.isDirectory()) {
             String findingText = "image \"$relativePathToImageFile\" missing"

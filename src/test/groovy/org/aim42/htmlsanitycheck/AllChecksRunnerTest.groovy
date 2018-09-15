@@ -22,7 +22,7 @@ class AllChecksRunnerTest extends GroovyTestCase {
         tmpFile = File.createTempFile("testfile", ".html") <<HTML
 
         Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
-        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile?.getAbsoluteFile().getParent())
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile.parentFile)
 
 
         // wrap fileToTest in Collection to comply to AllChecksRunner API
@@ -62,7 +62,7 @@ class AllChecksRunnerTest extends GroovyTestCase {
         tmpFile = File.createTempFile("testfile", ".html") << HTML
 
         Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
-        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile?.getAbsoluteFile().getParent())
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile.parentFile)
 
         allChecksRunner = new AllChecksRunner(  )
 
