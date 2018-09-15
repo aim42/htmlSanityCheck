@@ -332,7 +332,8 @@ function scrollToTop() {
 
             writer << """\n\n
  ${result.nrOfItemsChecked} $result.sourceItemName checked,
- ${result.nrOfProblems()} $result.targetItemName found.\n"""
+ ${result.nrOfProblems()} $result.targetItemName found.<br>
+ ${result.generalRemark}"""
 
         }
     }
