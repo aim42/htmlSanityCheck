@@ -1,11 +1,10 @@
-= Development Docs
+= Development Guide
 :toc:
 :toclevels: 2
 :toc-position: right
 
 :experimental:
 :imagesdir: ./images
-
 
 == Prerequisites
 
@@ -55,7 +54,7 @@ of available checkers. This set is used to configure the 'AllChecksRunner' class
 
  implementation-class=org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin
 
-=== Notes for IntelliJ Users
+== Notes for IntelliJ Users
 If you work with IntelliJ, you should configure your run- and test configurations
 so that the working-directory is set to your current module - most easily done
 by making $MODULE_DIR$ your default.
@@ -65,15 +64,9 @@ image:intellij-run-configuration.jpg[]
 
 == Building the Plugin
 
-=== Uploading / Publishing to Maven Central and Bintray
 
-t.b.c.
 
-=== Uploading to Gradle Plugin Repository
+
+=== Uploading to Public Archives
 Currently we use the Gradle Plugin Repository to host the plugin - which is very simple
 to configure for users.
-
-== Design Discussions
-
-include::development/issue-185.adoc[]
-include::development/issue-190.adoc[]
