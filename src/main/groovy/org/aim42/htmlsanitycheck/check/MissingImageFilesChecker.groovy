@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.html.URLUtil
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
@@ -12,13 +13,16 @@ import org.slf4j.LoggerFactory
 
 class MissingImageFilesChecker extends Checker {
 
-    // members are initialized in implicit constructor
     private List<HtmlElement> images
-    private String baseDirPath
+    private File baseDir
+    private File currentDir
 
     // logging stuff
     private final static Logger logger = LoggerFactory.getLogger(MissingImageFilesChecker);
 
+    public MissingImageFilesChecker() {
+        baseDir = Configuration.getConfigItemByName( Configuration.ITEM_NAME_sourceDir )
+    }
 
     @Override
     protected void initCheckingResultsDescription() {
@@ -31,6 +35,7 @@ class MissingImageFilesChecker extends Checker {
 
     @Override
     protected SingleCheckResults check(final HtmlPage pageToCheck) {
+        currentDir = pageToCheck.file?.parentFile ?: baseDir
 
         //get list of all image-tags "<img..." in html file
         images = pageToCheck.getAllImageTags()
@@ -51,6 +56,7 @@ class MissingImageFilesChecker extends Checker {
       }
     }
 
+
     private void checkSingleLocalImage(HtmlElement image) {
         String relativePathToCurrentImage = image.getImageSrcAttribute()
 
@@ -68,19 +74,15 @@ class MissingImageFilesChecker extends Checker {
 
 
     /**
-     * check if the file at relativePathToImageFile exists
+     * check if a single image file exists
      *
     * @param relativePathToImageFile == XYZ in <img src="XYZ">
      **/
     private void doesImageFileExist(String relativePathToImageFile) {
-        // problem: if the relativePath is "./images/fileName.jpg",
-        // we need to add the appropriate path prefix...
+        File parentDir = relativePathToImageFile?.startsWith("/") ? baseDir : currentDir;
 
-        String absolutePath = baseDirPath + "/" + relativePathToImageFile //[1..-1]
 
-        //logger.info( "doesFileExist: absolutePath of image: $absolutePath")
-
-        File imageFile = new File(absolutePath);
+        File imageFile = new File(parentDir, relativePathToImageFile);
 
         if (!imageFile.exists() || imageFile.isDirectory()) {
             String findingText = "image \"$relativePathToImageFile\" missing"
@@ -94,7 +96,7 @@ class MissingImageFilesChecker extends Checker {
 }
 
 /*========================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

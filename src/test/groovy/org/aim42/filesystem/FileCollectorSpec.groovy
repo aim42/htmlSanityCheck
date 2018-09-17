@@ -1,14 +1,43 @@
 package org.aim42.filesystem
 
+import org.aim42.htmlsanitycheck.Configuration
+import spock.lang.Shared
 import spock.lang.Specification
 
 // see end-of-file for license information
 class FileCollectorSpec extends Specification {
+    @Shared
     File tempDir
 
     def setup() {
         tempDir = File.createTempDir()
     }
+
+
+    def "we can take srcDir and srcDocs from configuration instance"() {
+        given: "a file, directory and Configuration instance"
+        // create file with proper html content
+        File tmpFile = File.createTempFile("testfile", ".html") << """<body><title>hsc</title></body></html>"""
+
+
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile?.getAbsoluteFile().getParent())
+
+        when: "we call the collector with that configuration"
+        HashSet<File> allFilesToCheck
+
+        def tmpDir = Configuration.getConfigItemByName(Configuration.ITEM_NAME_sourceDir)
+        def tmpDocs = Configuration.getConfigItemByName(Configuration.ITEM_NAME_sourceDocuments)
+
+        allFilesToCheck = FileCollector.getHtmlFilesToCheck(
+                tmpDir,
+                tmpDocs
+        )
+
+        then: "we find that one file!"
+        allFilesToCheck.size() == 1
+    }
+
 
     // we can identify html files
     def "IsHtmlFile"(String fileName, Boolean isHtml) {
@@ -149,7 +178,7 @@ class FileCollectorSpec extends Specification {
 
         // "mock" a configuration
         Set<File> collectedFiles =
-                FileCollector.getConfiguredHtmlFiles(tempDir, emptyFileCollection)
+                FileCollector.getHtmlFilesToCheck(tempDir, emptyFileCollection)
 
         then:
         collectedFiles.size() == htmlFileCount //find the file we just created
@@ -170,6 +199,7 @@ class FileCollectorSpec extends Specification {
 
     }
 
+
     def "we can configure selected files"(
             Set otherDirsAndFiles,
             Set<String> configuredFiles ) {
@@ -184,7 +214,7 @@ class FileCollectorSpec extends Specification {
 
         // "mock" a configuration
         Set<File> collectedFiles =
-                FileCollector.getConfiguredHtmlFiles(tempDir, configuredFiles )
+                FileCollector.getHtmlFilesToCheck(tempDir, configuredFiles )
 
         then:
         collectedFiles.size() == 1
@@ -201,7 +231,7 @@ class FileCollectorSpec extends Specification {
 }
 
 /*========================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

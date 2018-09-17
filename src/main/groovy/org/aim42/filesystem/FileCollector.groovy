@@ -48,20 +48,35 @@ class FileCollector {
     }
 
     /**
-     * returns all configured html files as Set<File>
-     *
+     * The main use-case for this class: returns all configured html files as Set<File>.
+     * @param srcDir (mandatory) Directory where the html files are located. Type: File. Default: build/docs
+     *            can be given as File or String
+     * @param sourceDocs (optional) Defaults to all files in ${srcDir}.
      */
-    public static Set<File> getConfiguredHtmlFiles(
-            File srcDir,
-            Set<String> sourceDocs) {
+    public static Set<File> getHtmlFilesToCheck(File srcDir, Collection<String> sourceDocs) {
         // first case: no document names given -> return all html files
-        // in directory tree
+        // in directory
         if ((sourceDocs == null) || (sourceDocs?.empty)) {
             return getAllHtmlFilesFromDirectory(srcDir)
         } else {
             return getAllConfiguredHtmlFiles(srcDir, sourceDocs)
         }
     }
+
+    // if for other types of input parameters, convert and delegate
+
+    public static Set<File> getHtmlFilesToCheck(File srcDir, String sourceDoc) {
+        return getHtmlFilesToCheck(srcDir, [sourceDoc])
+    }
+
+    public static Set<File> getHtmlFilesToCheck(String srcDirName, ArrayList<String> sourceDocs) {
+        return getHtmlFilesToCheck(new File(srcDirName), sourceDocs)
+    }
+
+    public static Set<File> getHtmlFilesToCheck(String srcDirName, String sourceDocName) {
+        return getHtmlFilesToCheck(new File(srcDirName), [sourceDocName])
+    }
+
 
     /**
      * returns all configured image files as Set<File>
@@ -86,7 +101,7 @@ class FileCollector {
      * @return all files with appropriate extension
      */
     public static Set<File> getAllHtmlFilesFromDirectory(File dir) {
-        Set<File> files = new HashSet<File>()  
+        Set<File> files = new HashSet<File>()
 
         // scan only files, not directories
         dir.eachFileRecurse(FileType.FILES) { file ->
@@ -121,7 +136,7 @@ class FileCollector {
      * returns all configured html files from @param srcDocs
      * which really exist below @param srcDocs
      */
-    public static Set<File> getAllConfiguredHtmlFiles(File srcDir, Set<String> srcDocs) {
+    public static Set<File> getAllConfiguredHtmlFiles(File srcDir, Collection<String> srcDocs) {
         Set<File> files = new HashSet<File>()
 
         srcDocs.each { configuredFileName ->
@@ -166,7 +181,7 @@ class FileCollector {
 }
 
 /*========================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
