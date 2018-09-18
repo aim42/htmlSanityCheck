@@ -12,6 +12,7 @@ v0.9, Sept-02-2014
 :project-issues: https://github.com/aim42/htmlSanityCheck/issues
 :project-bugs: https://github.com/aim42/htmlSanityCheck/issues?q=is%3Aopen+is%3Aissue+label%3Abug
 
+image::{improveDocImage}[link={repositoryDocsDir}index.adoc, float=right]
 
 *The Problem*: Languages like AsciiDoc or Markdown allow for easy writing and
 hyperlinking. When they are transformed to HTML the _sanity_ of links

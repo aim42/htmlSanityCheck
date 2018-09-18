@@ -6,6 +6,7 @@
 :experimental:
 :imagesdir: ./images
 
+image::{improveDocImage}[link={repositoryDocsDir}DevelopmentGuide.adoc, float=right]
 
 == Prerequisites
 

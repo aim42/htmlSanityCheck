@@ -145,7 +145,11 @@ asciidoctor {
 
             // the following are used for PlantUML integration
             'allow-uri-read'    : true,
-            'plantUMLDir'       : file("./build/asciidoc/pdf/.").canonicalPath
+            'plantUMLDir'       : file("./build/asciidoc/pdf/.").canonicalPath,
+
+            //for the "improve this doc" shield
+            'repositoryDocsDir' : 'https://github.com/aim42/htmlSanityCheck/blob/master/src/docs/',
+            'improveDocImage'   : 'https://img.shields.io/badge/improve-this%20doc-orange.svg',
     ]
 
 
