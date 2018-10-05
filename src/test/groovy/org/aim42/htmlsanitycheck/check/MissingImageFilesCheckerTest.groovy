@@ -2,6 +2,7 @@
 
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.aim42.htmlsanitycheck.html.HtmlPage
@@ -70,8 +71,8 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
         List<HtmlElement> images = htmlPage.getAllImageTags()
         assertEquals( "expected 1 image", 1, images.size())
 
-
-        checker = new MissingImageFilesChecker( baseDirPath: "")
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, new File(""))
+        checker = new MissingImageFilesChecker( )
 
         checkingResults = checker.performCheck( htmlPage )
 
@@ -82,9 +83,40 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
         assertEquals("expected $expected images, found $actual",
                 expected, actual)
 
+    }
 
+
+    @Test
+    public void testExistingImageIsFound() {
+
+        File tempImageFile = File.createTempFile("testfile", ".jpg") << """dummy jpg file"""
+
+        String HTML_WITH_IMAGE = """
+           <html>
+             <head></head>
+              <body>
+                   <h1>dummy-heading-1</h1>
+                   <img src="${tempImageFile.name}">
+              </body>
+           </html>"""
+
+        htmlPage = new HtmlPage(HTML_WITH_IMAGE)
+
+
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tempImageFile.parentFile )
+
+        checker = new MissingImageFilesChecker( )
+        checkingResults = checker.performCheck( htmlPage )
+
+        // checker must check one whatIsTheProblem
+        int expected = 0
+        int actual = checkingResults.nrOfProblems()
+
+        // image file exists, therefore Checker must not find any problem
+        assertEquals("expected $expected images, found $actual", expected, actual)
 
     }
+
 
 
     @Test
@@ -101,7 +133,8 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
 
         assertNotNull("htmlpage must not be null", htmlPage )
 
-        checker = new MissingImageFilesChecker( baseDirPath: imagesDir)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, new File(imagesDir) )
+        checker = new MissingImageFilesChecker()
 
         checkingResults = checker.performCheck( htmlPage )
 
@@ -138,7 +171,8 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
         List<HtmlElement> images = htmlPage.getAllImageTags()
         assertEquals( "expected 1 image", 1, images.size())
 
-        checker = new MissingImageFilesChecker( baseDirPath: tempFolder)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tempFolder )
+        checker = new MissingImageFilesChecker()
 
         checkingResults = checker.performCheck( htmlPage )
 
@@ -158,7 +192,7 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
 
 
 /*========================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

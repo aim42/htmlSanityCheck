@@ -87,7 +87,7 @@ ruleset {
         AbstractClassWithoutAbstractMethod
         AssignmentToStaticFieldFromInstanceMethod
         BooleanMethodReturnsNull
-        BuilderMethodWithSideEffects
+        //BuilderMethodWithSideEffects
         CloneableWithoutClone
         CloseWithoutCloseable
         CompareToWithoutComparable
@@ -188,30 +188,30 @@ ruleset {
 
 
         // rulesets/junit.xml
-        ChainedTest
-        CoupledTestCase
-        JUnitAssertAlwaysFails
-        JUnitAssertAlwaysSucceeds
-        JUnitFailWithoutMessage
-        JUnitLostTest
-        JUnitPublicField
-        JUnitPublicNonTestMethod
-        JUnitPublicProperty
-        JUnitSetUpCallsSuper
-        JUnitStyleAssertions
-        JUnitTearDownCallsSuper
-        JUnitTestMethodWithoutAssert
-        JUnitUnnecessarySetUp
-        JUnitUnnecessaryTearDown
-        JUnitUnnecessaryThrowsException
-        SpockIgnoreRestUsed
-        UnnecessaryFail
-        UseAssertEqualsInsteadOfAssertTrue
-        UseAssertFalseInsteadOfNegation
-        UseAssertNullInsteadOfAssertEquals
-        UseAssertSameInsteadOfAssertTrue
-        UseAssertTrueInsteadOfAssertEquals
-        UseAssertTrueInsteadOfNegation
+//        ChainedTest
+//        CoupledTestCase
+//        JUnitAssertAlwaysFails
+//        JUnitAssertAlwaysSucceeds
+//        JUnitFailWithoutMessage
+//        JUnitLostTest
+//        JUnitPublicField
+//        JUnitPublicNonTestMethod
+//        JUnitPublicProperty
+//        JUnitSetUpCallsSuper
+//        JUnitStyleAssertions
+//        JUnitTearDownCallsSuper
+//        JUnitTestMethodWithoutAssert
+//        JUnitUnnecessarySetUp
+//        JUnitUnnecessaryTearDown
+//        JUnitUnnecessaryThrowsException
+//        SpockIgnoreRestUsed
+//        UnnecessaryFail
+//        UseAssertEqualsInsteadOfAssertTrue
+//        UseAssertFalseInsteadOfNegation
+//        UseAssertNullInsteadOfAssertEquals
+//        UseAssertSameInsteadOfAssertTrue
+//        UseAssertTrueInsteadOfAssertEquals
+//        UseAssertTrueInsteadOfNegation
 
         // rulesets/logging.xml
         LoggerForDifferentClass
@@ -239,7 +239,7 @@ ruleset {
         PackageNameMatchesFilePath
         ParameterName
         PropertyName
-        VariableName
+        //VariableName
 
         // rulesets/security.xml
         FileCreateTempFile

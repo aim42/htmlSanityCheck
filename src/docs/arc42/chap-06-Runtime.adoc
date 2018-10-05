@@ -1,4 +1,6 @@
 
 == Runtime View
 
+image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-06-Runtime.adoc, float=right]
+
 NOTE: Not appropriate for this system due to very simple implementation.

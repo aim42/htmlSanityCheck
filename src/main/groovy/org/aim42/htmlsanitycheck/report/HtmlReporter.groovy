@@ -332,7 +332,8 @@ function scrollToTop() {
 
             writer << """\n\n
  ${result.nrOfItemsChecked} $result.sourceItemName checked,
- ${result.nrOfProblems()} $result.targetItemName found.\n"""
+ ${result.nrOfProblems()} $result.targetItemName found.<br>
+ ${result.generalRemark}"""
 
         }
     }
@@ -393,7 +394,7 @@ function scrollToTop() {
 }
 /*======================================================================
 
-Copyright 2014 Gernot Starke and aim42 contributors
+Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

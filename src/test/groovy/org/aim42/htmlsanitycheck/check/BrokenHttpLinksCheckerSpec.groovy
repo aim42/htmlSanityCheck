@@ -1,9 +1,11 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.inet.NetUtil
+import spock.lang.IgnoreIf
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -25,6 +27,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     /* executed before every single spec */
 
     def setup() {
+
         brokenHttpLinksChecker = new BrokenHttpLinksChecker()
 
         collector = new SingleCheckResults()
@@ -35,8 +38,8 @@ class BrokenHttpLinksCheckerSpec extends Specification {
      * (the checker will most likely use google.com as a proxy for "internet"
      */
     // todo: test that properly
+    @IgnoreIf({ Boolean.valueOf(env['INTELLIJ']) })
     def "recognize if there is internet connectivity"() {
-
         expect: "if there is no internet connection, testing should fail"
         NetUtil.isInternetConnectionAvailable() == true
 
@@ -59,7 +62,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     }
 
 
-    def "one syntactically correct http URL yields one check"() {
+    def "one syntactically correct http URL is ok"() {
         given: "an HTML page with a single correct anchor/link"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href="https://google.com">google</a>
@@ -70,15 +73,18 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         when: "page is checked"
         collector = brokenHttpLinksChecker.performCheck(htmlPage)
 
-        then:
+        then: "a single item is checked"
         collector.nrOfItemsChecked == 1
+
+        and: "the result is ok"
+        collector.nrOfProblems() == 0
 
     }
 
     def "single bad link is identified as problem"() {
 
         given: "an HTML page with a single (bad) link"
-        String badhref = "http://arc42.org/ui98jfuhenu87djch"
+        String badhref = "https://arc42.org/ui98jfuhenu87djch"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${badhref}>nonexisting arc42 link</a>
                 $HtmlConst.HTML_END """
@@ -93,13 +99,17 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
     }
 
-    @Unroll
-    def 'bad link #badLink is identified as problem'() {
 
-        given: "an HTML page with a single (bad) link"
-        String badURL = "https://httpstat.us/${badLink}"
+    // IntelliJ has problems with testing http connections,
+    // so we ignore some tests...
+    @Unroll
+    //@IgnoreIf({ Boolean.valueOf(env['INTELLIJ']) })
+    def 'bad link #badLink is recognized as such'() {
+
+        given: "an HTML page with a single (broken) link"
+        String goodURL = "https://httpstat.us/${badLink}"
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href=${badURL}>${badLink}</a>
+                <a href=${goodURL}>${badLink}</a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
@@ -107,14 +117,12 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         when: "page is checked"
         collector = brokenHttpLinksChecker.performCheck(htmlPage)
 
-        then: "then collector contains the appropriate error message"
-        collector.findings[0].whatIsTheProblem.contains("${badLink}")
-
-        collector.findings[0].whatIsTheProblem.contains("Error: ${badURL}")
+        then: "then collector contains one error message"
+        collector.getFindings().size() == 1
 
         where:
 
-        badLink << [400, 401, 403, 404, 405, 406, 408, 409, 410]
+        badLink << [400, 401, 403, 404, 405, 406, 408, 409, 410, 429, 431, 500, 501, 502, 504, 505, 506, 507]
 
     }
     /**

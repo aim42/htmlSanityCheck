@@ -99,6 +99,21 @@ class URLUtilTest extends GroovyTestCase {
 
     }
 
+    @Test
+    public void testLinkToFileCheckDoesNotRelyOnDefaultLocale() {
+        Locale defaultLocale = Locale.getDefault()
+        try {
+            Locale.setDefault(new Locale("tr", "TR"))
+            List<String> localResources = ["file://test.html", "FILE://test.html"]
+
+            localResources.each { it ->
+                assertTrue("$it not recognized as local resource", URLUtil.isLocalResource(it))
+            }
+        } finally {
+            Locale.setDefault(defaultLocale)
+        }
+    }
+
     /**
      * tests if cross-references (intra-document-links) are recognized
      */

@@ -72,6 +72,7 @@ image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommo
 image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link="{project-bugs}"^]
 image:http://img.shields.io/github/issues/aim42/{project}.svg[link={project-issues}]
 
+image::{improveDocImage}[link={repositoryDocsDir}hsc_arc42.adoc, float=right]
 
 
 [NOTE]
@@ -79,11 +80,6 @@ image:http://img.shields.io/github/issues/aim42/{project}.svg[link={project-issu
 Within the following text, the "Html Sanity Checker" shall be
 abbreviated with kbd:[HtmlSC]
 ====
-
-[plantuml,"firstDiagram",png]
-....
-include::plantuml/sequence1.puml[]
-....
 
 include::arc42/About-This-Docu.adoc[]
 

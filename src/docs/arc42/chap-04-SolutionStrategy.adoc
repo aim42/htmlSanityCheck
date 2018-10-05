@@ -1,6 +1,8 @@
 
 == Solution Strategy
 
+image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-04-SolutionStrategy.adoc, float=right]
+
 * Implement kbd:[HtmlSC] in {groovy-url}[Groovy] and Java with minimal
 external dependencies. Wrap this implementation into a {gradle-url}
 plugin, so it can be used within automated builds. Details are given

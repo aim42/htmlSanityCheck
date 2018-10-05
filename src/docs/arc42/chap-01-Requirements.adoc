@@ -1,6 +1,8 @@
 :numbered:
 == Introduction and Goals
 
+image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-01-Requirements.adoc, float=right]
+
 kbd:[HtmlSC] shall support authors creating digital formats
 with hyperlinks and integration of images and similar resources.
 

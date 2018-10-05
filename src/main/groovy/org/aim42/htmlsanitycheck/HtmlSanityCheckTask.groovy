@@ -1,11 +1,10 @@
 package org.aim42.htmlsanitycheck
 
-import org.aim42.filesystem.FileCollector
+
 import org.gradle.api.DefaultTask
 
 // see end-of-file for license information
 import org.gradle.api.GradleException
-import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.*
 
 /**
@@ -47,13 +46,28 @@ class HtmlSanityCheckTask extends DefaultTask {
     // defaults to 5000 (msecs)
     @Optional
     @Input
-    long httpConnectionTimeout = 5000
+    int httpConnectionTimeout = 5000
+
+    // shall localhost-URLs lead to warnings?
+    @Optional
+    @Input
+    boolean ignoreLocalHost = false
+
+    // shall numerical IP addresses lead to warnings?
+    @Optional
+    @Input
+    boolean ignoreIPAddresses = false
+
+    // shall certain http status codes be treated differently from the standard?
+    @Optional
+    @Input
+    Collection<Integer> httpWarningCodes
+    Collection<Integer> httpErrorCodes
+    Collection<Integer> httpSuccessCodes
 
 
     // private stuff
     // **************************************************************************
-    // configuration object to pass around
-    private Configuration configuration
 
 
     private Set<File> allFilesToCheck
@@ -70,12 +84,9 @@ class HtmlSanityCheckTask extends DefaultTask {
         // thx https://github.com/stevesaliman/gradle-cobertura-plugin/commit/d61191f7d5f4e8e89abcd5f3839a210985526648
         outputs.upToDateWhen { false }
 
-        // give sensible default for output directory
-        checkingResultsDir = new File(project.buildDir, '/report/htmlchecks/')
-        junitResultsDir = new File(project.buildDir, '/test-results/htmlchecks/')
-
-        // we start with an empty Set
-        allFilesToCheck = new HashSet<File>()
+        // give sensible default for output directory, see https://github.com/aim42/htmlSanityCheck/issues/205
+        checkingResultsDir = new File(project.buildDir, '/reports/htmlSanityCheck/')
+        junitResultsDir = new File(project.buildDir, '/test-results/htmlSanityCheck/')
 
     }
 
@@ -86,15 +97,14 @@ class HtmlSanityCheckTask extends DefaultTask {
     @TaskAction
     public void sanityCheckHtml() {
 
-        configuration =
+        // convert gradle config parameters to Configuration (registry)
+        setupConfiguration()
+
+        // tell us about these parameters
         logBuildParameter()
 
-
-
-        // if we have no valid input file, abort with exception
-        if (isValidConfiguration(sourceDir, sourceDocuments)) {
-
-            allFilesToCheck = FileCollector.getConfiguredHtmlFiles(sourceDir, sourceDocuments)
+        // if we have no valid configuration, abort with exception
+        if (Configuration.isValid()) {
 
             // create output directory for checking results
             checkingResultsDir.mkdirs()
@@ -112,16 +122,10 @@ class HtmlSanityCheckTask extends DefaultTask {
             logger.info("allFilesToCheck" + allFilesToCheck.toString(), "")
 
             // create an AllChecksRunner...
-            // TODO: pass a dictionary instead of single parameters, following the Open-Close principle
+            def allChecksRunner = new AllChecksRunner(  )
 
-            def allChecksRunner = new AllChecksRunner(
-                    allFilesToCheck,
-                    checkingResultsDir,
-                    junitResultsDir
-            )
-            allChecksRunner.consoleReport = false
 
-            // perform the actual checks
+            // ... and perform the actual checks
             def allChecks = allChecksRunner.performAllChecks()
 
             // check for findings and fail build if requested
@@ -136,58 +140,10 @@ See ${checkingResultsDir} for a detailed report."""
             }
         } else {
             logger.warn("""Fatal configuration errors preventing checks:\n
-              sourceDir : $sourceDir \n
-              sourceDocs: $sourceDocuments\n""", "fatal error")
+            ${Configuration.toString()}""")
         }
     }
 
-    /**
-     * checks plausibility of input parameters:
-     * we need at least one html file as input, maybe several
-     * @param srcDir
-     * @param srcDocs needs to be of type {@link FileCollection} to be Gradle-compliant
-     */
-    public static Boolean isValidConfiguration(File srcDir, Set<String> srcDocs) {
-
-        // cannot check if source director is null (= unspecified)
-        if ((srcDir == null)) {
-            throw new MisconfigurationException("source directory must not be null")
-        }
-
-        // cannot check if both input params are null
-        if ((srcDir == null) && (srcDocs == null)) {
-            throw new IllegalArgumentException("both sourceDir and sourceDocs were null")
-        }
-
-        // no srcDir was given and empty SrcDocs
-        if ((!srcDir) && (srcDocs != null)) {
-            if ((srcDocs?.empty)) {
-                throw new IllegalArgumentException("both sourceDir and sourceDocs must not be empty")
-            }
-        }
-        // non-existing srcDir is absurd too
-        if ((!srcDir.exists())) {
-            throw new IllegalArgumentException("given sourceDir " + srcDir + " does not exist.")
-        }
-
-        // if srcDir exists but is empty... no good :-(
-        if ((srcDir.exists())
-                && (srcDir.isDirectory())
-                && (srcDir.directorySize() == 0)) {
-            throw new IllegalArgumentException("given sourceDir " + srcDir + " is empty")
-        }
-
-        // if srcDir exists but does not contain any html file... no good
-        if ((srcDir.exists())
-                && (srcDir.isDirectory())
-                && (FileCollector.getAllHtmlFilesFromDirectory(srcDir).size() == 0)) {
-            throw new MisconfigurationException("no html file found in", srcDir)
-        }
-
-        // if no exception has been thrown until now,
-        // the configuration seems to be valid..
-        return true
-    }
 
     /**
      * setup a @Configuration instance containing all given configuration parameters
@@ -198,17 +154,25 @@ See ${checkingResultsDir} for a detailed report."""
      * Note: It does not check this configuration for plausibility or mental health...
      * @return @Configuration
      */
-    protected Configuration setupConfiguration() {
-        Configuration myConfig = new Configuration()
+    protected void setupConfiguration() {
 
-        myConfig.addConfigurationItem("sourceDocuments", sourceDocuments)
-        myConfig.addConfigurationItem("sourceDir", sourceDir)
-        myConfig.addConfigurationItem("checkingResultsDir", checkingResultsDir)
-        myConfig.addConfigurationItem("junitResultsDir", junitResultsDir)
-        myConfig.addConfigurationItem("failOnErrors", failOnErrors)
-        myConfig.addConfigurationItem( "httpConnectionTimeout", httpConnectionTimeout)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, sourceDocuments)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, sourceDir)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_checkingResultsDir, checkingResultsDir)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_junitResultsDir, junitResultsDir)
 
-        return myConfig
+        // consoleReport is always FALSE for Gradle based builds
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_consoleReport, false)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_failOnErrors, failOnErrors)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_httpConnectionTimeout, httpConnectionTimeout)
+
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_ignoreLocalhost, ignoreLocalHost)
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_ignoreIPAddresses, ignoreIPAddresses)
+
+        // in case we have configured specific interpretations of http status codes
+        Configuration.overwriteHttpSuccessCodes( httpSuccessCodes )
+        Configuration.overwriteHttpErrorCodes(   httpErrorCodes )
+        Configuration.overwriteHttpWarningCodes( httpWarningCodes )
     }
 
 
@@ -227,7 +191,7 @@ See ${checkingResultsDir} for a detailed report."""
 }
 
 /*========================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

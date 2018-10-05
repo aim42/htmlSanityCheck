@@ -13,12 +13,6 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
     private AllChecksRunner allChecksRunner
 
-    @Before
-    void setup() {
-        //
-
-    }
-
 
     @Test
     public void testSingleCorrectHTMLFile() {
@@ -27,10 +21,14 @@ class AllChecksRunnerTest extends GroovyTestCase {
         // create file with proper html content
         tmpFile = File.createTempFile("testfile", ".html") <<HTML
 
-        // wrap fileToTest in Collection to comply to AllChecksRunner API
-        allChecksRunner = new AllChecksRunner( new LinkedHashSet<File>( [tmpFile] ) )
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile.parentFile)
 
-        SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile(tmpFile)
+
+        // wrap fileToTest in Collection to comply to AllChecksRunner API
+        allChecksRunner = new AllChecksRunner( )
+
+        SinglePageResults pageResults = allChecksRunner.performChecksForOneFile(tmpFile)
 
         // expectation:
         // 4 checks run
@@ -63,14 +61,12 @@ class AllChecksRunnerTest extends GroovyTestCase {
         // create file
         tmpFile = File.createTempFile("testfile", ".html") << HTML
 
-        File testDir = File.createTempDir( "testdir", "")
-        allChecksRunner = new AllChecksRunner(
-                new LinkedHashSet<File>([tmpFile]),
-                testDir,
-                testDir
-        )
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile.parentFile)
 
-        SinglePageResults pageResults = allChecksRunner.performAllChecksForOneFile( tmpFile )
+        allChecksRunner = new AllChecksRunner(  )
+
+        SinglePageResults pageResults = allChecksRunner.performChecksForOneFile( tmpFile )
 
         int expected = AllCheckers.checkerClazzes.size()
         assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
@@ -85,7 +81,7 @@ class AllChecksRunnerTest extends GroovyTestCase {
  * This is free software - without ANY guarantee!
  *
  *
- * Copyright 2014, Dr. Gernot Starke, arc42.org
+ * Copyright Dr. Gernot Starke, arc42.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

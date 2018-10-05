@@ -2,6 +2,8 @@
 [[deployment-view]]
 == Deployment View
 
+image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-07-Deployment.adoc, float=right]
+
 [[img-deployment]]
 image::hsc-deployment.png["Deployment", title="Deployment"]
 
