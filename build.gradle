@@ -16,14 +16,12 @@ buildscript {
 }
 
 plugins {
-    id 'org.asciidoctor.convert' version '1.5.3'
     id 'groovy'
     id 'java'
     id "com.gradle.plugin-publish" version "0.9.10"
 
     // to report build results back to gradle.org
     id 'com.gradle.build-scan' version '1.15.1'
-    id "org.aim42.htmlSanityCheck" version "1.0.0-RC-1"
 
 }
 
@@ -69,9 +67,6 @@ apply plugin: 'java-gradle-plugin'
 // Groovy source files using CodeNarc and generates reports from these checks.
 apply plugin: 'codenarc'
 
-// asciidoctor conversion
-apply plugin: 'org.asciidoctor.convert'
-
 // publish to gradle-plugin-repository
 apply plugin: "com.gradle.plugin-publish"
 
@@ -84,6 +79,7 @@ apply from: 'config/codenarc.gradle'
 // end:BuildPlugins[]
 
 
+/**
 htmlSanityCheck {
 
     // ensure asciidoctor->html runs first
@@ -102,6 +98,7 @@ htmlSanityCheck {
     failOnErrors = false
 
 }
+ **/
 
 task copyResourceImages(type: Copy) {
     from('src/main/resources') {
@@ -119,7 +116,7 @@ processResources {
 
 // ========================================================
 
-
+/**
 asciidoctor {
 
     // the jrubyPrepare tasks takes care of loading the gems
@@ -165,6 +162,11 @@ asciidoctor {
     }
 
 } // asciidoctor
+
+ **/
+
+//configure docToolchain to use the main project's config
+project('docToolchain') { docDir = "../." }
 
 // ==========================================================
 // if you use htmlSanityCheck locally, publish with
