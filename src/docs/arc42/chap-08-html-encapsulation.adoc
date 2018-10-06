@@ -2,6 +2,8 @@ ifndef::imagesdir[:imagesdir: ../images]
 [[html-encapsulation]]
 === Encapsulate HTML Parsing
 
+image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-08-html-encapsulation.adoc, float=right]
+
 We encapsulate the third-party HTML parser (http://jsoup.org) in
 simple wrapper classes with interfaces specific to our different
 checking algorithms.

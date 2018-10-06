@@ -1,6 +1,9 @@
 ifndef::imagesdir[:imagesdir: ../images]
 [[gradle-plugin-concept]]
 === Gradle Plugin Concept and Development
+
+image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-08-gradle-plugin.adoc, float=right]
+
 You should definitely read the original https://gradle.org/docs/current/userguide/userguide.html[Gradle User Guide] on custom plugin development.
 
 To enable the <<requirements, required Gradle integration>>,

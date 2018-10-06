@@ -1,7 +1,9 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import spock.lang.Specification
+import sun.security.krb5.Config
 
 /**
  * specifiy behavior of CheckerCreator factory
@@ -115,7 +117,8 @@ class CheckerCreatorSpec extends Specification {
         MissingImageFilesChecker oneChecker
 
         when:
-        oneChecker = CheckerCreator.createSingleChecker(MissingImageFilesChecker.class, [baseDirPath: new File('.').canonicalPath ])
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, new File('.'))
+        oneChecker = CheckerCreator.createSingleChecker(MissingImageFilesChecker.class)
 
         // performCheck method returns SingleCheckResults
         def fullDeclaration = "public org.aim42.htmlsanitycheck.collect.SingleCheckResults org.aim42.htmlsanitycheck.check.Checker.performCheck(org.aim42.htmlsanitycheck.html.HtmlPage)"
@@ -125,15 +128,16 @@ class CheckerCreatorSpec extends Specification {
         then:'performCheck method is present'
         notThrown(NoSuchMethodException)
         pMethod == fullDeclaration
-		and:'baseDirPath is present'
-		oneChecker.baseDirPath
+		and:'baseDir is present'
+		oneChecker.baseDir
     }
 
 	def "can create MissingLocalResourcesChecker instance"() {
         MissingLocalResourcesChecker oneChecker
 
         when:
-        oneChecker = CheckerCreator.createSingleChecker(MissingLocalResourcesChecker.class, [baseDirPath: new File('.').canonicalPath ])
+        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, new File('.'))
+        oneChecker = CheckerCreator.createSingleChecker(MissingLocalResourcesChecker.class)
 
         // performCheck method returns SingleCheckResults
         def fullDeclaration = "public org.aim42.htmlsanitycheck.collect.SingleCheckResults org.aim42.htmlsanitycheck.check.Checker.performCheck(org.aim42.htmlsanitycheck.html.HtmlPage)"
@@ -143,8 +147,8 @@ class CheckerCreatorSpec extends Specification {
         then:'performCheck method is present'
         notThrown(NoSuchMethodException)
         pMethod == fullDeclaration
-		and:'baseDirPath is present'
-		oneChecker.baseDirPath
+        and:'baseDir is present'
+        oneChecker.baseDir
     }
 }
 

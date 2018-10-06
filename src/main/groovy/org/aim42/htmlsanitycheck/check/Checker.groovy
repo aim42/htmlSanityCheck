@@ -63,7 +63,6 @@ abstract class Checker {
     abstract protected SingleCheckResults check( final HtmlPage pageToCheck )
 
 
-
 }
 
 

@@ -1,6 +1,8 @@
 ifndef::imagesdir[:imagesdir: ../images]
 == Context
 
+image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-03-Context.adoc, float=right]
+
 === Business Context
 
 image::hsc-context.png["Business Context", title="Business Context"]
