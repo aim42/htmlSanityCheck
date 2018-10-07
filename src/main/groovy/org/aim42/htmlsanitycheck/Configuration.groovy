@@ -145,7 +145,7 @@ class Configuration {
      * @param itemName
      * @param itemValue
      */
-    static void addConfigurationItem(String itemName, Object itemValue) {
+    void addConfigurationItem(String itemName, Object itemValue) {
         if (itemValue != null) {
             registry().configurationItems.put(itemName, itemValue)
         }
@@ -154,7 +154,7 @@ class Configuration {
     /**
      * overwrites httpSuccessCodes configuration
      */
-    static void overwriteHttpSuccessCodes(Collection<Integer> additionalSuccessCodes) {
+    void overwriteHttpSuccessCodes(Collection<Integer> additionalSuccessCodes) {
         def errCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
         def warnCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
         def successCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
@@ -171,7 +171,7 @@ class Configuration {
     /**
      * overwrites httpWarningCodes configuration
      */
-    static void overwriteHttpWarningCodes(Collection<Integer> additionalWarningCodes) {
+    void overwriteHttpWarningCodes(Collection<Integer> additionalWarningCodes) {
         def errCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
         def warnCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
         def successCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
@@ -188,7 +188,7 @@ class Configuration {
     /**
      * overwrites httpErrorCodes configuration
      */
-    static void overwriteHttpErrorCodes(Collection<Integer> additionalErrorCodes) {
+    void overwriteHttpErrorCodes(Collection<Integer> additionalErrorCodes) {
         def errCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
         def warnCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
         def successCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
@@ -203,10 +203,10 @@ class Configuration {
     }
 
 
-    private static updateSuccessWarningErrorCodesConfiguration(errCodes, warnCodes, successCodes) {
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_httpErrorCodes, errCodes)
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_httpWarningCodes, warnCodes)
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_httpSuccessCodes, successCodes)
+    void updateSuccessWarningErrorCodesConfiguration(errCodes, warnCodes, successCodes) {
+        this.addConfigurationItem(Configuration.ITEM_NAME_httpErrorCodes, errCodes)
+        this.addConfigurationItem(Configuration.ITEM_NAME_httpWarningCodes, warnCodes)
+        this.addConfigurationItem(Configuration.ITEM_NAME_httpSuccessCodes, successCodes)
     }
 
     /**
@@ -217,7 +217,7 @@ class Configuration {
      * srcDocs needs to be of type {@link org.gradle.api.file.FileCollection}
      * to be Gradle-compliant
      */
-    public static Boolean isValid() {
+    public Boolean isValid() {
         // prior to 1.0.0-RC-2: public static Boolean isValid(File srcDir, Set<String> srcDocs) {
 
         // we need at least srcDir and srcDocs!!
@@ -266,7 +266,7 @@ class Configuration {
 
 
     @Override
-    public static String toString() {
+    public String toString() {
         return "Configuration{" +
                 "configurationItems=" + registry().configurationItems +
                 '}';
