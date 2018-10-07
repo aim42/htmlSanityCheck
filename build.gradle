@@ -41,7 +41,6 @@ dependencies {
     // jsoup is our awesome html parser, see jsoup.org
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 
-    asciidoctor 'org.asciidoctor:asciidoctorj-diagram:1.5.8'
 
 } // dependencies
 
@@ -79,27 +78,6 @@ apply from: 'config/codenarc.gradle'
 // end:BuildPlugins[]
 
 
-/**
-htmlSanityCheck {
-
-    // ensure asciidoctor->html runs first
-    // and images are copied to build directory
-
-    dependsOn asciidoctor
-
-    //sourceDocuments = [ "one-file.html", "another-file.html", "index.html"]
-
-    sourceDir = new File("${buildDir}/html5")
-
-    // where to put results of sanityChecks...
-    checkingResultsDir = new File( buildDir, "reports/htmlSanityCheck" )
-
-    // fail the build if any error is encountered
-    failOnErrors = false
-
-}
- **/
-
 task copyResourceImages(type: Copy) {
     from('src/main/resources') {
         include '**/*.png'
@@ -116,52 +94,6 @@ processResources {
 
 // ========================================================
 
-/**
-asciidoctor {
-
-
-    outputDir = file(buildDir)
-    sourceDir = file(srcDir)
-    sources {
-        include "hsc_arc42.adoc",
-                "index.adoc",
-                "DevelopmentDocs.adoc"
-    }
-
-    attributes = [
-            doctype             : 'book',
-            icons               : 'font',
-            toc                 : 'left',
-            sectlink            : true,
-            sectanchors         : true,
-            numbered            : true,
-            'source-highlighter': 'coderay',
-            'javaVersion'       : "$javaVersion",
-            'currentDate'       : "$currentDate",
-            'versionId'         : "$version",
-
-            // the following are used for PlantUML integration
-            'allow-uri-read'    : true,
-            'plantUMLDir'       : file("./build/asciidoc/pdf/.").canonicalPath,
-
-            //for the "improve this doc" shield
-            'repositoryDocsDir' : 'https://github.com/aim42/htmlSanityCheck/blob/master/src/docs/',
-            'improveDocImage'   : 'https://img.shields.io/badge/improve-this%20doc-orange.svg',
-    ]
-
-
-    resources {
-        from("${srcDir}/images") {
-            include '**'
-        }
-        into "./images"
-    }
-
-    requires = ['asciidoctor-diagram']
-
-} // asciidoctor
-
- **/
 
 //configure docToolchain to use the main project's config
 project('docToolchain') { docDir = "../." }
