@@ -41,7 +41,7 @@ dependencies {
     // jsoup is our awesome html parser, see jsoup.org
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 
-    //   gems 'rubygems:asciidoctor-diagram:1.4.0'
+    asciidoctor 'org.asciidoctor:asciidoctorj-diagram:1.5.8'
 
 } // dependencies
 
@@ -119,21 +119,13 @@ processResources {
 /**
 asciidoctor {
 
-    // the jrubyPrepare tasks takes care of loading the gems
-//    dependsOn jrubyPrepare
-
-    // the asciidoctor task depends on this gem
-//    requires = ['asciidoctor-diagram']
-
-    // seems to be important :-)
-//    gemPath = jrubyPrepare.outputDir
 
     outputDir = file(buildDir)
     sourceDir = file(srcDir)
     sources {
         include "hsc_arc42.adoc",
                 "index.adoc",
-                "DevelopmentGuide.adoc"
+                "DevelopmentDocs.adoc"
     }
 
     attributes = [
@@ -150,7 +142,11 @@ asciidoctor {
 
             // the following are used for PlantUML integration
             'allow-uri-read'    : true,
-            'plantUMLDir'       : file("./build/asciidoc/pdf/.").canonicalPath
+            'plantUMLDir'       : file("./build/asciidoc/pdf/.").canonicalPath,
+
+            //for the "improve this doc" shield
+            'repositoryDocsDir' : 'https://github.com/aim42/htmlSanityCheck/blob/master/src/docs/',
+            'improveDocImage'   : 'https://img.shields.io/badge/improve-this%20doc-orange.svg',
     ]
 
 
@@ -160,6 +156,8 @@ asciidoctor {
         }
         into "./images"
     }
+
+    requires = ['asciidoctor-diagram']
 
 } // asciidoctor
 

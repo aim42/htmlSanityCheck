@@ -8,6 +8,12 @@ import org.junit.Test;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
+// this DOES NOT WORK
+// ArchUnit cannot check groovy code!!
+// see https://github.com/TNG/ArchUnit/issues/107
+// **********************************************
+
+
 public class CheckArchitecturalRules {
 
 
@@ -20,21 +26,38 @@ public class CheckArchitecturalRules {
         classes = importer.importPackages("org.aim42");
     }
 
+
     @Test
     public void collect_should_not_access_suggest() {
-        ArchRule rule = noClasses().that().resideInAPackage("..collect..")
-                .should().accessClassesThat().resideInAPackage("..suggest.."); // The '..' represents a wildcard for any number of packages
+        ArchRule rule = noClasses()
+                .that()
+                .resideInAPackage("..collect..")
+                .should()
+                .accessClassesThat()
+                .resideInAPackage("..suggest.."); // The '..' represents a wildcard for any number of packages
+
+        rule.check(classes);
+    }
+
+    @Test
+    public void check_should_not_access_html() {
+        ArchRule rule = noClasses()
+                .that()
+                .resideInAPackage("..check..")
+                .should()
+                .accessClassesThat()
+                .resideInAPackage("..html..");
 
         rule.check(classes);
     }
 
     @Test
     public void check_can_access_report() {
-        ArchRule rule = classes().that().resideInAnyPackage( "check")
-                .should().accessClassesThat().resideInAnyPackage( "report");
+        ArchRule rule = classes().that().resideInAnyPackage("check")
+                .should().accessClassesThat().resideInAnyPackage("report");
     }
 
-    //@Test
+    @Test
     public void interfaces_should_not_have_names_ending_with_the_word_interface() {
 
         noClasses().that().areInterfaces()
@@ -45,14 +68,18 @@ public class CheckArchitecturalRules {
 
     //@Test
     public void checkers_should_extend_checker() {
-        classes().that().haveNameMatching(".*Checker").should().implement("Checker").check(classes);
+        classes().that()
+                .haveNameMatching(".*Checker")
+                .should()
+                .implement("Checker")
+                .check(classes);
     }
 
     @Test
     public void only_suggester_should_call_string_similiarity_library() {
         noClasses().that().dontHaveSimpleName("Suggester")
                 .and().haveNameNotMatching("..Test")
-                .and().resideInAPackage( "net.ricecode")
+                .and().resideInAPackage("net.ricecode")
                 .should().accessClassesThat()
                 .resideInAPackage("..similarity..")
                 .check(classes);
@@ -62,7 +89,7 @@ public class CheckArchitecturalRules {
 
 
 /*=============================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

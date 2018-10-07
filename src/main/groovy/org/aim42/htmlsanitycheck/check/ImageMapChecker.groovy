@@ -146,8 +146,7 @@ class ImageMapChecker extends Checker {
 
     /*
     check for broken href links.
-    TODO: currently this checks only for INTERNAL links, enhance to arbitrary links
-     */
+    */
     private void  checkForBrokenHrefLinks() {
 
         mapNames.each { mapName ->

@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
@@ -40,9 +41,7 @@ class BrokenHttpLinksChecker extends Checker {
 
         // if there's no internet, issue a general warning
         // but continue trying
-        if (NetUtil.isInternetConnectionAvailable() == false) {
-            checkingResults.generalRemark = "There seems to be a general problem with internet connectivity, all other checks for http/https links might yield incorrect results!"
-        }
+        addWarningIfNoInternetConnection()
 
         checkAllHttpLinks()
 
@@ -52,8 +51,9 @@ class BrokenHttpLinksChecker extends Checker {
 
 
     private void addWarningIfNoInternetConnection() {
-
-
+        if (NetUtil.isInternetConnectionAvailable() == false) {
+            checkingResults.generalRemark = "There seems to be a general problem with internet connectivity, all other checks for http/https links might yield incorrect results!"
+        }
     }
 
     /**
@@ -79,19 +79,28 @@ class BrokenHttpLinksChecker extends Checker {
 
         try {
             URL url = new URL(href)
+
+            // check if localhost-URL
+            checkIfLocalhostURL(url, href)
+
+            // check if (numerical) IP address
+            checkIfIPAddress(url, href)
+
             try {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("HEAD");
 
-                // TODO add httpConnectionTimeout parameter!!
-                //if (httpConnectionTimeout >= 0) {
-                //    connection.setConnectTimeout(httpConnectionTimeout);
-                //}
+                // httpConnectionTimeout is a configuration parameter
+                // that defaults to 5000 (msec)
+                connection.setConnectTimeout(
+                        Configuration?.getConfigItemByName(Configuration.ITEM_NAME_httpConnectionTimeout)
+                );
+
+                // try to connect
                 connection.connect();
                 int responseCode = connection.getResponseCode();
 
                 // interpret response code
-                // TODO: make this configurable
                 decideHowToTreatResponseCode(responseCode, href)
 
             }
@@ -106,9 +115,38 @@ class BrokenHttpLinksChecker extends Checker {
         }
     }
 
+    // if configured, ip addresses in URLs yield warnings
+    private void checkIfIPAddress(URL url, String href) {
+        if (!Configuration.getConfigItemByName(Configuration.ITEM_NAME_ignoreIPAddresses)) {
+            String host = url.getHost()
+
+            if (host.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")) {
+                Finding localhostWarning = new Finding("""Warning: numerical urls (ip address) indicates suspicious environment dependency: href=${
+                    href
+                }""")
+                checkingResults.addFinding(localhostWarning)
+            }
+        }
+    }
+
+    // if configured ,localhost-URLs yield warnings!
+    private void checkIfLocalhostURL(URL url, String href) {
+        if (!Configuration.getConfigItemByName(Configuration.ITEM_NAME_ignoreLocalhost)) {
+            String host = url.getHost()
+            if ((host == "localhost") || host.startsWith("127.0.0")) {
+                Finding localhostWarning = new Finding("""Warning: localhost urls indicates suspicious environment dependency: href=${
+                    href
+                }""")
+                checkingResults.addFinding(localhostWarning)
+            }
+        }
+    }
+
     /**
      * response codes other than 200 might be treated as errors or warnings,
      * sometimes even information.
+     *
+     * IF a warning or error is found, a @Finding is added to checkingResults
      * TODO: add configuration and logic to "decideHowToTreatResponseCode"
      *
      * @param responseCode
@@ -117,22 +155,20 @@ class BrokenHttpLinksChecker extends Checker {
 
         String problem
 
-        if (!(responseCode in NetUtil.HTTP_SUCCESS_CODES)) {
+        Collection<Integer> successCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
+        Collection<Integer> warningCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
+        Collection<Integer> errorCodes   = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
 
-            if (NetUtil.HTTP_WARNING_CODES.contains(responseCode)) {
-                    problem = "Warning:" }
-            else if (responseCode >= 400) {
-                problem = "Error:";
-            }
-             else {
-                problem = "Error: Unknown or unclassified response code:"
-            }
-
-            problem += """ ${href} returned statuscode ${responseCode}."""
-
-            checkingResults.addFinding(new Finding(problem))
+        switch (responseCode) {
+            case successCodes: return
+            case warningCodes: problem = "Warning:"; break
+            case errorCodes:   problem = "Error:"; break
+            default: problem = "Error: Unknown or unclassified response code:"
         }
 
+        problem += """ ${href} returned statuscode  ${responseCode}."""
+
+        checkingResults.addFinding(new Finding(problem))
         return
     }
 

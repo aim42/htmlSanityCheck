@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
@@ -51,8 +52,10 @@ class MissingLocalResourceRefCountSpec extends Specification {
 
         HtmlPage htmlPage = new HtmlPage( tmpHtmlFile )
 
+        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tmpDir )
+
         when:
-        def missingLocalResourcesChecker = new MissingLocalResourcesChecker( baseDirPath: tmpDir )
+        def missingLocalResourcesChecker = new MissingLocalResourcesChecker()
         SingleCheckResults collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
 

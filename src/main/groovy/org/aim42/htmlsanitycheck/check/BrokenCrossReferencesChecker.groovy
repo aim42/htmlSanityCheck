@@ -119,8 +119,6 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
     private void addBrokenLinkToResults(String linkTarget, String href) {
         String findingText = "link target \"$linkTarget\" missing"
 
-        // TODO: reference count is appended as string - better keep this as separate int value
-
         // now count occurrences - how often is it referenced
         int nrOfReferences = countNrOfReferences(href)
         if (nrOfReferences > 1) {
@@ -142,7 +140,7 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
 
 }
 /*========================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

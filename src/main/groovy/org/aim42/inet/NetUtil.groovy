@@ -5,12 +5,17 @@ package org.aim42.inet
 
 class NetUtil {
 
+    // the codes below can be overwritten by configuration!
+
     // these are regarded as "Success" when checking
     // http(s) links
     final static def HTTP_SUCCESS_CODES = (200..208) + [226]
 
     // for codes in the HTTP_WARNING_CODES, a warning is added to the findings
     final static def HTTP_WARNING_CODES = (100..102) + (300..308)
+
+    // error codes
+    final static def HTTP_ERROR_CODES = (400..451) + (500..511)
 
     /**
      * We try to check if there is a usable Internet connection available.
