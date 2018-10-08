@@ -89,7 +89,7 @@ class HtmlSanityCheckTask extends DefaultTask {
         checkingResultsDir = new File(project.buildDir, '/reports/htmlSanityCheck/')
         junitResultsDir = new File(project.buildDir, '/test-results/htmlSanityCheck/')
 
-        myConfig = this.setupConfiguration()
+
     }
 
     /**
@@ -101,6 +101,9 @@ class HtmlSanityCheckTask extends DefaultTask {
 
         // tell us about these parameters
         logBuildParameter()
+
+        // get configuration parameters from gradle
+        myConfig = this.setupConfiguration()
 
         // if we have no valid configuration, abort with exception
         if (myConfig.isValid()) {
@@ -155,7 +158,7 @@ See ${checkingResultsDir} for a detailed report."""
 
         Configuration tmpConfig = new Configuration()
 
-        with tmpConfig {
+        tmpConfig.with {
             addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, sourceDocuments)
             addConfigurationItem(Configuration.ITEM_NAME_sourceDir, sourceDir)
             addConfigurationItem(Configuration.ITEM_NAME_checkingResultsDir, checkingResultsDir)
