@@ -57,7 +57,7 @@ types of stakeholders:
 The {project-url}[repository is located on Github].
 
 *Status*:
-image:http://img.shields.io/:license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
+image:http://img.shields.io/badge/license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
 image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[issues]
 
