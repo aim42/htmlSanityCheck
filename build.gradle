@@ -1,8 +1,5 @@
-// gradle build script for html sanity check
-// =========================================
-
-// to process the version-property file, we need the filter
-//import org.apache.tools.ant.filters.*
+// gradle build script for htmlSanityCheck
+// =======================================
 
 
 buildscript {
@@ -206,7 +203,7 @@ task info(
 }
 
 /*
- * Copyright 2012-2018 the original author or authors.
+ * Copyright Gernot Starke and aim42 contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

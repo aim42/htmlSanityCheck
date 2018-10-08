@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.aim42.htmlsanitycheck.html.HtmlPage
@@ -30,6 +31,10 @@ import org.aim42.htmlsanitycheck.html.HtmlPage
  */
 class MissingAltInImageTagsChecker extends Checker {
 
+
+    MissingAltInImageTagsChecker(Configuration pConfig) {
+        super(pConfig)
+    }
 
     @Override
     protected void initCheckingResultsDescription() {

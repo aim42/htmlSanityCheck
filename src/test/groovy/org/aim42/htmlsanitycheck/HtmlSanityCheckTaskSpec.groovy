@@ -11,39 +11,39 @@ class HtmlSanityCheckTaskSpec extends Specification {
     private File htmlFile
     private File nonHtmlFile
 
-
+    private Configuration myConfig = new Configuration()
 
     def "configuring a single html file is ok"() {
 
         given:
-            tempDir = File.createTempDir()
-            htmlFile = new File( tempDir, "a.html") << HTML_HEADER
+        tempDir = File.createTempDir()
+        htmlFile = new File(tempDir, "a.html") << HTML_HEADER
 
         when: "we create a configuration with this single file"
-            Configuration.addSourceFileConfiguration(tempDir, new HashSet(["a.html"]))
+        myConfig.addSourceFileConfiguration(tempDir, new HashSet(["a.html"]))
 
-            Configuration.isValid( )
+        myConfig.isValid()
 
         then:
-            htmlFile.exists()
-            tempDir.isDirectory()
-            tempDir.directorySize() > 0
-            notThrown( Exception )
+        htmlFile.exists()
+        tempDir.isDirectory()
+        tempDir.directorySize() > 0
+        notThrown(Exception)
 
     }
 
 
     def "configuring a single non-html file is not ok"() {
         given:
-            tempDir = File.createTempDir()
-            nonHtmlFile = new File( tempDir, "zypern.txt") << "this is no html"
-            Configuration.addSourceFileConfiguration(tempDir, new HashSet(["zypern.txt"]))
+        tempDir = File.createTempDir()
+        nonHtmlFile = new File(tempDir, "zypern.txt") << "this is no html"
+        myConfig.addSourceFileConfiguration(tempDir, new HashSet(["zypern.txt"]))
 
         when:
-            Configuration.isValid()
+        myConfig.isValid()
 
         then:
-            thrown MisconfigurationException
+        thrown MisconfigurationException
 
     }
 
@@ -56,10 +56,10 @@ class HtmlSanityCheckTaskSpec extends Specification {
     def "configuring file #srcDocs in directory #srcDocs is absurd"() {
 
         given: "configuration with #srcDir and #srcDocs"
-        Configuration.addSourceFileConfiguration( srcDir, srcDocs)
+        myConfig.addSourceFileConfiguration(srcDir, srcDocs)
 
         when: "configuration is validated..."
-        def tmpResult = Configuration.isValid()
+        def tmpResult = myConfig.isValid()
 
         then: "an exception is thrown"
         thrown MisconfigurationException
@@ -84,7 +84,7 @@ class HtmlSanityCheckTaskSpec extends Specification {
     def "empty configuration makes no sense"() {
 
         when:
-        Configuration.isValid()
+        myConfig.isValid()
 
         then:
         thrown MisconfigurationException

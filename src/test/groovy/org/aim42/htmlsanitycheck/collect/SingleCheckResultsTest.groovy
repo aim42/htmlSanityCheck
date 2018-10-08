@@ -16,6 +16,8 @@ class SingleCheckResultsTest extends GroovyTestCase {
 
     final String localPath = "/src/test/resources"
 
+    private Configuration myConfig = new Configuration()
+
     String imageDir
 
     SingleCheckResults checkingResults
@@ -33,7 +35,7 @@ class SingleCheckResultsTest extends GroovyTestCase {
 
         imageDir = new File(".").getCanonicalPath() + localPath
 
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, new File(imageDir) )
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, new File(imageDir) )
 
     }
 
@@ -82,7 +84,7 @@ class SingleCheckResultsTest extends GroovyTestCase {
         List<HtmlElement> images = htmlPage.getAllImageTags()
         assertEquals("expected 2 images", 2, images.size())
 
-        checker = new MissingImageFilesChecker()
+        checker = new MissingImageFilesChecker( myConfig )
 
         SingleCheckResults checkingResults = checker.performCheck( htmlPage )
 

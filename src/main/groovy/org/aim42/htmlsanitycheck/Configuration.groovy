@@ -35,9 +35,6 @@ import org.aim42.inet.NetUtil
 
 class Configuration {
 
-    // the configuration registry instance
-    private static Configuration internalRegistry
-
     /*****************************************
      * configuration item names
      *
@@ -81,14 +78,6 @@ class Configuration {
      **************************/
     private Map configurationItems = [:]
 
-    // REGISTRY methods
-    // ****************
-    private static synchronized Configuration registry() {
-        if (internalRegistry == null) {
-            internalRegistry = new Configuration();
-        }
-        return internalRegistry;
-    }
 
     // constructor to set (some) default values
     private Configuration() {
@@ -107,8 +96,8 @@ class Configuration {
      * @param itemName
      * @return
      */
-    public static synchronized Object getConfigItemByName(final String itemName) {
-        return registry().configurationItems.get(itemName)
+    public synchronized Object getConfigItemByName(final String itemName) {
+        return configurationItems.get(itemName)
     }
 
     // special HtmlSanityChecker methods for mandatory configuration items
@@ -117,17 +106,17 @@ class Configuration {
     /**
      * convenience method for simplified testing
      */
-    static synchronized void addSourceFileConfiguration(File srcDir, Set<String> srcDocs) {
-        registry().addConfigurationItem(ITEM_NAME_sourceDir, srcDir)
-        registry().addConfigurationItem(ITEM_NAME_sourceDocuments, srcDocs)
+     synchronized void addSourceFileConfiguration(File srcDir, Set<String> srcDocs) {
+        addConfigurationItem(ITEM_NAME_sourceDir, srcDir)
+        addConfigurationItem(ITEM_NAME_sourceDocuments, srcDocs)
     }
 
     /**
      * @return true if item is already present, false otherwise
      */
-    static boolean checkIfItemPresent(String itemName) {
+    public boolean checkIfItemPresent(String itemName) {
         boolean result = false
-        if (registry().configurationItems.get(itemName) != null) {
+        if (configurationItems.get(itemName) != null) {
             result = true
         }
         return result
@@ -136,8 +125,8 @@ class Configuration {
     /**
      * @return the number of configuration items
      */
-    static int nrOfConfigurationItems() {
-        return registry().configurationItems.size()
+     int nrOfConfigurationItems() {
+        return configurationItems.size()
     }
 
     /** add a single configuration item, unless its value is null
@@ -147,7 +136,7 @@ class Configuration {
      */
     void addConfigurationItem(String itemName, Object itemValue) {
         if (itemValue != null) {
-            registry().configurationItems.put(itemName, itemValue)
+            configurationItems.put(itemName, itemValue)
         }
     }
 
@@ -155,9 +144,9 @@ class Configuration {
      * overwrites httpSuccessCodes configuration
      */
     void overwriteHttpSuccessCodes(Collection<Integer> additionalSuccessCodes) {
-        def errCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
-        def warnCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
-        def successCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
+        def errCodes = getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
+        def warnCodes = getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
+        def successCodes = getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
 
         additionalSuccessCodes.each { code ->
             successCodes += code // add to success codes
@@ -172,9 +161,9 @@ class Configuration {
      * overwrites httpWarningCodes configuration
      */
     void overwriteHttpWarningCodes(Collection<Integer> additionalWarningCodes) {
-        def errCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
-        def warnCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
-        def successCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
+        def errCodes = getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
+        def warnCodes = getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
+        def successCodes = getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
 
         additionalWarningCodes.each { code ->
             warnCodes += code // add to warning codes
@@ -189,9 +178,9 @@ class Configuration {
      * overwrites httpErrorCodes configuration
      */
     void overwriteHttpErrorCodes(Collection<Integer> additionalErrorCodes) {
-        def errCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
-        def warnCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
-        def successCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
+        def errCodes = getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
+        def warnCodes = getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
+        def successCodes = getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
 
         additionalErrorCodes.each { code ->
             errCodes += code // add to error codes
@@ -204,9 +193,9 @@ class Configuration {
 
 
     void updateSuccessWarningErrorCodesConfiguration(errCodes, warnCodes, successCodes) {
-        this.addConfigurationItem(Configuration.ITEM_NAME_httpErrorCodes, errCodes)
-        this.addConfigurationItem(Configuration.ITEM_NAME_httpWarningCodes, warnCodes)
-        this.addConfigurationItem(Configuration.ITEM_NAME_httpSuccessCodes, successCodes)
+        addConfigurationItem(Configuration.ITEM_NAME_httpErrorCodes, errCodes)
+        addConfigurationItem(Configuration.ITEM_NAME_httpWarningCodes, warnCodes)
+        addConfigurationItem(Configuration.ITEM_NAME_httpSuccessCodes, successCodes)
     }
 
     /**
@@ -218,11 +207,10 @@ class Configuration {
      * to be Gradle-compliant
      */
     public Boolean isValid() {
-        // prior to 1.0.0-RC-2: public static Boolean isValid(File srcDir, Set<String> srcDocs) {
 
         // we need at least srcDir and srcDocs!!
-        File srcDir = registry().getConfigItemByName(Configuration.ITEM_NAME_sourceDir)
-        Set<String> srcDocs = registry().getConfigItemByName(Configuration.ITEM_NAME_sourceDocuments)
+        File srcDir = getConfigItemByName(Configuration.ITEM_NAME_sourceDir)
+        Set<String> srcDocs = getConfigItemByName(Configuration.ITEM_NAME_sourceDocuments)
 
         // cannot check if source director is null (= unspecified)
         if ((srcDir == null)) {
@@ -268,7 +256,7 @@ class Configuration {
     @Override
     public String toString() {
         return "Configuration{" +
-                "configurationItems=" + registry().configurationItems +
+                "configurationItems=" + configurationItems +
                 '}';
     }
 }

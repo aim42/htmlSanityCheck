@@ -15,6 +15,8 @@ class CheckerCreatorSpec extends Specification {
 
     String pMethod
 
+    Configuration myConfig = new Configuration()
+
     def setup() {
         // ... takes HtmlPage as parameter
         params = [HtmlPage.class]
@@ -25,7 +27,7 @@ class CheckerCreatorSpec extends Specification {
         Checker oneChecker
 
         when:
-        oneChecker = CheckerCreator.createSingleChecker(BrokenCrossReferencesChecker.class)
+        oneChecker = CheckerCreator.createSingleChecker(BrokenCrossReferencesChecker.class, myConfig)
 
         // performCheck method returns SingleCheckResults
         def fullDeclaration = "public final org.aim42.htmlsanitycheck.collect.SingleCheckResults org.aim42.htmlsanitycheck.check.SuggestingChecker.performCheck(org.aim42.htmlsanitycheck.html.HtmlPage)"
@@ -48,7 +50,7 @@ class CheckerCreatorSpec extends Specification {
 
 
         when:
-        checkers = CheckerCreator.createCheckerClassesFrom( checkerClazzes )
+        checkers = CheckerCreator.createCheckerClassesFrom( checkerClazzes, myConfig )
         then:
         checkers.size() == 2
 
@@ -83,7 +85,7 @@ class CheckerCreatorSpec extends Specification {
         Checker oneChecker
 
         when:
-        oneChecker = CheckerCreator.createSingleChecker(checkerClazz)
+        oneChecker = CheckerCreator.createSingleChecker(checkerClazz, myConfig)
 
         then:
         notThrown(NoSuchMethodException)
@@ -107,7 +109,7 @@ class CheckerCreatorSpec extends Specification {
 
     def "creating unknown checkers throws exception"() {
         when:
-        Checker checker = CheckerCreator.createSingleChecker(java.lang.String.class)
+        Checker checker = CheckerCreator.createSingleChecker(java.lang.String.class, myConfig)
 
         then:
         thrown(UnknownCheckerException)
@@ -117,8 +119,8 @@ class CheckerCreatorSpec extends Specification {
         MissingImageFilesChecker oneChecker
 
         when:
-        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, new File('.'))
-        oneChecker = CheckerCreator.createSingleChecker(MissingImageFilesChecker.class)
+        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, new File('.'))
+        oneChecker = CheckerCreator.createSingleChecker(MissingImageFilesChecker.class, myConfig)
 
         // performCheck method returns SingleCheckResults
         def fullDeclaration = "public org.aim42.htmlsanitycheck.collect.SingleCheckResults org.aim42.htmlsanitycheck.check.Checker.performCheck(org.aim42.htmlsanitycheck.html.HtmlPage)"
@@ -136,8 +138,8 @@ class CheckerCreatorSpec extends Specification {
         MissingLocalResourcesChecker oneChecker
 
         when:
-        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, new File('.'))
-        oneChecker = CheckerCreator.createSingleChecker(MissingLocalResourcesChecker.class)
+        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, new File('.'))
+        oneChecker = CheckerCreator.createSingleChecker(MissingLocalResourcesChecker.class, myConfig)
 
         // performCheck method returns SingleCheckResults
         def fullDeclaration = "public org.aim42.htmlsanitycheck.collect.SingleCheckResults org.aim42.htmlsanitycheck.check.Checker.performCheck(org.aim42.htmlsanitycheck.html.HtmlPage)"

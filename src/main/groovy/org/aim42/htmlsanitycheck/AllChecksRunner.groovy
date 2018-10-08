@@ -52,6 +52,10 @@ class AllChecksRunner {
     private PerRunResults resultsForAllPages
 
 
+    // keep your own configuration (in case we have multiple parallel instances running...)
+    private Configuration myConfig
+
+
     private static final Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
 
     /**
@@ -59,23 +63,25 @@ class AllChecksRunner {
      *
      */
 
-    public AllChecksRunner() {
+    public AllChecksRunner( Configuration pConfig ) {
         super()
 
+        myConfig = pConfig
+
         this.filesToCheck = FileCollector.getHtmlFilesToCheck(
-                Configuration.getConfigItemByName(Configuration.ITEM_NAME_sourceDir),
-                Configuration.getConfigItemByName (Configuration.ITEM_NAME_sourceDocuments)
+                myConfig.getConfigItemByName(Configuration.ITEM_NAME_sourceDir),
+                myConfig.getConfigItemByName (Configuration.ITEM_NAME_sourceDocuments)
         )
 
 
         // TODO: #185 (checker classes shall be detected automatically (aka CheckerFactory)
         // CheckerFactory needs the configuration
-        this.checkers = CheckerCreator.createCheckerClassesFrom( AllCheckers.checkerClazzes )
+        this.checkers = CheckerCreator.createCheckerClassesFrom( AllCheckers.checkerClazzes, myConfig )
 
         this.resultsForAllPages = new PerRunResults()
 
-        this.checkingResultsDir = Configuration.getConfigItemByName(Configuration.ITEM_NAME_checkingResultsDir)
-        this.junitResultsDir = Configuration.getConfigItemByName(Configuration.ITEM_NAME_junitResultsDir)
+        this.checkingResultsDir = myConfig.getConfigItemByName(Configuration.ITEM_NAME_checkingResultsDir)
+        this.junitResultsDir = myConfig.getConfigItemByName(Configuration.ITEM_NAME_junitResultsDir)
 
         logger.debug("AllChecksRunner created with ${this.checkers.size()} checkers for ${filesToCheck.size()} files")
     }
@@ -137,7 +143,7 @@ class AllChecksRunner {
         // apply every checker to this page
         // ToDo: parallelize with GPARS?
         checkers.each { checker ->
-            def singleCheckResults = checker.performCheck(pageToCheck)
+            def singleCheckResults = checker.performCheck(pageToCheck )
             collectedResults.addResultsForSingleCheck(singleCheckResults)
         }
 

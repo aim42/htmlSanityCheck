@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
@@ -31,6 +32,9 @@ class ImageMapChecker extends Checker {
 
     private HtmlPage pageToCheck
 
+    ImageMapChecker(Configuration pConfig) {
+        super(pConfig)
+    }
 
     @Override
     protected void initCheckingResultsDescription() {

@@ -23,6 +23,9 @@ class BrokenHttpLinksChecker extends Checker {
     // the pure http/https-hrefs a set, duplicates are removed here
     private Set<HtmlElement> hrefSet
 
+    BrokenHttpLinksChecker(Configuration pConfig) {
+        super(pConfig)
+    }
 
     @Override
     protected void initCheckingResultsDescription() {
@@ -93,7 +96,7 @@ class BrokenHttpLinksChecker extends Checker {
                 // httpConnectionTimeout is a configuration parameter
                 // that defaults to 5000 (msec)
                 connection.setConnectTimeout(
-                        Configuration?.getConfigItemByName(Configuration.ITEM_NAME_httpConnectionTimeout)
+                        myConfig?.getConfigItemByName(Configuration.ITEM_NAME_httpConnectionTimeout)
                 );
 
                 // try to connect
@@ -117,7 +120,7 @@ class BrokenHttpLinksChecker extends Checker {
 
     // if configured, ip addresses in URLs yield warnings
     private void checkIfIPAddress(URL url, String href) {
-        if (!Configuration.getConfigItemByName(Configuration.ITEM_NAME_ignoreIPAddresses)) {
+        if (!myConfig.getConfigItemByName(Configuration.ITEM_NAME_ignoreIPAddresses)) {
             String host = url.getHost()
 
             if (host.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")) {
@@ -131,7 +134,7 @@ class BrokenHttpLinksChecker extends Checker {
 
     // if configured ,localhost-URLs yield warnings!
     private void checkIfLocalhostURL(URL url, String href) {
-        if (!Configuration.getConfigItemByName(Configuration.ITEM_NAME_ignoreLocalhost)) {
+        if (!myConfig.getConfigItemByName(Configuration.ITEM_NAME_ignoreLocalhost)) {
             String host = url.getHost()
             if ((host == "localhost") || host.startsWith("127.0.0")) {
                 Finding localhostWarning = new Finding("""Warning: localhost urls indicates suspicious environment dependency: href=${
@@ -155,9 +158,9 @@ class BrokenHttpLinksChecker extends Checker {
 
         String problem
 
-        Collection<Integer> successCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
-        Collection<Integer> warningCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
-        Collection<Integer> errorCodes   = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
+        Collection<Integer> successCodes = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
+        Collection<Integer> warningCodes = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
+        Collection<Integer> errorCodes   = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
 
         switch (responseCode) {
             case successCodes: return

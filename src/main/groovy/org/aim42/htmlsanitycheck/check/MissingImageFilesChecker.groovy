@@ -20,8 +20,10 @@ class MissingImageFilesChecker extends Checker {
     // logging stuff
     private final static Logger logger = LoggerFactory.getLogger(MissingImageFilesChecker);
 
-    public MissingImageFilesChecker() {
-        baseDir = Configuration.getConfigItemByName( Configuration.ITEM_NAME_sourceDir )
+
+    public MissingImageFilesChecker( Configuration pConfig) {
+        super( pConfig )
+        baseDir = myConfig.getConfigItemByName( Configuration.ITEM_NAME_sourceDir )
     }
 
     @Override

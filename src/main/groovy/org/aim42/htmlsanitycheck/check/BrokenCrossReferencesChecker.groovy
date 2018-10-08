@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.html.URLUtil
@@ -12,7 +13,11 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
 
     private List<String> listOfIds    // id="XYZ"
     private List<String> hrefList
-    private Set<String> hrefSet       // <a href="XYZ"...>
+    private Set<String> hrefSet
+
+    BrokenCrossReferencesChecker(Configuration pConfig) {
+        super(pConfig)
+    }       // <a href="XYZ"...>
 
 
     @Override

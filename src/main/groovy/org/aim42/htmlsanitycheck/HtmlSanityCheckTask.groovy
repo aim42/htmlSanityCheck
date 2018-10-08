@@ -68,8 +68,10 @@ class HtmlSanityCheckTask extends DefaultTask {
     // private stuff
     // **************************************************************************
 
-
     private Set<File> allFilesToCheck
+
+    private Configuration myConfig
+
 
     /**
      * Sets sensible defaults for important attributes.
@@ -87,6 +89,7 @@ class HtmlSanityCheckTask extends DefaultTask {
         checkingResultsDir = new File(project.buildDir, '/reports/htmlSanityCheck/')
         junitResultsDir = new File(project.buildDir, '/test-results/htmlSanityCheck/')
 
+        myConfig = this.setupConfiguration()
     }
 
     /**
@@ -96,14 +99,11 @@ class HtmlSanityCheckTask extends DefaultTask {
     @TaskAction
     public void sanityCheckHtml() {
 
-        // convert gradle config parameters to Configuration (registry)
-        setupConfiguration()
-
         // tell us about these parameters
         logBuildParameter()
 
         // if we have no valid configuration, abort with exception
-        if (Configuration.isValid()) {
+        if (myConfig.isValid()) {
 
             // create output directory for checking results
             checkingResultsDir.mkdirs()
@@ -121,7 +121,7 @@ class HtmlSanityCheckTask extends DefaultTask {
             logger.info("allFilesToCheck" + allFilesToCheck.toString(), "")
 
             // create an AllChecksRunner...
-            def allChecksRunner = new AllChecksRunner()
+            def allChecksRunner = new AllChecksRunner( myConfig )
 
             // ... and perform the actual checks
             def allChecks = allChecksRunner.performAllChecks()
@@ -138,7 +138,7 @@ See ${checkingResultsDir} for a detailed report."""
             }
         } else {
             logger.warn("""Fatal configuration errors preventing checks:\n
-            ${Configuration.toString()}""")
+            ${myConfig.toString()}""")
         }
     }
 
@@ -153,9 +153,9 @@ See ${checkingResultsDir} for a detailed report."""
      */
     protected Configuration setupConfiguration() {
 
-        Configuration myConfig = new Configuration()
+        Configuration tmpConfig = new Configuration()
 
-        with myConfig {
+        with tmpConfig {
             addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, sourceDocuments)
             addConfigurationItem(Configuration.ITEM_NAME_sourceDir, sourceDir)
             addConfigurationItem(Configuration.ITEM_NAME_checkingResultsDir, checkingResultsDir)
@@ -174,6 +174,8 @@ See ${checkingResultsDir} for a detailed report."""
             overwriteHttpErrorCodes(httpErrorCodes)
             overwriteHttpWarningCodes(httpWarningCodes)
         }
+
+        return tmpConfig
     }
 
 
