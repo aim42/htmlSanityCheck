@@ -1,0 +1,3 @@
+[submodule "docToolchain"]
+	path = docToolchain
+	url = git@github.com:docToolchain/docToolchain.git
