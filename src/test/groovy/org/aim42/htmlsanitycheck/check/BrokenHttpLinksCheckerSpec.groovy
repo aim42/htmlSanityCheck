@@ -125,10 +125,30 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
     }
 
+
+    def "bad amazon link is identified as problem"() {
+
+        given: "an HTML page with a single (good) amazon link"
+        String badAmazonLink = "https://www.amazon.com/dp/4242424242"
+        String HTML = """$HtmlConst.HTML_HEAD 
+                <a href=${badAmazonLink}>Amazon</a>
+                $HtmlConst.HTML_END """
+
+        htmlPage = new HtmlPage(HTML)
+
+        when: "page is checked"
+        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+        then: "then collector contains the appropriate error message"
+        collector.findings[0].whatIsTheProblem.contains(badAmazonLink)
+
+    }
+
+
     // IntelliJ has problems with testing http connections,
     // so we ignore some tests...
     @Unroll
-    @IgnoreIf({ Boolean.valueOf(env['INTELLIJ']) })
+    //@IgnoreIf({ Boolean.valueOf(env['INTELLIJ']) })
     def 'bad link #badLink is recognized as such'() {
 
         given: "an HTML page with a single (broken) link"

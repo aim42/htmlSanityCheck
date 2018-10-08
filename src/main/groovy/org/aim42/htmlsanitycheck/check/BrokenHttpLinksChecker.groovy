@@ -129,7 +129,7 @@ class BrokenHttpLinksChecker extends Checker {
                     secondConnection.setRequestMethod("GET")
                     int finalResponseCode = secondConnection.getResponseCode()
                     secondConnection.disconnect()
-                    
+
                     switch (finalResponseCode) {
                         case successCodes: return
                         case warningCodes: problem = "Warning:"; break
