@@ -1,0 +1,73 @@
+
+=== Handling 403 and 405 Status Codes
+
+
+https://github.com/aim42/htmlSanityCheck/issues/219[Issue 219]
+explains that the naive link checks based upon
+a http HEAD request sometimes fail, e.g. for links to amazon.com:
+
+For example: (curl -I perfoerms a HEAD request)
+
+....
+curl -I https://www.amazon.de/dp/3446443487
+HTTP/2 405
+server: Server
+content-type: text/html;charset=UTF-8
+<snip>
+
+....
+
+This is clearly a _false negative_,
+as the URL itself is correct and the
+page exists.
+
+
+
+==== Proposed Approach
+
+[plantuml,"GET-after-HEAD-failapproach",png]
+....
+@startuml
+skinparam maxmessagesize 80
+participant BrokenLinksChecker as BLC
+participant RelaxedServer as RS
+participant PickyServer as PS
+
+-> BLC: check()
+activate BLC
+
+BLC -> BLC: setTimeout
+
+BLC -> RS: HEAD goodURL
+RS --> BLC: statuscode 200: OK
+
+BLC -> PS: HEAD otherURL
+PS --> BLC: statuscode 405
+BLC -> PS: GET otherURL
+PS --> BLC: realStatus
+
+@enduml
+....
+
+The general behavior we implement shall be the following
+
+[source, Groovy]
+----
+if (responseCode in successCodes) then return
+else {
+
+    // try GET
+    connection.setRequestMethod("GET")
+    int finalResponseCode = connection.getResponseCode()
+
+    switch (realResponseCode) {
+        case warningCodes: println "real warning $responseCode"; break
+        case errorCodes: println "real error $responseCode"; break
+
+        default: println "Error: Unknown or unclassified response code"
+    }
+}
+
+----
+
+

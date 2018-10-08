@@ -23,8 +23,20 @@ class BrokenHttpLinksChecker extends Checker {
     // the pure http/https-hrefs a set, duplicates are removed here
     private Set<HtmlElement> hrefSet
 
+    // get the (configured) statusCodes, just syntactic sugar...
+    private final Collection<Integer> successCodes
+    private final Collection<Integer> warningCodes
+    private final Collection<Integer> errorCodes
+
+
+
     BrokenHttpLinksChecker(Configuration pConfig) {
         super(pConfig)
+
+        successCodes = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
+        warningCodes = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
+        errorCodes   = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
+
     }
 
     @Override
@@ -66,16 +78,24 @@ class BrokenHttpLinksChecker extends Checker {
     private void checkAllHttpLinks() {
         // for all hrefSet check if the corresponding link is valid
         hrefSet.each { href ->
-            checkSingleHttpLink(href)
+            doubleCheckSingleHttpLink(href)
         }
     }
 
     /**
-     * Check a single external link
-     *
-
+     * Double-Check a single http(s) link:
+     * Some servers don't accept head request and send errors like 403 or 405,
+     * instead of 200.
+     * Therefore we double-check: in case of errors or warnings,
+     * we try again with a GET, to get the "finalResponseCode" -
+     * which we then categorize as success, error or warning
      */
-    protected void checkSingleHttpLink(String href) {
+
+
+    protected void doubleCheckSingleHttpLink(String href) {
+
+        // to create appropriate error messages
+        String problem
 
         // bookkeeping:
         checkingResults.incNrOfChecks()
@@ -100,11 +120,32 @@ class BrokenHttpLinksChecker extends Checker {
                 );
 
                 // try to connect
-                connection.connect();
-                int responseCode = connection.getResponseCode();
+                connection.connect()
+                int responseCode = connection.getResponseCode()
 
-                // interpret response code
-                decideHowToTreatResponseCode(responseCode, href)
+                // issue 218 and 219: some webservers respond with 403 or 405
+                // when given HEAD requests. Therefore, try GET
+                if (responseCode in successCodes) return
+
+                // in case of errors or warnings,
+                // try again with GET.
+
+                else {
+                    connection.setRequestMethod("GET")
+                    int finalResponseCode = connection.getResponseCode()
+
+                    switch (finalResponseCode) {
+                        case successCodes: return
+                        case warningCodes: problem = "Warning:"; break
+                        case errorCodes: problem = "Error:"; break
+                        default: problem = "Error: Unknown or unclassified response code:"
+                    }
+
+                    problem += """ ${href} returned statuscode ${responseCode}."""
+
+                    checkingResults.addFinding(new Finding(problem))
+
+                } // else
 
             }
             catch (InterruptedIOException | ConnectException | UnknownHostException | IOException exception) {
@@ -145,35 +186,6 @@ class BrokenHttpLinksChecker extends Checker {
         }
     }
 
-    /**
-     * response codes other than 200 might be treated as errors or warnings,
-     * sometimes even information.
-     *
-     * IF a warning or error is found, a @Finding is added to checkingResults
-     * TODO: add configuration and logic to "decideHowToTreatResponseCode"
-     *
-     * @param responseCode
-     */
-    protected void decideHowToTreatResponseCode(int responseCode, String href) {
-
-        String problem
-
-        Collection<Integer> successCodes = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
-        Collection<Integer> warningCodes = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
-        Collection<Integer> errorCodes   = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
-
-        switch (responseCode) {
-            case successCodes: return
-            case warningCodes: problem = "Warning:"; break
-            case errorCodes:   problem = "Error:"; break
-            default: problem = "Error: Unknown or unclassified response code:"
-        }
-
-        problem += """ ${href} returned statuscode  ${responseCode}."""
-
-        checkingResults.addFinding(new Finding(problem))
-        return
-    }
 
 }
 
