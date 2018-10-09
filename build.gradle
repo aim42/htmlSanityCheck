@@ -99,11 +99,6 @@ processResources {
 //configure docToolchain to use the main project's config
 project('docToolchain') {
     docDir = "../."
-    //disable 'check' and 'test' task
-    gradle.taskGraph.whenReady {
-        tasks.find {it.name=="check"}.enabled=false
-        tasks.find {it.name=="test"}.enabled=false
-    }
 }
 
 // ==========================================================
