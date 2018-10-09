@@ -40,8 +40,9 @@ class MissingLocalResourcesChecker extends Checker {
     // logging stuff
     private final static Logger logger = LoggerFactory.getLogger(MissingLocalResourcesChecker.class);
 
-    public MissingLocalResourcesChecker() {
-        baseDir = Configuration.getConfigItemByName( Configuration.ITEM_NAME_sourceDir )
+    public MissingLocalResourcesChecker( Configuration pConfig ) {
+        super( pConfig )
+        baseDir = pConfig.getConfigItemByName( Configuration.ITEM_NAME_sourceDir )
     }
 
     @Override

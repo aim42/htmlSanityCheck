@@ -1,0 +1,23 @@
+ifndef::plantUMLDir[:plantUMLDir: .plantuml/]
+
+== Generierte Diagramme mit PlantUML
+
+=== Aktivitätsdiagramme
+
+Hier ein minimalistisches Aktivitätsdiagramm:
+
+[source, plantuml]
+----
+[plantuml]
+--
+start
+:activity;
+--
+----
+
+[plantuml,"{plantUMLDir}activity","png"]
+--
+start
+:activity;
+--
+

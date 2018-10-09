@@ -24,6 +24,8 @@ class MissingLocalResourceRefCountSpec extends Specification {
     private File tmpHtmlFile
     private File tmpLocalResourceFile
 
+    private Configuration myConfig = new Configuration()
+
 
     /*
      * data-driven test to specify behavior of MissingLocalResourceChecker reference counter:
@@ -52,10 +54,10 @@ class MissingLocalResourceRefCountSpec extends Specification {
 
         HtmlPage htmlPage = new HtmlPage( tmpHtmlFile )
 
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tmpDir )
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tmpDir )
 
         when:
-        def missingLocalResourcesChecker = new MissingLocalResourcesChecker()
+        def missingLocalResourcesChecker = new MissingLocalResourcesChecker( myConfig )
         SingleCheckResults collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
 

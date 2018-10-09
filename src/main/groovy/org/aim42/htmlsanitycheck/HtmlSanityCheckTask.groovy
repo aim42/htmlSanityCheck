@@ -65,12 +65,13 @@ class HtmlSanityCheckTask extends DefaultTask {
     Collection<Integer> httpErrorCodes
     Collection<Integer> httpSuccessCodes
 
-
     // private stuff
     // **************************************************************************
 
-
     private Set<File> allFilesToCheck
+
+    private Configuration myConfig
+
 
     /**
      * Sets sensible defaults for important attributes.
@@ -88,6 +89,7 @@ class HtmlSanityCheckTask extends DefaultTask {
         checkingResultsDir = new File(project.buildDir, '/reports/htmlSanityCheck/')
         junitResultsDir = new File(project.buildDir, '/test-results/htmlSanityCheck/')
 
+
     }
 
     /**
@@ -97,14 +99,14 @@ class HtmlSanityCheckTask extends DefaultTask {
     @TaskAction
     public void sanityCheckHtml() {
 
-        // convert gradle config parameters to Configuration (registry)
-        setupConfiguration()
-
         // tell us about these parameters
         logBuildParameter()
 
+        // get configuration parameters from gradle
+        myConfig = this.setupConfiguration()
+
         // if we have no valid configuration, abort with exception
-        if (Configuration.isValid()) {
+        if (myConfig.isValid()) {
 
             // create output directory for checking results
             checkingResultsDir.mkdirs()
@@ -122,8 +124,7 @@ class HtmlSanityCheckTask extends DefaultTask {
             logger.info("allFilesToCheck" + allFilesToCheck.toString(), "")
 
             // create an AllChecksRunner...
-            def allChecksRunner = new AllChecksRunner(  )
-
+            def allChecksRunner = new AllChecksRunner( myConfig )
 
             // ... and perform the actual checks
             def allChecks = allChecksRunner.performAllChecks()
@@ -140,10 +141,9 @@ See ${checkingResultsDir} for a detailed report."""
             }
         } else {
             logger.warn("""Fatal configuration errors preventing checks:\n
-            ${Configuration.toString()}""")
+            ${myConfig.toString()}""")
         }
     }
-
 
     /**
      * setup a @Configuration instance containing all given configuration parameters
@@ -154,25 +154,31 @@ See ${checkingResultsDir} for a detailed report."""
      * Note: It does not check this configuration for plausibility or mental health...
      * @return @Configuration
      */
-    protected void setupConfiguration() {
+    protected Configuration setupConfiguration() {
 
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, sourceDocuments)
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, sourceDir)
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_checkingResultsDir, checkingResultsDir)
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_junitResultsDir, junitResultsDir)
+        Configuration tmpConfig = new Configuration()
 
-        // consoleReport is always FALSE for Gradle based builds
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_consoleReport, false)
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_failOnErrors, failOnErrors)
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_httpConnectionTimeout, httpConnectionTimeout)
+        tmpConfig.with {
+            addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, sourceDocuments)
+            addConfigurationItem(Configuration.ITEM_NAME_sourceDir, sourceDir)
+            addConfigurationItem(Configuration.ITEM_NAME_checkingResultsDir, checkingResultsDir)
+            addConfigurationItem(Configuration.ITEM_NAME_junitResultsDir, junitResultsDir)
 
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_ignoreLocalhost, ignoreLocalHost)
-        Configuration.addConfigurationItem(Configuration.ITEM_NAME_ignoreIPAddresses, ignoreIPAddresses)
+            // consoleReport is always FALSE for Gradle based builds
+            addConfigurationItem(Configuration.ITEM_NAME_consoleReport, false)
+            addConfigurationItem(Configuration.ITEM_NAME_failOnErrors, failOnErrors)
+            addConfigurationItem(Configuration.ITEM_NAME_httpConnectionTimeout, httpConnectionTimeout)
 
-        // in case we have configured specific interpretations of http status codes
-        Configuration.overwriteHttpSuccessCodes( httpSuccessCodes )
-        Configuration.overwriteHttpErrorCodes(   httpErrorCodes )
-        Configuration.overwriteHttpWarningCodes( httpWarningCodes )
+            addConfigurationItem(Configuration.ITEM_NAME_ignoreLocalhost, ignoreLocalHost)
+            addConfigurationItem(Configuration.ITEM_NAME_ignoreIPAddresses, ignoreIPAddresses)
+
+            // in case we have configured specific interpretations of http status codes
+            overwriteHttpSuccessCodes(httpSuccessCodes)
+            overwriteHttpErrorCodes(httpErrorCodes)
+            overwriteHttpWarningCodes(httpWarningCodes)
+        }
+
+        return tmpConfig
     }
 
 

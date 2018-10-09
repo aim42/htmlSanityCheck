@@ -11,6 +11,18 @@ class ConfigurationSpec extends Specification {
     final def CI_FileCheck_Name = "fileToCheck"
     final def CI_FileCheck_Value = "index.html"
 
+    private final static HTML_HEADER = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <head></head><html>"""
+
+    private File tempDir
+    private File htmlFile
+    private File nonHtmlFile
+
+    private Configuration myConfig
+
+    void setup() {
+        myConfig = new Configuration()
+    }
+
     /**
      * The very basic SmokeTest for configuration items
      * @return
@@ -18,51 +30,52 @@ class ConfigurationSpec extends Specification {
     def "can add and retrieve single config item"() {
 
         when: "we add a single configuration item"
-        Configuration.addConfigurationItem(CI_FileCheck_Name, CI_FileCheck_Value)
+        myConfig.addConfigurationItem(CI_FileCheck_Name, CI_FileCheck_Value)
 
         then: "we can retrieve this item"
-        Configuration.getConfigItemByName(CI_FileCheck_Name) == CI_FileCheck_Value
+        myConfig.getConfigItemByName(CI_FileCheck_Name) == CI_FileCheck_Value
 
     }
 
     def "checks if item is already present in configuration"() {
         when: "we configure a single item"
-        Configuration.addConfigurationItem(CI_FileCheck_Name, "test")
+        myConfig.addConfigurationItem(CI_FileCheck_Name, "test")
 
         then: "a check finds this item"
-        Configuration.checkIfItemPresent(CI_FileCheck_Name) == true
+        myConfig.checkIfItemPresent(CI_FileCheck_Name) == true
     }
+
 
     def "configuration item can be overwritten"() {
         String oneITEM = "oneITEM"
 
         given: "an (int) item is configured"
-        Configuration.addConfigurationItem(oneITEM, 10)
+        myConfig.addConfigurationItem(oneITEM, 10)
 
         when: "this item is configured again!"
-        Configuration.addConfigurationItem(oneITEM, 42)
+        myConfig.addConfigurationItem(oneITEM, 42)
 
         then: "only the last value is contained in Configuration"
-        Configuration.getConfigItemByName(oneITEM) == 42
+        myConfig.getConfigItemByName(oneITEM) == 42
 
     }
 
 
     def "not configured item yields null result"() {
         given: " a single entry configuration"
-        Configuration.addConfigurationItem(CI_FileCheck_Name, CI_FileCheck_Value)
+        myConfig.addConfigurationItem(CI_FileCheck_Name, CI_FileCheck_Value)
 
         expect: "when a different config item is requested, null is returned"
-        Configuration.getConfigItemByName("NonExistingItem") == null
+        myConfig.getConfigItemByName("NonExistingItem") == null
     }
 
     @Unroll
     def "can add and retrieve item #itemName of type #itemValue.getClass()"() {
         when: "we add #itemName"
-        Configuration.addConfigurationItem(itemName, itemValue)
+        myConfig.addConfigurationItem(itemName, itemValue)
 
         and: "we retrieve that value from our configuration"
-        def value = Configuration.getConfigItemByName(itemName)
+        def value = myConfig.getConfigItemByName(itemName)
 
 
         then: "we retrieve the correct value"
@@ -91,16 +104,16 @@ class ConfigurationSpec extends Specification {
         ArrayList<Integer> httpSuccessCodes = [newSuccessCode]
 
         when: "we overwrite the standard Configuration with this value"
-        Configuration.overwriteHttpSuccessCodes( httpSuccessCodes )
+        myConfig.overwriteHttpSuccessCodes( httpSuccessCodes )
 
         then: "503 IS now contained in successCodes"
-        Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes).contains(newSuccessCode)
+        myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes).contains(newSuccessCode)
 
         and: "503 is NOT contained in errorCodes"
-        !Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes).contains(newSuccessCode)
+        !myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes).contains(newSuccessCode)
 
         and: "503 is NOT contained in warningCodes"
-        !Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes).contains(newSuccessCode)
+        !myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes).contains(newSuccessCode)
 
     }
 
@@ -108,22 +121,101 @@ class ConfigurationSpec extends Specification {
         final String itemName = "NonExistingItem"
 
         when: "we try to add a null value to a config item"
-        Configuration.addConfigurationItem(itemName, null)
+        myConfig.addConfigurationItem(itemName, null)
 
         then: "this value is NOT added to configuration"
-        Configuration.checkIfItemPresent( itemName ) == false
+        myConfig.checkIfItemPresent( itemName ) == false
     }
 
     def "avoid overriding config values with null"() {
         final String itemName = "SomeItem"
 
         given: "someItem with value 42"
-        Configuration.addConfigurationItem(itemName, 42)
+        myConfig.addConfigurationItem(itemName, 42)
 
         when: "we try to overwrite itemName with null value"
-        Configuration.addConfigurationItem(itemName, null)
+        myConfig.addConfigurationItem(itemName, null)
 
         then: "the result is still 42"
-        Configuration.getConfigItemByName(itemName) == 42
+        myConfig.getConfigItemByName(itemName) == 42
     }
+
+    def "configuring a single html file is ok"() {
+
+        given:
+        tempDir = File.createTempDir()
+        htmlFile = new File(tempDir, "a.html") << HTML_HEADER
+
+        when: "we create a configuration with this single file"
+        myConfig.addSourceFileConfiguration(tempDir, new HashSet(["a.html"]))
+
+        myConfig.isValid()
+
+        then:
+        htmlFile.exists()
+        tempDir.isDirectory()
+        tempDir.directorySize() > 0
+        notThrown(Exception)
+
+    }
+
+
+    def "configuring a single non-html file is not ok"() {
+        given:
+        tempDir = File.createTempDir()
+        nonHtmlFile = new File(tempDir, "zypern.txt") << "this is no html"
+        myConfig.addSourceFileConfiguration(tempDir, new HashSet(["zypern.txt"]))
+
+        when:
+        myConfig.isValid()
+
+        then:
+        thrown MisconfigurationException
+
+    }
+
+    /*
+     * giving no srcFiles and no srcDir is absurd...
+     *
+     */
+
+    @Unroll
+    def "configuring file #srcDocs in directory #srcDocs is absurd"() {
+
+        given: "configuration with #srcDir and #srcDocs"
+        myConfig.addSourceFileConfiguration(srcDir, srcDocs)
+
+        when: "configuration is validated..."
+        def tmpResult = myConfig.isValid()
+
+        then: "an exception is thrown"
+        thrown MisconfigurationException
+
+
+        where:
+
+        srcDir                        | srcDocs
+        null                          | null
+        new File("/_non/exis_/d_ir/") | null
+        new File("/_non/exis_/d_ir/") | new HashSet<String>()
+
+        // existing but empty directory is absurd too...
+        File.createTempDir()          | null
+
+        // existing directory with nonexisting files too...
+        File.createTempDir()          | ["non.existing", "blurb.htm"].toSet()
+
+    }
+
+    // this spec is a syntactic variation of the data (table-)driven test
+    def "empty configuration makes no sense"() {
+
+        when:
+        myConfig.isValid()
+
+        then:
+        thrown MisconfigurationException
+    }
+
+
 }

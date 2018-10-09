@@ -1,8 +1,5 @@
-// gradle build script for html sanity check
-// =========================================
-
-// to process the version-property file, we need the filter
-//import org.apache.tools.ant.filters.*
+// gradle build script for htmlSanityCheck
+// =======================================
 
 
 buildscript {
@@ -16,17 +13,19 @@ buildscript {
 }
 
 plugins {
-    id 'org.asciidoctor.convert' version '1.5.3'
     id 'groovy'
     id 'java'
     id "com.gradle.plugin-publish" version "0.9.10"
 
     // to report build results back to gradle.org
     id 'com.gradle.build-scan' version '1.15.1'
-    id "org.aim42.htmlSanityCheck" version "1.0.0-RC-1"
 
 }
 
+repositories {
+    mavenCentral()
+    jcenter()
+}
 
 dependencies {
 
@@ -43,7 +42,6 @@ dependencies {
     // jsoup is our awesome html parser, see jsoup.org
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 
-    asciidoctor 'org.asciidoctor:asciidoctorj-diagram:1.5.8'
 
 } // dependencies
 
@@ -69,9 +67,6 @@ apply plugin: 'java-gradle-plugin'
 // Groovy source files using CodeNarc and generates reports from these checks.
 apply plugin: 'codenarc'
 
-// asciidoctor conversion
-apply plugin: 'org.asciidoctor.convert'
-
 // publish to gradle-plugin-repository
 apply plugin: "com.gradle.plugin-publish"
 
@@ -83,25 +78,6 @@ apply from: 'config/codenarc.gradle'
 
 // end:BuildPlugins[]
 
-
-htmlSanityCheck {
-
-    // ensure asciidoctor->html runs first
-    // and images are copied to build directory
-
-    dependsOn asciidoctor
-
-    //sourceDocuments = [ "one-file.html", "another-file.html", "index.html"]
-
-    sourceDir = new File("${buildDir}/html5")
-
-    // where to put results of sanityChecks...
-    checkingResultsDir = new File( buildDir, "reports/htmlSanityCheck" )
-
-    // fail the build if any error is encountered
-    failOnErrors = false
-
-}
 
 task copyResourceImages(type: Copy) {
     from('src/main/resources') {
@@ -120,49 +96,10 @@ processResources {
 // ========================================================
 
 
-asciidoctor {
-
-
-    outputDir = file(buildDir)
-    sourceDir = file(srcDir)
-    sources {
-        include "hsc_arc42.adoc",
-                "index.adoc",
-                "DevelopmentDocs.adoc"
-    }
-
-    attributes = [
-            doctype             : 'book',
-            icons               : 'font',
-            toc                 : 'left',
-            sectlink            : true,
-            sectanchors         : true,
-            numbered            : true,
-            'source-highlighter': 'coderay',
-            'javaVersion'       : "$javaVersion",
-            'currentDate'       : "$currentDate",
-            'versionId'         : "$version",
-
-            // the following are used for PlantUML integration
-            'allow-uri-read'    : true,
-            'plantUMLDir'       : file("./build/asciidoc/pdf/.").canonicalPath,
-
-            //for the "improve this doc" shield
-            'repositoryDocsDir' : 'https://github.com/aim42/htmlSanityCheck/blob/master/src/docs/',
-            'improveDocImage'   : 'https://img.shields.io/badge/improve-this%20doc-orange.svg',
-    ]
-
-
-    resources {
-        from("${srcDir}/images") {
-            include '**'
-        }
-        into "./images"
-    }
-
-    requires = ['asciidoctor-diagram']
-
-} // asciidoctor
+//configure docToolchain to use the main project's config
+project('docToolchain') {
+    docDir = "../."
+}
 
 // ==========================================================
 // if you use htmlSanityCheck locally, publish with
@@ -206,7 +143,7 @@ task info(
 }
 
 /*
- * Copyright 2012-2018 the original author or authors.
+ * Copyright Gernot Starke and aim42 contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -2,3 +2,5 @@ rootProject.name = 'htmlSanityCheck'
 
 enableFeaturePreview('STABLE_PUBLISHING')
 
+include 'docToolchain'
+

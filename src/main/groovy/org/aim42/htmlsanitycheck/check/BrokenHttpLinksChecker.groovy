@@ -23,6 +23,21 @@ class BrokenHttpLinksChecker extends Checker {
     // the pure http/https-hrefs a set, duplicates are removed here
     private Set<HtmlElement> hrefSet
 
+    // get the (configured) statusCodes, just syntactic sugar...
+    private final Collection<Integer> successCodes
+    private final Collection<Integer> warningCodes
+    private final Collection<Integer> errorCodes
+
+
+
+    BrokenHttpLinksChecker(Configuration pConfig) {
+        super(pConfig)
+
+        successCodes = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
+        warningCodes = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
+        errorCodes   = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
+
+    }
 
     @Override
     protected void initCheckingResultsDescription() {
@@ -63,16 +78,24 @@ class BrokenHttpLinksChecker extends Checker {
     private void checkAllHttpLinks() {
         // for all hrefSet check if the corresponding link is valid
         hrefSet.each { href ->
-            checkSingleHttpLink(href)
+            doubleCheckSingleHttpLink(href)
         }
     }
 
     /**
-     * Check a single external link
-     *
-
+     * Double-Check a single http(s) link:
+     * Some servers don't accept head request and send errors like 403 or 405,
+     * instead of 200.
+     * Therefore we double-check: in case of errors or warnings,
+     * we try again with a GET, to get the "finalResponseCode" -
+     * which we then categorize as success, error or warning
      */
-    protected void checkSingleHttpLink(String href) {
+
+
+    protected void doubleCheckSingleHttpLink(String href) {
+
+        // to create appropriate error messages
+        String problem
 
         // bookkeeping:
         checkingResults.incNrOfChecks()
@@ -87,21 +110,38 @@ class BrokenHttpLinksChecker extends Checker {
             checkIfIPAddress(url, href)
 
             try {
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("HEAD");
-
-                // httpConnectionTimeout is a configuration parameter
-                // that defaults to 5000 (msec)
-                connection.setConnectTimeout(
-                        Configuration?.getConfigItemByName(Configuration.ITEM_NAME_httpConnectionTimeout)
-                );
+                HttpURLConnection firstConnection = getNewURLConnection(url)
 
                 // try to connect
-                connection.connect();
-                int responseCode = connection.getResponseCode();
+                firstConnection.connect()
+                int responseCode = firstConnection.getResponseCode()
+                firstConnection.disconnect()
 
-                // interpret response code
-                decideHowToTreatResponseCode(responseCode, href)
+                // issue 218 and 219: some webservers respond with 403 or 405
+                // when given HEAD requests. Therefore, try GET
+                if (responseCode in successCodes) return
+
+                // in case of errors or warnings,
+                // try again with GET.
+
+                else {
+                    HttpURLConnection secondConnection = getNewURLConnection(url)
+                    secondConnection.setRequestMethod("GET")
+                    int finalResponseCode = secondConnection.getResponseCode()
+                    secondConnection.disconnect()
+
+                    switch (finalResponseCode) {
+                        case successCodes: return
+                        case warningCodes: problem = "Warning:"; break
+                        case errorCodes: problem = "Error:"; break
+                        default: problem = "Error: Unknown or unclassified response code:"
+                    }
+
+                    problem += """ ${href} returned statuscode ${responseCode}."""
+
+                    checkingResults.addFinding(new Finding(problem))
+
+                } // else
 
             }
             catch (InterruptedIOException | ConnectException | UnknownHostException | IOException exception) {
@@ -115,9 +155,21 @@ class BrokenHttpLinksChecker extends Checker {
         }
     }
 
+    private HttpURLConnection getNewURLConnection(URL url) {
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("HEAD");
+
+        // httpConnectionTimeout is a configuration parameter
+        // that defaults to 5000 (msec)
+        connection.setConnectTimeout(
+                myConfig?.getConfigItemByName(Configuration.ITEM_NAME_httpConnectionTimeout)
+        );
+        return connection
+    }
+
     // if configured, ip addresses in URLs yield warnings
     private void checkIfIPAddress(URL url, String href) {
-        if (!Configuration.getConfigItemByName(Configuration.ITEM_NAME_ignoreIPAddresses)) {
+        if (!myConfig.getConfigItemByName(Configuration.ITEM_NAME_ignoreIPAddresses)) {
             String host = url.getHost()
 
             if (host.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")) {
@@ -131,7 +183,7 @@ class BrokenHttpLinksChecker extends Checker {
 
     // if configured ,localhost-URLs yield warnings!
     private void checkIfLocalhostURL(URL url, String href) {
-        if (!Configuration.getConfigItemByName(Configuration.ITEM_NAME_ignoreLocalhost)) {
+        if (!myConfig.getConfigItemByName(Configuration.ITEM_NAME_ignoreLocalhost)) {
             String host = url.getHost()
             if ((host == "localhost") || host.startsWith("127.0.0")) {
                 Finding localhostWarning = new Finding("""Warning: localhost urls indicates suspicious environment dependency: href=${
@@ -142,35 +194,6 @@ class BrokenHttpLinksChecker extends Checker {
         }
     }
 
-    /**
-     * response codes other than 200 might be treated as errors or warnings,
-     * sometimes even information.
-     *
-     * IF a warning or error is found, a @Finding is added to checkingResults
-     * TODO: add configuration and logic to "decideHowToTreatResponseCode"
-     *
-     * @param responseCode
-     */
-    protected void decideHowToTreatResponseCode(int responseCode, String href) {
-
-        String problem
-
-        Collection<Integer> successCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
-        Collection<Integer> warningCodes = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
-        Collection<Integer> errorCodes   = Configuration.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
-
-        switch (responseCode) {
-            case successCodes: return
-            case warningCodes: problem = "Warning:"; break
-            case errorCodes:   problem = "Error:"; break
-            default: problem = "Error: Unknown or unclassified response code:"
-        }
-
-        problem += """ ${href} returned statuscode  ${responseCode}."""
-
-        checkingResults.addFinding(new Finding(problem))
-        return
-    }
 
 }
 

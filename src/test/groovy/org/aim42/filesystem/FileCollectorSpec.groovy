@@ -9,8 +9,11 @@ class FileCollectorSpec extends Specification {
     @Shared
     File tempDir
 
+    private Configuration myConfig
+
     def setup() {
         tempDir = File.createTempDir()
+        myConfig = new Configuration()
     }
 
 
@@ -20,14 +23,14 @@ class FileCollectorSpec extends Specification {
         File tmpFile = File.createTempFile("testfile", ".html") << """<body><title>hsc</title></body></html>"""
 
 
-        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
-        Configuration.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile?.getAbsoluteFile().getParent())
+        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
+        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile?.getAbsoluteFile().getParent())
 
         when: "we call the collector with that configuration"
         HashSet<File> allFilesToCheck
 
-        def tmpDir = Configuration.getConfigItemByName(Configuration.ITEM_NAME_sourceDir)
-        def tmpDocs = Configuration.getConfigItemByName(Configuration.ITEM_NAME_sourceDocuments)
+        def tmpDir = myConfig.getConfigItemByName(Configuration.ITEM_NAME_sourceDir)
+        def tmpDocs = myConfig.getConfigItemByName(Configuration.ITEM_NAME_sourceDocuments)
 
         allFilesToCheck = FileCollector.getHtmlFilesToCheck(
                 tmpDir,
