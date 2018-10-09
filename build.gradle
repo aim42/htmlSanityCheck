@@ -98,7 +98,14 @@ processResources {
 
 //configure docToolchain to use the main project's config
 project('docToolchain') {
-    docDir = "../."
+    if (project.hasProperty('docDir')) {
+        docDir = "../."
+    } else {
+        println "="*80
+        println "  please initialize the docToolchain submodule by executing"
+        println "  git submodule update -i"
+        println "="*80
+    }
 }
 
 // ==========================================================
