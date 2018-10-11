@@ -107,6 +107,7 @@ htmlSanityCheck {
 
     // fail build on errors?
     failOnErrors = true
+
 }
 ----
 
@@ -189,8 +190,18 @@ htmlSanityCheck {
     // where to put results of sanityChecks...
     checkingResultsDir = new File( checkingResultsPath )
 
-   // fail build on errors?
+    // fail build on errors?
     failOnErrors = false
+
+   // http connection timeout in milliseconds
+    httpConnectionTimeout = 1000
+
+    // which statuscodes shall be interpreted as warning, error or success
+    // defaults to standard
+    httpWarningCodes = [401]
+    // httpErrorCodes
+    // httpSuccessCodes
+
 }
 
 ----
