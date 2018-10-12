@@ -144,7 +144,11 @@ class BrokenHttpLinksChecker extends Checker {
                 } // else
 
             }
-            catch (InterruptedIOException | ConnectException | UnknownHostException | IOException exception) {
+            catch (UnknownHostException) {
+                Finding unknownHostFinding = new Finding( """Unknown host with href=$href""")
+                checkingResults.addFinding( unknownHostFinding)
+            }
+            catch (InterruptedIOException | ConnectException |  IOException exception) {
                 Finding someException = new Finding("""exception ${exception.toString()} with href=${href}""")
                 checkingResults.addFinding(someException)
             }
