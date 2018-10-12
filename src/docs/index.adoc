@@ -1,16 +1,13 @@
 :!toc:
 = image:htmlsanitycheck-logo.png[HTML Sanity Checker] Documentation Overview
-:imagesdir: ./images
-
 Dr. Gernot Starke <gernot.starke@innoq.com>
 v0.9, Sept-02-2014
-
+:imagesdir: ./images
 :experimental:
-
 :project: htmlSanityCheck
 :project-url: https://github.com/aim42/htmlSanityCheck
 :project-issues: https://github.com/aim42/htmlSanityCheck/issues
-:project-bugs: https://github.com/aim42/htmlSanityCheck/issues?q=is%3Aopen+is%3Aissue+label%3Abug
+:project-bugs: "https://github.com/aim42/htmlSanityCheck/issues?q=is%3Aopen+is%3Aissue+label%3Abug"
 
 image::{improveDocImage}[link={repositoryDocsDir}index.adoc, float=right]
 
@@ -60,6 +57,5 @@ The {project-url}[repository is located on Github].
 image:http://img.shields.io/badge/license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
 image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link={project-bugs}]
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[issues]
-
 
 "External resources" icon from http://openclipart.org/detail/179896/world-wide-web-by-gr8dan-179896[openclipart]
