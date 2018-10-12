@@ -32,8 +32,7 @@ dependencies {
     testCompile(
             'junit:junit:4.12',
             'org.codehaus.groovy:groovy-all:2.4.12',
-            'org.spockframework:spock-core:1.1-groovy-2.4',
-            'com.tngtech.archunit:archunit-junit:0.8.3')
+            'org.spockframework:spock-core:1.1-groovy-2.4')
 
     compile gradleApi()
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'

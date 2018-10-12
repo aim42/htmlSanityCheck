@@ -62,7 +62,11 @@ class HtmlSanityCheckTask extends DefaultTask {
     @Optional
     @Input
     Collection<Integer> httpWarningCodes
+    @Optional
+    @Input
     Collection<Integer> httpErrorCodes
+    @Optional
+    @Input
     Collection<Integer> httpSuccessCodes
 
     // private stuff

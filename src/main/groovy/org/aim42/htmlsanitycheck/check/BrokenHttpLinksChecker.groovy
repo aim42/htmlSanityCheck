@@ -110,18 +110,12 @@ class BrokenHttpLinksChecker extends Checker {
             checkIfIPAddress(url, href)
 
             try {
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("HEAD");
-
-                // httpConnectionTimeout is a configuration parameter
-                // that defaults to 5000 (msec)
-                connection.setConnectTimeout(
-                        myConfig?.getConfigItemByName(Configuration.ITEM_NAME_httpConnectionTimeout)
-                );
+                HttpURLConnection firstConnection = getNewURLConnection(url)
 
                 // try to connect
-                connection.connect()
-                int responseCode = connection.getResponseCode()
+                firstConnection.connect()
+                int responseCode = firstConnection.getResponseCode()
+                firstConnection.disconnect()
 
                 // issue 218 and 219: some webservers respond with 403 or 405
                 // when given HEAD requests. Therefore, try GET
@@ -131,8 +125,10 @@ class BrokenHttpLinksChecker extends Checker {
                 // try again with GET.
 
                 else {
-                    connection.setRequestMethod("GET")
-                    int finalResponseCode = connection.getResponseCode()
+                    HttpURLConnection secondConnection = getNewURLConnection(url)
+                    secondConnection.setRequestMethod("GET")
+                    int finalResponseCode = secondConnection.getResponseCode()
+                    secondConnection.disconnect()
 
                     switch (finalResponseCode) {
                         case successCodes: return
@@ -148,7 +144,11 @@ class BrokenHttpLinksChecker extends Checker {
                 } // else
 
             }
-            catch (InterruptedIOException | ConnectException | UnknownHostException | IOException exception) {
+            catch (UnknownHostException) {
+                Finding unknownHostFinding = new Finding( """Unknown host with href=$href""")
+                checkingResults.addFinding( unknownHostFinding)
+            }
+            catch (InterruptedIOException | ConnectException |  IOException exception) {
                 Finding someException = new Finding("""exception ${exception.toString()} with href=${href}""")
                 checkingResults.addFinding(someException)
             }
@@ -157,6 +157,18 @@ class BrokenHttpLinksChecker extends Checker {
             Finding malformedURLFinding = new Finding("""malformed URL exception with href=${href}""")
             checkingResults.addFinding(malformedURLFinding)
         }
+    }
+
+    private HttpURLConnection getNewURLConnection(URL url) {
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("HEAD");
+
+        // httpConnectionTimeout is a configuration parameter
+        // that defaults to 5000 (msec)
+        connection.setConnectTimeout(
+                myConfig?.getConfigItemByName(Configuration.ITEM_NAME_httpConnectionTimeout)
+        );
+        return connection
     }
 
     // if configured, ip addresses in URLs yield warnings

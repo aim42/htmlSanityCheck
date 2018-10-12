@@ -101,6 +101,49 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
     }
 
+    /**
+     * regression for weird behavior of certain Amazon.com links,
+     * where HEAD requests are always answered with 405 instead of 200...
+     */
+    def "amazon 405 statuscode for links that really exist"() {
+        given: "an HTML page with a single (good) amazon link"
+        String goodAmazonLink = "https://www.amazon.com/dp/B01A2QL9SS"
+        String HTML = """$HtmlConst.HTML_HEAD 
+                <a href=${goodAmazonLink}>Amazon</a>
+                $HtmlConst.HTML_END """
+
+        htmlPage = new HtmlPage(HTML)
+
+        when: "page is checked"
+        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+        then: "a single item is checked"
+        collector.nrOfItemsChecked == 1
+
+        and: "the result is ok"
+        collector.nrOfProblems() == 0
+
+    }
+
+
+    def "bad amazon link is identified as problem"() {
+
+        given: "an HTML page with a single (good) amazon link"
+        String badAmazonLink = "https://www.amazon.com/dp/4242424242"
+        String HTML = """$HtmlConst.HTML_HEAD 
+                <a href=${badAmazonLink}>Amazon</a>
+                $HtmlConst.HTML_END """
+
+        htmlPage = new HtmlPage(HTML)
+
+        when: "page is checked"
+        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+        then: "then collector contains the appropriate error message"
+        collector.findings[0].whatIsTheProblem.contains(badAmazonLink)
+
+    }
+
 
     // IntelliJ has problems with testing http connections,
     // so we ignore some tests...
