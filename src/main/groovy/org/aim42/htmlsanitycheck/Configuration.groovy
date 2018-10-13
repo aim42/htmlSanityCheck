@@ -63,9 +63,6 @@ class Configuration {
     // if (ignoreIPAddresses) then urls with numeric IP addresses are marked as "Warning"
     final static String ITEM_NAME_ignoreIPAddresses = "ignoreIPAddresses"
 
-    // currently unused - planned for future enhancements
-    // ==================================================
-
     final static String ITEM_NAME_httpWarningCodes = "httpWarningCodes"
     final static String ITEM_NAME_httpErrorCodes = "httpErrorCodes"
     final static String ITEM_NAME_httpSuccessCodes = "httpSuccessCodes"
