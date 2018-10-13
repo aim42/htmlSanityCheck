@@ -1,4 +1,5 @@
 :numbered:
+ifndef::imagesdir[:imagesdir: ../images]
 == Introduction and Goals
 
 image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-01-Requirements.adoc, float=right]

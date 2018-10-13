@@ -1,3 +1,4 @@
+ifndef::imagesdir[:imagesdir: ../images]
 :numbered:
 
 :jsoup-url: http://jsoup.org[jsoup HTML parser]

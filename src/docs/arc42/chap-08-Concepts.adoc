@@ -1,4 +1,4 @@
-
+ifndef::imagesdir[:imagesdir: ../images]
 == Technical and Crosscutting Concepts
 
 image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-08-Concepts.adoc, float=right]

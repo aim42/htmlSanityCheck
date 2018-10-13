@@ -211,7 +211,7 @@ htmlSanityCheck {
 [cols="1,1",width="50%"]
 |===
 | The overall goal is to create neat and clear reports,
-showing evantual errors within HTML files - as shown in the adjoining figure.
+showing eventual errors within HTML files - as shown in the adjoining figure.
 | image:sample-hsc-report.jpg[width="200", link="./sample-hsc-report.jpg"
   (click on thumbnail for details)]
 |===
@@ -227,7 +227,7 @@ Finds all '<a href="XYZ">' where XYZ is not defined.
 .src/broken.html
 [source,html]
 ----
-<a href="#missing>internal anchor</a>
+<a href="#missing">internal anchor</a>
 ...
 <h2 id="missinG">Bookmark-Header</h2>
 ----

@@ -1,4 +1,4 @@
-
+ifndef::imagesdir[:imagesdir: ../images]
 == Solution Strategy
 
 image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-04-SolutionStrategy.adoc, float=right]
