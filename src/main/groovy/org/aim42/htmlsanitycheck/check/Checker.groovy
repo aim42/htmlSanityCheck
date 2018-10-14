@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
 
@@ -26,6 +27,13 @@ abstract class Checker {
     SingleCheckResults checkingResults
 
 
+    // keep your own configuration
+    Configuration myConfig
+
+    public Checker ( Configuration pConfig ) {
+        this.myConfig =  pConfig
+    }
+
     // tag::performCheckTemplateMethod[]
     /**
     ** template method for performing a single type of checks on the given @see HtmlPage.
@@ -33,7 +41,7 @@ abstract class Checker {
      * Prerequisite: pageToCheck has been successfully parsed,
      * prior to constructing this Checker instance.
     **/
-    public SingleCheckResults performCheck( final HtmlPage pageToCheck ) {
+    public SingleCheckResults performCheck( final HtmlPage pageToCheck) {
         // assert non-null htmlPage
         assert pageToCheck != null
 
@@ -61,7 +69,6 @@ abstract class Checker {
      * @return collected results of this Checker instance
      */
     abstract protected SingleCheckResults check( final HtmlPage pageToCheck )
-
 
 
 }

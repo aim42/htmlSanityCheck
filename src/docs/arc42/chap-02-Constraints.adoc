@@ -2,6 +2,8 @@
 :numbered:
 == Constraints
 
+image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-02-Constraints.adoc, float=right]
+
 kbd:[HtmlSC] shall be:
 
 * platform-independent and should run on the major operating systems

@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
@@ -17,6 +18,10 @@ abstract class SuggestingChecker extends Checker {
 
     // valid possibilities for e.g. image-file-names or link-targets
     ArrayList<String> validPossibilities
+
+    SuggestingChecker(Configuration pConfig) {
+        super(pConfig)
+    }
 
     @Override
     abstract protected void initCheckingResultsDescription()

@@ -1,5 +1,8 @@
 package org.aim42.htmlsanitycheck.html
 
+import groovy.transform.Memoized
+
+import java.util.regex.Pattern
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
@@ -15,8 +18,19 @@ import org.jsoup.select.Elements
  */
 class HtmlPage {
 
+    /**
+     * Pattern to check for HTTP/S scheme, includes the
+     * scheme separator (colon).
+     */
+    private static final Pattern HTTP_SCHEME_PATTERN = ~/(?i)^https?:/
+
     // jsoup Document
     private Document document
+
+    /**
+     * The HTML file.
+     */
+    private File file
 
     /**
      *
@@ -36,6 +50,7 @@ class HtmlPage {
      */
     public HtmlPage(File file) {
         assert file.exists()
+        this.file = file
         document = Jsoup.parse(file, "UTF-8")
     }
 
@@ -48,6 +63,13 @@ class HtmlPage {
         return new HtmlPage(fileToCheck)
     }
 
+    /**
+     * Gets the file of the HTML page.
+     * @return the file, or null if the HTML is not from a file.
+     */
+    public File getFile() {
+        return file;
+    }
 
     /**
      * get document meta info (e.g. filename, title, size etc.)
@@ -72,6 +94,7 @@ class HtmlPage {
      * builds a list of all imageMaps
      * @return ArrayList of imageMaps
      */
+    @Memoized
     public final ArrayList<HtmlElement> getAllImageMaps() {
         Elements elements = document?.select("map")
         return toHtmlElementsCollection(elements)
@@ -80,6 +103,7 @@ class HtmlPage {
     /**
      * @return list of all imageMap-names
      */
+    @Memoized
     public final ArrayList<String> getAllMapNames() {
         ArrayList<String> mapNames = new ArrayList()
 
@@ -94,6 +118,7 @@ class HtmlPage {
     /**
      * @return list of all usemap-references y with <img src="x" usemap="y"
      */
+    @Memoized
     public final ArrayList<String> getAllUsemapRefs() {
         ArrayList<String> usemapRefs = new ArrayList<String>()
 
@@ -108,6 +133,7 @@ class HtmlPage {
      * builds a list from all '<img src="XYZ"/>' tags
      * @return immutable ArrayList
      */
+    @Memoized
     public final ArrayList<HtmlElement> getAllImageTags() {
         Elements elements = document?.getElementsByTag("img")
 
@@ -120,6 +146,7 @@ class HtmlPage {
      * builds an immutable list of '<img src="xxx" alt="yz">,
      * where "yz" is non-empty.
      */
+    @Memoized
     public final ArrayList<HtmlElement> getAllImageTagsWithNonEmptyAltAttribute() {
         // regex "\S" matches any word
         Elements elements = document?.select("img[alt~=(\\S)]")
@@ -131,6 +158,7 @@ class HtmlPage {
      * builds an immutable list of <img...> tags, where
      * the alt-tag is missing or empty ("").
      */
+    @Memoized
     public final ArrayList<HtmlElement> getAllImageTagsWithMissingAltAttribute() {
         Elements elements = document?.select("img") - document?.select("img[alt~=(\\S)]")
 
@@ -141,6 +169,7 @@ class HtmlPage {
      * builds a list of all '<a href="XYZ"> tags
      * @return ArrayList of all hrefs, including the "#"
      */
+    @Memoized
     public final ArrayList<HtmlElement> getAllAnchorHrefs() {
         Elements elements = document.select("a[href]")
 
@@ -151,6 +180,7 @@ class HtmlPage {
      * builds a list of all 'id="XYZ"' attributes
      * @return ArrayList of all hrefs
      */
+    @Memoized
     public final ArrayList<HtmlElement> getAllIds() {
         Elements elements = document.getElementsByAttribute("id")
 
@@ -168,6 +198,7 @@ class HtmlPage {
      * - hrefs might start with file://
      * - href might be empty string (nobody knows wtf this is good for, but html parsers usually accept it)
      */
+    @Memoized
     public final ArrayList<String> getAllHrefStrings() {
         Elements elements = document.select("a[href]")
 
@@ -184,19 +215,21 @@ class HtmlPage {
 
     /**
      * @return immutable set of all href-attributes that start with http or https
-     **/
+     * */
+    @Memoized
     public final Set<String> getAllHttpHrefStringsAsSet() {
         Elements elements = document.select("a[href]")
 
         return elements
-                .collect{ it.attr("href")}
-                .findAll{ element -> element.toUpperCase().startsWith("HTTP") }
+                .collect { it.attr("href") }
+                .findAll { it =~ HTTP_SCHEME_PATTERN }
                 .toSet()
 
     }
     /**
      * @return immutable List of img-tags with "usemap=xyz" declaration
      */
+    @Memoized
     public final ArrayList<HtmlElement> getImagesWithUsemapDeclaration() {
         Elements elements = document?.select("img[usemap]")
 
@@ -213,6 +246,7 @@ class HtmlPage {
      * @param mapName name of the map
      * @return
      */
+    @Memoized
     public final ArrayList<HtmlElement> getAllAreasForMapName(String mapName) {
         // get all maps with name==mapName
         Elements mapsWithName = document?.select("map[name=${mapName}]")
@@ -226,6 +260,7 @@ class HtmlPage {
     }
 
 
+    @Memoized
     public final ArrayList<String> getAllHrefsForMapName(String mapName) {
         ArrayList<String> hrefs = new ArrayList()
 
@@ -238,10 +273,10 @@ class HtmlPage {
         return hrefs
     }
 
-/**
- * getAllIdStrings return ArrayList<String> of all id="xyz" definitions
- */
-
+    /**
+    * getAllIdStrings return ArrayList<String> of all id="xyz" definitions
+    */
+    @Memoized
     public final ArrayList<String> getAllIdStrings() {
         Elements elements = document.getElementsByAttribute("id")
 
@@ -254,9 +289,10 @@ class HtmlPage {
         return idList
     }
 
-/**
- * convert JSoup Elements to ArrayList<HtmlElement>
- */
+    /**
+    * convert JSoup Elements to ArrayList<HtmlElement>
+    */
+    @Memoized
     private final ArrayList<HtmlElement> toHtmlElementsCollection(Elements elements) {
 
         ArrayList<HtmlElement> arrayList = new ArrayList<>()
@@ -271,7 +307,7 @@ class HtmlPage {
 
 }
 /*========================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

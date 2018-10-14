@@ -1,0 +1,26 @@
+@startuml
+skinparam maxmessagesize 80
+Gradle -> HSC: sanityCheckHtml()
+participant HSCTask as HSC
+activate HSC
+
+participant AllChecksRunner as ACR
+participant ChecksRunner as CR
+
+HSC -> HSC: cfg = setupConfiguration()
+HSC -> ACR: new AllChecksRunner(cfg)
+activate ACR
+ACR -> CR: new ChecksRunner(cfg)
+activate CR
+
+loop allCheckers
+    participant "CheckerCreator" as CREATOR
+    CR -> CREATOR: createCheck(file)
+end
+
+
+CR -> CR: allFiles = FileCollector.getConfiguredHtmlFiles()
+ACR -> ACR: allCeckers = CheckerFactory.getAllCheckersByAnnotation
+
+
+@enduml

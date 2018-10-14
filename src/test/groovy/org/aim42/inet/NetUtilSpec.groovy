@@ -18,7 +18,14 @@ class NetUtilSpec extends Specification {
         successCode << [200,201,202]
     }
 
+    @Unroll
+    def "error codes contain #errorCode"() {
+        expect:
+        errorCode in NetUtil.HTTP_ERROR_CODES
 
+        where:
+        errorCode << [400,401,402,403,404,405,406,407,408,409,410,500,501,502,503,504,505]
+    }
 
     def "is internet connection available"() {
 

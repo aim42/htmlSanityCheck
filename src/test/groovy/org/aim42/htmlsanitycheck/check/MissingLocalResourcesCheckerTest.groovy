@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
@@ -13,9 +14,12 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
     HtmlPage htmlPage
     SingleCheckResults collector
 
+    private Configuration myConfig
+
     @Before
     public void setUp() {
         collector = new SingleCheckResults()
+        myConfig = new Configuration()
     }
 
 
@@ -31,11 +35,12 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
         assertTrue( "newly created html file exists", index.exists())
 
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, d1 )
 
         // 4.) check
         htmlPage = new HtmlPage( index )
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker( baseDirPath: d1.canonicalPath )
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker( myConfig)
         collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
         // assert that no issue is found (== the local resource d2/fname.html is found)
@@ -57,6 +62,8 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
         assertTrue( "newly created html file exists", index.exists())
 
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, d1 )
+
         htmlPage = new HtmlPage( index )
 
         // pageToCheck shall contain ONE local resource / local-reference
@@ -68,7 +75,7 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
         assertEquals( "expected d2/fname#anchor", "d2/$fname#anchor", localReference)
 
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker( baseDirPath: d1.canonicalPath )
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker( myConfig)
         collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
         // assert that no issue is found
@@ -88,7 +95,7 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML )
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker()
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
         collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
 
@@ -109,7 +116,8 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
         htmlPage = new HtmlPage( HTML )
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker()
+        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, new File("."))
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
         collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
         int expected = 2
@@ -158,13 +166,15 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 		htmlFile.text = """<html><head><title>absolute resource test</title></head>
 <body><p><a href="/files/doc.pdf" /></p></body>
 </html>"""
-		
+
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tempFolder )
+
         htmlPage = new HtmlPage( htmlFile )
 
         int nrOfLocalReferences = htmlPage.getAllHrefStrings().size()
         assertEquals( "expected one reference", 1, nrOfLocalReferences)
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker( baseDirPath: tempFolder)
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
 
         collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
@@ -188,7 +198,7 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
  * This is free software - without ANY guarantee!
  *
  *
- * Copyright 2013, Dr. Gernot Starke, arc42.org
+ * Copyright Dr. Gernot Starke and aim42 contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

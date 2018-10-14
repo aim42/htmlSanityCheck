@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.collect
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.check.Checker
 import org.aim42.htmlsanitycheck.check.MissingImageFilesChecker
 import org.aim42.htmlsanitycheck.html.HtmlElement
@@ -14,6 +15,8 @@ class SingleCheckResultsTest extends GroovyTestCase {
     final String whatIsCheckedMessage = "A Headline for Testing Purpose"
 
     final String localPath = "/src/test/resources"
+
+    private Configuration myConfig = new Configuration()
 
     String imageDir
 
@@ -32,6 +35,7 @@ class SingleCheckResultsTest extends GroovyTestCase {
 
         imageDir = new File(".").getCanonicalPath() + localPath
 
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, new File(imageDir) )
 
     }
 
@@ -80,7 +84,7 @@ class SingleCheckResultsTest extends GroovyTestCase {
         List<HtmlElement> images = htmlPage.getAllImageTags()
         assertEquals("expected 2 images", 2, images.size())
 
-        checker = new MissingImageFilesChecker( baseDirPath: imageDir)
+        checker = new MissingImageFilesChecker( myConfig )
 
         SingleCheckResults checkingResults = checker.performCheck( htmlPage )
 
@@ -111,7 +115,7 @@ class SingleCheckResultsTest extends GroovyTestCase {
 }
 
 /*======================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

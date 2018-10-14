@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.html.URLUtil
@@ -12,7 +13,11 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
 
     private List<String> listOfIds    // id="XYZ"
     private List<String> hrefList
-    private Set<String> hrefSet       // <a href="XYZ"...>
+    private Set<String> hrefSet
+
+    BrokenCrossReferencesChecker(Configuration pConfig) {
+        super(pConfig)
+    }       // <a href="XYZ"...>
 
 
     @Override
@@ -119,8 +124,6 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
     private void addBrokenLinkToResults(String linkTarget, String href) {
         String findingText = "link target \"$linkTarget\" missing"
 
-        // TODO: reference count is appended as string - better keep this as separate int value
-
         // now count occurrences - how often is it referenced
         int nrOfReferences = countNrOfReferences(href)
         if (nrOfReferences > 1) {
@@ -142,7 +145,7 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
 
 }
 /*========================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
