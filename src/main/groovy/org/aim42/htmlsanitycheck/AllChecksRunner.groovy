@@ -1,8 +1,16 @@
 package org.aim42.htmlsanitycheck
 
+import org.aim42.filesystem.FileCollector
+import org.aim42.filesystem.FileUtil
 import org.aim42.htmlsanitycheck.check.*
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
+import org.aim42.htmlsanitycheck.html.HtmlPage
+import org.aim42.htmlsanitycheck.report.ConsoleReporter
+import org.aim42.htmlsanitycheck.report.HtmlReporter
+import org.aim42.htmlsanitycheck.report.JUnitXmlReporter
+import org.aim42.htmlsanitycheck.report.LoggerReporter
+import org.aim42.htmlsanitycheck.report.Reporter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -25,85 +33,163 @@ import org.slf4j.LoggerFactory
 
 class AllChecksRunner {
 
-    private ChecksRunner runner
+    // we check a collection of files:
+    private Collection<File> filesToCheck = new HashSet<File>()
+
+    // where do we put our results
+    private File checkingResultsDir
+
+    // where do we put our junit results
+    private File junitResultsDir
+
+    /** Determines if the report is output to the console. */
+    boolean consoleReport = true
+
+    // checker instances
+    private Set<Checker> checkers
+
+    // keep all results
+    private PerRunResults resultsForAllPages
+
+
+    // keep your own configuration (in case we have multiple parallel instances running...)
+    private Configuration myConfig
+
 
     private static final Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
 
-    private static final String prefixTemporary = "temporary"
-
-
     /**
-     * runs all available checks on the file
+     * runs all available checks
      *
-     * @param filesToCheck all available checks are run against these files
-     * @param checkingResultsDir where to put resulting test-report
-     * @param junitResultsDir where to put resulting JUnit XML
-     * @param checkExternalResources if enabled, we also check remote links
      */
 
-    public AllChecksRunner(
-            Collection<File> filesToCheck,
-            File checkingResultsDir,
-            File junitResultsDir
-    ) {
+    public AllChecksRunner( Configuration pConfig ) {
         super()
 
-        runner = new ChecksRunner( AllCheckers.checkerClazzes,
-                                    filesToCheck,
-                                    checkingResultsDir,
-									junitResultsDir)
+        myConfig = pConfig
 
-        logger.debug("AllChecksRunner created")
-    }
-
-	boolean getConsoleReport() {
-		runner.consoleReport
-	}
-
-	void setConsoleReport(boolean b) {
-		runner.consoleReport = b
-	}
-
-    /**
-     * for testing purposes we provide a convenience constructor
-     * with just the files to check... and supply a temporary directory
-     *
-     * @param filesToCheck
-     */
-    public AllChecksRunner(Collection<File> filesToCheck) {
-        this(filesToCheck,
-                File.createTempDir(prefixTemporary, "directory"),
-                File.createTempDir(prefixTemporary, "junit")
+        this.filesToCheck = FileCollector.getHtmlFilesToCheck(
+                myConfig.getConfigItemByName(Configuration.ITEM_NAME_sourceDir),
+                myConfig.getConfigItemByName (Configuration.ITEM_NAME_sourceDocuments)
         )
+
+
+        // TODO: #185 (checker classes shall be detected automatically (aka CheckerFactory)
+        // CheckerFactory needs the configuration
+        this.checkers = CheckerCreator.createCheckerClassesFrom( AllCheckers.checkerClazzes, myConfig )
+
+        this.resultsForAllPages = new PerRunResults()
+
+        this.checkingResultsDir = myConfig.getConfigItemByName(Configuration.ITEM_NAME_checkingResultsDir)
+        this.junitResultsDir = myConfig.getConfigItemByName(Configuration.ITEM_NAME_junitResultsDir)
+
+        logger.debug("AllChecksRunner created with ${this.checkers.size()} checkers for ${filesToCheck.size()} files")
     }
 
+
+
     /**
-     * performs all available checks
-     * on pageToCheck
+     * performs all available checks on pageToCheck
      *
-     * TODO: simplify checking... collect all checker instances in one collection,
-     * then iteratively call it.performCheck() on those...
      */
     public PerRunResults performAllChecks() {
 
         logger.debug "entered performAllChecks"
-        runner.performChecks()
+
+        filesToCheck.each { file ->
+            resultsForAllPages.addPageResults(
+                    performChecksForOneFile(file))
+        }
+
+        // after all checks, stop the timer...
+        resultsForAllPages.stopTimer()
+
+        // and then report the results
+        reportCheckingResultsOnLogger()
+        if (consoleReport) {
+            reportCheckingResultsOnConsole()
+        }
+        if (checkingResultsDir) {
+            reportCheckingResultsAsHTML(checkingResultsDir.absolutePath)
+        }
+        if (junitResultsDir) {
+            reportCheckingResultsAsJUnitXml(junitResultsDir.absolutePath)
+        }
+
+        return resultsForAllPages
+
+    }
+
+
+    /**
+     *  performs all configured checks on a single HTML file.
+     *
+     *  Creates a {@link org.aim42.htmlsanitycheck.collect.SinglePageResults} instance to keep checking results.
+     */
+    protected SinglePageResults performChecksForOneFile(File thisFile) {
+
+        // the currently processed (parsed) HTML page
+        HtmlPage pageToCheck = HtmlPage.parseHtml(thisFile)
+
+        // initialize results for this page
+        SinglePageResults collectedResults =
+                new SinglePageResults(
+                        pageFilePath: thisFile.canonicalPath,
+                        pageFileName: thisFile.name,
+                        pageTitle: pageToCheck.getDocumentTitle(),
+                        pageSize: pageToCheck.documentSize
+                )
+
+        // apply every checker to this page
+        // ToDo: parallelize with GPARS?
+        checkers.each { checker ->
+            def singleCheckResults = checker.performCheck(pageToCheck )
+            collectedResults.addResultsForSingleCheck(singleCheckResults)
+        }
+
+        return collectedResults
+    }
+
+
+    /**
+     * reports results on stdout
+     * TODO:
+     */
+    private void reportCheckingResultsOnConsole() {
+        Reporter reporter = new ConsoleReporter(resultsForAllPages)
+
+        reporter.reportFindings()
 
     }
 
     /**
-     *  performs all known checks on a single HTML file.
-     *
-     *  Creates a {@link SinglePageResults} instance to keep checking results.
+     * reports results to logger
+     * TODO: report results to logger
      */
-    public SinglePageResults performAllChecksForOneFile(File thisFile) {
+    private void reportCheckingResultsOnLogger() {
+        Reporter reporter = new LoggerReporter(resultsForAllPages, logger)
 
-        return runner.performChecksForOneFile( thisFile )
+        reporter.reportFindings()
+
     }
 
+    /**
+     * report results in HTML file(s)
+     */
+    private void reportCheckingResultsAsHTML(String resultsDir) {
 
+        Reporter reporter = new HtmlReporter(resultsForAllPages, resultsDir)
+        reporter.reportFindings()
+    }
 
+    /**
+     * report results in JUnit XML
+     */
+    private void reportCheckingResultsAsJUnitXml(String resultsDir) {
 
+        Reporter reporter = new JUnitXmlReporter(resultsForAllPages, resultsDir)
+        reporter.reportFindings()
+    }
     /**
      * runs the checks from the command
      * line with default settings...
@@ -116,12 +202,6 @@ class AllChecksRunner {
     }
 
 
-    @Override
-    public String toString() {
-        return "   file(s) to check : $fileToCheck\n" +
-                "   put results in  : $checkingResultsDir\n" +
-                "   base dir        : $baseDirPath\n";
-    }
 }
 
 /*========================================================================

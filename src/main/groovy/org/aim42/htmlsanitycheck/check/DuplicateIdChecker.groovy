@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.aim42.htmlsanitycheck.html.HtmlPage
@@ -16,6 +17,9 @@ class DuplicateIdChecker extends Checker {
     // all html-tags containing ids including potential duplicates
     List<String> idStringsList
 
+    DuplicateIdChecker(Configuration pConfig) {
+        super(pConfig)
+    }
 
     @Override
     protected void initCheckingResultsDescription() {
@@ -79,7 +83,7 @@ class DuplicateIdChecker extends Checker {
 
 
 /*=====================================================================
- Copyright 2014 Gernot Starke and aim42 contributors
+ Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

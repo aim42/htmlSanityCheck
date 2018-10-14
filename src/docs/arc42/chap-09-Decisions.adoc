@@ -4,6 +4,8 @@
 
 == Design Decisions
 
+image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-09-Decisions.adoc, float=right]
+
 === Checking of external links postponed
 In the current {revision} we won't check external links.
 These checks have been postponed to later versions.

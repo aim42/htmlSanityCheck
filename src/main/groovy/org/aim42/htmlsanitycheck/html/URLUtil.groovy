@@ -24,7 +24,6 @@ class URLUtil {
     public static boolean isValidURL(String link) {
         // TODO: refactor this code to use  org.apache.commons.validator.routines.*
 
-        // TODO: this fails for cross-references - but should not!
         boolean isValid = false
 
         if (isCrossReference(link)) {
@@ -35,13 +34,16 @@ class URLUtil {
                 isValid = true
             }
             catch (MalformedURLException e) {
+                isValid = false
                 // ignore
 
             }
             catch (URISyntaxException e1) {
-                // ignore too
+                isValid = false
             }
         }
+
+        return isValid
     }
 
     /**
@@ -89,10 +91,10 @@ class URLUtil {
 
         // handle corner cases
         if ((link == null)
-                || containsInvalidChars( link )
+                || containsInvalidChars(link)
                 || (link == "")
-                || isCrossReference( link )      // "#link" or similar
-                || isRemoteURL( link )           // "mailto:", "http" etc
+                || isCrossReference(link)      // "#link" or similar
+                || isRemoteURL(link)           // "mailto:", "http" etc
 
         )
             return false
@@ -136,7 +138,7 @@ class URLUtil {
 
     private static Boolean isLinkToFile(URI aUri) {
 
-        aUri?.getScheme()?.toUpperCase() == "FILE"
+        aUri?.getScheme()?.equalsIgnoreCase("file")
     }
 
     /**
@@ -148,7 +150,7 @@ class URLUtil {
 
         // the simple test is if the xref starts with "#"
 
-        return ( xref.startsWith("#")  && !containsInvalidChars( xref ) )
+        return (xref.startsWith("#") && !containsInvalidChars(xref))
 
     }
 

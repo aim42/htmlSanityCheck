@@ -87,6 +87,7 @@ class ConsoleReporter extends Reporter {
             printer "Results for ${result.whatIsChecked}"
             printer "${result.nrOfItemsChecked} $result.sourceItemName checked,"
             printer "${result.nrOfProblems()} $result.targetItemName found.\n"
+            printer "${result.generalRemark}"
         }
     }
 

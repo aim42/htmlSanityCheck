@@ -2,6 +2,7 @@ package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.html.URLUtil
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -19,9 +20,16 @@ class MissingLocalResourcesChecker extends Checker {
     // created from the List of all by toSet() method
     private Set<String> localResourcesSet
 
-    // we need to know the baseDir of the html file, so we can check
-    // for local resources either with relative or absolute paths
-    private String baseDirPath
+    /**
+     * The base directory to resolve absolute paths.
+     */
+    private File baseDir
+
+    /**
+     * The current directory, obtained from the HtmlPage, to resolve
+     * relative paths.
+     */
+    private File currentDir
 
     /**
      * True to require files to be referenced and not directories. Useful if the web server doesn't
@@ -31,6 +39,11 @@ class MissingLocalResourcesChecker extends Checker {
 
     // logging stuff
     private final static Logger logger = LoggerFactory.getLogger(MissingLocalResourcesChecker.class);
+
+    public MissingLocalResourcesChecker( Configuration pConfig ) {
+        super( pConfig )
+        baseDir = pConfig.getConfigItemByName( Configuration.ITEM_NAME_sourceDir )
+    }
 
     @Override
     protected void initCheckingResultsDescription() {
@@ -54,12 +67,7 @@ class MissingLocalResourcesChecker extends Checker {
 
         logger.debug """local resources set: ${localResourcesSet}"""
 
-        // make sure we have a non-null baseDir
-        // (for html pages given as "string", this should be "")
-        if (baseDirPath == null) {
-            logger.info "no baseDir given, set to empty string."
-            baseDirPath = ""
-        }
+        currentDir = pageToCheck.file?.parentFile ?: baseDir
 
         // perform the actual checks
         checkAllLocalResources( localResourcesSet )
@@ -98,8 +106,15 @@ class MissingLocalResourcesChecker extends Checker {
         // we need to strip the localResource of #anchor-parts
         String localResourcePath = new URI( localResource ).getPath()
 
+        if (localResourcePath == null) {
+            // For example, javascript:;
+            return
+        }
+
+        File parentDir = localResourcePath?.startsWith("/") ? baseDir : currentDir;
+
         // we need the baseDir for robust checking of local resources...
-        File localFile = new File( baseDirPath, localResourcePath );
+        File localFile = new File( parentDir, localResourcePath );
 
         // action required if resource does not exist
         if (!localFile.exists() || (requireFiles && !localFile.isFile())) {
@@ -131,7 +146,7 @@ class MissingLocalResourcesChecker extends Checker {
  * This is free software - without ANY guarantee!
  *
  *
- * Copyright 2013, Dr. Gernot Starke, arc42.org
+ * Copyright Dr. Gernot Starke and aim42 contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

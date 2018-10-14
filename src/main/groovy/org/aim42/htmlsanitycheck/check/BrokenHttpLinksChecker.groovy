@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
@@ -22,6 +23,21 @@ class BrokenHttpLinksChecker extends Checker {
     // the pure http/https-hrefs a set, duplicates are removed here
     private Set<HtmlElement> hrefSet
 
+    // get the (configured) statusCodes, just syntactic sugar...
+    private final Collection<Integer> successCodes
+    private final Collection<Integer> warningCodes
+    private final Collection<Integer> errorCodes
+
+
+
+    BrokenHttpLinksChecker(Configuration pConfig) {
+        super(pConfig)
+
+        successCodes = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes)
+        warningCodes = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes)
+        errorCodes   = myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes)
+
+    }
 
     @Override
     protected void initCheckingResultsDescription() {
@@ -40,9 +56,7 @@ class BrokenHttpLinksChecker extends Checker {
 
         // if there's no internet, issue a general warning
         // but continue trying
-        if (NetUtil.isInternetConnectionAvailable() == false) {
-            checkingResults.generalRemark = "There seems to be a general problem with internet connectivity, all other checks for http/https links might yield incorrect results!"
-        }
+        addWarningIfNoInternetConnection()
 
         checkAllHttpLinks()
 
@@ -52,8 +66,9 @@ class BrokenHttpLinksChecker extends Checker {
 
 
     private void addWarningIfNoInternetConnection() {
-
-
+        if (NetUtil.isInternetConnectionAvailable() == false) {
+            checkingResults.generalRemark = "There seems to be a general problem with internet connectivity, all other checks for http/https links might yield incorrect results!"
+        }
     }
 
     /**
@@ -63,39 +78,77 @@ class BrokenHttpLinksChecker extends Checker {
     private void checkAllHttpLinks() {
         // for all hrefSet check if the corresponding link is valid
         hrefSet.each { href ->
-            checkSingleHttpLink(href)
+            doubleCheckSingleHttpLink(href)
         }
     }
 
     /**
-     * Check a single external link
-     *
-
+     * Double-Check a single http(s) link:
+     * Some servers don't accept head request and send errors like 403 or 405,
+     * instead of 200.
+     * Therefore we double-check: in case of errors or warnings,
+     * we try again with a GET, to get the "finalResponseCode" -
+     * which we then categorize as success, error or warning
      */
-    protected void checkSingleHttpLink(String href) {
+
+
+    protected void doubleCheckSingleHttpLink(String href) {
+
+        // to create appropriate error messages
+        String problem
 
         // bookkeeping:
         checkingResults.incNrOfChecks()
 
         try {
             URL url = new URL(href)
+
+            // check if localhost-URL
+            checkIfLocalhostURL(url, href)
+
+            // check if (numerical) IP address
+            checkIfIPAddress(url, href)
+
             try {
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("HEAD");
+                HttpURLConnection firstConnection = getNewURLConnection(url)
 
-                // TODO add httpConnectionTimeout parameter!!
-                //if (httpConnectionTimeout >= 0) {
-                //    connection.setConnectTimeout(httpConnectionTimeout);
-                //}
-                connection.connect();
-                int responseCode = connection.getResponseCode();
+                // try to connect
+                firstConnection.connect()
+                int responseCode = firstConnection.getResponseCode()
+                firstConnection.disconnect()
 
-                // interpret response code
-                // TODO: make this configurable
-                decideHowToTreatResponseCode(responseCode, href)
+                // issue 218 and 219: some webservers respond with 403 or 405
+                // when given HEAD requests. Therefore, try GET
+                if (responseCode in successCodes) return
+
+                // in case of errors or warnings,
+                // try again with GET.
+
+                else {
+                    HttpURLConnection secondConnection = getNewURLConnection(url)
+                    secondConnection.setRequestMethod("GET")
+                    int finalResponseCode = secondConnection.getResponseCode()
+                    secondConnection.disconnect()
+
+                    switch (finalResponseCode) {
+                        case successCodes: return
+                        case warningCodes: problem = "Warning:"; break
+                        case errorCodes: problem = "Error:"; break
+                        default: problem = "Error: Unknown or unclassified response code:"
+                    }
+
+                    problem += """ ${href} returned statuscode ${responseCode}."""
+
+                    checkingResults.addFinding(new Finding(problem))
+
+                } // else
 
             }
-            catch (InterruptedIOException | ConnectException | UnknownHostException | IOException exception) {
+            catch (UnknownHostException) {
+                Finding unknownHostFinding = new Finding( """Unknown host with href=$href""")
+                checkingResults.addFinding( unknownHostFinding)
+            }
+            catch (InterruptedIOException | ConnectException |  IOException exception) {
                 Finding someException = new Finding("""exception ${exception.toString()} with href=${href}""")
                 checkingResults.addFinding(someException)
             }
@@ -106,35 +159,45 @@ class BrokenHttpLinksChecker extends Checker {
         }
     }
 
-    /**
-     * response codes other than 200 might be treated as errors or warnings,
-     * sometimes even information.
-     * TODO: add configuration and logic to "decideHowToTreatResponseCode"
-     *
-     * @param responseCode
-     */
-    protected void decideHowToTreatResponseCode(int responseCode, String href) {
+    private HttpURLConnection getNewURLConnection(URL url) {
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("HEAD");
 
-        String problem
-
-        if (!(responseCode in NetUtil.HTTP_SUCCESS_CODES)) {
-
-            if (NetUtil.HTTP_WARNING_CODES.contains(responseCode)) {
-                    problem = "Warning:" }
-            else if (responseCode >= 400) {
-                problem = "Error:";
-            }
-             else {
-                problem = "Error: Unknown or unclassified response code:"
-            }
-
-            problem += """ ${href} returned statuscode ${responseCode}."""
-
-            checkingResults.addFinding(new Finding(problem))
-        }
-
-        return
+        // httpConnectionTimeout is a configuration parameter
+        // that defaults to 5000 (msec)
+        connection.setConnectTimeout(
+                myConfig?.getConfigItemByName(Configuration.ITEM_NAME_httpConnectionTimeout)
+        );
+        return connection
     }
+
+    // if configured, ip addresses in URLs yield warnings
+    private void checkIfIPAddress(URL url, String href) {
+        if (!myConfig.getConfigItemByName(Configuration.ITEM_NAME_ignoreIPAddresses)) {
+            String host = url.getHost()
+
+            if (host.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")) {
+                Finding localhostWarning = new Finding("""Warning: numerical urls (ip address) indicates suspicious environment dependency: href=${
+                    href
+                }""")
+                checkingResults.addFinding(localhostWarning)
+            }
+        }
+    }
+
+    // if configured ,localhost-URLs yield warnings!
+    private void checkIfLocalhostURL(URL url, String href) {
+        if (!myConfig.getConfigItemByName(Configuration.ITEM_NAME_ignoreLocalhost)) {
+            String host = url.getHost()
+            if ((host == "localhost") || host.startsWith("127.0.0")) {
+                Finding localhostWarning = new Finding("""Warning: localhost urls indicates suspicious environment dependency: href=${
+                    href
+                }""")
+                checkingResults.addFinding(localhostWarning)
+            }
+        }
+    }
+
 
 }
 

@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.check.UnknownCheckerException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -10,17 +11,16 @@ import org.slf4j.LoggerFactory
 
 class CheckerCreator {
 
-    private final static Logger logger = LoggerFactory.getLogger(CheckerCreator.class);
+    private final static Logger logger = LoggerFactory.getLogger(CheckerCreator.class)
 
 
-    public static ArrayList<Checker> createCheckerClassesFrom(
-            final Collection<Class> checkerClasses,
-			final Map<String, Object> params = [:]) {
+    public static ArrayList<Checker> createCheckerClassesFrom( final Collection<Class> checkerClasses,
+                                                               final Configuration pConfig) {
 
-        ArrayList<Checker> checkers = new LinkedHashSet<Checker>( checkerClasses.size() )
+        ArrayList<Checker> checkers = new LinkedHashSet<Checker>(checkerClasses.size())
 
         checkerClasses.each { checkerClass ->
-            checkers.add( CheckerCreator.createSingleChecker( checkerClass, params ))
+            checkers.add(CheckerCreator.createSingleChecker(checkerClass, pConfig ))
 
         }
 
@@ -29,9 +29,7 @@ class CheckerCreator {
     }
 
 
-    // TODO: needs some params,
-
-    public static Checker createSingleChecker( final Class checkerClass, final Map<String, Object> params = [:] ) {
+    public static Checker createSingleChecker(final Class checkerClass, final Configuration pConfig ) {
         Checker checker
 
         // switch over all possible Checker classes
@@ -40,40 +38,34 @@ class CheckerCreator {
 
         // clearly violates the open-close principle
 
-        switch ( checkerClass ) {
+        switch (checkerClass) {
             case BrokenCrossReferencesChecker.class:
-                checker = new BrokenCrossReferencesChecker(); break
+                checker = new BrokenCrossReferencesChecker( pConfig); break
 
             case BrokenHttpLinksChecker.class:
-                checker = new BrokenHttpLinksChecker(); break
+                checker = new BrokenHttpLinksChecker( pConfig ); break
 
             case DuplicateIdChecker.class:
-                checker = new DuplicateIdChecker(); break
+                checker = new DuplicateIdChecker( pConfig ); break
 
             case ImageMapChecker.class:
-                checker = new ImageMapChecker(); break
+                checker = new ImageMapChecker(pConfig); break
 
             case MissingAltInImageTagsChecker.class:
-                checker = new MissingAltInImageTagsChecker(); break
+                checker = new MissingAltInImageTagsChecker(pConfig); break
 
             case MissingImageFilesChecker.class:
-                checker = new MissingImageFilesChecker(); break
+                checker = new MissingImageFilesChecker(pConfig); break
 
             case MissingLocalResourcesChecker.class:
-                checker = new MissingLocalResourcesChecker();break
+                checker = new MissingLocalResourcesChecker(pConfig); break
 
 
             default:
-                logger.warn( "unknown Checker ${checkerClass.toString()}")
-                throw new UnknownCheckerException( checkerClass.toString() )
+                logger.warn("unknown Checker ${checkerClass.toString()}")
+                throw new UnknownCheckerException(checkerClass.toString())
 
         }
-		
-		params.each { key, value ->
-			if (checker.hasProperty(key)) {
-				checker[key] = value
-			}
-		}
 
         return checker
 
