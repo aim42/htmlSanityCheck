@@ -16,7 +16,6 @@ data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_0
 :numbered:
 :linkattrs:
 :experimental:
-:improveDocImage: https://img.shields.io/badge/improve-this%20doc-orange.svg
 
 :author: Dr. Gernot Starke
 :email: gernot.starke@innoq.com
@@ -32,7 +31,8 @@ data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_0
 :project-url: https://github.com/aim42/htmlSanityCheck
 :project-issues: https://github.com/aim42/htmlSanityCheck/issues
 :project-bugs: https://github.com/aim42/htmlSanityCheck/issues?q=is%3Aopen+is%3Aissue+label%3Abug
-
+:repositoryDocsDir: https://github.com/aim42/htmlSanityCheck/blob/master/src/docs/
+:improveDocImage: https://img.shields.io/badge/improve-this%20doc-orange.svg
 :project-name: asciidoctor-gradle-plugin
 
 :coresourcepath: ../../../src/main/groovy/org/aim42
@@ -45,7 +45,7 @@ data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_0
 
 :asciidoc-url: http://asciidoctor.org
 :gradle-url: https://gradle.org/[Gradle]
-:groovy-url: http://groovy.codehaus.org/
+:groovy-url: http://www.groovy-lang.org/
 
 :source-highlighter: pygments
 :pygments-style: emacs
@@ -82,14 +82,40 @@ abbreviated with kbd:[HtmlSC]
 
 include::arc42/About-This-Docu.adoc[]
 
+<<<<
+
 include::arc42/chap-01-Requirements.adoc[]
+
+<<<<
+
 include::arc42/chap-02-Constraints.adoc[]
+
+<<<<
+
 include::arc42/chap-03-Context.adoc[]
+
+<<<<
+
 include::arc42/chap-04-SolutionStrategy.adoc[]
+
+<<<<
+
 include::arc42/chap-05-BuildingBlocks.adoc[]
+
+<<<<
+
 include::arc42/chap-06-Runtime.adoc[]
+
+<<<<
+
 include::arc42/chap-07-Deployment.adoc[]
+
+<<<<
+
 include::arc42/chap-08-Concepts.adoc[]
+
+<<<<
+
 include::arc42/chap-09-Decisions.adoc[]
 
 

@@ -98,7 +98,8 @@ processResources {
 //configure docToolchain to use the main project's config
 project('docToolchain') {
     if (project.hasProperty('docDir')) {
-        docDir = "../."
+        docDir = '../.'
+        mainConfigFile = 'config/docToolchain.groovy'
     } else {
         println "="*80
         println "  please initialize the docToolchain submodule by executing"
@@ -106,6 +107,10 @@ project('docToolchain') {
         println "="*80
     }
 }
+
+task generateDocs (
+        dependsOn: ['docToolchain:exportExcel', 'docToolchain:generateHTML', 'docToolchain:htmlSanityCheck']
+) { }
 
 // ==========================================================
 // if you use htmlSanityCheck locally, publish with

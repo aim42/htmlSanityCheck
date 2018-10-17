@@ -5,7 +5,7 @@ image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-03-Context.adoc, flo
 
 === Business Context
 
-image::hsc-context.png["Business Context", title="Business Context"]
+image::ea/htmlSanityCheck/hsc-context.png["Business Context", title="Business Context"]
 
 [options="header", cols="1,4"]
 .Business Context
