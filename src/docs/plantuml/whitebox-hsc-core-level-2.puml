@@ -1,0 +1,53 @@
+@startuml
+skinparam componentStyle uml2
+skinparam component {
+   backgroundColor<<planned>> Khaki
+   backgroundColor White
+}
+
+skinparam handwritten true
+
+left footer
+
+<font color=blue>HtmlSanityCheck</font>
+https://github.com/aim42/htmlSanityCheck
+endfooter
+
+
+interface "local\nfile system" as files
+[FileUtil]  as futil
+[NetUtil]   as netutil
+
+interface "external Websites" as web
+
+frame "HSC Core" as core {
+
+   [Configuration]   as config
+   [Reporter]        as reporter
+   [Suggester]       as suggester
+   [Checker]         as checker #YellowGreen
+   [AllChecksRunner] as acr
+
+acr -down-> checker
+acr -right-> config
+
+checker -->reporter
+checker --> suggester
+checker -left-> futil
+checker -> netutil
+
+suggester -left-> files
+
+futil -down-> files
+netutil -down-> web
+
+}
+
+[HSC Gradle Plugin] as gradleplugin
+gradleplugin -down-> config
+gradleplugin -down-> acr
+checker -down-> web
+checker -down-> files
+
+
+@enduml
