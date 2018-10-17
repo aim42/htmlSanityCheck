@@ -108,6 +108,10 @@ project('docToolchain') {
     }
 }
 
+task generateDocs (
+        dependsOn: ['docToolchain:exportExcel', 'docToolchain:generateHTML', 'docToolchain:htmlSanityCheck']
+) { }
+
 // ==========================================================
 // if you use htmlSanityCheck locally, publish with
 // "gradle publishToMavenLocal"
