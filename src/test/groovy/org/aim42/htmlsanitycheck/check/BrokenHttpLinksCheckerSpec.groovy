@@ -6,6 +6,7 @@ import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.inet.NetUtil
 import spock.lang.IgnoreIf
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
