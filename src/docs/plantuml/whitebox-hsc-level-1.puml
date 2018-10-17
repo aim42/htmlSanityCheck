@@ -1,0 +1,53 @@
+@startuml
+skinparam componentStyle uml2
+skinparam component {
+   backgroundColor<<planned>> Khaki
+   backgroundColor White
+}
+
+skinparam handwritten true
+
+left footer
+
+<font color=blue>HtmlSanityCheck</font>
+https://github.com/aim42/htmlSanityCheck
+endfooter
+
+interface "local file system" as files
+interface "external Websites" as web
+
+rectangle "HtmlSanityCheck (Level 1)" as HSC {
+
+[HSC Core] as core #YellowGreen
+[HSC Gradle Plugin] -down-> core
+
+
+[HSC Graphical UI] <<planned>> as ui
+[HSC Maven Plugin]  <<planned>> as mavenplugin
+
+[FileUtil] as futil
+[NetUtil] as netutil
+
+mavenplugin .down-> core
+ui .down-> core
+
+core -> futil
+core -> netutil
+
+futil -down-> files
+netutil -down-> web
+
+}
+:docu-author: -down-> ui
+
+[Build System] as bs
+
+
+bs -down-> [HSC Gradle Plugin]
+bs .down.> mavenplugin
+
+core -down-> files
+core -down-> web
+
+
+@enduml
