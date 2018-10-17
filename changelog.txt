@@ -1,5 +1,9 @@
 HtmlSanityCheck - ChangeLog
 
+V.1.0.0-RC-2
+Oct 2018: enhanced configurability, fixed several bugs, released version on gradle plugin portal
+
+
 V.0.9.8
 July 2018: added CodeNarc V1.2, upgraded to gradle 4.9, fixed travis build, improved footer of html report
 

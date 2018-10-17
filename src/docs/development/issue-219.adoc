@@ -6,14 +6,17 @@ https://github.com/aim42/htmlSanityCheck/issues/219[Issue 219]
 explains that the naive link checks based upon
 a http HEAD request sometimes fail, e.g. for links to amazon.com:
 
-For example: (curl -I perfoerms a HEAD request)
+For example: (`curl -I performs a HEAD request)
 
 ....
+<snip>
+
 curl -I https://www.amazon.de/dp/3446443487
 HTTP/2 405
 server: Server
 content-type: text/html;charset=UTF-8
-<snip>
+
+</snip>
 
 ....
 
@@ -50,7 +53,7 @@ PS --> BLC: realStatus
 ....
 
 The general behavior we implement shall be the following
-
+`
 [source, Groovy]
 ----
 if (responseCode in successCodes) then return
