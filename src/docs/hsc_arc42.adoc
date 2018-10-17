@@ -82,14 +82,40 @@ abbreviated with kbd:[HtmlSC]
 
 include::arc42/About-This-Docu.adoc[]
 
+<<<<
+
 include::arc42/chap-01-Requirements.adoc[]
+
+<<<<
+
 include::arc42/chap-02-Constraints.adoc[]
+
+<<<<
+
 include::arc42/chap-03-Context.adoc[]
+
+<<<<
+
 include::arc42/chap-04-SolutionStrategy.adoc[]
+
+<<<<
+
 include::arc42/chap-05-BuildingBlocks.adoc[]
+
+<<<<
+
 include::arc42/chap-06-Runtime.adoc[]
+
+<<<<
+
 include::arc42/chap-07-Deployment.adoc[]
+
+<<<<
+
 include::arc42/chap-08-Concepts.adoc[]
+
+<<<<
+
 include::arc42/chap-09-Decisions.adoc[]
 
 
