@@ -4,6 +4,8 @@
 :toc-position: right
 :experimental:
 :imagesdir: ./images
+:repositoryDocsDir: https://github.com/aim42/htmlSanityCheck/blob/master/src/docs/
+:improveDocImage: https://img.shields.io/badge/improve-this%20doc-orange.svg
 
 image::{improveDocImage}[link={repositoryDocsDir}DevelopmentGuide.adoc, float=right]
 
