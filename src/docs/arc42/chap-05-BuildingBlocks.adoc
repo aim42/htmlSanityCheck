@@ -5,7 +5,7 @@ image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-05-BuildingBlocks.ad
 
 === Whitebox HtmlSanityChecker
 
-image::hsc-whitebox.png["Whitebox", title="Whitebox (Overall system)"]
+image::ea/htmlSanityCheck/hsc-whitebox.png["Whitebox", title="Whitebox (Overall system)"]
 
 Rationale::
 
@@ -85,7 +85,7 @@ Files::
 ==== _HSC-Core_ (Whitebox)
 
 
-image::hsc-core.png["Whitebox", title="HSC-Core (Whitebox)"]
+image::ea/htmlSanityCheck/hsc-core.png["Whitebox", title="HSC-Core (Whitebox)"]
 
 Rationale::
 This structures follows a strictly functional decomposition:
@@ -138,7 +138,7 @@ concept of extensible checking algorithms>>.
 [[ResultsCollector]]
 ==== ResultsCollector (Whitebox)
 
-image::ResultsCollector.png["Whitebox", title="Results Collector (Whitebox)"]
+image::ea/htmlSanityCheck/ResultsCollector.png["Whitebox", title="Results Collector (Whitebox)"]
 
 Rationale::
 This structures follows the hierarchy of checks - namely managing results for:
