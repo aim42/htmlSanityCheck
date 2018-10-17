@@ -5,7 +5,13 @@ image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-05-BuildingBlocks.ad
 
 === Whitebox HtmlSanityChecker
 
-image::hsc-whitebox.png["Whitebox", title="Whitebox (Overall system)"]
+
+[plantuml,"whitbox-hsc-level-1",png]
+....
+include::../plantuml/whitebox-hsc-level-1.puml[]
+....
+
+
 
 Rationale::
 
@@ -22,15 +28,12 @@ Contained Blackboxes::
 [cols="1,3" options=""]
 .HtmlSanityChecker building blocks
 |===
-| <<checker_blackbox, HSC_Core>> | hsc_core: html parsing and sanity checking, file handling
+| <<checker_blackbox, HSC Core>> | hsc core: html parsing and sanity checking, configuration, reporting.
 | HSC Gradle Plugin | integrates the Gradle build tool with kbd:[HtmlSC],
 enabling arbitrary gradle builds to use kbd:[HtmlSC] functionality.
-| HSC Command Line Interface | (not documented)
+| HSC Maven Plugin | (planned, not yet implemented)
 | HSC Graphical Interface | (planned, not implemented)
 
-| Reporter
-| outputs the collected checking results to configurable
-destinations e.g., stdout or a Html file.
 |===
 
 
@@ -44,9 +47,10 @@ Interfaces::
 line shell to call the kbd:[HtmlSC]
 | build system  | currently restricted to Gradle: The build
 system uses kbd:[HtmlSC] as configured in the buildscript.
-| local-html and local-images | kbd:[HtmlSC] needs access to several
+| local-file system | kbd:[HtmlSC] needs access to several
 local files, especially the html page to be checked and to the
 corresponding image directories.
+| external websites| to check external links, kbd:[HtmlSC] needs to access external sites via http HEAD or GET requests.
 |===
 
 
