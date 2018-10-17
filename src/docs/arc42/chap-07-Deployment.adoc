@@ -5,7 +5,7 @@ ifndef::imagesdir[:imagesdir: ../images]
 image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-07-Deployment.adoc, float=right]
 
 [[img-deployment]]
-image::hsc-deployment.png["Deployment", title="Deployment"]
+image::ea/htmlSanityCheck/hsc-deployment.png["Deployment", title="Deployment"]
 
 [options="header", cols="1,4"]
 .Deployment

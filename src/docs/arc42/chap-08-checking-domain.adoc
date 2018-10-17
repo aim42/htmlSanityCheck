@@ -3,7 +3,7 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-08-checking-domain.adoc, float=right]
 
-image::HTML_Checking_Domain.png["HTML Checking Domain Model", title="HTML Checking Domain Model"]
+image::ea/htmlSanityCheck/HTML_Checking_Domain.png["HTML Checking Domain Model", title="HTML Checking Domain Model"]
 
 
 [options="header", cols="1,4"]
