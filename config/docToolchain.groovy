@@ -9,8 +9,8 @@ inputPath = 'src/docs'
 
 inputFiles = [
         [file: 'adoc-sandbox.adoc',    formats: ['html','pdf']],
-        [file: 'DevelopmentDocs.adoc', formats: ['html','pdf']],
-        [file: 'hsc_arc42.adoc',       formats: ['html','pdf']],
+        [file: 'DevelopmentDocs.adoc', formats: ['html','pdf','docbook','epub']],
+        [file: 'hsc_arc42.adoc',       formats: ['html','pdf','docbook','docx']],
         [file: 'index.adoc',           formats: ['html','pdf']],
 ]
 
