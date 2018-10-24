@@ -173,6 +173,27 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         badLink << [400, 401, 403, 404, 405, 406, 408, 409, 410, 429, 431, 500, 501, 502, 504, 505, 506, 507]
 
     }
+
+
+    def 'redirects are recognized and their new location is contained in warning message'() {
+
+        given: "the old arc42 (http!) page "
+        String HTML = """$HtmlConst.HTML_HEAD 
+                <a href="http://arc42.de"</a>
+                $HtmlConst.HTML_END """
+
+        htmlPage = new HtmlPage(HTML)
+
+        when: "page is checked"
+        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+        then: "then collector contains one error message"
+        collector.getFindings().size() == 1
+
+        collector?.getFindings()?.first().whatIsTheProblem.contains("https://arc42.de")
+
+    }
+
     /**
      * guys from OpenRepose (https://github.com/rackerlabs/gradle-linkchecker-plugin/) came up with the
      * cornercase of "localhost" and "127.0.0.1"

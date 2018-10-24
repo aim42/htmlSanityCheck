@@ -1,0 +1,52 @@
+
+=== Handling 30x Status Codes
+
+
+https://github.com/aim42/htmlSanityCheck/issues/244[Issue 244]
+explains that status codes 30x (redirect of some kind)
+might signal an error, but can return the new location
+of the requested resource.
+
+For example: (`curl -I performs a HEAD request)
+
+....
+<snip>
+
+curl -I http://www.arc.de
+
+HTTP/1.1 301 Moved Permanently
+Content-Type: text/html; charset=UTF-8
+Connection: keep-alive
+Keep-Alive: timeout=15
+Date: Wed, 24 Oct 2018 14:16:04 GMT
+Server: Apache
+X-Powered-By: PHP/7.0.32
+Location: https://arc42.de/
+</snip>
+
+....
+
+So - the url exists in principle (in the example above,
+it only changed from `http` to `https`...
+
+
+==== Proposed Approach
+
+A very simple solution would be to
+access the location header and return
+that together with the warning message.
+
+
+[source, Groovy]
+----
+if (responseCode in [301, 302, 303, 307, 308]) then {
+    // get location
+    String newLocation
+    if (connection.headerFields.'Location') {
+         // add connection.headerFields.Location.first() to warning message
+    }
+}
+
+----
+
+

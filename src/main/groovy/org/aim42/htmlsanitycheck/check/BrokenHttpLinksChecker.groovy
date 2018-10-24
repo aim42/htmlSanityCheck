@@ -115,12 +115,23 @@ class BrokenHttpLinksChecker extends Checker {
                 // try to connect
                 firstConnection.connect()
                 int responseCode = firstConnection.getResponseCode()
-                firstConnection.disconnect()
 
-                // issue 218 and 219: some webservers respond with 403 or 405
+                // issue 218 and 219: some web servers respond with 403 or 405
                 // when given HEAD requests. Therefore, try GET
                 if (responseCode in successCodes) return
 
+                // issue 244: special case for redirects
+                // thanx to https://stackoverflow.com/questions/39718059/read-from-url-in-groovy-with-redirect
+                else if (responseCode in [301, 302, 303, 307, 308])  {
+                    String newLocation
+                    if (firstConnection.headerFields.'Location') {
+                        newLocation = firstConnection.headerFields.Location.first()
+
+                        problem += """ ${href} returned statuscode ${responseCode}, new location: $newLocation"""
+                        checkingResults.addFinding(new Finding(problem))
+
+                    }
+                }
                 // in case of errors or warnings,
                 // try again with GET.
 
@@ -142,6 +153,9 @@ class BrokenHttpLinksChecker extends Checker {
                     checkingResults.addFinding(new Finding(problem))
 
                 } // else
+
+             // cleanup firstConnection
+             firstConnection.disconnect()
 
             }
             catch (UnknownHostException) {
@@ -167,7 +181,11 @@ class BrokenHttpLinksChecker extends Checker {
         // that defaults to 5000 (msec)
         connection.setConnectTimeout(
                 myConfig?.getConfigItemByName(Configuration.ITEM_NAME_httpConnectionTimeout)
-        );
+        )
+
+        // TODO followRedirects should be a configuration parameter
+        // that defaults to false
+
         return connection
     }
 
