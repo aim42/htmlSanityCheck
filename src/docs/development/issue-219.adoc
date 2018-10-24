@@ -28,7 +28,7 @@ page exists.
 
 ==== Proposed Approach
 
-[plantuml,"GET-after-HEAD-failapproach",png]
+[plantuml,"{plantumldir}GET-after-HEAD-failapproach",png]
 ....
 @startuml
 skinparam maxmessagesize 80
