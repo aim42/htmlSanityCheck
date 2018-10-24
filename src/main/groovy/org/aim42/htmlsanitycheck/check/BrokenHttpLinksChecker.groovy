@@ -41,7 +41,7 @@ class BrokenHttpLinksChecker extends Checker {
 
     @Override
     protected void initCheckingResultsDescription() {
-        checkingResults.whatIsChecked = "External links Check"
+        checkingResults.whatIsChecked = "External Links Check"
         checkingResults.sourceItemName = "anchor href attribute"
         checkingResults.targetItemName = "broken external link"
     }

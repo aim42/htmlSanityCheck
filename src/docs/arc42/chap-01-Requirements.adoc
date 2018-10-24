@@ -71,115 +71,33 @@ Important terms (*domain terms*) of html sanity checking is documented in a (sma
 
 ==== General Functionality
 
-
-[options="header", cols="1,3,8"]
 .General Requirements
-|===
-| ID  | Functionality | Description
-| G-1 | read HTML file | kbd:[HtmlSC] shall read a single (configurable)
-                        HTML file
-| G-2 | {gradle-url}-plugin | kbd:[HtmlSC] can be run as {gradle-url}-plugin.
-| G-3 | command line usage | kbd:[HtmlSC] can be called from the command line with arguments and options
-| G-4 | configurable output | output can be configured to console or file
-| G-5 | free and open source | all required dependencies shall be compliant
-                               to the https://creativecommons.org/licenses/by-sa/4.0/[CC-SA-4 licence].
-| G-6 | available via public repositories | like bintray or jcenter.
-| G-7 | configurable to check multiple HTML files | configure a set of files to be processes in a single _run_ and produce a joint report. (useful for e.g. API documentation with many HTML files referencing each other)
-|===
-
+include::../excel/Requirements.xlsx/General.adoc[]
 
 [[requiredChecks]]
 ==== Types of Sanity Checks
 
-
-[options="header", cols="1,3,8"]
 .Required Checks
-|===
-| ID  | Check | Description
-| R-1 | missing image files   | Check all image tags if the referenced
-                                  image files exist.
-                                  See <<MissingImageFilesChecker>>
-| R-2 | broken internal links | Check all internal links from anchor-tags
-                                  (href="#XYZ") if the link targets "XYZ" are defined.
-                                  See <<BrokenCrossReferencesChecker>>
-| R-3 | missing local files   | either other html-files, pdf's or similar.
-                                  See <<MissingLocalResourcesChecker>>
-| R-4  | duplicate link targets | Check all bookmark definitions
-                                  (... id="XYZ") whether the id's ("XYZ") are unique.
-                                  See <<DuplicateIdChecker>>
-| R-5  | malformed links        | Check all links for syntactical correctness
-| R-6  | missing alt-attribute  | in image-tags.  See <<MissingImgAltAttributeChecker>>
-| R-7  | unused-images          | Check for files in image-directories that are not referenced by any
-                                  of the HTML files in this _run_
-| R-8  | illegal link targets   | Check for malformed or illegal anchors (link targets).
-|===
+include::../excel/Requirements.xlsx/Required{sp}Checks.adoc[]
 
-
-[options="header", cols="1,3,8"]
 .Optional Checks
-|===
-| ID | Check  | Description
-| Opt-1 | missing external images | Check externally referenced images for availability
-| Opt-2 | broken external links | Check external links for both syntax and availability
-|===
-
+include::../excel/Requirements.xlsx/Optional{sp}Checks.adoc[]
 
 ==== Reporting and Output Requirements
 
-
-[options="header", cols="1,3,8"]
 .Reporting Requirements
-|===
-| ID  | Requirement | Description
-| R-1 | various output formats | Checking output in plain text and HTML
-| R-2 | output to stdout | kbd:[HtmlSC] can output results on stdout (the console)
-| R-3 | configurable file output | kbd:[HtmlSC] can store results in file in configurable directories
-|===
-
-
-
-
+include::../excel/Requirements.xlsx/Reporting.adoc[]
 
 [[quality-goals]]
 === Quality Goals
 
-[options="header", cols="1,2,6"]
 .Quality-Goals
-|===
-| Priority | Quality-Goal | Scenario
-| 1        | Correctness  | Every broken internal link (cross reference) is found.
-| 1        | Correctness  | Every missing local image is found.
-| 2        | Flexibility  | Multiple checking algorithms, report formats and clients. At least
-Gradle, command-line and a graphical client have to be supported.
-| 2        | Safety       | Content of the files to be checked is _never_ altered.
-| 2        | Correctness  | Correctness of every checker is automatically tested for positive AND negative
-                            cases
-| 2        | Correctness  | Every reporting format is tested: Reports must exactly reflect checking results.
-| 3        | Performance  | Check of 100kB html file performed under 10 secs
-(excluding gradle startup)
-|===
-
+include::../excel/Requirements.xlsx/Quality{sp}Goals.adoc[]
 
 === Stakeholder
 
-[options="header", cols="2,4,5"]
 .Stakeholder
-|===
-| Role | Description | Goal, Intention
-
-| Documentation author      | writes documentation with Html output | wants to check that the resulting document contains good links, image references
-| [[arc42_user]] arc42 user | uses the arc42 template for architecture documentation
-| wants a small but practical example of _how to apply arc42_.
-
-| aim42 contributor
-| contributes to aim42 methode-guide
-| check generated html code to ensure links and images are correct during
-(gradle-based) build process
-
-| software developer |
-| wants an example of pragmatic architecture documentation and arc42 usage
-
-|===
+include::../excel/Stakeholder.xlsx/Stakeholder.adoc[]
 
 [[InformationOnUris]]
 === Background Information on URIs

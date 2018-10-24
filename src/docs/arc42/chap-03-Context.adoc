@@ -6,7 +6,7 @@ include::_feedback.adoc[]
 
 === Business Context
 
-image::hsc-context.png["Business Context", title="Business Context"]
+image::ea/htmlSanityCheck/hsc-context.png["Business Context", title="Business Context"]
 
 [options="header", cols="1,4"]
 .Business Context

@@ -6,7 +6,7 @@ ifndef::imagesdir[:imagesdir: ../images]
 include::_feedback.adoc[]
 
 [[img-deployment]]
-image::hsc-deployment.png["Deployment", title="Deployment"]
+image::ea/htmlSanityCheck/hsc-deployment.png["Deployment", title="Deployment"]
 
 [options="header", cols="1,4"]
 .Deployment

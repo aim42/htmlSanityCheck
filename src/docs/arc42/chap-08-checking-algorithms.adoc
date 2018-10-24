@@ -21,7 +21,7 @@ include::{coresourcepath}/htmlsanitycheck/check/Checker.groovy[tags=performCheck
 ----
 
 
-image::template-method.png["Template Method", title="Template-Method Overview"]
+image::ea/htmlSanityCheck/template-method.png["Template Method", title="Template-Method Overview"]
 
 [options="header", cols="1,4"]
 .Template Method

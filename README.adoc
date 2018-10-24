@@ -1,5 +1,5 @@
 = image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
-:version: 1.0.0-RC-1
+:version: 1.0.0-RC-3
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
@@ -127,7 +127,7 @@ buildscript {
 
 
 plugins {
-    id 'org.aim42.htmlsanitycheck' version '1.0.0-RC-1'
+    id 'org.aim42.htmlsanitycheck' version '1.0.0-RC-2'
     id 'org.asciidoctor.convert' version '1.5.8'
 }
 
