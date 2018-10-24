@@ -7,7 +7,7 @@ proposes to merge the two classes AllChecksRunner and ChecksRunner.
 
 ==== Proposed (new) Scenario
 
-[plantuml,"mainloop-new",png]
+[plantuml,"{plantumldir}mainloop-new",png]
 ....
 include::MainLoop-new.puml[]
 ....

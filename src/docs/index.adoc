@@ -55,12 +55,11 @@ types of stakeholders:
 
 The {project-url}[repository is located on Github].
 
+ifndef::backend-pdf[]
 *Status*:
 image:http://img.shields.io/badge/license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
-//the PDF-renderer
-ifndef::backend-pdf[]
 image:http://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link="{project-bugs}"]
-endif::[]
 image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[issues]
+endif::[]
 
 "External resources" icon from http://openclipart.org/detail/179896/world-wide-web-by-gr8dan-179896[openclipart]

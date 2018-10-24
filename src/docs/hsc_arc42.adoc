@@ -71,11 +71,13 @@ completed and maintained by Ralf Müller and Gernot Starke.#
 
 [small]#Version {version} of {docdate}#
 
+ifndef::backend-pdf[]
 image:http://img.shields.io/badge/license-ccsa4-green.png[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
 image:http://img.shields.io/github/issues/aim42/{project}.png[link={project-issues}]
+endif::[]
 
 :filename: hsc_arc42.adoc
-include::_feedback.adoc[]
+include::arc42/_feedback.adoc[]
 
 
 [NOTE]
