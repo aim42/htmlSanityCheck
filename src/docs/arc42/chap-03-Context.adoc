@@ -1,7 +1,8 @@
 ifndef::imagesdir[:imagesdir: ../images]
 == Context
 
-image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-03-Context.adoc, float=right]
+:filename: arc42/chap-03-Context.adoc
+include::_feedback.adoc[]
 
 === Business Context
 

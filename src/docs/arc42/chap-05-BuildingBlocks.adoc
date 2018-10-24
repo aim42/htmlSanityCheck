@@ -1,12 +1,13 @@
 ifndef::imagesdir[:imagesdir: ../images]
 == Building Block View
 
-image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-05-BuildingBlocks.adoc, float=right]
+:filename: arc42/chap-05-BuildingBlocks.adoc
+include::_feedback.adoc[]
 
 === Whitebox HtmlSanityChecker
 
 
-[plantuml,"whitbox-hsc-level-1",png]
+[plantuml,"{plantumldir}whitbox-hsc-level-1",png]
 ....
 include::../plantuml/whitebox-hsc-level-1.puml[]
 ....
@@ -89,7 +90,7 @@ Files::
 ==== _HSC-Core_ (Whitebox)
 
 
-image::hsc-core.png["Whitebox", title="HSC-Core (Whitebox)"]
+image::ea/htmlSanityCheck/hsc-core.png["Whitebox", title="HSC-Core (Whitebox)"]
 
 Rationale::
 This structures follows a strictly functional decomposition:
@@ -142,7 +143,7 @@ concept of extensible checking algorithms>>.
 [[ResultsCollector]]
 ==== ResultsCollector (Whitebox)
 
-image::ResultsCollector.png["Whitebox", title="Results Collector (Whitebox)"]
+image::ea/htmlSanityCheck/ResultsCollector.png["Whitebox", title="Results Collector (Whitebox)"]
 
 Rationale::
 This structures follows the hierarchy of checks - namely managing results for:

@@ -1,6 +1,7 @@
 
 == Runtime View
 
-image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-06-Runtime.adoc, float=right]
+:filename: arc42/chap-06-Runtime.adoc
+include::_feedback.adoc[]
 
 NOTE: Not appropriate for this system due to very simple implementation.
