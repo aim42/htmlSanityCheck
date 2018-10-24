@@ -1,7 +1,8 @@
 ifndef::imagesdir[:imagesdir: ../images]
 == Solution Strategy
 
-image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-04-SolutionStrategy.adoc, float=right]
+:filename: arc42/chap-04-SolutionStrategy.adoc
+include::_feedback.adoc[]
 
 * Implement kbd:[HtmlSC] in {groovy-url}[Groovy] and Java with minimal
 external dependencies. Wrap this implementation into a {gradle-url}

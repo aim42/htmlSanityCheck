@@ -1,7 +1,8 @@
 ifndef::imagesdir[:imagesdir: ../images]
 === HTML Checking Domain Model
 
-image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-08-checking-domain.adoc, float=right]
+:filename: arc42/chap-08-checking-domain.adoc
+include::_feedback.adoc[]
 
 image::HTML_Checking_Domain.png["HTML Checking Domain Model", title="HTML Checking Domain Model"]
 

@@ -5,7 +5,8 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 == Design Decisions
 
-image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-09-Decisions.adoc, float=right]
+:filename: arc42/chap-09-Decisions.adoc
+include::_feedback.adoc[]
 
 === Checking of external links postponed
 In the current {revision} we won't check external links.

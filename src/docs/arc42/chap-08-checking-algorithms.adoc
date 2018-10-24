@@ -2,7 +2,8 @@ ifndef::imagesdir[:imagesdir: ../images]
 [[checking-concept]]
 === Flexible Checking Algorithms
 
-image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-08-checking-algorithms.adoc, float=right]
+:filename: arc42/chap-08-checking-algorithms.adoc
+include::_feedback.adoc[]
 
 kbd:[HtmlSC] uses the template-method-pattern to enable flexible checking algorithms:
 

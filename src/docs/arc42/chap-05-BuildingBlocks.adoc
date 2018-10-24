@@ -1,7 +1,8 @@
 ifndef::imagesdir[:imagesdir: ../images]
 == Building Block View
 
-image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-05-BuildingBlocks.adoc, float=right]
+:filename: arc42/chap-05-BuildingBlocks.adoc
+include::_feedback.adoc[]
 
 === Whitebox HtmlSanityChecker
 
