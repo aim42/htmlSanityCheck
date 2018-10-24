@@ -2,7 +2,8 @@ ifndef::imagesdir[:imagesdir: ../images]
 [[deployment-view]]
 == Deployment View
 
-image::{improveDocImage}[link={repositoryDocsDir}arc42/chap-07-Deployment.adoc, float=right]
+:filename: arc42/chap-07-Deployment.adoc
+include::_feedback.adoc[]
 
 [[img-deployment]]
 image::ea/htmlSanityCheck/hsc-deployment.png["Deployment", title="Deployment"]

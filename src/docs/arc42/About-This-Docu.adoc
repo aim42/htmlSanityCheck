@@ -3,7 +3,8 @@
 
 == Goals of this Documentation
 
-image::{improveDocImage}[link={repositoryDocsDir}arc42/About-This-Docu.adoc, float=right]
+:filename: arc42/About-This-Docu.adoc
+include::_feedback.adoc[]
 
 This documentation is an example of
 {arc42-url}[arc42] documentation.
