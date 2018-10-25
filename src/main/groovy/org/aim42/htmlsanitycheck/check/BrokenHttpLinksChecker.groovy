@@ -127,7 +127,7 @@ class BrokenHttpLinksChecker extends Checker {
                     if (firstConnection.headerFields.'Location') {
                         newLocation = firstConnection.headerFields.Location.first()
 
-                        problem += """ ${href} returned statuscode ${responseCode}, new location: $newLocation"""
+                        problem = """Warning: ${href} returned statuscode ${responseCode}, new location: $newLocation"""
                         checkingResults.addFinding(new Finding(problem))
 
                     }
@@ -182,6 +182,11 @@ class BrokenHttpLinksChecker extends Checker {
         connection.setConnectTimeout(
                 myConfig?.getConfigItemByName(Configuration.ITEM_NAME_httpConnectionTimeout)
         )
+
+        // to avoid nasty 403 errors (forbidden), we set a referrer and user-agent
+        // 
+        connection.setRequestProperty("Referer", "https://aim42.org");
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         // TODO followRedirects should be a configuration parameter
         // that defaults to false
