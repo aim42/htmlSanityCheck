@@ -286,7 +286,7 @@ This tiny piece rests on incredible groundwork:
 
 == Ideas and Origin
 
-* The plugin heavily relies on code provided by the {gradle-url}[Gradle project].
+* The plugin heavily relies on code provided by {gradle-url}[Gradle].
 
 * Inspiration on code organization, implementation and testing of the plugin
 came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by [@AAlmiray].
@@ -300,13 +300,15 @@ came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by [@AA
 
 In case you want to checkout, fork and/or contribute:
 The documentation is maintained using the awesome
-https://github.com/docToolchain/docToolchain[docToolchain] project.
+https://github.com/docToolchain/docToolchain[docToolchain],
+created by https://rdmueller.github.io/[@rdmueller].
 
 After checkout you should execute:
 
 `git submodule update -i`
 
 to ensure that the docToolchain submodule is downloaded.
+
 
 === Helpful Sources for Development
 
