@@ -184,7 +184,7 @@ class BrokenHttpLinksChecker extends Checker {
         )
 
         // to avoid nasty 403 errors (forbidden), we set a referrer and user-agent
-        // 
+        //
         connection.setRequestProperty("Referer", "https://aim42.org");
         connection.setRequestProperty("User-Agent", "Mozilla/5.0");
 

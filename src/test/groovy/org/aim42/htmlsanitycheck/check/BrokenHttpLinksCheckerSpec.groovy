@@ -107,8 +107,8 @@ class BrokenHttpLinksCheckerSpec extends Specification {
      * where HEAD requests are always answered with 405 instead of 200...
      */
 
-    @Ignore("test currently breaks. see issue-219")
-    def "amazon 405 statuscode for links that really exist"() {
+    //@Ignore("test currently breaks. see issue-219")
+    def "amazon does not deliver 405 statuscode for links that really exist"() {
         given: "an HTML page with a single (good) amazon link"
         String goodAmazonLink = "https://www.amazon.com/dp/B01A2QL9SS"
         String HTML = """$HtmlConst.HTML_HEAD 
@@ -198,25 +198,24 @@ class BrokenHttpLinksCheckerSpec extends Specification {
      * guys from OpenRepose (https://github.com/rackerlabs/gradle-linkchecker-plugin/) came up with the
      * cornercase of "localhost" and "127.0.0.1"
      */
-//    def "urls with localhost leads to errors due to suspicious dependency to environment"() {
-//        // todo
-//        given: "HTML page with localhost url"
-//        String HTML = """$HtmlConst.HTML_HEAD
-//                         <a href="http://localhost:9001/">localhost</a>
-//                         $HtmlConst.HTML_END """
-//
-//        htmlPage = new HtmlPage(HTML)
-//
-//        when: "page is checked"
-//        collector = brokenHttpLinksChecker.performCheck(htmlPage)
-//
-//        then: "error is thrown"
-//        collector.nrOfItemsChecked == 1
-//
-//        and:
-//        collector.nrOfProblems() == 0
-//
-//    }
+    def "urls with localhost leads to errors due to suspicious dependency to environment"() {
+        // todo
+        given: "HTML page with localhost url"
+        String HTML = """$HtmlConst.HTML_HEAD
+                         <a href="http://localhost:9001/">localhost</a>
+                         $HtmlConst.HTML_END """
+
+        htmlPage = new HtmlPage(HTML)
+
+        when: "page is checked"
+        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+        then: "warning is given"
+
+        collector?.getFindings()?.first().whatIsTheProblem.contains("Warning")
+        collector?.getFindings()?.first().whatIsTheProblem.contains("suspicious")
+
+    }
 }
 
 /************************************************************************
