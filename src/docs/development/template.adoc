@@ -1,0 +1,38 @@
+
+=== Descriptive Title
+
+[role="arc42help"]
+****
+.Problem Description
+
+Introduce the reader to your problem by describing the current situation and the resulting problem in detail.
+
+Use diagrams to visualize the problem.
+
+[plantuml, "{plantumldir}name",png]
+....
+a -> b
+....
+
+****
+
+==== Proposed Approach
+
+[role="arc42help"]
+****
+
+You already have a solution approach in mind?
+Describe it here so that it can be discussed.
+Again, diagrams might be helptful.
+
+****
+
+==== Decision
+
+[role="arc42help"]
+****
+
+Document the decision in Detail by moving all information from this Discussion to capter 9 "Design Decisions" of your arc42 docs.
+
+****
+
