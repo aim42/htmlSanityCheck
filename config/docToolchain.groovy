@@ -8,7 +8,6 @@ inputPath = 'src/docs'
 
 
 inputFiles = [
-        [file: 'adoc-sandbox.adoc',    formats: ['html','pdf']],
         [file: 'DevelopmentDocs.adoc', formats: ['html','pdf','docbook','epub']],
         [file: 'hsc_arc42.adoc',       formats: ['html','pdf','docbook','docx']],
         [file: 'index.adoc',           formats: ['html','pdf']],
@@ -41,7 +40,6 @@ confluence.with {
     input = [
             [ file: "build/docs/html5/hsc_arc42.html" ],
             [ file: "build/docs/html5/index.html" ],
-            [ file: "build/docs/html5/adoc-sandbox.html" ],
             [ file: "build/docs/html5/DevelopmentDocs.html" ],
     ]
 
