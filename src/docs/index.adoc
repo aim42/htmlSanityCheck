@@ -55,7 +55,7 @@ types of stakeholders:
 
 The {project-url}[repository is located on Github].
 
-ifndef::backend-pdf[]
+ifdef::backend-html5[]
 *Status*:
 image:http://img.shields.io/badge/license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
 image:http://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link="{project-bugs}"]
