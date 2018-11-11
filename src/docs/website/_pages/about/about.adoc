@@ -1,0 +1,40 @@
+= About...
+:page-layout: single
+:page-permalink: /about/
+:page-header: { overlay_image: /images/splash/unsplash-contact-pavan-trikutam.jpg, caption: "[**Pavan Trikutam**](https://unsplash.com/collections/389099/contact?photo=71CjSSB83Wo)" }
+:icons: font
+:page-liquid: true
+:page-sidebar: { nav: about}
+
+
+== The Team
+
+
+*Gernot Starke* (INNOQ Fellow) initially created the HtmlSanityChecker
+to support the https://aim42.org[aim42] initiative for software improvement.
+
+Usually he works as coach and consultant for software architecture,
+(co)founded https://arc42.org[arc42], founded https://aim42.org[aim],
+co-founded the https://isaqb.org[iSAQB association].
+
+He has worked on the design and implementation of medium and large-scale systems
+for organizations in various sectors, mainly in finance, insurance, automotive,
+logistics, and telecommunications.
+
+Apart from consulting he has authored numerous books on software architecture and patterns
+and lives in Cologne together with _Cheffe Uli_, definitely his dream women.
+
+
+=== Contributors
+
+*Ralf D. Müller* is a Solutions Architect and an ambitious Grails developer.
+He is continually trying to simplify his work. Currently, his main concern is
+improving the holistic documentation of projects. He achieves this especially with
+the help of the arc42 template and docs-as-code approach.
+
+Ralf founded the open source https://docs-as-co.de[docToolchain] project.
+
+*Patrick Double* contributed numerous code patches to htmlSanityCheck, and helped
+to keep things going during some dark phases. Thanx, Pat!
+
+Thanx to all the other contributors!

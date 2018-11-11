@@ -1,0 +1,22 @@
+# main links
+main:
+  - title: "User-Guide"
+    url: /userguide
+  - title: "Development"
+    url: /development
+  - title: "Architecture"
+    url: /architecture
+  - title: "Background"
+    url: /background
+  - title: "About"
+    url: /about
+
+about:
+  - title: About
+    children:
+      - title: "Contact"
+        url: /about/contact
+      - title: "Imprint"
+        url: /about/imprint
+      - title: "This Site"
+        url: /about/site

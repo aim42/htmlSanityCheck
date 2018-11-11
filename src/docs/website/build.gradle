@@ -1,0 +1,79 @@
+plugins {
+    id 'org.aim42.htmlSanityCheck' version '1.0.0-RC-2'
+}
+
+htmlSanityCheck {
+    sourceDir = new File( "_site" )
+
+    // where to put results of sanityChecks...
+    checkingResultsDir = new File( "_site/report/htmlchecks" )
+
+    // fail build on errors?
+    failOnErrors = false
+}
+
+task info () {
+    doLast {
+        def color = { color, text ->
+            def colors = [black: 30, red: 31, green: 32, yellow: 33, blue: 34, magenta: 35, cyan: 36, white: 37]
+            return new String((char) 27) + "[${colors[color]}m${text}" + new String((char) 27) + "[0m"
+        }
+        println """\
+            Docker container to develop or build the ${color 'cyan', site} website:
+            ================================================================
+             Please select wether to ${color 'green', 'develop'} or ${color 'red', 'build'} the site:
+             
+             gradle ${color 'green', 'develop'} starts a jekyll server on port 0.0.0.0:4000,
+             which performs incremental builds and listens for file changes.
+             gradle ${color 'green', 'build'} build the required docker image.
+             gradle ${color 'green', 'remove'} the running docker container.
+             gradle ${color 'green', 'open'} to open site in default browser
+             gradle ${color 'green', 'logs'} to show jekyll logs
+             
+            ================================================================"""
+         .stripIndent()
+    }
+}
+task develop (type: Exec) {
+    executable = "docker-compose"
+    args = ["--file", "_docker-compose-dev.yml", "up", "-d"]
+} doLast {
+    println "started jekyll container"
+    println "use task 'open' to open it with your default browser"
+}
+task build (type: Exec) {
+    executable = "docker-compose"
+    args = ["--file", "./_docker-compose-dev.yml", "build", "--force-rm"]
+}
+task remove (type: Exec) {
+    executable = "docker-compose"
+    args = ["--file", "_docker-compose-dev.yml", "down"]
+}
+task production (dependsOn: ['develop','remove']) {
+}
+task upload (type: Exec) {
+    executable = "docker"
+    args = ["run", "-it", "gernotstarke/ftp-uploader:0.2",
+                   "-v", "${localdir}:/${localdir}",
+                   site, server, localdir]
+}
+task open () {
+    doLast {
+        java.awt.Desktop.desktop.browse "http://localhost:4000".toURI()
+    }
+}
+task logs (type: Exec) {
+    doLast {
+        def containerId
+        "docker ps".execute().text.eachLine { container ->
+            if (container.contains("jekyll")) {
+                containerId = container.split(" +")[0]
+            }
+        }
+        executable = "docker"
+        args = ["logs", containerId,
+                "--tail", "100",
+                "--follow"]
+    }
+}
+defaultTasks 'info'

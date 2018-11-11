@@ -1,0 +1,27 @@
+= User Guide
+:page-layout: single
+:page-permalink: /userguide
+:page-header: { overlay_filter: 0.5, overlay_image: /images/splash/get-started-599118-unsplash.jpg }
+:page-sidebar: { }
+
+This page shall contain the user guide
+
+== Using Gradle, Standard Settings
+
+
+== Using Gradle, Advanced Settings
+
+
+== Using Maven, Standard Settings
+
+
+== Using Maven, Advanced Settings
+
+== Using the Command Line
+(currently not implemented)
+
+== Using the GUI
+(currently not implemented)
+
+
+== Summary of Configuration Parameters
