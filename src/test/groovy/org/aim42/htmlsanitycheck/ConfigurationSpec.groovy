@@ -217,5 +217,20 @@ class ConfigurationSpec extends Specification {
         thrown MisconfigurationException
     }
 
+    // prefixOnlyHrefExtensions can be reconfigured
+    def "prefixOnlyHrefExtensions can be overwritten"() {
+        def newExtensions = ["html", "htm" ]
+
+        when: "prefixOnlyHrefExtensions are overwritten and read"
+            myConfig.overwritePrefixOnlyHrefExtensions( newExtensions )
+
+            def prefixOnlyHrefExtensions = myConfig.getConfigItemByName( Configuration.ITEM_NAME_prefixOnlyHrefExtensions)
+
+        then: "prefixOnlyExtensions contain only new elements"
+
+            prefixOnlyHrefExtensions.size() == newExtensions.size()
+
+            prefixOnlyHrefExtensions.contains( newExtensions.get(0))
+    }
 
 }

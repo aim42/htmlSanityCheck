@@ -37,7 +37,7 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
         myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, d1 )
 
-        // 4.) check
+
         htmlPage = new HtmlPage( index )
 
         missingLocalResourcesChecker = new MissingLocalResourcesChecker( myConfig)
@@ -87,7 +87,7 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
 
     @Test
-    public void testCrossReferenceIsNotChecked() {
+    public void testPureCrossReferenceIsNotChecked() {
         String HTML = """${HtmlConst.HTML_HEAD}
             <h1>dummy-heading-1</h1>
             <a href="#aim42">aim42</a>

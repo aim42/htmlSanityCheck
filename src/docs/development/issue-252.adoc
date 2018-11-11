@@ -1,0 +1,54 @@
+
+== Issue 252 (MissingLocalResourcesChecker gives false positives)
+
+****
+.Problem Description
+
+The MLR-Checker currently gives false positives ("false alarms")
+if the link has a form like
+
+[source,html]
+<a href="/foo">
+
+****
+
+=== Background
+
+The short form of a URL:
+
+[source,html]
+<a href="/foo">
+
+can actually mean one of the following:
+
+* `/foo.html`
+* more generally `/foo.<extension>`
+* `/foo/index.<extension>`
+
+where extension
+is one of the following: `html, htm, shtml, phtml, php, asp, aspx, xml`
+
+
+=== Proposed Approach
+
+* Define a proper name for the "link without extension"
+(`prefixOnlyHref`)
+* When checking local resources, add a special case
+for URLs with `prefixOnlyHref`.
+
+* Add a new configuration item with the extensions to be checked,
+the default should be the list given above
+(`ITEM_NAME_prefixOnlyHrefExtensions`)
+
+* Add these defaults to `NetUtil`
+
+
+
+
+=== Decision
+
+****
+
+Document the decision in Detail by moving all information from this Discussion to capter 9 "Design Decisions" of your arc42 docs.
+
+****

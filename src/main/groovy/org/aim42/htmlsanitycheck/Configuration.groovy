@@ -70,6 +70,9 @@ class Configuration {
     final static String ITEM_NAME_urlsToExclude = "urlsToExclude"
     final static String ITEM_NAME_hostsToExclude = "hostsToExclude"
 
+    // extensions to be tried for noExtensionHrefs (see #252, MissingLocalResourcesChecker)
+    final static String ITEM_NAME_prefixOnlyHrefExtensions = "prefixOnlyHrefExtensions"
+
     /***************************
      * private member
      **************************/
@@ -86,6 +89,8 @@ class Configuration {
         this.configurationItems.put(ITEM_NAME_httpConnectionTimeout, 5000)   // 5 secs as default timeout
         this.configurationItems.put(ITEM_NAME_ignoreIPAddresses, false)      // warning if numerical IP addresses
         this.configurationItems.put(ITEM_NAME_ignoreLocalhost, false)        // warning if localhost-URLs
+
+        this.configurationItems.put(ITEM_NAME_prefixOnlyHrefExtensions, NetUtil.POSSIBLE_EXTENSIONS)
     }
 
     /** retrieve a single configuration item
@@ -194,6 +199,14 @@ class Configuration {
         addConfigurationItem(Configuration.ITEM_NAME_httpWarningCodes, warnCodes)
         addConfigurationItem(Configuration.ITEM_NAME_httpSuccessCodes, successCodes)
     }
+
+    /**
+     * overwrites prefixOnlyHrefExtensions
+     */
+    void overwritePrefixOnlyHrefExtensions( Collection<String> prefixesToBeConsidered ) {
+        addConfigurationItem( Configuration.ITEM_NAME_prefixOnlyHrefExtensions, prefixesToBeConsidered)
+    }
+
 
     /**
      * checks plausibility of configuration:

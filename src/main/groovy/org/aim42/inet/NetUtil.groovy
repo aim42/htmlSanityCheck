@@ -17,6 +17,9 @@ class NetUtil {
     // error codes
     final static def HTTP_ERROR_CODES = (400..451) + (500..511)
 
+    // typical extensions used with "prefixOnlyHrefs" (e.g. <a href="/sample">)
+    final static def POSSIBLE_EXTENSIONS = ["html", "htm", "shtml", "phtml", "php","asp", "aspx", "xml"]
+
     /**
      * We try to check if there is a usable Internet connection available.
      * Our approximation is DNS resolution: if google.com can be resolved to an IP address,

@@ -94,7 +94,11 @@ class MissingLocalResourcesChecker extends Checker {
     - dir/file.ext
     - file:/dir/file.ext
     - file.ext#anchor
+
+    - see #252 (false positives), localResource can be a /example string referencing a file "/example.html"
+      This special case is called "prefixOnlyHref"
      */
+
     private void checkSingleLocalResource( String localResource )  {
         // the localResource is either path+filename  or filename or directory
 
@@ -117,7 +121,7 @@ class MissingLocalResourcesChecker extends Checker {
         File localFile = new File( parentDir, localResourcePath );
 
         // action required if resource does not exist
-        if (!localFile.exists() || (requireFiles && !localFile.isFile())) {
+        if (!localFile.exists() || !localFile.isFile()) {
             handleNonexistingLocalResource( localResource )
         }
     }

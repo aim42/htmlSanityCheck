@@ -104,12 +104,16 @@ Problems occur if the same link target is defined several times (also shown belo
 
 [small]#Addresses requirement <<requiredChecks, R-3>>.#
 
-Current limitation: Does *NOT* check references-with-anchors of the following form:
+===== Current limitations:
+
+Does *NOT* deep-checking of references-with-anchors of the following form:
 
 [source,html]
-<a href="api/core/Artifact.html#mvcGroupInit">GroupInit</a>
+<a href="api/Artifact.html#target">GroupInit</a>
 
-containing both a local (file) reference plus an internal anchor +#mvcGroupInit+
+containing both a local (file) reference plus an internal anchor +#target+
+
+See issues #252 (false positives) and #253 (deep links shall be checked)
 
 
 
