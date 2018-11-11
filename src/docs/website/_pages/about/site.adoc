@@ -1,0 +1,29 @@
+= About this Site
+:page-layout: single
+:page-permalink: /about/site
+:page-header: { overlay_image: /images/splash/unsplash-contact-pavan-trikutam.jpg, caption: "[**Pavan Trikutam**](https://unsplash.com/collections/389099/contact?photo=71CjSSB83Wo)" }
+:icons: font
+:page-liquid: true
+:page-sidebar: { nav: about}
+
+"Eat your own dogfood"
+-- Paul Maritz (Microsoft, 1988)
+
+This site is build with
+https://en.wikipedia.org/wiki/Eating_your_own_dog_food[eat-your-own-dogfood]
+philophy in mind: We write and maintain
+all content in AsciiDoc, hosted on Github and automatically deployed on update of the master branch.
+
+The site itself is built using the static site generator Jekyll with support
+of some nifty plugins. Hosting is done by Netlify.
+
+For development, we run jekyll within a docker container.
+
+
+== Page Statistics
+
+This site...
+
+* was last built on {{ site.time | date: '%c' }}
+* contains {{ site.pages | size }} pages
+* link:/report/htmlchecks/index.html[HtmlSanityCheck-Report]

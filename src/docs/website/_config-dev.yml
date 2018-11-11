@@ -1,0 +1,10 @@
+# This is the development configuration file for jekyll,
+# supposed to OVERRIDE settings from _config.yml
+#
+# call jekyll with: jekyll server --config _config.yml _config-dev.yml
+# =====================================================================
+
+
+url      : "http://localhost" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+baseurl  : # the subpath of your site, e.g. "/blog"
+host     : 0.0.0.0
