@@ -71,6 +71,7 @@ include:
   - _pages
   - images
   - images/splash
+  - documentation
 exclude:
   - vendor
   - .asset-cache
