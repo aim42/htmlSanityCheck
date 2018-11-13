@@ -16,4 +16,4 @@ ID = "htmlSanityCheck"
 
   # Default build command.
   #command = "echo 'default context'"
-  command="gradlew generateHTML && cp -r ./build/docs/html5/ src/docs/website/_site/documentation && cd src/docs/website/ && jekyll build"
+  command="./gradlew generateHTML && cp -r ./build/docs/html5/ src/docs/website/_site/documentation && cd src/docs/website/ && jekyll build"
