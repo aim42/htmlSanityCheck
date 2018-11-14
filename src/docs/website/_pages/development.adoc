@@ -6,4 +6,4 @@
 
 This page shall contain the Development Guide.
 
-Try /development/documentation/DevelopmentDocs.html.
+Try the link:/documentation/DevelopmentDocs.html[Development Guide].
