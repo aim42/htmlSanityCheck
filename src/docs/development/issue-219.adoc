@@ -41,7 +41,7 @@ activate BLC
 
 BLC -> BLC: setTimeout
 
-BLC -> RS: HEAD goodURL
+BLC -> RS: HEAD correctURL
 RS --> BLC: statuscode 200: OK
 
 BLC -> PS: HEAD otherURL
@@ -49,8 +49,16 @@ PS --> BLC: statuscode 405
 BLC -> PS: GET otherURL
 PS --> BLC: realStatus
 
+left footer
+
+<font color=blue>HtmlSanityCheck</font>
+https://github.com/aim42/htmlSanityCheck
+endfooter
+
 @enduml
 ....
+
+Reason for this "double check" is to keep the transmitted data volume low (and performance higher).
 
 The general behavior we implement shall be the following
 `
