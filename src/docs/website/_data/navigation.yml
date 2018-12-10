@@ -5,7 +5,7 @@ main:
   - title: "Development"
     url: /development
   - title: "Architecture"
-    url: /architecture
+    url: https://hsc.aim42.org/documentation/hsc_arc42.html
   - title: "Background"
     url: /background
   - title: "About"
