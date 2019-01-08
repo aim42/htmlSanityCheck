@@ -20,7 +20,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     HtmlPage htmlPage
     SingleCheckResults collector
 
-    private Configuration myConfig = new Configuration()
+    private Configuration myConfig
 
     /** executed once before all specs are executed **/
     def beforeSpec() {
@@ -30,7 +30,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     /* executed before every single spec */
 
     def setup() {
-
+        myConfig = new Configuration()
         brokenHttpLinksChecker = new BrokenHttpLinksChecker( myConfig )
 
         collector = new SingleCheckResults()
