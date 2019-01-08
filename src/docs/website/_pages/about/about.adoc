@@ -14,18 +14,19 @@
 to support the https://aim42.org[aim42] initiative for software improvement.
 
 Usually he works as coach and consultant for software architecture,
-(co)founded https://arc42.org[arc42], founded https://aim42.org[aim],
+(co)founded https://arc42.org[arc42],
+founded the "Architecture Improvemenent Method"
+(https://aim42.org[aim42]),
 co-founded the https://isaqb.org[iSAQB association].
 
 He has worked on the design and implementation of medium and large-scale systems
 for organizations in various sectors, mainly in finance, insurance, automotive,
 logistics, and telecommunications.
 
-Apart from consulting he has authored numerous books on software architecture and patterns
+Apart from consulting he has authored numerous books on software architecture
+and patterns
 and lives in Cologne together with _Cheffe Uli_, definitely his dream women.
 
-
-=== Contributors
 
 *Ralf D. Müller* is a Solutions Architect and an ambitious Grails developer.
 He is continually trying to simplify his work. Currently, his main concern is
