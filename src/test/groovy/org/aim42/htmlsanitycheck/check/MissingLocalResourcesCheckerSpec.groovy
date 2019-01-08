@@ -17,8 +17,9 @@ class MissingLocalResourcesCheckerSpec extends Specification {
 
     def setup() {
         myConfig = new Configuration()
-        collector = new SingleCheckResults()
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker( myConfig)
 
+        collector = new SingleCheckResults()
     }
 
     /**
