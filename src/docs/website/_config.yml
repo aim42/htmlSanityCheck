@@ -120,6 +120,18 @@ kramdown:
   smart_quotes: lsquo,rsquo,ldquo,rdquo
   enable_coderay: false
 
+# Asciidoc stuff
+asciidoc:
+  processor: asciidoctor
+  ext: asciidoc,adoc,ad
+
+asciidoctor:
+  safe: unsafe
+  attributes:
+  - idseparator=_
+  - source-highlighter=coderay
+#  - pygments-css=class
+
 
 # Sass/SCSS
 sass:
@@ -140,6 +152,7 @@ plugins:
   - jekyll-feed
   - jemoji
   - jekyll-include-cache
+  - jekyll-asciidoc
 
 # mimic GitHub Pages with --safe
 whitelist:
