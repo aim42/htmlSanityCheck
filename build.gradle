@@ -13,13 +13,14 @@ buildscript {
 }
 
 plugins {
+    id 'org.asciidoctor.convert' version '1.5.3'
     id 'groovy'
     id 'java'
     id "com.gradle.plugin-publish" version "0.9.10"
 
     // to report build results back to gradle.org
     id 'com.gradle.build-scan' version '1.16'
-
+    id "org.aim42.htmlSanityCheck" version "1.0.0"
 }
 
 repositories {
@@ -71,6 +72,9 @@ apply plugin: 'java-gradle-plugin'
 // Groovy source files using CodeNarc and generates reports from these checks.
 apply plugin: 'codenarc'
 
+// asciidoctor conversion
+apply plugin: 'org.asciidoctor.convert'
+
 // publish to gradle-plugin-repository
 apply plugin: "com.gradle.plugin-publish"
 
@@ -82,6 +86,18 @@ apply from: 'config/codenarc.gradle'
 
 // end:BuildPlugins[]
 
+htmlSanityCheck {
+    sourceDir = new File( buildDir, "html5")
+
+    // files to check - in Set-notation
+    //sourceDocuments = [ "one-file.html", "another-file.html", "index.html"]
+
+    // where to put results of sanityChecks...
+    checkingResultsDir = new File( buildDir, "reports/tests/htmlSanityCheck" )
+
+    // don't break the build if html errors are found!
+    failOnErrors = false
+}
 
 task copyResourceImages(type: Copy) {
     from('src/main/resources') {
@@ -99,23 +115,50 @@ processResources {
 
 // ========================================================
 
-
-//configure docToolchain to use the main project's config
-project('docToolchain') {
-    if (project.hasProperty('docDir')) {
-        docDir = '../.'
-        mainConfigFile = 'config/docToolchain.groovy'
-    } else {
-        println "="*80
-        println "  please initialize the docToolchain submodule by executing"
-        println "  git submodule update -i"
-        println "="*80
+asciidoctor {
+    outputDir = file(buildDir)
+    sourceDir = file(srcDir)
+    sources {
+        include "hsc_arc42.adoc",
+                "index.adoc",
+                "DevelopmentGuide.adoc"
     }
-}
+
+    attributes = [
+            doctype             : 'book',
+            icons               : 'font',
+            toc                 : 'left',
+            sectlink            : true,
+            sectanchors         : true,
+            numbered            : true,
+            'source-highlighter': 'coderay',
+            'javaVersion'       : "$javaVersion",
+            'currentDate'       : "$currentDate",
+            'versionId'         : "$version"]
+
+    resources {
+        from("${srcDir}/images") {
+            include '**'
+        }
+        into "./images"
+    }
+
+} // asciidoctor
 
 task generateDocs (
-        dependsOn: ['docToolchain:exportExcel', 'docToolchain:generateHTML', 'docToolchain:htmlSanityCheck']
-) { }
+        type: Exec,
+        group: 'docToolchain',
+        description: 'executes all steps to generate docs through docToolchain docker container'
+) {
+//    ignoreExitValue = true
+    workingDir "$projectDir"
+    if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")) {
+        executable = "$projectDir/doctoolchain.bat"
+    } else {
+        executable = "$projectDir/doctoolchain.sh"
+    }
+    args = ['exportExcel', 'generateHTML', 'htmlSanityCheck']
+}
 
 // ==========================================================
 // if you use htmlSanityCheck locally, publish with
