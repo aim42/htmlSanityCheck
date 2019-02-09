@@ -1,6 +1,9 @@
 package org.aim42.htmlsanitycheck
 
 import org.gradle.testkit.runner.GradleRunner
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
@@ -22,33 +25,27 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
 
     def setup() {
         buildDir = testProjectDir.newFolder("build")
-        buildFile = testProjectDir.newFile('build.gradle')
         htmlFile = testProjectDir.newFile("test.html")
+        buildFile = testProjectDir.newFile('build.gradle') << """
+            plugins {
+                id 'org.aim42.htmlSanityCheck'
+            }
+            
+            htmlSanityCheck {
+                sourceDir = file( "${htmlFile.parent}" )
+                checkingResultsDir = file( "${buildDir.absolutePath}" )
+            }
+        """
     }
 
     @Unroll
     def "can execute htmlSanityCheck task with Gradle version #gradleVersion"() {
         given:
         htmlFile << VALID_HTML
-        buildFile << """
-            plugins {
-                id 'org.aim42.htmlSanityCheck'
-            }
-
-            htmlSanityCheck {
-                sourceDir = file( "${htmlFile.parent}" )
-                checkingResultsDir = file( "${buildDir.absolutePath}" )
-            }
-        """
 
         when:
 
-        def result = GradleRunner.create()
-                .withGradleVersion(gradleVersion)
-                .withProjectDir(testProjectDir.root)
-                .withPluginClasspath()
-                .withArguments('htmlSanityCheck')
-                .build()
+        def result = runnerForHtmlSanityCheckTask(gradleVersion).build()
 
         then:
         result.task(":htmlSanityCheck").outcome == SUCCESS
@@ -62,25 +59,14 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
         given:
         htmlFile << INVALID_HTML
         buildFile << """
-            plugins {
-                id 'org.aim42.htmlSanityCheck'
-            }
-
             htmlSanityCheck {
-                sourceDir = file( "${htmlFile.parent}" )
-                checkingResultsDir = file( "${buildDir.absolutePath}" )
                 failOnErrors = true
             }
         """
 
         when:
 
-        def result = GradleRunner.create()
-                .withGradleVersion(gradleVersion)
-                .withProjectDir(testProjectDir.root)
-                .withPluginClasspath()
-                .withArguments('htmlSanityCheck')
-                .buildAndFail()
+        def result = runnerForHtmlSanityCheckTask(gradleVersion).buildAndFail()
 
         then:
         result.task(":htmlSanityCheck").outcome == FAILED
@@ -88,5 +74,66 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
 
         where:
         gradleVersion << GRADLE_VERSIONS
+    }
+
+    @Unroll
+    def "can select a subset of all checks to be performed with Gradle version #gradleVersion"() {
+        given:
+        htmlFile << VALID_HTML
+        buildFile << """
+            import org.aim42.htmlsanitycheck.check.AllCheckers
+
+            htmlSanityCheck {
+                checkerClasses = [AllCheckers.checkerClazzes.first()]
+            }
+        """
+
+        when:
+        runnerForHtmlSanityCheckTask(gradleVersion).build()
+        def htmlReportFile = new File(testProjectDir.root, "build/index.html")
+
+        then:
+        new HtmlReport(htmlReportFile).fileResults*.checkCount == [1]
+
+        where:
+        gradleVersion << GRADLE_VERSIONS
+    }
+
+    private GradleRunner runnerForHtmlSanityCheckTask(String gradleVersion) {
+        GradleRunner.create()
+            .withGradleVersion(gradleVersion)
+            .withProjectDir(testProjectDir.root)
+            .withPluginClasspath()
+            .withArguments('htmlSanityCheck')
+    }
+
+    private static class HtmlReport {
+        final List<HtmlReportFileResults> fileResults
+
+        HtmlReport(File file) {
+            def document = Jsoup.parse(file.text)
+            fileResults = document.select("h1[id]").collect { new HtmlReportFileResults(it) }
+        }
+    }
+
+    private static class HtmlReportFileResults {
+        final int checkCount
+
+        HtmlReportFileResults(Element element) {
+            def fileElements = nextSiblingsUntil(element, "h1[id]")
+            checkCount = fileElements.findAll { it.is("div.success") || it.is("div.failures") }.size()
+        }
+
+        private static List<Element> nextSiblingsUntil(Element element, String cssSelector) {
+            def elements = []
+            def next = element.nextElementSibling()
+            def matchFound = next.is(cssSelector)
+            while (next && !matchFound) {
+                elements << next
+                next = next.nextElementSibling()
+                matchFound = next.is(cssSelector)
+            }
+            elements
+        }
     }
 }

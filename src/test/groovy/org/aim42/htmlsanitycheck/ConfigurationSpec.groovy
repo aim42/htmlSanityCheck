@@ -233,4 +233,25 @@ class ConfigurationSpec extends Specification {
             prefixOnlyHrefExtensions.contains( newExtensions.get(0))
     }
 
+    @Unroll("checks to execute cannot be #checksToExecute")
+    def "checks to execute have to be a non empty collection"() {
+        given:
+        tempDir = File.createTempDir()
+        new File(tempDir, "a.html") << HTML_HEADER
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tempDir)
+
+        and:
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_checksToExecute, checksToExecute)
+
+        when:
+        myConfig.valid
+
+        then:
+        def e = thrown(MisconfigurationException)
+        e.message == "checks to execute have to be a non empty collection"
+
+        where:
+        checksToExecute << [[], "not a collection"]
+    }
+
 }

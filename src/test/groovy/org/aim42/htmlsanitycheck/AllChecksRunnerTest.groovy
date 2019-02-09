@@ -76,6 +76,20 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
     }
 
+    @Test
+    public void testUsingSubsetOfChecks() {
+        tmpFile = File.createTempFile("testfile", ".html") << """$HTML_HEAD<body><title>hsc</title></body></html>"""
+
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tmpFile.parentFile)
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_checksToExecute, [AllCheckers.checkerClazzes.first()])
+
+        allChecksRunner = new AllChecksRunner(myConfig)
+        SinglePageResults pageResults = allChecksRunner.performChecksForOneFile(tmpFile)
+
+        assertEquals(1, pageResults.singleCheckResults.size())
+    }
+
 }
 
 /************************************************************************

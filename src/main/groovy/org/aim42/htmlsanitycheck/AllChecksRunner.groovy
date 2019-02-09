@@ -76,7 +76,8 @@ class AllChecksRunner {
 
         // TODO: #185 (checker classes shall be detected automatically (aka CheckerFactory)
         // CheckerFactory needs the configuration
-        this.checkers = CheckerCreator.createCheckerClassesFrom( AllCheckers.checkerClazzes, myConfig )
+        Set<Class> checkerClasses = myConfig.getConfigItemByName(Configuration.ITEM_NAME_checksToExecute)
+        this.checkers = CheckerCreator.createCheckerClassesFrom( checkerClasses, myConfig )
 
         this.resultsForAllPages = new PerRunResults()
 
