@@ -87,6 +87,8 @@ junitResultsDir:: (optional) directory where the results written to in JUnit XML
 failOnErrors:: (optional) if set to "true", the build will fail if any error was found in the checked pages.
                       Defaults to `false`
 
+checkerClasses:: (optional) a set of checker classes to be executed. Defaults to all available checker classes.
+
 
 
 == Examples
@@ -115,6 +117,8 @@ htmlSanityCheck {
 .build.gradle (extensive example)
 [source, groovy]
 ----
+
+import org.aim42.htmlsanitycheck.check.*
 
 buildscript {
     repositories {
@@ -201,6 +205,9 @@ htmlSanityCheck {
     httpWarningCodes = [401]
     // httpErrorCodes
     // httpSuccessCodes
+
+    // only execute a subset of all available checks
+    checkerClasses = [DuplicateIdChecker, MissingImageFilesChecker]
 
 }
 

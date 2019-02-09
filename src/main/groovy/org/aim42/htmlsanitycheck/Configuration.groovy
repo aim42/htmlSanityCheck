@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck
 
 import org.aim42.filesystem.FileCollector
+import org.aim42.htmlsanitycheck.check.AllCheckers
 import org.aim42.inet.NetUtil
 
 // see end-of-file for license information
@@ -73,6 +74,8 @@ class Configuration {
     // extensions to be tried for noExtensionHrefs (see #252, MissingLocalResourcesChecker)
     final static String ITEM_NAME_prefixOnlyHrefExtensions = "prefixOnlyHrefExtensions"
 
+    final static String ITEM_NAME_checksToExecute = "checksToExecute"
+
     /***************************
      * private member
      **************************/
@@ -91,6 +94,8 @@ class Configuration {
         this.configurationItems.put(ITEM_NAME_ignoreLocalhost, false)        // warning if localhost-URLs
 
         this.configurationItems.put(ITEM_NAME_prefixOnlyHrefExtensions, NetUtil.POSSIBLE_EXTENSIONS)
+
+        this.configurationItems.put(ITEM_NAME_checksToExecute, AllCheckers.checkerClazzes)
     }
 
     /** retrieve a single configuration item
@@ -255,6 +260,11 @@ class Configuration {
                 && (srcDir.isDirectory())
                 && (FileCollector.getAllHtmlFilesFromDirectory(srcDir).size() == 0)) {
             throw new MisconfigurationException("no html file found in $srcDir")
+        }
+
+        Object checksToExecute = getConfigItemByName(Configuration.ITEM_NAME_checksToExecute)
+        if (!(checksToExecute instanceof Collection) || !checksToExecute) {
+            throw new MisconfigurationException("checks to execute have to be a non empty collection")
         }
 
         // if no exception has been thrown until now,

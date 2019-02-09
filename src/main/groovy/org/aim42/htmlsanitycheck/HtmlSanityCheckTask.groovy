@@ -1,6 +1,6 @@
 package org.aim42.htmlsanitycheck
 
-
+import org.aim42.htmlsanitycheck.check.AllCheckers
 import org.gradle.api.DefaultTask
 
 // see end-of-file for license information
@@ -68,6 +68,9 @@ class HtmlSanityCheckTask extends DefaultTask {
     @Optional
     @Input
     Collection<Integer> httpSuccessCodes
+
+    @Input
+    Set<Class> checkerClasses = AllCheckers.checkerClazzes
 
     // private stuff
     // **************************************************************************
@@ -175,6 +178,8 @@ See ${checkingResultsDir} for a detailed report."""
 
             addConfigurationItem(Configuration.ITEM_NAME_ignoreLocalhost, ignoreLocalHost)
             addConfigurationItem(Configuration.ITEM_NAME_ignoreIPAddresses, ignoreIPAddresses)
+
+            addConfigurationItem(Configuration.ITEM_NAME_checksToExecute, checkerClasses)
 
             // in case we have configured specific interpretations of http status codes
             overwriteHttpSuccessCodes(httpSuccessCodes)
