@@ -10,33 +10,7 @@ import java.util.regex.Pattern
 
 class FileCollector {
 
-    // (?i): ignore-case
-    // htm(l): either htm or html
-    // at least one character left of the dot
-    public final static Pattern HTML_FILE_EXTENSION_PATTERN = ~/(?i).+\.htm(l)?$/
-
-    public final static Closure<Boolean> INCLUDE_HTML_FILES = { File file ->
-        // allow only html or htm files
-        (file.name ==~ HTML_FILE_EXTENSION_PATTERN)
-    }
-
     public final static String IMAGE_FILE_EXTENSION_PATTERN = ~/(?i).+\.(jpg|jpeg|png|gif|bmp|svg)?$/
-
-
-    public static Boolean isHtmlFile(File file) {
-        return (isHtmlFile(file.absolutePath)
-                && file.isFile())
-    }
-
-    /**
-     * checks if @param fileName represents a valid html file,
-     * ignoring the files' content!
-     * @param fileName
-     * @return
-     */
-    public static Boolean isHtmlFile(String fileName) {
-        return (fileName ==~ HTML_FILE_EXTENSION_PATTERN)
-    }
 
     /**
      * checks if @param fileName represents an image file name,
@@ -46,37 +20,6 @@ class FileCollector {
     public static Boolean isImageFileName(String fileName) {
         return (fileName ==~ IMAGE_FILE_EXTENSION_PATTERN)
     }
-
-    /**
-     * The main use-case for this class: returns all configured html files as Set<File>.
-     * @param srcDir (mandatory) Directory where the html files are located. Type: File. Default: build/docs
-     *            can be given as File or String
-     * @param sourceDocs (optional) Defaults to all files in ${srcDir}.
-     */
-    public static Set<File> getHtmlFilesToCheck(File srcDir, Collection<String> sourceDocs) {
-        // first case: no document names given -> return all html files
-        // in directory
-        if ((sourceDocs == null) || (sourceDocs?.empty)) {
-            return getAllHtmlFilesFromDirectory(srcDir)
-        } else {
-            return getAllConfiguredHtmlFiles(srcDir, sourceDocs)
-        }
-    }
-
-    // if for other types of input parameters, convert and delegate
-
-    public static Set<File> getHtmlFilesToCheck(File srcDir, String sourceDoc) {
-        return getHtmlFilesToCheck(srcDir, [sourceDoc])
-    }
-
-    public static Set<File> getHtmlFilesToCheck(String srcDirName, ArrayList<String> sourceDocs) {
-        return getHtmlFilesToCheck(new File(srcDirName), sourceDocs)
-    }
-
-    public static Set<File> getHtmlFilesToCheck(String srcDirName, String sourceDocName) {
-        return getHtmlFilesToCheck(new File(srcDirName), [sourceDocName])
-    }
-
 
     /**
      * returns all configured image files as Set<File>
@@ -92,25 +35,6 @@ class FileCollector {
         } else {
             return getAllConfiguredImageFiles(srcDir, sourceDocs)
         }
-    }
-
-    /**
-     * returns all html files in a given directory.
-     * (recursively looks in subdirectories)
-     * @param dir where to look for matching files
-     * @return all files with appropriate extension
-     */
-    public static Set<File> getAllHtmlFilesFromDirectory(File dir) {
-        Set<File> files = new HashSet<File>()
-
-        // scan only files, not directories
-        dir.eachFileRecurse(FileType.FILES) { file ->
-            if (isHtmlFile(file)) {
-                files.add(file)
-            }
-        }
-
-        return files
     }
 
     /**
@@ -130,24 +54,6 @@ class FileCollector {
         }
 
         return files
-    }
-
-    /**
-     * returns all configured html files from @param srcDocs
-     * which really exist below @param srcDocs
-     */
-    public static Set<File> getAllConfiguredHtmlFiles(File srcDir, Collection<String> srcDocs) {
-        Set<File> files = new HashSet<File>()
-
-        srcDocs.each { configuredFileName ->
-            File file = new File(srcDir, configuredFileName)
-            if (file.exists()) {
-                files.add(file)
-            }
-        }
-
-        return files
-
     }
 
     /**

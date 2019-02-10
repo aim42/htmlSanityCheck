@@ -113,7 +113,7 @@ class Configuration {
     /**
      * convenience method for simplified testing
      */
-     synchronized void addSourceFileConfiguration(File srcDir, Set<String> srcDocs) {
+     synchronized void addSourceFileConfiguration(File srcDir, Collection<File> srcDocs) {
         addConfigurationItem(ITEM_NAME_sourceDir, srcDir)
         addConfigurationItem(ITEM_NAME_sourceDocuments, srcDocs)
     }
@@ -232,34 +232,18 @@ class Configuration {
             throw new MisconfigurationException("source directory must not be null")
         }
 
-        // cannot check if both input params are null
-        if ((srcDir == null) && (srcDocs == null)) {
-            throw new MisconfigurationException("both sourceDir and sourceDocs were null")
-        }
-
-        // no srcDir was given and empty SrcDocs
-        if ((!srcDir) && (srcDocs != null)) {
-            if ((srcDocs?.empty)) {
-                throw new MisconfigurationException("both sourceDir and sourceDocs must not be empty")
-            }
-        }
-        // non-existing srcDir is absurd too
         if ((!srcDir.exists())) {
             throw new MisconfigurationException("given sourceDir $srcDir does not exist.")
         }
 
-        // if srcDir exists but is empty... no good :-(
-        if ((srcDir.exists())
-                && (srcDir.isDirectory())
-                && (srcDir.directorySize() == 0)) {
-            throw new MisconfigurationException("given sourceDir $srcDir is empty")
+        // cannot check if both input params are null
+        if (srcDocs == null) {
+            throw new MisconfigurationException("source documents must not be null")
         }
 
-        // if srcDir exists but does not contain any html file... no good
-        if ((srcDir.exists())
-                && (srcDir.isDirectory())
-                && (FileCollector.getAllHtmlFilesFromDirectory(srcDir).size() == 0)) {
-            throw new MisconfigurationException("no html file found in $srcDir")
+        // empty SrcDocs
+        if (srcDocs.empty) {
+            throw new MisconfigurationException("source documents must not be empty")
         }
 
         Object checksToExecute = getConfigItemByName(Configuration.ITEM_NAME_checksToExecute)

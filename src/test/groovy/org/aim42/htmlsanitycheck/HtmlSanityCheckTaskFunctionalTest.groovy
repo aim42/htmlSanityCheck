@@ -77,6 +77,30 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
     }
 
     @Unroll
+    def "can specify a subset of files in source directory to be checked"() {
+        given:
+        htmlFile << VALID_HTML
+        testProjectDir.newFile("test-invalid.html") << INVALID_HTML
+        buildFile << """
+            htmlSanityCheck {
+                sourceDocuments = fileTree(sourceDir) {
+                    include '**/$htmlFile.name'
+                } 
+                failOnErrors = true
+            }
+        """
+
+        when:
+        def result = runnerForHtmlSanityCheckTask(gradleVersion).build()
+
+        then:
+        result.task(":htmlSanityCheck").outcome == SUCCESS
+
+        where:
+        gradleVersion << GRADLE_VERSIONS
+    }
+
+    @Unroll
     def "can select a subset of all checks to be performed with Gradle version #gradleVersion"() {
         given:
         htmlFile << VALID_HTML
