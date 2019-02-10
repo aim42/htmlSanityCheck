@@ -74,8 +74,8 @@ This task exposes a few properties as part of its configuration:
 [horizontal]
 sourceDir:: (mandatory) directory where the html files are located. Type: File. Default: `build/docs`.
 sourceDocuments:: (optional) an override to process several source files, which may be a subset of all
-                      files available in [x-]`${sourceDir}`. Type: Set.
-                      Defaults to all files in [x-]`${sourceDir}`.
+                      files available in [x-]`${sourceDir}`. Type: `org.gradle.api.file.FileCollection`.
+                      Defaults to all files in [x-]`${sourceDir}` whose names end with `.html`.
 
 checkingResultsDir:: (optional) directory where the checking results written to.
                       Defaults to `${buildDir}/report/htmlchecks/`
@@ -100,9 +100,6 @@ apply plugin: 'org.aim42.htmlSanityCheck'
 
 htmlSanityCheck {
     sourceDir = new File( "$buildDir/docs" )
-
-    // files to check - in Set-notation
-    sourceDocuments = [ "one-file.html", "another-file.html", "index.html"]
 
     // where to put results of sanityChecks...
     checkingResultsDir = new File( "$buildDir/report/htmlchecks" )
@@ -188,8 +185,10 @@ htmlSanityCheck {
 
     sourceDir = new File( htmlOutputPath )
 
-    // files to check, in Set-notation
-    sourceDocuments = [ "many-errors.html", "no-errors.html"]
+    // files to check, specified as a file tree with filtering
+    sourceDocuments = fileTree(sourceDir) {
+        include "many-errors.html", "no-errors.html"
+    }
 
     // where to put results of sanityChecks...
     checkingResultsDir = new File( checkingResultsPath )
