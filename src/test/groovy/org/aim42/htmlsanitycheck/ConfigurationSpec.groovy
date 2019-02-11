@@ -147,7 +147,7 @@ class ConfigurationSpec extends Specification {
         htmlFile = new File(tempDir, "a.html") << HTML_HEADER
 
         when: "we create a configuration with this single file"
-        myConfig.addSourceFileConfiguration(tempDir, new HashSet(["a.html"]))
+        myConfig.addSourceFileConfiguration(tempDir, [htmlFile])
 
         myConfig.isValid()
 
@@ -156,21 +156,6 @@ class ConfigurationSpec extends Specification {
         tempDir.isDirectory()
         tempDir.directorySize() > 0
         notThrown(Exception)
-
-    }
-
-
-    def "configuring a single non-html file is not ok"() {
-        given:
-        tempDir = File.createTempDir()
-        nonHtmlFile = new File(tempDir, "zypern.txt") << "this is no html"
-        myConfig.addSourceFileConfiguration(tempDir, new HashSet(["zypern.txt"]))
-
-        when:
-        myConfig.isValid()
-
-        then:
-        thrown MisconfigurationException
 
     }
 
@@ -197,13 +182,10 @@ class ConfigurationSpec extends Specification {
         srcDir                        | srcDocs
         null                          | null
         new File("/_non/exis_/d_ir/") | null
-        new File("/_non/exis_/d_ir/") | new HashSet<String>()
+        new File("/_non/exis_/d_ir/") | []
 
         // existing but empty directory is absurd too...
-        File.createTempDir()          | null
-
-        // existing directory with nonexisting files too...
-        File.createTempDir()          | ["non.existing", "blurb.htm"].toSet()
+        File.createTempDir()          | []
 
     }
 
@@ -231,6 +213,28 @@ class ConfigurationSpec extends Specification {
             prefixOnlyHrefExtensions.size() == newExtensions.size()
 
             prefixOnlyHrefExtensions.contains( newExtensions.get(0))
+    }
+
+    @Unroll("checks to execute cannot be #checksToExecute")
+    def "checks to execute have to be a non empty collection"() {
+        given:
+        tempDir = File.createTempDir()
+        htmlFile = new File(tempDir, "a.html") << HTML_HEADER
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tempDir)
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, [htmlFile])
+
+        and:
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_checksToExecute, checksToExecute)
+
+        when:
+        myConfig.valid
+
+        then:
+        def e = thrown(MisconfigurationException)
+        e.message == "checks to execute have to be a non empty collection"
+
+        where:
+        checksToExecute << [[], "not a collection"]
     }
 
 }

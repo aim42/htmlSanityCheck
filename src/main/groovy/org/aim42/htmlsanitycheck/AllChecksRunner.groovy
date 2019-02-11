@@ -68,15 +68,12 @@ class AllChecksRunner {
 
         myConfig = pConfig
 
-        this.filesToCheck = FileCollector.getHtmlFilesToCheck(
-                myConfig.getConfigItemByName(Configuration.ITEM_NAME_sourceDir),
-                myConfig.getConfigItemByName (Configuration.ITEM_NAME_sourceDocuments)
-        )
-
+        this.filesToCheck = myConfig.getConfigItemByName(Configuration.ITEM_NAME_sourceDocuments)
 
         // TODO: #185 (checker classes shall be detected automatically (aka CheckerFactory)
         // CheckerFactory needs the configuration
-        this.checkers = CheckerCreator.createCheckerClassesFrom( AllCheckers.checkerClazzes, myConfig )
+        Set<Class> checkerClasses = myConfig.getConfigItemByName(Configuration.ITEM_NAME_checksToExecute)
+        this.checkers = CheckerCreator.createCheckerClassesFrom( checkerClasses, myConfig )
 
         this.resultsForAllPages = new PerRunResults()
 

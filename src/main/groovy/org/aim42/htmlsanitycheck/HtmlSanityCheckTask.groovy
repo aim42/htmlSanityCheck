@@ -1,11 +1,12 @@
 package org.aim42.htmlsanitycheck
 
-
+import org.aim42.htmlsanitycheck.check.AllCheckers
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
+import org.gradle.api.file.FileCollection
+import org.gradle.api.tasks.*
 
 // see end-of-file for license information
-import org.gradle.api.GradleException
-import org.gradle.api.tasks.*
 
 /**
  * Entry class for the gradle-plugin.
@@ -19,9 +20,8 @@ class HtmlSanityCheckTask extends DefaultTask {
 
     //
     // we support checking several named files
-    @Optional
-    @Input
-    Set<String> sourceDocuments
+    @InputFiles
+    FileCollection sourceDocuments
 
     // or all (html) files in a directory
     @InputDirectory
@@ -69,6 +69,9 @@ class HtmlSanityCheckTask extends DefaultTask {
     @Input
     Collection<Integer> httpSuccessCodes
 
+    @Input
+    Set<Class> checkerClasses = AllCheckers.checkerClazzes
+
     // private stuff
     // **************************************************************************
 
@@ -96,10 +99,18 @@ class HtmlSanityCheckTask extends DefaultTask {
 
     }
 
-    /**
-     * entry point for several html sanity checks
-     * @author Gernot Starke <gs@gernotstarke.de>
-     */
+    void setSourceDir(File sourceDir) {
+        this.sourceDir = sourceDir
+        if (sourceDocuments == null) {
+            sourceDocuments = project.fileTree(sourceDir)
+            sourceDocuments.include('**/*.html')
+        }
+    }
+
+/**
+ * entry point for several html sanity checks
+ * @author Gernot Starke <gs@gernotstarke.de>
+ */
     @TaskAction
     public void sanityCheckHtml() {
 
@@ -128,7 +139,7 @@ class HtmlSanityCheckTask extends DefaultTask {
             logger.info("allFilesToCheck" + allFilesToCheck.toString(), "")
 
             // create an AllChecksRunner...
-            def allChecksRunner = new AllChecksRunner( myConfig )
+            def allChecksRunner = new AllChecksRunner(myConfig)
 
             // ... and perform the actual checks
             def allChecks = allChecksRunner.performAllChecks()
@@ -163,7 +174,7 @@ See ${checkingResultsDir} for a detailed report."""
         Configuration tmpConfig = new Configuration()
 
         tmpConfig.with {
-            addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, sourceDocuments)
+            addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, sourceDocuments.files)
             addConfigurationItem(Configuration.ITEM_NAME_sourceDir, sourceDir)
             addConfigurationItem(Configuration.ITEM_NAME_checkingResultsDir, checkingResultsDir)
             addConfigurationItem(Configuration.ITEM_NAME_junitResultsDir, junitResultsDir)
@@ -175,6 +186,8 @@ See ${checkingResultsDir} for a detailed report."""
 
             addConfigurationItem(Configuration.ITEM_NAME_ignoreLocalhost, ignoreLocalHost)
             addConfigurationItem(Configuration.ITEM_NAME_ignoreIPAddresses, ignoreIPAddresses)
+
+            addConfigurationItem(Configuration.ITEM_NAME_checksToExecute, checkerClasses)
 
             // in case we have configured specific interpretations of http status codes
             overwriteHttpSuccessCodes(httpSuccessCodes)

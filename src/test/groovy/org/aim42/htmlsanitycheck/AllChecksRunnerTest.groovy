@@ -22,7 +22,7 @@ class AllChecksRunnerTest extends GroovyTestCase {
         // create file with proper html content
         tmpFile = File.createTempFile("testfile", ".html") <<HTML
 
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
+        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, [tmpFile])
         myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile.parentFile)
 
 
@@ -62,7 +62,7 @@ class AllChecksRunnerTest extends GroovyTestCase {
         // create file
         tmpFile = File.createTempFile("testfile", ".html") << HTML
 
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, tmpFile.name)
+        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, [tmpFile])
         myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile.parentFile)
 
         allChecksRunner = new AllChecksRunner( myConfig )
@@ -74,6 +74,20 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
         assertEquals("expected 2 findings", 2, pageResults.nrOfFindingsOnPage())
 
+    }
+
+    @Test
+    public void testUsingSubsetOfChecks() {
+        tmpFile = File.createTempFile("testfile", ".html") << """$HTML_HEAD<body><title>hsc</title></body></html>"""
+
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, [tmpFile])
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tmpFile.parentFile)
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_checksToExecute, [AllCheckers.checkerClazzes.first()])
+
+        allChecksRunner = new AllChecksRunner(myConfig)
+        SinglePageResults pageResults = allChecksRunner.performChecksForOneFile(tmpFile)
+
+        assertEquals(1, pageResults.singleCheckResults.size())
     }
 
 }
