@@ -123,7 +123,7 @@ class URLUtil {
         // simple solution works for htmlSanityCheck
 
 
-        String illegalCharsRegex = / |!|\*|\$/
+        String illegalCharsRegex = / |\*|\$/
 
         Matcher matcher = (aLink =~ illegalCharsRegex)
 

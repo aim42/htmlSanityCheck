@@ -16,9 +16,11 @@ class URLUtilSpec extends Specification {
         false | "#Context-Analysis"
         false | "#Context_Analysis"
         false | "#Context--Analysis"
+        false | "/forum/#!forum/randoop-discuss" // correct, as reported in #271
 
         true  | "#Context Analysis" // regression test, contains blank
         true  | "*Context-Analysis" // * is not allowed
+
     }
 
 
