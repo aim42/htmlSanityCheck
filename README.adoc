@@ -1,5 +1,5 @@
 = image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
-:version: 1.1.0
+:version: 1.1.1
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
@@ -27,7 +27,6 @@ It can be used as Gradle plugin. Standalone Java and graphical UI
 are planned for future releases.
 
 
-image:https://badge.waffle.io/aim42/htmlsanitycheck.svg?columns=all[https://waffle.io/aim42/htmlsanitycheck]
 image:https://img.shields.io/badge/License-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"]
 image:https://travis-ci.org/aim42/htmlSanityCheck.svg?branch=master["Build Status", link="https://travis-ci.org/aim42/htmlSanityCheck"]
 
@@ -128,7 +127,7 @@ buildscript {
 
 
 plugins {
-    id 'org.aim42.htmlsanitycheck' version '1.1.0'
+    id 'org.aim42.htmlsanitycheck' version '1.1.1'
     id 'org.asciidoctor.convert' version '1.5.8'
 }
 
