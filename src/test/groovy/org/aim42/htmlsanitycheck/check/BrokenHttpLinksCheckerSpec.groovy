@@ -84,6 +84,33 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
     }
 
+
+    def "regression for issue 272"(String goodUrl) {
+        given: "an HTML page with a single correct anchor/link"
+        String HTML = """$HtmlConst.HTML_HEAD 
+                <a href=$goodUrl>url that lead to unknown host</a>
+                $HtmlConst.HTML_END """
+
+        htmlPage = new HtmlPage(HTML)
+
+        when: "Douglas Cayers url is checked"
+        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+        then: "a single item is checked"
+        collector.nrOfItemsChecked == 1
+
+        and: "the result is ok"
+        collector.nrOfProblems() == 0
+
+        where:
+           goodUrl << [ "http://junit.sourceforge.net/javadoc/org/junit/Before.html",
+                       "http://plumelib.org/plume-util/api/org/plumelib/util/DeterministicObject.html",
+                       "http://people.csail.mit.edu/cpacheco/publications/randoop-case-study-abstract.html",
+                       "https://douglascayers.com/2015/05/30/how-to-set-custom-java-path-after-installing-jdk-8/"
+           ]
+    }
+
+
     def "single bad link is identified as problem"() {
 
         given: "an HTML page with a single (bad) link"

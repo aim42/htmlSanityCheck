@@ -6,6 +6,7 @@ import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.inet.NetUtil
+import org.aim42.net.TrustAllCertificates
 
 
 /**
@@ -173,7 +174,11 @@ class BrokenHttpLinksChecker extends Checker {
         }
     }
 
+
     private HttpURLConnection getNewURLConnection(URL url) {
+
+        TrustAllCertificates.install()
+
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("HEAD");
 
@@ -186,7 +191,7 @@ class BrokenHttpLinksChecker extends Checker {
         // to avoid nasty 403 errors (forbidden), we set a referrer and user-agent
         //
         connection.setRequestProperty("Referer", "https://aim42.org");
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0");
 
         // TODO followRedirects should be a configuration parameter
         // that defaults to false
