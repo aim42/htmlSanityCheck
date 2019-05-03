@@ -51,6 +51,7 @@ abstract class Reporter {
      */
     public addCheckingResultsForOnePage( SinglePageResults singlePageResults) {
         pageResults.add( singlePageResults )
+        pageResults.sort(); // enforce sorting, fixing issue #128
     }
 
     /**
