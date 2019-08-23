@@ -10,7 +10,6 @@ import org.aim42.htmlsanitycheck.html.URLUtil
 
 class BrokenCrossReferencesChecker extends SuggestingChecker {
 
-
     private List<String> listOfIds    // id="XYZ"
     private List<String> hrefList
     private Set<String> hrefSet
@@ -18,7 +17,6 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
     BrokenCrossReferencesChecker(Configuration pConfig) {
         super(pConfig)
     }       // <a href="XYZ"...>
-
 
     @Override
     protected void initCheckingResultsDescription() {
@@ -38,8 +36,7 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
 
     @Override
     protected SingleCheckResults check(final HtmlPage pageToCheck) {
-
-        //get list of all a-tags "<a src=..." in html file
+        //get list of all a-tags "<a href=..." in html file
         hrefList = pageToCheck.getAllHrefStrings()
         hrefSet = hrefList.toSet()
 
@@ -51,12 +48,10 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
         return checkingResults
     }
 
-    /*
+    /**
      * check all internal links against the existing id's
      */
-
     private void checkAllInternalLinks() {
-
         // for all hrefSet check if the corresponding id exists
         hrefSet.each { href ->
             //if (URLUtil.isValidURL(href))
@@ -64,13 +59,11 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
         }
     }
 
-    /*
-    * check a single internal link (href) against the existing id's within
-    * the html document
+    /**
+     * check a single internal link (href) against the existing id's within
+     * the html document
      */
-
     private void checkSingleInternalLink(String href) {
-
         checkingResults.incNrOfChecks()
         if (URLUtil.containsInvalidChars(href)) {
             // we found link with illegal characters!
@@ -93,33 +86,29 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
         }
     }
 
-
-
-
     /**
      * check if the id for the href parameter exists
      *
      * @param href = "#XYZ" in id="XYZ"
      * */
     private void doesLinkTargetExist(String href) {
-
         if (href == '#') {
             return
         }
 
         // strip href of its leading "#"
         String linkTarget = (href.startsWith("#")) ? href[1..-1] : href
-
+        // fragment can be URL-encoded
+        linkTarget = URLDecoder.decode(linkTarget, 'UTF-8')
 
         if (!listOfIds.contains(linkTarget)) {
             // we found a broken link!
             addBrokenLinkToResults(linkTarget, href)
         }
-
     }
 
-    /*
-    * bookkeeping the broken links that we found
+    /**
+     * bookkeeping the broken links that we found
      */
     private void addBrokenLinkToResults(String linkTarget, String href) {
         String findingText = "link target \"$linkTarget\" missing"
@@ -132,16 +121,13 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
 
         // determine suggestions "what could have been meant?"
 
-
         checkingResults.newFinding(findingText, nrOfReferences)
     }
-
 
     private int countNrOfReferences(String href) {
         int nrOfReferences = hrefList.findAll { it == href }.size()
         return nrOfReferences
     }
-
 
 }
 /*========================================================================
@@ -160,5 +146,3 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
  See the License for the specific language governing permissions and
  limitations under the License.
  ========================================================================*/
-
-

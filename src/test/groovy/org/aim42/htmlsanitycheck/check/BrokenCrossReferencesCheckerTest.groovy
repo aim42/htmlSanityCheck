@@ -1,63 +1,47 @@
 package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
-import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
-import org.junit.Before
 import org.junit.Test
+
+import static org.aim42.htmlsanitycheck.html.HtmlConst.HTML_END
+import static org.aim42.htmlsanitycheck.html.HtmlConst.HTML_HEAD
 
 // see end-of-file for license information
 
 
 class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
-    Checker undefinedInternalLinksChecker
-    HtmlPage htmlPage
-    SingleCheckResults collector
+    SingleCheckResults collector = new SingleCheckResults()
 
-    @Before
-    public void setUp() {
-      collector = new SingleCheckResults()
+    void check(String htmlBody) {
+        String html = HTML_HEAD + htmlBody + HTML_END
+        HtmlPage htmlPage = new HtmlPage(html)
+        collector = new BrokenCrossReferencesChecker().performCheck(htmlPage)
     }
 
-
     @Test
-    public void testExternalLinkShallBeIgnored() {
-        String HTML = """$HtmlConst.HTML_HEAD
-
-                   <h1>dummy-heading-1</h1>
-                   <a href="http://github.com/aim42">aim42</a>
-                   <a href="https://github.com/arc42">arc42</a>
-              $HtmlConst.HTML_END
-              """
-
-        htmlPage = new HtmlPage( HTML )
-
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
-        collector = undefinedInternalLinksChecker.performCheck(htmlPage)
-
+    void testExternalLinkShallBeIgnored() {
+        check '''
+           <h1>dummy-heading-1</h1>
+           <a href="http://github.com/aim42">aim42</a>
+           <a href="https://github.com/arc42">arc42</a>
+        '''
 
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
         assertEquals( "expected 2 checks", 2, collector.nrOfItemsChecked)
-
     }
 
-
     @Test
-    public void testOneGoodOneBrokenLink() {
-        String HTML_WITH_A_TAGS_AND_ID = """
-           $HtmlConst.HTML_HEAD
-                   <h1>dummy-heading-1</h1>
-                   <a href="#aim42">link-to-aim42</a>
-                   <h2 id="aim42">aim42 Architecture Improvement</h3>
-                   <a href="#nonexisting">non-existing-link</a>
-           $HtmlConst.HTML_END
-              """
+    void testOneGoodOneBrokenLink() {
+        String HTML_WITH_A_TAGS_AND_ID = '''
+           <h1>dummy-heading-1</h1>
+           <a href="#aim42">link-to-aim42</a>
+           <h2 id="aim42">aim42 Architecture Improvement</h3>
+           <a href="#nonexisting">non-existing-link</a>
+        '''
 
-        htmlPage = new HtmlPage( HTML_WITH_A_TAGS_AND_ID )
-
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
-        collector = undefinedInternalLinksChecker.performCheck(htmlPage)
+        check HTML_WITH_A_TAGS_AND_ID
 
         assertEquals( "expected one finding", 1, collector.nrOfProblems())
         assertEquals( "expected four checks", 4, collector.nrOfItemsChecked)
@@ -69,22 +53,14 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
         assertEquals(message, expected, actual)
     }
 
-
     @Test
-    public void testLinkWithIllegalCharacter() {
+    void testLinkWithIllegalCharacter() {
         String HTML_WITH_BAD_LINK = '''
-           <html>
-             <head></head>
-              <body>
-                   <h1>dummy-heading-1</h1>
-                   <a href="#Context Analysis">context</a>
-              </body>
-           </html>'''
+           <h1>dummy-heading-1</h1>
+           <a href="#Context Analysis">context</a>
+        '''
 
-        htmlPage = new HtmlPage( HTML_WITH_BAD_LINK )
-
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
-        collector = undefinedInternalLinksChecker.performCheck(htmlPage)
+        check HTML_WITH_BAD_LINK
 
         assertEquals( "expected one finding", 1, collector.nrOfProblems())
         assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
@@ -92,49 +68,33 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
         String actual = collector.findings.first()
         String expected = "link \"#Context Analysis\" contains illegal characters"
         String message = "expected $expected"
-
         assertEquals(message, expected, actual)
     }
 
-
     @Test
-    public void testTwoGoodLinks() {
+    void testTwoGoodLinks() {
         String HTML_WITH_TWO_TAGS_AND_ID = '''
-           <html>
-             <head></head>
-              <body>
-                   <h1>dummy-heading-1</h1>
-                   <a href="#aim42">link-to-aim42</a>
-                   <h2 id="aim42">aim42 Architecture Improvement</h3>
-                   <a href="#arc42">arc42</a>
-                   <h2 id="arc42">arc42</a>
-              </body>
-           </html>'''
+           <h1>dummy-heading-1</h1>
+           <a href="#aim42">link-to-aim42</a>
+           <h2 id="aim42">aim42 Architecture Improvement</h3>
+           <a href="#arc42">arc42</a>
+           <h2 id="arc42">arc42</a>
+        '''
 
-        htmlPage = new HtmlPage( HTML_WITH_TWO_TAGS_AND_ID )
-
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
-        collector = undefinedInternalLinksChecker.performCheck( htmlPage )
+        check HTML_WITH_TWO_TAGS_AND_ID
 
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
         assertEquals( "expected four checks", 4, collector.nrOfItemsChecked)
     }
 
     @Test
-    public void testTwoBrokenLinks() {
+    void testTwoBrokenLinks() {
         String HTML_WITH_TWO_LINKS_NO_ID = '''
-           <html>
-             <head></head>
-              <body>
-                   <a href="#aim42">link-to-aim42</a>
-                   <a href="#arc42">non-existing-link</a>
-              </body>
-           </html>'''
+           <a href="#aim42">link-to-aim42</a>
+           <a href="#arc42">non-existing-link</a>
+        '''
 
-        htmlPage = new HtmlPage( HTML_WITH_TWO_LINKS_NO_ID)
-
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
-        collector = undefinedInternalLinksChecker.performCheck(htmlPage)
+        check HTML_WITH_TWO_LINKS_NO_ID
 
         assertEquals( "expected two findings", 2, collector.nrOfProblems())
         assertEquals( "expected four checks", 4, collector.nrOfItemsChecked)
@@ -153,22 +113,14 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
     }
 
     @Test
-    public void testReferenceCount() {
-        String HTML = """$HtmlConst.HTML_HEAD
-                   <a href="#aim42">link-0</a>
-                   <a href="#aim42">link-1</a>
-                   <a href="#aim42">link-2</a>
-                   <a href="#aim42">link-3</a>
-                   <a href="#aim42">link-4</a>
-
-              </body>
-           </html>"""
-
-        htmlPage = new HtmlPage( HTML)
-
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
-
-        collector = undefinedInternalLinksChecker.performCheck(htmlPage)
+    void testReferenceCount() {
+        check '''
+           <a href="#aim42">link-0</a>
+           <a href="#aim42">link-1</a>
+           <a href="#aim42">link-2</a>
+           <a href="#aim42">link-3</a>
+           <a href="#aim42">link-4</a>
+        '''
 
         assertEquals( "expected five findings", 5, collector.nrOfProblems())
         assertEquals( "expected two checks", 2, collector.nrOfItemsChecked)
@@ -182,53 +134,44 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
    }
 
     @Test
-    public void testMailtoinkIsIgnored() {
-        String HTML = """$HtmlConst.HTML_HEAD
-                   <a href="mailto:chuck.norris@example.org">mail him</a>
-              </body></html>"""
-
-        htmlPage = new HtmlPage( HTML )
-
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker()
-        collector = undefinedInternalLinksChecker.performCheck(htmlPage)
+    void testMailtoinkIsIgnored() {
+        check '''
+           <a href="mailto:chuck.norris@example.org">mail him</a>
+        '''
 
         assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
         assertEquals( "expected zero finding", 0, collector.nrOfProblems())
     }
 
     @Test
-    public void testLinkToLocalFileShallNotBeChecked() {
-        String HTML = """$HtmlConst.HTML_HEAD
-           <a href="api/nonexisting.html">internal-link-to-file</a>
-         </body>
-           </html>
-        """
-        htmlPage = new HtmlPage( HTML )
-
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker( )
-
-        collector = undefinedInternalLinksChecker.performCheck( htmlPage )
+    void testLinkToLocalFileShallNotBeChecked() {
+        check '''
+            <a href="api/nonexisting.html">internal-link-to-file</a>
+        '''
 
         // for local references, no checks shall be performed
         assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
-
     }
 
     @Test
-    public void testLinkToHashtagShallPass() {
-        String HTML = """$HtmlConst.HTML_HEAD
-           <a href="#">internal-link-to-file</a>
-         </body>
-           </html>
-        """
-        htmlPage = new HtmlPage( HTML )
-
-        undefinedInternalLinksChecker = new BrokenCrossReferencesChecker( )
-
-        collector = undefinedInternalLinksChecker.performCheck( htmlPage )
+    void testLinkToHashtagShallPass() {
+        check '''
+            <a href="#">internal-link-to-file</a>
+        '''
 
         assertEquals( "expected checks", 2, collector.nrOfItemsChecked)
+        assertEquals( "expected zero finding", 0, collector.nrOfProblems())
+    }
 
+    @Test
+    void testUrlEncodedFragmentIsUnderstood() {
+        check '''
+            <a href="#%3Cinit%3E(int%5B%5D)">constructor</a>
+            <a id="<init>(int[])">...</a>
+        '''
+
+        assertEquals( "expected checks", 2, collector.nrOfItemsChecked)
+        assertEquals( "expected zero finding", 0, collector.nrOfProblems())
     }
 
 }
