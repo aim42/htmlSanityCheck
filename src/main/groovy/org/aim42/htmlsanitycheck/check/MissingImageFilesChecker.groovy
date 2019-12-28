@@ -94,8 +94,9 @@ class MissingImageFilesChecker extends Checker {
     private void doesImageFileExist(String relativePathToImageFile) {
         File parentDir = relativePathToImageFile?.startsWith("/") ? baseDir : currentDir;
 
+        String decodedRelativePathtoImageFile = URLDecoder.decode(relativePathToImageFile);
 
-        File imageFile = new File(parentDir, relativePathToImageFile);
+        File imageFile = new File(parentDir, decodedRelativePathtoImageFile);
 
         if (!imageFile.exists() || imageFile.isDirectory()) {
             String findingText = "image \"$relativePathToImageFile\" missing"
