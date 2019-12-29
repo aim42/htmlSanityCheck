@@ -152,7 +152,7 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
         expected = 2
         actual = checkingResults.nrOfProblems()
 
-        assertEquals( "extected $expected finding, found $actual",
+        assertEquals( "expected $expected finding, found $actual",
                 expected, actual)
 
     }
@@ -189,7 +189,43 @@ class MissingImageFilesCheckerTest extends GroovyTestCase {
         expected = 0
         actual = checkingResults.nrOfProblems()
 
-        assertEquals( "extected $expected finding, found $actual",
+        assertEquals( "expected $expected finding, found $actual",
+                expected, actual)
+	}
+
+@Test
+    public void testCheckImageWithSpace() {
+		File tempFolder = File.createTempDir()
+
+		File imageFolder = new File(tempFolder, "images")
+		assertTrue("Cannot create ${imageFolder}", imageFolder.mkdirs())
+		new File(imageFolder, "b g.jpg").bytes = new byte[0]
+
+		File htmlFile = new File(tempFolder, "index.html")
+		htmlFile.text = """<html><head><title>absolute image test</title></head>
+<body><p><img src="/images/b%20g.jpg" /></p></body>
+</html>"""
+
+        htmlPage = new HtmlPage( htmlFile )
+
+        List<HtmlElement> images = htmlPage.getAllImageTags()
+        assertEquals( "expected 1 image", 1, images.size())
+
+        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tempFolder )
+        checker = new MissingImageFilesChecker( myConfig)
+
+        checkingResults = checker.performCheck( htmlPage )
+
+        int expected = 1
+        int actual = checkingResults.nrOfItemsChecked
+
+        assertEquals("expected $expected images, found $actual",
+                expected, actual)
+
+        expected = 0
+        actual = checkingResults.nrOfProblems()
+
+        assertEquals( "expected $expected finding, found $actual",
                 expected, actual)
 	}
 }
