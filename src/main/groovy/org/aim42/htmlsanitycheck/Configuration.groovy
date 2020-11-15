@@ -83,7 +83,7 @@ class Configuration {
 
 
     // constructor to set (some) default values
-    private Configuration() {
+    Configuration() {
 
         this.configurationItems.put(ITEM_NAME_httpErrorCodes, NetUtil.HTTP_ERROR_CODES)
         this.configurationItems.put(ITEM_NAME_httpSuccessCodes, NetUtil.HTTP_SUCCESS_CODES)
@@ -103,7 +103,7 @@ class Configuration {
      * @param itemName
      * @return
      */
-    public synchronized Object getConfigItemByName(final String itemName) {
+    synchronized Object getConfigItemByName(final String itemName) {
         return configurationItems.get(itemName)
     }
 
@@ -121,7 +121,7 @@ class Configuration {
     /**
      * @return true if item is already present, false otherwise
      */
-    public boolean checkIfItemPresent(String itemName) {
+    boolean checkIfItemPresent(String itemName) {
         boolean result = false
         if (configurationItems.get(itemName) != null) {
             result = true
@@ -221,7 +221,7 @@ class Configuration {
      * srcDocs needs to be of type {@link org.gradle.api.file.FileCollection}
      * to be Gradle-compliant
      */
-    public Boolean isValid() {
+    Boolean isValid() {
 
         // we need at least srcDir and srcDocs!!
         File srcDir = getConfigItemByName(Configuration.ITEM_NAME_sourceDir)
@@ -258,7 +258,7 @@ class Configuration {
 
 
     @Override
-    public String toString() {
+    String toString() {
         return "Configuration{" +
                 "configurationItems=" + configurationItems +
                 '}';

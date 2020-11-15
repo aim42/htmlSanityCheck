@@ -182,7 +182,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def 'bad link #badLink is recognized as such'() {
 
         given: "an HTML page with a single (broken) link"
-        String goodURL = "https://httpstat.us/${badLink}"
+        String goodURL = "https://mock.codes/${badLink}"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${goodURL}>${badLink}</a>
                 $HtmlConst.HTML_END """
