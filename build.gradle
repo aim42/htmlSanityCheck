@@ -16,10 +16,6 @@ plugins {
     id 'groovy'
     id 'java'
     id "com.gradle.plugin-publish" version "0.9.10"
-
-    // to report build results back to gradle.org
-    id 'com.gradle.build-scan' version '2.2.1'
-
 }
 
 repositories {
@@ -29,13 +25,13 @@ repositories {
 
 dependencies {
 
-    testCompile(
+    testImplementation(
             'junit:junit:4.12',
             'org.spockframework:spock-core:1.2-groovy-2.5')
-    
-    compile gradleApi()
 
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
+    implementation gradleApi()
+
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
 
     // since gradle 4.6, annotation processors shall be explicitly declared
     // (instead of just having them in the compile-group)
@@ -43,7 +39,7 @@ dependencies {
 
 
     // jsoup is our awesome html parser, see jsoup.org
-    compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 
 
 } // dependencies

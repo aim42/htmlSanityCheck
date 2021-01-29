@@ -1,6 +1,8 @@
+plugins {
+    // to report build results back to gradle.org
+    id "com.gradle.enterprise" version "3.5.1"
+}
+
 rootProject.name = 'htmlSanityCheck'
 
-enableFeaturePreview('STABLE_PUBLISHING')
-
 include 'docToolchain'
-

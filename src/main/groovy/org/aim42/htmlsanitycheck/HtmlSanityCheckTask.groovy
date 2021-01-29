@@ -44,17 +44,17 @@ class HtmlSanityCheckTask extends DefaultTask {
 
     // configurable timeout for http-requests (used by @BrokenHttpLinksChecker)
     // defaults to 5000 (msecs)
-    @Optional
+    // java primitives must not be marked as @Optional
     @Input
     int httpConnectionTimeout = 5000
 
     // shall localhost-URLs lead to warnings?
-    @Optional
+    // java primitives must not be marked as @Optional
     @Input
     boolean ignoreLocalHost = false
 
     // shall numerical IP addresses lead to warnings?
-    @Optional
+    // java primitives must not be marked as @Optional
     @Input
     boolean ignoreIPAddresses = false
 
