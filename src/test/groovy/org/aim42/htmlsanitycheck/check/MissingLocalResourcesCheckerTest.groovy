@@ -142,8 +142,11 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
         final String fname = "fname.html"
         File f2 = new File(d2, fname) << HtmlConst.HTML_HEAD
 
-        assertEquals("created an artificial file", "d2/fname.html",
-                f2.canonicalPath - d1.canonicalPath - "/")
+        assertEquals("created an artificial file",
+                // unix: /d2/fname.html
+                // windows: \d2\fname.html
+                File.separator + "d2" + File.separator + "fname.html",
+                f2.canonicalPath - d1.canonicalPath)
 
         assertTrue("newly created artificial file exists", f2.exists())
 

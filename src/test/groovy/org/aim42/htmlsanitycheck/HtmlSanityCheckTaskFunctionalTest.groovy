@@ -15,7 +15,7 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 class HtmlSanityCheckTaskFunctionalTest extends Specification {
     private final static VALID_HTML = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"><html><head></head><body></body><html>"""
     private final static INVALID_HTML = """<body><span id="id"/><span id="id"/></body> """
-    private final static GRADLE_VERSIONS = ['4.9']
+    private final static GRADLE_VERSIONS = ['6.8.1']
 
     @Rule
     final TemporaryFolder testProjectDir = new TemporaryFolder()
@@ -26,14 +26,19 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
     def setup() {
         buildDir = testProjectDir.newFolder("build")
         htmlFile = testProjectDir.newFile("test.html")
+        // a note on writing paths to the build script on windows:
+        // - the default file separator is a backslash
+        // - as the path is written into a quoted string, backslashes should be quoted
+        // - to avoid string manipulation or similar, we use URIs to avoid the problem
+        //   (URIs consist of / instead of backslashes)
         buildFile = testProjectDir.newFile('build.gradle') << """
             plugins {
                 id 'org.aim42.htmlSanityCheck'
             }
             
             htmlSanityCheck {
-                sourceDir = file( "${htmlFile.parent}" )
-                checkingResultsDir = file( "${buildDir.absolutePath}" )
+                sourceDir = file( "${htmlFile.parentFile.toURI().path}" )
+                checkingResultsDir = file( "${buildDir.toURI().path}" )
             }
         """
     }
