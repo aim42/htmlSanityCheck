@@ -1,6 +1,9 @@
 HtmlSanityCheck - ChangeLog
 
-V 1.3.snapshot
+V 1.1.4
+April 2021: GS, merge #283, remove codenarc, remove docToolChain-submodule
+
+V 1.1.3.snapshot
 Jan 2021: try to fix https://github.com/aim42/htmlSanityCheck/issues/282
 
 V.1.0.0-RC-2
