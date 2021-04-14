@@ -1,6 +1,7 @@
 .idea
 *.iml
 *.class
+*.DS_Store
 docs/.gradle
 hsc_diagrams.ldb
 gradle-app.setting
@@ -33,3 +34,4 @@ archunit-0.5.0.jar
 src/docs/excel
 src/docs/website/_site
 lib
+src/docs/resources/graphics/.DS_Store
