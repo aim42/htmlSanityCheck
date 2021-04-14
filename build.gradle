@@ -16,6 +16,7 @@ plugins {
     id 'groovy'
     id 'java'
     id "com.gradle.plugin-publish" version "0.9.10"
+    id 'codenarc'
 }
 
 repositories {
@@ -46,8 +47,6 @@ dependencies {
 
 
 group = 'org.aim42'
-// Set product version if tag is given on CI
-System.getenv('TRAVIS_TAG')?.eachMatch(/^[0-9]+(\.[0-9]+)*$/) { m -> project.version = m[0] }
 
 
 ext {
@@ -64,7 +63,8 @@ apply plugin: 'java-gradle-plugin'
 
 // The CodeNarc plugin performs quality checks on your project’s
 // Groovy source files using CodeNarc and generates reports from these checks.
-apply plugin: 'codenarc'
+// apply plugin: 'codenarc'
+//apply from: 'config/codenarc.gradle'
 
 // publish to gradle-plugin-repository
 apply plugin: "com.gradle.plugin-publish"
@@ -73,7 +73,6 @@ apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'maven-publish'
 //apply from: "config/publish-snapshot.gradle"
 
-apply from: 'config/codenarc.gradle'
 
 // end:BuildPlugins[]
 
@@ -84,6 +83,7 @@ task copyResourceImages(type: Copy) {
     }
     into processResources.destinationDir
 }
+
 processResources {
     exclude '**/*.png'
     inputs.property "version", project.version
@@ -95,22 +95,7 @@ processResources {
 // ========================================================
 
 
-//configure docToolchain to use the main project's config
-project('docToolchain') {
-    if (project.hasProperty('docDir')) {
-        docDir = '../.'
-        mainConfigFile = 'config/docToolchain.groovy'
-    } else {
-        println "="*80
-        println "  please initialize the docToolchain submodule by executing"
-        println "  git submodule update -i"
-        println "="*80
-    }
-}
 
-task generateDocs (
-        dependsOn: ['docToolchain:exportExcel', 'docToolchain:generateHTML', 'docToolchain:htmlSanityCheck']
-) { }
 
 // ==========================================================
 // if you use htmlSanityCheck locally, publish with
