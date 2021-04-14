@@ -1,8 +1,0 @@
-// where to find codenarc rule configuration
-codenarc {
-    toolVersion = '1.2'
-    configFile = file("${project.projectDir}/config/codenarc.groovy")
-    maxPriority2Violations = 300
-    maxPriority3Violations = 600
-
-}
