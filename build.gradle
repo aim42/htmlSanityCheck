@@ -4,11 +4,10 @@
 
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
-        jcenter()
     }
 }
 
@@ -20,8 +19,8 @@ plugins {
 }
 
 repositories {
-    mavenCentral()
     jcenter()
+//    mavenCentral()
 }
 
 dependencies {
@@ -71,7 +70,7 @@ apply plugin: "com.gradle.plugin-publish"
 
 // publish to (local) maven repo
 apply plugin: 'maven-publish'
-//apply from: "config/publish-snapshot.gradle"
+apply from: "config/publish-snapshot.gradle"
 
 
 // end:BuildPlugins[]

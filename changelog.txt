@@ -1,5 +1,9 @@
 HtmlSanityCheck - ChangeLog
 
+v 1.1.5
+April 2021: GS, compiled with Java 8 - as I accidentally compiled V 1.1.4 with jdk 14...
+no other changes or fixes
+
 V 1.1.4
 April 2021: GS, merge #283, remove codenarc, remove docToolChain-submodule
 
