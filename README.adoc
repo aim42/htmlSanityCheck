@@ -205,8 +205,15 @@ htmlSanityCheck {
     // httpSuccessCodes
 
     // only execute a subset of all available checks
+    // available checker:
+    //   * BrokenCrossReferencesChecker
+    //   * BrokenHttpLinksChecker
+    //   * DuplicateIdChecker
+    //   * ImageMapChecker
+    //   * MissingAltInImageTagsChecker
+    //   * MissingImageFilesChecker
+    //   * MissingLocalResourcesChecker
     checkerClasses = [DuplicateIdChecker, MissingImageFilesChecker]
-
 }
 
 ----
@@ -239,21 +246,29 @@ Finds all '<a href="XYZ">' where XYZ is not defined.
 
 In this example, the bookmark is _misspelled_.
 
+Use checkerClass _BrokenCrossReferencesChecker_.
 
 === Missing Images Files
 Images, referenced in '<img src="XYZ"...' tags, refer to external files. The existence of
 these files is checked by the plugin.
 
+Use checkerClass _MissingImageFilesChecker_.
+
 === Multiple Definitions of Bookmarks or ID's
 If any is defined more than once, any anchor linking to it will be confused :-)
 
+Use checkerClass _DuplicateIdChecker_.
+
 === Missing Local Resources
 All files (e.g. downloads) referenced from html.
+
+Use checkerClass _MissingLocalResourcesChecker_.
 
 === Missing Alt-tags in Images
 Image-tags should contain an alt-attribute that the browser displays when the original image
 file cannot be found or cannot be rendered. Having alt-attributes is good and defensive style.
 
+Use checkerClass _MissingAltInImageTagsChecker_.
 
 === Broken HTTP Links
 The current version (derived from branch 1.0.0-RC-2) contains a simple
@@ -266,6 +281,8 @@ want some content behind paywalls NOT to result in errors...)
 Localhost or numerical IP addresses are currently NOT marked as suspicious.
 
 Please comment in case you have additional requirements.
+
+Use checkerClass _BrokenHttpLinksChecker_.
 
 === Other types of external links
 *planned*: ftp, ntp or other protocols are currently not checked,
