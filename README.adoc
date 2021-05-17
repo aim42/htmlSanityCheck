@@ -214,6 +214,7 @@ htmlSanityCheck {
     //   * MissingImageFilesChecker
     //   * MissingLocalResourcesChecker
     checkerClasses = [DuplicateIdChecker, MissingImageFilesChecker]
+
 }
 
 ----
