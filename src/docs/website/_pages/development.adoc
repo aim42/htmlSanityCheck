@@ -1,9 +1,0 @@
-= Development Guide!
-:page-layout: single
-:page-permalink: /development
-:page-header: { overlay_filter: 0.5, overlay_image: /images/splash/hhgdac-splash.jpg, caption: "[Artem Sapegin](https://unsplash.com/photos/b18TRXc8UPQ)" }
-:page-sidebar: { }
-
-This page shall contain the Development Guide.
-
-Try the link:/documentation/DevelopmentDocs.html[Development Guide].
