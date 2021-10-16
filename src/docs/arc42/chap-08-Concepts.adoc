@@ -1,8 +1,8 @@
+:jbake-order: 80
 ifndef::imagesdir[:imagesdir: ../images]
 == Technical and Crosscutting Concepts
 
 :filename: arc42/chap-08-Concepts.adoc
-include::_feedback.adoc[]
 
 include::chap-08-checking-domain.adoc[]
 include::chap-08-gradle-plugin.adoc[]

@@ -1,8 +1,8 @@
+:jbake-order: 50
 ifndef::imagesdir[:imagesdir: ../images]
 == Building Block View
 
 :filename: arc42/chap-05-BuildingBlocks.adoc
-include::_feedback.adoc[]
 
 === Whitebox HtmlSanityChecker
 

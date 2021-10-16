@@ -1,8 +1,8 @@
+:jbake-order: 40
 ifndef::imagesdir[:imagesdir: ../images]
 == Solution Strategy
 
 :filename: arc42/chap-04-SolutionStrategy.adoc
-include::_feedback.adoc[]
 
 * Implement kbd:[HtmlSC] in {groovy-url}[Groovy] and Java with minimal
 external dependencies. Wrap this implementation into a {gradle-url}

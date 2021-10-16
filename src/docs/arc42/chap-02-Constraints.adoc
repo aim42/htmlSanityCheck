@@ -1,9 +1,9 @@
+:jbake-order: 20
 
 :numbered:
 == Constraints
 
 :filename: arc42/chap-02-Constraints.adoc
-include::_feedback.adoc[]
 
 kbd:[HtmlSC] shall be:
 

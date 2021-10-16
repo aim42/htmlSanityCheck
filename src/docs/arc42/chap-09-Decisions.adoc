@@ -1,3 +1,4 @@
+:jbake-order: 90
 ifndef::imagesdir[:imagesdir: ../images]
 :numbered:
 
@@ -6,7 +7,6 @@ ifndef::imagesdir[:imagesdir: ../images]
 == Design Decisions
 
 :filename: arc42/chap-09-Decisions.adoc
-include::_feedback.adoc[]
 
 === Checking of external links postponed
 In the current {revision} we won't check external links.

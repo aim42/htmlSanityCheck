@@ -1,3 +1,4 @@
+:jbake-menu: -
 ifndef::imagesdir[:imagesdir: ../images]
 [[html-encapsulation]]
 === Encapsulate HTML Parsing

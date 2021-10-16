@@ -1,9 +1,9 @@
+:jbake-order: 70
 ifndef::imagesdir[:imagesdir: ../images]
 [[deployment-view]]
 == Deployment View
 
 :filename: arc42/chap-07-Deployment.adoc
-include::_feedback.adoc[]
 
 [[img-deployment]]
 image::ea/htmlSanityCheck/hsc-deployment.png["Deployment", title="Deployment"]

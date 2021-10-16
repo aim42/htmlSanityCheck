@@ -1,9 +1,9 @@
+:jbake-order: 10
 :numbered:
 ifndef::imagesdir[:imagesdir: ../images]
 == Introduction and Goals
 
 :filename: arc42/chap-01-Requirements.adoc
-include::_feedback.adoc[]
 
 kbd:[HtmlSC] shall support authors creating digital formats
 with hyperlinks and integration of images and similar resources.
