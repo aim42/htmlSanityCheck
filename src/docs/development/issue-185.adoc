@@ -1,11 +1,11 @@
 
-=== Automated Checker Factory
+== Automated Checker Factory
 
 https://github.com/aim42/htmlSanityCheck/issues/185[Issue 185]
 proposes to automatically detect and instantiate Checker
 (sub-)classes.
 
-==== Problem
+=== Problem
 We want to adhere to the Open-Close principle (OCP)
 when adding new checkers:
 
@@ -34,7 +34,7 @@ class AllCheckers {
 
 
 
-==== Solution Approach
+=== Solution Approach
 
 A solution needs to address two issues:
 

@@ -1,5 +1,5 @@
 
-=== Handling 30x Status Codes
+== Handling 30x Status Codes
 
 
 https://github.com/aim42/htmlSanityCheck/issues/244[Issue 244]
@@ -30,7 +30,7 @@ So - the url exists in principle (in the example above,
 it only changed from `http` to `https`...
 
 
-==== Proposed Approach
+=== Proposed Approach
 
 A very simple solution would be to
 access the location header and return

@@ -1,0 +1,39 @@
+
+:numbered:
+:linkattrs:
+:experimental:
+
+:author: Dr. Gernot Starke
+:email: gernot.starke@innoq.com
+:docdate: {docdate}
+
+:project: htmlsanitycheck
+
+// where are images located?
+ifndef::imagesdir[:imagesdir: ../images]
+
+:project: htmlSanityCheck
+:project-url: https://github.com/aim42/htmlSanityCheck
+:project-issues: https://github.com/aim42/htmlSanityCheck/issues
+:project-bugs: https://github.com/aim42/htmlSanityCheck/issues?q=is%3Aopen+is%3Aissue+label%3Abug
+:repositoryDocsDir: https://github.com/aim42/htmlSanityCheck/blob/master/src/docs/
+:improveDocImage: https://img.shields.io/badge/improve-this%20doc-orange.svg
+:project-name: asciidoctor-gradle-plugin
+:project-report-issue-link: https://github.com/aim42/htmlSanityCheck/issues/new?title=&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:
+:project-repository-docs-link: https://github.com/aim42/htmlSanityCheck/blob/master/src/docs/
+:project-repository-docs-edit-link: https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/
+
+:coresourcepath: {projectRootDir}/src/main/groovy/org/aim42
+:coretestpath:   {projectRootDir}/src/test/groovy/org/aim42
+
+:asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin
+
+:arc42-url: http://github.com/arc42
+:aim42-url: http://github.com/aim42
+
+:asciidoc-url: http://asciidoctor.org
+:gradle-url: https://gradle.org/[Gradle]
+:groovy-url: http://www.groovy-lang.org/
+
+:source-highlighter: pygments
+:pygments-style: emacs

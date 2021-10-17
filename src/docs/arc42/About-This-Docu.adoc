@@ -1,4 +1,5 @@
 :jbake-order: 0
+include::chapters/_config.adoc[]
 :numbered!:
 
 == Goals of this Documentation

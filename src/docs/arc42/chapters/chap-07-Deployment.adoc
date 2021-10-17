@@ -1,5 +1,6 @@
+:jbake-menu: arc42
 :jbake-order: 70
-ifndef::imagesdir[:imagesdir: ../images]
+include::_config.adoc[]
 [[deployment-view]]
 == Deployment View
 

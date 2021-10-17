@@ -1,5 +1,6 @@
+:jbake-menu: arc42
 :jbake-order: 30
-ifndef::imagesdir[:imagesdir: ../images]
+include::_config.adoc[]
 == Context
 
 :filename: arc42/chap-03-Context.adoc

@@ -1,9 +1,9 @@
 :jbake-menu: -
-ifndef::imagesdir[:imagesdir: ../images]
+include::_config.adoc[]
 === HTML Checking Domain Model
 
 :filename: arc42/chap-08-checking-domain.adoc
-include::_feedback.adoc[]
+include::../_feedback.adoc[]
 
 image::ea/htmlSanityCheck/HTML_Checking_Domain.png["HTML Checking Domain Model", title="HTML Checking Domain Model"]
 

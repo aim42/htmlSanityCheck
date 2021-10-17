@@ -1,3 +1,5 @@
+:jbake-status: published
+:jbake-menu: development
 = Development Docs
 :toc:
 :toclevels: 2

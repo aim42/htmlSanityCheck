@@ -1,10 +1,10 @@
 :jbake-menu: -
-ifndef::imagesdir[:imagesdir: ../images]
+include::_config.adoc[]
 [[gradle-plugin-concept]]
 === Gradle Plugin Concept and Development
 
 :filename: arc42/chap-08-gradle-plugin.adoc
-include::_feedback.adoc[]
+include::../_feedback.adoc[]
 
 You should definitely read the original https://gradle.org/docs/current/userguide/userguide.html[Gradle User Guide] on custom plugin development.
 

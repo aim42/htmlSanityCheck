@@ -1,5 +1,6 @@
+:jbake-menu: arc42
 :jbake-order: 90
-ifndef::imagesdir[:imagesdir: ../images]
+include::_config.adoc[]
 :numbered:
 
 :jsoup-url: http://jsoup.org[jsoup HTML parser]

@@ -1,4 +1,6 @@
+:jbake-menu: arc42
 :jbake-order: 60
+include::_config.adoc[]
 
 == Runtime View
 

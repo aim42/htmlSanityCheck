@@ -1,11 +1,11 @@
 
-=== Refactoring the Main Checking Loop
+== Refactoring the Main Checking Loop
 
 
 https://github.com/aim42/htmlSanityCheck/issues/190[Issue 190]
 proposes to merge the two classes AllChecksRunner and ChecksRunner.
 
-==== Proposed (new) Scenario
+=== Proposed (new) Scenario
 
 [plantuml,"{plantumldir}mainloop-new",png]
 ....

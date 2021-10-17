@@ -1,0 +1,5 @@
+:imagesdir: ../images
+:jbake-menu: Manual
+
+
+include::{projectRootDir}README.adoc[leveloffset=+1]

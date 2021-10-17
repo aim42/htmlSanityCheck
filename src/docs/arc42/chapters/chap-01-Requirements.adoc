@@ -1,6 +1,7 @@
+:jbake-menu: arc42
 :jbake-order: 10
-:numbered:
-ifndef::imagesdir[:imagesdir: ../images]
+include::_config.adoc[]
+
 == Introduction and Goals
 
 :filename: arc42/chap-01-Requirements.adoc
@@ -72,32 +73,32 @@ Important terms (*domain terms*) of html sanity checking is documented in a (sma
 ==== General Functionality
 
 .General Requirements
-include::../excel/Requirements.xlsx/General.adoc[]
+include::../../excel/Requirements.xlsx/General.adoc[]
 
 [[requiredChecks]]
 ==== Types of Sanity Checks
 
 .Required Checks
-include::../excel/Requirements.xlsx/Required{sp}Checks.adoc[]
+include::../../excel/Requirements.xlsx/Required{sp}Checks.adoc[]
 
 .Optional Checks
-include::../excel/Requirements.xlsx/Optional{sp}Checks.adoc[]
+include::../../excel/Requirements.xlsx/Optional{sp}Checks.adoc[]
 
 ==== Reporting and Output Requirements
 
 .Reporting Requirements
-include::../excel/Requirements.xlsx/Reporting.adoc[]
+include::../../excel/Requirements.xlsx/Reporting.adoc[]
 
 [[quality-goals]]
 === Quality Goals
 
 .Quality-Goals
-include::../excel/Requirements.xlsx/Quality{sp}Goals.adoc[]
+include::../../excel/Requirements.xlsx/Quality{sp}Goals.adoc[]
 
 === Stakeholder
 
 .Stakeholder
-include::../excel/Stakeholder.xlsx/Stakeholder.adoc[]
+include::../../excel/Stakeholder.xlsx/Stakeholder.adoc[]
 
 [[InformationOnUris]]
 === Background Information on URIs

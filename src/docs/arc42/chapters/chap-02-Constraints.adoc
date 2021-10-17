@@ -1,6 +1,6 @@
+:jbake-menu: arc42
 :jbake-order: 20
-
-:numbered:
+include::_config.adoc[]
 == Constraints
 
 :filename: arc42/chap-02-Constraints.adoc

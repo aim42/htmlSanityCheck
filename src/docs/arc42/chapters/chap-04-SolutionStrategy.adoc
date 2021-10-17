@@ -1,5 +1,6 @@
+:jbake-menu: arc42
 :jbake-order: 40
-ifndef::imagesdir[:imagesdir: ../images]
+include::_config.adoc[]
 == Solution Strategy
 
 :filename: arc42/chap-04-SolutionStrategy.adoc

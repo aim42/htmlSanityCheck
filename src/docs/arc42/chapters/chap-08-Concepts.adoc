@@ -1,5 +1,6 @@
+:jbake-menu: arc42
 :jbake-order: 80
-ifndef::imagesdir[:imagesdir: ../images]
+include::_config.adoc[]
 == Technical and Crosscutting Concepts
 
 :filename: arc42/chap-08-Concepts.adoc

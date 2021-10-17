@@ -1,5 +1,6 @@
+:jbake-menu: arc42
 :jbake-order: 50
-ifndef::imagesdir[:imagesdir: ../images]
+include::_config.adoc[]
 == Building Block View
 
 :filename: arc42/chap-05-BuildingBlocks.adoc
@@ -9,7 +10,7 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 [plantuml,"{plantumldir}whitbox-hsc-level-1",png]
 ....
-include::../plantuml/whitebox-hsc-level-1.puml[]
+include::../../plantuml/whitebox-hsc-level-1.puml[]
 ....
 
 

@@ -1,10 +1,10 @@
 :jbake-menu: -
-ifndef::imagesdir[:imagesdir: ../images]
+include::_config.adoc[]
 [[checking-concept]]
 === Flexible Checking Algorithms
 
 :filename: arc42/chap-08-checking-algorithms.adoc
-include::_feedback.adoc[]
+include::../_feedback.adoc[]
 
 kbd:[HtmlSC] uses the template-method-pattern to enable flexible checking algorithms:
 

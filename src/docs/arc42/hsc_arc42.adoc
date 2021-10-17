@@ -1,0 +1,92 @@
+:jbake-date: 2021-10-16
+:toc: left
+:toclevels: 3
+:toc-position: left
+:jbake-menu: -
+++++
+<!-- github ribbon thanx to https://github.com/blog/273-github-ribbons -->
+<a href="https://github.com/aim42/htmlSanityCheck">
+<img style="position: absolute; top: 0; right: 0; border: 0;"
+src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67"
+alt="Fork me on GitHub"
+data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+++++
+
+= HTML Sanity Checker Architecture Documentation
+
+include::_config.adoc[]
+// ---------------------------------
+
+
+
+[cols="1,4" options=""]
+|===
+| image:arc42-logo.png[arc42, link={arc42-url}]
+| (C) This document uses material from the http://arc42.de[arc42 architecture
+template^], freely available at {arc42-url}[{arc42-url}^].
+
+[small]#This material is open source and provided under the Creative Commons Sharealike 4.0 license.
+It comes *without any guarantee*. Use on your own risk.
+arc42 and its structure by Dr. Peter Hruschka and Dr. Gernot Starke.
+Asciidoc version initiated by Markus Schärtel and Jürgen Krey,
+completed and maintained by Ralf Müller and Gernot Starke.#
+|===
+
+[small]#Version {version} of {docdate}#
+
+ifdef::backend-html5[]
+image:http://img.shields.io/badge/license-ccsa4-green.png[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
+image:http://img.shields.io/github/issues/aim42/{project}.png[link={project-issues}]
+endif::[]
+
+:filename: hsc_arc42.adoc
+include::_feedback.adoc[]
+
+
+[NOTE]
+====
+Within the following text, the "Html Sanity Checker" shall be
+abbreviated with kbd:[HtmlSC]
+====
+
+include::About-This-Docu.adoc[]
+
+<<<<
+
+include::chapters/chap-01-Requirements.adoc[]
+
+<<<<
+
+include::chapters/chap-02-Constraints.adoc[]
+
+<<<<
+
+include::chapters/chap-03-Context.adoc[]
+
+<<<<
+
+include::chapters/chap-04-SolutionStrategy.adoc[]
+
+<<<<
+
+include::chapters/chap-05-BuildingBlocks.adoc[]
+
+<<<<
+
+include::chapters/chap-06-Runtime.adoc[]
+
+<<<<
+
+include::chapters/chap-07-Deployment.adoc[]
+
+<<<<
+
+include::chapters/chap-08-Concepts.adoc[]
+
+<<<<
+
+include::chapters/chap-09-Decisions.adoc[]
+
+
+== Glossary
+See the <<HTML Checking Domain Model, domain model>> for explanations of important terms.
