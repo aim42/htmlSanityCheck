@@ -17,7 +17,7 @@ with hyperlinks and integration of images and similar resources.
 |===
 | The overall goal of kbd:[HtmlSC] is to create neat and clear reports,
 showing errors within HTML files - as shown in the adjoining figure.
-| image:sample-hsc-report.jpg[width="200", link="images/sample-hsc-report.jpg"
+| image:sample-hsc-report.jpg[width="200", link="/images/sample-hsc-report.jpg"
   (click on thumbnail for details)]
 |===
 

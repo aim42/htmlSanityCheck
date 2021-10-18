@@ -3,4 +3,4 @@
 :jbake-menu: Manual
 
 
-include::{projectRootDir}README.adoc[leveloffset=+1]
+include::{projectRootDir}/README.adoc[leveloffset=+1]

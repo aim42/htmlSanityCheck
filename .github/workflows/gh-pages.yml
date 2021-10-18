@@ -15,8 +15,14 @@ jobs:
       DTC_HEADLES: true
     steps:
       - uses: actions/checkout@v2
-      - name: Build
-        run: ./dtcw exportExcel && ./dtcw generateSite && cp -r ./build/microsite/output ./public
+      - name: exportExcel
+        run: ./dtcw exportExcel
+      - name: generateSite
+        run: ./dtcw generateSite
+      - name: htmlSanityCheck
+        run: ./dtcw htmlSanityCheck
+      - name: copyToPublic
+        cp -r ./build/microsite/output ./public && cp ./build/report/htmlchecks ./public
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
