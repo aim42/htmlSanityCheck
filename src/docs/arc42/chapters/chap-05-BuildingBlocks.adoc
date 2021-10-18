@@ -3,7 +3,7 @@
 include::_config.adoc[]
 == Building Block View
 
-:filename: arc42/chap-05-BuildingBlocks.adoc
+:filename: arc42/chapters/chap-05-BuildingBlocks.adoc
 
 === Whitebox HtmlSanityChecker
 

@@ -3,7 +3,7 @@ include::_config.adoc[]
 [[gradle-plugin-concept]]
 === Gradle Plugin Concept and Development
 
-:filename: arc42/chap-08-gradle-plugin.adoc
+:filename: arc42/chapters/chap-08-gradle-plugin.adoc
 include::../_feedback.adoc[]
 
 You should definitely read the original https://gradle.org/docs/current/userguide/userguide.html[Gradle User Guide] on custom plugin development.
@@ -67,4 +67,4 @@ The plugin code itself is built with gradle.
 ==== Further Information on Creating Gradle Plugins
 Although writing plugins is described in the Gradle user guide, 
 a clearly explained sample is given in a 
-http://code4reference.com/2012/08/gradle-custom-plugin-part-2/[Code4Reference] tutorial. 
+https://code4reference.com/2012/08/gradle-custom-plugin-part-2/[Code4Reference] tutorial.

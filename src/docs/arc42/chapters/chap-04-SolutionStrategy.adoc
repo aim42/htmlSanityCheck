@@ -3,7 +3,7 @@
 include::_config.adoc[]
 == Solution Strategy
 
-:filename: arc42/chap-04-SolutionStrategy.adoc
+:filename: arc42/chapters/chap-04-SolutionStrategy.adoc
 
 * Implement kbd:[HtmlSC] in {groovy-url}[Groovy] and Java with minimal
 external dependencies. Wrap this implementation into a {gradle-url}

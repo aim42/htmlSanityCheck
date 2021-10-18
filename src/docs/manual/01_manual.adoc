@@ -1,3 +1,4 @@
+:filename: manual/01_manual.adoc
 :imagesdir: ../images
 :jbake-menu: Manual
 

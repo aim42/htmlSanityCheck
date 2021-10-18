@@ -28,12 +28,12 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 :asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin
 
-:arc42-url: http://github.com/arc42
-:aim42-url: http://github.com/aim42
+:arc42-url: https://github.com/arc42
+:aim42-url: https://github.com/aim42
 
-:asciidoc-url: http://asciidoctor.org
+:asciidoc-url: https://asciidoctor.org
 :gradle-url: https://gradle.org/[Gradle]
-:groovy-url: http://www.groovy-lang.org/
+:groovy-url: https://www.groovy-lang.org/
 
 :source-highlighter: pygments
 :pygments-style: emacs

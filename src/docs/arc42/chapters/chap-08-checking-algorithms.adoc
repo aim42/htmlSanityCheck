@@ -3,12 +3,12 @@ include::_config.adoc[]
 [[checking-concept]]
 === Flexible Checking Algorithms
 
-:filename: arc42/chap-08-checking-algorithms.adoc
+:filename: arc42/chapters/chap-08-checking-algorithms.adoc
 include::../_feedback.adoc[]
 
 kbd:[HtmlSC] uses the template-method-pattern to enable flexible checking algorithms:
 
-[quote, http://sourcemaking.com/design_patterns/template_method]
+[quote, https://sourcemaking.com/design_patterns/template_method]
 The Template Method defines a skeleton of an algorithm in an operation, and defers some steps to subclasses.
 
 We achieve that by defining the skeleton of the checking algorithm in one operation, deferring the specific checking algorithm steps to subclasses.

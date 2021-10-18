@@ -4,7 +4,7 @@ include::_config.adoc[]
 
 == Introduction and Goals
 
-:filename: arc42/chap-01-Requirements.adoc
+:filename: arc42/chapters/chap-01-Requirements.adoc
 
 kbd:[HtmlSC] shall support authors creating digital formats
 with hyperlinks and integration of images and similar resources.
@@ -137,7 +137,7 @@ a file... ref can be an internal link, or a URI without protocol...
 
 ==== References on URIs and HTML Syntax
 
-* http://www.ietf.org/rfc/rfc2396.txt[IETF RFC-2396 on URI Syntax]: The
+* https://www.ietf.org/rfc/rfc2396.txt[IETF RFC-2396 on URI Syntax]: The
 fundamental reference!
-* http://www.w3.org/TR/html401/struct/links.html#h-12.2.4[W3C HTML Reference]
-* http://en.wikipedia.org/wiki/URI_scheme#Generic_syntax[Wikipedia on URI-Schemes]
+* https://www.w3.org/TR/html401/struct/links.html#h-12.2.4[W3C HTML Reference]
+* https://en.wikipedia.org/wiki/URI_scheme#Generic_syntax[Wikipedia on URI-Schemes]

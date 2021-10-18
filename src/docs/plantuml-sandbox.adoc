@@ -1,3 +1,4 @@
+:filename: plantuml-sandbox.adoc
 ifndef::plantUMLDir[:plantUMLDir: .plantuml/]
 
 == Generierte Diagramme mit PlantUML

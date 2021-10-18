@@ -3,7 +3,7 @@
 include::_config.adoc[]
 == Technical and Crosscutting Concepts
 
-:filename: arc42/chap-08-Concepts.adoc
+:filename: arc42/chapters/chap-08-Concepts.adoc
 
 include::chap-08-checking-domain.adoc[]
 include::chap-08-gradle-plugin.adoc[]
@@ -79,7 +79,7 @@ based upon css styling re-used from the Gradle JUnit plugin.
 * Stylesheets, a minimized version of jQuery javascript library plus some icons
 are copied at report-generation time from the jar-file to the report output directory.
 
-* Styling the back-to-top arrow/button is done as a combination of JavaScript plus some css styling, as described in http://www.webtipblog.com/adding-scroll-top-button-website/.
+* Styling the back-to-top arrow/button is done as a combination of JavaScript plus some css styling, as described in https://www.webtipblog.com/adding-scroll-top-button-website/.
 
 
 ==== Copy Required Resources to Output Directory

@@ -1,4 +1,4 @@
-def url = "http://www.google.com"
+def url = "https://www.google.com"
 def content
 
 try {

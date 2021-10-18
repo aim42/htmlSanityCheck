@@ -68,19 +68,19 @@ microsite.with {
     //
     // contact eMail
     // example: mailto:bert@example.com
-    footerMail = '##footer-email'
+    footerMail = ''
     //
     // twitter account url
-    footerTwitter = '##twitter-url##'
+    footerTwitter = ''
     //
     // Stackoverflow QA
-    footerSO = '##Stackoverflow-url##'
+    footerSO = ''
     //
     // Github Repository
-    footerGithub = '##Github-url##'
+    footerGithub = 'https://github.com/aim42/htmlSanityCheck'
     //
     // Slack Channel
-    footerSlack = '##Slack-url##'
+    footerSlack = ''
     //
     // Footer Text
     // example: <small class="text-white">build with docToolchain and jBake <br /> theme: docsy</small>
@@ -94,8 +94,8 @@ microsite.with {
     issueUrl = 'https://github.com/aim42/htmlSanityCheck/issues/new'
     //
     // the base url for code files in github
-    // Example: https://github.com/doctoolchain/doctoolchain/edit/master/content/src/docs/
-    gitRepoUrl = 'https://github.com/aim42/htmlSanityCheck/edit/master/content/src/docs/'
+    // Example: https://github.com/doctoolchain/doctoolchain/edit/master/src/docs
+    gitRepoUrl = 'https://github.com/rdmueller/htmlSanityCheck/edit/dtcw/src/docs'
 
     //
     // the location of the landing page

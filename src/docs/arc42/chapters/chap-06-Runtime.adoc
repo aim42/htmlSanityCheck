@@ -4,6 +4,6 @@ include::_config.adoc[]
 
 == Runtime View
 
-:filename: arc42/chap-06-Runtime.adoc
+:filename: arc42/chapters/chap-06-Runtime.adoc
 
 NOTE: Not appropriate for this system due to very simple implementation.

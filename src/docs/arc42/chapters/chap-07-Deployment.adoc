@@ -4,7 +4,7 @@ include::_config.adoc[]
 [[deployment-view]]
 == Deployment View
 
-:filename: arc42/chap-07-Deployment.adoc
+:filename: arc42/chapters/chap-07-Deployment.adoc
 
 [[img-deployment]]
 image::ea/htmlSanityCheck/hsc-deployment.png["Deployment", title="Deployment"]
@@ -15,7 +15,7 @@ image::ea/htmlSanityCheck/hsc-deployment.png["Deployment", title="Deployment"]
 | Node / Artifact | Description
 | hsc plugin binary | compiled version of kbd:[HtmlSC], including required dependencies.
 | hsc-development | where development of kbd:[HtmlSC] takes place
-| artifact repository (https://bintray.com/bintray/jcenter[Bintray]) | global public _cloud_ repository for binary artifacts, similar to http://search.maven.org/[mavenCentral].  kbd:[HtmlSC] binaries are uploaded to this server.
+| artifact repository (https://bintray.com/bintray/jcenter[Bintray]) | global public _cloud_ repository for binary artifacts, similar to https://search.maven.org/[mavenCentral].  kbd:[HtmlSC] binaries are uploaded to this server.
 | hsc user computer | where arbitrary documentation takes place with html as output formats.
 | build.gradle    |  Gradle build script configuring (among other things) the kbd:[HtmlSC] plugin to check _some documentation_.
 |===

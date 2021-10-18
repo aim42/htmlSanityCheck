@@ -3,7 +3,7 @@
 include::_config.adoc[]
 == Constraints
 
-:filename: arc42/chap-02-Constraints.adoc
+:filename: arc42/chapters/chap-02-Constraints.adoc
 
 kbd:[HtmlSC] shall be:
 
