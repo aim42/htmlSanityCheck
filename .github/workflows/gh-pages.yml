@@ -24,7 +24,7 @@ jobs:
       - name: htmlSanityCheck
         run: ./dtcw htmlSanityCheck
       - name: copyToPublic
-        cp -r ./build/microsite/output ./public && cp ./build/report/htmlchecks ./public && cp -r ./build/pdf ./public
+        run: cp -r ./build/microsite/output ./public && cp ./build/report/htmlchecks ./public && cp -r ./build/pdf ./public
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
 #        if: ${{ github.ref == 'refs/heads/main' }}
