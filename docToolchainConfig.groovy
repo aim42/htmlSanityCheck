@@ -108,7 +108,7 @@ microsite.with {
 
 //*****************************************************************************************
 
-//Configuration for exportChangelog
+//Configuration for exportChangelog 
 
 exportChangelog = [:]
 
