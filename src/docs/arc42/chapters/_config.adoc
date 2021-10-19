@@ -35,5 +35,5 @@ ifndef::imagesdir[:imagesdir: ../images]
 :gradle-url: https://gradle.org/[Gradle]
 :groovy-url: https://www.groovy-lang.org/
 
-:source-highlighter: pygments
-:pygments-style: emacs
+//:source-highlighter: pygments
+//:pygments-style: emacs

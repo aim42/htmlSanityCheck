@@ -1,6 +1,7 @@
+include::_config.adoc[]
 :jbake-menu: arc42
 :jbake-order: 10
-include::_config.adoc[]
+:jbake-rightColumnHtml: <a href="../../pdf/arc42/hsc_arc42.pdf"><i class="fa fa-file fa-fw"></i> Download PDF</a>
 
 == Introduction and Goals
 
@@ -13,13 +14,11 @@ with hyperlinks and integration of images and similar resources.
 === Requirements Overview
 
 
-[cols="1,1",width="50%"]
-|===
-| The overall goal of kbd:[HtmlSC] is to create neat and clear reports,
+The overall goal of kbd:[HtmlSC] is to create neat and clear reports,
 showing errors within HTML files - as shown in the adjoining figure.
-| image:sample-hsc-report.jpg[width="200", link="/images/sample-hsc-report.jpg"
+
+image:sample-hsc-report.jpg[width="200", link="/images/sample-hsc-report.jpg"
   (click on thumbnail for details)]
-|===
 
 
 
