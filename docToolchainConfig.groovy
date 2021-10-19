@@ -9,7 +9,7 @@ pdfThemeDir = './src/docs/pdfTheme'
 
 inputFiles = [
         //[file: 'doctoolchain_demo.adoc',       formats: ['html','pdf']],
-        //[file: 'arc42-template.adoc',    formats: ['html','pdf']],
+        [file: 'arc42/hsc_arc42.adoc',    formats: ['pdf']],
         /** inputFiles **/
 ]
 
@@ -95,7 +95,7 @@ microsite.with {
     //
     // the base url for code files in github
     // Example: https://github.com/doctoolchain/doctoolchain/edit/master/src/docs
-    gitRepoUrl = 'https://github.com/rdmueller/htmlSanityCheck/edit/dtcw/src/docs'
+    gitRepoUrl = 'https://github.com/aim42/htmlSanityCheck/edit/master/src/docs'
 
     //
     // the location of the landing page
@@ -257,7 +257,7 @@ exportEA.with {
 
 //tag::htmlSanityCheckConfig[]
 htmlSanityCheck.with {
-    //sourceDir = "build/html5/site"
+    sourceDir = "build/microsite/output"
     //checkingResultsDir =
 }
 //end::htmlSanityCheckConfig[]
