@@ -9,7 +9,7 @@
 #...
 
 MAIN_CONFIG_FILE=docToolchainConfig.groovy
-VERSION=2.0.0-dev
+VERSION=2.0.2
 DISTRIBUTION_URL=https://github.com/docToolchain/docToolchain/releases/download/v${VERSION}/docToolchain-${VERSION}.zip
 
 
