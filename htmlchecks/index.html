@@ -1,0 +1,3807 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><meta httpEquiv="Content-Type" content="text/html"; charset="utf-8"/>
+<title>HTML Sanity Check Results</title>
+<link href="scroll.css" rel="stylesheet" type="text/css"/>
+<link href="htmlsc-style.css" rel="stylesheet" type="text/css"/>
+
+<script type="text/javascript" src="jquery.min.js"></script>
+
+<script>
+$(function(){
+
+    $(document).on( 'scroll', function(){
+      if ($(window).scrollTop() > 100) {
+            $('.scroll-top-wrapper').addClass('show');
+        } else {
+            $('.scroll-top-wrapper').removeClass('show');
+        }
+    });
+});
+
+$(function(){
+    $(document).on( 'scroll', function(){
+        if ($(window).scrollTop() > 80) {
+            $('.scroll-top-wrapper').addClass('show');
+        } else {
+            $('.scroll-top-wrapper').removeClass('show');
+        }
+    });
+    $('.scroll-top-wrapper').on('click', scrollToTop);
+});
+
+function scrollToTop() {
+    verticalOffset = typeof(verticalOffset) != 'undefined' ? verticalOffset : 0;
+    element = $('body');
+    offset = element.offset();
+    offsetTop = offset.top;
+    $('html, body').animate({scrollTop: offsetTop}, 500, 'linear');
+}
+</script>
+
+</head>
+<body id="top">
+<img class="logo" src="htmlsanitycheck-logo.png" alt="htmlSC" align="right"/><h1>HTML Sanity Check Results </h1>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="pages">
+
+          <div class="counter">36</div>
+
+          pages</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">1970</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">139</div>
+
+          issues</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="duration">
+
+          <div class="counter">100.588sec</div>
+
+          duration</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">92%</div>
+        successful</div>
+    </td></tr></table>
+
+<h2>Results by Page </h2>
+<table>
+   <thead>
+     <tr>
+       <th>Page</th> <th>Checks</th> <th>Findings</th> <th>Success rate</th>
+     </tr>
+   </thead>
+   <tbody>
+      <tr>
+        <td class="failures"><a href="#readmeXhtml">readme.html</a></td>
+        <td class="number">31</td>
+        <td class="number">2</td>
+        <td class="number failures">93%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#readmeXdraftXhtml">readme-draft.html</a></td>
+        <td class="number">29</td>
+        <td class="number">2</td>
+        <td class="number failures">93%</td>
+      </tr>
+      <tr>
+        <td class="success"><a href="#archiveXhtml">archive.html</a></td>
+        <td class="number">13</td>
+        <td class="number">0</td>
+        <td class="number success">100%</td>
+      </tr>
+      <tr>
+        <td class="success"><a href="#searchXhtml">search.html</a></td>
+        <td class="number">16</td>
+        <td class="number">0</td>
+        <td class="number success">100%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#01_manualXhtml">01_manual.html</a></td>
+        <td class="number">127</td>
+        <td class="number">11</td>
+        <td class="number failures">91%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#reportXhtml">report.html</a></td>
+        <td class="number">24</td>
+        <td class="number">2</td>
+        <td class="number failures">91%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#StakeholderXdraftXhtml">Stakeholder-draft.html</a></td>
+        <td class="number">26</td>
+        <td class="number">3</td>
+        <td class="number failures">88%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#readmeXhtml">readme.html</a></td>
+        <td class="number">31</td>
+        <td class="number">3</td>
+        <td class="number failures">90%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#GeneralXdraftXhtml">General-draft.html</a></td>
+        <td class="number">28</td>
+        <td class="number">3</td>
+        <td class="number failures">89%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#ReportingXdraftXhtml">Reporting-draft.html</a></td>
+        <td class="number">26</td>
+        <td class="number">3</td>
+        <td class="number failures">88%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#OptionalXChecksXdraftXhtml">Optional+Checks-draft.html</a></td>
+        <td class="number">26</td>
+        <td class="number">3</td>
+        <td class="number failures">88%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#RequiredXChecksXdraftXhtml">Required+Checks-draft.html</a></td>
+        <td class="number">36</td>
+        <td class="number">8</td>
+        <td class="number failures">77%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#QualityXGoalsXdraftXhtml">Quality+Goals-draft.html</a></td>
+        <td class="number">26</td>
+        <td class="number">3</td>
+        <td class="number failures">88%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#chapX08XhtmlXencapsulationXdraftXhtml">chap-08-html-encapsulation-draft.html</a></td>
+        <td class="number">39</td>
+        <td class="number">2</td>
+        <td class="number failures">94%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#chapX06XRuntimeXhtml">chap-06-Runtime.html</a></td>
+        <td class="number">49</td>
+        <td class="number">3</td>
+        <td class="number failures">93%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#chapX07XDeploymentXhtml">chap-07-Deployment.html</a></td>
+        <td class="number">58</td>
+        <td class="number">3</td>
+        <td class="number failures">94%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#chapX08XConceptsXhtml">chap-08-Concepts.html</a></td>
+        <td class="number">142</td>
+        <td class="number">13</td>
+        <td class="number failures">90%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#chapX08XcheckingXalgorithmsXdraftXhtml">chap-08-checking-algorithms-draft.html</a></td>
+        <td class="number">63</td>
+        <td class="number">9</td>
+        <td class="number failures">85%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#chapX09XDecisionsXhtml">chap-09-Decisions.html</a></td>
+        <td class="number">66</td>
+        <td class="number">4</td>
+        <td class="number failures">93%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#chapX01XRequirementsXhtml">chap-01-Requirements.html</a></td>
+        <td class="number">97</td>
+        <td class="number">15</td>
+        <td class="number failures">84%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#chapX04XSolutionStrategyXhtml">chap-04-SolutionStrategy.html</a></td>
+        <td class="number">59</td>
+        <td class="number">6</td>
+        <td class="number failures">89%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#chapX03XContextXhtml">chap-03-Context.html</a></td>
+        <td class="number">65</td>
+        <td class="number">4</td>
+        <td class="number failures">93%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#chapX08XgradleXpluginXdraftXhtml">chap-08-gradle-plugin-draft.html</a></td>
+        <td class="number">48</td>
+        <td class="number">4</td>
+        <td class="number failures">91%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#chapX08XcheckingXdomainXdraftXhtml">chap-08-checking-domain-draft.html</a></td>
+        <td class="number">43</td>
+        <td class="number">2</td>
+        <td class="number failures">95%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#chapX05XBuildingBlocksXhtml">chap-05-BuildingBlocks.html</a></td>
+        <td class="number">77</td>
+        <td class="number">5</td>
+        <td class="number failures">93%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#chapX02XConstraintsXhtml">chap-02-Constraints.html</a></td>
+        <td class="number">49</td>
+        <td class="number">3</td>
+        <td class="number failures">93%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#hsc_arc42Xhtml">hsc_arc42.html</a></td>
+        <td class="number">270</td>
+        <td class="number">5</td>
+        <td class="number failures">98%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#AboutXThisXDocuXhtml">About-This-Docu.html</a></td>
+        <td class="number">56</td>
+        <td class="number">3</td>
+        <td class="number failures">94%</td>
+      </tr>
+      <tr>
+        <td class="success"><a href="#indexXhtml">index.html</a></td>
+        <td class="number">13</td>
+        <td class="number">0</td>
+        <td class="number success">100%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#issueX252Xhtml">issue-252.html</a></td>
+        <td class="number">50</td>
+        <td class="number">2</td>
+        <td class="number failures">96%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#issueX244Xhtml">issue-244.html</a></td>
+        <td class="number">46</td>
+        <td class="number">2</td>
+        <td class="number failures">95%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#publishingXhtml">publishing.html</a></td>
+        <td class="number">47</td>
+        <td class="number">3</td>
+        <td class="number failures">93%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#issueX185Xhtml">issue-185.html</a></td>
+        <td class="number">53</td>
+        <td class="number">2</td>
+        <td class="number failures">96%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#templateXhtml">template.html</a></td>
+        <td class="number">45</td>
+        <td class="number">2</td>
+        <td class="number failures">95%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#issueX219Xhtml">issue-219.html</a></td>
+        <td class="number">48</td>
+        <td class="number">2</td>
+        <td class="number failures">95%</td>
+      </tr>
+      <tr>
+        <td class="failures"><a href="#issueX190Xhtml">issue-190.html</a></td>
+        <td class="number">48</td>
+        <td class="number">2</td>
+        <td class="number failures">95%</td>
+      </tr>
+
+    </tbody>
+  </table><hr>
+
+<h1 id="readmeXhtml">Results for readme.html </h1>
+location : /project/build/microsite/output/ea/readme.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">35.89</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">31</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">2</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">93%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 7 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27readme.ad%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:ea/readme.ad returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27readme.ad%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:ea/readme.ad returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 6 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 13 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="readmeXdraftXhtml">Results for readme-draft.html </h1>
+location : /project/build/microsite/output/images/ea/readme-draft.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">35.85</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">29</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">2</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">93%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 7 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27readme.ad%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:images/ea/readme.ad returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27readme.ad%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:images/ea/readme.ad returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 5 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 12 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="archiveXhtml">Results for archive.html </h1>
+location : /project/build/microsite/output/archive.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">27.73</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">13</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">0</div>
+
+          issue</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox success" id="successRate">
+
+        <div class="percent">100%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 1 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="success"><h3>External Links Check</h3></div>
+
+
+ 1 anchor href attribute checked,
+ 0 broken external link found.<br>
+ 
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 5 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 6 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="searchXhtml">Results for search.html </h1>
+location : /project/build/microsite/output/search.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">29.74</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">16</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">0</div>
+
+          issue</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox success" id="successRate">
+
+        <div class="percent">100%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 4 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="success"><h3>External Links Check</h3></div>
+
+
+ 1 anchor href attribute checked,
+ 0 broken external link found.<br>
+ 
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 5 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 6 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="01_manualXhtml">Results for 01_manual.html </h1>
+location : /project/build/microsite/output/manual/01_manual.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">54.9</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">127</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">11</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">91%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 27 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 4 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 26 anchor href attribute checked,
+ 10 broken external link found.<br>
+ 
+  <ul>
+      <li> Warning: http://www.gradle.org/docs/current/userguide/custom_plugins.html returned statuscode 301, new location: https://www.gradle.org/docs/current/userguide/custom_plugins.html </li>
+      <li> Unknown host with href=http://code4reference.com/2012/08/gradle-custom-plugin-part-2/ </li>
+      <li> Warning: http://gradle.org/ returned statuscode 301, new location: https://gradle.org/ </li>
+      <li> Error: https://rawgit.com/aim42/htmlSanityCheck/gh-pages/hsc_arc42.html returned statuscode 404. </li>
+      <li> Unknown host with href=http://code4reference.com/2012/08/gradle-custom-plugin-part-1/ </li>
+      <li> Warning: http://jsoup.org/apidocs/ returned statuscode 301, new location: https://jsoup.org/apidocs/ </li>
+      <li> Warning: http://jsoup.org returned statuscode 301, new location: https://jsoup.org/ </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27HTML+Sanity+Check%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:manual/01_manual.adoc returned statuscode 400. </li>
+      <li> Warning: http://structure101.com returned statuscode 301, new location: https://structure101.com/ </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27HTML+Sanity+Check%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:manual/01_manual.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="failures"><h3>Missing Local Resources Check</h3></div>
+
+
+ 6 anchor tag href attribute checked,
+ 1 missing local resources found.<br>
+ 
+  <ul>
+      <li> local resource "./sample-hsc-report.jpg" missing </li>
+  </ul>
+
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 6 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 58 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="reportXhtml">Results for report.html </h1>
+location : /project/build/microsite/output/report/report.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">35.08</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">24</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">2</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">91%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 4 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Demo-Report%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:report/report.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Demo-Report%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:report/report.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 5 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 10 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="StakeholderXdraftXhtml">Results for Stakeholder-draft.html </h1>
+location : /project/build/microsite/output/excel/Stakeholder.xlsx/Stakeholder-draft.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">37.37</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">26</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">3</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">88%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 4 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 3 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/excel/Stakeholder.xlsx/Stakeholder.adoc returned statuscode 404. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Stakeholder.adoc%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/Stakeholder.xlsx/Stakeholder.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Stakeholder.adoc%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/Stakeholder.xlsx/Stakeholder.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 6 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 11 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="readmeXhtml">Results for readme.html </h1>
+location : /project/build/microsite/output/excel/readme.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">35.88</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">31</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">3</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">90%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 7 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 3 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27readme.ad%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/readme.ad returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/excel/readme.ad returned statuscode 404. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27readme.ad%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/readme.ad returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 6 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 13 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="GeneralXdraftXhtml">Results for General-draft.html </h1>
+location : /project/build/microsite/output/excel/Requirements.xlsx/General-draft.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">38.53</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">28</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">3</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">89%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 4 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 6 anchor href attribute checked,
+ 3 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27General.adoc%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/Requirements.xlsx/General.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/excel/Requirements.xlsx/General.adoc returned statuscode 404. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27General.adoc%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/Requirements.xlsx/General.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 6 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 12 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="ReportingXdraftXhtml">Results for Reporting-draft.html </h1>
+location : /project/build/microsite/output/excel/Requirements.xlsx/Reporting-draft.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">36.82</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">26</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">3</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">88%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 4 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 3 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Reporting.adoc%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/Requirements.xlsx/Reporting.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/excel/Requirements.xlsx/Reporting.adoc returned statuscode 404. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Reporting.adoc%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/Requirements.xlsx/Reporting.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 6 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 11 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="OptionalXChecksXdraftXhtml">Results for Optional+Checks-draft.html </h1>
+location : /project/build/microsite/output/excel/Requirements.xlsx/Optional+Checks-draft.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">36.52</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">26</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">3</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">88%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 4 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 3 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Optional+Checks.adoc%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/Requirements.xlsx/Optional+Checks.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/excel/Requirements.xlsx/Optional+Checks.adoc returned statuscode 404. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Optional+Checks.adoc%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/Requirements.xlsx/Optional+Checks.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 6 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 11 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="RequiredXChecksXdraftXhtml">Results for Required+Checks-draft.html </h1>
+location : /project/build/microsite/output/excel/Requirements.xlsx/Required+Checks-draft.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">39.14</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">36</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">8</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">77%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 4 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 3 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/excel/Requirements.xlsx/Required+Checks.adoc returned statuscode 404. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Required+Checks.adoc%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/Requirements.xlsx/Required+Checks.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Required+Checks.adoc%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/Requirements.xlsx/Required+Checks.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 6 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="failures"><h3>Broken Internal Links Check</h3></div>
+
+
+ 21 href checked,
+ 5 missing id found.<br>
+ 
+  <ul>
+      <li> link target "MissingImageFilesChecker" missing
+ (Suggestions: td-sidebar-menu) </li>
+      <li> link target "MissingLocalResourcesChecker" missing
+ (Suggestions: td-sidebar-menu) </li>
+      <li> link target "MissingImgAltAttributeChecker" missing
+ (Suggestions: td-sidebar-menu) </li>
+      <li> link target "BrokenCrossReferencesChecker" missing
+ (Suggestions: td-section-nav) </li>
+      <li> link target "DuplicateIdChecker" missing
+ (Suggestions: td-section-nav) </li>
+  </ul>
+<hr><p>
+
+<h1 id="QualityXGoalsXdraftXhtml">Results for Quality+Goals-draft.html </h1>
+location : /project/build/microsite/output/excel/Requirements.xlsx/Quality+Goals-draft.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">38.42</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">26</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">3</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">88%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 4 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 3 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Quality+Goals.adoc%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/Requirements.xlsx/Quality+Goals.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/excel/Requirements.xlsx/Quality+Goals.adoc returned statuscode 404. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Quality+Goals.adoc%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:excel/Requirements.xlsx/Quality+Goals.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 6 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 11 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="chapX08XhtmlXencapsulationXdraftXhtml">Results for chap-08-html-encapsulation-draft.html </h1>
+location : /project/build/microsite/output/arc42/chapters/chap-08-html-encapsulation-draft.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">36.84</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">39</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">2</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">94%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 7 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 7 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Encapsulate+HTML+Parsing%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-html-encapsulation.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Encapsulate+HTML+Parsing%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-html-encapsulation.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 7 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 2 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 16 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="chapX06XRuntimeXhtml">Results for chap-06-Runtime.html </h1>
+location : /project/build/microsite/output/arc42/chapters/chap-06-Runtime.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">37.94</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">49</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">3</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">93%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 7 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Runtime+View%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-06-Runtime.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Runtime+View%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-06-Runtime.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="failures"><h3>Missing Local Resources Check</h3></div>
+
+
+ 15 anchor tag href attribute checked,
+ 1 missing local resources found.<br>
+ 
+  <ul>
+      <li> local resource "../../pdf/arc42/hsc_arc42.pdf" missing </li>
+  </ul>
+
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 22 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="chapX07XDeploymentXhtml">Results for chap-07-Deployment.html </h1>
+location : /project/build/microsite/output/arc42/chapters/chap-07-Deployment.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">40.86</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">58</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">3</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">94%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 8 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 1 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 7 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Deployment+View%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-07-Deployment.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Deployment+View%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-07-Deployment.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="failures"><h3>Missing Local Resources Check</h3></div>
+
+
+ 15 anchor tag href attribute checked,
+ 1 missing local resources found.<br>
+ 
+  <ul>
+      <li> local resource "../../pdf/arc42/hsc_arc42.pdf" missing </li>
+  </ul>
+
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 1 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 26 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="chapX08XConceptsXhtml">Results for chap-08-Concepts.html </h1>
+location : /project/build/microsite/output/arc42/chapters/chap-08-Concepts.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">68.3</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">142</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">13</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">90%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 28 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 2 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 21 anchor href attribute checked,
+ 4 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Technical+and+Crosscutting+Concepts%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-Concepts.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Technical+and+Crosscutting+Concepts%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-Concepts.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/gradle/gradle/blob/master/subprojects/performance/src/testFixtures/groovy/org/gradle/performance/results/ReportGenerator.java#L50-50 returned statuscode 404. </li>
+      <li> Unknown host with href=https://code4reference.com/2012/08/gradle-custom-plugin-part-2/ </li>
+  </ul>
+
+<div class="failures"><h3>Missing Local Resources Check</h3></div>
+
+
+ 15 anchor tag href attribute checked,
+ 1 missing local resources found.<br>
+ 
+  <ul>
+      <li> local resource "../../pdf/arc42/hsc_arc42.pdf" missing </li>
+  </ul>
+
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 10 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="failures"><h3>Broken Internal Links Check</h3></div>
+
+
+ 66 href checked,
+ 8 missing id found.<br>
+ 
+  <ul>
+      <li> link target "requiredChecks" missing, reference count: 7
+ (Suggestions: MissingLocalResourcesChecker) </li>
+      <li> link target "requirements" missing
+ (Suggestions: MissingImgAltAttributeChecker) </li>
+  </ul>
+<hr><p>
+
+<h1 id="chapX08XcheckingXalgorithmsXdraftXhtml">Results for chap-08-checking-algorithms-draft.html </h1>
+location : /project/build/microsite/output/arc42/chapters/chap-08-checking-algorithms-draft.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">47.67</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">63</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">9</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">85%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 15 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 1 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 6 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Flexible+Checking+Algorithms%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-checking-algorithms.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Flexible+Checking+Algorithms%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-checking-algorithms.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 7 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 3 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="failures"><h3>Broken Internal Links Check</h3></div>
+
+
+ 31 href checked,
+ 7 missing id found.<br>
+ 
+  <ul>
+      <li> link target "requiredChecks" missing, reference count: 7
+ (Suggestions: MissingLocalResourcesChecker) </li>
+  </ul>
+<hr><p>
+
+<h1 id="chapX09XDecisionsXhtml">Results for chap-09-Decisions.html </h1>
+location : /project/build/microsite/output/arc42/chapters/chap-09-Decisions.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">42.0</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">66</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">4</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">93%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 10 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 8 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Design+Decisions%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-09-Decisions.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Design+Decisions%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-09-Decisions.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="failures"><h3>Missing Local Resources Check</h3></div>
+
+
+ 15 anchor tag href attribute checked,
+ 1 missing local resources found.<br>
+ 
+  <ul>
+      <li> local resource "../../pdf/arc42/hsc_arc42.pdf" missing </li>
+  </ul>
+
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="failures"><h3>Broken Internal Links Check</h3></div>
+
+
+ 33 href checked,
+ 1 missing id found.<br>
+ 
+  <ul>
+      <li> link target "html-encapsulation" missing
+ (Suggestions: _checking_of_external_links_postponed) </li>
+  </ul>
+<hr><p>
+
+<h1 id="chapX01XRequirementsXhtml">Results for chap-01-Requirements.html </h1>
+location : /project/build/microsite/output/arc42/chapters/chap-01-Requirements.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">63.3</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">97</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">15</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">84%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 18 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 2 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 10 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Introduction+and+Goals%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-01-Requirements.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Introduction+and+Goals%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-01-Requirements.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="failures"><h3>Missing Local Resources Check</h3></div>
+
+
+ 16 anchor tag href attribute checked,
+ 1 missing local resources found.<br>
+ 
+  <ul>
+      <li> local resource "../../pdf/arc42/hsc_arc42.pdf" missing </li>
+  </ul>
+
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 2 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="failures"><h3>Broken Internal Links Check</h3></div>
+
+
+ 49 href checked,
+ 12 missing id found.<br>
+ 
+  <ul>
+      <li> link target "MissingLocalResourcesChecker" missing, reference count: 2
+ (Suggestions: _terminology_what_can_go_wrong_in_html_files) </li>
+      <li> link "#HTML Checking Domain Model" contains illegal characters
+ (Suggestions: _introduction_and_goals) </li>
+      <li> link target "BrokenCrossReferencesChecker" missing, reference count: 2
+ (Suggestions: _introduction_and_goals) </li>
+      <li> link target "DuplicateIdChecker" missing, reference count: 2
+ (Suggestions: _reporting_and_output_requirements) </li>
+      <li> link target "MissingImageFilesChecker" missing, reference count: 2
+ (Suggestions: _terminology_what_can_go_wrong_in_html_files) </li>
+      <li> link target "BrokenHttpLinksChecker" missing
+ (Suggestions: _reporting_and_output_requirements) </li>
+      <li> link target "MissingImgAltAttributeChecker" missing, reference count: 2
+ (Suggestions: _terminology_what_can_go_wrong_in_html_files) </li>
+  </ul>
+<hr><p>
+
+<h1 id="chapX04XSolutionStrategyXhtml">Results for chap-04-SolutionStrategy.html </h1>
+location : /project/build/microsite/output/arc42/chapters/chap-04-SolutionStrategy.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">38.56</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">59</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">6</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">89%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 7 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 7 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Solution+Strategy%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-04-SolutionStrategy.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Solution+Strategy%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-04-SolutionStrategy.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="failures"><h3>Missing Local Resources Check</h3></div>
+
+
+ 15 anchor tag href attribute checked,
+ 1 missing local resources found.<br>
+ 
+  <ul>
+      <li> local resource "../../pdf/arc42/hsc_arc42.pdf" missing </li>
+  </ul>
+
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="failures"><h3>Broken Internal Links Check</h3></div>
+
+
+ 30 href checked,
+ 3 missing id found.<br>
+ 
+  <ul>
+      <li> link target "checking-concept" missing
+ (Suggestions: _solution_strategy) </li>
+      <li> link target "reporting-concept" missing
+ (Suggestions: _solution_strategy) </li>
+      <li> link target "gradle-plugin-concept" missing
+ (Suggestions: _solution_strategy) </li>
+  </ul>
+<hr><p>
+
+<h1 id="chapX03XContextXhtml">Results for chap-03-Context.html </h1>
+location : /project/build/microsite/output/arc42/chapters/chap-03-Context.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">43.51</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">65</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">4</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">93%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 9 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 2 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 7 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Context%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-03-Context.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Context%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-03-Context.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="failures"><h3>Missing Local Resources Check</h3></div>
+
+
+ 15 anchor tag href attribute checked,
+ 1 missing local resources found.<br>
+ 
+  <ul>
+      <li> local resource "../../pdf/arc42/hsc_arc42.pdf" missing </li>
+  </ul>
+
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 2 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="failures"><h3>Broken Internal Links Check</h3></div>
+
+
+ 30 href checked,
+ 1 missing id found.<br>
+ 
+  <ul>
+      <li> link target "deployment-view" missing
+ (Suggestions: _context) </li>
+  </ul>
+<hr><p>
+
+<h1 id="chapX08XgradleXpluginXdraftXhtml">Results for chap-08-gradle-plugin-draft.html </h1>
+location : /project/build/microsite/output/arc42/chapters/chap-08-gradle-plugin-draft.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">39.94</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">48</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">4</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">91%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 12 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 8 anchor href attribute checked,
+ 3 broken external link found.<br>
+ 
+  <ul>
+      <li> Unknown host with href=https://code4reference.com/2012/08/gradle-custom-plugin-part-2/ </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Gradle+Plugin+Concept+and+Development%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-gradle-plugin.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Gradle+Plugin+Concept+and+Development%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-gradle-plugin.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 7 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 2 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="failures"><h3>Broken Internal Links Check</h3></div>
+
+
+ 19 href checked,
+ 1 missing id found.<br>
+ 
+  <ul>
+      <li> link target "requirements" missing
+ (Suggestions: _passing_parameters_from_buildfile_to_plugin) </li>
+  </ul>
+<hr><p>
+
+<h1 id="chapX08XcheckingXdomainXdraftXhtml">Results for chap-08-checking-domain-draft.html </h1>
+location : /project/build/microsite/output/arc42/chapters/chap-08-checking-domain-draft.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">42.41</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">43</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">2</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">95%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 7 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 1 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 8 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27HTML+Checking+Domain+Model%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-checking-domain.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27HTML+Checking+Domain+Model%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-checking-domain.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 7 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 3 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 17 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="chapX05XBuildingBlocksXhtml">Results for chap-05-BuildingBlocks.html </h1>
+location : /project/build/microsite/output/arc42/chapters/chap-05-BuildingBlocks.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">55.14</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">77</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">5</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">93%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 15 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 3 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Building+Block+View%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-05-BuildingBlocks.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Building+Block+View%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-05-BuildingBlocks.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="failures"><h3>Missing Local Resources Check</h3></div>
+
+
+ 15 anchor tag href attribute checked,
+ 1 missing local resources found.<br>
+ 
+  <ul>
+      <li> local resource "../../pdf/arc42/hsc_arc42.pdf" missing </li>
+  </ul>
+
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 3 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="failures"><h3>Broken Internal Links Check</h3></div>
+
+
+ 36 href checked,
+ 2 missing id found.<br>
+ 
+  <ul>
+      <li> link target "checking-concept" missing
+ (Suggestions: _whitebox_htmlsanitychecker) </li>
+      <li> link target "arc42_user" missing
+ (Suggestions: _whitebox_htmlsanitychecker) </li>
+  </ul>
+<hr><p>
+
+<h1 id="chapX02XConstraintsXhtml">Results for chap-02-Constraints.html </h1>
+location : /project/build/microsite/output/arc42/chapters/chap-02-Constraints.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">38.07</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">49</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">3</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">93%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 7 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Constraints%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-02-Constraints.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Constraints%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-02-Constraints.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="failures"><h3>Missing Local Resources Check</h3></div>
+
+
+ 15 anchor tag href attribute checked,
+ 1 missing local resources found.<br>
+ 
+  <ul>
+      <li> local resource "../../pdf/arc42/hsc_arc42.pdf" missing </li>
+  </ul>
+
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 22 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="hsc_arc42Xhtml">Results for hsc_arc42.html </h1>
+location : /project/build/microsite/output/arc42/hsc_arc42.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">133.06</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">270</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">5</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">98%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 65 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 11 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 35 anchor href attribute checked,
+ 4 broken external link found.<br>
+ 
+  <ul>
+      <li> Unknown host with href=https://code4reference.com/2012/08/gradle-custom-plugin-part-2/ </li>
+      <li> Error: https://github.com/gradle/gradle/blob/master/subprojects/performance/src/testFixtures/groovy/org/gradle/performance/results/ReportGenerator.java#L50-50 returned statuscode 404. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27HTML+Sanity+Checker+Architecture+Documentation%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/hsc_arc42.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27HTML+Sanity+Checker+Architecture+Documentation%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/hsc_arc42.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 8 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 24 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="failures"><h3>Broken Internal Links Check</h3></div>
+
+
+ 127 href checked,
+ 1 missing id found.<br>
+ 
+  <ul>
+      <li> link target "arc42_user" missing
+ (Suggestions: _intra_document_uris) </li>
+  </ul>
+<hr><p>
+
+<h1 id="AboutXThisXDocuXhtml">Results for About-This-Docu.html </h1>
+location : /project/build/microsite/output/arc42/About-This-Docu.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">38.69</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">56</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">3</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">94%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 8 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 7 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Goals+of+this+Documentation%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/About-This-Docu.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Goals+of+this+Documentation%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/About-This-Docu.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="failures"><h3>Missing Local Resources Check</h3></div>
+
+
+ 15 anchor tag href attribute checked,
+ 1 missing local resources found.<br>
+ 
+  <ul>
+      <li> local resource "../pdf/arc42/hsc_arc42.pdf" missing </li>
+  </ul>
+
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 26 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="indexXhtml">Results for index.html </h1>
+location : /project/build/microsite/output/index.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">29.76</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">13</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">0</div>
+
+          issue</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox success" id="successRate">
+
+        <div class="percent">100%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 1 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="success"><h3>External Links Check</h3></div>
+
+
+ 1 anchor href attribute checked,
+ 0 broken external link found.<br>
+ 
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 5 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 6 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="issueX252Xhtml">Results for issue-252.html </h1>
+location : /project/build/microsite/output/development/issue-252.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">39.97</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">50</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">2</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">96%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 10 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Issue+252+%28MissingLocalResourcesChecker+gives+false+positives%29%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/issue-252.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Issue+252+%28MissingLocalResourcesChecker+gives+false+positives%29%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/issue-252.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 11 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 24 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="issueX244Xhtml">Results for issue-244.html </h1>
+location : /project/build/microsite/output/development/issue-244.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">38.59</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">46</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">2</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">95%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 8 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 6 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Handling+30x+Status+Codes%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/issue-244.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Handling+30x+Status+Codes%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/issue-244.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 11 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 21 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="publishingXhtml">Results for publishing.html </h1>
+location : /project/build/microsite/output/development/publishing.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">38.98</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">47</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">3</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">93%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 9 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 7 anchor href attribute checked,
+ 3 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Publishing+kbd%3AhtmlSC+Releases%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/publishing.adoc returned statuscode 400. </li>
+      <li> Unknown host with href=https://java.dzone.com/articles/enjoy-bintray-and-use-it-pain </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Publishing+kbd%3AhtmlSC+Releases%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/publishing.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 11 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 20 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="issueX185Xhtml">Results for issue-185.html </h1>
+location : /project/build/microsite/output/development/issue-185.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">39.04</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">53</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">2</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">96%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 9 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 0 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 8 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Automated+Checker+Factory%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/issue-185.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Automated+Checker+Factory%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/issue-185.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 11 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 0 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 25 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="templateXhtml">Results for template.html </h1>
+location : /project/build/microsite/output/development/template.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">38.17</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">45</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">2</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">95%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 9 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 1 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 5 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Descriptive+Title%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/template.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Descriptive+Title%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/template.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 11 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 1 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 18 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="issueX219Xhtml">Results for issue-219.html </h1>
+location : /project/build/microsite/output/development/issue-219.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">39.04</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">48</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">2</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">95%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 8 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 1 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 6 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Handling+403+and+405+Status+Codes%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/issue-219.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Handling+403+and+405+Status+Codes%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/issue-219.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 11 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 1 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 21 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+
+<h1 id="issueX190Xhtml">Results for issue-190.html </h1>
+location : /project/build/microsite/output/development/issue-190.html <p>
+
+<table><tr><td><div class="summaryGroup">
+<table>
+<tr>
+
+    <td>
+
+      <div class="infoBox" id="size">
+
+          <div class="counter">37.53</div>
+
+          kByte</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="checks">
+
+          <div class="counter">48</div>
+
+          checks</div>
+
+    </td>
+
+    <td>
+
+      <div class="infoBox" id="findings">
+
+          <div class="counter">2</div>
+
+          issues</div>
+
+    </td></tr>
+</table></div></td  >
+
+    <td><div class="infoBox failures" id="successRate">
+
+        <div class="percent">95%</div>
+        successful</div>
+    </td></tr></table>
+
+
+<div class="success"><h3>Duplicate Definition of id Check</h3></div>
+
+
+ 8 id checked,
+ 0 duplicate id found.<br>
+ 
+<div class="success"><h3>Missing Local Images Check</h3></div>
+
+
+ 1 img src attributes checked,
+ 0 missing image files found.<br>
+ 
+<div class="failures"><h3>External Links Check</h3></div>
+
+
+ 6 anchor href attribute checked,
+ 2 broken external link found.<br>
+ 
+  <ul>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Refactoring+the+Main+Checking+Loop%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/issue-190.adoc returned statuscode 400. </li>
+      <li> Error: https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27Refactoring+the+Main+Checking+Loop%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:development/issue-190.adoc returned statuscode 400. </li>
+  </ul>
+
+<div class="success"><h3>Missing Local Resources Check</h3></div>
+
+
+ 11 anchor tag href attribute checked,
+ 0 missing local resources found.<br>
+ 
+<div class="success"><h3>Consistency of ImageMaps</h3></div>
+
+
+ 0 imageMap checked,
+ 0 map/area and usemap-references found.<br>
+ 
+<div class="success"><h3>Missing alt-attribute declaration in image tags</h3></div>
+
+
+ 1 image tags checked,
+ 0 missing alt attributes found.<br>
+ 
+<div class="success"><h3>Broken Internal Links Check</h3></div>
+
+
+ 21 href checked,
+ 0 missing id found.<br>
+ <hr><p>
+<!-- scroll-to-top icon -->
+<div class="scroll-top-wrapper">
+   <img src="arrow-up.png" alt="to top"/>
+</div>
+
+<div id="footer">
+  Generated by <a href="https://www.aim42.org">htmlSanityCheck</a> (version 1.1.6) at 29. October 2021, 07:39 
+</div></body></html>

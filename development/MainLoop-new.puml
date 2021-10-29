@@ -1,0 +1,27 @@
+@startuml
+skinparam maxmessagesize 80
+skinparam handwritten true
+
+activate Gradle
+Gradle -> HSC: sanityCheckHtml()
+
+participant HSCTask as HSC
+activate HSC
+
+participant AllChecksRunner as ACR
+
+HSC -> HSC: cfg = setupConfiguration()
+HSC -> ACR: new AllChecksRunner(cfg)
+activate ACR
+
+ACR -> ACR: allFiles = FileCollector.getConfiguredHtmlFiles()
+ACR -> ACR: allCeckers = CheckerFactory.getAllCheckersByAnnotation
+
+loop allFiles
+    participant "Checker" as CHECK <<abstract>>
+    ACR -> CHECK: configureAllCheckers(file)
+    loop allCheckers
+    ACR -> CHECK: performSingleCheck(file)
+    end
+end
+@enduml

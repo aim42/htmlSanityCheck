@@ -1,0 +1,5 @@
+"Role","Description","Goal, Intention"
+"Documentation author","writes documentation with Html output","wants to check that the resulting document contains good links, image references"
+"arc42 user","uses the arc42 template for architecture documentation","wants a small but practical example of how to apply arc42."
+"aim42 contributor","contributes to aim42 methode-guide","check generated html code to ensure links and images are correct during (gradle-based) build process"
+"software developer","","wants an example of pragmatic architecture documentation and arc42 usage"

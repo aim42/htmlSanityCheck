@@ -1,0 +1,2315 @@
+<!doctype html>
+<html lang="de">
+<head>
+  
+  <!-- arc42/hsc_arc42.html -->
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+  <meta content="jbake" name="generator">
+  <meta content="INDEX, FOLLOW" name="ROBOTS">
+
+  <title>HTML Sanity Checker Architecture Documentation</title>
+  <meta content="docToolchain" property="og:title">
+  <meta content="build your dev docs the easy way..." property="og:description">
+  <meta content="website" property="og:type">
+  <meta content="docToolchain" property="og:site_name">
+  <meta content="docToolchain" itemprop="name">
+  <meta content="build your dev docs the easy way..." itemprop="description">
+  <meta content="summary" name="twitter:card">
+  <meta content="docToolchain" name="twitter:title">
+  <meta content="build your dev docs the easy way..." name="twitter:description">
+
+  <link as="style" href="../css/main.min.881fe5f7b53609f55ebfb496c7097c3b30b2e8ceb20a54bc6a48350ded67224f.css"
+        rel="preload">
+  <link href="../css/main.min.881fe5f7b53609f55ebfb496c7097c3b30b2e8ceb20a54bc6a48350ded67224f.css" integrity=""
+        rel="stylesheet">
+  <link href="../css/asciidoctor.css" rel="stylesheet">
+  <link href="../css/prettify.css" rel="stylesheet">
+
+    <!-- favicon generated with https://www.favicon-generator.org/ -->
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="apple-touch-icon" sizes="57x57" href="../apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="../apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="../apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="../apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="../apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="../apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="../apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="../apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="../android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="../ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+  <script crossorigin="anonymous" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+          src="../js/jquery-3.5.1.min.js"></script>
+  <style>
+      div.bg-light {
+          background-color: rgba(127, 180, 224, 0.3) !important;
+      }
+  span.tag {
+      border-radius: 10px;
+      background-color: #30638E;
+      color: white;
+      padding: 5px 10px;
+  }
+  span.tag a {
+      color: white;
+      padding: 0
+  }
+  span.tag span {
+      margin-left: 10px;
+      border-radius: 10px;
+      background-color: white;
+      color: #30638E;
+  }
+  div.td-toc {
+    height: calc(100vh - 5rem) !important;
+  }
+  div#toctitle {
+    display: none
+  }
+  #td-section-nav {
+    max-height: calc(100vh - 4rem);
+    font-size: smaller;
+    line-hight: 1.1;
+  }
+  .td-page-meta {
+      font-size: smaller;
+      line-hight: 1.1;
+  }
+  #td-section-nav ul.td-sidebar-nav__section  {
+    padding-left:0px;
+  }
+  .match {
+      font-size: smaller;
+  }
+      .admonitionblock td.icon .fa:before {
+          font-size: xxx-large;
+      }
+  </style>
+
+   <style>
+    div.openblock.primary div.content, div.openblock.secondary div.content {
+        border: 1px solid #7a2518;
+        padding: 5px;
+    }
+    div.openblock.primary div.content div.content, div.openblock.secondary div.content div.content {
+        border: 0px solid #7a2518;
+        padding: 0;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .switch {
+        border-width: 1px 1px 0 1px;
+        border-style: solid;
+        border-color: #7a2518;
+        display: inline-block;
+    }
+
+    .switch--item {
+        padding: 2px 10px;
+        background-color: #ffffff;
+        color: #7a2518;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .switch--item:not(:first-child) {
+        border-width: 0 0 0 1px;
+        border-style: solid;
+        border-color: #7a2518;
+    }
+
+    .switch--item.selected {
+        background-color: #7a2519;
+        color: #ffffff;
+    }
+    </style>
+
+
+</head>
+
+<body onload="prettyPrint()" class="td-section">
+<header>
+	
+
+<nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar">
+    <a class="navbar-brand" href="../index.html">
+        <span class="navbar-logo"></span><span
+            class="font-weight-bold">HTML Sanity Checker</span>
+    </a>
+    <div class="td-navbar-nav-scroll ml-md-auto" id="main_navbar">
+        <ul class="navbar-nav mt-2 mt-lg-0">
+    <li class="nav-item mr-4 mb-2 mb-lg-0"><!--img src="../images/status.png" alt="status" width="16" height="16" onerror="this.style.display='none'"--></li>
+            <!--
+            [report:[[title:Demo-Report, order:-1, filename:null, uri:report/report.html]], development:[[title:Issue 252 (MissingLocalResourcesChecker gives false positives), order:-1, filename:null, uri:development/issue-252.html], [title:Descriptive Title, order:-1, filename:null, uri:development/template.html], [title:Publishing kbd:htmlSC Releases, order:-1, filename:null, uri:development/publishing.html], [title:Handling 30x Status Codes, order:-1, filename:null, uri:development/issue-244.html], [title:Handling 403 and 405 Status Codes, order:-1, filename:null, uri:development/issue-219.html], [title:Refactoring the Main Checking Loop, order:-1, filename:null, uri:development/issue-190.html], [title:Automated Checker Factory, order:-1, filename:null, uri:development/issue-185.html]], arc42:[[title:Deployment View, order:70, filename:null, uri:arc42/chapters/chap-07-Deployment.html], [title:Runtime View, order:60, filename:null, uri:arc42/chapters/chap-06-Runtime.html], [title:Introduction and Goals, order:10, filename:null, uri:arc42/chapters/chap-01-Requirements.html], [title:Design Decisions, order:90, filename:null, uri:arc42/chapters/chap-09-Decisions.html], [title:Constraints, order:20, filename:null, uri:arc42/chapters/chap-02-Constraints.html], [title:Building Block View, order:50, filename:null, uri:arc42/chapters/chap-05-BuildingBlocks.html], [title:Technical and Crosscutting Concepts, order:80, filename:null, uri:arc42/chapters/chap-08-Concepts.html], [title:Solution Strategy, order:40, filename:null, uri:arc42/chapters/chap-04-SolutionStrategy.html], [title:Context, order:30, filename:null, uri:arc42/chapters/chap-03-Context.html], [title:Goals of this Documentation, order:0, filename:null, uri:arc42/About-This-Docu.html]], excel:[[title:readme.ad, order:-1, filename:null, uri:excel/readme.html]], Manual:[[title:HTML Sanity Check, order:01, filename:null, uri:manual/01_manual.html]], ea:[[title:readme.ad, order:-1, filename:null, uri:ea/readme.html]], -:[[title:HTML Sanity Checker Architecture Documentation, order:-1, filename:null, uri:arc42/hsc_arc42.html], [title:search, order:0, filename:null, uri:search.html]]]
+            -->
+
+            <li class="nav-item mr-4 mb-2 mb-lg-0">
+                <a class="nav-link " href="../manual/01_manual.html"><span>Manual</span></a>
+            </li>
+            <!--
+            [report:[[title:Demo-Report, order:-1, filename:null, uri:report/report.html]], development:[[title:Issue 252 (MissingLocalResourcesChecker gives false positives), order:-1, filename:null, uri:development/issue-252.html], [title:Descriptive Title, order:-1, filename:null, uri:development/template.html], [title:Publishing kbd:htmlSC Releases, order:-1, filename:null, uri:development/publishing.html], [title:Handling 30x Status Codes, order:-1, filename:null, uri:development/issue-244.html], [title:Handling 403 and 405 Status Codes, order:-1, filename:null, uri:development/issue-219.html], [title:Refactoring the Main Checking Loop, order:-1, filename:null, uri:development/issue-190.html], [title:Automated Checker Factory, order:-1, filename:null, uri:development/issue-185.html]], arc42:[[title:Deployment View, order:70, filename:null, uri:arc42/chapters/chap-07-Deployment.html], [title:Runtime View, order:60, filename:null, uri:arc42/chapters/chap-06-Runtime.html], [title:Introduction and Goals, order:10, filename:null, uri:arc42/chapters/chap-01-Requirements.html], [title:Design Decisions, order:90, filename:null, uri:arc42/chapters/chap-09-Decisions.html], [title:Constraints, order:20, filename:null, uri:arc42/chapters/chap-02-Constraints.html], [title:Building Block View, order:50, filename:null, uri:arc42/chapters/chap-05-BuildingBlocks.html], [title:Technical and Crosscutting Concepts, order:80, filename:null, uri:arc42/chapters/chap-08-Concepts.html], [title:Solution Strategy, order:40, filename:null, uri:arc42/chapters/chap-04-SolutionStrategy.html], [title:Context, order:30, filename:null, uri:arc42/chapters/chap-03-Context.html], [title:Goals of this Documentation, order:0, filename:null, uri:arc42/About-This-Docu.html]], excel:[[title:readme.ad, order:-1, filename:null, uri:excel/readme.html]], Manual:[[title:HTML Sanity Check, order:01, filename:null, uri:manual/01_manual.html]], ea:[[title:readme.ad, order:-1, filename:null, uri:ea/readme.html]], -:[[title:HTML Sanity Checker Architecture Documentation, order:-1, filename:null, uri:arc42/hsc_arc42.html], [title:search, order:0, filename:null, uri:search.html]]]
+
+            [ea:[-, [[title:readme.ad, order:-1, filename:null, uri:ea/readme.html]]], Manual:[Manual, [[title:HTML Sanity Check, order:01, filename:null, uri:manual/01_manual.html]]], arc42:[Architecture, [[title:Deployment View, order:70, filename:null, uri:arc42/chapters/chap-07-Deployment.html], [title:Runtime View, order:60, filename:null, uri:arc42/chapters/chap-06-Runtime.html], [title:Introduction and Goals, order:10, filename:null, uri:arc42/chapters/chap-01-Requirements.html], [title:Design Decisions, order:90, filename:null, uri:arc42/chapters/chap-09-Decisions.html], [title:Constraints, order:20, filename:null, uri:arc42/chapters/chap-02-Constraints.html], [title:Building Block View, order:50, filename:null, uri:arc42/chapters/chap-05-BuildingBlocks.html], [title:Technical and Crosscutting Concepts, order:80, filename:null, uri:arc42/chapters/chap-08-Concepts.html], [title:Solution Strategy, order:40, filename:null, uri:arc42/chapters/chap-04-SolutionStrategy.html], [title:Context, order:30, filename:null, uri:arc42/chapters/chap-03-Context.html], [title:Goals of this Documentation, order:0, filename:null, uri:arc42/About-This-Docu.html]]], development:[Development, [[title:Issue 252 (MissingLocalResourcesChecker gives false positives), order:-1, filename:null, uri:development/issue-252.html], [title:Descriptive Title, order:-1, filename:null, uri:development/template.html], [title:Publishing kbd:htmlSC Releases, order:-1, filename:null, uri:development/publishing.html], [title:Handling 30x Status Codes, order:-1, filename:null, uri:development/issue-244.html], [title:Handling 403 and 405 Status Codes, order:-1, filename:null, uri:development/issue-219.html], [title:Refactoring the Main Checking Loop, order:-1, filename:null, uri:development/issue-190.html], [title:Automated Checker Factory, order:-1, filename:null, uri:development/issue-185.html]]], report:[Report, [[title:Demo-Report, order:-1, filename:null, uri:report/report.html]]], excel:[-, [[title:readme.ad, order:-1, filename:null, uri:excel/readme.html]]], -:[-, [[title:HTML Sanity Checker Architecture Documentation, order:-1, filename:null, uri:arc42/hsc_arc42.html], [title:search, order:0, filename:null, uri:search.html]]]]
+            -->
+
+            <li class="nav-item mr-4 mb-2 mb-lg-0">
+                <a class="nav-link active" href="../arc42/About-This-Docu.html"><span>Architecture</span></a>
+            </li>
+            <!--
+            [report:[[title:Demo-Report, order:-1, filename:null, uri:report/report.html]], development:[[title:Issue 252 (MissingLocalResourcesChecker gives false positives), order:-1, filename:null, uri:development/issue-252.html], [title:Descriptive Title, order:-1, filename:null, uri:development/template.html], [title:Publishing kbd:htmlSC Releases, order:-1, filename:null, uri:development/publishing.html], [title:Handling 30x Status Codes, order:-1, filename:null, uri:development/issue-244.html], [title:Handling 403 and 405 Status Codes, order:-1, filename:null, uri:development/issue-219.html], [title:Refactoring the Main Checking Loop, order:-1, filename:null, uri:development/issue-190.html], [title:Automated Checker Factory, order:-1, filename:null, uri:development/issue-185.html]], arc42:[[title:Goals of this Documentation, order:0, filename:null, uri:arc42/About-This-Docu.html], [title:Introduction and Goals, order:10, filename:null, uri:arc42/chapters/chap-01-Requirements.html], [title:Constraints, order:20, filename:null, uri:arc42/chapters/chap-02-Constraints.html], [title:Context, order:30, filename:null, uri:arc42/chapters/chap-03-Context.html], [title:Solution Strategy, order:40, filename:null, uri:arc42/chapters/chap-04-SolutionStrategy.html], [title:Building Block View, order:50, filename:null, uri:arc42/chapters/chap-05-BuildingBlocks.html], [title:Runtime View, order:60, filename:null, uri:arc42/chapters/chap-06-Runtime.html], [title:Deployment View, order:70, filename:null, uri:arc42/chapters/chap-07-Deployment.html], [title:Technical and Crosscutting Concepts, order:80, filename:null, uri:arc42/chapters/chap-08-Concepts.html], [title:Design Decisions, order:90, filename:null, uri:arc42/chapters/chap-09-Decisions.html]], excel:[[title:readme.ad, order:-1, filename:null, uri:excel/readme.html]], Manual:[[title:HTML Sanity Check, order:01, filename:null, uri:manual/01_manual.html]], ea:[[title:readme.ad, order:-1, filename:null, uri:ea/readme.html]], -:[[title:HTML Sanity Checker Architecture Documentation, order:-1, filename:null, uri:arc42/hsc_arc42.html], [title:search, order:0, filename:null, uri:search.html]]]
+
+            [ea:[-, [[title:readme.ad, order:-1, filename:null, uri:ea/readme.html]]], Manual:[Manual, [[title:HTML Sanity Check, order:01, filename:null, uri:manual/01_manual.html]]], arc42:[Architecture, [[title:Goals of this Documentation, order:0, filename:null, uri:arc42/About-This-Docu.html], [title:Introduction and Goals, order:10, filename:null, uri:arc42/chapters/chap-01-Requirements.html], [title:Constraints, order:20, filename:null, uri:arc42/chapters/chap-02-Constraints.html], [title:Context, order:30, filename:null, uri:arc42/chapters/chap-03-Context.html], [title:Solution Strategy, order:40, filename:null, uri:arc42/chapters/chap-04-SolutionStrategy.html], [title:Building Block View, order:50, filename:null, uri:arc42/chapters/chap-05-BuildingBlocks.html], [title:Runtime View, order:60, filename:null, uri:arc42/chapters/chap-06-Runtime.html], [title:Deployment View, order:70, filename:null, uri:arc42/chapters/chap-07-Deployment.html], [title:Technical and Crosscutting Concepts, order:80, filename:null, uri:arc42/chapters/chap-08-Concepts.html], [title:Design Decisions, order:90, filename:null, uri:arc42/chapters/chap-09-Decisions.html]]], development:[Development, [[title:Issue 252 (MissingLocalResourcesChecker gives false positives), order:-1, filename:null, uri:development/issue-252.html], [title:Descriptive Title, order:-1, filename:null, uri:development/template.html], [title:Publishing kbd:htmlSC Releases, order:-1, filename:null, uri:development/publishing.html], [title:Handling 30x Status Codes, order:-1, filename:null, uri:development/issue-244.html], [title:Handling 403 and 405 Status Codes, order:-1, filename:null, uri:development/issue-219.html], [title:Refactoring the Main Checking Loop, order:-1, filename:null, uri:development/issue-190.html], [title:Automated Checker Factory, order:-1, filename:null, uri:development/issue-185.html]]], report:[Report, [[title:Demo-Report, order:-1, filename:null, uri:report/report.html]]], excel:[-, [[title:readme.ad, order:-1, filename:null, uri:excel/readme.html]]], -:[-, [[title:HTML Sanity Checker Architecture Documentation, order:-1, filename:null, uri:arc42/hsc_arc42.html], [title:search, order:0, filename:null, uri:search.html]]]]
+            -->
+
+            <li class="nav-item mr-4 mb-2 mb-lg-0">
+                <a class="nav-link " href="../development/issue-185.html"><span>Development</span></a>
+            </li>
+            <!--
+            [report:[[title:Demo-Report, order:-1, filename:null, uri:report/report.html]], development:[[title:Automated Checker Factory, order:-1, filename:null, uri:development/issue-185.html], [title:Descriptive Title, order:-1, filename:null, uri:development/template.html], [title:Handling 30x Status Codes, order:-1, filename:null, uri:development/issue-244.html], [title:Handling 403 and 405 Status Codes, order:-1, filename:null, uri:development/issue-219.html], [title:Issue 252 (MissingLocalResourcesChecker gives false positives), order:-1, filename:null, uri:development/issue-252.html], [title:Publishing kbd:htmlSC Releases, order:-1, filename:null, uri:development/publishing.html], [title:Refactoring the Main Checking Loop, order:-1, filename:null, uri:development/issue-190.html]], arc42:[[title:Goals of this Documentation, order:0, filename:null, uri:arc42/About-This-Docu.html], [title:Introduction and Goals, order:10, filename:null, uri:arc42/chapters/chap-01-Requirements.html], [title:Constraints, order:20, filename:null, uri:arc42/chapters/chap-02-Constraints.html], [title:Context, order:30, filename:null, uri:arc42/chapters/chap-03-Context.html], [title:Solution Strategy, order:40, filename:null, uri:arc42/chapters/chap-04-SolutionStrategy.html], [title:Building Block View, order:50, filename:null, uri:arc42/chapters/chap-05-BuildingBlocks.html], [title:Runtime View, order:60, filename:null, uri:arc42/chapters/chap-06-Runtime.html], [title:Deployment View, order:70, filename:null, uri:arc42/chapters/chap-07-Deployment.html], [title:Technical and Crosscutting Concepts, order:80, filename:null, uri:arc42/chapters/chap-08-Concepts.html], [title:Design Decisions, order:90, filename:null, uri:arc42/chapters/chap-09-Decisions.html]], excel:[[title:readme.ad, order:-1, filename:null, uri:excel/readme.html]], Manual:[[title:HTML Sanity Check, order:01, filename:null, uri:manual/01_manual.html]], ea:[[title:readme.ad, order:-1, filename:null, uri:ea/readme.html]], -:[[title:HTML Sanity Checker Architecture Documentation, order:-1, filename:null, uri:arc42/hsc_arc42.html], [title:search, order:0, filename:null, uri:search.html]]]
+
+            [ea:[-, [[title:readme.ad, order:-1, filename:null, uri:ea/readme.html]]], Manual:[Manual, [[title:HTML Sanity Check, order:01, filename:null, uri:manual/01_manual.html]]], arc42:[Architecture, [[title:Goals of this Documentation, order:0, filename:null, uri:arc42/About-This-Docu.html], [title:Introduction and Goals, order:10, filename:null, uri:arc42/chapters/chap-01-Requirements.html], [title:Constraints, order:20, filename:null, uri:arc42/chapters/chap-02-Constraints.html], [title:Context, order:30, filename:null, uri:arc42/chapters/chap-03-Context.html], [title:Solution Strategy, order:40, filename:null, uri:arc42/chapters/chap-04-SolutionStrategy.html], [title:Building Block View, order:50, filename:null, uri:arc42/chapters/chap-05-BuildingBlocks.html], [title:Runtime View, order:60, filename:null, uri:arc42/chapters/chap-06-Runtime.html], [title:Deployment View, order:70, filename:null, uri:arc42/chapters/chap-07-Deployment.html], [title:Technical and Crosscutting Concepts, order:80, filename:null, uri:arc42/chapters/chap-08-Concepts.html], [title:Design Decisions, order:90, filename:null, uri:arc42/chapters/chap-09-Decisions.html]]], development:[Development, [[title:Automated Checker Factory, order:-1, filename:null, uri:development/issue-185.html], [title:Descriptive Title, order:-1, filename:null, uri:development/template.html], [title:Handling 30x Status Codes, order:-1, filename:null, uri:development/issue-244.html], [title:Handling 403 and 405 Status Codes, order:-1, filename:null, uri:development/issue-219.html], [title:Issue 252 (MissingLocalResourcesChecker gives false positives), order:-1, filename:null, uri:development/issue-252.html], [title:Publishing kbd:htmlSC Releases, order:-1, filename:null, uri:development/publishing.html], [title:Refactoring the Main Checking Loop, order:-1, filename:null, uri:development/issue-190.html]]], report:[Report, [[title:Demo-Report, order:-1, filename:null, uri:report/report.html]]], excel:[-, [[title:readme.ad, order:-1, filename:null, uri:excel/readme.html]]], -:[-, [[title:HTML Sanity Checker Architecture Documentation, order:-1, filename:null, uri:arc42/hsc_arc42.html], [title:search, order:0, filename:null, uri:search.html]]]]
+            -->
+
+            <li class="nav-item mr-4 mb-2 mb-lg-0">
+                <a class="nav-link " href="../report/report.html"><span>Report</span></a>
+            </li>
+            <!--
+            [report:[[title:Demo-Report, order:-1, filename:null, uri:report/report.html]], development:[[title:Automated Checker Factory, order:-1, filename:null, uri:development/issue-185.html], [title:Descriptive Title, order:-1, filename:null, uri:development/template.html], [title:Handling 30x Status Codes, order:-1, filename:null, uri:development/issue-244.html], [title:Handling 403 and 405 Status Codes, order:-1, filename:null, uri:development/issue-219.html], [title:Issue 252 (MissingLocalResourcesChecker gives false positives), order:-1, filename:null, uri:development/issue-252.html], [title:Publishing kbd:htmlSC Releases, order:-1, filename:null, uri:development/publishing.html], [title:Refactoring the Main Checking Loop, order:-1, filename:null, uri:development/issue-190.html]], arc42:[[title:Goals of this Documentation, order:0, filename:null, uri:arc42/About-This-Docu.html], [title:Introduction and Goals, order:10, filename:null, uri:arc42/chapters/chap-01-Requirements.html], [title:Constraints, order:20, filename:null, uri:arc42/chapters/chap-02-Constraints.html], [title:Context, order:30, filename:null, uri:arc42/chapters/chap-03-Context.html], [title:Solution Strategy, order:40, filename:null, uri:arc42/chapters/chap-04-SolutionStrategy.html], [title:Building Block View, order:50, filename:null, uri:arc42/chapters/chap-05-BuildingBlocks.html], [title:Runtime View, order:60, filename:null, uri:arc42/chapters/chap-06-Runtime.html], [title:Deployment View, order:70, filename:null, uri:arc42/chapters/chap-07-Deployment.html], [title:Technical and Crosscutting Concepts, order:80, filename:null, uri:arc42/chapters/chap-08-Concepts.html], [title:Design Decisions, order:90, filename:null, uri:arc42/chapters/chap-09-Decisions.html]], excel:[[title:readme.ad, order:-1, filename:null, uri:excel/readme.html]], Manual:[[title:HTML Sanity Check, order:01, filename:null, uri:manual/01_manual.html]], ea:[[title:readme.ad, order:-1, filename:null, uri:ea/readme.html]], -:[[title:HTML Sanity Checker Architecture Documentation, order:-1, filename:null, uri:arc42/hsc_arc42.html], [title:search, order:0, filename:null, uri:search.html]]]
+
+            [ea:[-, [[title:readme.ad, order:-1, filename:null, uri:ea/readme.html]]], Manual:[Manual, [[title:HTML Sanity Check, order:01, filename:null, uri:manual/01_manual.html]]], arc42:[Architecture, [[title:Goals of this Documentation, order:0, filename:null, uri:arc42/About-This-Docu.html], [title:Introduction and Goals, order:10, filename:null, uri:arc42/chapters/chap-01-Requirements.html], [title:Constraints, order:20, filename:null, uri:arc42/chapters/chap-02-Constraints.html], [title:Context, order:30, filename:null, uri:arc42/chapters/chap-03-Context.html], [title:Solution Strategy, order:40, filename:null, uri:arc42/chapters/chap-04-SolutionStrategy.html], [title:Building Block View, order:50, filename:null, uri:arc42/chapters/chap-05-BuildingBlocks.html], [title:Runtime View, order:60, filename:null, uri:arc42/chapters/chap-06-Runtime.html], [title:Deployment View, order:70, filename:null, uri:arc42/chapters/chap-07-Deployment.html], [title:Technical and Crosscutting Concepts, order:80, filename:null, uri:arc42/chapters/chap-08-Concepts.html], [title:Design Decisions, order:90, filename:null, uri:arc42/chapters/chap-09-Decisions.html]]], development:[Development, [[title:Automated Checker Factory, order:-1, filename:null, uri:development/issue-185.html], [title:Descriptive Title, order:-1, filename:null, uri:development/template.html], [title:Handling 30x Status Codes, order:-1, filename:null, uri:development/issue-244.html], [title:Handling 403 and 405 Status Codes, order:-1, filename:null, uri:development/issue-219.html], [title:Issue 252 (MissingLocalResourcesChecker gives false positives), order:-1, filename:null, uri:development/issue-252.html], [title:Publishing kbd:htmlSC Releases, order:-1, filename:null, uri:development/publishing.html], [title:Refactoring the Main Checking Loop, order:-1, filename:null, uri:development/issue-190.html]]], report:[Report, [[title:Demo-Report, order:-1, filename:null, uri:report/report.html]]], excel:[-, [[title:readme.ad, order:-1, filename:null, uri:excel/readme.html]]], -:[-, [[title:HTML Sanity Checker Architecture Documentation, order:-1, filename:null, uri:arc42/hsc_arc42.html], [title:search, order:0, filename:null, uri:search.html]]]]
+            -->
+
+        </ul>
+    </div>
+    <div class="navbar-nav d-none d-lg-block" >
+        <form action="../search.html">
+        <input aria-label="Search this site…" autocomplete="off" class="form-control td-search-input"
+               placeholder=" Search this site…" type="search" name="q">
+        </form>
+    </div>
+</nav>
+
+</header>
+<div class="container-fluid td-outer">
+	<div class="td-main">
+		<div class="row flex-xl-nowrap">
+			<div class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
+				<div class="td-sidebar__inner" id="td-sidebar-menu" >
+					
+        <form class="td-sidebar__search d-flex align-items-center d-lg-none" action="../search.html">
+
+            <input aria-label="Search this site…" name="q" autocomplete="off" class="form-control td-search-input"
+                   placeholder=" Search this site…" type="search">
+
+
+            <button aria-controls="td-docs-nav" aria-expanded="false"
+                    aria-label="Toggle section navigation" class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" data-target="#td-section-nav"
+                    data-toggle="collapse" type="button">
+            </button>
+        </form>
+
+        <nav class="collapse td-sidebar-nav" id="td-section-nav" >
+
+            <ul class="td-sidebar-nav__section pr-md-3">
+                <li class="td-sidebar-nav__section-title">
+                    <span class="align-left pl-0 pr-2 active td-sidebar-link td-sidebar-link__section">-</span>
+                </li>
+                <ul>
+                    <li class="collapse show" id="docs">
+                        <ul class="td-sidebar-nav__section pr-md-3">
+                            
+                            
+                            <li class="td-sidebar-nav__section-title">
+                                <a class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section active"
+                                   href="../arc42/hsc_arc42.html">HTML Sanity Checker Architecture Documentation</a>
+                            </li>
+                            
+                            
+                            <li class="td-sidebar-nav__section-title">
+                                <a class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section "
+                                   href="../search.html">search</a>
+                            </li>
+                            
+                            <!--li class="td-sidebar-nav__section-title">
+                                <a  href="/docs/overview/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Overview</a>
+                            </li>
+                            <ul>
+                                <li class="collapse show">
+                                    <a class="td-sidebar-link td-sidebar-link__page " id="m-docsgetting-startedexample-page" href="/docs/getting-started/example-page/">Example Page</a>
+                                </li>
+                            </ul-->
+                        </ul>
+
+        </nav>
+
+				</div>
+			</div>
+			<div class="d-none d-xl-block col-xl-2 td-toc d-print-none">
+				<div class="td-page-meta ml-2 pb-1 pt-2 mb-0">
+					
+        <a href="https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/arc42/hsc_arc42.adoc"
+           target="_blank"><i class="fa fa-edit fa-fw"></i> Improve this doc</a>
+        <!--a href="https://github.com/google/docsy-example/new/master/content/en/docs/_index.md?filename=change-me.md&amp;value=---%0Atitle%3A+%22Long+Page+Title%22%0AlinkTitle%3A+%22Short+Nav+Title%22%0Aweight%3A+100%0Adescription%3A+%3E-%0A+++++Page+description+for+heading+and+indexes.%0A---%0A%0A%23%23+Heading%0A%0AEdit+this+template+to+create+your+new+page.%0A%0A%2A+Give+it+a+good+name%2C+ending+in+%60.md%60+-+e.g.+%60getting-started.md%60%0A%2A+Edit+the+%22front+matter%22+section+at+the+top+of+the+page+%28weight+controls+how+its+ordered+amongst+other+pages+in+the+same+directory%3B+lowest+number+first%29.%0A%2A+Add+a+good+commit+message+at+the+bottom+of+the+page+%28%3C80+characters%3B+use+the+extended+description+field+for+more+detail%29.%0A%2A+Create+a+new+branch+so+you+can+preview+your+new+file+and+request+a+review+via+Pull+Request.%0A"
+           target="_blank"><i class="fa fa-edit fa-fw"></i> Create child page</a-->
+        <a href="https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27HTML+Sanity+Checker+Architecture+Documentation%27&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/hsc_arc42.adoc" target="_blank"><i
+                class="fab fa-github fa-fw"></i> Create an issue</a>
+        <!--a href="https://github.com/google/docsy/issues/new" target="_blank"><i
+                class="fas fa-tasks fa-fw"></i> Create project issue</a-->
+        <!--a href="https://example.docsy.dev/docs/_print/" id="print"><i class="fa fa-print fa-fw"></i> Print
+        entire section</a-->
+        
+        <hr />
+        <div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_html_sanity_checker_architecture_documentation">HTML Sanity Checker Architecture Documentation</a></li>
+<li><a href="#_goals_of_this_documentation">Goals of this Documentation</a>
+<ul class="sectlevel2">
+<li><a href="#_disclaimer">Disclaimer</a></li>
+</ul>
+</li>
+<li><a href="#_introduction_and_goals">1. Introduction and Goals</a>
+<ul class="sectlevel2">
+<li><a href="#requirements">1.1. Requirements Overview</a></li>
+<li><a href="#quality-goals">1.2. Quality Goals</a></li>
+<li><a href="#_stakeholder">1.3. Stakeholder</a></li>
+<li><a href="#InformationOnUris">1.4. Background Information on URIs</a></li>
+</ul>
+</li>
+<li><a href="#_constraints">2. Constraints</a></li>
+<li><a href="#_context">3. Context</a>
+<ul class="sectlevel2">
+<li><a href="#_business_context">3.1. Business Context</a></li>
+<li><a href="#_deployment_context">3.2. Deployment Context</a></li>
+</ul>
+</li>
+<li><a href="#_solution_strategy">4. Solution Strategy</a></li>
+<li><a href="#_building_block_view">5. Building Block View</a>
+<ul class="sectlevel2">
+<li><a href="#_whitebox_htmlsanitychecker">5.1. Whitebox HtmlSanityChecker</a></li>
+<li><a href="#_building_blocks_level_2">5.2. Building Blocks - Level 2</a></li>
+<li><a href="#_building_blocks_level_3">5.3. Building Blocks - Level 3</a></li>
+</ul>
+</li>
+<li><a href="#_runtime_view">6. Runtime View</a></li>
+<li><a href="#deployment-view">7. Deployment View</a></li>
+<li><a href="#_technical_and_crosscutting_concepts">8. Technical and Crosscutting Concepts</a>
+<ul class="sectlevel2">
+<li><a href="#_html_checking_domain_model">8.1. HTML Checking Domain Model</a></li>
+<li><a href="#gradle-plugin-concept">8.2. Gradle Plugin Concept and Development</a></li>
+<li><a href="#checking-concept">8.3. Flexible Checking Algorithms</a></li>
+<li><a href="#html-encapsulation">8.4. Encapsulate HTML Parsing</a></li>
+<li><a href="#reporting-concept">8.5. Flexible Reporting</a></li>
+</ul>
+</li>
+<li><a href="#_design_decisions">9. Design Decisions</a>
+<ul class="sectlevel2">
+<li><a href="#_checking_of_external_links_postponed">9.1. Checking of external links postponed</a></li>
+<li><a href="#_html_parsing_with_jsoup">9.2. HTML Parsing with jsoup</a></li>
+<li><a href="#_string_similarity_checking_with_jaro_winkler_distance">9.3. String Similarity Checking with Jaro-Winkler-Distance</a></li>
+<li><a href="#_glossary">9.4. Glossary</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+
+				</div>
+			</div>
+			<main class="col-12 col-md-9 col-xl-8 pl-md-5" role="main">
+				    <nav aria-label="breadcrumb" class="d-none d-md-block d-print-none">
+        <ol class="breadcrumb spb-1">
+            <!--li aria-current="page" class="breadcrumb-item active">
+                <a href="https://example.docsy.dev/docs/">Documentation</a>
+            </li-->
+
+        </ol>
+    </nav>
+
+
+    <div class="td-content">
+        <p>
+            
+<!-- github ribbon thanx to https://github.com/blog/273-github-ribbons -->
+<a href="https://github.com/aim42/htmlSanityCheck">
+<img style="position: absolute; top: 0; right: 0; border: 0;"
+src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67"
+alt="Fork me on GitHub"
+data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+<div class="sect1">
+<h2 id="_html_sanity_checker_architecture_documentation">HTML Sanity Checker Architecture Documentation</h2>
+<div class="sectionbody">
+<div style="page-break-after: always;"></div>
+<div class="paragraph">
+<p><span class="image left"><a class="image" href="https://github.com/arc42"><img src="../images/arc42-logo.png" alt="arc42"></a></span></p>
+</div>
+<div class="paragraph">
+<p>&#169; This document uses material from the <a href="https://arc42.de" target="_blank" rel="noopener">arc42 architecture
+template</a>, freely available at <a href="https://github.com/arc42" target="_blank" rel="noopener">https://github.com/arc42</a>.</p>
+</div>
+<div class="paragraph">
+<p><span class="small">This material is open source and provided under the Creative Commons Sharealike 4.0 license.
+It comes <strong>without any guarantee</strong>. Use on your own risk.
+arc42 and its structure by Dr. Peter Hruschka and Dr. Gernot Starke.
+Asciidoc version initiated by Markus Schärtel and Jürgen Krey,
+completed and maintained by Ralf Müller and Gernot Starke.</span></p>
+</div>
+<div class="paragraph">
+<p><span class="small">Version v2.6.7 of 2021-10-29</span></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><a class="image" href="https://creativecommons.org/licenses/by-sa/4.0/"><img src="https://img.shields.io/badge/license-ccsa4-green.png" alt="license ccsa4 green" width="^"></a></span>
+<span class="image"><a class="image" href="https://github.com/aim42/htmlSanityCheck/issues"><img src="https://img.shields.io/github/issues/aim42/htmlSanityCheck.png" alt="htmlSanityCheck"></a></span></p>
+</div>
+<div class="imageblock right">
+<div class="content">
+<a class="image" href="https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/arc42/hsc_arc42.adoc"><img src="https://img.shields.io/badge/improve-this%20doc-orange.svg" alt="improve this%20doc orange"></a>
+</div>
+</div>
+<div class="imageblock right">
+<div class="content">
+<a class="image" href="https://github.com/aim42/htmlSanityCheck/issues/new?title=&amp;body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/hsc_arc42.adoc"><img src="https://img.shields.io/badge/create-an%20issue-blue.svg" alt="create an%20issue blue"></a>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Within the following text, the "Html Sanity Checker" shall be
+abbreviated with <kbd>HtmlSC</kbd></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<!-- endtoc -->
+</div>
+</div>
+<div class="sect1">
+<h2 id="_goals_of_this_documentation">Goals of this Documentation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This documentation is an example of
+<a href="https://github.com/arc42">arc42</a> documentation.</p>
+</div>
+<div class="paragraph">
+<p>You may copy this documentation or parts of it for your own
+projects. In such cases you must include a link or
+reference to <a href="https://github.com/arc42">arc42</a> or <a href="https://github.com/aim42">aim42</a>
+(we regard this as <em>fair-use</em>).</p>
+</div>
+<div class="paragraph">
+<p>For real-world projects,
+the relation of code and documentation is over-sized.</p>
+</div>
+<div class="sect2">
+<h3 id="_disclaimer">Disclaimer</h3>
+<div class="paragraph">
+<p>We provide absolutely <strong>no guarantee</strong>,
+neither for the accuracy of this documentation
+nor for any property or feature of the software described here.</p>
+</div>
+<div class="paragraph">
+<p>Do not use this software in critical situations or projects.</p>
+</div>
+<div style="page-break-after: always;"></div>
+<!-- endtoc -->
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction_and_goals">1. Introduction and Goals</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><kbd>HtmlSC</kbd> shall support authors creating digital formats
+with hyperlinks and integration of images and similar resources.</p>
+</div>
+<div class="sect2">
+<h3 id="requirements">1.1. Requirements Overview</h3>
+<div class="paragraph">
+<p>The overall goal of <kbd>HtmlSC</kbd> is to create neat and clear reports,
+showing errors within HTML files - as shown in the adjoining figure.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><a class="image" href="/images/sample-hsc-report.jpg"><img src="../images/sample-hsc-report.jpg" alt="sample hsc report" width="200" height="(click on thumbnail for details)"></a></span></p>
+</div>
+<div class="sect3">
+<h4 id="_basic_usage">1.1.1. Basic Usage</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A user configures the location (directory and filename) of one or more HTML file(s),</p>
+</li>
+<li>
+<p>and the corresponding images directory.</p>
+</li>
+<li>
+<p><kbd>HtmlSC</kbd> performs various checks on the HTML and</p>
+</li>
+<li>
+<p>reports its results either on the console or as HTML report.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><kbd>HtmlSC</kbd> can run from the command line or as <a href="https://gradle.org/">Gradle</a>-plugin.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_terminology_what_can_go_wrong_in_html_files">Terminology: What Can Go Wrong in HTML Files?</h4>
+<div class="paragraph">
+<p>Apart from purely syntactical errors, many things can go wrong in html, especially with respect to hyperlinks, anchors and id&#8217;s - as those are often manually maintained.</p>
+</div>
+<div class="paragraph">
+<p>Primary sources of problems are bad links (in technical terms: URIs). For further information, see the <a href="#InformationOnUris">background information on URIs</a>.</p>
+</div>
+<div class="paragraph">
+<div class="title">Broken Cross References:: Cross-references (internal links) can be broken, e.g. due to missing or misspelled link-targets.</div>
+<p>See <a href="#BrokenCrossReferencesChecker">BrokenCrossReferencesChecker</a></p>
+</div>
+<div class="paragraph">
+<div class="title">Missing image files: Referenced image files can be missing or misspelled.</div>
+<p>See <a href="#MissingImageFilesChecker">MissingImageFilesChecker</a>.</p>
+</div>
+<div class="paragraph">
+<div class="title">Missing local resources: Referenced local resources (other than images) can be missing or misspelled.</div>
+<p>See <a href="#MissingLocalResourcesChecker">MissingLocalResourcesChecker</a></p>
+</div>
+<div class="paragraph">
+<div class="title">Duplicate link targets: link-targets can occur several times with the same name - so the browser cannot know which is the desired target.</div>
+<p>See <a href="#DuplicateIdChecker">DuplicateIdChecker</a>.</p>
+</div>
+<div class="paragraph">
+<div class="title">Broken external links: External http links can be broken due to myriads of reasons: misspelled, link-target currently offline, illegal link syntax.</div>
+<p>See <a href="#BrokenHttpLinksChecker">BrokenHttpLinksChecker</a>.</p>
+</div>
+<div class="paragraph">
+<div class="title">Missing Alt Attribute in Image Tags: Images missing an alt-attribute.</div>
+<p>See <a href="#MissingImgAltAttributeChecker">MissingImgAltAttributeChecker</a>.</p>
+</div>
+<div class="paragraph">
+<p>Checking and reporting these errors and flaws is the central <em>business requirement</em> of <kbd>HtmlSC</kbd>.</p>
+</div>
+<div class="paragraph">
+<p>Important terms (<strong>domain terms</strong>) of html sanity checking is documented in a (small)
+<a href="#_html_checking_domain_model">domain model</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_general_functionality">1.1.2. General Functionality</h4>
+<!-- endtoc -->
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 9%;">
+<col style="width: 31%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">ID</th>
+<th class="tableblock halign-left valign-top">Functionality</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">G-1</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">read HTML file</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">HtmlSC shall read a single (configurable) HTML file</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">G-2</p></td>
+<td class="tableblock halign-left valign-bottom"><p class="tableblock"><a href="https://gradle.org/">Gradle</a>-plugin</p></td>
+<td class="tableblock halign-left valign-bottom"><p class="tableblock">HtmlSC can be run as <a href="https://gradle.org/">Gradle</a>-plugin.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">G-3</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">command line usage</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">HtmlSC can be called from the command line with arguments and options</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">G-4</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">configurable output</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">output can be configured to console or file</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">G-5</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">free and open source</p></td>
+<td class="tableblock halign-left valign-bottom"><p class="tableblock">all required dependencies shall be compliant to the <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-SA-4 licence</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">G-6</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">available via public repositories</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">like bintray or jcenter.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">G-7</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">configurable to check multiple HTML files</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">configure a set of files to be processes in a single run and produce a joint report. (useful for e.g. API documentation with many HTML files referencing each other)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="requiredChecks">1.1.3. Types of Sanity Checks</h4>
+<!-- endtoc -->
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 3%;">
+<col style="width: 25%;">
+<col style="width: 72%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">ID</th>
+<th class="tableblock halign-left valign-top">Check</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">R-1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">missing image files</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Check all image tags if the referenced image files exist. See <a href="#MissingImageFilesChecker">MissingImageFilesChecker</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">R-2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">broken internal links</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Check all internal links from anchor-tags (href="#XYZ") if the link targets "XYZ" are defined. See <a href="#BrokenCrossReferencesChecker">BrokenCrossReferencesChecker</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">R-3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">missing local files</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">either other html-files, pdf’s or similar. See <a href="#MissingLocalResourcesChecker">MissingLocalResourcesChecker</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">R-4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">duplicate link targets</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Check all bookmark definitions (…​ id="XYZ") whether the id’s ("XYZ") are unique. See <a href="#DuplicateIdChecker">DuplicateIdChecker</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">R-5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">malformed links</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Check all links for syntactical correctness</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">R-6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">missing alt-attribute</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">in image-tags. See <a href="#MissingImgAltAttributeChecker">MissingImgAltAttributeChecker</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">R-7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">unused-images</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Check for files in image-directories that are not referenced by any of the HTML files in this run</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">R-8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">illegal link targets</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Check for malformed or illegal anchors (link targets).</p></td>
+</tr>
+</tbody>
+</table>
+<!-- endtoc -->
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 13.8613%;">
+<col style="width: 27.7227%;">
+<col style="width: 58.416%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">ID</th>
+<th class="tableblock halign-left valign-top">Check</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">Opt-1</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">missing external images</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">Check externally referenced images for availability</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">Opt-2</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">broken external links</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">Check external links for both syntax and availability</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_reporting_and_output_requirements">1.1.4. Reporting and Output Requirements</h4>
+<!-- endtoc -->
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 5%;">
+<col style="width: 18%;">
+<col style="width: 77%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">ID</th>
+<th class="tableblock halign-left valign-top">Requirement</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">R-1</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">various output formats</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">Checking output in plain text and HTML</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">R-2</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">output to stdout</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">HtmlSC can output results on stdout (the console)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">R-3</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">configurable file output</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">HtmlSC can store results in file in configurable directories</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="quality-goals">1.2. Quality Goals</h3>
+<!-- endtoc -->
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 6%;">
+<col style="width: 12%;">
+<col style="width: 82%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Priority</th>
+<th class="tableblock halign-left valign-top">Quality-Goal</th>
+<th class="tableblock halign-left valign-top">Scenario</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Correctness</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Every broken internal link (cross reference) is found.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Correctness</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Every missing local image is found.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flexibility</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Multiple checking algorithms, report formats and clients. At least Gradle, command-line and a graphical client have to be supported.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Safety</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Content of the files to be checked is never altered.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Correctness</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Correctness of every checker is automatically tested for positive AND negative cases</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Correctness</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Every reporting format is tested: Reports must exactly reflect checking results.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Performance</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Check of 100kB html file performed under 10 secs (excluding gradle startup)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_stakeholder">1.3. Stakeholder</h3>
+<!-- endtoc -->
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 32%;">
+<col style="width: 53%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Role</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Goal, Intention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Documentation author</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">writes documentation with Html output</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wants to check that the resulting document contains good links, image references</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">arc42 user</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">uses the arc42 template for architecture documentation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wants a small but practical example of how to apply arc42.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">aim42 contributor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contributes to aim42 methode-guide</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">check generated html code to ensure links and images are correct during (gradle-based) build process</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">software developer</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wants an example of pragmatic architecture documentation and arc42 usage</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="InformationOnUris">1.4. Background Information on URIs</h3>
+<div class="paragraph">
+<p>The generic structure of a Uniform Resource Identifier consists of
+the following parts:
+[type][://][subdomain][domain][port][path][file][query][hash]</p>
+</div>
+<div class="paragraph">
+<p>An example, visualized:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/uri-generic-example.png" alt="uri generic example">
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>java.net.URL</code> class contains a generic parser for URLs and URIs.
+See the following snippet, taken from the unit test class <code>URLUtilTest.groovy</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Generic URI Structure</div>
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="groovy">    @Test
+    public void testGenericURISyntax() {
+        // based upon an example from the Oracle(tm) Java tutorial:
+        // http://docs.oracle.com/javase/tutorial/networking/urls/urlInfo.html
+        def aURL =
+                new URL("http://example.com:42/docs/tutorial/index.html?name=aim42#INTRO");
+        aURL.with {
+            assert getProtocol() == "http"
+            assert getAuthority() == "example.com:42"
+            assert getHost() == "example.com"
+            assert getPort() == 42
+            assert getPath() == "/docs/tutorial/index.html"
+            assert getQuery() == "name=aim42"
+            assert getRef() == "INTRO"
+        }
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>URIs are used to <strong>reference</strong> other resources.
+For  <kbd>HtmlSC</kbd> it is useful to distinguish between internal (== local)and external references:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Internal references, a.k.a. Cross-References</p>
+</li>
+<li>
+<p>External references</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_intra_document_uris">1.4.1. Intra-Document URIs</h4>
+<div class="paragraph">
+<p>a file&#8230;&#8203; ref can be an internal link, or a URI without protocol&#8230;&#8203;</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_references_on_uris_and_html_syntax">1.4.2. References on URIs and HTML Syntax</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.ietf.org/rfc/rfc2396.txt">IETF RFC-2396 on URI Syntax</a>: The
+fundamental reference!</p>
+</li>
+<li>
+<p><a href="https://www.w3.org/TR/html401/struct/links.html#h-12.2.4">W3C HTML Reference</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/URI_scheme#Generic_syntax">Wikipedia on URI-Schemes</a></p>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+<!-- endtoc -->
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_constraints">2. Constraints</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><kbd>HtmlSC</kbd> shall be:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>platform-independent and should run on the major operating systems
+(Windows&#8482;, Linux, and Mac-OS&#8482;)</p>
+</li>
+<li>
+<p>integrated with the Gradle build tool</p>
+</li>
+<li>
+<p>runnable from the command line</p>
+</li>
+<li>
+<p>developed under a liberal open-source license</p>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+<!-- endtoc -->
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context">3. Context</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_business_context">3.1. Business Context</h3>
+<div class="imageblock">
+<div class="content">
+<img src="../images/ea/htmlSanityCheck/hsc-context.png" alt="Business Context">
+</div>
+<div class="title">Figure 1. Business Context</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Business Context</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Neighbor</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">user</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">documents software with toolchain that generates html. Wants to ensure that
+links within this html are valid.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">build system</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">local html files</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>HtmlSC</kbd> reads and parses local html files and
+performs sanity checks within those.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">local image files</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>HtmlSC</kbd> checks if linked images exist as (local) files.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">external web resources</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>HtmlSC</kbd> can be configured to optionally check for the existence
+of external web resources. Due to the nature of web systems, this check might need a significant
+amount of time and might yield invalid results due to network and latency issues.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_deployment_context">3.2. Deployment Context</h3>
+<div class="paragraph">
+<p>The following diagram shows the participating computers ({node}) with their technical connections plus the major {artifact} of <kbd>HtmlSC</kbd>, the hsc-plugin-binary.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/deployment-context.png" alt="Deployment Context">
+</div>
+<div class="title">Figure 2. Deployment Context</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Deployment Context</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Node / Artifact</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{node} hsc-development</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">where development of <kbd>HtmlSC</kbd> takes place</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{artifact} hsc-plugin-binary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">compiled and packaged version of <kbd>HtmlSC</kbd> including required dependencies.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{node} artifact repository (<a href="https://bintray.com/bintray/jcenter">Bintray</a>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">global public <em>cloud</em> repository for binary artifacts, similar to <a href="https://search.maven.org/">mavenCentral</a>.  <kbd>HtmlSC</kbd> binaries are uploaded to this server.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{node} hsc user computer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">where arbitrary documentation takes place with html as output formats.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{artifact} build.gradle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gradle build script configuring (among other things) the <kbd>HtmlSC</kbd> plugin to perform the Html checking.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Details see <a href="#deployment-view">deployment view</a>.</p>
+</div>
+<div style="page-break-after: always;"></div>
+<!-- endtoc -->
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solution_strategy">4. Solution Strategy</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Implement <kbd>HtmlSC</kbd> in <a href="https://www.groovy-lang.org/">Groovy</a> and Java with minimal
+external dependencies. Wrap this implementation into a <a href="https://gradle.org/">Gradle</a>
+plugin, so it can be used within automated builds. Details are given
+in the <a href="#gradle-plugin-concept">Gradle plugin concept</a>.</p>
+</li>
+<li>
+<p>Apply the <em>template-method-pattern</em> (see e.g. {template-method-url}) to enable:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>multiple checking algorithms. See the <a href="#checking-concept">concept for checking algorithms</a>,</p>
+</li>
+<li>
+<p>both HTML (file) and text (console) output. See the <a href="#reporting-concept">reporting concept</a>.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+<!-- endtoc -->
+</div>
+</div>
+<div class="sect1">
+<h2 id="_building_block_view">5. Building Block View</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_whitebox_htmlsanitychecker">5.1. Whitebox HtmlSanityChecker</h3>
+<div class="imageblock">
+<div class="content">
+<img src="../images/{plantumldir}whitbox-hsc-level-1.png" alt="{plantumldir}whitbox hsc level 1" width="592" height="491">
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Rationale</dt>
+<dd>
+<p>We used <em>functional decomposition</em> to separate responsibilities:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#checker_blackbox">CheckerCore</a> shall encapsulate checking logic and Html parsing/processing.</p>
+</li>
+<li>
+<p>all kinds of outputs (console, html-file, graphical) shall be handled in a separate component
+(<code>Reporter</code>)</p>
+</li>
+<li>
+<p>Implementation of Gradle specific stuff shall be encapsulated.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Contained Blackboxes</dt>
+</dl>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. HtmlSanityChecker building blocks</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#checker_blackbox">HSC Core</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">hsc core: html parsing and sanity checking, configuration, reporting.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HSC Gradle Plugin</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">integrates the Gradle build tool with <kbd>HtmlSC</kbd>,
+enabling arbitrary gradle builds to use <kbd>HtmlSC</kbd> functionality.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HSC Maven Plugin</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"> (planned, not yet implemented)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HSC Graphical Interface</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(planned, not implemented)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Interfaces</dt>
+</dl>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. HtmlSanityChecker internal interfaces</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Interface</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">usage via shell</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#arc42_user">arc42 user</a> uses a command
+line shell to call the <kbd>HtmlSC</kbd></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">build system</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"> currently restricted to Gradle: The build
+system uses <kbd>HtmlSC</kbd> as configured in the buildscript.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">local-file system</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>HtmlSC</kbd> needs access to several
+local files, especially the html page to be checked and to the
+corresponding image directories.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"> external websites</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">to check external links, <kbd>HtmlSC</kbd> needs to access external sites via http HEAD or GET requests.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="checker_blackbox">5.1.1. <em>HSC Core</em> (Blackbox)</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Intent/Responsibility</dt>
+<dd>
+<p>HSC_Core contains the core functions
+to perform the various sanity checks. It parses the html file
+into a DOM-like in-memory representation, which is then
+used to perform the actual checks.</p>
+</dd>
+<dt class="hdlist1">Interfaces</dt>
+</dl>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. HSC_Core Interfaces</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Interface (From-To)</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Command Line Interface &#8594; Checker</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"> Uses the #AllChecksRunner class.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gradle Plugin &#8594; Checker</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Exposes <kbd>HtmlSC</kbd> via a standard Gradle plugin,
+as described in the Gradle user guide.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Files</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>org.aim42.htmlsanitycheck.AllChecksRunner</p>
+</li>
+<li>
+<p>org.aim42.htmlsanitycheck.HtmlSanityCheckGradlePlugin</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_building_blocks_level_2">5.2. Building Blocks - Level 2</h3>
+<div class="sect3">
+<h4 id="_hsc_core_whitebox">5.2.1. <em>HSC-Core</em> (Whitebox)</h4>
+<div class="imageblock">
+<div class="content">
+<img src="../images/ea/htmlSanityCheck/hsc-core.png" alt="Whitebox">
+</div>
+<div class="title">Figure 3. HSC-Core (Whitebox)</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Rationale</dt>
+<dd>
+<p>This structures follows a strictly functional decomposition:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>parsing and handling html input</p>
+</li>
+<li>
+<p>checking</p>
+</li>
+<li>
+<p>collecting checking results</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Contained Blackboxes</dt>
+</dl>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 6. HSC-Core building blocks</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Checker</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Abstract class, used in form of the template-pattern. Shall be subclassed
+for all checking algorithms.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AllChecksRunner</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Facade to the different Checker instances. Provides a (parameter-driven)
+command-line interface.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#ResultsCollector">ResultsCollector (Whitebox)</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Collects all checking results. Its interface <code>Results</code> is contained in the
+<a href="#ResultsCollector">whitebox description</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Reporter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Reports checking results to either console or an html file.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HtmlParser</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Encapsulates html parsing, provides methods to search
+within the (parsed) html.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Suggester</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">In case of checking issues, suggests alternatives by comparing the faulty element
+to the one present in the html file. Currently not implemented</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_checker_and_xyzchecker_subclasses">5.2.2. Checker and xyzChecker Subclasses</h4>
+<div class="paragraph">
+<p>The abstract Checker provides a uniform interface (<code>public void check()</code>)
+to different checking algorithms. It is based upon the <a href="#checking-concept">concept of extensible checking algorithms</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_building_blocks_level_3">5.3. Building Blocks - Level 3</h3>
+<div class="sect3">
+<h4 id="ResultsCollector">5.3.1. ResultsCollector (Whitebox)</h4>
+<div class="imageblock">
+<div class="content">
+<img src="../images/ea/htmlSanityCheck/ResultsCollector.png" alt="Whitebox">
+</div>
+<div class="title">Figure 4. Results Collector (Whitebox)</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Rationale</dt>
+<dd>
+<p>This structures follows the hierarchy of checks - namely managing results for:</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>a number of pages/documents, containing:</p>
+</li>
+<li>
+<p>a single page, each containing many</p>
+</li>
+<li>
+<p>single checks within a page</p>
+</li>
+</ol>
+</div>
+</dd>
+<dt class="hdlist1">Contained Blackboxes</dt>
+</dl>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 7. ResultsCollector building blocks</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Per-Run Results</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">results for potentially many Html pages/documents.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Single-Page-Results</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">results for a single page</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Single-Check-Results</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">results for a single type of check (e.g. missing-images check)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Finding</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a single finding, (e.g. "image 'logo.png' missing"). Can hold suggestions
+and (planned for future releases) the responsible html element.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_interface_results">Interface <code>Results</code></h5>
+<div class="paragraph">
+<p>The <code>Result</code> interface is used by all clients
+(especially <code>Reporter</code> subclasses, graphical and command-line
+clients) to access checking results. It consists of three distinct APIs for
+overall <code>RunResults</code>, single-page results (<code>PageResults</code>) and single-check results
+(<code>CheckResults</code>). See the interface definitions below - taken from the Groovy-
+ source code:</p>
+</div>
+<div class="listingblock">
+<div class="title">Interface RunResults</div>
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="groovy">public interface RunResults {
+
+    // returns results for all pages which have been checked
+    public ArrayList&lt;SinglePageResults&gt; getResultsForAllPages()
+
+    // how many pages were checked in this run?
+    public int nrOfPagesChecked()
+
+    // how many checks were performed in all?
+    public int nrOfChecksPerformedOnAllPages()
+
+    // how many findings (errors and issues) were found in all?
+    public int nrOfFindingsOnAllPages()
+
+    // how long took checking (in milliseconds)?
+    public Long checkingTookHowManyMillis()
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Interface PageResults</div>
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="groovy">public interface PageResults {
+
+    // what's the title of this page?
+    public String getPageTitle()
+
+    // what's the filename and path?
+    public String getPageFileName()
+    public String getPageFilePath()
+
+    // how many items have been checked?
+    public int nrOfItemsCheckedOnPage()
+
+    // how many problems were found on this page?
+    public int nrOfFindingsOnPage()
+
+    // how many different checks have run on this page?
+    public int howManyCheckersHaveRun()
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Interface CheckResults</div>
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="groovy">public interface CheckResults {
+
+    // return a description of what is checked
+    // (e.g. "Missing Images Checker" or "Broken Cross-References Checker"
+    public String description()
+
+    // returns all findings/problems found during this check
+    public  ArrayList&lt;Finding&gt; getFindings()
+}</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+<!-- endtoc -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_runtime_view">6. Runtime View</h2>
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Not appropriate for this system due to very simple implementation.
+</td>
+</tr>
+</table>
+</div>
+<div style="page-break-after: always;"></div>
+<!-- endtoc -->
+</div>
+</div>
+<div class="sect1">
+<h2 id="deployment-view">7. Deployment View</h2>
+<div class="sectionbody">
+<div id="img-deployment" class="imageblock">
+<div class="content">
+<img src="../images/ea/htmlSanityCheck/hsc-deployment.png" alt="Deployment">
+</div>
+<div class="title">Figure 5. Deployment</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 8. Deployment</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Node / Artifact</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">hsc plugin binary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">compiled version of <kbd>HtmlSC</kbd>, including required dependencies.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">hsc-development</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">where development of <kbd>HtmlSC</kbd> takes place</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">artifact repository (<a href="https://bintray.com/bintray/jcenter">Bintray</a>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">global public <em>cloud</em> repository for binary artifacts, similar to <a href="https://search.maven.org/">mavenCentral</a>.  <kbd>HtmlSC</kbd> binaries are uploaded to this server.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">hsc user computer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">where arbitrary documentation takes place with html as output formats.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">build.gradle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gradle build script configuring (among other things) the <kbd>HtmlSC</kbd> plugin to check <em>some documentation</em>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The three nodes (<em>computers</em>) shown in <a href="#img-deployment">Deployment</a> are connected via Internet.</p>
+</div>
+<div class="paragraph">
+<p>Sanity checker will:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>be bundled as a single jar,</p>
+</li>
+<li>
+<p>be uploaded to the Bintray repository,</p>
+</li>
+<li>
+<p>referencable within a gradle buildfile,</p>
+</li>
+<li>
+<p>provide a main method with parameters and options, so all checks can be
+called from the command line.</p>
+</li>
+</ol>
+</div>
+<div style="page-break-after: always;"></div>
+<!-- endtoc -->
+</div>
+</div>
+<div class="sect1">
+<h2 id="_technical_and_crosscutting_concepts">8. Technical and Crosscutting Concepts</h2>
+<div class="sectionbody">
+<!-- endtoc -->
+<div class="sect2">
+<h3 id="_html_checking_domain_model">8.1. HTML Checking Domain Model</h3>
+<div class="imageblock right">
+<div class="content">
+<a class="image" href="https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/arc42/chapters/chap-08-checking-domain.adoc"><img src="https://img.shields.io/badge/improve-this%20doc-orange.svg" alt="improve this%20doc orange"></a>
+</div>
+</div>
+<div class="imageblock right">
+<div class="content">
+<a class="image" href="https://github.com/aim42/htmlSanityCheck/issues/new?title=&amp;body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-checking-domain.adoc"><img src="https://img.shields.io/badge/create-an%20issue-blue.svg" alt="create an%20issue blue"></a>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/ea/htmlSanityCheck/HTML_Checking_Domain.png" alt="HTML Checking Domain Model">
+</div>
+<div class="title">Figure 6. HTML Checking Domain Model</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 9. Domain Model</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Term</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Anchor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Html element to create &#8594;Links. Contains link-target in the form <code>&lt;a href="link-target"&gt;</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cross Reference</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link from one part of the document to another part within the same document.
+                       A special form of &#8594;Internal Link, with a &#8594;Link Target in the same document.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">External Link</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to another page or resource at another domain.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Finding</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description of a problem found by one &#8594;Checker within the &#8594;Html Page.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Html Element</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTML pages (documents) are made up by HTML elements .e.g., <code>&lt;a href="link target"&gt;</code>, <code>&lt;img src="image.png"&gt;</code> and others. See the <a href="https://www.w3schools.com/html/html_elements.asp">W3-Consortium</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Html Page</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A single chunk of HTML, mostly regarded as a single file. Shall comply
+					   to standard HTML syntax. Minimal requirement: Our HTML parser can successfully parse this page. Contains &#8594;Html Elements. Also called <em>Html Document</em>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identifier for a specific part of a document, e.g. <code>&lt;h2 id="#someHeader"&gt;</code>.
+						Often used to describe &#8594;Link Targets.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Internal Link</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to another section of the same page or to another page of the same domain.
+						Also called <em>Local Link</em>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any a reference in the &#8594;Html Page that lets you display or activate another
+                        part of this document (&#8594;Internal Link) or another document, image or resource
+                        (can be either &#8594;Internal (local) or &#8594;External Link).
+                        Every link leads from the <em>Link Source</em> to the <em>Link Target</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link Target</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The target of any &#8594;Link, e.g. heading or any other a part of
+					 a &#8594;Html Document, any internal or external resource (identified by URI). Expressed by &#8594;id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Local Resource</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">local file, either other Html files or other types (e.g. pdf, docx)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run Result</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The overall results of checking a number of pages (at least one page).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Single Page Result</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A collection of all checks of a single &#8594;Html Page.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">URI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Universal Resource Identifier. Defined in <a href="https://www.ietf.org/rfc/rfc2396.txt">RFC-2396</a>. The ultimate source of truth concerning link syntax and semantic.</p></td>
+</tr>
+</tbody>
+</table>
+<!-- endtoc -->
+</div>
+<div class="sect2">
+<h3 id="gradle-plugin-concept">8.2. Gradle Plugin Concept and Development</h3>
+<div class="imageblock right">
+<div class="content">
+<a class="image" href="https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/arc42/chapters/chap-08-gradle-plugin.adoc"><img src="https://img.shields.io/badge/improve-this%20doc-orange.svg" alt="improve this%20doc orange"></a>
+</div>
+</div>
+<div class="imageblock right">
+<div class="content">
+<a class="image" href="https://github.com/aim42/htmlSanityCheck/issues/new?title=&amp;body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-gradle-plugin.adoc"><img src="https://img.shields.io/badge/create-an%20issue-blue.svg" alt="create an%20issue blue"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>You should definitely read the original <a href="https://gradle.org/docs/current/userguide/userguide.html">Gradle User Guide</a> on custom plugin development.</p>
+</div>
+<div class="paragraph">
+<p>To enable the <a href="#requirements">required Gradle integration</a>,
+we implement a lean wrapper as described in the Gradle user guide.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="groovy">class HtmlSanityCheckPlugin implements Plugin&lt;Project&gt; {
+    void apply(Project project) {
+	project.task('htmlSanityCheck',
+		type: HtmlSanityCheckTask,
+		group: 'Check')
+    }
+}</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_directory_structure_and_required_files">8.2.1. Directory Structure and Required Files</h4>
+<div class="listingblock">
+<div class="content">
+<pre>|-htmlSanityCheck
+   |  |-src
+   |  |  |-main
+   |  |  |  |-org
+   |  |  |  |  |-aim42
+   |  |  |  |  |  |-htmlsanitycheck
+   |  |  |  |  |  |  | ...
+   |  |  |  |  |  |  |-HtmlSanityCheckPlugin.groovy // <b class="conum">(1)</b>
+   |  |  |  |  |  |  |-HtmlSanityCheckTask.groovy
+   |  |  |  |-resources
+   |  |  |  |  |-META-INF                          // <b class="conum">(2)</b>
+   |  |  |  |  |  |-gradle-plugins
+   |  |  |  |  |  |  |-htmlSanityCheck.properties  // <b class="conum">(3)</b>
+   |  |  |-test
+   |  |  |  |-org
+   |  |  |  |  |-aim42
+   |  |  |  |  |  |-htmlsanitycheck
+   |  |  |  |  |  |  | ...
+   |  |  |  |  |  |  |-HtmlSanityCheckPluginTest
+   |</pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>the actual plugin code: <code>HtmlSanityCheckPlugin.groovy</code> and
+<code>HtmlSanityCheckTask.groovy</code> groovy files</p>
+</li>
+<li>
+<p>Gradle expects plugin properties in <code>META-INF</code></p>
+</li>
+<li>
+<p>property file containing the name of the actual implementation class:
+<code>implementation-class=org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin</code></p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_passing_parameters_from_buildfile_to_plugin">8.2.2. Passing Parameters From Buildfile to Plugin</h4>
+<div class="paragraph">
+<p>To be done</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_building_the_plugin">8.2.3. Building the Plugin</h4>
+<div class="paragraph">
+<p>The plugin code itself is built with gradle.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_uploading_to_public_archives">8.2.4. Uploading to Public Archives</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_further_information_on_creating_gradle_plugins">8.2.5. Further Information on Creating Gradle Plugins</h4>
+<div class="paragraph">
+<p>Although writing plugins is described in the Gradle user guide,
+a clearly explained sample is given in a
+<a href="https://code4reference.com/2012/08/gradle-custom-plugin-part-2/">Code4Reference</a> tutorial.</p>
+</div>
+<!-- endtoc -->
+</div>
+</div>
+<div class="sect2">
+<h3 id="checking-concept">8.3. Flexible Checking Algorithms</h3>
+<div class="imageblock right">
+<div class="content">
+<a class="image" href="https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/arc42/chapters/chap-08-checking-algorithms.adoc"><img src="https://img.shields.io/badge/improve-this%20doc-orange.svg" alt="improve this%20doc orange"></a>
+</div>
+</div>
+<div class="imageblock right">
+<div class="content">
+<a class="image" href="https://github.com/aim42/htmlSanityCheck/issues/new?title=&amp;body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-checking-algorithms.adoc"><img src="https://img.shields.io/badge/create-an%20issue-blue.svg" alt="create an%20issue blue"></a>
+</div>
+</div>
+<div class="paragraph">
+<p><kbd>HtmlSC</kbd> uses the template-method-pattern to enable flexible checking algorithms:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+The Template Method defines a skeleton of an algorithm in an operation, and defers some steps to subclasses.
+</blockquote>
+<div class="attribution">
+&#8212; https://sourcemaking.com/design_patterns/template_method
+</div>
+</div>
+<div class="paragraph">
+<p>We achieve that by defining the skeleton of the checking algorithm in one operation, deferring the specific checking algorithm steps to subclasses.</p>
+</div>
+<div class="paragraph">
+<p>The invariant steps are implemented in the abstract base class, while the variant checking algorithms have to be provided by the subclasses.</p>
+</div>
+<div class="listingblock">
+<div class="title">Template method "performCheck"</div>
+<div class="content">
+<pre class="prettyprint highlight linenums"><code data-lang="groovy">    /**
+    ** template method for performing a single type of checks on the given @see HtmlPage.
+     *
+     * Prerequisite: pageToCheck has been successfully parsed,
+     * prior to constructing this Checker instance.
+    **/
+    public SingleCheckResults performCheck( final HtmlPage pageToCheck) {
+        // assert non-null htmlPage
+        assert pageToCheck != null
+
+        checkingResults = new SingleCheckResults()
+
+        // description is set by subclasses
+        initCheckingResultsDescription()
+
+        return check( pageToCheck ) // &lt;1&gt; delegate check() to subclass
+    }</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/ea/htmlSanityCheck/template-method.png" alt="Template Method">
+</div>
+<div class="title">Figure 7. Template-Method Overview</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 10. Template Method</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Checker</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>abstract</em> base class, containing the template method check()
+                                        plus the public method performCheck()</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#MissingImageFilesChecker">MissingImageFilesChecker</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">checks if referenced local image files exist</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#MissingImgAltAttributeChecker">MissingImgAltAttributeChecker</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">checks if there are image tags without alt-attributes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#BrokenCrossReferencesChecker">BrokenCrossReferencesChecker</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">checks if cross references (links referenced within the page) exist</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#DuplicateIdChecker">DuplicateIdChecker</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">checks if any id has multiple definitions</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#MissingLocalResourcesChecker">MissingLocalResourcesChecker</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">checks if referenced other resources exist</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#BrokenHttpLinksChecker">BrokenHttpLinksChecker</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">checks if external links are valid</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#IllegalLinkChecker">IllegalLinkChecker</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">checks if links do not violate HTML link syntax</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="MissingImageFilesChecker">8.3.1. MissingImageFilesChecker</h4>
+<div class="paragraph">
+<p><span class="small">Addresses requirement <a href="#requiredChecks">R-1</a>.</span></p>
+</div>
+<div class="paragraph">
+<p>Checks if image files referenced in &lt;img src="someFile.jpg"&gt; really
+exists on the local file system.</p>
+</div>
+<div class="paragraph">
+<p>The (little) problem with checking images is their path: Consider the following
+HTML fragment (from the file testme.html):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="html">&lt;img src="./images/one-image.jpg"&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This image file ("one-image.jpg") has to be located relative to the directory
+containing the corresponding HTML file.</p>
+</div>
+<div class="paragraph">
+<p>Therefore the expected absolute path of the "one-image.jpg" has to be determined
+from the absolute path of the html file under test.</p>
+</div>
+<div class="paragraph">
+<p>We check for existing files using the usual Java API, but have to do some
+<em>directory arithmetic</em> to get the absolutePathToImageFile:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">File f = new File( absolutePathToImageFile );
+if(f.exists() &amp;&amp; !f.isDirectory())</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="MissingImgAltAttributeChecker">8.3.2. MissingImgAltAttributeChecker</h4>
+<div class="paragraph">
+<p><span class="small">Addresses requirement <a href="#requiredChecks">R-6</a>.</span></p>
+</div>
+<div class="paragraph">
+<p>Simple syntactic check: iterates over all &lt;img&gt; tags to check
+if the image has an alt-tag.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="BrokenCrossReferencesChecker">8.3.3. BrokenCrossReferencesChecker</h4>
+<div class="paragraph">
+<p><span class="small">Addresses requirement <a href="#requiredChecks">R-2</a>.</span></p>
+</div>
+<div class="paragraph">
+<p>Cross references are document-internal links where the href="link-target" from the html anchor
+tag has no prefix like +http, https, ftp, telnet, mailto, file and such.</p>
+</div>
+<div class="paragraph">
+<p>Only links with prefix # shall be taken into account, e.g. &lt;a href="#internalLink"&gt;.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="DuplicateIdChecker">8.3.4. DuplicateIdChecker</h4>
+<div class="paragraph">
+<p><span class="small">Addresses requirement <a href="#requiredChecks">R-4</a>.</span></p>
+</div>
+<div class="paragraph">
+<p>Sections, especially headings, can be made link-targets by adding the id="#xyz" element,
+yielding for example html headings like the following example.</p>
+</div>
+<div class="paragraph">
+<p>Problems occur if the same link target is defined several times (also shown below).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="html">&lt;h2 id="seealso"&gt;First Heading&lt;/h2&gt;
+&lt;h2 id="seealso"&gt;Second Heading&lt;/h2&gt;
+&lt;a href="#seealso"&gt;Duplicate definition - where shall I go now?&lt;/a&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="MissingLocalResourcesChecker">8.3.5. MissingLocalResourcesChecker</h4>
+<div class="paragraph">
+<p><span class="small">Addresses requirement <a href="#requiredChecks">R-3</a>.</span></p>
+</div>
+<div class="sect4">
+<h5 id="_current_limitations">Current limitations:</h5>
+<div class="paragraph">
+<p>Does <strong>NOT</strong> deep-checking of references-with-anchors of the following form:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="html">&lt;a href="api/Artifact.html#target"&gt;GroupInit&lt;/a&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>containing both a local (file) reference plus an internal anchor #target</p>
+</div>
+<div class="paragraph">
+<p>See issues #252 (false positives) and #253 (deep links shall be checked)</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="BrokenHttpLinksChecker">8.3.6. BrokenHttpLinksChecker</h4>
+<div class="paragraph">
+<p><span class="small">Addresses requirement <a href="#requiredChecks">R-9</a>.</span></p>
+</div>
+<div class="paragraph">
+<p>Problem here are networking issues, latency and HTTP return codes. This checker is planned,
+but currently not implemented.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="IllegalLinkChecker">8.3.7. IllegalLinkChecker</h4>
+<div class="paragraph">
+<p><span class="small">Addresses requirement <a href="#requiredChecks">R-5</a>.</span></p>
+</div>
+<div class="paragraph">
+<p>This checker is planned, but currently not implemented.
+:jbake-status: draft
+:jbake-order: -1
+:jbake-type: page_toc
+:jbake-menu: -
+:jbake-title: Encapsulate HTML Parsing</p>
+</div>
+<!-- endtoc -->
+</div>
+</div>
+<div class="sect2">
+<h3 id="html-encapsulation">8.4. Encapsulate HTML Parsing</h3>
+<div class="imageblock right">
+<div class="content">
+<a class="image" href="https://github.com/aim42/htmlSanityCheck/edit/master/src/docs/arc42/chapters/chap-08-html-encapsulation.adoc"><img src="https://img.shields.io/badge/improve-this%20doc-orange.svg" alt="improve this%20doc orange"></a>
+</div>
+</div>
+<div class="imageblock right">
+<div class="content">
+<a class="image" href="https://github.com/aim42/htmlSanityCheck/issues/new?title=&amp;body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/chapters/chap-08-html-encapsulation.adoc"><img src="https://img.shields.io/badge/create-an%20issue-blue.svg" alt="create an%20issue blue"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>We encapsulate the third-party HTML parser (<a href="https://jsoup.org" class="bare">https://jsoup.org</a>) in
+simple wrapper classes with interfaces specific to our different
+checking algorithms.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="reporting-concept">8.5. Flexible Reporting</h3>
+<div class="paragraph">
+<p><kbd>HtmlSC</kbd> allows for different output formats:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>formats (HTML and text) and</p>
+</li>
+<li>
+<p>destinations (file and console)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The reporting subsystem uses the template method pattern to allow different output formats
+(e.g. Console and HTML). The overall structure of reports is always the same:</p>
+</div>
+<div class="paragraph">
+<p>Graphical clients can use the API of the reporting subsystem to display
+reports in arbitrary formats.</p>
+</div>
+<div class="paragraph">
+<p>The (generic and abstract) reporting is implemented in the abstract Reporter class
+as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="groovy">/**
+ * main entry point for reporting - to be called when a report is requested
+ * Uses template-method to delegate concrete implementations to subclasses
+*/
+    public void reportFindings() {
+        initReport()            // <b class="conum">(1)</b>
+        reportOverallSummary()  // <b class="conum">(2)</b>
+        reportAllPages()        // <b class="conum">(3)</b>
+        closeReport()           // <b class="conum">(4)</b>
+    }
+//
+    private void reportAllPages() {
+        pageResults.each { pageResult -&gt;
+            reportPageSummary( pageResult ) // <b class="conum">(5)</b>
+            pageResult.singleCheckResults.each { resultForOneCheck -&gt;
+               reportSingleCheckSummary( resultForOneCheck )  // <b class="conum">(6)</b>
+               reportSingleCheckDetails( resultForOneCheck )  // <b class="conum">(7)</b>
+               reportPageFooter()                             // <b class="conum">(8)</b>
+        }
+    }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>initialize the report, e.g. create and open the file, copy css-, javascript and image files.</p>
+</li>
+<li>
+<p>create the overall summary, with the overall success percentage and a list of all checked pages with their success rate.</p>
+</li>
+<li>
+<p>iterate over all pages</p>
+</li>
+<li>
+<p>write report footer - in HTML report also create back-to-top-link</p>
+</li>
+<li>
+<p>for a single page, report the nr of checks and problems plus the success rate</p>
+</li>
+<li>
+<p>for every singleCheck on that page, report a summary and</p>
+</li>
+<li>
+<p>all detailed findings for a singleCheck.</p>
+</li>
+<li>
+<p>for every checked page, create a footer, page break or similar to graphically distinguish
+pages between each other.</p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="_styling_the_reporting_output">8.5.1. Styling the Reporting Output</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>HtmlReporter</code> explicitly generates css classes together with the html elements,
+based upon css styling re-used from the Gradle JUnit plugin.</p>
+</li>
+<li>
+<p>Stylesheets, a minimized version of jQuery javascript library plus some icons
+are copied at report-generation time from the jar-file to the report output directory.</p>
+</li>
+<li>
+<p>Styling the back-to-top arrow/button is done as a combination of JavaScript plus some css styling, as described in <a href="https://www.webtipblog.com/adding-scroll-top-button-website/" class="bare">https://www.webtipblog.com/adding-scroll-top-button-website/</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_copy_required_resources_to_output_directory">8.5.2. Copy Required Resources to Output Directory</h4>
+<div class="paragraph">
+<p>When creating the HTML report, we need to copy the required resource files (css, JavaScript)
+to the output directory.</p>
+</div>
+<div class="paragraph">
+<p>The appropriate copy method was re-used from the <a href="https://github.com/gradle/gradle/blob/master/subprojects/performance/src/testFixtures/groovy/org/gradle/performance/results/ReportGenerator.java#L50-50">Gradle sources</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_attributions">8.5.3. Attributions</h4>
+<div class="paragraph">
+<p>Credits for the arrow-icon <a href="https://www.iconfinder.com/icons/118743/arrow_up_icon" class="bare">https://www.iconfinder.com/icons/118743/arrow_up_icon</a></p>
+</div>
+<div style="page-break-after: always;"></div>
+<!-- endtoc -->
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_design_decisions">9. Design Decisions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_checking_of_external_links_postponed">9.1. Checking of external links postponed</h3>
+<div class="paragraph">
+<p>In the current {revision} we won&#8217;t check external links.
+These checks have been postponed to later versions.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_html_parsing_with_jsoup">9.2. HTML Parsing with jsoup</h3>
+<div class="paragraph">
+<p>To check HTML we parse it into an internal (DOM-like) representation.
+For this task we use <a href="https://jsoup.org">jsoup HTML parser</a>, an open-source parser without
+external dependencies.</p>
+</div>
+<div class="paragraph">
+<p>To quote from the jsoup website:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+jsoup is a Java library for working with real-world HTML.
+It provides a very convenient API for extracting and manipulating data,
+using the best of DOM, CSS, and jQuery-like methods.
+</blockquote>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Goals of this decision</dt>
+<dd>
+<p>Check HTML programmatically by using an existing API that provides access and finder
+methods to the DOM-tree of the file(s) to be checked.</p>
+</dd>
+<dt class="hdlist1">Decision Criteria</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>few dependencies, so the <kbd>HtmlSC</kbd> binary stays as small as possible.</p>
+</li>
+<li>
+<p>accessor and finder methods to find images, links and link-targets within the DOM tree.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Alternatives</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>HTTPUnit: a testing framework for web applications and -sites. Its main focus is web testing and it suffers from a large number of dependencies.</p>
+</li>
+<li>
+<p>jsoup: a plain HTML parser without any dependencies (!) and a rich API to access all HTML elements in DOM-like syntax.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Find details on how <kbd>HtmlSC</kbd> implements HTML parsing in the
+<a href="#html-encapsulation">HTML encapsulation concept</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_string_similarity_checking_with_jaro_winkler_distance">9.3. String Similarity Checking with <a href="https://wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance">Jaro-Winkler-Distance</a></h3>
+<div class="paragraph">
+<p>The small <a href="https://github.com/rrice/java-string-similarity">java-string-similarity</a> library (by Ralph Allen Rice) contains implementations of several similarity-calculation algorithms. As it is <strong>not available</strong> as public binary,
+we use the sources instead, primarily:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>net.ricecode.similarity.JaroWinklerStrategyTest
+net.ricecode.similarity.JaroWinklerStrategy</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The actual implementation of the similarity comparison has been postponed
+to a later release of <kbd>HtmlSC</kbd>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_glossary">9.4. Glossary</h3>
+<div class="paragraph">
+<p>See the <a href="#_html_checking_domain_model">domain model</a> for explanations of important terms.</p>
+</div>
+</div>
+</div>
+</div>
+        </p>
+
+        <style>
+.feedback--answer {
+    display: inline-block;
+}
+
+.feedback--answer-no {
+    margin-left: 1em;
+}
+
+.feedback--response {
+    display: none;
+    margin-top: 1em;
+}
+
+.feedback--response__visible {
+    display: block;
+}
+</style>
+
+<div class="d-print-none">
+    <h2 class="feedback--title">Feedback</h2>
+    <p class="feedback--question">Was this page helpful?</p>
+    <button class="feedback--answer feedback--answer-yes">Yes</button>
+    <button class="feedback--answer feedback--answer-no">No</button>
+    <p class="feedback--response feedback--response-yes">
+        Glad to hear it! Please <a href="https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27HTML+Sanity+Checker+Architecture+Documentation%27%20👍&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/hsc_arc42.adoc">tell us
+    how we can improve</a>.
+    </p>
+    <p class="feedback--response feedback--response-no">
+        Sorry to hear that. Please <a href="https://github.com/aim42/htmlSanityCheck/issues/new?title=Docs%3A+Feedback+for+%27HTML+Sanity+Checker+Architecture+Documentation%27%20👎&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:arc42/hsc_arc42.adoc">tell
+    us how we can improve</a>.
+    </p>
+</div>
+<script>
+    const yesButton = document.querySelector('.feedback--answer-yes');
+    const noButton = document.querySelector('.feedback--answer-no');
+    const yesResponse = document.querySelector('.feedback--response-yes');
+    const noResponse = document.querySelector('.feedback--response-no');
+    const disableButtons = () => {
+        yesButton.disabled = true;
+        noButton.disabled = true;
+    };
+    const sendFeedback = (value) => {
+        if (typeof ga !== 'function') return;
+        const args = {
+            command: 'send',
+            hitType: 'event',
+            category: 'Helpful',
+            action: 'click',
+            label: window.location.pathname,
+            value: value
+        };
+        ga(args.command, args.hitType, args.category, args.action, args.label, args.value);
+    };
+    yesButton.addEventListener('click', () => {
+        yesResponse.classList.add('feedback--response__visible');
+        disableButtons();
+        sendFeedback(1);
+    });
+    noButton.addEventListener('click', () => {
+        noResponse.classList.add('feedback--response__visible');
+        disableButtons();
+        sendFeedback(0);
+    });
+</script>
+
+
+        <br>
+
+        <!--div class="text-muted mt-5 pt-3 border-top">Last modified July 3, 2019: <a
+                href="https://github.com/google/docsy-example/commit/d6aa89c8b24089d7e6741030864eff209465e896">Added
+            links to user guide repo (d6aa89c)</a>
+        </div-->
+    </div>
+
+
+			</main>
+
+		</div>
+	</div>
+
+
+	
+    <!--footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">&copy; 2020 | based on <a href="https://arc42.org">arc42 7.0</a> | mixed with <a href="http://getbootstrap.com/">Bootstrap v5.0.0-beta</a> | Baked with <a href="http://jbake.org">JBake v2.6.7</a></span>
+        </div>
+    </footer-->
+
+    <footer class="bg-dark py-5 row d-print-none">
+        <div class="container-fluid mx-sm-5">
+            <div class="row">
+                <div class="col-6 col-sm-4 text-xs-center order-sm-2">
+
+
+                    <ul class="list-inline mb-0">
+                        
+                        
+                        
+                    </ul>
+
+
+                </div>
+                <div class="col-6 col-sm-4 text-right text-xs-center order-sm-3">
+
+
+                    <ul class="list-inline mb-0">
+
+                        
+                        <li aria-label="GitHub" class="list-inline-item mx-2 h3" data-original-title="GitHub" data-placement="top"
+                            data-toggle="tooltip" title="">
+                            <a class="text-white" href="https://github.com/aim42/htmlSanityCheck" rel="noopener noreferrer"
+                               target="_blank">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </li>
+                        
+
+                        
+
+
+                    </ul>
+
+
+                </div>
+                <div class="col-12 col-sm-4 text-center py-2 order-sm-2">
+
+                        ##Footer-Text##
+
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script crossorigin="anonymous"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            src="../js/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            src="../js/bootstrap.min.js"></script>
+
+
+    <script crossorigin="anonymous"
+            integrity="sha256-tfwbKdJGWDWEQlS9TYBHOOryTAzsUwCbTGiZmJvlWkc=" src="..//js/main.min.b5fc1b29d2465835844254bd4d804738eaf24c0cec53009b4c6899989be55a47.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/blocks.js" ></script>
+    <script src="../js/prettify.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,3 @@
+"ID","Check","Description"
+"Opt-1","missing external images","Check externally referenced images for availability"
+"Opt-2","broken external links","Check external links for both syntax and availability"

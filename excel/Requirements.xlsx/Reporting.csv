@@ -1,0 +1,4 @@
+"ID","Requirement","Description"
+"R-1","various output formats","Checking output in plain text and HTML"
+"R-2","output to stdout","HtmlSC can output results on stdout (the console)"
+"R-3","configurable file output","HtmlSC can store results in file in configurable directories"
