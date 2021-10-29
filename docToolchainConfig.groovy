@@ -257,7 +257,7 @@ exportEA.with {
 
 //tag::htmlSanityCheckConfig[]
 htmlSanityCheck.with {
-    sourceDir = "build/microsite/output"
+    sourceDir = "/project/build/microsite/output"
     //checkingResultsDir =
 }
 //end::htmlSanityCheckConfig[]
