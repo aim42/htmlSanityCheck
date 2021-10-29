@@ -16,6 +16,8 @@ jobs:
       DTC_HEADLES: true
     steps:
       - uses: actions/checkout@v2
+      - name: setup
+        run: chmod +x dtcw
       - name: exportExcel
         run: ./dtcw exportExcel
       - name: generateSite
