@@ -1,0 +1,15 @@
+:jbake-menu: arc42
+:jbake-order: 20
+:jbake-rightColumnHtml: <a href="../../pdf/arc42/hsc_arc42.pdf"><i class="fa fa-file fa-fw"></i> Download PDF</a>
+include::_config.adoc[]
+== Constraints
+
+:filename: arc42/chapters/chap-02-Constraints.adoc
+
+kbd:[HtmlSC] shall be:
+
+* platform-independent and should run on the major operating systems
+(Windows(TM), Linux, and Mac-OS(TM))
+* integrated with the Gradle build tool
+* runnable from the command line
+* developed under a liberal open-source license

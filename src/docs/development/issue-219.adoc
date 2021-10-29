@@ -1,5 +1,6 @@
+:filename: development/issue-219.adoc
 
-=== Handling 403 and 405 Status Codes
+== Handling 403 and 405 Status Codes
 
 
 https://github.com/aim42/htmlSanityCheck/issues/219[Issue 219]
@@ -26,7 +27,7 @@ page exists.
 
 
 
-==== Proposed Approach
+=== Proposed Approach
 
 [plantuml,"{plantumldir}GET-after-HEAD-failapproach",png]
 ....

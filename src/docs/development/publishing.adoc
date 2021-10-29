@@ -1,8 +1,9 @@
+:filename: development/publishing.adoc
 === Publishing kbd:htmlSC Releases
 
 ==== Automating the Upload of a Gradle Plugin
 Puh - handling Bintray or JCenter is
-http://java.dzone.com/articles/enjoy-bintray-and-use-it-pain[not funny].
+https://java.dzone.com/articles/enjoy-bintray-and-use-it-pain[not funny].
 
 ==== Handling (Secret) Credentials
 We use Etienne Studers awesome

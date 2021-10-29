@@ -1,7 +1,8 @@
+:filename: index.adoc
 :!toc:
 = image:htmlsanitycheck-logo.png[HTML Sanity Checker] Documentation Overview
 Dr. Gernot Starke <gernot.starke@innoq.com>
-v0.9, Sept-02-2014
+v0.9, 2014-09-02
 :imagesdir: ./images
 :experimental:
 :repositoryDocsDir: https://github.com/aim42/htmlSanityCheck/blob/master/src/docs/
@@ -45,11 +46,11 @@ types of stakeholders:
 
 | arc42-user, (methodical) software developer or architect
 | link:hsc_arc42.html[Architecture Documentation] 
-| http://github.com/arc42[arc42]-based documentation,
+| https://github.com/arc42[arc42]-based documentation,
   with requirements, quality-goals,
   context, building-blocks and
   concepts. Created as an example
-  for http://arc42.de[arc42].
+  for https://arc42.de[arc42].
 
 |===
 
@@ -57,9 +58,9 @@ The {project-url}[repository is located on Github].
 
 ifdef::backend-html5[]
 *Status*:
-image:http://img.shields.io/badge/license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
-image:http://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link="{project-bugs}"]
-image:http://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[issues]
+image:https://img.shields.io/badge/license-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"^]
+image:https://badge.waffle.io/aim42/{project}.png?label=bug&title=bugs[link="{project-bugs}"]
+image:https://img.shields.io/github/issues/aim42/htmlsanitycheck.svg[issues]
 endif::[]
 
-"External resources" icon from http://openclipart.org/detail/179896/world-wide-web-by-gr8dan-179896[openclipart]
+"External resources" icon from https://openclipart.org/detail/179896/world-wide-web-by-gr8dan-179896[openclipart]

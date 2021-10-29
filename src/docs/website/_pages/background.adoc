@@ -1,7 +1,0 @@
-= Background information
-:page-layout: single
-:page-permalink: /background
-:page-header: { overlay_filter: 0.5, overlay_image: /images/splash/library-splash.jpg, caption: "[Jessica Ruscello](https://unsplash.com/photos/OQSCtabGkSY)" }
-:page-sidebar: { }
-
-This page shall contain some background information

@@ -1,10 +1,11 @@
-
+:jbake-order: 0
+:jbake-rightColumnHtml: <a href="../pdf/arc42/hsc_arc42.pdf"><i class="fa fa-file fa-fw"></i> Download PDF</a>
+include::chapters/_config.adoc[]
 :numbered!:
 
 == Goals of this Documentation
 
 :filename: arc42/About-This-Docu.adoc
-include::_feedback.adoc[]
 
 This documentation is an example of
 {arc42-url}[arc42] documentation.

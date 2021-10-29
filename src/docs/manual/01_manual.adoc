@@ -1,0 +1,7 @@
+:filename: manual/01_manual.adoc
+:imagesdir: ../images
+:jbake-menu: Manual
+:jbake-title: HTML Sanity Check
+
+
+include::{projectRootDir}/README.adoc[leveloffset=+1]

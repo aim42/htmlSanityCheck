@@ -1,0 +1,209 @@
+:jbake-menu: arc42
+:jbake-order: 50
+:jbake-rightColumnHtml: <a href="../../pdf/arc42/hsc_arc42.pdf"><i class="fa fa-file fa-fw"></i> Download PDF</a>
+include::_config.adoc[]
+== Building Block View
+
+:filename: arc42/chapters/chap-05-BuildingBlocks.adoc
+
+=== Whitebox HtmlSanityChecker
+
+
+[plantuml,"{plantumldir}whitbox-hsc-level-1",png]
+....
+include::../../plantuml/whitebox-hsc-level-1.puml[]
+....
+
+
+
+Rationale::
+
+We used _functional decomposition_ to separate responsibilities:
+
+* <<checker_blackbox, CheckerCore>> shall encapsulate checking logic and Html parsing/processing.
+* all kinds of outputs (console, html-file, graphical) shall be handled in a separate component
+  (`Reporter`)
+* Implementation of Gradle specific stuff shall be encapsulated.
+
+
+Contained Blackboxes::
+
+[cols="1,3" options=""]
+.HtmlSanityChecker building blocks
+|===
+| <<checker_blackbox, HSC Core>> | hsc core: html parsing and sanity checking, configuration, reporting.
+| HSC Gradle Plugin | integrates the Gradle build tool with kbd:[HtmlSC],
+enabling arbitrary gradle builds to use kbd:[HtmlSC] functionality.
+| HSC Maven Plugin | (planned, not yet implemented)
+| HSC Graphical Interface | (planned, not implemented)
+
+|===
+
+
+Interfaces::
+
+[cols="1,4", options="header"]
+.HtmlSanityChecker internal interfaces
+|===
+| Interface | Description
+| usage via shell | <<arc42_user, arc42 user>> uses a command
+line shell to call the kbd:[HtmlSC]
+| build system  | currently restricted to Gradle: The build
+system uses kbd:[HtmlSC] as configured in the buildscript.
+| local-file system | kbd:[HtmlSC] needs access to several
+local files, especially the html page to be checked and to the
+corresponding image directories.
+| external websites| to check external links, kbd:[HtmlSC] needs to access external sites via http HEAD or GET requests.
+|===
+
+
+[[checker_blackbox]]
+==== _HSC Core_ (Blackbox)
+
+Intent/Responsibility:: HSC_Core contains the core functions
+to perform the various sanity checks. It parses the html file
+into a DOM-like in-memory representation, which is then
+used to perform the actual checks.
+
+
+Interfaces::
+
+[cols="2,4", options="header"]
+.HSC_Core Interfaces
+|===
+| Interface (From-To) | Description
+
+| Command Line Interface -> Checker
+| Uses the #AllChecksRunner class.
+
+| Gradle Plugin -> Checker
+| Exposes kbd:[HtmlSC] via a standard Gradle plugin,
+as described in the Gradle user guide.
+|===
+
+
+Files::
+    * +org.aim42.htmlsanitycheck.AllChecksRunner+
+    * +org.aim42.htmlsanitycheck.HtmlSanityCheckGradlePlugin+
+
+
+=== Building Blocks - Level 2
+
+==== _HSC-Core_ (Whitebox)
+
+
+image::ea/htmlSanityCheck/hsc-core.png["Whitebox", title="HSC-Core (Whitebox)"]
+
+Rationale::
+This structures follows a strictly functional decomposition:
+
+* parsing and handling html input
+* checking
+* collecting checking results
+
+Contained Blackboxes::
+
+[cols="1,4" options=""]
+.HSC-Core building blocks
+|===
+| Checker
+| Abstract class, used in form of the template-pattern. Shall be subclassed
+for all checking algorithms.
+
+| AllChecksRunner
+| Facade to the different Checker instances. Provides a (parameter-driven)
+command-line interface.
+
+| <<ResultsCollector>>
+| Collects all checking results. Its interface `Results` is contained in the
+<<ResultsCollector, whitebox description>>
+
+| Reporter
+| Reports checking results to either console or an html file.
+
+| HtmlParser
+| Encapsulates html parsing, provides methods to search
+within the (parsed) html.
+
+| Suggester
+| In case of checking issues, suggests alternatives by comparing the faulty element
+to the one present in the html file. Currently not implemented
+|===
+
+
+==== Checker and xyzChecker Subclasses
+
+The abstract Checker provides a uniform interface (`public void check()`)
+to different checking algorithms. It is based upon the <<checking-concept,
+concept of extensible checking algorithms>>.
+
+
+
+
+=== Building Blocks - Level 3
+
+[[ResultsCollector]]
+==== ResultsCollector (Whitebox)
+
+image::ea/htmlSanityCheck/ResultsCollector.png["Whitebox", title="Results Collector (Whitebox)"]
+
+Rationale::
+This structures follows the hierarchy of checks - namely managing results for:
+
+. a number of pages/documents, containing:
+. a single page, each containing many
+. single checks within a page
+
+
+Contained Blackboxes::
+
+[cols="1,4" options=""]
+.ResultsCollector building blocks
+|===
+| Per-Run Results
+| results for potentially many Html pages/documents.
+
+| Single-Page-Results
+| results for a single page
+
+| Single-Check-Results
+| results for a single type of check (e.g. missing-images check)
+
+| Finding
+| a single finding, (e.g. "image 'logo.png' missing"). Can hold suggestions
+and (planned for future releases) the responsible html element.
+|===
+
+
+
+===== Interface `Results`
+
+The `Result` interface is used by all clients
+(especially `Reporter` subclasses, graphical and command-line
+clients) to access checking results. It consists of three distinct APIs for
+overall `RunResults`, single-page results (`PageResults`) and single-check results
+(`CheckResults`). See the interface definitions below - taken from the Groovy-
+ source code:
+
+
+
+[source, groovy]
+.Interface RunResults
+----
+include::{coresourcepath}/htmlsanitycheck/collect/RunResults.groovy[tags=RunResultInterface]
+----
+
+
+
+[source, groovy]
+.Interface PageResults
+----
+include::{coresourcepath}/htmlsanitycheck/collect/PageResults.groovy[tags=PageResultInterface]
+----
+
+
+[source, groovy]
+.Interface CheckResults
+----
+include::{coresourcepath}/htmlsanitycheck/collect/CheckResults.groovy[tags=CheckResultsInterface]
+----

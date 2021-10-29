@@ -1,0 +1,13 @@
+:jbake-menu: -
+include::_config.adoc[]
+[[html-encapsulation]]
+=== Encapsulate HTML Parsing
+
+:filename: arc42/chapters/chap-08-html-encapsulation.adoc
+include::../_feedback.adoc[]
+
+We encapsulate the third-party HTML parser (https://jsoup.org) in
+simple wrapper classes with interfaces specific to our different
+checking algorithms.
+
+

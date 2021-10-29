@@ -1,0 +1,33 @@
+:jbake-menu: arc42
+:jbake-order: 70
+:jbake-rightColumnHtml: <a href="../../pdf/arc42/hsc_arc42.pdf"><i class="fa fa-file fa-fw"></i> Download PDF</a>
+include::_config.adoc[]
+[[deployment-view]]
+== Deployment View
+
+:filename: arc42/chapters/chap-07-Deployment.adoc
+
+[[img-deployment]]
+image::ea/htmlSanityCheck/hsc-deployment.png["Deployment", title="Deployment"]
+
+[options="header", cols="1,4"]
+.Deployment
+|===
+| Node / Artifact | Description
+| hsc plugin binary | compiled version of kbd:[HtmlSC], including required dependencies.
+| hsc-development | where development of kbd:[HtmlSC] takes place
+| artifact repository (https://bintray.com/bintray/jcenter[Bintray]) | global public _cloud_ repository for binary artifacts, similar to https://search.maven.org/[mavenCentral].  kbd:[HtmlSC] binaries are uploaded to this server.
+| hsc user computer | where arbitrary documentation takes place with html as output formats.
+| build.gradle    |  Gradle build script configuring (among other things) the kbd:[HtmlSC] plugin to check _some documentation_.
+|===
+
+The three nodes (_computers_) shown in <<img-deployment>> are connected via Internet.
+
+Sanity checker will:
+
+. be bundled as a single jar,
+. be uploaded to the Bintray repository, 
+. referencable within a gradle buildfile,
+. provide a +main+ method with parameters and options, so all checks can be
+called from the command line.
+
