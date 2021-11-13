@@ -45,4 +45,4 @@ image::deployment-context.png["Deployment Context", title="Deployment Context"]
 |===
 
 
-Details see <<deployment-view, deployment view>>.
+Details see xref:chap-07-Deployment.adoc#deployment-view[deployment view].

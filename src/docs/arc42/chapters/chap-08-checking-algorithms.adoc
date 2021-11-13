@@ -21,6 +21,7 @@ The invariant steps are implemented in the abstract base class, while the varian
 include::{coresourcepath}/htmlsanitycheck/check/Checker.groovy[tags=performCheckTemplateMethod]
 ----
 
+ifndef::imagesdir[:imagesdir: ../../images]
 
 image::ea/htmlSanityCheck/template-method.png["Template Method", title="Template-Method Overview"]
 
@@ -42,7 +43,7 @@ image::ea/htmlSanityCheck/template-method.png["Template Method", title="Template
 [[MissingImageFilesChecker]]
 ==== MissingImageFilesChecker
 
-[small]#Addresses requirement <<requiredChecks, R-1>>.#
+[small]#Addresses requirement xref:chap-01-Requirements.adoc#requiredChecks[R-1].#
 
 Checks if image files referenced in +<img src="someFile.jpg">+ really
 exists on the local file system.
@@ -70,7 +71,7 @@ if(f.exists() && !f.isDirectory())
 
 [[MissingImgAltAttributeChecker]]
 ==== MissingImgAltAttributeChecker
-[small]#Addresses requirement <<requiredChecks, R-6>>.#
+[small]#Addresses requirement xref:chap-01-Requirements.adoc#requiredChecks[R-6].#
 
 Simple syntactic check: iterates over all <img> tags to check
 if the image has an alt-tag.
@@ -78,7 +79,7 @@ if the image has an alt-tag.
 
 [[BrokenCrossReferencesChecker]]
 ==== BrokenCrossReferencesChecker
-[small]#Addresses requirement <<requiredChecks, R-2>>.#
+[small]#Addresses requirement xref:chap-01-Requirements.adoc#requiredChecks[R-2].#
 
 Cross references are document-internal links where the +href="link-target" from the html anchor
 tag has no prefix like +http+, +https+, +ftp+, +telnet+, +mailto+, +file+ and such.
@@ -88,7 +89,7 @@ Only links with prefix +#+ shall be taken into account, e.g. +<a href="#internal
 [[DuplicateIdChecker]]
 ==== DuplicateIdChecker
 
-[small]#Addresses requirement <<requiredChecks, R-4>>.#
+[small]#Addresses requirement xref:chap-01-Requirements.adoc#requiredChecks[R-4].#
 
 Sections, especially headings, can be made link-targets by adding the +id="#xyz"+ element,
 yielding for example html headings like the following example.
@@ -103,7 +104,7 @@ Problems occur if the same link target is defined several times (also shown belo
 [[MissingLocalResourcesChecker]]
 ==== MissingLocalResourcesChecker
 
-[small]#Addresses requirement <<requiredChecks, R-3>>.#
+[small]#Addresses requirement xref:chap-01-Requirements.adoc#requiredChecks[R-3].#
 
 ===== Current limitations:
 
@@ -121,7 +122,7 @@ See issues #252 (false positives) and #253 (deep links shall be checked)
 [[BrokenHttpLinksChecker]]
 ==== BrokenHttpLinksChecker
 
-[small]#Addresses requirement <<requiredChecks, R-9>>.#
+[small]#Addresses requirement xref:chap-01-Requirements.adoc#requiredChecks[R-9].#
 
 Problem here are networking issues, latency and HTTP return codes. This checker is planned,
 but currently not implemented.
@@ -129,6 +130,6 @@ but currently not implemented.
 [[IllegalLinkChecker]]
 ==== IllegalLinkChecker
 
-[small]#Addresses requirement <<requiredChecks, R-5>>.#
+[small]#Addresses requirement xref:chap-01-Requirements.adoc#requiredChecks[R-5].#
 
 This checker is planned, but currently not implemented.

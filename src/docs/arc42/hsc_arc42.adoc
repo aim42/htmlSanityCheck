@@ -4,6 +4,7 @@
 :toc-position: left
 :jbake-menu: -
 :doctype: book
+:relfileprefix: chapters/
 
 ifdef::backend-html5[]
 ++++
