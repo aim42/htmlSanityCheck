@@ -20,7 +20,7 @@ Rationale::
 
 We used _functional decomposition_ to separate responsibilities:
 
-* <<checker_blackbox, CheckerCore>> shall encapsulate checking logic and Html parsing/processing.
+* xref:chap-08-Concepts.adoc#checker_blackbox[CheckerCore] shall encapsulate checking logic and Html parsing/processing.
 * all kinds of outputs (console, html-file, graphical) shall be handled in a separate component
   (`Reporter`)
 * Implementation of Gradle specific stuff shall be encapsulated.

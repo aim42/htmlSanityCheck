@@ -7,7 +7,7 @@
 :asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin
 
 :asciidoc-url: http://asciidoctor.org
-:gradle-url: http://gradle.org/
+:gradle-url: https://gradle.org/
 
 :gernotstarke: https://github.com/gernotstarke
 :project: htmlSanityCheck
@@ -294,13 +294,13 @@ but should...
 == Technical Documentation
 In addition to checking HTML, this project serves as an example for http://arc42.de[arc42].
 
-Please see our https://rawgit.com/aim42/htmlSanityCheck/gh-pages/hsc_arc42.html[software architecture documentation].
+Please see our https://aim42.github.io/htmlSanityCheck/arc42/About-This-Docu.html[software architecture documentation].
 
 
 == Fundamentals
 This tiny piece rests on incredible groundwork:
 
-* http://jsoup.org[Jsoup HTML parser] and analysis toolkit - robust and easy-to-use.
+* https://jsoup.org[Jsoup HTML parser] and analysis toolkit - robust and easy-to-use.
 
 * IntelliJ IDEA - my (Gernot) best (programming) friend.
 
@@ -337,11 +337,11 @@ to ensure that the docToolchain submodule is downloaded.
 
 Several sources provided help during development:
 
-* http://www.gradle.org/docs/current/userguide/custom_plugins.html[Gradle guide on writing custom plugins]
+* https://www.gradle.org/docs/current/userguide/custom_plugins.html[Gradle guide on writing custom plugins]
 * The code4reference tutorial an Gradle custom plugins,
 http://code4reference.com/2012/08/gradle-custom-plugin-part-1/[part 1] and
 http://code4reference.com/2012/08/gradle-custom-plugin-part-2/[part 2].
-* Of course, the http://jsoup.org/apidocs/[JSoup API documentation]
+* Of course, the https://jsoup.org/apidocs/[JSoup API documentation]
 
 == Similar Projects
 
@@ -366,4 +366,4 @@ Some day I'll unify that :-)
 
 Big thanx to Structure-101 for helping us analyze and restructure our code...
 
-image:./structure101-logo.png[link="http://structure101.com"]
+image:./structure101-logo.png[link="https://structure101.com"]

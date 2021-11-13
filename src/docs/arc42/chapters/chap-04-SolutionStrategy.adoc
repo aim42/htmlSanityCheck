@@ -9,8 +9,8 @@ include::_config.adoc[]
 * Implement kbd:[HtmlSC] in {groovy-url}[Groovy] and Java with minimal
 external dependencies. Wrap this implementation into a {gradle-url}
 plugin, so it can be used within automated builds. Details are given
-in the <<gradle-plugin-concept, Gradle plugin concept>>.
+in the xref:chap-08-Concepts.adoc#gradle-plugin-concept[Gradle plugin concept].
 
 * Apply the _template-method-pattern_ (see e.g. {template-method-url}) to enable:
-** multiple checking algorithms. See the <<checking-concept, concept for checking algorithms>>,
-** both HTML (file) and text (console) output. See the <<reporting-concept, reporting concept>>.
+** multiple checking algorithms. See the xref:chap-08-Concepts.adoc#checking-concept[concept for checking algorithms],
+** both HTML (file) and text (console) output. See the xref:chap-08-Concepts.adoc#reporting-concept[reporting concept].

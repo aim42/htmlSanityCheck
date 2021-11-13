@@ -22,12 +22,14 @@ jobs:
         run: ./dtcw exportExcel
       - name: generateSite
         run: ./dtcw generateSite
+      - name: removeDraft
+        run: find build/microsite/output/. -name "*-draft.html" -type f -delete
       - name: generatePdf
         run: ./dtcw generatePdf
       - name: htmlSanityCheck
         run: ./dtcw htmlSanityCheck
       - name: copyToPublic
-        run: cp -r ./build/microsite/output ./public && cp -r ./build/report/htmlchecks ./public && cp -r ./build/pdf ./public
+        run: cp -r ./build/pdf ./build/microsite/output && cp -r ./build/report/htmlchecks ./build/microsite/output && cp -r ./build/microsite/output ./public
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
 #        if: ${{ github.ref == 'refs/heads/main' }}

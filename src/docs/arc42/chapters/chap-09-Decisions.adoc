@@ -44,7 +44,7 @@ Alternatives::
 
 
 Find details on how kbd:[HtmlSC] implements HTML parsing in the
-<<html-encapsulation, HTML encapsulation concept>>.
+xref:chap-08-Concepts.adoc#html-encapsulation[HTML encapsulation concept].
 
 
 === String Similarity Checking with https://wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance[Jaro-Winkler-Distance]
