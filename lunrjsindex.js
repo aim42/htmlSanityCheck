@@ -106,6 +106,14 @@ var documents = [
 
 {
     "id": 13,
+    "uri": "development/issue-190.html",
+    "menu": "development",
+    "title": "Refactoring the Main Checking Loop",
+    "text": " Table of Contents Refactoring the Main Checking Loop Proposed (new) Scenario Refactoring the Main Checking Loop Issue 190 proposes to merge the two classes AllChecksRunner and ChecksRunner. Proposed (new) Scenario "
+},
+
+{
+    "id": 14,
     "uri": "development/template.html",
     "menu": "development",
     "title": "Descriptive Title",
@@ -113,19 +121,11 @@ var documents = [
 },
 
 {
-    "id": 14,
+    "id": 15,
     "uri": "development/publishing.html",
     "menu": "development",
     "title": "Publishing kbd:htmlSC Releases",
     "text": " Table of Contents Publishing kbd:htmlSC Releases Publishing kbd:htmlSC Releases Automating the Upload of a Gradle Plugin Puh - handling Bintray or JCenter is not funny . Handling (Secret) Credentials We use Etienne Studers awesome Gradle-Credentials plugin to allow automatic deployment to public portals (like Bintray, JCenter and/or Gradle-Plugin-Portal) and keep the appropriate passwords/API-keys secret. Brief instructions below - for details see the credentials plugin integrate the plugin in the buildfile get the required credentials from the Bintray website (or wherever you want to publish artifacts) add the required credentials: &gt; gradle addCredentials --key bintrayUserName --value &lt;your-Bintray-username&gt; :addCredentials BUILD SUCCESSFUL &gt; gradle addCredentials --key bintrayApiKey --value &lt;some-long-key&gt; Within the buildfile you can now access these credentials as follows: // include these lines in your build.gradle: println Username :  + credentials.bintrayUserName println Bintray API Key :  + credentials.bintrayApiKey "
-},
-
-{
-    "id": 15,
-    "uri": "development/issue-190.html",
-    "menu": "development",
-    "title": "Refactoring the Main Checking Loop",
-    "text": " Table of Contents Refactoring the Main Checking Loop Proposed (new) Scenario Refactoring the Main Checking Loop Issue 190 proposes to merge the two classes AllChecksRunner and ChecksRunner. Proposed (new) Scenario "
 },
 
 {
@@ -138,6 +138,14 @@ var documents = [
 
 {
     "id": 17,
+    "uri": "development/issue-219.html",
+    "menu": "development",
+    "title": "Handling 403 and 405 Status Codes",
+    "text": " Table of Contents Handling 403 and 405 Status Codes Proposed Approach Handling 403 and 405 Status Codes Issue 219 explains that the naive link checks based upon a http HEAD request sometimes fail, e.g. for links to amazon.com: For example: (`curl -I performs a HEAD request) &lt;snip&gt; curl -I https://www.amazon.de/dp/3446443487 HTTP/2 405 server: Server content-type: text/html;charset=UTF-8 &lt;/snip&gt; This is clearly a false negative , as the URL itself is correct and the page exists. Proposed Approach Reason for this double check is to keep the transmitted data volume low (and performance higher). The general behavior we implement shall be the following ` if (responseCode in successCodes) then return else { // try GET connection.setRequestMethod(GET) int finalResponseCode = connection.getResponseCode() switch (realResponseCode) { case warningCodes: println real warning $responseCode; break case errorCodes: println real error $responseCode; break default: println Error: Unknown or unclassified response code } } "
+},
+
+{
+    "id": 18,
     "uri": "development/issue-185.html",
     "menu": "development",
     "title": "Automated Checker Factory",
@@ -145,19 +153,11 @@ var documents = [
 },
 
 {
-    "id": 18,
+    "id": 19,
     "uri": "development/issue-252.html",
     "menu": "development",
     "title": "Issue 252 (MissingLocalResourcesChecker gives false positives)",
     "text": " Table of Contents Issue 252 (MissingLocalResourcesChecker gives false positives) Background Proposed Approach Decision Issue 252 (MissingLocalResourcesChecker gives false positives) Problem Description The MLR-Checker currently gives false positives (false alarms) if the link has a form like &lt;a href=/foo&gt; Background The short form of a URL: &lt;a href=/foo&gt; can actually mean one of the following: /foo.html more generally /foo.&lt;extension&gt; /foo/index.&lt;extension&gt; where extension is one of the following: html, htm, shtml, phtml, php, asp, aspx, xml Proposed Approach Define a proper name for the link without extension ( prefixOnlyHref ) When checking local resources, add a special case for URLs with prefixOnlyHref . Add a new configuration item with the extensions to be checked, the default should be the list given above ( ITEM_NAME_prefixOnlyHrefExtensions ) Add these defaults to NetUtil Decision Document the decision in Detail by moving all information from this Discussion to capter 9 Design Decisions of your arc42 docs. "
-},
-
-{
-    "id": 19,
-    "uri": "development/issue-219.html",
-    "menu": "development",
-    "title": "Handling 403 and 405 Status Codes",
-    "text": " Table of Contents Handling 403 and 405 Status Codes Proposed Approach Handling 403 and 405 Status Codes Issue 219 explains that the naive link checks based upon a http HEAD request sometimes fail, e.g. for links to amazon.com: For example: (`curl -I performs a HEAD request) &lt;snip&gt; curl -I https://www.amazon.de/dp/3446443487 HTTP/2 405 server: Server content-type: text/html;charset=UTF-8 &lt;/snip&gt; This is clearly a false negative , as the URL itself is correct and the page exists. Proposed Approach Reason for this double check is to keep the transmitted data volume low (and performance higher). The general behavior we implement shall be the following ` if (responseCode in successCodes) then return else { // try GET connection.setRequestMethod(GET) int finalResponseCode = connection.getResponseCode() switch (realResponseCode) { case warningCodes: println real warning $responseCode; break case errorCodes: println real error $responseCode; break default: println Error: Unknown or unclassified response code } } "
 },
 
 {

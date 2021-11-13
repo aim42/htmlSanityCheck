@@ -67,6 +67,11 @@
     </url>
 
     <url>
+    	<loc>https://localhost/development/issue-190.html</loc>
+    	<lastmod>2021-11-13</lastmod>
+    </url>
+
+    <url>
     	<loc>https://localhost/development/template.html</loc>
     	<lastmod>2021-11-13</lastmod>
     </url>
@@ -77,12 +82,12 @@
     </url>
 
     <url>
-    	<loc>https://localhost/development/issue-190.html</loc>
+    	<loc>https://localhost/development/issue-244.html</loc>
     	<lastmod>2021-11-13</lastmod>
     </url>
 
     <url>
-    	<loc>https://localhost/development/issue-244.html</loc>
+    	<loc>https://localhost/development/issue-219.html</loc>
     	<lastmod>2021-11-13</lastmod>
     </url>
 
@@ -93,11 +98,6 @@
 
     <url>
     	<loc>https://localhost/development/issue-252.html</loc>
-    	<lastmod>2021-11-13</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/development/issue-219.html</loc>
     	<lastmod>2021-11-13</lastmod>
     </url>
 
