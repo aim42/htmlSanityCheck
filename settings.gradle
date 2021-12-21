@@ -5,4 +5,3 @@ plugins {
 
 rootProject.name = 'htmlSanityCheck'
 
-include 'docToolchain'
