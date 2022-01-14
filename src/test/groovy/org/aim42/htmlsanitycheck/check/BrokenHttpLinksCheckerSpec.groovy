@@ -201,7 +201,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
     }
 
-
+    @Ignore
     def 'redirects are recognized and their new location is contained in warning message'() {
 
         given: "the old arc42 (http!) page "

@@ -8,8 +8,8 @@ import spock.lang.Unroll
 
 class ConfigurationSpec extends Specification {
 
-    final def CI_FileCheck_Name = "fileToCheck"
-    final def CI_FileCheck_Value = "index.html"
+    def CI_FileCheck_Name = "fileToCheck"
+    def CI_FileCheck_Value = "index.html"
 
     private final static HTML_HEADER = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <head></head><html>"""
 

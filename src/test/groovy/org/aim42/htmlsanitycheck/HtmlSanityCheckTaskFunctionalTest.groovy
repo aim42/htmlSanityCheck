@@ -18,7 +18,7 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
     private final static GRADLE_VERSIONS = ['6.8.1']
 
     @Rule
-    final TemporaryFolder testProjectDir = new TemporaryFolder()
+    TemporaryFolder testProjectDir = new TemporaryFolder()
     File buildDir
     File buildFile
     File htmlFile
