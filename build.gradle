@@ -31,11 +31,11 @@ dependencies {
 
     implementation gradleApi()
 
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.1'
 
     // since gradle 4.6, annotation processors shall be explicitly declared
     // (instead of just having them in the compile-group)
-    annotationProcessor 'org.apache.logging.log4j:log4j-core:2.3'
+    annotationProcessor 'org.apache.logging.log4j:log4j-core:2.17.1'
 
 
     // jsoup is our awesome html parser, see jsoup.org
