@@ -32,6 +32,11 @@
     </url>
 
     <url>
+    	<loc>https://localhost/development/publishing.html</loc>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
     	<loc>https://localhost/development/issue-244.html</loc>
     	<lastmod>2022-01-14</lastmod>
     </url>
@@ -47,11 +52,6 @@
     </url>
 
     <url>
-    	<loc>https://localhost/development/publishing.html</loc>
-    	<lastmod>2022-01-14</lastmod>
-    </url>
-
-    <url>
     	<loc>https://localhost/development/issue-219.html</loc>
     	<lastmod>2022-01-14</lastmod>
     </url>
@@ -62,12 +62,12 @@
     </url>
 
     <url>
-    	<loc>https://localhost/arc42/chapters/chap-05-BuildingBlocks.html</loc>
+    	<loc>https://localhost/arc42/chapters/chap-03-Context.html</loc>
     	<lastmod>2022-01-14</lastmod>
     </url>
 
     <url>
-    	<loc>https://localhost/arc42/chapters/chap-03-Context.html</loc>
+    	<loc>https://localhost/arc42/chapters/chap-05-BuildingBlocks.html</loc>
     	<lastmod>2022-01-14</lastmod>
     </url>
 
@@ -77,12 +77,12 @@
     </url>
 
     <url>
-    	<loc>https://localhost/arc42/chapters/chap-02-Constraints.html</loc>
+    	<loc>https://localhost/arc42/chapters/chap-09-Decisions.html</loc>
     	<lastmod>2022-01-14</lastmod>
     </url>
 
     <url>
-    	<loc>https://localhost/arc42/chapters/chap-09-Decisions.html</loc>
+    	<loc>https://localhost/arc42/chapters/chap-02-Constraints.html</loc>
     	<lastmod>2022-01-14</lastmod>
     </url>
 
