@@ -3,107 +3,107 @@
 
     <url>
     	<loc>https://localhost/report/report.html</loc>
-    	<lastmod>2021-12-21</lastmod>
+    	<lastmod>2022-01-14</lastmod>
     </url>
 
     <url>
     	<loc>https://localhost/ea/readme.html</loc>
-    	<lastmod>2021-12-21</lastmod>
+    	<lastmod>2022-01-14</lastmod>
     </url>
 
     <url>
     	<loc>https://localhost/excel/readme.html</loc>
-    	<lastmod>2021-12-21</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/arc42/About-This-Docu.html</loc>
-    	<lastmod>2021-12-21</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/manual/01_manual.html</loc>
-    	<lastmod>2021-12-21</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/arc42/chapters/chap-08-Concepts.html</loc>
-    	<lastmod>2021-12-21</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/arc42/chapters/chap-03-Context.html</loc>
-    	<lastmod>2021-12-21</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/arc42/chapters/chap-01-Requirements.html</loc>
-    	<lastmod>2021-12-21</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/arc42/chapters/chap-09-Decisions.html</loc>
-    	<lastmod>2021-12-21</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/arc42/chapters/chap-07-Deployment.html</loc>
-    	<lastmod>2021-12-21</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/arc42/chapters/chap-06-Runtime.html</loc>
-    	<lastmod>2021-12-21</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/arc42/chapters/chap-04-SolutionStrategy.html</loc>
-    	<lastmod>2021-12-21</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/arc42/chapters/chap-02-Constraints.html</loc>
-    	<lastmod>2021-12-21</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/arc42/chapters/chap-05-BuildingBlocks.html</loc>
-    	<lastmod>2021-12-21</lastmod>
+    	<lastmod>2022-01-14</lastmod>
     </url>
 
     <url>
     	<loc>https://localhost/development/template.html</loc>
-    	<lastmod>2021-12-21</lastmod>
+    	<lastmod>2022-01-14</lastmod>
     </url>
 
     <url>
     	<loc>https://localhost/development/issue-185.html</loc>
-    	<lastmod>2021-12-21</lastmod>
+    	<lastmod>2022-01-14</lastmod>
     </url>
 
     <url>
     	<loc>https://localhost/development/issue-252.html</loc>
-    	<lastmod>2021-12-21</lastmod>
+    	<lastmod>2022-01-14</lastmod>
     </url>
 
     <url>
     	<loc>https://localhost/development/issue-244.html</loc>
-    	<lastmod>2021-12-21</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/development/issue-219.html</loc>
-    	<lastmod>2021-12-21</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/development/publishing.html</loc>
-    	<lastmod>2021-12-21</lastmod>
+    	<lastmod>2022-01-14</lastmod>
     </url>
 
     <url>
     	<loc>https://localhost/development/issue-190.html</loc>
-    	<lastmod>2021-12-21</lastmod>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/manual/01_manual.html</loc>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/development/publishing.html</loc>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/development/issue-219.html</loc>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/arc42/chapters/chap-07-Deployment.html</loc>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/arc42/chapters/chap-05-BuildingBlocks.html</loc>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/arc42/chapters/chap-03-Context.html</loc>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/arc42/chapters/chap-04-SolutionStrategy.html</loc>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/arc42/chapters/chap-02-Constraints.html</loc>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/arc42/chapters/chap-09-Decisions.html</loc>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/arc42/chapters/chap-08-Concepts.html</loc>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/arc42/chapters/chap-06-Runtime.html</loc>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/arc42/chapters/chap-01-Requirements.html</loc>
+    	<lastmod>2022-01-14</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/arc42/About-This-Docu.html</loc>
+    	<lastmod>2022-01-14</lastmod>
     </url>
 
     <url>
@@ -113,12 +113,12 @@
 
     <url>
     	<loc>https://localhost/search.html</loc>
-    	<lastmod>2021-12-21</lastmod>
+    	<lastmod>2022-01-14</lastmod>
     </url>
 
     <url>
     	<loc>https://localhost/lunrjsindex.html</loc>
-    	<lastmod>2021-12-21</lastmod>
+    	<lastmod>2022-01-14</lastmod>
     </url>
 
 </urlset>
