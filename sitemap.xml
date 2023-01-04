@@ -27,22 +27,17 @@
     </url>
 
     <url>
-    	<loc>https://localhost/arc42/chapters/chap-08-Concepts.html</loc>
-    	<lastmod>2023-01-04</lastmod>
-    </url>
-
-    <url>
     	<loc>https://localhost/arc42/chapters/chap-04-SolutionStrategy.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
     <url>
-    	<loc>https://localhost/arc42/chapters/chap-07-Deployment.html</loc>
+    	<loc>https://localhost/arc42/chapters/chap-08-Concepts.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
     <url>
-    	<loc>https://localhost/arc42/chapters/chap-05-BuildingBlocks.html</loc>
+    	<loc>https://localhost/arc42/chapters/chap-07-Deployment.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
@@ -57,7 +52,7 @@
     </url>
 
     <url>
-    	<loc>https://localhost/arc42/chapters/chap-03-Context.html</loc>
+    	<loc>https://localhost/arc42/chapters/chap-05-BuildingBlocks.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
@@ -72,7 +67,17 @@
     </url>
 
     <url>
+    	<loc>https://localhost/arc42/chapters/chap-03-Context.html</loc>
+    	<lastmod>2023-01-04</lastmod>
+    </url>
+
+    <url>
     	<loc>https://localhost/development/template.html</loc>
+    	<lastmod>2023-01-04</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/development/publishing.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
@@ -83,11 +88,6 @@
 
     <url>
     	<loc>https://localhost/development/issue-190.html</loc>
-    	<lastmod>2023-01-04</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/development/publishing.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
