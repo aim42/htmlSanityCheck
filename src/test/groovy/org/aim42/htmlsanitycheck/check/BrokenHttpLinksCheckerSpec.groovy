@@ -103,7 +103,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         collector.nrOfProblems() == 0
 
         where:
-           goodUrl << [ "http://junit.sourceforge.net/javadoc/org/junit/Before.html",
+           goodUrl << [ "https://junit.org/junit4/javadoc/latest/org/junit/Before.html",
                        "http://plumelib.org/plume-util/api/org/plumelib/util/DeterministicObject.html",
                        "http://people.csail.mit.edu/cpacheco/publications/randoop-case-study-abstract.html",
                        "https://douglascayers.com/2015/05/30/how-to-set-custom-java-path-after-installing-jdk-8/"
