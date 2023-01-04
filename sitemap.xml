@@ -27,17 +27,22 @@
     </url>
 
     <url>
-    	<loc>https://localhost/arc42/chapters/chap-04-SolutionStrategy.html</loc>
-    	<lastmod>2023-01-04</lastmod>
-    </url>
-
-    <url>
     	<loc>https://localhost/arc42/chapters/chap-08-Concepts.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
     <url>
+    	<loc>https://localhost/arc42/chapters/chap-04-SolutionStrategy.html</loc>
+    	<lastmod>2023-01-04</lastmod>
+    </url>
+
+    <url>
     	<loc>https://localhost/arc42/chapters/chap-07-Deployment.html</loc>
+    	<lastmod>2023-01-04</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/arc42/chapters/chap-05-BuildingBlocks.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
@@ -52,22 +57,17 @@
     </url>
 
     <url>
-    	<loc>https://localhost/arc42/chapters/chap-05-BuildingBlocks.html</loc>
-    	<lastmod>2023-01-04</lastmod>
-    </url>
-
-    <url>
     	<loc>https://localhost/arc42/chapters/chap-01-Requirements.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
     <url>
-    	<loc>https://localhost/arc42/chapters/chap-09-Decisions.html</loc>
+    	<loc>https://localhost/arc42/chapters/chap-03-Context.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
     <url>
-    	<loc>https://localhost/arc42/chapters/chap-03-Context.html</loc>
+    	<loc>https://localhost/arc42/chapters/chap-09-Decisions.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
