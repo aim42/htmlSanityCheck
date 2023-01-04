@@ -15,7 +15,6 @@ plugins {
     id 'groovy'
     id 'java'
     id "com.gradle.plugin-publish" version "0.14.0"
-    id 'codenarc'
 }
 
 repositories {
