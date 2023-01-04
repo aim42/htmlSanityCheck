@@ -3,7 +3,6 @@ package org.aim42.htmlsanitycheck.check
 import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import spock.lang.Specification
-import sun.security.krb5.Config
 
 /**
  * specifiy behavior of CheckerCreator factory
