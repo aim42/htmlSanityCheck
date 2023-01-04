@@ -26,18 +26,18 @@ var documents = [
 
 {
     "id": 3,
-    "uri": "arc42/About-This-Docu.html",
-    "menu": "arc42",
-    "title": "Goals of this Documentation",
-    "text": " Table of Contents Goals of this Documentation Disclaimer Goals of this Documentation This documentation is an example of arc42 documentation. You may copy this documentation or parts of it for your own projects. In such cases you must include a link or reference to arc42 or aim42 (we regard this as fair-use ). For real-world projects, the relation of code and documentation is over-sized. Disclaimer We provide absolutely no guarantee , neither for the accuracy of this documentation nor for any property or feature of the software described here. Do not use this software in critical situations or projects. "
-},
-
-{
-    "id": 4,
     "uri": "ea/readme.html",
     "menu": "ea",
     "title": "readme.ad",
     "text": " Table of Contents Warning! This folder contains exported diagrams or notes from Enterprise Architect. Please note that these are generated files but reside in the src -folder in order to be versioned. This is to make sure that they can be used from environments other than windows. Warning! The contents of this folder will be overwritten with each re-export! use gradle exportEA to re-export files "
+},
+
+{
+    "id": 4,
+    "uri": "arc42/About-This-Docu.html",
+    "menu": "arc42",
+    "title": "Goals of this Documentation",
+    "text": " Table of Contents Goals of this Documentation Disclaimer Goals of this Documentation This documentation is an example of arc42 documentation. You may copy this documentation or parts of it for your own projects. In such cases you must include a link or reference to arc42 or aim42 (we regard this as fair-use ). For real-world projects, the relation of code and documentation is over-sized. Disclaimer We provide absolutely no guarantee , neither for the accuracy of this documentation nor for any property or feature of the software described here. Do not use this software in critical situations or projects. "
 },
 
 {
@@ -58,18 +58,18 @@ var documents = [
 
 {
     "id": 7,
-    "uri": "arc42/chapters/chap-07-Deployment.html",
-    "menu": "arc42",
-    "title": "Deployment View",
-    "text": " Table of Contents 1. Deployment View 1. Deployment View Figure 1. Deployment Table 1. Deployment Node / Artifact Description hsc plugin binary compiled version of HtmlSC , including required dependencies. hsc-development where development of HtmlSC takes place artifact repository ( Bintray ) global public cloud repository for binary artifacts, similar to mavenCentral . HtmlSC binaries are uploaded to this server. hsc user computer where arbitrary documentation takes place with html as output formats. build.gradle Gradle build script configuring (among other things) the HtmlSC plugin to check some documentation . The three nodes ( computers ) shown in Deployment are connected via Internet. Sanity checker will: be bundled as a single jar, be uploaded to the Bintray repository, referencable within a gradle buildfile, provide a main method with parameters and options, so all checks can be called from the command line. "
-},
-
-{
-    "id": 8,
     "uri": "arc42/chapters/chap-02-Constraints.html",
     "menu": "arc42",
     "title": "Constraints",
     "text": " Table of Contents 1. Constraints 1. Constraints HtmlSC shall be: platform-independent and should run on the major operating systems (Windows&#8482;, Linux, and Mac-OS&#8482;) integrated with the Gradle build tool runnable from the command line developed under a liberal open-source license "
+},
+
+{
+    "id": 8,
+    "uri": "arc42/chapters/chap-07-Deployment.html",
+    "menu": "arc42",
+    "title": "Deployment View",
+    "text": " Table of Contents 1. Deployment View 1. Deployment View Figure 1. Deployment Table 1. Deployment Node / Artifact Description hsc plugin binary compiled version of HtmlSC , including required dependencies. hsc-development where development of HtmlSC takes place artifact repository ( Bintray ) global public cloud repository for binary artifacts, similar to mavenCentral . HtmlSC binaries are uploaded to this server. hsc user computer where arbitrary documentation takes place with html as output formats. build.gradle Gradle build script configuring (among other things) the HtmlSC plugin to check some documentation . The three nodes ( computers ) shown in Deployment are connected via Internet. Sanity checker will: be bundled as a single jar, be uploaded to the Bintray repository, referencable within a gradle buildfile, provide a main method with parameters and options, so all checks can be called from the command line. "
 },
 
 {
