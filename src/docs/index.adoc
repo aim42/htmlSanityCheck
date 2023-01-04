@@ -5,7 +5,7 @@ Dr. Gernot Starke <gernot.starke@innoq.com>
 v0.9, 2014-09-02
 :imagesdir: ./images
 :experimental:
-:repositoryDocsDir: https://github.com/aim42/htmlSanityCheck/blob/master/src/docs/
+:repositoryDocsDir: https://github.com/aim42/htmlSanityCheck/blob/main/src/docs/
 :improveDocImage: https://img.shields.io/badge/improve-this%20doc-orange.svg
 :project: htmlSanityCheck
 :project-url: https://github.com/aim42/htmlSanityCheck

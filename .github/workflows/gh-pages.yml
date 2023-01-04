@@ -3,7 +3,7 @@ name: GitHub Pages
 on:
   push:
     branches:
-      - master  # Set a branch name to trigger deployment
+      - main  # Set a branch name to trigger deployment
 #  pull_request:
   workflow_dispatch: {}
 
@@ -16,8 +16,6 @@ jobs:
       DTC_HEADLES: true
     steps:
       - uses: actions/checkout@v2
-      - name: setup
-        run: chmod +x dtcw
       - name: exportExcel
         run: ./dtcw exportExcel
       - name: generateSite

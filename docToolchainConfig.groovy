@@ -96,7 +96,7 @@ microsite.with {
     //
     // the base url for code files in github
     // Example: https://github.com/doctoolchain/doctoolchain/edit/master/src/docs
-    gitRepoUrl = 'https://github.com/aim42/htmlSanityCheck/edit/master/src/docs'
+    gitRepoUrl = 'https://github.com/aim42/htmlSanityCheck/edit/main/src/docs'
 
     //
     // the location of the landing page
