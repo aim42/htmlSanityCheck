@@ -28,7 +28,7 @@ are planned for future releases.
 
 
 image:https://img.shields.io/badge/License-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"]
-image:https://travis-ci.org/aim42/htmlSanityCheck.svg?branch=master["Build Status", link="https://travis-ci.org/aim42/htmlSanityCheck"]
+image:https://github.com/aim42/htmlSanityCheck/actions/workflows/gradle-build.yml/badge.svg[]
 
 == Installation
 
