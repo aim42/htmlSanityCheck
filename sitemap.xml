@@ -12,17 +12,17 @@
     </url>
 
     <url>
+    	<loc>https://localhost/arc42/About-This-Docu.html</loc>
+    	<lastmod>2023-01-04</lastmod>
+    </url>
+
+    <url>
     	<loc>https://localhost/excel/readme.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
     <url>
     	<loc>https://localhost/ea/readme.html</loc>
-    	<lastmod>2023-01-04</lastmod>
-    </url>
-
-    <url>
-    	<loc>https://localhost/arc42/About-This-Docu.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
@@ -37,17 +37,17 @@
     </url>
 
     <url>
-    	<loc>https://localhost/arc42/chapters/chap-02-Constraints.html</loc>
-    	<lastmod>2023-01-04</lastmod>
-    </url>
-
-    <url>
     	<loc>https://localhost/arc42/chapters/chap-07-Deployment.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 
     <url>
     	<loc>https://localhost/arc42/chapters/chap-05-BuildingBlocks.html</loc>
+    	<lastmod>2023-01-04</lastmod>
+    </url>
+
+    <url>
+    	<loc>https://localhost/arc42/chapters/chap-02-Constraints.html</loc>
     	<lastmod>2023-01-04</lastmod>
     </url>
 

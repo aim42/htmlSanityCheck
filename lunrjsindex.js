@@ -18,6 +18,14 @@ var documents = [
 
 {
     "id": 2,
+    "uri": "arc42/About-This-Docu.html",
+    "menu": "arc42",
+    "title": "Goals of this Documentation",
+    "text": " Table of Contents Goals of this Documentation Disclaimer Goals of this Documentation This documentation is an example of arc42 documentation. You may copy this documentation or parts of it for your own projects. In such cases you must include a link or reference to arc42 or aim42 (we regard this as fair-use ). For real-world projects, the relation of code and documentation is over-sized. Disclaimer We provide absolutely no guarantee , neither for the accuracy of this documentation nor for any property or feature of the software described here. Do not use this software in critical situations or projects. "
+},
+
+{
+    "id": 3,
     "uri": "excel/readme.html",
     "menu": "excel",
     "title": "readme.ad",
@@ -25,19 +33,11 @@ var documents = [
 },
 
 {
-    "id": 3,
+    "id": 4,
     "uri": "ea/readme.html",
     "menu": "ea",
     "title": "readme.ad",
     "text": " Table of Contents Warning! This folder contains exported diagrams or notes from Enterprise Architect. Please note that these are generated files but reside in the src -folder in order to be versioned. This is to make sure that they can be used from environments other than windows. Warning! The contents of this folder will be overwritten with each re-export! use gradle exportEA to re-export files "
-},
-
-{
-    "id": 4,
-    "uri": "arc42/About-This-Docu.html",
-    "menu": "arc42",
-    "title": "Goals of this Documentation",
-    "text": " Table of Contents Goals of this Documentation Disclaimer Goals of this Documentation This documentation is an example of arc42 documentation. You may copy this documentation or parts of it for your own projects. In such cases you must include a link or reference to arc42 or aim42 (we regard this as fair-use ). For real-world projects, the relation of code and documentation is over-sized. Disclaimer We provide absolutely no guarantee , neither for the accuracy of this documentation nor for any property or feature of the software described here. Do not use this software in critical situations or projects. "
 },
 
 {
@@ -58,14 +58,6 @@ var documents = [
 
 {
     "id": 7,
-    "uri": "arc42/chapters/chap-02-Constraints.html",
-    "menu": "arc42",
-    "title": "Constraints",
-    "text": " Table of Contents 1. Constraints 1. Constraints HtmlSC shall be: platform-independent and should run on the major operating systems (Windows&#8482;, Linux, and Mac-OS&#8482;) integrated with the Gradle build tool runnable from the command line developed under a liberal open-source license "
-},
-
-{
-    "id": 8,
     "uri": "arc42/chapters/chap-07-Deployment.html",
     "menu": "arc42",
     "title": "Deployment View",
@@ -73,11 +65,19 @@ var documents = [
 },
 
 {
-    "id": 9,
+    "id": 8,
     "uri": "arc42/chapters/chap-05-BuildingBlocks.html",
     "menu": "arc42",
     "title": "Building Block View",
     "text": " Table of Contents 1. Building Block View 1.1. Whitebox HtmlSanityChecker 1.2. Building Blocks - Level 2 1.3. Building Blocks - Level 3 1. Building Block View 1.1. Whitebox HtmlSanityChecker Rationale We used functional decomposition to separate responsibilities: CheckerCore shall encapsulate checking logic and Html parsing/processing. all kinds of outputs (console, html-file, graphical) shall be handled in a separate component ( Reporter ) Implementation of Gradle specific stuff shall be encapsulated. Contained Blackboxes Table 1. HtmlSanityChecker building blocks HSC Core hsc core: html parsing and sanity checking, configuration, reporting. HSC Gradle Plugin integrates the Gradle build tool with HtmlSC , enabling arbitrary gradle builds to use HtmlSC functionality. HSC Maven Plugin  (planned, not yet implemented) HSC Graphical Interface (planned, not implemented) Interfaces Table 2. HtmlSanityChecker internal interfaces Interface Description usage via shell arc42 user uses a command line shell to call the HtmlSC build system  currently restricted to Gradle: The build system uses HtmlSC as configured in the buildscript. local-file system HtmlSC needs access to several local files, especially the html page to be checked and to the corresponding image directories.  external websites to check external links, HtmlSC needs to access external sites via http HEAD or GET requests. 1.1.1. HSC Core (Blackbox) Intent/Responsibility HSC_Core contains the core functions to perform the various sanity checks. It parses the html file into a DOM-like in-memory representation, which is then used to perform the actual checks. Interfaces Table 3. HSC_Core Interfaces Interface (From-To) Description Command Line Interface &#8594; Checker  Uses the #AllChecksRunner class. Gradle Plugin &#8594; Checker Exposes HtmlSC via a standard Gradle plugin, as described in the Gradle user guide. Files org.aim42.htmlsanitycheck.AllChecksRunner org.aim42.htmlsanitycheck.HtmlSanityCheckGradlePlugin 1.2. Building Blocks - Level 2 1.2.1. HSC-Core (Whitebox) Figure 1. HSC-Core (Whitebox) Rationale This structures follows a strictly functional decomposition: parsing and handling html input checking collecting checking results Contained Blackboxes Table 4. HSC-Core building blocks Checker Abstract class, used in form of the template-pattern. Shall be subclassed for all checking algorithms. AllChecksRunner Facade to the different Checker instances. Provides a (parameter-driven) command-line interface. ResultsCollector (Whitebox) Collects all checking results. Its interface Results is contained in the whitebox description Reporter Reports checking results to either console or an html file. HtmlParser Encapsulates html parsing, provides methods to search within the (parsed) html. Suggester In case of checking issues, suggests alternatives by comparing the faulty element to the one present in the html file. Currently not implemented 1.2.2. Checker and xyzChecker Subclasses The abstract Checker provides a uniform interface ( public void check() ) to different checking algorithms. It is based upon the concept of extensible checking algorithms . 1.3. Building Blocks - Level 3 1.3.1. ResultsCollector (Whitebox) Figure 2. Results Collector (Whitebox) Rationale This structures follows the hierarchy of checks - namely managing results for: a number of pages/documents, containing: a single page, each containing many single checks within a page Contained Blackboxes Table 5. ResultsCollector building blocks Per-Run Results results for potentially many Html pages/documents. Single-Page-Results results for a single page Single-Check-Results results for a single type of check (e.g. missing-images check) Finding a single finding, (e.g. image 'logo.png' missing). Can hold suggestions and (planned for future releases) the responsible html element. Interface Results The Result interface is used by all clients (especially Reporter subclasses, graphical and command-line clients) to access checking results. It consists of three distinct APIs for overall RunResults , single-page results ( PageResults ) and single-check results ( CheckResults ). See the interface definitions below - taken from the Groovy- source code: Interface RunResults public interface RunResults { // returns results for all pages which have been checked public ArrayList&lt;SinglePageResults&gt; getResultsForAllPages() // how many pages were checked in this run? public int nrOfPagesChecked() // how many checks were performed in all? public int nrOfChecksPerformedOnAllPages() // how many findings (errors and issues) were found in all? public int nrOfFindingsOnAllPages() // how long took checking (in milliseconds)? public Long checkingTookHowManyMillis() } Interface PageResults public interface PageResults { // what's the title of this page? public String getPageTitle() // what's the filename and path? public String getPageFileName() public String getPageFilePath() // how many items have been checked? public int nrOfItemsCheckedOnPage() // how many problems were found on this page? public int nrOfFindingsOnPage() // how many different checks have run on this page? public int howManyCheckersHaveRun() } Interface CheckResults public interface CheckResults { // return a description of what is checked // (e.g. Missing Images Checker or Broken Cross-References Checker public String description() // returns all findings/problems found during this check public ArrayList&lt;Finding&gt; getFindings() } "
+},
+
+{
+    "id": 9,
+    "uri": "arc42/chapters/chap-02-Constraints.html",
+    "menu": "arc42",
+    "title": "Constraints",
+    "text": " Table of Contents 1. Constraints 1. Constraints HtmlSC shall be: platform-independent and should run on the major operating systems (Windows&#8482;, Linux, and Mac-OS&#8482;) integrated with the Gradle build tool runnable from the command line developed under a liberal open-source license "
 },
 
 {
