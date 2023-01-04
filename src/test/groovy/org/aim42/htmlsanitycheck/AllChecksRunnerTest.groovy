@@ -2,7 +2,6 @@ package org.aim42.htmlsanitycheck
 
 import org.aim42.htmlsanitycheck.check.AllCheckers
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
-import org.junit.Before
 import org.junit.Test
 
 class AllChecksRunnerTest extends GroovyTestCase {

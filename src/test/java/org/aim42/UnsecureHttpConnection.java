@@ -2,7 +2,6 @@ package org.aim42;// see end-of-file for license information
 
 
 import javax.net.ssl.HttpsURLConnection;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class UnsecureHttpConnection {

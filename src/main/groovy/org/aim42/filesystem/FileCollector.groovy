@@ -2,8 +2,6 @@ package org.aim42.filesystem
 
 import groovy.io.FileType
 
-import java.util.regex.Pattern
-
 // see end-of-file for license information
 
 // TODO: add exclude-patterns

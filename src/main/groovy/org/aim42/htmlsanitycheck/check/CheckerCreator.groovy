@@ -1,7 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.Configuration
-import org.aim42.htmlsanitycheck.check.UnknownCheckerException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

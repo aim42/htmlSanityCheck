@@ -1,10 +1,7 @@
 package org.aim42.htmlsanitycheck.report
 
 import groovy.transform.InheritConstructors
-import org.aim42.htmlsanitycheck.ProductVersion
 import org.aim42.htmlsanitycheck.collect.PerRunResults
-import org.aim42.htmlsanitycheck.collect.SingleCheckResults
-import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.slf4j.Logger
 
 /************************************************************************

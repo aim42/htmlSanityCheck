@@ -26,7 +26,11 @@
 package org.aim42.htmlsanitycheck.suggest;
 
 
-import net.ricecode.similarity.*;
+import net.ricecode.similarity.JaroWinklerStrategy;
+import net.ricecode.similarity.SimilarityScore;
+import net.ricecode.similarity.SimilarityStrategy;
+import net.ricecode.similarity.StringSimilarityService;
+import net.ricecode.similarity.StringSimilarityServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 

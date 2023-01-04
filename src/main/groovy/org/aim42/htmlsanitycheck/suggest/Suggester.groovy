@@ -1,12 +1,8 @@
-package org.aim42.htmlsanitycheck.suggest;
+package org.aim42.htmlsanitycheck.suggest
 
-import net.ricecode.similarity.JaroWinklerStrategy;
-import net.ricecode.similarity.SimilarityStrategy;
-import net.ricecode.similarity.StringSimilarityService;
-import net.ricecode.similarity.StringSimilarityServiceImpl;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.ricecode.similarity.JaroWinklerStrategy
+import net.ricecode.similarity.StringSimilarityService
+import net.ricecode.similarity.StringSimilarityServiceImpl
 
 /**
  * Finds suggestions for a target within a given list of options by applying string-similarity search

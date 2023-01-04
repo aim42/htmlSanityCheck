@@ -2,10 +2,9 @@
 
 package org.aim42.htmlsanitycheck
 
+import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.language.base.plugins.LifecycleBasePlugin
-import org.gradle.api.Plugin
-
 
 class HtmlSanityCheckPlugin implements Plugin<Project> {
 

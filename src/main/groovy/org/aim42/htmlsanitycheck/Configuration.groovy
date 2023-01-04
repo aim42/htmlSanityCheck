@@ -1,6 +1,6 @@
 package org.aim42.htmlsanitycheck
 
-import org.aim42.filesystem.FileCollector
+
 import org.aim42.htmlsanitycheck.check.AllCheckers
 import org.aim42.inet.NetUtil
 

@@ -1,11 +1,11 @@
 package org.aim42.htmlsanitycheck.html
 
 import groovy.transform.Memoized
-
-import java.util.regex.Pattern
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
+
+import java.util.regex.Pattern
 
 // see end-of-file for license information
 
