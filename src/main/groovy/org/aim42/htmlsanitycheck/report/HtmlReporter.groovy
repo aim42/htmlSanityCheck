@@ -71,6 +71,7 @@ public class HtmlReporter extends Reporter {
         URL resource = getClass().getClassLoader().getResource(resourceName);
 
         // https://github.com/aim42/htmlSanityCheck/issues/305
+        // unfortunately we currently are not able to use try-with-ressources yet.
         InputStream stream = null;
         try {
             stream = resource.openStream()
