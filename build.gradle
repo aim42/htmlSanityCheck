@@ -38,7 +38,7 @@ dependencies {
 
 
     // jsoup is our awesome html parser, see jsoup.org
-    implementation group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.16.1'
 
 
 } // dependencies

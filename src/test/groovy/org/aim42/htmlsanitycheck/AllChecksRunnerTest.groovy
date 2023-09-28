@@ -16,7 +16,7 @@ class AllChecksRunnerTest extends GroovyTestCase {
 
     @Test
     public void testSingleCorrectHTMLFile() {
-        String HTML = """$HTML_HEAD<body><title>hsc</title></body></html>"""
+        String HTML = """$HTML_HEAD<title>hsc</title><body></body></html>"""
 
         // create file with proper html content
         tmpFile = File.createTempFile("testfile", ".html") <<HTML
