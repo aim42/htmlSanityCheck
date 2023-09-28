@@ -5,7 +5,13 @@ import groovy.util.logging.Slf4j
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
-import org.gradle.util.GFileUtils
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /**
  * write the findings report to HTML
@@ -63,9 +69,21 @@ public class HtmlReporter extends Reporter {
      */
     private void copyResourceFromJarToDirectory(String resourceName, File outputDirectory) {
         URL resource = getClass().getClassLoader().getResource(resourceName);
-        // String dir = StringUtils.substringAfterLast(resourceName, ".");
-        //GFileUtils.copyURLToFile(resource, new File(outputDirectory, dir + "/" + resourceName));
-        GFileUtils.copyURLToFile(resource, new File(outputDirectory, resourceName));
+
+        // https://github.com/aim42/htmlSanityCheck/issues/305
+        InputStream stream = null;
+        try {
+            stream = resource.openStream()
+            Files.copy(stream, new File(outputDirectory, resourceName).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        } finally {
+            try {
+                stream.close();
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        }
     }
 
 
