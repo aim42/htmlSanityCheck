@@ -218,7 +218,7 @@ class Configuration {
      * We need at least one html file as input, maybe several
      * @param configuration instance
      *
-     * srcDocs needs to be of type {@link org.gradle.api.file.FileCollection}
+     * srcDocs needs to be of type {@link FileCollection}
      * to be Gradle-compliant
      */
     Boolean isValid() {
