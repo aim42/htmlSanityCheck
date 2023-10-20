@@ -6,8 +6,8 @@ import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 /**
  * write the findings report to HTML
