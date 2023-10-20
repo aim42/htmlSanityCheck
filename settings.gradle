@@ -1,9 +1,16 @@
-plugins {
-    // to report build results back to gradle.org
-    id "com.gradle.enterprise" version "3.5.1"
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
 }
 
-rootProject.name = 'htmlSanityCheck'
+plugins {
+    // to report build results back to gradle.org
+    id "com.gradle.enterprise" version "3.15.1"
+}
+
+rootProject.name = 'org.aim42.htmlSanityCheck'
 
 include 'htmlSanityCheck-core',
         'htmlSanityCheck-gradle-plugin'

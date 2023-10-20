@@ -1,0 +1,100 @@
+// gradle build script for htmlSanityCheck
+// =======================================
+
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+}
+
+plugins {
+    id 'java'
+    id 'groovy'
+//    id "com.gradle.plugin-publish" version "0.14.0"
+}
+
+ext {
+    srcDir = "$projectDir/src/docs"
+    javaVersion = System.getProperty("java.version")
+    currentDate = new Date().format("d. MMM yyyy")
+}
+
+allprojects {
+    group = 'org.aim42.htmlSanityCheck'
+    version = version
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    task info(
+            description: "info on path and objects"
+    ) {
+        doLast
+                {
+                    println "project.name         : " + project.name
+                    println "version              : " + version
+                    println "project.version      : " + project.version
+                    println "project.path         : " + project.path
+                    println "projectDir           : " + projectDir
+                    println "groupId              : " + project.group
+                    println "buildDir             : " + buildDir
+                    println "targetCompatibility  : " + rootProject.targetCompatibility
+                    println "=" * 80
+                }
+    }
+}
+
+subprojects {
+//    publishing {
+//        publications {
+//            maven(MavenPublication) {
+//                from components.java
+//                name project.name
+//            }
+//        }
+//    }
+}
+
+configure(subprojects) {
+    apply plugin: 'java'
+//    apply plugin: 'maven-publish'
+
+    // The CodeNarc plugin performs quality checks on your project’s
+    // Groovy source files using CodeNarc and generates reports from these checks.
+    // apply plugin: 'codenarc'
+    //apply from: 'config/codenarc.gradle'
+}
+
+/*
+ * Copyright Gernot Starke and aim42 contributors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ */

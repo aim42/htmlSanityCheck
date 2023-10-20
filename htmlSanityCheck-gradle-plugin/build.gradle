@@ -1,29 +1,4 @@
-// gradle build script for htmlSanityCheck
-// =======================================
-
-
-buildscript {
-    repositories {
-        jcenter()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-}
-
-plugins {
-    id 'groovy'
-    id 'java'
-    id "com.gradle.plugin-publish" version "0.14.0"
-}
-
-repositories {
-    jcenter()
-//    mavenCentral()
-}
-
 dependencies {
-
     testImplementation(
             'junit:junit:4.12',
             'org.spockframework:spock-core:2.3-groovy-3.0',
@@ -31,83 +6,32 @@ dependencies {
     )
 
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.16.1'
-
     implementation gradleApi()
-
     implementation project(":htmlSanityCheck-core")
-} // dependencies
-
-
-group = 'org.aim42'
-
-
-ext {
-    srcDir = "$projectDir/src/docs"
-    javaVersion = System.getProperty("java.version")
-    currentDate = new Date().format("d. MMM yyyy")
 }
 
 // tag::BuildPlugins[]
-apply plugin: 'groovy'
 
 apply plugin: 'java-gradle-plugin'
 
-// The CodeNarc plugin performs quality checks on your project’s
-// Groovy source files using CodeNarc and generates reports from these checks.
-// apply plugin: 'codenarc'
-//apply from: 'config/codenarc.gradle'
-
 // publish to gradle-plugin-repository
-apply plugin: "com.gradle.plugin-publish"
+//apply plugin: "com.gradle.plugin-publish"
 
 // publish to (local) maven repo
-apply plugin: 'maven-publish'
-apply from: "../config/publish-snapshot.gradle"
+//apply from: "../config/publish-snapshot.gradle"
 
 
 // end:BuildPlugins[]
-
 
 // ==========================================================
 // if you use htmlSanityCheck locally, publish with
 // "gradle publishToMavenLocal"
 
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId 'org.aim42'
-            artifactId project.name
-            version project.version
-            from components.java
-        }
-
-    }
-}
-
 // =========================================================
 
-apply from: '../config/buildScan.gradle'
-
-apply from: '../config/publish-gradle-plugin.gradle'
-
-
-task info(
-        description: "info on path and objects"
-) {
-    doLast
-            {
-                println "project.name         : " + project.name
-                println "version              : " + version
-                println "project.version      : " + project.version
-                println "project.path         : " + project.path
-                println "projectDir           : " + projectDir
-                println "groupId              : " + project.group
-                println "buildDir             : " + buildDir
-                println "targetCompatibility  : " + rootProject.targetCompatibility
-                println "=" * 80
-            }
-}
+//apply from: '../config/buildScan.gradle'
+//
+//apply from: '../config/publish-gradle-plugin.gradle'
 
 /*
  * Copyright Gernot Starke and aim42 contributors.
