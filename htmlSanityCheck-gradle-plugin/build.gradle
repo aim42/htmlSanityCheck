@@ -1,6 +1,6 @@
 dependencies {
     testImplementation(
-            'junit:junit:4.12',
+            'junit:junit:4.13.1',
             'org.spockframework:spock-core:2.3-groovy-3.0',
             gradleTestKit()
     )
