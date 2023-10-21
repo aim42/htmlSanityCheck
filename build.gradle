@@ -43,7 +43,7 @@ allprojects {
                     println "projectDir           : " + projectDir
                     println "groupId              : " + project.group
                     println "buildDir             : " + buildDir
-                    println "targetCompatibility  : " + rootProject.targetCompatibility
+                    println "targetCompatibility  : " + java.targetCompatibility
                     println "=" * 80
                 }
     }

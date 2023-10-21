@@ -19,7 +19,7 @@ dependencies {
 
 apply plugin: 'groovy'
 
-task copyResourceImages(type: Copy) {
+tasks.register('copyResourceImages', Copy) {
     from('src/main/resources') {
         include '**/*.png'
     }
