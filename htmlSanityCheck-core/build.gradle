@@ -19,9 +19,6 @@ dependencies {
 
 apply plugin: 'groovy'
 
-// publish to (local) maven repo
-//apply from: "../config/publish-snapshot.gradle"
-
 task copyResourceImages(type: Copy) {
     from('src/main/resources') {
         include '**/*.png'
@@ -37,11 +34,6 @@ processResources {
     filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [version: project.version])
     println "after processResources config, version= ${project.version}"
 }
-
-
-// =========================================================
-
-//apply from: '../config/buildScan.gradle'
 
 /*
  * Copyright Gernot Starke and aim42 contributors.

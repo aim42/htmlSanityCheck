@@ -13,7 +13,7 @@ buildscript {
 plugins {
     id 'java'
     id 'groovy'
-//    id "com.gradle.plugin-publish" version "0.14.0"
+    id 'maven-publish'
 }
 
 ext {
@@ -50,24 +50,38 @@ allprojects {
 }
 
 subprojects {
-//    publishing {
-//        publications {
-//            maven(MavenPublication) {
-//                from components.java
-//                name project.name
-//            }
-//        }
-//    }
+    ext {
+        publishVariant = { String variant ->
+            publishing {
+                publications {
+                    maven(MavenPublication) {
+                        from components[variant]
+
+                        // We have to perform some fancy renaming to make the plugin GAV coordinates match with docToolchain
+                        groupId = group
+                        artifactId = "org.aim42.${project.name.replaceAll('-', '.')}"
+                        version = version
+                    }
+                }
+            }
+        }
+    }
 }
 
 configure(subprojects) {
     apply plugin: 'java'
-//    apply plugin: 'maven-publish'
+    apply plugin: 'groovy'
+    apply plugin: 'maven-publish'
+
+    description "${rootProject.description} - Module ${project.name}"
+
+    java
 
     // The CodeNarc plugin performs quality checks on your project’s
     // Groovy source files using CodeNarc and generates reports from these checks.
     // apply plugin: 'codenarc'
-    //apply from: 'config/codenarc.gradle'
+
+    project.ext.publishVariant('java')
 }
 
 /*

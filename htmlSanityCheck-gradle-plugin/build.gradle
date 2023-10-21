@@ -10,29 +10,6 @@ dependencies {
     implementation project(":htmlSanityCheck-core")
 }
 
-// tag::BuildPlugins[]
-
-apply plugin: 'java-gradle-plugin'
-
-// publish to gradle-plugin-repository
-//apply plugin: "com.gradle.plugin-publish"
-
-// publish to (local) maven repo
-//apply from: "../config/publish-snapshot.gradle"
-
-
-// end:BuildPlugins[]
-
-// ==========================================================
-// if you use htmlSanityCheck locally, publish with
-// "gradle publishToMavenLocal"
-
-// =========================================================
-
-//apply from: '../config/buildScan.gradle'
-//
-//apply from: '../config/publish-gradle-plugin.gradle'
-
 /*
  * Copyright Gernot Starke and aim42 contributors.
  *
