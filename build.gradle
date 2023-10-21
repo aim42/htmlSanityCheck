@@ -75,7 +75,11 @@ configure(subprojects) {
 
     description "${rootProject.description} - Module ${project.name}"
 
-    java
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(8)
+        }
+    }
 
     // The CodeNarc plugin performs quality checks on your project’s
     // Groovy source files using CodeNarc and generates reports from these checks.
