@@ -38,7 +38,7 @@ class BrokenCrossReferencesChecker extends SuggestingChecker {
     protected SingleCheckResults check(final HtmlPage pageToCheck) {
         //get list of all a-tags "<a href=..." in html file
         hrefList = pageToCheck.getAllHrefStrings()
-        hrefSet = hrefList.toSet()
+        hrefSet = hrefList.toSet().sort()
 
         // get list of all id="XYZ"
         listOfIds = pageToCheck.getAllIdStrings()

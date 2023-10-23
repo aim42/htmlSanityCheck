@@ -101,14 +101,13 @@ class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
 
         // first finding: aim42 link missing
         String actual = collector.findings.first()
-        String expected = "link target \"arc42\" missing"
+        String expected = "link target \"aim42\" missing"
         String message = "expected $expected"
-
         assertEquals(message, expected, actual)
 
         // second finding: arc42 link missing
         actual = collector.findings[1]
-        expected = "link target \"aim42\" missing"
+        expected = "link target \"arc42\" missing"
         assertEquals(message, expected, actual)
     }
 
