@@ -24,3 +24,4 @@ rootProject.name = 'htmlSanityCheck'
 
 include('htmlSanityCheck-core')
 include('htmlSanityCheck-gradle-plugin')
+include('htmlSanityCheck-cli')
