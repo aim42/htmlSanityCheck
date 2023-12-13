@@ -1,5 +1,8 @@
 HtmlSanityCheck - ChangeLog
 
+v 2.0.0
+October 2023: GA/BK/JT, modularize htmlSanityChecker -> gradle plugin + core (+ CLI)
+
 v 1.1.5
 April 2021: GS, compiled with Java 8 - as I accidentally compiled V 1.1.4 with jdk 14...
 no other changes or fixes

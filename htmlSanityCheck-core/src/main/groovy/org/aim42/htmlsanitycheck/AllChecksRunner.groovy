@@ -1,12 +1,15 @@
 package org.aim42.htmlsanitycheck
 
-
 import org.aim42.htmlsanitycheck.check.Checker
 import org.aim42.htmlsanitycheck.check.CheckerCreator
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.aim42.htmlsanitycheck.html.HtmlPage
-import org.aim42.htmlsanitycheck.report.*
+import org.aim42.htmlsanitycheck.report.ConsoleReporter
+import org.aim42.htmlsanitycheck.report.HtmlReporter
+import org.aim42.htmlsanitycheck.report.JUnitXmlReporter
+import org.aim42.htmlsanitycheck.report.LoggerReporter
+import org.aim42.htmlsanitycheck.report.Reporter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

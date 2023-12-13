@@ -14,7 +14,7 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 class HtmlSanityCheckTaskFunctionalTest extends Specification {
     private final static VALID_HTML = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"><html><head></head><body></body><html>"""
     private final static INVALID_HTML = """<body><span id="id"/><span id="id"/></body> """
-    private final static GRADLE_VERSIONS = ['6.8.1']
+    private final static GRADLE_VERSIONS = ['8.4']
 
     @Rule
     TemporaryFolder testProjectDir = new TemporaryFolder()

@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck
 
+import junit.framework.TestCase
 import org.aim42.htmlsanitycheck.check.AllCheckers
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.junit.Test
@@ -37,16 +38,16 @@ class AllChecksRunnerTest extends GroovyTestCase {
         // title = "hsc"
         int expected = AllCheckers.checkerClazzes.size()
 
-        assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
+        TestCase.assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
 
-        assertEquals("expected 0 items checked", 0, pageResults.nrOfItemsCheckedOnPage())
+        TestCase.assertEquals("expected 0 items checked", 0, pageResults.nrOfItemsCheckedOnPage())
 
-        assertEquals("expected 0 findings", 0, pageResults.nrOfFindingsOnPage())
+        TestCase.assertEquals("expected 0 findings", 0, pageResults.nrOfFindingsOnPage())
 
-        assertEquals("expected hsc title", "hsc", pageResults.pageTitle)
+        TestCase.assertEquals("expected hsc title", "hsc", pageResults.pageTitle)
 
         String tmpFileName = tmpFile.name
-        assertEquals("expected $tmpFileName as fileName", tmpFileName, pageResults.pageFileName )
+        TestCase.assertEquals("expected $tmpFileName as fileName", tmpFileName, pageResults.pageFileName )
     }
 
 
@@ -69,9 +70,9 @@ class AllChecksRunnerTest extends GroovyTestCase {
         SinglePageResults pageResults = allChecksRunner.performChecksForOneFile( tmpFile )
 
         int expected = AllCheckers.checkerClazzes.size()
-        assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
+        TestCase.assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
 
-        assertEquals("expected 2 findings", 2, pageResults.nrOfFindingsOnPage())
+        TestCase.assertEquals("expected 2 findings", 2, pageResults.nrOfFindingsOnPage())
 
     }
 
@@ -86,7 +87,7 @@ class AllChecksRunnerTest extends GroovyTestCase {
         allChecksRunner = new AllChecksRunner(myConfig)
         SinglePageResults pageResults = allChecksRunner.performChecksForOneFile(tmpFile)
 
-        assertEquals(1, pageResults.singleCheckResults.size())
+        TestCase.assertEquals(1, pageResults.singleCheckResults.size())
     }
 
 }
