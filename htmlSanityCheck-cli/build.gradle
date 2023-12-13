@@ -1,0 +1,23 @@
+plugins {
+    id 'application'
+}
+
+dependencies {
+    implementation libs.picocli.impl
+    annotationProcessor libs.picocli.annotationprocessor
+
+    implementation libs.slf4j.api
+    implementation libs.slf4j.simple
+    implementation libs.groovy.all
+
+    implementation project(":htmlSanityCheck-core")
+}
+
+compileGroovy {
+    options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
+}
+
+application {
+    mainClass = 'org.aim42.htmlsanitycheck.cli.Main'
+    applicationName = 'hsc'
+}
