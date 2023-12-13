@@ -1,6 +1,7 @@
 # Keep lexicographical (alphabetical) order everywhere!
 [versions]
 junit5-version = '5.11.3'
+picocli-version = "4.7.5"
 slf4j-version = '2.0.16'
 string-similarity-version = '1.0.0'
 testcontainers-version = '1.20.3'
@@ -11,6 +12,8 @@ commons-validator = 'commons-validator:commons-validator:1.9.0'
 jsoup = 'org.jsoup:jsoup:1.18.1'
 junit-vintage = { module = 'org.junit.vintage:junit-vintage-engine', version.ref = 'junit5-version' }
 lombok = 'org.projectlombok:lombok:1.18.36'
+picocli-impl = { module = 'info.picocli:picocli', version.ref = "picocli-version" }
+picocli-annotationprocessor = { module = 'info.picocli:picocli-codegen', version.ref = "picocli-version" }
 slf4j-api = { module = 'org.slf4j:slf4j-api', version.ref = 'slf4j-version' }
 slf4j-nop = { module = 'org.slf4j:slf4j-nop', version.ref = 'slf4j-version' }
 string-similarity = {module = 'net.ricecode:string-similarity', version.ref ='string-similarity-version'}
