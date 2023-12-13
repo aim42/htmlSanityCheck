@@ -41,12 +41,10 @@ class Main implements Runnable {
     }
 
     private List<File> findFiles(File directory) throws IOException {
-        List<File> files = new ArrayList<>()
         Files.walk(Paths.get(directory.getPath()))
                 .filter(Files::isRegularFile)
-                .filter(path -> path.getFileName().endsWith(".html"))
-                .forEach(files::add)
-        return files
+                .filter({path -> path.toString().endsWith(".html")})
+                .collect {it.toFile()}
     }
 
     void run() {
@@ -55,11 +53,11 @@ class Main implements Runnable {
         var resultsDirectory = new File(resultsDirectoryName)
 
         configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments,
-                files.collect { file ->
+                files.collectMany { file ->
                     if (file.isDirectory()) {
                         return findFiles(file)
                     } else {
-                        return new File(file)
+                        return [file]
                     }
                 }
         )
