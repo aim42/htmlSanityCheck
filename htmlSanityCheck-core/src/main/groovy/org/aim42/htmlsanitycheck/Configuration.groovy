@@ -228,13 +228,13 @@ class Configuration {
         Set<String> srcDocs = getConfigItemByName(Configuration.ITEM_NAME_sourceDocuments)
 
         // cannot check if source director is null (= unspecified)
-        if ((srcDir == null)) {
-            throw new MisconfigurationException("source directory must not be null")
-        }
-
-        if ((!srcDir.exists())) {
-            throw new MisconfigurationException("given sourceDir $srcDir does not exist.")
-        }
+//        if ((srcDir == null)) {
+//            throw new MisconfigurationException("source directory must not be null")
+//        }
+//
+//        if ((!srcDir.exists())) {
+//            throw new MisconfigurationException("given sourceDir $srcDir does not exist.")
+//        }
 
         // cannot check if both input params are null
         if (srcDocs == null) {

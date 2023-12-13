@@ -5,8 +5,13 @@ import org.aim42.htmlsanitycheck.Configuration
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import picocli.CommandLine
+import picocli.CommandLine.Parameters
 import picocli.CommandLine.Command
 import picocli.CommandLine.Option
+
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 
 // see end-of-file for license information
 
@@ -23,14 +28,11 @@ class Main implements Runnable {
 //                "-r resultsDir""")
 //    }
 
-    @Option(names = ["-s", "--sourceDir"], description = "Source Directory")
-    String sourceDirectoryName
-
-    @Option(names = ["-f", "--sourceFile"], description = "Source Directory", arity = "*")
-    String[] sourceFileNames
-
     @Option(names = ["-r", "--resultsDir"], description = "Results Directory")
     String resultsDirectoryName = "/tmp/results"
+
+    @Parameters(arity = "1..*", description = "at least one File")
+    File[] files
 
     static void main(String[] args) {
         Main app = new Main()
@@ -38,15 +40,27 @@ class Main implements Runnable {
         cmd.execute(args)
     }
 
+    private List<File> findFiles(File directory) throws IOException {
+        List<File> files = new ArrayList<>()
+        Files.walk(Paths.get(directory.getPath()))
+                .filter(Files::isRegularFile)
+                .filter(path -> path.getFileName().endsWith(".html"))
+                .forEach(files::add)
+        return files
+    }
+
     void run() {
         var configuration = new Configuration()
 
         var resultsDirectory = new File(resultsDirectoryName)
 
-        configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, new File(sourceDirectoryName))
         configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments,
-                sourceFileNames.collect {filename ->
-                    return new File(filename)
+                files.collect { file ->
+                    if (file.isDirectory()) {
+                        return findFiles(file)
+                    } else {
+                        return new File(file)
+                    }
                 }
         )
         configuration.addConfigurationItem((Configuration.ITEM_NAME_checkingResultsDir), resultsDirectory)
