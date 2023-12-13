@@ -23,4 +23,5 @@ gradleEnterprise {
 rootProject.name = 'htmlSanityCheck'
 
 include 'htmlSanityCheck-core',
-        'htmlSanityCheck-gradle-plugin'
+        'htmlSanityCheck-gradle-plugin',
+        'htmlSanityCheck-cli'
