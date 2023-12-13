@@ -13,8 +13,8 @@ import picocli.CommandLine.Parameters
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.logging.Formatter
 import java.util.logging.ConsoleHandler
+import java.util.logging.Formatter
 import java.util.logging.Level
 import java.util.logging.LogManager
 import java.util.logging.LogRecord
@@ -98,6 +98,7 @@ class HscCommand implements Runnable {
     File[] srcDocs
 
     static void main(String[] args) {
+
         HscRunner hscRunner = new HscRunner()
         HscCommand hscCommand = new HscCommand(hscRunner)
         CommandLine cmd = new CommandLine(hscCommand)
@@ -112,7 +113,7 @@ class HscCommand implements Runnable {
                 .filter({ path ->
                     suffixes.any { suffix -> path.toString().endsWith(".${suffix}") }
                 })
-                .collect { Path path ->  path.toFile() }
+                .collect { Path path -> path.toFile() }
     }
 
     static class HscRunner {

@@ -92,7 +92,6 @@ jobs:
           echo "Files:"
           find * -ls
           ./gradlew javaToolchains
-          
 
       - name: Collect state upon failure (On Windows)
         if: failure() && runner.os == 'Windows'
