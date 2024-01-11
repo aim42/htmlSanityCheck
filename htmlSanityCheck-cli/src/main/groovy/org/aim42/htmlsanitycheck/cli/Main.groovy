@@ -20,18 +20,13 @@ import java.nio.file.Paths
 class Main implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(Main.class)
 
-//    @Option(names = ["-h", "--help"], usageHelp = true, description = "Display help message")
-//    void help () {
-//        logger.info("""SYNOPSIS: htmlSanityCheck
-//                "-s sourceDir
-//                "[ -f sourceFile ]+
-//                "-r resultsDir""")
-//    }
-
     @Option(names = ["-r", "--resultsDir"], description = "Results Directory")
     String resultsDirectoryName = "/tmp/results"
 
-    @Parameters(arity = "1..*", description = "at least one File")
+    @Parameters(arity = "1", description = "base directory", index = "0")
+    File srcDir
+
+    @Parameters(arity = "0..*", description = "at least one File", index = "1..*")
     File[] files
 
     static void main(String[] args) {
@@ -40,11 +35,11 @@ class Main implements Runnable {
         cmd.execute(args)
     }
 
-    private List<File> findFiles(File directory) throws IOException {
+    private static List<File> findFiles(File directory) throws IOException {
         Files.walk(Paths.get(directory.getPath()))
                 .filter(Files::isRegularFile)
-                .filter({path -> path.toString().endsWith(".html")})
-                .collect {it.toFile()}
+                .filter({ path -> path.toString().endsWith(".html") || path.toString().endsWith(".htm")})
+                .collect { it.toFile() }
     }
 
     void run() {
@@ -52,14 +47,9 @@ class Main implements Runnable {
 
         var resultsDirectory = new File(resultsDirectoryName)
 
+        configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, srcDir)
         configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments,
-                files.collectMany { file ->
-                    if (file.isDirectory()) {
-                        return findFiles(file)
-                    } else {
-                        return [file]
-                    }
-                }
+                files ?: findFiles(srcDir)
         )
         configuration.addConfigurationItem((Configuration.ITEM_NAME_checkingResultsDir), resultsDirectory)
 

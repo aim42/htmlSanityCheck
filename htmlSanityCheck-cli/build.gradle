@@ -19,4 +19,5 @@ compileGroovy {
 
 application {
     mainClass = 'org.aim42.htmlsanitycheck.cli.Main'
+    applicationName = 'hsc'
 }
