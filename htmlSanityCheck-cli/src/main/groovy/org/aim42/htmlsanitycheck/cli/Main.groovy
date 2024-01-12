@@ -5,29 +5,37 @@ import org.aim42.htmlsanitycheck.Configuration
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import picocli.CommandLine
-import picocli.CommandLine.Parameters
 import picocli.CommandLine.Command
 import picocli.CommandLine.Option
+import picocli.CommandLine.Parameters
 
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
 
 // see end-of-file for license information
 
-@Command(name = "hsc", mixinStandardHelpOptions = true, version = "hsc 2.0.0",
-        description = "Check HTML files for Sanity")
+@Command(name = "hsc", mixinStandardHelpOptions = true,
+        version = "hsc 2.0.0",
+        description = "Check HTML files for Sanity",
+        showDefaultValues = true
+)
 class Main implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(Main.class)
 
     @Option(names = ["-r", "--resultsDir"], description = "Results Directory")
     String resultsDirectoryName = "/tmp/results"
 
-    @Parameters(arity = "1", description = "base directory", index = "0")
-    File srcDir
+    @Option(names = ["-s", "--suffix"], description = "File name suffixes to investigate", split = ",")
+    String[] suffixes = ["html", "htm"]
 
-    @Parameters(arity = "0..*", description = "at least one File", index = "1..*")
-    File[] files
+    @Parameters(index = "0", arity = "0..1", description = "base directory (default: current directory)")
+    File srcDir = new File(".").getAbsoluteFile()
+
+    @Parameters(index = "1..*",
+            arity = "0..*",
+            description = "files to investigate (default: all files beyond <srcDir> with <suffixes>)"
+    )
+    File[] srcDocs
 
     static void main(String[] args) {
         Main app = new Main()
@@ -35,22 +43,30 @@ class Main implements Runnable {
         cmd.execute(args)
     }
 
-    private static List<File> findFiles(File directory) throws IOException {
-        Files.walk(Paths.get(directory.getPath()))
+    private List<File> findFiles() throws IOException {
+        Files.walk(Paths.get(srcDir.getPath()))
                 .filter(Files::isRegularFile)
-                .filter({ path -> path.toString().endsWith(".html") || path.toString().endsWith(".htm")})
+                .filter({ path ->
+                    suffixes.any { suffix -> path.toString().endsWith(".${suffix}") }
+                })
                 .collect { it.toFile() }
     }
 
     void run() {
         var configuration = new Configuration()
 
-        var resultsDirectory = new File(resultsDirectoryName)
-
         configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, srcDir)
-        configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments,
-                files ?: findFiles(srcDir)
-        )
+
+        def srcDocuments = srcDocs ?: findFiles()
+        if (!srcDocuments) {
+            CommandLine cmd = new CommandLine(this)
+            System.err.println("Please specify at least one src document (either explicitly or implicitly)")
+            cmd.usage(System.out)
+            System.exit(1)
+        }
+        configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, srcDocuments)
+
+        var resultsDirectory = new File(resultsDirectoryName)
         configuration.addConfigurationItem((Configuration.ITEM_NAME_checkingResultsDir), resultsDirectory)
 
         if (configuration.isValid()) {
