@@ -3,12 +3,12 @@ plugins {
 }
 
 dependencies {
-    implementation 'info.picocli:picocli:4.7.5'
-    annotationProcessor 'info.picocli:picocli-codegen:4.7.5'
+    implementation libs.picocli.impl
+    annotationProcessor libs.picocli.annotationprocessor
 
-    implementation "org.slf4j:slf4j-api:2.0.7"
-    implementation "org.slf4j:slf4j-simple:2.0.7"
-    implementation "org.codehaus.groovy:groovy-all:3.0.17"
+    implementation libs.slf4j.api
+    implementation libs.slf4j.simple
+    implementation libs.groovy.all
 
     implementation project(":htmlSanityCheck-core")
 }
