@@ -14,10 +14,9 @@ junit-vintage = { module = 'org.junit.vintage:junit-vintage-engine', version.ref
 lombok = 'org.projectlombok:lombok:1.18.36'
 picocli-impl = { module = 'info.picocli:picocli', version.ref = "picocli-version" }
 picocli-annotationprocessor = { module = 'info.picocli:picocli-codegen', version.ref = "picocli-version" }
-slf4j-api = { module = 'org.slf4j:slf4j-api', version.ref = 'slf4j-version' }
-slf4j-nop = { module = 'org.slf4j:slf4j-nop', version.ref = 'slf4j-version' }
-string-similarity = {module = 'net.ricecode:string-similarity', version.ref ='string-similarity-version'}
+slf4j-bom = { module = 'org.slf4j:slf4j-bom', version.ref = 'slf4j-version' }
 spock = 'org.spockframework:spock-bom:2.3-groovy-3.0'
+string-similarity = {module = 'net.ricecode:string-similarity', version.ref ='string-similarity-version'}
 testcontainers-junit-jupiter = { module = 'org.testcontainers:junit-jupiter', version.ref = 'testcontainers-version' }
 wiremock-testcontainers = { module = 'org.wiremock.integrations.testcontainers:wiremock-testcontainers-module', version.ref = 'wiremock-testcontainers-version' }
 
