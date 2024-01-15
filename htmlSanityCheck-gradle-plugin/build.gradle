@@ -56,13 +56,13 @@ publishing {
 }
 
 dependencies {
-    testImplementation(
-            gradleTestKit()
-    )
-
     implementation gradleApi()
     implementation project(":htmlSanityCheck-core")
-    testImplementation libs.jsoup
+
+    testImplementation(
+            libs.jsoup,
+            gradleTestKit()
+    )
 }
 
 /*
