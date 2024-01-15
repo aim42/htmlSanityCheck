@@ -22,6 +22,16 @@ import java.nio.file.Paths
 class Main implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(Main.class)
 
+    MainRunner runner
+
+    Main() {
+        Main(new MainRunner())
+    }
+
+    Main(MainRunner runner) {
+        this.runner = runner
+    }
+
     @Option(names = ["-r", "--resultsDir"], description = "Results Directory")
     String resultsDirectoryName = "/tmp/results"
 
@@ -38,7 +48,7 @@ class Main implements Runnable {
     File[] srcDocs
 
     static void main(String[] args) {
-        Main app = new Main()
+        Main app = new Main(new MainRunner())
         CommandLine cmd = new CommandLine(app)
         cmd.execute(args)
     }
@@ -52,37 +62,43 @@ class Main implements Runnable {
                 .collect { it.toFile() }
     }
 
+    static class MainRunner {
+        void run() {
+            var configuration = new Configuration()
+
+            configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, srcDir)
+
+            def srcDocuments = srcDocs ?: findFiles()
+            if (!srcDocuments) {
+                CommandLine cmd = new CommandLine(this)
+                System.err.println("Please specify at least one src document (either explicitly or implicitly)")
+                cmd.usage(System.out)
+                System.exit(1)
+            }
+            configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, srcDocuments)
+
+            var resultsDirectory = new File(resultsDirectoryName)
+            configuration.addConfigurationItem((Configuration.ITEM_NAME_checkingResultsDir), resultsDirectory)
+
+            if (configuration.isValid()) {
+                // create output directory for checking results
+                resultsDirectory.mkdirs()
+
+                // create an AllChecksRunner...
+                var allChecksRunner = new AllChecksRunner(configuration)
+
+                // ... and perform the actual checks
+                var allChecks = allChecksRunner.performAllChecks()
+
+                // check for findings and fail build if requested
+                var nrOfFindingsOnAllPages = allChecks.nrOfFindingsOnAllPages()
+                logger.debug("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
+            }
+        }
+    }
+
     void run() {
-        var configuration = new Configuration()
-
-        configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, srcDir)
-
-        def srcDocuments = srcDocs ?: findFiles()
-        if (!srcDocuments) {
-            CommandLine cmd = new CommandLine(this)
-            System.err.println("Please specify at least one src document (either explicitly or implicitly)")
-            cmd.usage(System.out)
-            System.exit(1)
-        }
-        configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, srcDocuments)
-
-        var resultsDirectory = new File(resultsDirectoryName)
-        configuration.addConfigurationItem((Configuration.ITEM_NAME_checkingResultsDir), resultsDirectory)
-
-        if (configuration.isValid()) {
-            // create output directory for checking results
-            resultsDirectory.mkdirs()
-
-            // create an AllChecksRunner...
-            var allChecksRunner = new AllChecksRunner(configuration)
-
-            // ... and perform the actual checks
-            var allChecks = allChecksRunner.performAllChecks()
-
-            // check for findings and fail build if requested
-            var nrOfFindingsOnAllPages = allChecks.nrOfFindingsOnAllPages()
-            logger.debug("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
-        }
+        runner.run()
     }
 }
 
