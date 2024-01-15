@@ -20,6 +20,16 @@ import java.nio.file.Paths
 class Main implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(Main.class)
 
+    MainRunner runner
+
+    Main() {
+        Main(new MainRunner())
+    }
+
+    Main(MainRunner runner) {
+        this.runner = runner
+    }
+
     @Option(names = ["-r", "--resultsDir"], description = "Results Directory")
     String resultsDirectoryName = "/tmp/results"
 
@@ -30,8 +40,11 @@ class Main implements Runnable {
     File[] files
 
     static void main(String[] args) {
-        Main app = new Main()
+        MainRunner runner = new MainRunner()
+        Main app = new Main(runner)
         CommandLine cmd = new CommandLine(app)
+        runner.setMain(app)
+        runner.setCmd(cmd)
         cmd.execute(args)
     }
 
@@ -53,20 +66,25 @@ class Main implements Runnable {
         )
         configuration.addConfigurationItem((Configuration.ITEM_NAME_checkingResultsDir), resultsDirectory)
 
-        if (configuration.isValid()) {
-            // create output directory for checking results
-            resultsDirectory.mkdirs()
+            if (configuration.isValid()) {
+                // create output directory for checking results
+                resultsDirectory.mkdirs()
 
-            // create an AllChecksRunner...
-            var allChecksRunner = new AllChecksRunner(configuration)
+                // create an AllChecksRunner...
+                var allChecksRunner = new AllChecksRunner(configuration)
 
-            // ... and perform the actual checks
-            var allChecks = allChecksRunner.performAllChecks()
+                // ... and perform the actual checks
+                var allChecks = allChecksRunner.performAllChecks()
 
-            // check for findings and fail build if requested
-            var nrOfFindingsOnAllPages = allChecks.nrOfFindingsOnAllPages()
-            logger.debug("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
+                // check for findings and fail build if requested
+                var nrOfFindingsOnAllPages = allChecks.nrOfFindingsOnAllPages()
+                logger.debug("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
+            }
         }
+    }
+
+    void run() {
+        runner.run()
     }
 }
 
