@@ -1,11 +1,12 @@
 dependencies {
     testImplementation(
-            'junit:junit:4.13.1',
-            'org.spockframework:spock-core:2.3-groovy-3.0',
+            libs.junit,
+            libs.spock,
+
             gradleTestKit()
     )
 
-    implementation group: 'org.jsoup', name: 'jsoup', version: '1.16.1'
+    implementation libs.jsoup
     implementation gradleApi()
     implementation project(":htmlSanityCheck-core")
 }

@@ -3,7 +3,7 @@
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
@@ -14,6 +14,8 @@ plugins {
     id 'java'
     id 'groovy'
     id 'maven-publish'
+
+    alias(libs.plugins.gradle.versions)
 }
 
 ext {
