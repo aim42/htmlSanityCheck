@@ -11,6 +11,8 @@ dependencies {
     }
     implementation libs.slf4j.api
     testImplementation libs.slf4j.nop
+    implementation 'org.slf4j:slf4j-api'
+    testImplementation 'org.slf4j:slf4j-nop'
     // jsoup is our awesome html parser, see jsoup.org
     implementation libs.jsoup
 
