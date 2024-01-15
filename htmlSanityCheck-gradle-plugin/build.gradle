@@ -21,13 +21,14 @@ gradlePlugin {
 }
 
 dependencies {
+    implementation gradleApi()
+
+    implementation project(":htmlSanityCheck-core")
+
     testImplementation(
+            libs.jsoup,
             gradleTestKit()
     )
-
-    implementation libs.jsoup
-    implementation gradleApi()
-    implementation project(":htmlSanityCheck-core")
 }
 
 /*
