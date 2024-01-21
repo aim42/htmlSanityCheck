@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.Configuration
+import org.aim42.htmlsanitycheck.ProductVersion
 import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlElement
@@ -191,7 +192,7 @@ class BrokenHttpLinksChecker extends Checker {
         // to avoid nasty 403 errors (forbidden), we set a referrer and user-agent
         //
         connection.setRequestProperty("Referer", "https://aim42.org");
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0");
+        connection.setRequestProperty("User-Agent", "hsc/${ProductVersion.getVersion()}");
 
         // TODO followRedirects should be a configuration parameter
         // that defaults to false
