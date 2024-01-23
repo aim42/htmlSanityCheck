@@ -1,5 +1,5 @@
 [versions]
-groovy-version = "3.0.20"
+groovy-version = "3.0.17"
 
 [libraries]
 # Use Groovy which corresponds to Gradle version (of hsc build)
