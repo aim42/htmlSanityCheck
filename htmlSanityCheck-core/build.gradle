@@ -1,6 +1,6 @@
 dependencies {
     implementation libs.slf4j.api
-
+    testImplementation libs.slf4j.nop
     // jsoup is our awesome html parser, see jsoup.org
     implementation libs.jsoup
     implementation 'org.codehaus.groovy:groovy-xml'
