@@ -1,3 +1,7 @@
+plugins {
+    id 'java-library'
+}
+
 dependencies {
     implementation libs.slf4j.api
     testImplementation libs.slf4j.nop
@@ -7,8 +11,6 @@ dependencies {
     // Since Groovy 2.5 it is necessary to import dateutil separately
     implementation 'org.codehaus.groovy:groovy-dateutil'
 }
-
-//apply plugin: 'groovy'
 
 tasks.register('copyResourceImages', Copy) {
     from('src/main/resources') {

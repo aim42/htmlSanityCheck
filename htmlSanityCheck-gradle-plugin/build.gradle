@@ -1,4 +1,15 @@
-apply plugin: 'java-gradle-plugin'
+plugins {
+    id 'java-gradle-plugin'
+}
+
+gradlePlugin {
+    plugins {
+        htmlSanityCheck {
+            id = 'org.aim42.htmlSanityCheck'
+            implementationClass = 'org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin'
+        }
+    }
+}
 
 dependencies {
     testImplementation(
