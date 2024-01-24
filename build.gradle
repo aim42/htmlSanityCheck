@@ -52,6 +52,10 @@ allprojects {
 }
 
 subprojects {
+    test {
+        useJUnitPlatform()
+    }
+
     ext {
         publishVariant = { String variant ->
             publishing {
@@ -80,6 +84,10 @@ configure(subprojects) {
     dependencies {
         implementation platform(libs.groovy.bom)
         implementation 'org.codehaus.groovy:groovy'
+
+        testImplementation platform (libs.spock)
+        testImplementation "org.spockframework:spock-core"
+        testImplementation "org.spockframework:spock-junit4"
     }
 
     java {

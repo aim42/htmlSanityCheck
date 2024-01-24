@@ -5,10 +5,9 @@ groovy-version = "3.0.17"
 # Use Groovy which corresponds to Gradle version (of hsc build)
 groovy-bom = { module = "org.codehaus.groovy:groovy-bom", version.ref = "groovy-version" }
 jsoup = "org.jsoup:jsoup:1.17.2"
-junit = "junit:junit:4.13.2"
 slf4j-api = "org.slf4j:slf4j-simple:2.0.7"
 slf4j-simple = "org.slf4j:slf4j-simple:2.0.7"
-spock = "org.spockframework:spock-core:2.3-groovy-3.0"
+spock = "org.spockframework:spock-bom:2.3-groovy-3.0"
 
 [plugins]
 gradle-versions = { id= "com.github.ben-manes.versions", version = "0.50.0" }

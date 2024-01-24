@@ -1,10 +1,4 @@
 dependencies {
-    testImplementation(
-            libs.junit,
-            libs.spock,
-            libs.slf4j.simple
-    )
-
     implementation libs.slf4j.api
 
     // jsoup is our awesome html parser, see jsoup.org

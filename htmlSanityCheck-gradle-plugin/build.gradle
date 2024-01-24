@@ -1,8 +1,5 @@
 dependencies {
     testImplementation(
-            libs.junit,
-            libs.spock,
-
             gradleTestKit()
     )
 
