@@ -52,10 +52,6 @@ allprojects {
 }
 
 subprojects {
-    test {
-        useJUnitPlatform()
-    }
-
     ext {
         publishVariant = { String variant ->
             publishing {
