@@ -88,12 +88,18 @@ configure(subprojects) {
         testImplementation platform (libs.spock)
         testImplementation "org.spockframework:spock-core"
         testImplementation "org.spockframework:spock-junit4"
+
+        testImplementation libs.junit.vintage
     }
 
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(8)
         }
+    }
+
+    tasks.named('test', Test) {
+        useJUnitPlatform()
     }
 
     // The CodeNarc plugin performs quality checks on your project’s
