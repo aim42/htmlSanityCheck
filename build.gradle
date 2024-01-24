@@ -51,29 +51,6 @@ allprojects {
     }
 }
 
-subprojects {
-    test {
-        useJUnitPlatform()
-    }
-
-    ext {
-        publishVariant = { String variant ->
-            publishing {
-                publications {
-                    maven(MavenPublication) {
-                        from components[variant]
-
-                        // We have to perform some fancy renaming to make the plugin GAV coordinates match with docToolchain
-                        groupId = group
-                        artifactId = "org.aim42.${project.name.replaceAll('-', '.')}"
-                        version = version
-                    }
-                }
-            }
-        }
-    }
-}
-
 configure(subprojects) {
     apply plugin: 'java'
     apply plugin: 'groovy'
@@ -106,7 +83,7 @@ configure(subprojects) {
     // Groovy source files using CodeNarc and generates reports from these checks.
     // apply plugin: 'codenarc'
 
-    project.ext.publishVariant('java')
+//    project.ext.publishVariant('java')
 }
 
 /*

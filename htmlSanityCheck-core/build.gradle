@@ -1,3 +1,7 @@
+plugins {
+    id 'java-library'
+}
+
 dependencies {
     implementation libs.slf4j.api
     testImplementation libs.slf4j.nop
@@ -8,7 +12,13 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy-dateutil'
 }
 
-//apply plugin: 'groovy'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
 
 tasks.register('copyResourceImages', Copy) {
     from('src/main/resources') {

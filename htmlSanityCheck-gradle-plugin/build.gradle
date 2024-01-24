@@ -1,4 +1,19 @@
-apply plugin: 'java-gradle-plugin'
+//apply plugin: 'java-gradle-plugin'
+plugins {
+    id 'java-gradle-plugin'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            // We have to perform some fancy renaming to make the plugin GAV coordinates match with gradle plugin naming conventions
+            groupId = group
+            artifactId = "org.aim42.${project.name.replaceAll('-', '.')}"
+            version = version
+        }
+    }
+}
 
 dependencies {
     testImplementation(
