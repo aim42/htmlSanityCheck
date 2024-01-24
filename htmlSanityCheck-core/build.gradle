@@ -9,11 +9,14 @@ dependencies {
 
     // jsoup is our awesome html parser, see jsoup.org
     implementation libs.jsoup
-    implementation libs.groovy.all
-    implementation libs.groovy.dateutil
+    implementation 'org.codehaus.groovy:groovy-xml'
+    // Since Groovy 2.5 it is necessary to import dateutil separately
+    implementation 'org.codehaus.groovy:groovy-dateutil'
+
+    testImplementation 'org.codehaus.groovy:groovy-test'
 }
 
-apply plugin: 'groovy'
+//apply plugin: 'groovy'
 
 tasks.register('copyResourceImages', Copy) {
     from('src/main/resources') {

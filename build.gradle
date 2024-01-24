@@ -77,6 +77,11 @@ configure(subprojects) {
 
     description "${rootProject.description} - Module ${project.name}"
 
+    dependencies {
+        implementation platform(libs.groovy.bom)
+        implementation 'org.codehaus.groovy:groovy'
+    }
+
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(8)

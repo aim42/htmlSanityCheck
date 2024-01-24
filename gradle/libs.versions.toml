@@ -3,9 +3,7 @@ groovy-version = "3.0.17"
 
 [libraries]
 # Use Groovy which corresponds to Gradle version (of hsc build)
-groovy-all = { module = "org.codehaus.groovy:groovy-all", version.ref = "groovy-version" }
-# Since Groovy 2.5 it is necessary to import dateutil separately
-groovy-dateutil = { module = "org.codehaus.groovy:groovy-dateutil", version.ref = "groovy-version" }
+groovy-bom = { module = "org.codehaus.groovy:groovy-bom", version.ref = "groovy-version" }
 jsoup = "org.jsoup:jsoup:1.17.2"
 junit = "junit:junit:4.13.2"
 slf4j-api = "org.slf4j:slf4j-simple:2.0.7"
