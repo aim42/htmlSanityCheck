@@ -6,8 +6,6 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy-xml'
     // Since Groovy 2.5 it is necessary to import dateutil separately
     implementation 'org.codehaus.groovy:groovy-dateutil'
-
-    testImplementation 'org.codehaus.groovy:groovy-test'
 }
 
 //apply plugin: 'groovy'

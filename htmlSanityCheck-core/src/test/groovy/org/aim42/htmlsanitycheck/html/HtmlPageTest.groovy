@@ -3,13 +3,16 @@ package org.aim42.htmlsanitycheck.html
 import org.junit.Before
 import org.junit.Test
 
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertTrue
+
 // see end-of-file for license information
 
 /**
  * test that important HTML elements are correctly parsed and extracted from {@link HtmlPage}.
  */
 
-class HtmlPageTest extends GroovyTestCase {
+class HtmlPageTest {
 
     /**
      * this file resides in git - so we can

@@ -7,7 +7,10 @@ import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.junit.Before
 import org.junit.Test
 
-class MissingLocalResourcesCheckerTest extends GroovyTestCase {
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertTrue
+
+class MissingLocalResourcesCheckerTest {
 
 
     Checker missingLocalResourcesChecker
@@ -72,7 +75,7 @@ class MissingLocalResourcesCheckerTest extends GroovyTestCase {
 
         // reference contained in pageToCheck shall be "d2/$fname#anchor"
         String localReference = htmlPage.getAllHrefStrings().first()
-        assertEquals( "expected d2/fname#anchor", "d2/$fname#anchor", localReference)
+        assertEquals( "expected d2/fname#anchor", "d2/$fname#anchor".toString(), localReference)
 
 
         missingLocalResourcesChecker = new MissingLocalResourcesChecker( myConfig)

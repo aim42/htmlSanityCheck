@@ -3,7 +3,9 @@ package org.aim42.htmlsanitycheck.collect
 import org.junit.Before
 import org.junit.Test
 
-class SinglePageResultsTest extends GroovyTestCase {
+import static org.junit.Assert.assertEquals
+
+class SinglePageResultsTest {
     final static String HTML_HEAD = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <head></head><html>'
 
     final static String HTML = """$HTML_HEAD<body><title>Faulty Dragon</title></body>

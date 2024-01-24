@@ -2,10 +2,13 @@ package org.aim42.htmlsanitycheck.collect
 
 import org.junit.Test
 
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertTrue
+
 // see end-of-file for license information
 
 
-class PerRunResultsTest extends GroovyTestCase {
+class PerRunResultsTest {
 
     @Test
     public void testEmptyRunResultHasNoPages() {

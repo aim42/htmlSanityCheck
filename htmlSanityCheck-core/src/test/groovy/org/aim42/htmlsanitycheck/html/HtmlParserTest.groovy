@@ -4,10 +4,12 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.junit.Test
 
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertTrue
+
 // see end-of-file for license information
 
-
-class HtmlParserTest extends GroovyTestCase {
+class HtmlParserTest {
 
 
     final static String LOCAL_IMG_SRC = "images/test_xyz_uvw.jpg"

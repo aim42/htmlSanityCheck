@@ -7,10 +7,12 @@ import org.junit.Test
 import static org.aim42.htmlsanitycheck.html.HtmlConst.HTML_END
 import static org.aim42.htmlsanitycheck.html.HtmlConst.HTML_HEAD
 
+import static org.junit.Assert.assertEquals
+
 // see end-of-file for license information
 
 
-class BrokenCrossReferencesCheckerTest extends GroovyTestCase {
+class BrokenCrossReferencesCheckerTest {
 
     SingleCheckResults collector = new SingleCheckResults()
 

@@ -5,12 +5,15 @@ import org.aim42.htmlsanitycheck.check.Checker
 import org.aim42.htmlsanitycheck.check.MissingImageFilesChecker
 import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.aim42.htmlsanitycheck.html.HtmlPage
+import org.junit.Before
 import org.junit.Test
+
+import static org.junit.Assert.assertEquals
 
 // see end-of-file for license information
 
 
-class SingleCheckResultsTest extends GroovyTestCase {
+class SingleCheckResultsTest {
 
     final String whatIsCheckedMessage = "A Headline for Testing Purpose"
 
@@ -24,6 +27,7 @@ class SingleCheckResultsTest extends GroovyTestCase {
 
     Checker checker
 
+    @Before
     public void setUp() {
         checkingResults =
                 new SingleCheckResults(

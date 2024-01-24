@@ -8,9 +8,11 @@ import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.junit.Before
 import org.junit.Test
 
+import static org.junit.Assert.assertEquals
+
 // see end of file for licence information
 
-class BrokenCrossReferenceCheckerSuggestionTest extends GroovyTestCase {
+class BrokenCrossReferenceCheckerSuggestionTest {
 
 
         private final static String HTMLHEAD = "<html><head></head><body>"

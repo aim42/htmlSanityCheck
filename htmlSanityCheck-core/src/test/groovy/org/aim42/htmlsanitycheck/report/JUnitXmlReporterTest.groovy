@@ -8,10 +8,12 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+import static org.junit.Assert.assertEquals
+
 // see end-of-file for license information
 
 
-class JUnitXmlReporterTest extends GroovyTestCase {
+class JUnitXmlReporterTest {
 
     Finding singleFinding
     SingleCheckResults singleCheckResults

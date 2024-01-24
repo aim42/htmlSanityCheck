@@ -4,10 +4,12 @@ import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.junit.Test
 
+import static org.junit.Assert.assertEquals
+
 // see end-of-file for license information
 
 
-class ReporterTest extends GroovyTestCase {
+class ReporterTest {
 
     @Test
     public void testNothingReportedWithEmptyResults() {

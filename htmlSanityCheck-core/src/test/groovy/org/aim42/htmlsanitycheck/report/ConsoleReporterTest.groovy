@@ -7,10 +7,12 @@ import org.aim42.htmlsanitycheck.collect.SinglePageResults
 import org.junit.Before
 import org.junit.Test
 
+import static org.junit.Assert.assertEquals
+
 // see end-of-file for license information
 
 
-class ConsoleReporterTest extends GroovyTestCase {
+class ConsoleReporterTest {
 
     Finding singleFinding
     SingleCheckResults singleCheckResults

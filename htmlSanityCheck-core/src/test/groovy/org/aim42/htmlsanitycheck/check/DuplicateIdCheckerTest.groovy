@@ -5,10 +5,12 @@ import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.junit.Before
 import org.junit.Test
 
+import static org.junit.Assert.assertEquals
+
 // see end-of-file for license information
 
 
-class DuplicateIdCheckerTest extends GroovyTestCase {
+class DuplicateIdCheckerTest {
 
     Checker duplicateIdChecker
     HtmlPage pageToCheck
