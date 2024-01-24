@@ -1,4 +1,6 @@
 = image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
+:icons: font
+// Align version with ./gradle.properties file
 :version: 2.0.0
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
@@ -39,9 +41,10 @@ Use the following snippet inside a Gradle build file:
 [subs="attributes"]
 ----
 plugins {
-  id 'org.aim42.{project}' version '{version}'
+  id 'org.aim42.{project}' version '{version}' // <1>
 }
 ----
+<1> Checkout <<box:current-version,current version>>
 
 OR
 
@@ -57,12 +60,25 @@ buildscript {
     }
 
     dependencies {
-        classpath ('gradle.plugin.org.aim42:{project}:{version}')
+        classpath ('gradle.plugin.org.aim42:{project}:{version}') // <1>
     }
 }
 
 apply plugin: 'org.aim42.{project}'
 ----
+<1> Checkout <<box:current-version,current version>>
+
+[[box:current-version]]
+[IMPORTANT]
+.Latest (development) version
+====
+The current development version is defined in link:gradle.properties[]
+
+[source]
+----
+include::gradle.properties[tag=version]
+----
+====
 
 == Usage
 
