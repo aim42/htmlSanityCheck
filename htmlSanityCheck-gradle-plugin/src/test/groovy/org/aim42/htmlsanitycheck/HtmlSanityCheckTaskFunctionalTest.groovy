@@ -14,7 +14,10 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 class HtmlSanityCheckTaskFunctionalTest extends Specification {
     private final static VALID_HTML = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"><html><head></head><body></body><html>"""
     private final static INVALID_HTML = """<body><span id="id"/><span id="id"/></body> """
-    private final static GRADLE_VERSIONS = ['8.5']
+    private final static GRADLE_VERSIONS = [ // 6.x or older does not work!
+                                            '7.6.3', // latest 7.x
+                                            '8.0.2', '8.1.1', '8.2.1', '8.3', '8.4', '8.5' // all 8.x (latest patches)
+                                           ]
 
     @Rule
     TemporaryFolder testProjectDir = new TemporaryFolder()
@@ -81,7 +84,7 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
     }
 
     @Unroll
-    def "can specify a subset of files in source directory to be checked"() {
+    def "can specify a subset of files in source directory to be checked with Gradle version #gradleVersion"() {
         given:
         htmlFile << VALID_HTML
         testProjectDir.newFile("test-invalid.html") << INVALID_HTML
