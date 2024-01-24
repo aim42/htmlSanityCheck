@@ -25,7 +25,7 @@ ext {
 }
 
 allprojects {
-    group = 'org.aim42.htmlSanityCheck'
+    group = group
     version = version
 
     repositories {
