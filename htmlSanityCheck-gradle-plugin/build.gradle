@@ -1,3 +1,5 @@
+apply plugin: 'java-gradle-plugin'
+
 dependencies {
     testImplementation(
             gradleTestKit()
