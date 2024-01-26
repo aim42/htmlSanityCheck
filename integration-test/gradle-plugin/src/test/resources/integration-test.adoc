@@ -1,0 +1,3 @@
+= Just a very simple (integration) test
+
+of https://github.com/aim42/htmlSanityCheck/[]
