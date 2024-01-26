@@ -25,9 +25,7 @@ allprojects {
         mavenCentral()
     }
 
-    task info(
-            description: "info on path and objects"
-    ) {
+    tasks.register("info") {
         doLast
                 {
                     println "project.name         : " + project.name
@@ -36,7 +34,6 @@ allprojects {
                     println "project.path         : " + project.path
                     println "projectDir           : " + projectDir
                     println "groupId              : " + project.group
-                    println "buildDir             : " + buildDir
                     println "targetCompatibility  : " + java.targetCompatibility
                     println "=" * 80
                 }
