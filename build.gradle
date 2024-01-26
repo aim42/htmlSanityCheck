@@ -12,16 +12,8 @@ buildscript {
 
 plugins {
     id 'java'
-    id 'groovy'
-    id 'maven-publish'
 
     alias(libs.plugins.gradle.versions)
-}
-
-ext {
-    srcDir = "$projectDir/src/docs"
-    javaVersion = System.getProperty("java.version")
-    currentDate = new Date().format("d. MMM yyyy")
 }
 
 allprojects {
