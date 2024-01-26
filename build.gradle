@@ -1,6 +1,3 @@
-// gradle build script for htmlSanityCheck
-// =======================================
-
 buildscript {
     repositories {
         mavenCentral()
@@ -51,7 +48,7 @@ configure(subprojects) {
         implementation platform(libs.groovy.bom)
         implementation 'org.codehaus.groovy:groovy'
 
-        testImplementation platform (libs.spock)
+        testImplementation platform(libs.spock)
         testImplementation "org.spockframework:spock-core"
         testImplementation "org.spockframework:spock-junit4"
 
@@ -64,6 +61,17 @@ configure(subprojects) {
         }
     }
 
+    publishing {
+        repositories {
+            maven {
+                name = 'myLocalRepositoryForFullIntegrationTests'
+                //noinspection GrDeprecatedAPIUsage
+                url = new File (project.parent.buildDir, "maven-repo")
+            }
+            mavenLocal()
+        }
+    }
+
     tasks.named('test', Test) {
         useJUnitPlatform()
     }
@@ -72,6 +80,27 @@ configure(subprojects) {
     // Groovy source files using CodeNarc and generates reports from these checks.
     // apply plugin: 'codenarc'
 }
+
+tasks.register("integrationTest") {
+    group("Verification")
+    description("Run overall integration tests")
+
+    final String INTEGRATION_TEST_DIRECTORY = "integration-test/gradle-plugin"
+
+    doLast {
+        def result = exec {
+            workingDir INTEGRATION_TEST_DIRECTORY
+            commandLine "./gradlew", "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}"
+        }
+        logger.debug "Script output: $result"
+        final File testIndex = new File(INTEGRATION_TEST_DIRECTORY, "build/reports/index.html")
+        assert testIndex.exists()
+    }
+}
+integrationTest.dependsOn(
+        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
+        ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository'
+)
 
 /*
  * Copyright Gernot Starke and aim42 contributors.
