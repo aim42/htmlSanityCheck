@@ -2,16 +2,17 @@
 groovy-version = "3.0.17"
 junit5-version = "5.10.1"
 picocli-version = "4.7.5"
+slf4j-version = "2.0.11"
 
 [libraries]
 # Use Groovy which corresponds to Gradle version (of hsc build)
 groovy-bom = { module = "org.codehaus.groovy:groovy-bom", version.ref = "groovy-version" }
 jsoup = "org.jsoup:jsoup:1.17.2"
 junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5-version" }
+mockito = "org.mockito:mockito-junit-jupiter:3.11.2"
 picocli-impl = { module = 'info.picocli:picocli', version.ref = "picocli-version" }
 picocli-annotationprocessor = { module = 'info.picocli:picocli-codegen', version.ref = "picocli-version" }
-slf4j-api = "org.slf4j:slf4j-api:2.0.11"
-slf4j-nop = "org.slf4j:slf4j-nop:2.0.11"
+slf4j-bom = { module = "org.slf4j:slf4j-bom", version.ref = "slf4j-version" }
 spock = "org.spockframework:spock-bom:2.3-groovy-3.0"
 
 [plugins]

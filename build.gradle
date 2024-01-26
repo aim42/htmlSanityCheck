@@ -48,7 +48,9 @@ configure(subprojects) {
         implementation platform(libs.groovy.bom)
         implementation 'org.codehaus.groovy:groovy'
 
-        testImplementation platform(libs.spock)
+        implementation platform (libs.slf4j.bom)
+
+        testImplementation platform (libs.spock)
         testImplementation "org.spockframework:spock-core"
         testImplementation "org.spockframework:spock-junit4"
 
