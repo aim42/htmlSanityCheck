@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 dependencies {
     implementation libs.slf4j.api
     testImplementation libs.slf4j.nop
@@ -6,6 +8,14 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy-xml'
     // Since Groovy 2.5 it is necessary to import dateutil separately
     implementation 'org.codehaus.groovy:groovy-dateutil'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
 }
 
 tasks.register('copyResourceImages', Copy) {
@@ -20,7 +30,7 @@ processResources {
 
     exclude '**/*.png'
     inputs.property "version", project.version
-    filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [version: project.version])
+    filter ReplaceTokens, tokens: [version: project.version]
     println "after processResources config, version= ${project.version}"
 }
 
