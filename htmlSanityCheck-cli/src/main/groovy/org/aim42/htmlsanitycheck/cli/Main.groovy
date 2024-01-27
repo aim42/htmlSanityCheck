@@ -48,8 +48,11 @@ class Main implements Runnable {
     File[] srcDocs
 
     static void main(String[] args) {
-        Main app = new Main(new MainRunner())
+        MainRunner runner = new MainRunner()
+        Main app = new Main(runner)
         CommandLine cmd = new CommandLine(app)
+        runner.setMain(app)
+        runner.setCmd(cmd)
         cmd.execute(args)
     }
 
@@ -62,22 +65,33 @@ class Main implements Runnable {
                 .collect { it.toFile() }
     }
 
-    static class MainRunner {
+    static class MainRunner implements CommandLine.IFactory {
+
+        @Override
+        <T> T create(Class<T> cls) throws Exception {
+            if (cls == Main.class) {
+                return (T) new Main()
+            } else {
+                throw new IllegalArgumentException("Cannot create CLI applications of class '${cls}'")
+            }
+        }
+
+        Main main
+        CommandLine cmd
+
         void run() {
-            var configuration = new Configuration()
-
-            configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, srcDir)
-
-            def srcDocuments = srcDocs ?: findFiles()
+            def srcDocuments = main.srcDocs ?: main.findFiles()
             if (!srcDocuments) {
-                CommandLine cmd = new CommandLine(this)
                 System.err.println("Please specify at least one src document (either explicitly or implicitly)")
                 cmd.usage(System.out)
                 System.exit(1)
             }
+
+            var configuration = new Configuration()
+            configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, main.srcDir)
             configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, srcDocuments)
 
-            var resultsDirectory = new File(resultsDirectoryName)
+            var resultsDirectory = new File(main.resultsDirectoryName)
             configuration.addConfigurationItem((Configuration.ITEM_NAME_checkingResultsDir), resultsDirectory)
 
             if (configuration.isValid()) {
