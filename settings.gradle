@@ -18,7 +18,7 @@ gradleEnterprise {
 }
 
 
-rootProject.name = 'org.aim42.htmlSanityCheck'
+rootProject.name = 'htmlSanityCheck'
 
 include 'htmlSanityCheck-core',
         'htmlSanityCheck-gradle-plugin'
