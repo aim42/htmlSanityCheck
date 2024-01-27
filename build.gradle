@@ -325,6 +325,9 @@ integrationTestGradlePlugin.dependsOn(
         ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
         ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository'
 )
+integrationTestGradlePlugin.configure {
+    shouldRunAfter(':htmlSanityCheck-gradle-plugin:check')
+}
 tasks.register("cleanIntegrationTestGradlePlugin", Delete) {
     group("Build")
     description("Deletes the result directory from gradle-plugin integration tests")
@@ -355,6 +358,9 @@ tasks.register("integrationTestCli") {
 integrationTestCli.dependsOn(
         ':htmlSanityCheck-cli:installDist'
 )
+integrationTestCli.configure {
+    shouldRunAfter (':htmlSanityCheck-cli:check')
+}
 tasks.register("cleanIntegrationTestCli", Delete) {
     group("Build")
     description("Deletes the result directory from CLI integration tests")
