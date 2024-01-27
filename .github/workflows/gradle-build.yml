@@ -19,7 +19,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
 
       - name: Execute Gradle build
-        run: ./gradlew clean integrationTest --scan -stacktrace
+        run: ./gradlew clean check integrationTest --scan -stacktrace
 
       - name: 'Publish Test Results'
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
