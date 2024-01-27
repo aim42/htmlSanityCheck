@@ -12,7 +12,7 @@ plugins {
 }
 
 htmlSanityCheck {
-    sourceDir = new File("src/test/resources")
+    sourceDir = new File("../common/src/test/resources")
 
     // where to put results of sanityChecks...
     checkingResultsDir = new File("build/reports")
