@@ -14,7 +14,7 @@ slf4j-nop = "org.slf4j:slf4j-nop:2.0.11"
 spock = "org.spockframework:spock-bom:2.3-groovy-3.0"
 
 [plugins]
-gradle-versions = { id = "com.github.ben-manes.versions", version = "0.50.0" }
+gradle-versions = { id= "com.github.ben-manes.versions", version = "0.51.0" }
 sonar = { id = "org.sonarqube", version = "5.0.0.4638" }
 gitProperties = { id = "com.gorylenko.gradle-git-properties", version = "2.4.1" }
 
