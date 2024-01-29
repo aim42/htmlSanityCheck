@@ -1,4 +1,4 @@
-package org.aim42.net;
+package org.aim42.htmlsanitycheck.tools;
 
 // created by https://www.geekality.net/2013/09/27/java-ignore-ssl-certificate-errors/
 
@@ -8,9 +8,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
 public final class TrustAllCertificates implements X509TrustManager, HostnameVerifier {
-    /**
-     * Installs a new {@link TrustAllCertificates} as trust manager and hostname verifier.
-     */
+    private TrustAllCertificates() {
+    }
+
     public static void install() {
         try {
             TrustAllCertificates trustAll = new TrustAllCertificates();
@@ -24,9 +24,7 @@ public final class TrustAllCertificates implements X509TrustManager, HostnameVer
 
             // Install the all-trusting host verifier
             HttpsURLConnection.setDefaultHostnameVerifier(trustAll);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Failed setting up all thrusting certificate manager.", e);
-        } catch (KeyManagementException e) {
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
             throw new RuntimeException("Failed setting up all thrusting certificate manager.", e);
         }
     }

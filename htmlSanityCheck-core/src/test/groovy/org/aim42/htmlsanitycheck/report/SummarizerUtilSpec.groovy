@@ -66,6 +66,7 @@ class SummarizerUtilSpec extends Specification {
         10       | 3          | 70
         3        | 1          | 66
         3        | 2          | 33
+        200      | 99         | 50
         1000     | 250        | 75
 
     }

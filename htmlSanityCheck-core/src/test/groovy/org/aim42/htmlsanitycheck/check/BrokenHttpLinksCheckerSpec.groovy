@@ -4,7 +4,7 @@ import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
-import org.aim42.inet.NetUtil
+import org.aim42.htmlsanitycheck.tools.Web
 import spock.lang.Ignore
 import spock.lang.IgnoreIf
 import spock.lang.Specification

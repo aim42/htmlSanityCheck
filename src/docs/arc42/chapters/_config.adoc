@@ -23,7 +23,7 @@ ifndef::imagesdir[:imagesdir: ../images]
 :project-repository-docs-link: https://github.com/aim42/htmlSanityCheck/blob/main/src/docs/
 :project-repository-docs-edit-link: https://github.com/aim42/htmlSanityCheck/edit/main/src/docs/
 
-:coresourcepath: {projectRootDir}/htmlSanityCheck-core/src/main/groovy/org/aim42
+:coresourcepath: {projectRootDir}/htmlSanityCheck-core/src/main/java/org/aim42
 :coretestpath:   {projectRootDir}/htmlSanityCheck-core/src/test/groovy/org/aim42
 
 :asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin

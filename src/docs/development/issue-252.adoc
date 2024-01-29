@@ -41,7 +41,7 @@ for URLs with `prefixOnlyHref`.
 the default should be the list given above
 (`ITEM_NAME_prefixOnlyHrefExtensions`)
 
-* Add these defaults to `NetUtil`
+* Add these defaults to `Web`
 
 
 
