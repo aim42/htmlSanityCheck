@@ -58,13 +58,13 @@ class HtmlSanityCheckPlugin implements Plugin<Project> {
 To be done
 
 ==== Building the Plugin
-The plugin code itself is built with gradle.
 
+The plugin code itself is built with gradle.
 
 ==== Uploading to Public Archives
 
+TBD
 
 ==== Further Information on Creating Gradle Plugins
-Although writing plugins is described in the Gradle user guide, 
-a clearly explained sample is given in a 
-https://code4reference.com/2012/08/gradle-custom-plugin-part-2/[Code4Reference] tutorial.
+
+The https://www.gradle.org/docs/current/userguide/custom_plugins.html[Gradle user guide] describes how to write a plugins.

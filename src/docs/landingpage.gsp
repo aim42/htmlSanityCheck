@@ -1,14 +1,15 @@
 <div class="row flex-xl-nowrap">
     <main class="col-12 col-md-12 col-xl-12 pl-md-12" role="main">
         <div class="bg-light p-5 rounded">
-            <h1>Html Sanity Check</h1>
+            <h1>Html Sanity Check (HSC)</h1>
             <p class="lead">
                 This project provides some basic sanity checking on html files.
             </p>
             <p>
                 It can be helpful in case of html generated from e.g. Asciidoctor, Markdown or other formats - as converters usually don’t check for missing images or broken links.
-
-                It can be used as Gradle plugin. Standalone Java and graphical UI are planned for future releases.
+                <br>
+                HSC can be used programmatically or as <a href="https://gradle.org">Gradle</a> plugin.
+                A standalone Java command line interface (CLI) version is planned as well as a <a href="https://maven.apache.org">Maven</a> plugin for future releases.
             </p>
         </div>
 

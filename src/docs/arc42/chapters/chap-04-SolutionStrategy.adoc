@@ -6,11 +6,11 @@ include::_config.adoc[]
 
 :filename: arc42/chapters/chap-04-SolutionStrategy.adoc
 
-* Implement kbd:[HtmlSC] in {groovy-url}[Groovy] and Java with minimal
+* Implement kbd:[HtmlSC] in Java with minimal
 external dependencies. Wrap this implementation into a {gradle-url}
 plugin, so it can be used within automated builds. Details are given
 in the xref:chap-08-Concepts.adoc#gradle-plugin-concept[Gradle plugin concept].
 
-* Apply the _template-method-pattern_ (see e.g. {template-method-url}) to enable:
-** multiple checking algorithms. See the xref:chap-08-Concepts.adoc#checking-concept[concept for checking algorithms],
+* Apply the _template-method-pattern_ (see e.g. {template-method-pattern-url}) to enable:
+** multiple checking algorithms. See the {xrefConceptCheckingAlgorithms},
 ** both HTML (file) and text (console) output. See the xref:chap-08-Concepts.adoc#reporting-concept[reporting concept].

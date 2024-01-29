@@ -76,7 +76,7 @@ class HtmlReporterTest {
         // Check the output
         String content = getResultContents()
         assertTrue(content.contains("Results for test.html"))
-        assertTrue(content.contains("location : /path/to/test.html"))
+        assertTrue(content.contains("location : <a href=\"/path/to/test.html\">/path/to/test.html</a>"))
         assertTrue(content.contains("<title>HTML Sanity Check Results</title>"))
         assertTrue(content.contains("<div class=\"infoBox\" id=\"findings\"><div class=\"counter\">0</div>issue</div>"))
         assertTrue(content.contains("<div class=\"infoBox\" id=\"size\"><div class=\"counter\">1.0</div>kByte</div>"))

@@ -1,5 +1,5 @@
 :filename: development/publishing.adoc
-=== Publishing kbd:htmlSC Releases
+=== Publishing kbd:[HtmlSC] Releases
 
 kbd:htmlSC (Core and Gradle plugin) can be published to https://central.sonatype.com/search?q=org.aim42.htmlSanityCheck[Maven Central] (MC) for retrieval by its consumers.
 

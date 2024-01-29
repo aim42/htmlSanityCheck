@@ -11,7 +11,7 @@ include::_config.adoc[]
 :filename: arc42/chapters/chap-09-Decisions.adoc
 
 === Checking of external links postponed
-In the current {revision} we won't check external links.
+In the current release, we won't check external links.
 These checks have been postponed to later versions.
 
 

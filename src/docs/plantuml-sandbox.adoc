@@ -1,5 +1,5 @@
 :filename: plantuml-sandbox.adoc
-ifndef::plantUMLDir[:plantUMLDir: .plantuml/]
+ifndef::plantumldir[:plantumldir: .plantuml/]
 
 == Generierte Diagramme mit PlantUML
 
@@ -16,7 +16,7 @@ start
 --
 ----
 
-[plantuml,"{plantUMLDir}activity","png"]
+[plantuml,"{plantumldir}activity","svg"]
 --
 start
 :activity;

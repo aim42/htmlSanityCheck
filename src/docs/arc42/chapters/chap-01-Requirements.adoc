@@ -13,7 +13,6 @@ with hyperlinks and integration of images and similar resources.
 [[requirements]]
 === Requirements Overview
 
-
 The overall goal of kbd:[HtmlSC] is to create neat and clear reports,
 showing errors within HTML files - as shown in the adjoining figure.
 
@@ -32,42 +31,38 @@ image:sample-hsc-report.jpg[width="200", link="/images/sample-hsc-report.jpg"
 kbd:[HtmlSC] can run from the command line or as {gradle-url}-plugin.
 
 
-[Terminology]
-==== Terminology: What Can Go Wrong in HTML Files?
+.Terminology: What Can Go Wrong in HTML Files?
+****
+Apart from purely syntactical errors, many things can go wrong in html, especially with respect to hyperlinks, anchors and id's -- as those are often manually maintained.
 
-Apart from purely syntactical errors, many things can go wrong in html, especially with respect to hyperlinks, anchors and id's - as those are often manually maintained.
+Primary sources of problems are bad links (in technical terms: URIs).
+For further information, see the <<InformationOnUris, background information on URIs>>.
 
-Primary sources of problems are bad links (in technical terms: URIs). For further information, see the <<InformationOnUris, background information on URIs>>.
+Broken Cross References:: Cross-references (internal links) can be broken, e.g. due to missing or misspelled link-targets.
+See {xrefAlgorithmBrokenCrossReferencesChecker}
 
+Missing image files:: Referenced image files can be missing or misspelled.
+See {xrefAlgorithmMissingImageFilesChecker}.
 
-.Broken Cross References:: Cross-references (internal links) can be broken, e.g. due to missing or misspelled link-targets.
-See xref:chap-08-Concepts.adoc#BrokenCrossReferencesChecker[BrokenCrossReferencesChecker]
+Missing local resources:: Referenced local resources (other than images) can be missing or misspelled.
+See {xrefAlgorithmMissingLocalResourcesChecker}
 
-.Missing image files: Referenced image files can be missing or misspelled.
-See xref:chap-08-Concepts.adoc#MissingImageFilesChecker[MissingImageFilesChecker].
+Duplicate link targets:: link-targets can occur several times with the same name - so the browser cannot know which is the desired target.
+See {xrefAlgorithmDuplicateIdChecker}.
 
-.Missing local resources: Referenced local resources (other than images) can be missing or misspelled.
-See xref:chap-08-Concepts.adoc#MissingLocalResourcesChecker[MissingLocalResourcesChecker]
+.Illegal links:: The links (aka anchors or URIs) can contain illegal characters or violate HTML link syntax. See {xrefAlgorithmIllegalLinkChecker}.
 
-.Duplicate link targets: link-targets can occur several times with the same name - so the browser cannot know which is the desired target.
-See xref:chap-08-Concepts.adoc#DuplicateIdChecker[DuplicateIdChecker].
+Broken external links:: External http links can be broken due to myriads of reasons: misspelled, link-target currently offline, illegal link syntax.
+See {xrefAlgorithmBrokenHttpLinksChecker}.
 
-.Illegal links:: The links (aka anchors or URIs) can contain illegal characters or violate HTML link syntax. See xref:chap-08-Concepts.adoc#[IllegalLinkChecker]
-
-.Broken external links: External http links can be broken due to myriads of reasons: misspelled, link-target currently offline, illegal link syntax.
-See xref:chap-08-Concepts.adoc#BrokenHttpLinksChecker[BrokenHttpLinksChecker].
-
-.Missing Alt Attribute in Image Tags: Images missing an alt-attribute.
-See xref:chap-08-Concepts.adoc#MissingImgAltAttributeChecker[MissingImgAltAttributeChecker].
+Missing Alt Attribute in Image Tags:: Images missing an alt-attribute.
+See {xrefAlgorithmMissingImgAltAttributeChecker}.
 
 Checking and reporting these errors and flaws is the central _business requirement_ of kbd:[HtmlSC].
 
-
-
 Important terms (*domain terms*) of html sanity checking is documented in a (small)
-xref:chap-08-Concepts.adoc#_html_checking_domain_model[domain model].
-
-
+xref:chap-08-Concepts.adoc#sec:html-checking-domain-model[domain model].
+****
 
 ==== General Functionality
 

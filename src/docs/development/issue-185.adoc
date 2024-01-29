@@ -41,7 +41,7 @@ A solution needs to address two issues:
 
 1.) _find_ all Checker subclasses
 One approach here relies on Java annotations,
-described by https://farenda.com/java/java-find-annotated-classes/[Przemysław Wojnowski],
+described by https://farenda.com/spring-find-annotated-classes/[Przemysław Wojnowski],
 and uses the https://github.com/ronmamo/reflections[Reflections] library.
 
 2.) _instantiate_ these classes (aka _Factory_ for the checkers)

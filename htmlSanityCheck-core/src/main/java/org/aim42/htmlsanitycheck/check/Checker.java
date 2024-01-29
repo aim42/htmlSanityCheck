@@ -23,7 +23,7 @@ public abstract class Checker {
     private SingleCheckResults checkingResults;
     private Configuration myConfig;
 
-    public Checker(Configuration pConfig) {
+    protected Checker(Configuration pConfig) {
         this.myConfig = pConfig;
     }
 
@@ -36,7 +36,7 @@ public abstract class Checker {
      **/
     public SingleCheckResults performCheck(final HtmlPage pageToCheck) {
         // assert non-null htmlPage
-        assert pageToCheck != null;
+        assert pageToCheck != null; // NOSONAR(S4274)
 
         checkingResults = new SingleCheckResults();
 
@@ -62,3 +62,21 @@ public abstract class Checker {
     protected abstract SingleCheckResults check(final HtmlPage pageToCheck);
 
 }
+
+/*======================================================================
+
+Copyright Gernot Starke and aim42 contributors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an
+ "AS IS" BASIS,WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ ======================================================================*/

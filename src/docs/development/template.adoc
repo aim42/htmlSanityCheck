@@ -1,4 +1,5 @@
 :filename: development/template.adoc
+ifndef::plantumldir[:plantumldir: .plantuml/]
 
 === Descriptive Title
 
@@ -10,7 +11,7 @@ Introduce the reader to your problem by describing the current situation and the
 
 Use diagrams to visualize the problem.
 
-[plantuml, "{plantumldir}name",png]
+[plantuml, "{plantumldir}name",svg]
 ....
 a -> b
 ....

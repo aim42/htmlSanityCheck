@@ -9,7 +9,7 @@ include::_config.adoc[]
 === Whitebox HtmlSanityChecker
 
 
-[plantuml,"{plantumldir}whitbox-hsc-level-1",png]
+[plantuml,"{plantumldir}whitbox-hsc-level-1",svg]
 ....
 include::../../plantuml/whitebox-hsc-level-1.puml[]
 ....
@@ -46,14 +46,19 @@ Interfaces::
 .HtmlSanityChecker internal interfaces
 |===
 | Interface | Description
-| usage via shell | <<arc42_user, arc42 user>> uses a command
-line shell to call the kbd:[HtmlSC]
-| build system  | currently restricted to Gradle: The build
-system uses kbd:[HtmlSC] as configured in the buildscript.
-| local-file system | kbd:[HtmlSC] needs access to several
-local files, especially the html page to be checked and to the
-corresponding image directories.
-| external websites| to check external links, kbd:[HtmlSC] needs to access external sites via http HEAD or GET requests.
+
+| usage via shell
+| an (arc42) user uses a command line shell to call kbd:[HtmlSC]
+
+| Buildsystem
+| Currently restricted to Gradle: The build system uses kbd:[HtmlSC] as configured in the buildscript.
+
+| Local filesystem
+| kbd:[HtmlSC] needs access to several local files, especially the html page to be checked and to the corresponding image directories.
+
+| External websites
+| to check external links, kbd:[HtmlSC] needs to access external sites via http HEAD or GET requests.
+
 |===
 
 
@@ -133,11 +138,8 @@ to the one present in the html file. Currently not implemented
 
 ==== Checker and xyzChecker Subclasses
 
-The abstract Checker provides a uniform interface (`public void check()`)
-to different checking algorithms. It is based upon the <<checking-concept,
-concept of extensible checking algorithms>>.
-
-
+The abstract Checker provides a uniform interface (`public void check()`) to different checking algorithms.
+It is based upon the extensible {xrefConceptCheckingAlgorithms}.
 
 
 === Building Blocks - Level 3
@@ -170,7 +172,7 @@ Contained Blackboxes::
 | results for a single type of check (e.g. missing-images check)
 
 | Finding
-| a single finding, (e.g. "image 'logo.png' missing"). Can hold suggestions
+| a single finding, (e.g., "image 'logo.png' missing"). Can hold suggestions
 and (planned for future releases) the responsible html element.
 |===
 

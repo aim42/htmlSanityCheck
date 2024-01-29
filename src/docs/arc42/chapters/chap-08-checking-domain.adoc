@@ -1,39 +1,71 @@
 :jbake-menu: -
 include::_config.adoc[]
+
+[[sec:html-checking-domain-model]]
 === HTML Checking Domain Model
 
 :filename: arc42/chapters/chap-08-checking-domain.adoc
 include::../_feedback.adoc[]
 
-image::ea/htmlSanityCheck/HTML_Checking_Domain.png["HTML Checking Domain Model", title="HTML Checking Domain Model"]
+image::ea/htmlSanityCheck/HTML_Checking_Domain.png["HTML Checking Domain Model",title="HTML Checking Domain Model"]
 
-
-[options="header", cols="1,4"]
+[options="header",cols="1,4"]
 .Domain Model
 |===
 | Term              | Description
-| Anchor            | Html element to create ->Links. Contains link-target in the form `<a href="link-target">`
-| Cross Reference   | Link from one part of the document to another part within the same document.
-                       A special form of ->Internal Link, with a ->Link Target in the same document.
-| External Link     | Link to another page or resource at another domain.
-| Finding           | Description of a problem found by one ->Checker within the ->Html Page.
-| Html Element      | HTML pages (documents) are made up by HTML elements .e.g., `<a href="link target">`, `<img src="image.png">` and others. See the https://www.w3schools.com/html/html_elements.asp[W3-Consortium]
-| Html Page         |  A single chunk of HTML, mostly regarded as a single file. Shall comply
-					   to standard HTML syntax. Minimal requirement: Our HTML parser can successfully parse this page. Contains ->Html Elements. Also called _Html Document_.
-| id                | Identifier for a specific part of a document, e.g. `<h2 id="#someHeader">`.
-						Often used to describe ->Link Targets.
-| Internal Link     | Link to another section of the same page or to another page of the same domain. 
-						Also called _Local Link_.
-| Link              | Any a reference in the ->Html Page that lets you display or activate another
-                        part of this document (->Internal Link) or another document, image or resource
-                        (can be either ->Internal (local) or ->External Link).
-                        Every link leads from the _Link Source_ to the _Link Target_
-| Link Target       | The target of any ->Link, e.g. heading or any other a part of  
-					 a ->Html Document, any internal or external resource (identified by URI). Expressed by ->id  
-| Local Resource    | local file, either other Html files or other types (e.g. pdf, docx)
-| Run Result        | The overall results of checking a number of pages (at least one page).
-| Single Page Result| A collection of all checks of a single ->Html Page.
-| URI               | Universal Resource Identifier. Defined in https://www.ietf.org/rfc/rfc2396.txt[RFC-2396]. The ultimate source of truth concerning link syntax and semantic.
+
+| Anchor
+| Html element to create ->Links. Contains link-target in the form `<a href="link-target">`
+
+| Cross Reference
+| Link from one part of the document to another part within the same document.
+A special form of ->Internal Link, with a ->Link Target in the same document.
+
+| External Link
+| Link to another page or resource at another domain.
+
+| Finding
+| Description of a problem found by one ->Checker within the ->Html Page.
+
+| Html Element
+| HTML pages (documents) are made up by HTML elements .e.g., `<a href="link target">`, `<img src="image.png">` and others. See the https://www.w3schools.com/html/html_elements.asp[W3-Consortium]
+
+| Html Page
+| A single chunk of HTML, mostly regarded as a single file. Shall comply
+to standard HTML syntax. Minimal requirement: Our HTML parser can successfully parse this page. Contains ->Html Elements. Also called _Html Document_.
+
+| id
+| Identifier for a specific part of a document, e.g. `<h2 id="#someHeader">`.
+Often used to describe ->Link Targets.
+
+| Internal Link
+| Link to another section of the same page or to another page of the same domain.
+Also called _Local Link_.
+
+| Link
+a| Any reference in the ->Html Page that lets you display or activate
+
+* another
+part of this document (->Internal Link) or
+* another document, image or resource
+(can be either ->Internal (local) or ->External Link).
+Every link leads from the _Link Source_ to the _Link Target_
+
+| Link Target
+| The target of any ->Link, e.g. heading or any other a part of
+a ->Html Document, any internal or external resource (identified by URI). Expressed by ->id
+
+| Local Resource
+| local file, either other Html files or other types (e.g. pdf, docx)
+
+| Run Result
+| The overall results of checking a number of pages (at least one page).
+
+| Single Page Result
+| A collection of all checks for a single ->Html Page.
+
+| URI
+| Universal Resource Identifier. Defined in https://www.ietf.org/rfc/rfc2396.txt[RFC-2396]. The ultimate source of truth concerning link syntax and semantic.
 |===
 
 

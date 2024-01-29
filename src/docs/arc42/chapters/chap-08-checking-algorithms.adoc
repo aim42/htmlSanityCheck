@@ -8,7 +8,7 @@ include::../_feedback.adoc[]
 
 kbd:[HtmlSC] uses the template-method-pattern to enable flexible checking algorithms:
 
-[quote, https://sourcemaking.com/design_patterns/template_method]
+[quote,{template-method-pattern-url}]
 The Template Method defines a skeleton of an algorithm in an operation, and defers some steps to subclasses.
 
 We achieve that by defining the skeleton of the checking algorithm in one operation, deferring the specific checking algorithm steps to subclasses.
@@ -18,7 +18,7 @@ The invariant steps are implemented in the abstract base class, while the varian
 [source, java, linenums, highlight='16']
 .Template method "performCheck"
 ----
-include::{coresourcepath}/htmlsanitycheck/check/Checker.java[tags=performCheckTemplateMethod]
+include::{coresourcepath}/htmlsanitycheck/check/Checker.java[tags=performCheckTemplateMethod,indent=0]
 ----
 
 ifndef::imagesdir[:imagesdir: ../../images]

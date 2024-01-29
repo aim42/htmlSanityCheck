@@ -88,7 +88,7 @@ are copied at report-generation time from the jar-file to the report output dire
 When creating the HTML report, we need to copy the required resource files (css, JavaScript)
 to the output directory.
 
-The appropriate copy method was re-used from the https://github.com/gradle/gradle/blob/master/subprojects/performance/src/testFixtures/groovy/org/gradle/performance/results/ReportGenerator.java#L50-50[Gradle sources].
+The appropriate copy method took a https://github.com/gradle/gradle/blob/5c45052ef3fa9395fa85f71340611bd159cd1489/testing/internal-performance-testing/src/main/groovy/org/gradle/performance/results/report/AbstractReportGenerator.java#L190[Gradle source] as blueprint.
 
 
 ==== Attributions

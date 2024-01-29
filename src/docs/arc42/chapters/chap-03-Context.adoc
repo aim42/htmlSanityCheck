@@ -2,6 +2,9 @@
 :jbake-order: 30
 :jbake-rightColumnHtml: <a href="../../pdf/arc42/hsc_arc42.pdf"><i class="fa fa-file fa-fw"></i> Download PDF</a>
 include::_config.adoc[]
+:node: Node
+:artifact: Artifact
+
 == Context
 
 :filename: arc42/chapters/chap-03-Context.adoc
@@ -30,7 +33,6 @@ amount of time and might yield invalid results due to network and latency issues
 
 The following diagram shows the participating computers ({node}) with their technical connections plus the major {artifact} of kbd:[HtmlSC], the hsc-plugin-binary.
 
-
 image::deployment-context.png["Deployment Context", title="Deployment Context"]
 
 [options="header", cols="1,3"]
@@ -39,7 +41,8 @@ image::deployment-context.png["Deployment Context", title="Deployment Context"]
 | Node / Artifact | Description
 | {node} hsc-development | where development of kbd:[HtmlSC] takes place
 | {artifact} hsc-plugin-binary | compiled and packaged version of kbd:[HtmlSC] including required dependencies. 
-| {node} artifact repository (https://bintray.com/bintray/jcenter[Bintray]) | global public _cloud_ repository for binary artifacts, similar to https://search.maven.org/[mavenCentral].  kbd:[HtmlSC] binaries are uploaded to this server.
+| {node} artifact repository (https://repo1.maven.org/maven2/[Maven Central]) | public Java artifact repository, cf. https://search.maven.org/[Maven Central Search].
+kbd:[HtmlSC] binaries are uploaded to this server.
 | {node} hsc user computer | where arbitrary documentation takes place with html as output formats.
 | {artifact} build.gradle | Gradle build script configuring (among other things) the kbd:[HtmlSC] plugin to perform the Html checking.
 |===

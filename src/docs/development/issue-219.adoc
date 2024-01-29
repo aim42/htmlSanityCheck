@@ -1,4 +1,5 @@
 :filename: development/issue-219.adoc
+ifndef::plantumldir[:plantumldir: .plantuml/]
 
 == Handling 403 and 405 Status Codes
 
@@ -29,7 +30,7 @@ page exists.
 
 === Proposed Approach
 
-[plantuml,"{plantumldir}GET-after-HEAD-failapproach",png]
+[plantuml,"{plantumldir}GET-after-HEAD-failapproach",svg]
 ....
 @startuml
 skinparam maxmessagesize 80

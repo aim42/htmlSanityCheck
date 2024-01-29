@@ -1,4 +1,5 @@
 :filename: development/issue-190.adoc
+ifndef::plantumldir[:plantumldir: .plantuml/]
 
 == Refactoring the Main Checking Loop
 
@@ -8,7 +9,7 @@ proposes to merge the two classes AllChecksRunner and ChecksRunner.
 
 === Proposed (new) Scenario
 
-[plantuml,"{plantumldir}mainloop-new",png]
+[plantuml,"{plantumldir}mainloop-new",svg]
 ....
 include::MainLoop-new.puml[]
 ....

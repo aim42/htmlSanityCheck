@@ -293,8 +293,8 @@ public class HtmlReporter extends Reporter {
         ));
 
         write(String.format(
-                "location : %s <p>%n",
-                pageResult.getPageFilePath()
+                "location : <a href=\"%s\">%s</a> <p>%n",
+                pageResult.getPageFilePath(), pageResult.getPageFilePath()
         ));
 
         int nrOfItemsChecked = pageResult.nrOfItemsCheckedOnPage();
@@ -411,6 +411,7 @@ public class HtmlReporter extends Reporter {
     }
 
 }
+
 /*======================================================================
 
 Copyright Gernot Starke and aim42 contributors
