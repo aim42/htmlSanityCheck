@@ -1,22 +1,23 @@
 [versions]
-groovy-version = "3.0.17"
-junit5-version = "5.10.1"
+groovy-version = '3.0.17'
+junit5-version = '5.10.2'
+slf4j-version = '2.0.13'
 
 [libraries]
-commons-validator = "commons-validator:commons-validator:1.8.0"
-# Use Groovy which corresponds to Gradle version (of hsc build)
-groovy-bom = { module = "org.codehaus.groovy:groovy-bom", version.ref = "groovy-version" }
-jsoup = "org.jsoup:jsoup:1.17.2"
-junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5-version" }
-lombok = "org.projectlombok:lombok:1.18.30"
-slf4j-api = "org.slf4j:slf4j-api:2.0.11"
-slf4j-nop = "org.slf4j:slf4j-nop:2.0.11"
-spock = "org.spockframework:spock-bom:2.3-groovy-3.0"
+commons-validator = 'commons-validator:commons-validator:1.8.0'
+# Use Groovy which corresponds to a Gradle version (of hsc build)
+groovy-bom = { module = 'org.codehaus.groovy:groovy-bom', version.ref = 'groovy-version' }
+jsoup = 'org.jsoup:jsoup:1.17.2'
+junit-vintage = { module = 'org.junit.vintage:junit-vintage-engine', version.ref = 'junit5-version' }
+lombok = 'org.projectlombok:lombok:1.18.32'
+slf4j-api = { module = 'org.slf4j:slf4j-api', version.ref = 'slf4j-version' }
+slf4j-nop = { module = 'org.slf4j:slf4j-nop', version.ref = 'slf4j-version' }
+spock = 'org.spockframework:spock-bom:2.3-groovy-3.0'
 
 [plugins]
-gradle-versions = { id= "com.github.ben-manes.versions", version = "0.51.0" }
-sonar = { id = "org.sonarqube", version = "5.0.0.4638" }
-gitProperties = { id = "com.gorylenko.gradle-git-properties", version = "2.4.1" }
+gradle-versions = { id= 'com.github.ben-manes.versions', version = '0.51.0' }
+sonar = { id = 'org.sonarqube', version = '5.0.0.4638' }
+gitProperties = { id = 'com.gorylenko.gradle-git-properties', version = '2.4.1' }
 
 # Copyright Gerd Aschemann and aim42 contributors.
 #

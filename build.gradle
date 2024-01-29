@@ -71,7 +71,7 @@ configure(subprojects) {
                 name = 'myLocalRepositoryForFullIntegrationTests'
                 //noinspection GrDeprecatedAPIUsage
                 File baseDir = file(project.parent.buildDir)
-                url = new File (baseDir, "maven-repo")
+                url = new File(baseDir, "maven-repo")
             }
             mavenLocal()
         }
@@ -89,6 +89,32 @@ configure(subprojects) {
             xml.required = true
         }
         dependsOn check // tests are required to run before generating the report
+    }
+}
+
+def groovyVersion = libs.groovy.bom.get().version
+def groovyVersionMajorMinor = groovyVersion.split('\\.')[0..1] .join('.')
+
+tasks.named("dependencyUpdates").configure {
+    gradleReleaseChannel = true
+
+    resolutionStrategy {
+        componentSelection { rules ->
+            rules.all { ComponentSelection selection ->
+                if (selection.candidate.version =~ /(alpha|M)/) {
+                    selection.reject('Rejected alpha or milestone version')
+                } else if (selection.candidate.group == 'org.spockframework') {
+                    def spockGroovyVersion = selection.candidate.version.split('-')[2]
+                    if (spockGroovyVersion != groovyVersionMajorMinor) {
+                        selection.reject("Spock's Groovy version ($spockGroovyVersion) does not match project's Groovy major/minor version ($groovyVersionMajorMinor)")
+                    }
+                } else if (selection.candidate.group == 'org.codehaus.groovy') {
+                    if (selection.candidate.version != groovyVersion) {
+                        selection.reject("Groovy version is determined by Gradle API (${groovyVersion})")
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -117,7 +143,7 @@ tasks.register("integrationTestOnly") {
         }
         logger.debug "Script output: $result"
         File integrationTestDirectory = file(INTEGRATION_TEST_DIRECTORY)
-        final File testIndex = new File (integrationTestDirectory, "build/reports/index.html")
+        final File testIndex = new File(integrationTestDirectory, "build/reports/index.html")
         assert testIndex.exists()
     }
 }

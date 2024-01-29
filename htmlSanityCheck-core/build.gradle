@@ -68,12 +68,9 @@ tasks.register('copyResourceImages', Copy) {
 processResources {
     dependsOn copyResourceImages, generateGitProperties
 
-//    duplicatesStrategy = DuplicatesStrategy.INHERIT
-
     exclude '**/*.png'
     inputs.property "version", project.version
     filter ReplaceTokens, tokens: [version: project.version]
-    println "after processResources config, version= ${project.version}"
 }
 
 /*
