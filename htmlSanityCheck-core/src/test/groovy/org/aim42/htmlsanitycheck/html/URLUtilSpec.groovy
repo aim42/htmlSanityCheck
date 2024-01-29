@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.html
 
+import org.aim42.htmlsanitycheck.tools.Web
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -8,7 +9,7 @@ class URLUtilSpec extends Specification {
     //@Unroll
     def "invalid chars in link"(boolean containsInvalidChars, String link) {
         expect:
-        URLUtil.containsInvalidChars( link ) == containsInvalidChars
+        Web.containsInvalidChars( link ) == containsInvalidChars
 
         where:
 
@@ -28,7 +29,7 @@ class URLUtilSpec extends Specification {
     @Unroll
     def "identify invalid links"(boolean isValid, String link) {
         expect:
-        URLUtil.isValidURL( link ) == isValid
+        Web.isValidURL( link ) == isValid
 
         where:
 
@@ -46,7 +47,7 @@ class URLUtilSpec extends Specification {
     def "identify local resource links"(boolean isLocal, String link) {
 
         expect:
-        URLUtil.isLocalResource( link ) == isLocal
+        Web.isLocalResource( link ) == isLocal
 
         where:
 
@@ -86,7 +87,7 @@ class URLUtilSpec extends Specification {
     @Unroll
     def "check for valid ip address"(boolean isValidIP, String ipa) {
         expect:
-        URLUtil.isValidIP(ipa) == isValidIP
+        Web.isIP(ipa) == isValidIP
 
         where:
 

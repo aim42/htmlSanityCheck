@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.html
 
 import org.junit.Test
+import org.aim42.htmlsanitycheck.tools.Web
 
 import static org.junit.Assert.assertFalse
 import static org.junit.Assert.assertTrue
@@ -17,13 +18,13 @@ class URLUtilTest {
     public void testFileURL() {
         String fileURL = "file://$IMG"
 
-        Boolean actual = URLUtil.isRemoteURL(fileURL)
+        Boolean actual = Web.isRemoteURL(fileURL)
 
         assertFalse("$fileURL shall be recognized as file but wasn't",
                 actual)
 
         fileURL = "$IMG"
-        actual = URLUtil.isRemoteURL(fileURL)
+        actual = Web.isRemoteURL(fileURL)
 
         assertFalse("$fileURL is file-url but not remote-url",
                 actual)
@@ -34,7 +35,7 @@ class URLUtilTest {
     @Test
     public void testHTTPUrl() {
         String httpURL = "http://$AIM/$IMG"
-        Boolean actual = URLUtil.isRemoteURL(httpURL)
+        Boolean actual = Web.isRemoteURL(httpURL)
         assertTrue("$httpURL shall be recognized as remote url but wasn't", actual)
 
     }
@@ -49,7 +50,7 @@ class URLUtilTest {
         prefixes.each { prefix ->
             String url = prefix + "://$AIM/$IMG"
             assertTrue("$prefix is remote URL but wasnt recognized",
-                    URLUtil.isRemoteURL(url))
+                    Web.isRemoteURL(url))
         }
     }
 
@@ -60,7 +61,7 @@ class URLUtilTest {
         prefixes.each { prefix ->
             String url = prefix + ":chuck.norris@example.com"
             assertTrue("$prefix is mailto-link but wasnt recognized",
-                    URLUtil.isRemoteURL(url))
+                    Web.isRemoteURL(url))
         }
     }
 
@@ -73,7 +74,7 @@ class URLUtilTest {
 
         paths.each { url ->
             assertFalse("$url is local but was recognized as remote",
-                    URLUtil.isRemoteURL(url))
+                    Web.isRemoteURL(url))
         }
 
     }
@@ -90,14 +91,14 @@ class URLUtilTest {
                                 "./docs/test.html#anchor"]
 
         locals.each { it ->
-            assertTrue("$it not recognized as local resource", URLUtil.isLocalResource(it))
+            assertTrue("$it not recognized as local resource", Web.isLocalResource(it))
         }
 
 
         List<String> remotes = ["http://google.com", "mailto:/hello@example.com",
                                 "ftp://file.html", "https://github.com"]
         remotes.each {
-            assertFalse("$it recognized as local resource", URLUtil.isLocalResource(it))
+            assertFalse("$it recognized as local resource", Web.isLocalResource(it))
         }
 
     }
@@ -110,7 +111,7 @@ class URLUtilTest {
             List<String> localResources = ["file://test.html", "FILE://test.html"]
 
             localResources.each { it ->
-                assertTrue("$it not recognized as local resource", URLUtil.isLocalResource(it))
+                assertTrue("$it not recognized as local resource", Web.isLocalResource(it))
             }
         } finally {
             Locale.setDefault(defaultLocale)
@@ -127,7 +128,7 @@ class URLUtilTest {
         crossRefs.each { cf ->
             //log.info(cf)
             assertTrue("$cf legal cross-reference not recognized",
-                    URLUtil.isCrossReference(cf))
+                    Web.isCrossReference(cf))
         }
     }
 
@@ -142,7 +143,7 @@ class URLUtilTest {
 
         paths.each { path ->
             assertFalse("$path recognized as cross-reference",
-                    URLUtil.isCrossReference(path))
+                    Web.isCrossReference(path))
         }
 
 

@@ -2,6 +2,7 @@ package org.aim42.htmlsanitycheck.html
 
 import org.junit.Before
 import org.junit.Test
+import org.aim42.htmlsanitycheck.tools.Web
 
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertTrue
@@ -278,7 +279,7 @@ class HtmlPageTest {
 
         // now filter the local resources
         List<String> localHrefStrings = hrefs.findAll { hrefString ->
-            URLUtil.isLocalResource(hrefString)
+            Web.isLocalResource(hrefString)
         }
 
         assertEquals("expected 2 local resources", 2, localHrefStrings.size())

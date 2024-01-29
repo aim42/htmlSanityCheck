@@ -4,7 +4,7 @@ import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
-import org.aim42.inet.NetUtil
+import org.aim42.htmlsanitycheck.tools.Web
 import spock.lang.Ignore
 import spock.lang.IgnoreIf
 import spock.lang.Specification
@@ -43,7 +43,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     @IgnoreIf({ Boolean.valueOf(env['INTELLIJ']) })
     def "recognize if there is internet connectivity"() {
         expect: "if there is no internet connection, testing should fail"
-        NetUtil.isInternetConnectionAvailable() == true
+        Web.isInternetConnectionAvailable() == true
 
     }
 
