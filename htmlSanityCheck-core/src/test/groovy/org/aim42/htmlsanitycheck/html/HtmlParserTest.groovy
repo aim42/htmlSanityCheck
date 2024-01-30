@@ -25,7 +25,7 @@ class HtmlParserTest {
 
 
     @Test
-    public void testBasicParser() {
+    void testBasicParser() {
 
         String html =
                 '''<html>
@@ -35,9 +35,9 @@ class HtmlParserTest {
                 <body>
                     <p>very basic html</p>
                 </body>
-            </html>''';
+            </html>'''
 
-        Document doc = Jsoup.parse(html);
+        Document doc = Jsoup.parse(html)
 
         boolean actual = (doc.body() != null)
         assertTrue("parsed basic html doc contains body", actual)
@@ -45,11 +45,11 @@ class HtmlParserTest {
 
 
     @Test
-    public void testGetSrcAttributeFromImageTag() {
+    void testGetSrcAttributeFromImageTag() {
 
         HtmlPage htmlpage = new HtmlPage(HTML_WITH_IMG_TAG)
 
-        ArrayList<HtmlElement> imageTags = htmlpage.getAllImageTags()
+        List<HtmlElement> imageTags = htmlpage.getAllImageTags()
 
         assertEquals("expect exactly one image tag", 1, imageTags.size())
 
@@ -61,7 +61,7 @@ class HtmlParserTest {
 
 
     @Test
-    public void testGetSrcAttributeFromRemoteImageTag() {
+    void testGetSrcAttributeFromRemoteImageTag() {
         String HTML = """${HtmlConst.HTML_HEAD} <body>
 
             <img src="$REMOTE_IMG_SRC" >
@@ -71,7 +71,7 @@ class HtmlParserTest {
 
         HtmlPage htmlPage = new HtmlPage( HTML )
 
-        ArrayList<HtmlElement> imageTags = htmlPage.getAllImageTags()
+        List<HtmlElement> imageTags = htmlPage.getAllImageTags()
 
         String expected = REMOTE_IMG_SRC
         String actual   = imageTags.first().getImageSrcAttribute()
@@ -81,7 +81,7 @@ class HtmlParserTest {
     }
 
     @Test
-    public void testGetHrefFromAnchorTag() {
+    void testGetHrefFromAnchorTag() {
         final String REMOTE_URL = "http://github.com/aim42"
         final String HTML = """${HtmlConst.HTML_HEAD} <body>
             <a href=$REMOTE_URL ></a>

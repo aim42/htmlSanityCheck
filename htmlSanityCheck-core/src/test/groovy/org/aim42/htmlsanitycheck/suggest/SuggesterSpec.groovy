@@ -6,7 +6,7 @@ import spock.lang.Timeout
 
 class SuggesterSpec extends Specification {
 
-    private ArrayList<String> options
+    private List<String> options
     private String target
 
     private List<String> suggestions
@@ -76,7 +76,7 @@ class SuggesterSpec extends Specification {
     // wait max one second
     def "Find Suggestion in Long Option List"() {
         final int HALFLENGTH = 1001
-        ArrayList<String> longOptionList = new ArrayList<String>(2 * HALFLENGTH)
+        List<String> longOptionList = new ArrayList<String>(2 * HALFLENGTH)
 
         given:
         target = "HtmlSanitY"
@@ -118,7 +118,7 @@ class SuggesterSpec extends Specification {
         final String bestOption = "hsc-logo.jpg"
         final String secondOption = "hsclogo.jpg"
 
-        ArrayList<String> optionList = ["arc42-logo.jpg",
+        List<String> optionList = ["arc42-logo.jpg",
                                         "hsc-logo-shaded.png",
                                         bestOption,
                                         secondOption,

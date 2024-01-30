@@ -5,9 +5,7 @@ import org.aim42.htmlsanitycheck.collect.PerRunResults;
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
 import org.aim42.htmlsanitycheck.collect.SinglePageResults;
 
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +20,7 @@ public abstract class Reporter {
      * create the reporter
      */
     public Reporter() {
-        this.createdOnDate =  new SimpleDateFormat("dd. MMMM YYYY, HH:mm").format(new Date());
+        this.createdOnDate =  new SimpleDateFormat("dd. MMMM yyyy, HH:mm").format(new Date());
         this.createdByHSCVersion = ProductVersion.getVersion();
 
     }
@@ -30,7 +28,7 @@ public abstract class Reporter {
     /**
      * Usually a Reporter instance shall be constructed with its appropriate
      *
-     * @param runResults
+     * @param runResults the results for the report
      * @see PerRunResults, as the latter contains all findings.
      */
     public Reporter(PerRunResults runResults) {
@@ -76,8 +74,8 @@ public abstract class Reporter {
 
     protected void reportPageDetails(SinglePageResults pageResults) {
         for (SingleCheckResults resultForOneCheck : pageResults.singleCheckResults) {
-            reportSingleCheckSummary((SingleCheckResults) resultForOneCheck);
-            reportSingleCheckDetails((SingleCheckResults) resultForOneCheck);
+            reportSingleCheckSummary(resultForOneCheck);
+            reportSingleCheckDetails(resultForOneCheck);
         }
 
     }
@@ -112,7 +110,7 @@ public abstract class Reporter {
         // default: do nothing
     }
 
-    protected ArrayList<SinglePageResults> pageResults;
+    protected List<SinglePageResults> pageResults;
     protected PerRunResults runResults;
     protected final String createdOnDate;
     protected final String createdByHSCVersion;

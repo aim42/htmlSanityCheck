@@ -6,7 +6,7 @@ import spock.lang.Unroll
 class HtmlPageSpec extends Specification {
 
     private HtmlPage htmlPage
-    private ArrayList qualifiedImageTags
+    private List qualifiedImageTags
 
 
     @Unroll
@@ -73,7 +73,7 @@ class HtmlPageSpec extends Specification {
 
     @Unroll
     def "detect correct number of external http links in anchors '#anchors' "() {
-        ArrayList externalLinks
+        Set externalLinks
 
         when:
         String html = HtmlConst.HTML_HEAD + anchors + HtmlConst.HTML_END

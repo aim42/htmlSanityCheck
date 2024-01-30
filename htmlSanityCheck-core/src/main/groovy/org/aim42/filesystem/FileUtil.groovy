@@ -25,7 +25,7 @@ import java.nio.file.Path
 class FileUtil {
 
 
-    static File commonPath(Collection<File> files) {
+    static File commonPath(Set<File> files) {
         if (!files) {
             return null
         }

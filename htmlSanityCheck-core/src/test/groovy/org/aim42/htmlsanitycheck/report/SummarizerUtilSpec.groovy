@@ -64,7 +64,7 @@ class SummarizerUtilSpec extends Specification {
         10       | 0          | 100
         10       | 2          | 80
         10       | 3          | 70
-        3        | 1          | 66
+        3        | 1          | 67
         3        | 2          | 33
         200      | 99         | 50
         1000     | 250        | 75
@@ -101,7 +101,7 @@ class SummarizerUtilSpec extends Specification {
 
 
     // helper method
-    private void setNrOfFindings(int nrOfFindings, SingleCheckResults scr) {
+    private static void setNrOfFindings(int nrOfFindings, SingleCheckResults scr) {
         Finding finding = new Finding("a finding")
 
         for (int i = 0; i < nrOfFindings; i++) {

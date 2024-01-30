@@ -18,12 +18,12 @@ public class MissingImageFilesChecker extends Checker {
 
     private static final Logger logger = LoggerFactory.getLogger(MissingImageFilesChecker.class);
     private List<HtmlElement> images;
-    private final File baseDir;
+    final File baseDir;
     private File currentDir;
 
     public MissingImageFilesChecker(Configuration pConfig) {
         super(pConfig);
-        baseDir = ((File) (getMyConfig().getConfigItemByName(Configuration.getITEM_NAME_sourceDir())));
+        baseDir = getMyConfig().getSourceDir();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class MissingImageFilesChecker extends Checker {
 
     private void checkAllImages() {
 
-        images.forEach(image -> checkSingleLocalImage(image));
+        images.forEach(this::checkSingleLocalImage);
 
     }
 
@@ -63,23 +63,22 @@ public class MissingImageFilesChecker extends Checker {
         // (that is, NO remote URL)
         boolean isRemoteURL = Web.isRemoteURL(imageSrcAttribute);
         boolean isDataURI = Web.isDataURI(imageSrcAttribute);
-        if (isRemoteURL) {
-            //do nothing. This checks for _local_ images
-        } else if (isDataURI) {
-            // bookkeeping:
-            getCheckingResults().incNrOfChecks();
+        if (!isRemoteURL) {
+            if (isDataURI) {
+                // bookkeeping:
+                getCheckingResults().incNrOfChecks();
 
-            doesDataURIContainData(imageSrcAttribute);
+                doesDataURIContainData(imageSrcAttribute);
 
-        } else {
-            //we have a simple local image
+            } else {
+                //we have a simple local image
 
-            // bookkeeping:
-            getCheckingResults().incNrOfChecks();
+                // bookkeeping:
+                getCheckingResults().incNrOfChecks();
 
-            doesImageFileExist(imageSrcAttribute);
+                doesImageFileExist(imageSrcAttribute);
+            }
         }
-
     }
 
     /**
@@ -90,7 +89,7 @@ public class MissingImageFilesChecker extends Checker {
     private void doesImageFileExist(String relativePathToImageFile) {
         File parentDir = relativePathToImageFile.startsWith("/") ? baseDir : currentDir;
 
-        String decodedRelativePathtoImageFile = null;
+        String decodedRelativePathtoImageFile;
         try {
             decodedRelativePathtoImageFile = URLDecoder.decode(relativePathToImageFile,"UTF-8");
         } catch (UnsupportedEncodingException e) {

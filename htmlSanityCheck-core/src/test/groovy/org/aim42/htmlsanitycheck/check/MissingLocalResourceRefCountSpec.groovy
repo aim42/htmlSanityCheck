@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check
 
+import groovy.util.logging.Slf4j
 import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
@@ -7,12 +8,13 @@ import org.aim42.htmlsanitycheck.html.HtmlPage
 import spock.lang.Specification
 import spock.lang.Unroll
 
+@Slf4j
 class MissingLocalResourceRefCountSpec extends Specification {
 
     // missing local resource name
     private static final String MIS_LOC_RES = "MissingLocalResource.html"
 
-    private static final String badLocalRef =  """<a href="${MIS_LOC_RES}">missing</a>"""
+    private static final String badLocalRef = """<a href="${MIS_LOC_RES}">missing</a>"""
 
 
     private static final String msgPrefix = MissingLocalResourcesChecker.MLRC_MESSAGE_PREFIX
@@ -45,6 +47,7 @@ class MissingLocalResourceRefCountSpec extends Specification {
                                             String htmlSnippet,
                                             String result) {
 
+        log.debug "testing with $nrOfChecks, $nrOfFindings, $htmlSnippet, expected: $result"
         given:
 
         String html = HtmlConst.HTML_HEAD + htmlSnippet + HtmlConst.HTML_END
@@ -52,19 +55,16 @@ class MissingLocalResourceRefCountSpec extends Specification {
         // create a file
         (tmpHtmlFile, tmpDir) = createTempLocalResources("index.html", html)
 
-        HtmlPage htmlPage = new HtmlPage( tmpHtmlFile )
+        HtmlPage htmlPage = new HtmlPage(tmpHtmlFile)
 
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tmpDir )
+        myConfig.setSourceConfiguration(tmpDir, [tmpHtmlFile] as Set)
 
         when:
-        def missingLocalResourcesChecker = new MissingLocalResourcesChecker( myConfig )
-        SingleCheckResults collector = missingLocalResourcesChecker.performCheck( htmlPage )
+        def missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
+        SingleCheckResults collector = missingLocalResourcesChecker.performCheck(htmlPage)
 
 
         then:
-
-        println "testing with $nrOfChecks, $nrOfFindings, $htmlSnippet, expected: $result "
-
         // our temporary  files still exists
         tmpHtmlFile.exists()
 
@@ -78,22 +78,22 @@ class MissingLocalResourceRefCountSpec extends Specification {
 
         where:
 
-        nrOfChecks | nrOfFindings | htmlSnippet | result
-         // one bad local reference:
-        1 | 1 | badLocalRef | """${msgPrefix} "${MIS_LOC_RES}" ${msgMissing}"""
+        nrOfChecks | nrOfFindings | htmlSnippet     | result
+        // one bad local reference:
+        1          | 1            | badLocalRef     | """${msgPrefix} "${MIS_LOC_RES}" ${msgMissing}"""
 
         // two bad local references to the same file -> reference count == 2
-        1 | 2 | badLocalRef*2 | """${msgPrefix} "${MIS_LOC_RES}" ${msgMissing}${msgRefCount}2"""
+        1          | 2            | badLocalRef * 2 | """${msgPrefix} "${MIS_LOC_RES}" ${msgMissing}${msgRefCount}2"""
 
         // five bad local references to the same file -> reference count == 5
-        1 | 5 | badLocalRef*5 | """${msgPrefix} "${MIS_LOC_RES}" ${msgMissing}${msgRefCount}5"""
+        1          | 5            | badLocalRef * 5 | """${msgPrefix} "${MIS_LOC_RES}" ${msgMissing}${msgRefCount}5"""
     }
 
     /*
-    * helper to create local resource
+     * helper to create local resource
      */
 
-    def List createTempLocalResources(String htmlFileName, String htmlContent) {
+    List createTempLocalResources(String htmlFileName, String htmlContent) {
         // 1.) create tmp directory tmpDir
         File tmpDir = File.createTempDir()
 

@@ -1,6 +1,8 @@
 package org.aim42.htmlsanitycheck.collect;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Collects checking results of 1..n html files which are checked together in one "run".
@@ -13,8 +15,7 @@ public class PerRunResults implements RunResults {
     // magic number - also used in tests
     private final static Long TIMER_STILL_RUNNING = 42L;
     // unused images is the only check concerning all pages...
-    SingleCheckResults unusedImagesResultsCollector;
-    private final ArrayList<SinglePageResults> resultsForAllPages;
+    private final List<SinglePageResults> resultsForAllPages;
     // checking time is important - therefore we maintain a timer
     private final Long startedCheckingTimeMillis;
     private Long finishedCheckingTimeMillis;
@@ -30,7 +31,7 @@ public class PerRunResults implements RunResults {
         this.startedCheckingTimeMillis = System.currentTimeMillis();
         this.finishedCheckingTimeMillis = TIMER_STILL_RUNNING;
 
-        this.resultsForAllPages = new ArrayList<SinglePageResults>();
+        this.resultsForAllPages = new ArrayList<>();
 
     }
 
@@ -38,7 +39,7 @@ public class PerRunResults implements RunResults {
      * return the List of results for the pages
      */
     @Override
-    public ArrayList<SinglePageResults> getResultsForAllPages() {
+    public List<SinglePageResults> getResultsForAllPages() {
         return resultsForAllPages;
     }
 
@@ -55,12 +56,12 @@ public class PerRunResults implements RunResults {
      */
     @Override
     public Long checkingTookHowManyMillis() {
-        Long itTookSoLong;
-        if (finishedCheckingTimeMillis == TIMER_STILL_RUNNING)
+        long itTookSoLong;
+        if (Objects.equals(finishedCheckingTimeMillis, TIMER_STILL_RUNNING)) {
             itTookSoLong = ILLEGAL_TIMER; // if read upside down: "Sie Esel"
-        else
+        } else {
             itTookSoLong = finishedCheckingTimeMillis - startedCheckingTimeMillis;
-
+        }
         return itTookSoLong;
     }
 
@@ -91,8 +92,8 @@ public class PerRunResults implements RunResults {
     public int nrOfChecksPerformedOnAllPages() {
 
         return resultsForAllPages.stream()
-                .map(singlePageResults -> singlePageResults.nrOfItemsCheckedOnPage())
-                .reduce((a, b) -> a + b).orElseGet(() -> 0);
+                .map(SinglePageResults::nrOfItemsCheckedOnPage)
+                .reduce(Integer::sum).orElse(0);
 
 
     }
@@ -104,13 +105,13 @@ public class PerRunResults implements RunResults {
     public int nrOfFindingsOnAllPages() {
 
         return resultsForAllPages.stream()
-                .map(singlePageResults -> singlePageResults.nrOfFindingsOnPage())
-                .reduce((a, b) -> a + b).orElseGet(() -> 0);
+                .map(SinglePageResults::nrOfFindingsOnPage)
+                .reduce(Integer::sum).orElse(0);
     }
 
 
 }
-/************************************************************************
+/* ***********************************************************************
  * This is free software - without ANY guarantee!
  *
  *

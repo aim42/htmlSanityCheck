@@ -1,13 +1,21 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 dependencies {
+    implementation (libs.commons.validator) {
+        // Having a vulnerability here ...
+        exclude group: 'commons-collections', module: 'commons-collections'
+    }
     implementation libs.slf4j.api
     testImplementation libs.slf4j.nop
     // jsoup is our awesome html parser, see jsoup.org
     implementation libs.jsoup
+
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+    testCompileOnly libs.lombok
+    testAnnotationProcessor libs.lombok
+
     implementation 'org.codehaus.groovy:groovy-xml'
-    // Since Groovy 2.5 it is necessary to import dateutil separately
-    implementation 'org.codehaus.groovy:groovy-dateutil'
 }
 
 publishing {

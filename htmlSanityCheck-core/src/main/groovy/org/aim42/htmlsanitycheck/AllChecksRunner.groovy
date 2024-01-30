@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory
 class AllChecksRunner {
 
     // we check a collection of files:
-    private Collection<File> filesToCheck = new HashSet<File>()
+    private Set<File> filesToCheck = new HashSet<File>()
 
     // where do we put our results
     private File checkingResultsDir
@@ -45,7 +45,7 @@ class AllChecksRunner {
     boolean consoleReport = true
 
     // checker instances
-    private Set<Checker> checkers
+    private List<Checker> checkers
 
     // keep all results
     private PerRunResults resultsForAllPages
@@ -55,29 +55,29 @@ class AllChecksRunner {
     private Configuration myConfig
 
 
-    private static final Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
+    private static final Logger logger = LoggerFactory.getLogger(AllChecksRunner.class)
 
     /**
      * runs all available checks
      *
      */
 
-    public AllChecksRunner( Configuration pConfig ) {
+    AllChecksRunner( Configuration pConfig ) {
         super()
 
         myConfig = pConfig
 
-        this.filesToCheck = myConfig.getConfigItemByName(Configuration.ITEM_NAME_sourceDocuments)
+        this.filesToCheck = myConfig.getSourceDocuments()
 
         // TODO: #185 (checker classes shall be detected automatically (aka CheckerFactory)
         // CheckerFactory needs the configuration
-        Set<Class> checkerClasses = myConfig.getConfigItemByName(Configuration.ITEM_NAME_checksToExecute)
+        List<Class> checkerClasses = myConfig.getChecksToExecute()
         this.checkers = CheckerCreator.createCheckerClassesFrom( checkerClasses, myConfig )
 
         this.resultsForAllPages = new PerRunResults()
 
-        this.checkingResultsDir = myConfig.getConfigItemByName(Configuration.ITEM_NAME_checkingResultsDir)
-        this.junitResultsDir = myConfig.getConfigItemByName(Configuration.ITEM_NAME_junitResultsDir)
+        this.checkingResultsDir = myConfig.getCheckingResultsDir()
+        this.junitResultsDir = myConfig.getJunitResultsDir()
 
         logger.debug("AllChecksRunner created with ${this.checkers.size()} checkers for ${filesToCheck.size()} files")
     }
@@ -88,7 +88,7 @@ class AllChecksRunner {
      * performs all available checks on pageToCheck
      *
      */
-    public PerRunResults performAllChecks() {
+    PerRunResults performAllChecks() {
 
         logger.debug "entered performAllChecks"
 
@@ -191,7 +191,7 @@ class AllChecksRunner {
      * line with default settings...
      * @param args
      */
-    public static void main(String[] args) {
+    static void main(String[] args) {
         // TODO: read parameter from command line
 
         // empty method is currently marked "prio-2" issue by CodeNarc... we'll ignore that

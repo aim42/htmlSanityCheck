@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,7 +20,9 @@ public class MissingLocalResourcesChecker extends Checker {
     public static final String MLRC_MESSAGE_MISSING = "missing";
     public static final String MLRC_REFCOUNT = ", reference count: ";
     private static final Logger logger = LoggerFactory.getLogger(MissingLocalResourcesChecker.class);
-    private Set<String> localResourcesSet;
+    // NOTE that we need, both the full list as well as the unique set of resources
+    // List of the local resources referenced in anchor tags
+    private List<String> localResourcesList;
     /**
      * The base directory to resolve absolute paths.
      */
@@ -29,14 +32,10 @@ public class MissingLocalResourcesChecker extends Checker {
      * relative paths.
      */
     private File currentDir;
-    /**
-     * True to require files to be referenced and not directories. Useful if the web server doesn't
-     * support a default directory, such as Amazon S3.
-     */
-    private final boolean requireFiles = false;
+
     public MissingLocalResourcesChecker(Configuration pConfig) {
         super(pConfig);
-        baseDir = ((File) (pConfig.getConfigItemByName(Configuration.getITEM_NAME_sourceDir())));
+        baseDir = pConfig.getSourceDir();
     }
 
     @Override
@@ -52,9 +51,12 @@ public class MissingLocalResourcesChecker extends Checker {
         List<String> allHrefs = pageToCheck.getAllHrefStrings();
 
         // now filter out all local resources
+        localResourcesList = allHrefs.stream().filter(Web::isLocalResource).collect(Collectors.toList());
 
         // now filter out all local resources
-        localResourcesSet = allHrefs.stream().filter(Web::isLocalResource).collect(Collectors.toSet());
+        // unique local references - each one is unique
+        // created from the List of all by toSet() method
+        Set<String> localResourcesSet = new HashSet<>(localResourcesList);
 
         logger.debug("local resources set: " + localResourcesSet);
 
@@ -71,7 +73,7 @@ public class MissingLocalResourcesChecker extends Checker {
 
     private void checkAllLocalResources(Set<String> localResources) {
 
-        localResources.forEach(localResource -> checkSingleLocalResource(localResource));
+        localResources.forEach(this::checkSingleLocalResource);
     }
 
     private void checkSingleLocalResource(String localResource) {
@@ -83,7 +85,7 @@ public class MissingLocalResourcesChecker extends Checker {
         getCheckingResults().incNrOfChecks();
 
         // we need to strip the localResource of #anchor-parts
-        String localResourcePath = null;
+        String localResourcePath;
         try {
             localResourcePath = new URI(localResource).getPath();
         } catch (URISyntaxException e) {
@@ -113,9 +115,11 @@ public class MissingLocalResourcesChecker extends Checker {
         String findingText = MLRC_MESSAGE_PREFIX + " \"" + nonExistingLocalResource + "\" " + MLRC_MESSAGE_MISSING;
 
         // how often is localResource referenced?
-        int nrOfOccurrences = (int) localResourcesSet.stream().filter(et -> et.equals(nonExistingLocalResource)).count();
+        int nrOfOccurrences = (int) localResourcesList.stream().filter(et -> et.equals(nonExistingLocalResource)).count();
 
-        if (nrOfOccurrences > 1) findingText += MLRC_REFCOUNT + nrOfOccurrences;
+        if (nrOfOccurrences > 1) {
+            findingText += MLRC_REFCOUNT + nrOfOccurrences;
+        }
 
         // add Finding to our current checking results, increment nrOfFindings by nrOfOccurrences
         getCheckingResults().newFinding(findingText, nrOfOccurrences);

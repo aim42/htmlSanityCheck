@@ -2,6 +2,9 @@
 
 package org.aim42.htmlsanitycheck.collect;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,13 +19,24 @@ import java.util.stream.Collectors;
 public class SingleCheckResults implements CheckResults {
 
     // the actual findings
-    public ArrayList<Finding> findings;
+    public List<Finding> findings;
+    @Setter
+    @Getter
     String whatIsChecked;    // i.e. "Missing Local Images Check"
     // source-whatIsTheProblem is checked against target-whatIsTheProblem
+    @Setter
+    @Getter
     String sourceItemName;    // i.e. image-src-attribute, anchor/link
-    String targetItemName;    // i.e. local-image-file, id/bookmark
+    @Setter
+    @Getter
+    private String targetItemName;    // i.e. local-image-file, id/bookmark
+    @Setter
+    @Getter
     String generalRemark;     // i.e. "Internet not available"
+    @Getter
     int nrOfItemsChecked;
+    // nrOfIssues can be larger than findings.size(),
+    // if some findings occur more than once
     private int nrOfIssues;
 
     /**
@@ -35,47 +49,10 @@ public class SingleCheckResults implements CheckResults {
 
         this.nrOfItemsChecked = 0;
         this.nrOfIssues = 0;
-        this.findings = new ArrayList<Finding>();
+        this.findings = new ArrayList<>();
         this.generalRemark = "";
     }
 
-    public String getWhatIsChecked() {
-        return whatIsChecked;
-    }
-
-    public void setWhatIsChecked(String whatIsChecked) {
-        this.whatIsChecked = whatIsChecked;
-    }
-
-    public String getSourceItemName() {
-        return sourceItemName;
-    }
-
-    public void setSourceItemName(String sourceItemName) {
-        this.sourceItemName = sourceItemName;
-    }
-
-    public String getTargetItemName() {
-        return targetItemName;
-    }
-
-    public void setTargetItemName(String targetItemName) {
-        this.targetItemName = targetItemName;
-    }
-
-    public String getGeneralRemark() {
-        return generalRemark;
-    }
-    // nrOfIssues can be larger than findings.size(),
-    // if some findings occur more than once
-
-    public void setGeneralRemark(String generalRemark) {
-        this.generalRemark = generalRemark;
-    }
-
-    public int getNrOfItemsChecked() {
-        return nrOfItemsChecked;
-    }
 
     /**
      * add a single finding to the collection,
@@ -98,13 +75,15 @@ public class SingleCheckResults implements CheckResults {
 
 
     /**
-     * add a single finding to the collection of Finding instances
+     * Add a single finding to the collection of Finding instances
      *
-     * @param singleFinding
+     * @param singleFinding the finding to be added
      */
     public void addFinding(Finding singleFinding) {
-        findings.add(singleFinding);
-        incNrOfIssues();
+        if (null != singleFinding) {
+            findings.add(singleFinding);
+            incNrOfIssues();
+        }
     }
 
     /**
@@ -120,10 +99,6 @@ public class SingleCheckResults implements CheckResults {
      */
     public void incNrOfChecks() {
         nrOfItemsChecked += 1;
-    }
-
-    public void addNrOfChecks(int nrOfChecksToAdd) {
-        nrOfItemsChecked += nrOfChecksToAdd;
     }
 
     public void setNrOfChecks(int nrOfChecks) {
@@ -152,7 +127,7 @@ public class SingleCheckResults implements CheckResults {
 
 
     @Override
-    public ArrayList<Finding> getFindings() {
+    public List<Finding> getFindings() {
         return findings;
     }
 
@@ -161,8 +136,7 @@ public class SingleCheckResults implements CheckResults {
      * (used to simplify testing)
      */
     public List<String> getFindingMessages() {
-        return findings.stream().map(finding -> finding.getWhatIsTheProblem()).collect(Collectors.toList());
-
+        return findings.stream().map(Finding::getWhatIsTheProblem).collect(Collectors.toList());
     }
 
 
@@ -176,13 +150,9 @@ public class SingleCheckResults implements CheckResults {
 
     @Override
     public String toString() {
-        int nrOfProblems = nrOfProblems();
-        return "Checking results for $whatIsChecked" + '\n' +
-                " $nrOfItemsChecked $sourceItemName checked," + '\n' +
-                " $nrOfProblems finding(s)" + '\n' +
-                findings.stream().map(it -> it.toString()).collect(Collectors.joining("\n"));
-
-
+        return String.format ("Checking results for %s\n  %d '%s' items checked,\n  %d finding(s):\n    %s",
+                whatIsChecked, nrOfItemsChecked, sourceItemName, nrOfIssues,
+                findings.stream().map(Finding::toString).collect(Collectors.joining("\n    ")));
     }
 
 

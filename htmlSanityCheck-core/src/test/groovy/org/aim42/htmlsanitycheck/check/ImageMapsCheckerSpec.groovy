@@ -24,7 +24,7 @@ class ImageMapsCheckerSpec extends Specification {
 
         when:
         imageMapsChecker = new ImageMapChecker()
-        collector = imageMapsChecker.performCheck( htmlPage )
+        collector = imageMapsChecker.performCheck(htmlPage)
 
         then:
         collector?.getFindingMessages()?.contains(msg)
@@ -33,27 +33,27 @@ class ImageMapsCheckerSpec extends Specification {
 
         where:
 
-        nrOfFindings | imageMapStr | msg
+        nrOfFindings | imageMapStr              | msg
         // no imagemap, no check, no problem
-        //0            | """<img src="x.jpg">""" | ""
+        //        0            | """<img src="x.jpg">"""  | ""
 
         // a correct imagemap
-        //0          | IMG1 + MAP1 + ID1       | ""
+        //        0            | IMG1 + MAP1 + ID1        | ""
 
         // image with usemap-ref but no map!
-        1 | IMG1 | """ImageMap "map1" (referenced by image "image1.jpg") missing."""
+        1            | IMG1                     | """ImageMap "map1" (referenced by image "image1.jpg") missing."""
 
         // one image but TWO maps with identical name
-        1 | IMG1 + MAP1 + MAP1 + ID1 | """2 imagemaps with identical name "map1" exist."""
+        1            | IMG1 + MAP1 + MAP1 + ID1 | """2 imagemaps with identical name "map1" exist."""
 
         // no image, dangling map
-        1 | MAP1 + ID1 | """ImageMap "map1" not referenced by any image."""
+        1            | MAP1 + ID1               | """ImageMap "map1" not referenced by any image."""
 
         // empty map
-        1 | IMG1 + MAP1_EMPTY | "ImageMap \"map1\" has no area tags."
+        1            | IMG1 + MAP1_EMPTY        | "ImageMap \"map1\" has no area tags."
 
         // href link target missing
-        1 | IMG1 + MAP1 + ID2 | "ImageMap \"map1\" refers to missing link \"id1\"."
+        1            | IMG1 + MAP1 + ID2        | "ImageMap \"map1\" refers to missing link \"id1\"."
     }
 
 

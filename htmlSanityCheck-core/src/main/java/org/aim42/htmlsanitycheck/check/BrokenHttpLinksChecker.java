@@ -12,7 +12,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Collection;
 import java.util.Set;
 
 
@@ -23,9 +22,9 @@ import java.util.Set;
 class BrokenHttpLinksChecker extends Checker {
 
     // get the (configured) statusCodes, just syntactic sugar...
-    private final Collection<Integer> successCodes;
-    private final Collection<Integer> warningCodes;
-    private final Collection<Integer> errorCodes;
+    private final Set<Integer> successCodes;
+    private final Set<Integer> warningCodes;
+    private final Set<Integer> errorCodes;
     // all href attributes with http(s) protocol,
     // including potential duplicates
     // need that to calculate "nrOfOccurrences"
@@ -36,9 +35,9 @@ class BrokenHttpLinksChecker extends Checker {
     BrokenHttpLinksChecker(Configuration pConfig) {
         super(pConfig);
 
-        errorCodes =  getMyConfig().getConfigItemByNameSetOfIntegers(Configuration.getITEM_NAME_httpErrorCodes());
-        warningCodes =  getMyConfig().getConfigItemByNameSetOfIntegers(Configuration.getITEM_NAME_httpWarningCodes());
-        successCodes =  getMyConfig().getConfigItemByNameSetOfIntegers(Configuration.getITEM_NAME_httpSuccessCodes());
+        errorCodes =  getMyConfig().getHttpErrorCodes();
+        warningCodes =  getMyConfig().getHttpWarningCodes();
+        successCodes =  getMyConfig().getHttpSuccessCodes();
     }
 
     @Override
@@ -81,7 +80,6 @@ class BrokenHttpLinksChecker extends Checker {
     private void checkAllHttpLinks() {
         // for all hrefSet check if the corresponding link is valid
         hrefSet.forEach(this::doubleCheckSingleHttpLink);
-
     }
 
     /**
@@ -121,10 +119,11 @@ class BrokenHttpLinksChecker extends Checker {
 
                 // issue 218 and 219: some web servers respond with 403 or 405
                 // when given HEAD requests. Therefore, try GET
-                if (successCodes.contains(responseCode)) return;
-
-                    // issue 244: special case for redirects
-                    // thanks to https://stackoverflow.com/questions/39718059/read-from-url-in-groovy-with-redirect
+                if (successCodes.contains(responseCode)) {
+                    return;
+                }
+                // issue 244: special case for redirects
+                // thanks to https://stackoverflow.com/questions/39718059/read-from-url-in-groovy-with-redirect
                 else if (Web.HTTP_REDIRECT_CODES.contains(responseCode)) {
                     String newLocation;
                     if (firstConnection.getHeaderField("Location") != null) {
@@ -137,7 +136,6 @@ class BrokenHttpLinksChecker extends Checker {
                 }
                 // in case of errors or warnings,
                 // try again with GET.
-
                 else {
                     HttpURLConnection secondConnection = getNewURLConnection(url);
                     secondConnection.setRequestMethod("GET");
@@ -145,16 +143,16 @@ class BrokenHttpLinksChecker extends Checker {
                     secondConnection.disconnect();
 
                     if (successCodes.contains(finalResponseCode)) {
-                        problem = "";
+                        return;
                     } else if (warningCodes.contains(finalResponseCode)) {
                         problem = "Warning:";
                     } else if (errorCodes.contains(finalResponseCode)) {
-                        problem = "Warning:";
+                        problem = "Error:";
                     } else {
-                        problem = "Warning:";
+                        problem = "Error: Unknown or unclassified response code:";
                     }
 
-                    problem += href + " returned statuscode " + responseCode + ".";
+                    problem += String.format("'%s' returned statuscode %d.", href, responseCode);
 
                     getCheckingResults().addFinding(new Finding(problem));
 
@@ -187,7 +185,7 @@ class BrokenHttpLinksChecker extends Checker {
         // httpConnectionTimeout is a configuration parameter
         // that defaults to 5000 (msec)
         connection.setConnectTimeout(
-                (Integer) getMyConfig().getConfigItemByName(Configuration.getITEM_NAME_httpConnectionTimeout())
+                getMyConfig().getHttpConnectionTimeout()
         );
 
         // to avoid nasty 403 errors (forbidden), we set a referrer and user-agent
@@ -203,7 +201,7 @@ class BrokenHttpLinksChecker extends Checker {
 
     // if configured, ip addresses in URLs yield warnings
     private void checkIfIPAddress(URL url, String href) {
-        if (!(Boolean) getMyConfig().getConfigItemByName(Configuration.getITEM_NAME_ignoreIPAddresses())) {
+        if (!getMyConfig().getIgnoreIPAddresses()) {
             String host = url.getHost();
 
             if (host.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")) {
@@ -215,7 +213,7 @@ class BrokenHttpLinksChecker extends Checker {
 
     // if configured ,localhost-URLs yield warnings!
     private void checkIfLocalhostURL(URL url, String href) {
-        if (!(Boolean) getMyConfig().getConfigItemByName(Configuration.getITEM_NAME_ignoreLocalhost())) {
+        if (!getMyConfig().getIgnoreLocalhost()) {
             String host = url.getHost();
             if (("localhost".equals(host)) || host.startsWith("127.0.0")) {
                 Finding localhostWarning = new Finding("Warning: localhost urls indicates suspicious environment dependency: href=" + href);

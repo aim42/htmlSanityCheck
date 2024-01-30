@@ -32,8 +32,8 @@ def Elements getMapsByName( Document doc, String mapName ) {
     return doc.select("""map[name=${mapName}]""")
 }
 
-def ArrayList<String> getHrefsForMap( Element map) {
-   ArrayList<String> hrefs = new ArrayList()
+def List<String> getHrefsForMap( Element map) {
+   List<String> hrefs = new ArrayList()
    
    getAreasForMap( map )?.each{ area ->
        hrefs += area.attr("href")
@@ -98,7 +98,7 @@ maps.each  { oneMap ->
  
         
    // 3.) are there hrefs defined within areas?
-   ArrayList<String> hrefs = getHrefsForMap( oneMap )
+   List<String> hrefs = getHrefsForMap( oneMap )
    println "hrefs = " + hrefs
  
  

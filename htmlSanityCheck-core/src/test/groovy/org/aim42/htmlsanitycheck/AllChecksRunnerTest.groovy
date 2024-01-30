@@ -16,15 +16,13 @@ class AllChecksRunnerTest {
     private Configuration myConfig = new Configuration()
 
     @Test
-    public void testSingleCorrectHTMLFile() {
+    void testSingleCorrectHTMLFile() {
         String HTML = """$HTML_HEAD<title>hsc</title><body></body></html>"""
 
         // create file with proper html content
         tmpFile = File.createTempFile("testfile", ".html") <<HTML
 
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, [tmpFile])
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile.parentFile)
-
+        myConfig.setSourceConfiguration(tmpFile.parentFile, [tmpFile] as Set)
 
         // wrap fileToTest in Collection to comply to AllChecksRunner API
         allChecksRunner = new AllChecksRunner(myConfig )
@@ -36,7 +34,7 @@ class AllChecksRunnerTest {
         // 0 items checked
         // 0 findings
         // title = "hsc"
-        int expected = AllCheckers.checkerClazzes.size()
+        int expected = AllCheckers.CHECKER_CLASSES.size()
 
         TestCase.assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
 
@@ -52,7 +50,7 @@ class AllChecksRunnerTest {
 
 
     @Test
-    public void testSingleBrokenHtmlFile() {
+    void testSingleBrokenHtmlFile() {
         String HTML = """$HTML_HEAD<body><title>Faulty Dragon</title></body>
                    <h1 id="aim42">dummy-heading-1</h1>
                    <h2 id="aim42">duplicate id</h2>
@@ -62,14 +60,13 @@ class AllChecksRunnerTest {
         // create file
         tmpFile = File.createTempFile("testfile", ".html") << HTML
 
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDocuments, [tmpFile])
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, tmpFile.parentFile)
+        myConfig.setSourceConfiguration(tmpFile.parentFile, [tmpFile] as Set)
 
         allChecksRunner = new AllChecksRunner( myConfig )
 
         SinglePageResults pageResults = allChecksRunner.performChecksForOneFile( tmpFile )
 
-        int expected = AllCheckers.checkerClazzes.size()
+        int expected = AllCheckers.CHECKER_CLASSES.size()
         TestCase.assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
 
         TestCase.assertEquals("expected 2 findings", 2, pageResults.nrOfFindingsOnPage())
@@ -77,14 +74,17 @@ class AllChecksRunnerTest {
     }
 
     @Test
-    public void testUsingSubsetOfChecks() {
+    void testUsingSubsetOfChecks() {
         tmpFile = File.createTempFile("testfile", ".html") << """$HTML_HEAD<body><title>hsc</title></body></html>"""
 
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, [tmpFile])
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tmpFile.parentFile)
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_checksToExecute, [AllCheckers.checkerClazzes.first()])
+        Configuration config = Configuration
+                .builder()
+                .sourceDir(tmpFile.parentFile)
+                .sourceDocuments([tmpFile] as Set)
+                .checksToExecute([AllCheckers.CHECKER_CLASSES.first()])
+                .build()
 
-        allChecksRunner = new AllChecksRunner(myConfig)
+        allChecksRunner = new AllChecksRunner(config)
         SinglePageResults pageResults = allChecksRunner.performChecksForOneFile(tmpFile)
 
         TestCase.assertEquals(1, pageResults.singleCheckResults.size())

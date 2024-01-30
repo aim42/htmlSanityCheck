@@ -153,7 +153,6 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
     }
 
-
     def "bad amazon link is identified as problem"() {
 
         given: "an HTML page with a single (good) amazon link"
@@ -215,7 +214,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         then: "then collector contains one error message"
         collector.getFindings().size() == 1
 
-        collector?.getFindings()?.first().whatIsTheProblem.contains("https://arc42.de")
+        collector?.getFindings()?.first()?.whatIsTheProblem?.contains("https://arc42.de")
 
     }
 
@@ -237,8 +236,8 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
         then: "warning is given"
 
-        collector?.getFindings()?.first().whatIsTheProblem.contains("Warning")
-        collector?.getFindings()?.first().whatIsTheProblem.contains("suspicious")
+        collector?.getFindings()?.first()?.whatIsTheProblem?.contains("Warning")
+        collector?.getFindings()?.first()?.whatIsTheProblem?.contains("suspicious")
 
     }
 }

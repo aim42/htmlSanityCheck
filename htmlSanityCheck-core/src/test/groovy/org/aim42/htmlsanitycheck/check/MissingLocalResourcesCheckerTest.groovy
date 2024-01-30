@@ -20,7 +20,7 @@ class MissingLocalResourcesCheckerTest {
     private Configuration myConfig
 
     @Before
-    public void setUp() {
+    void setUp() {
         collector = new SingleCheckResults()
         myConfig = new Configuration()
     }
@@ -30,7 +30,7 @@ class MissingLocalResourcesCheckerTest {
      * test that we can find a referenced local file in subdirectory
      */
     @Test
-    public void testExistingLocalResourceIsFound() {
+    void testExistingLocalResourceIsFound() {
 
         def (File index, String fname, File d1) = createNestedTempDirWithFile()
 
@@ -38,8 +38,7 @@ class MissingLocalResourcesCheckerTest {
 
         assertTrue( "newly created html file exists", index.exists())
 
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, d1 )
-
+        myConfig.setSourceConfiguration(d1, [index] as Set)
 
         htmlPage = new HtmlPage( index )
 
@@ -57,7 +56,7 @@ class MissingLocalResourcesCheckerTest {
      * a "complex" local reference is an anchor of the form <a href="dir/file.html#anchor>...
      *
      */
-    public void testExistingComplexLocalReferenceIsFound() {
+    void testExistingComplexLocalReferenceIsFound() {
 
        def (File index, String fname, File d1) = createNestedTempDirWithFile()
 
@@ -65,7 +64,7 @@ class MissingLocalResourcesCheckerTest {
 
         assertTrue( "newly created html file exists", index.exists())
 
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, d1 )
+        myConfig.setSourceConfiguration(d1, [index] as Set)
 
         htmlPage = new HtmlPage( index )
 
@@ -90,7 +89,7 @@ class MissingLocalResourcesCheckerTest {
 
 
     @Test
-    public void testPureCrossReferenceIsNotChecked() {
+    void testPureCrossReferenceIsNotChecked() {
         String HTML = """${HtmlConst.HTML_HEAD}
             <h1>dummy-heading-1</h1>
             <a href="#aim42">aim42</a>
@@ -110,7 +109,7 @@ class MissingLocalResourcesCheckerTest {
 
 
     @Test
-    public void testReferenceToLocalFileIsChecked() {
+    void testReferenceToLocalFileIsChecked() {
         String HTML = """${HtmlConst.HTML_HEAD}
             <h1>dummy-heading-1</h1>
             <a href="a_nonexisting_doc_uh7mP0R3YfR2__.pdf">nonexisting-doc</a>
@@ -119,7 +118,7 @@ class MissingLocalResourcesCheckerTest {
 
         htmlPage = new HtmlPage( HTML )
 
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, new File("."))
+        myConfig.setSourceConfiguration(new File("."), [] as Set)
         missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
         collector = missingLocalResourcesChecker.performCheck( htmlPage )
 
@@ -135,7 +134,7 @@ class MissingLocalResourcesCheckerTest {
     helper to created nested directory structure
      */
 
-    private List createNestedTempDirWithFile() {
+    private static List createNestedTempDirWithFile() {
         // 1.) create tmp directory d1 with subdir d2
         File d1 = File.createTempDir()
         File d2 = new File(d1, "/d2")
@@ -161,7 +160,7 @@ class MissingLocalResourcesCheckerTest {
 
 
     @Test
-    public void testCheckAbsoluteResource() {
+    void testCheckAbsoluteResource() {
 		File tempFolder = File.createTempDir()
 
 		File filesFolder = new File(tempFolder, "files")
@@ -173,7 +172,7 @@ class MissingLocalResourcesCheckerTest {
 <body><p><a href="/files/doc.pdf" /></p></body>
 </html>"""
 
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tempFolder )
+        myConfig.setSourceConfiguration(tempFolder, [htmlFile] as Set)
 
         htmlPage = new HtmlPage( htmlFile )
 

@@ -1,9 +1,9 @@
 package org.aim42.htmlsanitycheck.check;
 
 import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.List;
 
-/************************************************************************
+/* ***********************************************************************
  * This is free software - without ANY guarantee!
  *
  *
@@ -23,14 +23,13 @@ import java.util.LinkedHashSet;
  *
  *********************************************************************** */
 public class AllCheckers {
-    public static final LinkedHashSet<Class<? extends Checker>> checkerClazzes =
-            new LinkedHashSet<Class<? extends Checker>>(
-                    Arrays.asList(
-                            BrokenCrossReferencesChecker.class,
-                            BrokenHttpLinksChecker.class,
-                            DuplicateIdChecker.class,
-                            ImageMapChecker.class,
-                            MissingAltInImageTagsChecker.class,
-                            MissingImageFilesChecker.class,
-                            MissingLocalResourcesChecker.class));
+    public static final List<Class<? extends Checker>> CHECKER_CLASSES =
+            Arrays.asList(
+                    BrokenCrossReferencesChecker.class,
+                    BrokenHttpLinksChecker.class,
+                    DuplicateIdChecker.class,
+                    ImageMapChecker.class,
+                    MissingAltInImageTagsChecker.class,
+                    MissingImageFilesChecker.class,
+                    MissingLocalResourcesChecker.class);
 }

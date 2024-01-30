@@ -24,7 +24,6 @@
 package net.ricecode.similarity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -57,7 +56,7 @@ public class StringSimilarityServiceImpl implements StringSimilarityService {
      * @return A list of similarity scores.
      */
     public List<SimilarityScore> scoreAll(List<String> features, String target) {
-        ArrayList<SimilarityScore> scores = new ArrayList<SimilarityScore>();
+        List<SimilarityScore> scores = new ArrayList<>();
 
         for (String feature : features) {
             double score = strategy.score(feature, target);
@@ -99,11 +98,11 @@ public class StringSimilarityServiceImpl implements StringSimilarityService {
      * @return A SimilarityScore that has the top value amongst the features, according to the comparator.
      */
     public SimilarityScore findTop(List<String> features, String target, Comparator<SimilarityScore> comparator) {
-        if (features.size() == 0) {
+        if (features.isEmpty()) {
             return null;
         }
         List<SimilarityScore> scores = scoreAll(features, target);
-        Collections.sort(scores, comparator);
+        scores.sort(comparator);
         return scores.get(0);
     }
 
@@ -119,11 +118,11 @@ public class StringSimilarityServiceImpl implements StringSimilarityService {
      * according to the comparator
      */
     public List<SimilarityScore> findBestN(List<String> features, String target, int n) {
-        List<SimilarityScore> result = new ArrayList<SimilarityScore>();
+        List<SimilarityScore> result = new ArrayList<>();
 
-        if ((features.size() > 0) && (n >= 1)) {
+        if ((!features.isEmpty()) && (n >= 1)) {
             List<SimilarityScore> scores = scoreAll(features, target);
-            Collections.sort(scores, new DescendingSimilarityScoreComparator());
+            scores.sort(new DescendingSimilarityScoreComparator());
 
             // fails if n> scores.size(): result = scores.subList(0, n);
             result = scores.subList(0, Math.min(scores.size(), n));
