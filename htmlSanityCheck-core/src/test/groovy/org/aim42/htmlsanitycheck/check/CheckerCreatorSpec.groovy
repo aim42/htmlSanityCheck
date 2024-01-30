@@ -14,7 +14,7 @@ class CheckerCreatorSpec extends Specification {
 
     String pMethod
 
-    Configuration myConfig = new Configuration()
+    Configuration myConfig = Configuration.builder().sourceDir(new File('.')).build()
 
     def setup() {
         // ... takes HtmlPage as parameter
@@ -44,12 +44,12 @@ class CheckerCreatorSpec extends Specification {
         Checker oneChecker
 
         setup:
-        ArrayList<Class> checkerClazzes = [BrokenCrossReferencesChecker.class,
-                                           DuplicateIdChecker.class]
+        List<Class> checkerClazzes = [BrokenCrossReferencesChecker.class,
+                                      DuplicateIdChecker.class]
 
 
         when:
-        checkers = CheckerCreator.createCheckerClassesFrom( checkerClazzes, myConfig )
+        checkers = CheckerCreator.createCheckerClassesFrom(checkerClazzes, myConfig)
         then:
         checkers.size() == 2
 
@@ -92,15 +92,15 @@ class CheckerCreatorSpec extends Specification {
 
         where:
 
-        checkerClazz                                                 | superClazz
-        org.aim42.htmlsanitycheck.check.BrokenCrossReferencesChecker | org.aim42.htmlsanitycheck.check.SuggestingChecker
+        checkerClazz                 | superClazz
+        BrokenCrossReferencesChecker | SuggestingChecker
 
         // MIFChecker shall be SuggestingChecker - when issue #113 is fixed!
-        org.aim42.htmlsanitycheck.check.MissingImageFilesChecker     | org.aim42.htmlsanitycheck.check.Checker
+        MissingImageFilesChecker     | Checker
 
-        org.aim42.htmlsanitycheck.check.DuplicateIdChecker           | org.aim42.htmlsanitycheck.check.Checker
-        org.aim42.htmlsanitycheck.check.MissingAltInImageTagsChecker | org.aim42.htmlsanitycheck.check.Checker
-        org.aim42.htmlsanitycheck.check.ImageMapChecker              | org.aim42.htmlsanitycheck.check.Checker
+        DuplicateIdChecker           | Checker
+        MissingAltInImageTagsChecker | Checker
+        ImageMapChecker              | Checker
 
 
     }
@@ -108,47 +108,45 @@ class CheckerCreatorSpec extends Specification {
 
     def "creating unknown checkers throws exception"() {
         when:
-        Checker checker = CheckerCreator.createSingleChecker(java.lang.String.class, myConfig)
+        CheckerCreator.createSingleChecker(java.lang.String.class, myConfig)
 
         then:
         thrown(UnknownCheckerException)
     }
-	
-	def "can create MissingImageFilesChecker instance"() {
+
+    def "can create MissingImageFilesChecker instance"() {
         MissingImageFilesChecker oneChecker
 
         when:
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, new File('.'))
-        oneChecker = CheckerCreator.createSingleChecker(MissingImageFilesChecker.class, myConfig)
+        oneChecker = CheckerCreator.createSingleChecker(MissingImageFilesChecker.class, myConfig) as MissingImageFilesChecker
 
         // performCheck method returns SingleCheckResults
         def fullDeclaration = "public org.aim42.htmlsanitycheck.collect.SingleCheckResults org.aim42.htmlsanitycheck.check.Checker.performCheck(org.aim42.htmlsanitycheck.html.HtmlPage)"
 
         pMethod = oneChecker.class.getMethod("performCheck", params)
 
-        then:'performCheck method is present'
+        then: 'performCheck method is present'
         notThrown(NoSuchMethodException)
         pMethod == fullDeclaration
-		and:'baseDir is present'
-		oneChecker.baseDir
+        and: 'baseDir is present'
+        oneChecker.baseDir
     }
 
-	def "can create MissingLocalResourcesChecker instance"() {
+    def "can create MissingLocalResourcesChecker instance"() {
         MissingLocalResourcesChecker oneChecker
 
         when:
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, new File('.'))
-        oneChecker = CheckerCreator.createSingleChecker(MissingLocalResourcesChecker.class, myConfig)
+        oneChecker = CheckerCreator.createSingleChecker(MissingLocalResourcesChecker.class, myConfig) as MissingLocalResourcesChecker
 
         // performCheck method returns SingleCheckResults
         def fullDeclaration = "public org.aim42.htmlsanitycheck.collect.SingleCheckResults org.aim42.htmlsanitycheck.check.Checker.performCheck(org.aim42.htmlsanitycheck.html.HtmlPage)"
 
         pMethod = oneChecker.class.getMethod("performCheck", params)
 
-        then:'performCheck method is present'
+        then: 'performCheck method is present'
         notThrown(NoSuchMethodException)
         pMethod == fullDeclaration
-        and:'baseDir is present'
+        and: 'baseDir is present'
         oneChecker.baseDir
     }
 }

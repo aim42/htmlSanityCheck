@@ -6,12 +6,10 @@ package org.aim42.htmlsanitycheck.report;
  * to "XdirXonefileXhtml" or similar.
  */
 public class CreateLinkUtil {
+    // \W is regex for all non-word characters
+    static final String regex = "[\\W ]";
+
     public static String convertToLink(String stringWithNonWordChars) {
-
-        // \W is regex for all non-word characters
-        String regex = "\\W ";
-
         return stringWithNonWordChars.replaceAll(regex, "X");
     }
-
 }

@@ -1,7 +1,9 @@
 package org.aim42.htmlsanitycheck.check
 
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
+import org.aim42.htmlsanitycheck.html.HtmlElement
 import org.aim42.htmlsanitycheck.html.HtmlPage
+import org.jsoup.nodes.Element
 import org.junit.Before
 import org.junit.Test
 
@@ -17,13 +19,13 @@ class DuplicateIdCheckerTest {
     SingleCheckResults collector
 
     @Before
-    public void setUp() {
+    void setUp() {
         collector = new SingleCheckResults()
     }
 
 
     @Test
-    public void testOneDuplicateId() {
+    void testOneDuplicateId() {
         String HTML_WITH_DUPLICATE_ID = '''
            <html>
              <head></head>
@@ -46,7 +48,7 @@ class DuplicateIdCheckerTest {
     }
 
     @Test
-    public void testManyDuplicateId() {
+    void testManyDuplicateId() {
         String HTML_WITH_DUPLICATE_ID = '''
            <html>
              <head></head>
@@ -74,7 +76,7 @@ class DuplicateIdCheckerTest {
     }
 
     @Test
-    public void testGetAllTagsWithSpecificId() {
+    void testGetAllTagsWithSpecificId() {
         String HTML_WITH_DUPLICATE_ID = '''
            <html>
              <head></head>
@@ -89,17 +91,17 @@ class DuplicateIdCheckerTest {
            </html>'''
 
         pageToCheck = new HtmlPage(HTML_WITH_DUPLICATE_ID)
-        ArrayList tagsWithId = pageToCheck.getAllIds()
+        List tagsWithId = pageToCheck.getAllIds()
         //Set idStringsSet = pageToCheck.getAllIdStrings().toSet()
 
         assertEquals("Expected 4 tags with ids", 4, tagsWithId.size())
 
-        ArrayList<String> expectedAim43Ids =
+        List<HtmlElement> expectedAim43Ids =
                 DuplicateIdChecker.getAllTagsWithSpecificId( "aim43", tagsWithId)
         assertEquals(" Expected ONE tag with id='aim43", 1, expectedAim43Ids.size() )
 
 
-        ArrayList<String> expectedAim42Ids =
+        List<HtmlElement> expectedAim42Ids =
                 DuplicateIdChecker.getAllTagsWithSpecificId( "aim42", tagsWithId)
         assertEquals(" Expected TWO tags with id='aim42", 2, expectedAim42Ids.size() )
 

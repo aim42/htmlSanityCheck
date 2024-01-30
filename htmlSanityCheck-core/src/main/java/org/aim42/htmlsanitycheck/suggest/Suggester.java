@@ -5,7 +5,6 @@ import net.ricecode.similarity.SimilarityScore;
 import net.ricecode.similarity.StringSimilarityService;
 import net.ricecode.similarity.StringSimilarityServiceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +25,7 @@ public class Suggester {
      * @param options list of available options where the suggestion is taken from
      * @return a suggested alternative for target from the options
      */
-    static String determineSingleSuggestion(String target, ArrayList<String> options) {
+    static String determineSingleSuggestion(String target, List<String> options) {
 
         service = new StringSimilarityServiceImpl(new JaroWinklerStrategy());
 
@@ -40,7 +39,7 @@ public class Suggester {
      * @param target  string that is not contained in options, similarity-compared to every entry in options
      * @param options list of available options where suggestions are taken from
      * @param n       number of suggestions to return. Should better be lower than options.size()
-     * @return ArrayList of suggestions
+     * @return List of suggestions
      */
     public static List<String> determineNSuggestions(String target, List<String> options, int n) {
         service = new StringSimilarityServiceImpl(new JaroWinklerStrategy());
@@ -54,7 +53,7 @@ public class Suggester {
     }
 }
 
-/************************************************************************
+/* ***********************************************************************
  * This is free software - without ANY guarantee!
  * <p/>
  * <p/>

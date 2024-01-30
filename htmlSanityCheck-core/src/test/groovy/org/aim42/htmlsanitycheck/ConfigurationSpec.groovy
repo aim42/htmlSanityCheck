@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck
 
+import org.aim42.htmlsanitycheck.check.Checker
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -8,14 +9,10 @@ import spock.lang.Unroll
 
 class ConfigurationSpec extends Specification {
 
-    def CI_FileCheck_Name = "fileToCheck"
-    def CI_FileCheck_Value = "index.html"
-
     private final static HTML_HEADER = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <head></head><html>"""
 
     private File tempDir
     private File htmlFile
-    private File nonHtmlFile
 
     private Configuration myConfig
 
@@ -23,121 +20,64 @@ class ConfigurationSpec extends Specification {
         myConfig = new Configuration()
     }
 
-    /**
-     * The very basic SmokeTest for configuration items
-     * @return
-     */
-    def "can add and retrieve single config item"() {
-
-        when: "we add a single configuration item"
-        myConfig.addConfigurationItem(CI_FileCheck_Name, CI_FileCheck_Value)
-
-        then: "we can retrieve this item"
-        myConfig.getConfigItemByName(CI_FileCheck_Name) == CI_FileCheck_Value
-
-    }
-
-    def "checks if item is already present in configuration"() {
-        when: "we configure a single item"
-        myConfig.addConfigurationItem(CI_FileCheck_Name, "test")
-
-        then: "a check finds this item"
-        myConfig.checkIfItemPresent(CI_FileCheck_Name) == true
-    }
-
-
-    def "configuration item can be overwritten"() {
-        String oneITEM = "oneITEM"
-
-        given: "an (int) item is configured"
-        myConfig.addConfigurationItem(oneITEM, 10)
-
-        when: "this item is configured again!"
-        myConfig.addConfigurationItem(oneITEM, 42)
-
-        then: "only the last value is contained in Configuration"
-        myConfig.getConfigItemByName(oneITEM) == 42
-
-    }
-
-
-    def "not configured item yields null result"() {
-        given: " a single entry configuration"
-        myConfig.addConfigurationItem(CI_FileCheck_Name, CI_FileCheck_Value)
-
-        expect: "when a different config item is requested, null is returned"
-        myConfig.getConfigItemByName("NonExistingItem") == null
-    }
-
-    @Unroll
-    def "can add and retrieve item #itemName of type #itemValue.getClass()"() {
-        when: "we add #itemName"
-        myConfig.addConfigurationItem(itemName, itemValue)
-
-        and: "we retrieve that value from our configuration"
-        def value = myConfig.getConfigItemByName(itemName)
-
-
-        then: "we retrieve the correct value"
-        value == itemValue
-
-        and: "that value has the correct type"
-        value.getClass() == itemValue.getClass()
-
-        where:
-
-        itemName           | itemValue
-        "CI_FileName"      | "index.html"
-        "CI_NumberSmall"   | 42
-        "CI_Number2Bigger" | 80.000
-        "CI_Dir"           | "/report/htmlchecks/"
-        "CI_Bool"          | false
-        "CI_Map"           | [Warning: [300, 301, 305], Error: [400, 404]]
-        "CI_List"          | ["https://arc42.org", "https://aim42.org"]
-    }
-
-
     def "can overwrite http success codes"() {
 
         given: "configuration where 503 is success instead of error"
         int newSuccessCode = 503
-        ArrayList<Integer> httpSuccessCodes = [newSuccessCode]
+        Set<Integer> httpSuccessCodes = [newSuccessCode]
 
         when: "we overwrite the standard Configuration with this value"
-        myConfig.overwriteHttpSuccessCodes( httpSuccessCodes )
+        myConfig.overrideHttpSuccessCodes(httpSuccessCodes)
 
         then: "503 IS now contained in successCodes"
-        myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpSuccessCodes).contains(newSuccessCode)
+        myConfig.getHttpSuccessCodes().contains(newSuccessCode)
 
         and: "503 is NOT contained in errorCodes"
-        !myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpErrorCodes).contains(newSuccessCode)
+        !myConfig.getHttpErrorCodes().contains(newSuccessCode)
 
         and: "503 is NOT contained in warningCodes"
-        !myConfig.getConfigItemByName(Configuration.ITEM_NAME_httpWarningCodes).contains(newSuccessCode)
+        !myConfig.getHttpWarningCodes().contains(newSuccessCode)
 
     }
 
-    def "ignore null values in configuration"() {
-        final String itemName = "NonExistingItem"
+    def "can overwrite http warning codes"() {
 
-        when: "we try to add a null value to a config item"
-        myConfig.addConfigurationItem(itemName, null)
+        given: "configuration where 201 is warning instead of success"
+        int newWarningCode = 201
+        Set<Integer> httpWarningCodes = [newWarningCode]
 
-        then: "this value is NOT added to configuration"
-        myConfig.checkIfItemPresent( itemName ) == false
+        when: "we overwrite the standard Configuration with this value"
+        myConfig.overrideHttpWarningCodes(httpWarningCodes)
+
+        then: "201 IS now contained in warningCodes"
+        myConfig.getHttpWarningCodes().contains(newWarningCode)
+
+        and: "201 is NOT contained in errorCodes"
+        !myConfig.getHttpErrorCodes().contains(newWarningCode)
+
+        and: "201 is NOT contained in successCodes"
+        !myConfig.getHttpSuccessCodes().contains(newWarningCode)
+
     }
 
-    def "avoid overriding config values with null"() {
-        final String itemName = "SomeItem"
+    def "can overwrite http error codes"() {
 
-        given: "someItem with value 42"
-        myConfig.addConfigurationItem(itemName, 42)
+        given: "configuration where 403 is error instead of warning"
+        int newErrorCode = 403
+        Set<Integer> httpErrorCodes = [newErrorCode]
 
-        when: "we try to overwrite itemName with null value"
-        myConfig.addConfigurationItem(itemName, null)
+        when: "we overwrite the standard Configuration with this value"
+        myConfig.overrideHttpErrorCodes(httpErrorCodes)
 
-        then: "the result is still 42"
-        myConfig.getConfigItemByName(itemName) == 42
+        then: "403 IS now contained in errorCodes"
+        myConfig.getHttpErrorCodes().contains(newErrorCode)
+
+        and: "403 is NOT contained in successCodes"
+        !myConfig.getHttpSuccessCodes().contains(newErrorCode)
+
+        and: "403 is NOT contained in warningCodes"
+        !myConfig.getHttpWarningCodes().contains(newErrorCode)
+
     }
 
     def "configuring a single html file is ok"() {
@@ -147,7 +87,7 @@ class ConfigurationSpec extends Specification {
         htmlFile = new File(tempDir, "a.html") << HTML_HEADER
 
         when: "we create a configuration with this single file"
-        myConfig.addSourceFileConfiguration(tempDir, [htmlFile])
+        myConfig.setSourceConfiguration(tempDir, [htmlFile] as Set)
 
         myConfig.isValid()
 
@@ -168,10 +108,10 @@ class ConfigurationSpec extends Specification {
     def "configuring file #srcDocs in directory #srcDocs is absurd"() {
 
         given: "configuration with #srcDir and #srcDocs"
-        myConfig.addSourceFileConfiguration(srcDir, srcDocs)
+        myConfig.setSourceConfiguration(srcDir, srcDocs as Set)
 
         when: "configuration is validated..."
-        def tmpResult = myConfig.isValid()
+        myConfig.isValid()
 
         then: "an exception is thrown"
         thrown MisconfigurationException
@@ -181,8 +121,8 @@ class ConfigurationSpec extends Specification {
 
         srcDir                        | srcDocs
         null                          | null
-        new File("/_non/exis_/d_ir/") | null
-        new File("/_non/exis_/d_ir/") | []
+        new File("/_non/exists_/d_ir/") | null
+        new File("/_non/exists_/d_ir/") | []
 
         // existing but empty directory is absurd too...
         File.createTempDir()          | []
@@ -199,42 +139,26 @@ class ConfigurationSpec extends Specification {
         thrown MisconfigurationException
     }
 
-    // prefixOnlyHrefExtensions can be reconfigured
-    def "prefixOnlyHrefExtensions can be overwritten"() {
-        def newExtensions = ["html", "htm" ]
-
-        when: "prefixOnlyHrefExtensions are overwritten and read"
-            myConfig.overwritePrefixOnlyHrefExtensions( newExtensions )
-
-            def prefixOnlyHrefExtensions = myConfig.getConfigItemByName( Configuration.ITEM_NAME_prefixOnlyHrefExtensions)
-
-        then: "prefixOnlyExtensions contain only new elements"
-
-            prefixOnlyHrefExtensions.size() == newExtensions.size()
-
-            prefixOnlyHrefExtensions.contains( newExtensions.get(0))
-    }
-
-    @Unroll("checks to execute cannot be #checksToExecute")
-    def "checks to execute have to be a non empty collection"() {
+    @Unroll("checks to execute cannot be #checkersToExecute")
+    def "checks to execute have to be non empty"() {
         given:
         tempDir = File.createTempDir()
         htmlFile = new File(tempDir, "a.html") << HTML_HEADER
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tempDir)
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, [htmlFile])
-
-        and:
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_checksToExecute, checksToExecute)
+        Configuration myConfig = Configuration.builder()
+                .sourceDir(tempDir)
+                .sourceDocuments([htmlFile] as Set)
+                .checksToExecute(checkersToExecute)
+                .build()
 
         when:
         myConfig.valid
 
         then:
         def e = thrown(MisconfigurationException)
-        e.message == "checks to execute have to be a non empty collection"
+        e.message == "checks to execute have to be a non-empty list"
 
         where:
-        checksToExecute << [[], "not a collection"]
+        checkersToExecute << [[] as List]
     }
 
 }

@@ -26,20 +26,16 @@ can actually mean one of the following:
 * more generally `/foo.<extension>`
 * `/foo/index.<extension>`
 
-where extension
-is one of the following: `html, htm, shtml, phtml, php, asp, aspx, xml`
+where the extension is one of the following: `html, htm, shtml, phtml, php, asp, aspx, xml`
 
 
 === Proposed Approach
 
-* Define a proper name for the "link without extension"
-(`prefixOnlyHref`)
-* When checking local resources, add a special case
-for URLs with `prefixOnlyHref`.
+* Define a proper name for the "link without extension" (`prefixOnlyHref`)
+* When checking local resources, add a special case for URLs with `prefixOnlyHref`.
 
-* Add a new configuration item with the extensions to be checked,
-the default should be the list given above
-(`ITEM_NAME_prefixOnlyHrefExtensions`)
+* Add a new configuration item with the extensions to be checked.
+The default should be the list given above.
 
 * Add these defaults to `Web`
 
@@ -50,6 +46,6 @@ the default should be the list given above
 
 ****
 
-Document the decision in Detail by moving all information from this Discussion to capter 9 "Design Decisions" of your arc42 docs.
+Document the decision in Detail by moving all information from this Discussion to chapter 9 "Design Decisions" of your arc42 docs.
 
 ****

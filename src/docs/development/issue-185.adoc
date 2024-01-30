@@ -21,7 +21,7 @@ major redundancies in code:
 ----
 class AllCheckers {
 
-    public final static LinkedHashSet<Class> checkerClazzes =
+    public final static Set<Class> checkerClazzes =
             [BrokenCrossReferencesChecker,
              BrokenHttpLinksChecker,
              DuplicateIdChecker,

@@ -4,8 +4,7 @@ import org.aim42.htmlsanitycheck.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -14,11 +13,11 @@ import java.util.stream.Collectors;
 public class CheckerCreator {
     private static final Logger logger = LoggerFactory.getLogger(CheckerCreator.class);
 
-    public static Set<Checker> createCheckerClassesFrom(final Collection<Class<? extends Checker>> checkerClasses, final Configuration pConfig) {
+    public static List<Checker> createCheckerClassesFrom(final List<Class<? extends Checker>> checkerClasses, final Configuration configuration) {
 
         return checkerClasses.stream()
-                .map(checkerClass -> CheckerCreator.createSingleChecker(checkerClass, pConfig))
-                .collect(Collectors.toSet());
+                .map(checkerClass -> CheckerCreator.createSingleChecker(checkerClass, configuration))
+                .collect(Collectors.toList());
     }
 
     private static boolean isCase(Class<? extends Checker> caseValue, Class<? extends Checker> switchValue) {

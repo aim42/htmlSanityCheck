@@ -19,16 +19,14 @@ class SingleCheckResultsTest {
 
     final String localPath = "/src/test/resources"
 
-    private Configuration myConfig = new Configuration()
-
-    String imageDir
+    File imageDir
 
     SingleCheckResults checkingResults
 
     Checker checker
 
     @Before
-    public void setUp() {
+    void setUp() {
         checkingResults =
                 new SingleCheckResults(
                         whatIsChecked: whatIsCheckedMessage
@@ -37,14 +35,11 @@ class SingleCheckResultsTest {
         // not working in IntelliJ multi-module setup
         // imagesDir = System.getProperty("user.dir") + localPath
 
-        imageDir = new File(".").getCanonicalPath() + localPath
-
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, new File(imageDir) )
-
+        imageDir = new File (new File(".").getCanonicalPath(), localPath)
     }
 
     @Test
-    public void testCheckingResultConstruction() {
+    void testCheckingResultConstruction() {
         String expected = "empty checkingResult shall have "
 
         assertEquals(expected + "proper whatIsChecked",
@@ -57,7 +52,7 @@ class SingleCheckResultsTest {
     }
 
     @Test
-    public void testAddManyFindingToCheckingResult() {
+    void testAddManyFindingToCheckingResult() {
         int maxNrOfFindinds = 2
 
         for (int i = 1; i < maxNrOfFindinds; i++) {
@@ -67,7 +62,7 @@ class SingleCheckResultsTest {
     }
 
     @Test
-    public void testAddFindingToCheckingResult() {
+    void testAddFindingToCheckingResult() {
         checkingResults.addFinding(new Finding("googlygoob"))
 
         String expected = "One finding expected"
@@ -75,7 +70,7 @@ class SingleCheckResultsTest {
     }
 
     @Test
-    public void testCheckTwoImageTagsOneMissingFile() {
+    void testCheckTwoImageTagsOneMissingFile() {
 
         String oneGoodOneBadImageHTML = """<html><body>
                    <h1>dummy-heading-1</h1>
@@ -88,7 +83,7 @@ class SingleCheckResultsTest {
         List<HtmlElement> images = htmlPage.getAllImageTags()
         assertEquals("expected 2 images", 2, images.size())
 
-        checker = new MissingImageFilesChecker( myConfig )
+        checker = new MissingImageFilesChecker( Configuration.builder().sourceDir(imageDir).build() )
 
         SingleCheckResults checkingResults = checker.performCheck( htmlPage )
 

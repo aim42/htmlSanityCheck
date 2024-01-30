@@ -40,8 +40,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     @IgnoreIf({ !System.getenv('GITHUB_ACTIONS') })
     def "recognize if there is internet connectivity"() {
         expect: "if there is no internet connection, testing should fail"
-        NetUtil.isInternetConnectionAvailable()
-
+        Web.isInternetConnectionAvailable()
     }
 
     def "empty page has no errors"() {

@@ -1,5 +1,7 @@
 package org.aim42.htmlsanitycheck.check;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.aim42.htmlsanitycheck.Configuration;
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
 import org.aim42.htmlsanitycheck.html.HtmlPage;
@@ -15,6 +17,8 @@ import org.aim42.htmlsanitycheck.html.HtmlPage;
  *
  * @author Gernot Starke <gs@gernotstarke.de>
  */
+@Setter
+@Getter
 public abstract class Checker {
     private SingleCheckResults checkingResults;
     private Configuration myConfig;
@@ -49,25 +53,10 @@ public abstract class Checker {
     /**
      * Perform a particular kind of checks, i.e. missing-local-images-check
      * <p>
-     * Called by {@link #performCheck()} as part of the template method pattern.
+     * Called by {@link #performCheck(HtmlPage)} as part of the template method pattern.
      *
      * @return collected results of this Checker instance
      */
     protected abstract SingleCheckResults check(final HtmlPage pageToCheck);
 
-    public SingleCheckResults getCheckingResults() {
-        return checkingResults;
-    }
-
-    public void setCheckingResults(SingleCheckResults checkingResults) {
-        this.checkingResults = checkingResults;
-    }
-
-    public Configuration getMyConfig() {
-        return myConfig;
-    }
-
-    public void setMyConfig(Configuration myConfig) {
-        this.myConfig = myConfig;
-    }
 }

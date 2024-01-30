@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.html
 
+import org.jsoup.nodes.Element
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -28,13 +29,11 @@ class ImageMapParserSpec extends Specification {
     // find all imageMaps within pageToCheck
     @Unroll
     def "find all maps within page"(int nrOfIMaps, String imageMapString) {
-        ArrayList<HtmlElement> imageMaps = new ArrayList()
-
         when:
         String html = HtmlConst.HTML_HEAD + imageMapString + HtmlConst.HTML_END
 
         htmlPage = new HtmlPage(html)
-        imageMaps = htmlPage.getAllImageMaps()
+        def imageMaps = htmlPage.getAllImageMaps()
 
         then:
         imageMaps.size() == nrOfIMaps
@@ -55,7 +54,7 @@ class ImageMapParserSpec extends Specification {
     // find all img-tags with usemap-reference
     @Unroll
     def "find all image tags with usemap declaration"(int nrOfImgs, String htmlBody) {
-        ArrayList<HtmlElement> imageTagsWithUsemap
+        List<HtmlElement> imageTagsWithUsemap
 
         when:
         String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
@@ -75,13 +74,13 @@ class ImageMapParserSpec extends Specification {
     }
 
     /**
-    ** find all mapNames (Strings...),
+     ** find all mapNames (Strings...),
      * by inspecting the map-tags
-    */
+     */
 
     @Unroll
-    def "find all map names within page"(String htmlBody, ArrayList<String> names) {
-        ArrayList<String> mapNames
+    def "find all map names within page"(String htmlBody, List<String> names) {
+        List<String> mapNames
 
         when:
         String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
@@ -108,8 +107,8 @@ class ImageMapParserSpec extends Specification {
      * by searching the img-tags for usemap-attributes
      */
     @Unroll
-    def "find all usemap references within page"(String htmlBody, ArrayList<String> names) {
-        ArrayList<String> usemapRefs
+    def "find all usemap references within page"(String htmlBody, List<String> names) {
+        List<String> usemapRefs
 
         when:
         String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
@@ -134,7 +133,7 @@ class ImageMapParserSpec extends Specification {
 
     // find the area-tags within a named imageMap
     def "find all areas within map"(int nrOfAreas, String mapName, String htmlBody) {
-        ArrayList<HtmlElement> areasInMap
+        List<Element> areasInMap
 
         when:
         String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
@@ -150,18 +149,18 @@ class ImageMapParserSpec extends Specification {
         nrOfAreas | mapName | htmlBody
 
         // 2 areas in one imageMap
-        2 | "mymap" | ONE_IMG_ONE_MAP_TWO_AREAS
+        2         | "mymap" | ONE_IMG_ONE_MAP_TWO_AREAS
 
         // 1 area in named map, 2 in other
-        1 | "mymap" | ONE_IMG_ONE_MAP_ONE_AREA
+        1         | "mymap" | ONE_IMG_ONE_MAP_ONE_AREA
 
 
     }
 
 
     // find the area-tags within a named imageMap
-    def "find all hrefs within map"(int nrOfHrefs, String mapName, String htmlBody, ArrayList<String> hrefs) {
-        ArrayList<String> hrefsInMap
+    def "find all hrefs within map"(int nrOfHrefs, String mapName, String htmlBody, List<String> hrefs) {
+        List<String> hrefsInMap
 
         when:
         String html = HtmlConst.HTML_HEAD + htmlBody + HtmlConst.HTML_END
@@ -172,18 +171,17 @@ class ImageMapParserSpec extends Specification {
         then:
         // size matters
         nrOfHrefs == hrefsInMap.size()
-
-
+        hrefsInMap == hrefs
 
         where:
 
-        nrOfHrefs | mapName | htmlBody | hrefs
+        nrOfHrefs | mapName | htmlBody                  | hrefs
 
         // 2 areas in one imageMap               |
-        2 | "mymap" | ONE_IMG_ONE_MAP_TWO_AREAS | ["#test1", "#test2"]
+        2         | "mymap" | ONE_IMG_ONE_MAP_TWO_AREAS | ["#test1", "#test2"]
 
         // 1 area in named map, 2 in other
-        1 | "mymap" | ONE_IMG_ONE_MAP_ONE_AREA | ["#test1"]
+        1         | "mymap" | ONE_IMG_ONE_MAP_ONE_AREA  | ["#test1"]
 
     }
 

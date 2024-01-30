@@ -1,16 +1,19 @@
 package org.aim42.htmlsanitycheck.html;
 
+import lombok.Getter;
 import org.aim42.htmlsanitycheck.tools.Web;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -21,27 +24,26 @@ import java.util.stream.Collectors;
  * convenience methods to access anchor and image links
  * from html.
  * <p>
- * Relies on http://jsoup.org parser
+ * Relies on <a href="http://jsoup.org">jsoup</a> parser
  */
 public class HtmlPage {
-
-    /**
-     * Pattern to check for HTTP/S scheme, includes the
-     * scheme separator (colon).
-     */
-    private static final Pattern HTTP_SCHEME_PATTERN = Pattern.compile("(?i)^https?:");
 
     // jsoup Document
     private final Document document;
 
     /**
      * The HTML file.
+     * -- GETTER --
+     *  Gets the file of the HTML page.
+     *
+     * @return the file, or null if the HTML is not from a file.
+
      */
+    @Getter
     private File file;
 
     /**
      * @param text html as text (string)
-     * @return an HtmlPage
      */
     public HtmlPage(String text) {
         // Jsoup promises to parse without exception -
@@ -51,8 +53,7 @@ public class HtmlPage {
     }
 
     /**
-     * @param file
-     * @return an HtmlPage
+     * @param file the HTML file
      */
     public HtmlPage(File file) throws IOException {
         assert file.exists();
@@ -63,20 +64,11 @@ public class HtmlPage {
     /**
      * invokes the parser for the html page
      *
-     * @param input file
+     * @param fileToCheck the HTML file
      */
     public static HtmlPage parseHtml(File fileToCheck) throws IOException {
         assert fileToCheck.exists();
         return new HtmlPage(fileToCheck);
-    }
-
-    /**
-     * Gets the file of the HTML page.
-     *
-     * @return the file, or null if the HTML is not from a file.
-     */
-    public File getFile() {
-        return file;
     }
 
     /**
@@ -90,18 +82,10 @@ public class HtmlPage {
         return document.title();
     }
 
-    public String getDocumentURL() {
-        return document.nodeName();
-    }
-
-    public String getDocument() {
-        return document.toString();
-    }
-
     /**
-     * builds a list of all imageMaps
+     * Builds a list of all imageMaps
      *
-     * @return ArrayList of imageMaps
+     * @return List of imageMaps
      */
     public final List<HtmlElement> getAllImageMaps() {
         return document.select("map").stream()
@@ -130,7 +114,7 @@ public class HtmlPage {
     /**
      * builds a list from all '<img src="XYZ"/>' tags
      *
-     * @return immutable ArrayList
+     * @return immutable List
      */
     public final List<HtmlElement> getAllImageTags() {
         return document.getElementsByTag("img").stream()
@@ -153,7 +137,11 @@ public class HtmlPage {
      * the alt-tag is missing or empty ("").
      */
     public final List<HtmlElement> getAllImageTagsWithMissingAltAttribute() {
-        return document.select("img[alt~=(\\S)]").stream()
+        return document.select("img").stream()
+                .filter(element -> {
+                    Attribute alt = element.attribute("alt");
+                    return alt == null || alt.getValue().isEmpty();
+                })
                 .map(HtmlElement::new)
                 .collect(Collectors.toList());
     }
@@ -161,7 +149,7 @@ public class HtmlPage {
     /**
      * builds a list of all '<a href="XYZ"> tags
      *
-     * @return ArrayList of all hrefs, including the "#"
+     * @return List of all hrefs, including the "#"
      */
     public List<HtmlElement> getAllAnchorHrefs() {
         return document.getElementsByAttribute("href").stream()
@@ -172,7 +160,7 @@ public class HtmlPage {
     /**
      * builds a list of all 'id="XYZ"' attributes
      *
-     * @return ArrayList of all hrefs
+     * @return List of all hrefs
      */
     public final List<HtmlElement> getAllIds() {
         return document.getElementsByAttribute("id").stream()
@@ -181,11 +169,11 @@ public class HtmlPage {
     }
 
     /**
-     * @return ArrayList < String >  of all href-attributes
+     * @return List < String >  of all href-attributes
      * <p>
      * common pitfalls with hrefs:
      * - local hrefs start with # (like "#appendix")
-     * - remote hrefs should be valid URLs (like "https://google.com")
+     * - remote hrefs should be valid URLs (like "<a href="https://google.com">https://google.com</a>")
      * - remote hrefs might start with other than http (e.g. https, mailto, telnet, ssh)
      * - hrefs might start with file://
      * - href might be empty string (nobody knows wtf this is good for, but html parsers usually accept it)
@@ -226,13 +214,19 @@ public class HtmlPage {
      * for all maps are combined into one.
      *
      * @param mapName name of the map
-     * @return
+     * @return list of all contained areas
      */
-    public List<Elements> getAllAreasForMapName(String mapName) {
-        return document.select("map[name=" + mapName + "]").stream()
-                .map(m -> m.children().select("area"))
-                .collect(Collectors.toList());
-
+    public List<Element> getAllAreasForMapName(String mapName) {
+        List<Elements> result = new ArrayList<>();
+        document.select("map[name=" + mapName + "]")
+                .forEach(m -> {
+                            List<Elements> areas = Collections.singletonList(m.children().select("area"));
+                            if (!areas.isEmpty()) {
+                                result.addAll(areas);
+                            }
+                        }
+                );
+        return result.stream().flatMap(List::stream).collect(Collectors.toList());
     }
 
 
@@ -243,7 +237,7 @@ public class HtmlPage {
     }
 
     /**
-     * getAllIdStrings return ArrayList<String> of all id="xyz" definitions
+     * getAllIdStrings return List<String> of all id="xyz" definitions
      */
 
     public List<String> getAllIdStrings() {

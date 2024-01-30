@@ -5,7 +5,7 @@ package org.aim42.htmlsanitycheck;
 
 import java.io.File;
 
-class MisconfigurationException extends Exception {
+public class MisconfigurationException extends Exception {
 
 
     public MisconfigurationException(String message, File srcDir) {

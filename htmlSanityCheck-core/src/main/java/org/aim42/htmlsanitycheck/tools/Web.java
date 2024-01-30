@@ -1,7 +1,14 @@
 package org.aim42.htmlsanitycheck.tools;
 
-import java.io.IOException;
-import java.net.*;
+import org.apache.commons.validator.routines.InetAddressValidator;
+
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -17,21 +24,19 @@ public class Web {
 
     // these are regarded as "Success" when checking
     // http(s) links
-    public static final Set<Integer> HTTP_SUCCESS_CODES = initErrorCodes(200, 208, 226, 226);
+    public static final Set<Integer> HTTP_SUCCESS_CODES = initHttpReturnCodes(200, 208, 226, 226);
 
-    public static final Set<Integer> HTTP_WARNING_CODES = initErrorCodes(100, 102, 300, 308);
+    public static final Set<Integer> HTTP_WARNING_CODES = initHttpReturnCodes(100, 102, 300, 308);
 
-    public static final Set<Integer> HTTP_ERROR_CODES = initErrorCodes(400, 451, 500, 511);
+    public static final Set<Integer> HTTP_ERROR_CODES = initHttpReturnCodes(400, 451, 500, 511);
 
-    public static final Set<Integer> HTTP_REDIRECT_CODES = initErrorCodes(301, 303, 307, 308);
+    public static final Set<Integer> HTTP_REDIRECT_CODES = initHttpReturnCodes(301, 303, 307, 308);
 
     public static final Set<String> POSSIBLE_EXTENSIONS = initExtentions();
 
-    static private final Pattern httpPatter = Pattern.compile("^https?");
+    static private final Pattern httpPattern = Pattern.compile("^https?:");
 
     static private final Pattern mailPattern = Pattern.compile("^(?i)(mailto):.*$");
-
-    private static final Pattern ipPattern = Pattern.compile("\"\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}\"");
 
     private static final Pattern dataImagePattern = Pattern.compile("^(?i)(data:image).*$");
 
@@ -39,10 +44,10 @@ public class Web {
 
     private static final Pattern linkPattern = Pattern.compile("^//.*$");
 
-    private static Set<Integer> initErrorCodes(int alow, int ahigh, int blow, int high) {
+    private static Set<Integer> initHttpReturnCodes(int alow, int ahigh, int blow, int high) {
         Set<Integer> result = IntStream.rangeClosed(alow, ahigh).collect(HashSet::new, Set::add, Set::addAll);
         result.addAll(IntStream.rangeClosed(blow, high).collect(HashSet::new, Set::add, Set::addAll));
-        return result;
+        return Collections.unmodifiableSet(result);
     }
 
     private static Set<String> initExtentions() {
@@ -79,49 +84,24 @@ public class Web {
     }
 
     static public boolean isWebUrl(String possibleUrl) {
-        return httpPatter.matcher(possibleUrl).find();
+        return httpPattern.matcher(possibleUrl).find();
     }
 
-    public static boolean isLocahost(URL url) {
-        String host = url.getHost();
-        return host.equals("localhost") || host.startsWith("127.0.0");
+    public static boolean isIP(String ip) {
+        return InetAddressValidator.getInstance().isValid(ip);
     }
 
-    public static boolean isIP(URL url) {
-        return isIP(url.getHost());
-    }
-
-    public static boolean isIP(String url) {
-        return ipPattern.matcher(url).find();
-    }
-
-    public static HttpURLConnection getNewURLConnection(URL url) throws IOException {
-
-        TrustAllCertificates.install();
-
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("HEAD");
-
-        // httpConnectionTimeout defaults to 5000 (msec)
-        connection.setConnectTimeout(5000);
-
-        // to avoid nasty 403 errors (forbidden), we set a referrer and user-agent
-        //
-        connection.setRequestProperty("Referer", "https://aim42.org");
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0");
-
-        // TODO followRedirects should be a configuration parameter
-        // that defaults to false
-
-        return connection;
+    public static boolean startsWithIP(String url) {
+        int slashPos = url.indexOf('/');
+        if (slashPos > 0) {
+            String host = url.substring(0, slashPos);
+            return isIP(host);
+        }
+        return false;
     }
 
     public static boolean isSuccessCode(int responseCode) {
         return HTTP_SUCCESS_CODES.contains(responseCode);
-    }
-
-    public static boolean isRedirectCode(int responseCode) {
-        return HTTP_REDIRECT_CODES.contains(responseCode);
     }
 
     public static boolean isWarningCode(int responseCode) {
@@ -137,12 +117,13 @@ public class Web {
      * Checks if this String represents a remote URL
      * (startsWith http, https, ftp, telnet...)
      *
-     * @param link
+     * @param imgSrc the image URL to be checked
      */
     public static boolean isRemoteURL(String imgSrc) {
         return remoteImagePattern.matcher(imgSrc).find()
                 || mailPattern.matcher(imgSrc).find()
-                || isIP(imgSrc);
+                || isIP(imgSrc)
+                || startsWithIP(imgSrc);
     }
 
 
@@ -150,7 +131,7 @@ public class Web {
      * Checks if this String represents a data-image-URI
      * (startsWith "data:image"
      *
-     * @param s
+     * @param imgSrc the image URL to be checked
      */
     public static boolean isDataURI(String imgSrc) {
         return dataImagePattern.matcher(imgSrc).find();
@@ -161,7 +142,7 @@ public class Web {
      * Checks if this String represents a cross-reference,
      * that is an intra-document link
      *
-     * @param xref
+     * @param xref the cross reference to be checked
      */
     public static boolean isCrossReference(String xref) {
 
@@ -171,20 +152,17 @@ public class Web {
 
     }
 
+    private static final Pattern ILLEGAL_CHARS_REGEX = Pattern.compile("[ *$]");
     /**
      * helper to identify invalid characters in link
      *
-     * @param aLink
+     * @param aLink the link to be checked
      */
     public static boolean containsInvalidChars(String aLink) {
         // TODO finding illegal chars with a regex is overly simple,
         // as different chars are allowed in different parts of an URI...
         // simple solution works for htmlSanityCheck
-
-
-        Pattern illegalCharsRegex = Pattern.compile(" |\\*|\\$");
-
-        return illegalCharsRegex.matcher(aLink).find();
+        return ILLEGAL_CHARS_REGEX.matcher(aLink).find();
     }
 
     /**
@@ -202,11 +180,9 @@ public class Web {
                 || (link.isEmpty())
                 || isCrossReference(link)      // "#link" or similar
                 || isRemoteURL(link)           // "mailto:", "http" etc
-
-        )
+        ) {
             return false;
-
-        else {
+        } else {
             URI aUri;
             try {
                 aUri = new URI(link);
@@ -225,8 +201,8 @@ public class Web {
     }
 
 
-    /*
-     ** helper to identify "file scheme"
+    /**
+     * helper to identify "file scheme"
      */
     private static Boolean isLinkToFile(URI aUri) {
         if (aUri == null || aUri.getScheme() == null) {
@@ -240,13 +216,13 @@ public class Web {
     /**
      * Checks if this String represents a valid URI/URL
      *
-     * @param link
+     * @param link the URL to be checked
      * @return boolean
      */
     public static boolean isValidURL(String link) {
         // TODO: refactor this code to use  org.apache.commons.validator.routines.*
 
-        boolean isValid = false;
+        boolean isValid;
 
         if (isCrossReference(link)) {
             return true;
@@ -269,7 +245,7 @@ public class Web {
 }
 
 
-/************************************************************************
+/* ***********************************************************************
  * This is free software - without ANY guarantee!
  *
  *

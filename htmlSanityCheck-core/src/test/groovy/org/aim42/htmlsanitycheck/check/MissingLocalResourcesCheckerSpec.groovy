@@ -43,7 +43,7 @@ class MissingLocalResourcesCheckerSpec extends Specification {
         File exampleFile = new File(d1, "example.html") << HtmlConst.HTML_HEAD + HtmlConst.HTML_END
 
         // 4.) configure checker with temp directory
-        myConfig.addConfigurationItem( Configuration.ITEM_NAME_sourceDir, d1)
+        myConfig.setSourceConfiguration(d1, [exampleFile] as Set)
         missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
 
         // 5.)

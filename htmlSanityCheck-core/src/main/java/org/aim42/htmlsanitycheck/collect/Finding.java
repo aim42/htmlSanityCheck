@@ -2,9 +2,11 @@
 
 package org.aim42.htmlsanitycheck.collect;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * A single "finding" from any check, i.e.:
@@ -14,9 +16,12 @@ import java.util.stream.Collectors;
  */
 public class Finding {
 
+    @Getter
     String whatIsTheProblem; // i.e. which image is missing, which link/anchor is undefined
+    @Getter
     int nrOfOccurrences;// how often does this specific finding occur in the checked-page
     // suggestions are ordered: getAt(0) yields the best, getAt(1) the second and so forth
+    @Setter
     List<String> suggestions;
 
     public Finding() {
@@ -30,14 +35,14 @@ public class Finding {
      * @param whatIsTheProblem An explanation of what went wrong (i.e. name of missing file)
      */
     public Finding(String whatIsTheProblem) {
-        this(whatIsTheProblem, 1, new ArrayList<String>(3));
+        this(whatIsTheProblem, 1, new ArrayList<>(3));
     }
 
     /**
      * finding with explanation and several occurences
      */
     public Finding(String whatIsTheProblem, int nrOfOccurrences) {
-        this(whatIsTheProblem, nrOfOccurrences, new ArrayList<String>(3));
+        this(whatIsTheProblem, nrOfOccurrences, new ArrayList<>(3));
     }
 
 
@@ -47,7 +52,7 @@ public class Finding {
      *
      * @param whatIsTheProblem An explanation of what went wrong (i.e. name of missing file)
      */
-    public Finding(String whatIsTheProblem, int nrOfOccurrences, ArrayList<String> suggestions) {
+    public Finding(String whatIsTheProblem, int nrOfOccurrences, List<String> suggestions) {
         this.whatIsTheProblem = whatIsTheProblem;
         this.nrOfOccurrences = nrOfOccurrences;
         this.suggestions = suggestions;
@@ -60,40 +65,14 @@ public class Finding {
      * @param whatIsTheProblem explanation what went wrong
      * @param suggestions      what could have been meant
      */
-    public Finding(String whatIsTheProblem, ArrayList<String> suggestions) {
+    public Finding(String whatIsTheProblem, List<String> suggestions) {
         this(whatIsTheProblem, 1, suggestions);
-    }
-
-    public String getWhatIsTheProblem() {
-        return whatIsTheProblem;
-    }
-
-    public int getNrOfOccurrences() {
-        return nrOfOccurrences;
-    }
-
-    public void setSuggestions(List<String> suggestions) {
-        this.suggestions = suggestions;
-    }
-
-    /**
-     * add a single suggestion to the list of suggestions
-     *
-     * @param suggestion
-     */
-    public void addSingleSuggestion(String suggestion) {
-        suggestions.add(suggestion);
-    }
-
-
-    public void setNrOfOccurences(int nrOfOccurences) {
-        this.nrOfOccurrences = nrOfOccurrences;
     }
 
     @Override
     public String toString() {
-        String refCount = (nrOfOccurrences > 1) ? " (reference count: $nrOfOccurrences)" : "";
-        String suggestionStr = (suggestions.size() > 0) ? "\n (Suggestions: " + suggestions.stream().collect(Collectors.joining(",")) + ")" : "";
+        String refCount = (nrOfOccurrences > 1) ? String.format(" (reference count: %d)", nrOfOccurrences) : "";
+        String suggestionStr = (!suggestions.isEmpty()) ? "\n (Suggestions: " + String.join(",", suggestions) + ")" : "";
 
         return whatIsTheProblem + refCount + (suggestionStr.isEmpty() ? "" : suggestionStr);
     }

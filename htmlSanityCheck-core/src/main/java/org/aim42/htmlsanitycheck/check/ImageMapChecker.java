@@ -6,6 +6,7 @@ import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
 import org.aim42.htmlsanitycheck.html.HtmlElement;
 import org.aim42.htmlsanitycheck.html.HtmlPage;
 import org.aim42.htmlsanitycheck.tools.Web;
+import org.jsoup.nodes.Element;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,15 +21,13 @@ import java.util.Set;
  * 4.) every area-tag has one non-empty href attribute
  * 5.) every href points to valid target (broken-links check)
  * <p>
- * see also: http://www.w3schools.com/tags/tag_map.asp
+ * see also: <a href="http://www.w3schools.com/tags/tag_map.asp">http://www.w3schools.com/tags/tag_map.asp</a>
  **/
 public class ImageMapChecker extends Checker {
-    private List<HtmlElement> maps;
     private List<String> mapNames;
     private List<HtmlElement> imagesWithUsemapRefs;
     private List<String> usemapRefs;
     private List<String> listOfIds;
-    private String findingText;
     private HtmlPage pageToCheck;
 
 
@@ -70,20 +69,22 @@ public class ImageMapChecker extends Checker {
                 .forEach(findingText -> getCheckingResults().addFinding(new Finding(findingText)));
     }
 
+    /*
+     * search for maps that are NOT referenced by any image-tag
+     */
     private void checkEmptyMaps() {
-        mapNames.stream().map(mapName ->
-                        pageToCheck.getAllAreasForMapName(mapName))
-                .filter(areas -> !areas.isEmpty())
-                .peek(a -> getCheckingResults().incNrOfChecks())
-                .forEach(area -> getCheckingResults().addFinding(new Finding(findingText)));
+        mapNames.forEach(mapName -> {
+            List<Element> areas = pageToCheck.getAllAreasForMapName(mapName);
+            if (areas.isEmpty()) {
+                getCheckingResults().addFinding(new Finding(String.format("ImageMap \"%s\" has no area tags.", mapName)));
+            }
+        });
     }
 
     /*
 check for duplicate map names
  */
     private void checkDuplicateMapNames() {
-        int mapNameCount;
-
         Set<String> mapNameSet = new HashSet<>(mapNames);
 
         mapNameSet.stream()
@@ -102,26 +103,26 @@ check for duplicate map names
      * b.) if there are more maps named "y" -> problem
      */
     private void checkBrokenImageMapReferences() {
-        imagesWithUsemapRefs.stream()
+        imagesWithUsemapRefs
                 .forEach(imageTag -> checkBrokenImageMapReference(imageTag.getUsemapRef(), imageTag));
     }
 
     private void checkBrokenImageMapReference(String imgMap, HtmlElement imageTag) {
         getCheckingResults().incNrOfChecks();
 
-
-        long mapCount = mapNames.stream().filter(it -> it == imgMap).count();
+        long mapCount = mapNames.stream().filter(it -> it.equals(imgMap)).count();
 
         if (mapCount == 0L) {
             // no map found, despite img-tag usemap-reference
-            findingText = "ImageMap \"" + imageTag.getUsemapRef() + "\" (referenced by image \"" + imageTag.getImageSrcAttribute() + "\") missing.";
-            getCheckingResults().addFinding(new Finding(findingText));
+            getCheckingResults().addFinding(
+                    new Finding(String.format("ImageMap \"%s\" (referenced by image \"%s\") missing.",
+                            imageTag.getUsemapRef(), imageTag.getImageSrcAttribute())));
         }
     }
 
     private void checkForBrokenHrefLinks() {
 
-        mapNames.forEach(n -> checkAreaHrefsForMapName(n));
+        mapNames.forEach(this::checkAreaHrefsForMapName);
     }
 
     /*
@@ -135,7 +136,7 @@ check for duplicate map names
 
         areaHrefs.stream()
                 .peek(a -> getCheckingResults().incNrOfChecks())
-                .filter(href -> Web.isCrossReference(href))
+                .filter(Web::isCrossReference)
                 .forEach(href -> checkLocalHref(href, mapName, areaHrefs));
 
     }
@@ -153,12 +154,12 @@ TODO: remove duplication to BrokenCrossReferencesChecker
         if (!listOfIds.contains(linkTarget)) {
 
             // we found a broken link!
-            findingText = "ImageMap \"" + mapName + "\" refers to missing link \"" + linkTarget + "\"";
+            String findingText = String.format("ImageMap \"%s\" refers to missing link \"%s\"", mapName, linkTarget);
 
             // now count occurrences - how often is it referenced
-            int nrOfReferences = (int) areaHrefs.stream().filter(it -> it == href).count();
+            int nrOfReferences = (int) areaHrefs.stream().filter(it -> it.equals(href)).count();
             if (nrOfReferences > 1) {
-                findingText += ", reference count: " + nrOfReferences + ".";
+                findingText += String.format(", reference count: %d.", nrOfReferences);
             } else findingText += ".";
 
             getCheckingResults().newFinding(findingText, nrOfReferences);
@@ -171,7 +172,7 @@ TODO: remove duplication to BrokenCrossReferencesChecker
         imagesWithUsemapRefs = pageToCheck.getImagesWithUsemapDeclaration();
 
         // get all <map name="z">...
-        maps = pageToCheck.getAllImageMaps();
+        pageToCheck.getAllImageMaps();
 
         // get the names of all maps
         mapNames = pageToCheck.getAllMapNames();

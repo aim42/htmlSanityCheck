@@ -1,8 +1,8 @@
 package org.aim42.htmlsanitycheck.html
 
+import org.aim42.htmlsanitycheck.tools.Web
 import org.junit.Before
 import org.junit.Test
-import org.aim42.htmlsanitycheck.tools.Web
 
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertTrue
@@ -51,12 +51,12 @@ class HtmlPageTest {
 
 
     @Before
-    public void setUp() {
+    void setUp() {
         tmpFile = File.createTempFile("testfile", "html")
     }
 
     @Test
-    public void testStaticParseHtml() {
+    void testStaticParseHtml() {
         tmpFile.write(HTML_WITH_TWO_IMG_TAGS)
 
         htmlPage = HtmlPage.parseHtml(tmpFile)
@@ -68,11 +68,11 @@ class HtmlPageTest {
 
 
     @Test
-    public void testGetTwoImagesFromHtml() {
+    void testGetTwoImagesFromHtml() {
 
         htmlPage = new HtmlPage(HTML_WITH_TWO_IMG_TAGS)
 
-        ArrayList<HtmlElement> images = htmlPage.getAllImageTags()
+        List<HtmlElement> images = htmlPage.getAllImageTags()
 
         // should yield TWO image tags!
         assertEquals("TWO images expected", 2, images.size())
@@ -82,11 +82,11 @@ class HtmlPageTest {
 
 
     @Test
-    public void testGetOneImageFromHtml() {
+    void testGetOneImageFromHtml() {
 
         htmlPage = new HtmlPage(HTML_WITH_ONE_IMG_TAG)
 
-        ArrayList images = htmlPage.getAllImageTags()
+        List images = htmlPage.getAllImageTags()
 
         // should yield exactly ONE image tag!
         assertEquals("ONE image expected", 1, images.size())
@@ -94,12 +94,12 @@ class HtmlPageTest {
     }
 
     @Test
-    public void testGetOneImageFromHtmlFile() {
+    void testGetOneImageFromHtmlFile() {
         tmpFile.write(HTML_WITH_ONE_IMG_TAG)
 
         htmlPage = new HtmlPage(tmpFile)
 
-        ArrayList images = htmlPage.getAllImageTags()
+        List images = htmlPage.getAllImageTags()
 
         // should yield exactly ONE image tag!
         assertEquals("ONE image expected", 1, images.size())
@@ -107,12 +107,12 @@ class HtmlPageTest {
     }
 
     @Test
-    public void testGetTwoImagesFromHtmlFile() {
+    void testGetTwoImagesFromHtmlFile() {
         tmpFile.write(HTML_WITH_TWO_IMG_TAGS)
 
         htmlPage = new HtmlPage(tmpFile)
 
-        ArrayList images = htmlPage.getAllImageTags()
+        List images = htmlPage.getAllImageTags()
 
         assertEquals("two images expected", 2, images.size())
 
@@ -120,7 +120,7 @@ class HtmlPageTest {
 
 
     @Test
-    public void testGetHtmlImgTagsFromFile() {
+    void testGetHtmlImgTagsFromFile() {
         String userDir = System.getProperty("user.dir")
         String filePath = userDir + LOCAL_PATH + FILENAME
 
@@ -130,13 +130,13 @@ class HtmlPageTest {
 
         htmlPage = new HtmlPage(new File(filePath))
 
-        ArrayList images = htmlPage.getAllImageTags()
+        List images = htmlPage.getAllImageTags()
         assertEquals("expected 4 images", 4, images.size())
 
     }
 
     @Test
-    public void testGetLocalAnchorHrefsFromHtml() {
+    void testGetLocalAnchorHrefsFromHtml() {
 
         String HREF_ONE = "#aim42"
         String HREF_TWO = "#nonexisting"
@@ -152,7 +152,7 @@ class HtmlPageTest {
 
         htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
 
-        ArrayList anchors = htmlPage.getAllAnchorHrefs()
+        List anchors = htmlPage.getAllAnchorHrefs()
 
         assertEquals("two anchor hrefs expected", 2, anchors.size())
 
@@ -162,7 +162,7 @@ class HtmlPageTest {
     }
 
     @Test
-    public void testGetLocalAndRemoteAnchorsFromHtml() {
+    void testGetLocalAndRemoteAnchorsFromHtml() {
         String ONE = "downloads/aim42.pdf"
         String TWO = "File.docx"
 
@@ -176,7 +176,7 @@ class HtmlPageTest {
 
         htmlPage = new HtmlPage(HTML)
 
-        ArrayList anchors = htmlPage.getAllAnchorHrefs()
+        List anchors = htmlPage.getAllAnchorHrefs()
 
         assertEquals("three anchor hrefs expected", 3, anchors.size())
 
@@ -189,7 +189,7 @@ class HtmlPageTest {
  * make sure we get the hrefs (id="XYZ") from html
  **/
     @Test
-    public void testGetOneIdFromHtml() {
+    void testGetOneIdFromHtml() {
 
         String HREF_ONE = "aim42"
 
@@ -200,7 +200,7 @@ class HtmlPageTest {
 
         htmlPage = new HtmlPage(HTML_WITH_A_TAG_AND_ID)
 
-        ArrayList bookmarks = htmlPage.getAllIds()
+        List bookmarks = htmlPage.getAllIds()
 
         // there's ONE id contained in the sample html
         assertEquals("only ONE id is expected in bookmark list", 1, bookmarks.size())
@@ -210,7 +210,7 @@ class HtmlPageTest {
     }
 
     @Test
-    public void testGetManyIdFromHtml() {
+    void testGetManyIdFromHtml() {
 
         String HREF_ONE = "aim42"
 
@@ -226,7 +226,7 @@ class HtmlPageTest {
            </html>'''
 
         htmlPage = new HtmlPage(HTML_WITH_A_TAG_AND_ID)
-        ArrayList bookmarks = htmlPage.getAllIds()
+        List bookmarks = htmlPage.getAllIds()
 
         // there's TWO ids contained in the sample html
         assertEquals("TWO ids expected in bookmark list", 3, bookmarks.size())
@@ -235,7 +235,7 @@ class HtmlPageTest {
 
 
     @Test
-    public void testAnchorsToStringList() {
+    void testAnchorsToStringList() {
         String HTML_WITH_A_TAGS_AND_ID = '''
            <html>
              $HTML_PREFIX
@@ -248,7 +248,7 @@ class HtmlPageTest {
            </html>'''
 
         htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
-        ArrayList hrefs = htmlPage.getAllHrefStrings()
+        List hrefs = htmlPage.getAllHrefStrings()
 
         assertEquals("expected [#aim42, #nonexisting]", ['#aim42', '#nonexisting'], hrefs)
 
@@ -261,7 +261,7 @@ class HtmlPageTest {
  */
 
     @Test
-    public void testGetAllLocalResourceHrefStrings() {
+    void testGetAllLocalResourceHrefStrings() {
         final String LOC1 = "file://path/filename.html"
         final String LOC2 = "dir/ectory/filename.pdf"
 
@@ -273,7 +273,7 @@ class HtmlPageTest {
         </body></html>"""
 
         htmlPage = new HtmlPage(HTML)
-        ArrayList<String> hrefs = htmlPage.getAllHrefStrings()
+        List<String> hrefs = htmlPage.getAllHrefStrings()
 
         assertEquals("expected 3 href-strings", 3, hrefs.size())
 
@@ -287,7 +287,7 @@ class HtmlPageTest {
 
 
     @Test
-    public void testGetManyIdStrings() {
+    void testGetManyIdStrings() {
         String HTML_WITH_A_TAGS_AND_ID = '''
            <html>
              $HTML_PREFIX
@@ -302,7 +302,7 @@ class HtmlPageTest {
            </html>'''
 
         htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
-        ArrayList ids = htmlPage.getAllIdStrings()
+        List ids = htmlPage.getAllIdStrings()
 
         def expected = ['aim42', 'aim43', 'aim44', 'aim45', 'aim46']
         assertEquals("expected $expected", expected, ids)
@@ -310,7 +310,7 @@ class HtmlPageTest {
 
 
     @Test
-    public void testGetIdStringsAndAllIds() {
+    void testGetIdStringsAndAllIds() {
         String HTML_WITH_A_TAGS_AND_ID = """$HTML_HEAD<body>
                    <a href="#aim42">link-to-aim42</a>
                    <h2 id="aim42">aim42 Architecture Improvement</h3>
@@ -320,12 +320,12 @@ class HtmlPageTest {
            </html>"""
 
         htmlPage = new HtmlPage(HTML_WITH_A_TAGS_AND_ID)
-        ArrayList idStrings = htmlPage.getAllIdStrings()
+        List idStrings = htmlPage.getAllIdStrings()
 
         def expectedIdStrings = ['aim42', 'aim43', 'aim44']
         assertEquals("expected $expectedIdStrings", expectedIdStrings, idStrings)
 
-        ArrayList tagsWithId = htmlPage.getAllIds()
+        List tagsWithId = htmlPage.getAllIds()
         assertEquals("expected 3 tags with ids", 3, tagsWithId.size())
 
     }
@@ -339,7 +339,7 @@ class HtmlPageTest {
  * (
  */
     @Test
-    public void testManyAnchorTags() {
+    void testManyAnchorTags() {
 
         final int NR_OF_ANCHORS = 3000
 

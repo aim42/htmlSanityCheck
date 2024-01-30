@@ -15,10 +15,10 @@ We achieve that by defining the skeleton of the checking algorithm in one operat
 
 The invariant steps are implemented in the abstract base class, while the variant checking algorithms have to be provided by the subclasses.
 
-[source, groovy,linenums,highlight='16']
+[source, java, linenums, highlight='16']
 .Template method "performCheck"
 ----
-include::{coresourcepath}/htmlsanitycheck/check/Checker.groovy[tags=performCheckTemplateMethod]
+include::{coresourcepath}/htmlsanitycheck/check/Checker.java[tags=performCheckTemplateMethod]
 ----
 
 ifndef::imagesdir[:imagesdir: ../../images]

@@ -115,7 +115,7 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
             import org.aim42.htmlsanitycheck.check.AllCheckers
 
             htmlSanityCheck {
-                checkerClasses = [AllCheckers.checkerClazzes.first()]
+                checkerClasses = [AllCheckers.CHECKER_CLASSES.first()]
             }
         """
 

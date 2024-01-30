@@ -31,11 +31,11 @@ class MissingImageFilesCheckerTest {
     private Configuration myConfig
 
     // logging stuff
-    private final static Logger logger = LoggerFactory.getLogger(MissingImageFilesCheckerTest.class);
+    private final static Logger logger = LoggerFactory.getLogger(MissingImageFilesCheckerTest.class)
 
 
     @Before
-    public void setUp() {
+    void setUp() {
 
         userDir = System.getProperty("user.dir")
         fileName = 'file-to-test.html'
@@ -53,13 +53,13 @@ class MissingImageFilesCheckerTest {
 
 
     @Test
-    public void testCheckImageDirectoryExists() {
+    void testCheckImageDirectoryExists() {
         assertTrue( "new image directory $imagesDir does not exist ",
                 new File( imagesDir ).exists())
     }
 
     @Test
-    public void testImageMustNotBeDirectory() {
+    void testImageMustNotBeDirectory() {
         // we try to use userDir as an image...
         File userDirectory = new File( userDir )
         assertTrue( "userDir does not exist", userDirectory.exists())
@@ -79,7 +79,7 @@ class MissingImageFilesCheckerTest {
         List<HtmlElement> images = htmlPage.getAllImageTags()
         assertEquals( "expected 1 image", 1, images.size())
 
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, new File(""))
+        myConfig.setSourceConfiguration(new File(""), [] as Set)
         checker = new MissingImageFilesChecker( myConfig)
 
         checkingResults = checker.performCheck( htmlPage )
@@ -95,7 +95,7 @@ class MissingImageFilesCheckerTest {
 
 
     @Test
-    public void testExistingImageIsFound() {
+    void testExistingImageIsFound() {
 
         File tempImageFile = File.createTempFile("testfile", ".jpg") << """dummy jpg file"""
 
@@ -111,7 +111,7 @@ class MissingImageFilesCheckerTest {
         htmlPage = new HtmlPage(HTML_WITH_IMAGE)
 
 
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tempImageFile.parentFile )
+        myConfig.setSourceConfiguration(tempImageFile.parentFile, [tempImageFile] as Set)
 
         checker = new MissingImageFilesChecker( myConfig)
         checkingResults = checker.performCheck( htmlPage )
@@ -128,7 +128,7 @@ class MissingImageFilesCheckerTest {
 
 
     @Test
-    public void testCheckSingleImageWithMissingImage() {
+    void testCheckSingleImageWithMissingImage() {
 
         // make sure the generated file exists...
         assertTrue( "file $filePath  does NOT exist (but should!)",
@@ -141,7 +141,7 @@ class MissingImageFilesCheckerTest {
 
         assertNotNull("htmlpage must not be null", htmlPage )
 
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, new File(imagesDir) )
+        myConfig.setSourceConfiguration(new File(imagesDir), [] as Set)
         checker = new MissingImageFilesChecker( myConfig)
 
         checkingResults = checker.performCheck( htmlPage )
@@ -162,7 +162,7 @@ class MissingImageFilesCheckerTest {
     }
 
     @Test
-    public void testCheckAbsoluteImage() {
+    void testCheckAbsoluteImage() {
 		File tempFolder = File.createTempDir()
 
 		File imageFolder = new File(tempFolder, "images")
@@ -179,7 +179,7 @@ class MissingImageFilesCheckerTest {
         List<HtmlElement> images = htmlPage.getAllImageTags()
         assertEquals( "expected 1 image", 1, images.size())
 
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tempFolder )
+        myConfig.setSourceConfiguration(tempFolder, [] as Set)
         checker = new MissingImageFilesChecker( myConfig)
 
         checkingResults = checker.performCheck( htmlPage )
@@ -198,7 +198,7 @@ class MissingImageFilesCheckerTest {
 	}
 
 @Test
-    public void testCheckImageWithSpace() {
+    void testCheckImageWithSpace() {
 		File tempFolder = File.createTempDir()
 
 		File imageFolder = new File(tempFolder, "images")
@@ -215,7 +215,7 @@ class MissingImageFilesCheckerTest {
         List<HtmlElement> images = htmlPage.getAllImageTags()
         assertEquals( "expected 1 image", 1, images.size())
 
-        myConfig.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, tempFolder )
+        myConfig.setSourceConfiguration(tempFolder, [] as Set)
         checker = new MissingImageFilesChecker( myConfig)
 
         checkingResults = checker.performCheck( htmlPage )

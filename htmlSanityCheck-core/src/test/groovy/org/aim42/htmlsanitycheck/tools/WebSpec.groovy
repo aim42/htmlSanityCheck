@@ -1,35 +1,75 @@
-package org.aim42.htmlsanitycheck.html
+package org.aim42.htmlsanitycheck.tools
 
-import org.aim42.htmlsanitycheck.tools.Web
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class URLUtilSpec extends Specification {
+// see end-of-file for license information
+
+
+class WebSpec extends Specification {
+
+    @Unroll
+    def "success return codes contain #successCode"() {
+        expect:
+        Web.isSuccessCode(successCode)
+
+        where:
+        successCode << [200, 201, 202]
+    }
+
+    @Unroll
+    def "warning return codes contain #warningCode"() {
+        expect:
+        Web.isWarningCode(warningCode)
+
+        where:
+        warningCode << [100, 101, 102]
+    }
+
+    @Unroll
+    def "error codes contain #errorCode"() {
+        expect:
+        Web.isErrorCode(errorCode)
+
+        where:
+        errorCode << [400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 500, 501, 502, 503, 504, 505]
+    }
+
+    def "is internet connection available"() {
+
+        // Stubbing in the following manner DOES NOT WORK!!!
+        //given: "we're disconnected from the internet..."
+        //Stub(NetUtil)
+        //NetUtil.isInternetConnectionAvailable(_) >> false
+
+
+        expect:
+        Web.isInternetConnectionAvailable()
+    }
 
     //@Unroll
     def "invalid chars in link"(boolean containsInvalidChars, String link) {
         expect:
-        Web.containsInvalidChars( link ) == containsInvalidChars
+        Web.containsInvalidChars(link) == containsInvalidChars
 
         where:
 
         containsInvalidChars | link
-        false | "#Context-Analysis"
-        false | "#Context_Analysis"
-        false | "#Context--Analysis"
-        false | "/forum/#!forum/randoop-discuss" // correct, as reported in #271
+        false                | "#Context-Analysis"
+        false                | "#Context_Analysis"
+        false                | "#Context--Analysis"
+        false                | "/forum/#!forum/randoop-discuss" // correct, as reported in #271
 
-        true  | "#Context Analysis" // regression test, contains blank
-        true  | "*Context-Analysis" // * is not allowed
+        true                 | "#Context Analysis" // regression test, contains blank
+        true                 | "*Context-Analysis" // * is not allowed
 
     }
-
 
 
     @Unroll
     def "identify invalid links"(boolean isValid, String link) {
         expect:
-        Web.isValidURL( link ) == isValid
+        Web.isValidURL(link) == isValid
 
         where:
 
@@ -47,7 +87,7 @@ class URLUtilSpec extends Specification {
     def "identify local resource links"(boolean isLocal, String link) {
 
         expect:
-        Web.isLocalResource( link ) == isLocal
+        Web.isLocalResource(link) == isLocal
 
         where:
 
@@ -106,24 +146,3 @@ class URLUtilSpec extends Specification {
 
     }
 }
-
-
-/************************************************************************
- * This is free software - without ANY guarantee!
- *
- *
- * Copyright 2013-2015, Dr. Gernot Starke, arc42.org
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- *********************************************************************** */

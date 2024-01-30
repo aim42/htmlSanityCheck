@@ -66,16 +66,16 @@ class HtmlSanityCheckTask extends DefaultTask {
     // shall certain http status codes be treated differently from the standard?
     @Optional
     @Input
-    Collection<Integer> httpWarningCodes
+    Set<Integer> httpWarningCodes
     @Optional
     @Input
-    Collection<Integer> httpErrorCodes
+    Set<Integer> httpErrorCodes
     @Optional
     @Input
-    Collection<Integer> httpSuccessCodes
+    Set<Integer> httpSuccessCodes
 
     @Input
-    Set<Class> checkerClasses = AllCheckers.checkerClazzes
+    List<Class> checkerClasses = AllCheckers.CHECKER_CLASSES
 
     // private stuff
     // **************************************************************************
@@ -117,13 +117,13 @@ class HtmlSanityCheckTask extends DefaultTask {
  * @author Gernot Starke <gs@gernotstarke.de>
  */
     @TaskAction
-    public void sanityCheckHtml() {
+    void sanityCheckHtml() {
 
         // tell us about these parameters
         logBuildParameter()
 
         // get configuration parameters from gradle
-        myConfig = this.setupConfiguration()
+        myConfig = setupConfiguration()
 
         // if we have no valid configuration, abort with exception
         if (myConfig.isValid()) {
@@ -176,31 +176,35 @@ See ${checkingResultsDir} for a detailed report."""
      */
     protected Configuration setupConfiguration() {
 
-        Configuration tmpConfig = new Configuration()
+        Configuration result = Configuration.builder()
+                .sourceDocuments(sourceDocuments.files)
+                .sourceDir(sourceDir)
+                .checkingResultsDir(checkingResultsDir)
+                .junitResultsDir(junitResultsDir)
 
-        tmpConfig.with {
-            addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, sourceDocuments.files)
-            addConfigurationItem(Configuration.ITEM_NAME_sourceDir, sourceDir)
-            addConfigurationItem(Configuration.ITEM_NAME_checkingResultsDir, checkingResultsDir)
-            addConfigurationItem(Configuration.ITEM_NAME_junitResultsDir, junitResultsDir)
+        // consoleReport is always FALSE for Gradle based builds
+                .consoleReport(false)
+                .failOnErrors(failOnErrors)
+                .httpConnectionTimeout(httpConnectionTimeout)
 
-            // consoleReport is always FALSE for Gradle based builds
-            addConfigurationItem(Configuration.ITEM_NAME_consoleReport, false)
-            addConfigurationItem(Configuration.ITEM_NAME_failOnErrors, failOnErrors)
-            addConfigurationItem(Configuration.ITEM_NAME_httpConnectionTimeout, httpConnectionTimeout)
+                .ignoreLocalhost(ignoreLocalHost)
+                .ignoreIPAddresses(ignoreIPAddresses)
 
-            addConfigurationItem(Configuration.ITEM_NAME_ignoreLocalhost, ignoreLocalHost)
-            addConfigurationItem(Configuration.ITEM_NAME_ignoreIPAddresses, ignoreIPAddresses)
+                .checksToExecute(checkerClasses)
+                .build()
 
-            addConfigurationItem(Configuration.ITEM_NAME_checksToExecute, checkerClasses)
-
-            // in case we have configured specific interpretations of http status codes
-            overwriteHttpSuccessCodes(httpSuccessCodes)
-            overwriteHttpErrorCodes(httpErrorCodes)
-            overwriteHttpWarningCodes(httpWarningCodes)
+        // in case we have configured specific interpretations of http status codes
+        if (httpSuccessCodes) {
+            result.overrideHttpSuccessCodes(httpSuccessCodes)
+        }
+        if (httpErrorCodes) {
+            result.overrideHttpErrorCodes(httpErrorCodes)
+        }
+        if (httpWarningCodes) {
+            result.overrideHttpWarningCodes(httpWarningCodes)
         }
 
-        return tmpConfig
+        return result
     }
 
 
