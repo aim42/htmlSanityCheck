@@ -42,6 +42,8 @@ configure(subprojects) {
     apply plugin: 'groovy'
     apply plugin: 'maven-publish'
 
+    apply plugin: 'jacoco'
+
     description "${rootProject.description} - Module ${project.name}"
 
     dependencies {
@@ -66,7 +68,7 @@ configure(subprojects) {
             maven {
                 name = 'myLocalRepositoryForFullIntegrationTests'
                 //noinspection GrDeprecatedAPIUsage
-                url = new File (project.parent.buildDir, "maven-repo")
+                url = new File(project.parent.buildDir, "maven-repo")
             }
             mavenLocal()
         }
@@ -74,6 +76,13 @@ configure(subprojects) {
 
     tasks.named('test', Test) {
         useJUnitPlatform()
+    }
+
+    check {
+        finalizedBy jacocoTestReport // report is always generated after tests run
+    }
+    jacocoTestReport {
+        dependsOn check // tests are required to run before generating the report
     }
 
     // The CodeNarc plugin performs quality checks on your project’s

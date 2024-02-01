@@ -27,3 +27,11 @@ jobs:
         with:
           files: |
             **/build/test-results/**/*.xml
+
+      - name: JaCoCo Test Coverage Report
+        uses: PavanMudigonda/jacoco-reporter@v4.9
+        with:
+          coverage_results_path: "htmlSanityCheck-gradle-plugin/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
+          coverage_report_name: Coverage
+          coverage_report_title: JaCoCo
+          github_token: ${{ secrets.GITHUB_TOKEN }}

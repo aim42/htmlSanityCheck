@@ -1,5 +1,10 @@
 plugins {
     id 'java-gradle-plugin'
+    id 'jacoco-report-aggregation'
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('testCodeCoverageReport', JacocoReport)
 }
 
 gradlePlugin {
