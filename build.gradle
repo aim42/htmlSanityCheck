@@ -68,7 +68,8 @@ configure(subprojects) {
             maven {
                 name = 'myLocalRepositoryForFullIntegrationTests'
                 //noinspection GrDeprecatedAPIUsage
-                url = new File(project.parent.buildDir, "maven-repo")
+                File baseDir = file(project.parent.buildDir)
+                url = new File (baseDir, "maven-repo")
             }
             mavenLocal()
         }
@@ -102,7 +103,8 @@ tasks.register("integrationTest") {
             commandLine "./gradlew", "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}"
         }
         logger.debug "Script output: $result"
-        final File testIndex = new File(INTEGRATION_TEST_DIRECTORY, "build/reports/index.html")
+        File integrationTestDirectory = file(INTEGRATION_TEST_DIRECTORY)
+        final File testIndex = new File (integrationTestDirectory, "build/reports/index.html")
         assert testIndex.exists()
     }
 }

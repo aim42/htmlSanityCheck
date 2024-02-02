@@ -12,13 +12,13 @@ plugins {
 }
 
 htmlSanityCheck {
-    sourceDir = new File("src/test/resources")
+    sourceDir = file("src/test/resources")
 
     // where to put results of sanityChecks...
-    checkingResultsDir = new File("build/reports")
+    checkingResultsDir = file("build/reports")
 
-    logger.quiet "docToolchain> HSC sourceDir: ${sourceDir}"
-    logger.quiet "docToolchain> HSC checkingResultsDir: ${checkingResultsDir}"
+    logger.quiet "docToolchain> HSC sourceDir: ${sourceDir.absolutePath}"
+    logger.quiet "docToolchain> HSC checkingResultsDir: ${checkingResultsDir.absolutePath}"
 }
 
 tasks.register("clean", Delete) {
