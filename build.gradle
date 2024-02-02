@@ -32,6 +32,10 @@ allprojects {
                     println "projectDir           : " + projectDir
                     println "groupId              : " + project.group
                     println "targetCompatibility  : " + java.targetCompatibility
+                    println "OS                   : " + System.properties["os.name"]
+                    println "Java VM Name         : " + System.properties["java.vm.name"]
+                    println "Java VM Vendor       : " + System.properties["java.vm.vendor"]
+                    println "Java VM Version      : " + System.properties["java.vm.version"]
                     println "=" * 80
                 }
     }
@@ -91,16 +95,16 @@ configure(subprojects) {
     // apply plugin: 'codenarc'
 }
 
-tasks.register("integrationTest") {
+tasks.register("integrationTestOnly") {
     group("Verification")
-    description("Run overall integration tests")
+    description("Run overall integration tests (no publish)")
 
     final String INTEGRATION_TEST_DIRECTORY = "integration-test/gradle-plugin"
 
     doLast {
         def result = exec {
             workingDir INTEGRATION_TEST_DIRECTORY
-            commandLine "./gradlew", "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}"
+            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "gradlew.bat" : "./gradlew", "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}"
         }
         logger.debug "Script output: $result"
         File integrationTestDirectory = file(INTEGRATION_TEST_DIRECTORY)
@@ -108,9 +112,18 @@ tasks.register("integrationTest") {
         assert testIndex.exists()
     }
 }
-integrationTest.dependsOn(
+integrationTestOnly.mustRunAfter(
         ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
         ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository'
+)
+tasks.register("integrationTest") {
+    group("Verification")
+    description("Run overall integration tests (and publish first)")
+}
+integrationTest.dependsOn(
+        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
+        ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
+        'integrationTestOnly'
 )
 
 /*

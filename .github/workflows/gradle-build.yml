@@ -1,16 +1,17 @@
-name: Gradle Build Check
+name: Gradle Build and Test
 on:
   pull_request:
   push:
-  workflow_dispatch: {}
+  workflow_dispatch:
 jobs:
   gradle:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
         with:
           distribution: temurin
+          # Always build with JDK 8 initially
           java-version: 8
 
       - name: Setup Gradle
@@ -19,7 +20,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
 
       - name: Execute Gradle build
-        run: ./gradlew clean check integrationTest --scan -stacktrace
+        run: ./gradlew clean check integrationTest --scan --stacktrace
 
       - name: 'Publish Test Results'
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
@@ -35,3 +36,14 @@ jobs:
           coverage_report_name: Coverage
           coverage_report_title: JaCoCo
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@master
+        with:
+          name: maven-repo
+          path: build/maven-repo
+
+      - name: Trigger Test Matrix Workflow
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: test-java-os-mix.yml

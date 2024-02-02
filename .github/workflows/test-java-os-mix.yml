@@ -1,0 +1,33 @@
+name: HTML Sanity Check Matrix Test
+on:
+  push:
+    paths:
+      - .github/workflows/test-java-os-mix.yml
+  workflow_dispatch: {}
+
+jobs:
+  test-java-os-mix:
+    strategy:
+      matrix:
+        os-version: [ ubuntu-latest, macos-14, windows-latest ]
+        java-version: [ 11, 17, 21 ]
+    runs-on: ${{ matrix.os-version }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download Artifacts
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: gradle-build.yml
+          name: maven-repo
+          path: build/maven-repo
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java-version }}
+      - name: Execute integration test (on Unixes)
+        run: |
+          uname -a
+          ./gradlew --version
+          ./gradlew info
+          ./gradlew integrationTestOnly --scan
+
