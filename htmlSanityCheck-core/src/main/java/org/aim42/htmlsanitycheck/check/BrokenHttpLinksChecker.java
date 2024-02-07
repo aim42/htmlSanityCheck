@@ -17,6 +17,7 @@ import java.util.Set;
 
 /**
  * Check html anchor href attributes
+ *
  * @see <a href="https://www.w3schools.com/tags/att_a_href.asp">https://www.w3schools.com/tags/att_a_href.asp</a>
  */
 class BrokenHttpLinksChecker extends Checker {
@@ -35,9 +36,9 @@ class BrokenHttpLinksChecker extends Checker {
     BrokenHttpLinksChecker(Configuration pConfig) {
         super(pConfig);
 
-        errorCodes =  getMyConfig().getHttpErrorCodes();
-        warningCodes =  getMyConfig().getHttpWarningCodes();
-        successCodes =  getMyConfig().getHttpSuccessCodes();
+        errorCodes = getMyConfig().getHttpErrorCodes();
+        warningCodes = getMyConfig().getHttpWarningCodes();
+        successCodes = getMyConfig().getHttpSuccessCodes();
     }
 
     @Override
@@ -129,7 +130,7 @@ class BrokenHttpLinksChecker extends Checker {
                     if (firstConnection.getHeaderField("Location") != null) {
                         newLocation = firstConnection.getHeaderField("Location");
 
-                        problem = "Warning: " + href + " returned statuscode " + responseCode + ", new location: " + newLocation;
+                        problem = String.format("Warning: %s returned statuscode %d, new location: %s", href, responseCode, newLocation);
                         getCheckingResults().addFinding(new Finding(problem));
 
                     }
@@ -152,7 +153,7 @@ class BrokenHttpLinksChecker extends Checker {
                         problem = "Error: Unknown or unclassified response code:";
                     }
 
-                    problem += String.format("'%s' returned statuscode %d.", href, responseCode);
+                    problem += String.format(" %s returned statuscode %d.", href, responseCode);
 
                     getCheckingResults().addFinding(new Finding(problem));
 

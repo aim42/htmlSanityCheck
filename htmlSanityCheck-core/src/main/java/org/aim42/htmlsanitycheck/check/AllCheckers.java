@@ -25,11 +25,13 @@ import java.util.List;
 public class AllCheckers {
     public static final List<Class<? extends Checker>> CHECKER_CLASSES =
             Arrays.asList(
-                    BrokenCrossReferencesChecker.class,
-                    BrokenHttpLinksChecker.class,
-                    DuplicateIdChecker.class,
-                    ImageMapChecker.class,
+                    // Keep the list ordering to ensure comparability with HSC 1.x versions
                     MissingAltInImageTagsChecker.class,
                     MissingImageFilesChecker.class,
-                    MissingLocalResourcesChecker.class);
+                    DuplicateIdChecker.class,
+                    BrokenHttpLinksChecker.class,
+                    ImageMapChecker.class,
+                    BrokenCrossReferencesChecker.class,
+                    MissingLocalResourcesChecker.class
+            );
 }
