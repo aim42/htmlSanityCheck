@@ -1,8 +1,7 @@
-package org.aim42.htmlsanitycheck.report
+package org.aim42.htmlsanitycheck.report;
 
-import groovy.transform.InheritConstructors
-import org.aim42.htmlsanitycheck.collect.PerRunResults
-import org.slf4j.Logger
+import org.aim42.htmlsanitycheck.collect.PerRunResults;
+import org.slf4j.Logger;
 
 /************************************************************************
  * This is free software - without ANY guarantee!
@@ -24,13 +23,10 @@ import org.slf4j.Logger
  *
  *********************************************************************** */
 
-@InheritConstructors
-class LoggerReporter extends ConsoleReporter {
+public class LoggerReporter extends ConsoleReporter {
 
-    public LoggerReporter( PerRunResults runResults, Logger logger ) {
-        super( runResults )
-		printer = { line -> logger.info(line) }
+    public LoggerReporter(PerRunResults runResults, Logger logger) {
+        super(runResults);
+        this.printer = logger::info;
     }
-
 }
-

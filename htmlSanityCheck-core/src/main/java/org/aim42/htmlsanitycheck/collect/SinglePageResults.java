@@ -1,14 +1,17 @@
 package org.aim42.htmlsanitycheck.collect;
 
+import lombok.AllArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Collects checking results {@link Finding} of a single html page.
  * <p>
- * Contains information about the page itself, e.g. its filename and title.
+ * Contains information about the page itself, e.g., its filename and title.
  * Instances of this class will be contained in {@link SingleCheckResults}
  */
+@AllArgsConstructor
 public class SinglePageResults implements PageResults {
 
     public String pageFileName; // from where we read the HTML
@@ -22,7 +25,7 @@ public class SinglePageResults implements PageResults {
 
     // some variants for construction
     public SinglePageResults() {
-        this.singleCheckResults = new ArrayList<SingleCheckResults>();
+        this.singleCheckResults = new ArrayList<>();
         this.pageFileName = "";
         this.pageFilePath = "";
         this.pageTitle = "";
@@ -36,7 +39,7 @@ public class SinglePageResults implements PageResults {
 
 
     /**
-     * allows to add the results of a single check
+     * Allows adding the results of a single check
      **/
     public void addResultsForSingleCheck(SingleCheckResults resultsForSingleCheck) {
 
@@ -64,19 +67,18 @@ public class SinglePageResults implements PageResults {
     // query the results
     @Override
     public int nrOfItemsCheckedOnPage() {
-        return singleCheckResults.stream().map(it -> it.getNrOfItemsChecked()).reduce(0, (a, b) -> a + b);
+        return singleCheckResults.stream().map(SingleCheckResults::getNrOfItemsChecked).reduce(0, Integer::sum);
     }
 
     @Override
     public int nrOfFindingsOnPage() {
-        return singleCheckResults.stream().map(it -> it.nrOfProblems()).reduce(0, (a, b) -> a + b);
+        return singleCheckResults.stream().map(SingleCheckResults::nrOfProblems).reduce(0, Integer::sum);
     }
 
     /**
-     * returns the number of distinct checker types that have run
+     * Returns the number of distinct checker types that have run
      * (by the number of SingleCheckResults available)
      *
-     * @return
      */
     @Override
     public int howManyCheckersHaveRun() {

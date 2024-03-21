@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * A single "finding" from any check, i.e.:
+ * A single "finding" from any check, i.e.:
  * - a missing image file
  * - a missing label/id/bookmark (== broken link)
  * - a duplicate label/id/bookmark
@@ -22,6 +23,7 @@ public class Finding {
     int nrOfOccurrences;// how often does this specific finding occur in the checked-page
     // suggestions are ordered: getAt(0) yields the best, getAt(1) the second and so forth
     @Setter
+    @Getter
     List<String> suggestions;
 
     public Finding() {
