@@ -22,10 +22,10 @@ public class HtmlReporter extends Reporter {
     private static final Logger log = LoggerFactory.getLogger(HtmlReporter.class);
 
     private static final String REPORT_FILENAME = "index.html";
-    private String resultsOutputDir;
+    private final String resultsOutputDir;
     private FileWriter writer;
 
-    public void write(String content) {
+    protected void write(String content) {
         try {
             writer.write(content);
         } catch (IOException e) {
@@ -41,7 +41,7 @@ public class HtmlReporter extends Reporter {
     @Override
     public void initReport() {
         // determine a path where we can write our output file...
-        File outputFile = createOutputFile(resultsOutputDir, REPORT_FILENAME);
+        File outputFile = createOutputFile(resultsOutputDir);
 
         // init the private writer object
         try {
@@ -79,13 +79,19 @@ public class HtmlReporter extends Reporter {
         // unfortunately we currently are not able to use try-with-ressources yet.
         InputStream stream = null;
         try {
-            stream = resource.openStream();
+            if (resource != null) {
+                stream = resource.openStream();
+            } else {
+                throw new IOException("Resource not found: " + resourceName);
+            }
             Files.copy(stream, new File(outputDirectory, resourceName).toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (final IOException e) {
             throw new UncheckedIOException(e);
         } finally {
             try {
-                stream.close();
+                if (stream != null) {
+                    stream.close();
+                }
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
             }
@@ -346,13 +352,10 @@ public class HtmlReporter extends Reporter {
 
     @Override
     protected void reportSingleCheckDetails(SingleCheckResults checkResults) {
-        if (checkResults.getFindings().size() > 0) {
+        if (!checkResults.getFindings().isEmpty()) {
 
             write("\n  <ul>\n");
-            checkResults.getFindings().forEach(finding -> {
-
-                write(String.format("      <li> %s </li>\n", finding.toString()));
-            });
+            checkResults.getFindings().forEach(finding -> write(String.format("      <li> %s </li>\n", finding.toString())));
             write("  </ul>\n");
         }
     }
@@ -361,11 +364,10 @@ public class HtmlReporter extends Reporter {
      * tries to find a writable directory. First tries dirName,
      * if that does not work takes User.dir as second choice.
      *
-     * @param dirName  : e.g. /Users/aim42/projects/htmlsc/build/report/htmlchecks
-     * @param fileName : default "index.html"
+     * @param dirName : e.g. /Users/aim42/projects/htmlsc/build/report/htmlchecks
      * @return complete path to a writable file that does not currently exist.
      */
-    private File createOutputFile(String dirName, String fileName) {
+    private File createOutputFile(String dirName) {
         File outputFolder = new File(dirName);
 
         if (!outputFolder.isDirectory() || !outputFolder.canWrite()) {
@@ -374,9 +376,7 @@ public class HtmlReporter extends Reporter {
         }
 
         // make sure we really have an existing file!
-        File outputFile = new File(outputFolder, fileName);
-
-        return outputFile;
+        return new File(outputFolder, HtmlReporter.REPORT_FILENAME);
     }
 
 
