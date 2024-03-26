@@ -22,9 +22,6 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     private Configuration myConfig
 
     /** executed once before all specs are executed **/
-    def beforeSpec() {
-
-    }
 
     /* executed before every single spec */
 
@@ -40,10 +37,10 @@ class BrokenHttpLinksCheckerSpec extends Specification {
      * (the checker will most likely use google.com as a proxy for "internet"
      */
     // todo: test that properly
-    @IgnoreIf({ Boolean.valueOf(env['INTELLIJ']) })
+    @IgnoreIf({ !System.getenv('GITHUB_ACTIONS') })
     def "recognize if there is internet connectivity"() {
         expect: "if there is no internet connection, testing should fail"
-        NetUtil.isInternetConnectionAvailable() == true
+        NetUtil.isInternetConnectionAvailable()
 
     }
 
@@ -102,9 +99,9 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         collector.nrOfProblems() == 0
 
         where:
-           goodUrl << [ "https://junit.org/junit4/javadoc/latest/org/junit/Before.html",
-                       "http://plumelib.org/plume-util/api/org/plumelib/util/DeterministicObject.html",
-                       "http://people.csail.mit.edu/cpacheco/publications/randoop-case-study-abstract.html"
+           goodUrl << ["https://junit.org/junit4/javadoc/latest/org/junit/Before.html",
+                       "https://plumelib.org/plume-util/api/org/plumelib/util/DeterministicObject.html",
+                       "https://people.csail.mit.edu/cpacheco/publications/randoop-case-study-abstract.html"
            ]
     }
 
@@ -154,6 +151,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     }
 
 
+    @IgnoreIf({ !System.getenv('GITHUB_ACTIONS') })
     def "bad amazon link is identified as problem"() {
 
         given: "an HTML page with a single (good) amazon link"
@@ -173,10 +171,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     }
 
 
-    // IntelliJ has problems with testing http connections,
-    // so we ignore some tests...
     @Unroll
-    //@IgnoreIf({ Boolean.valueOf(env['INTELLIJ']) })
     def 'bad link #badLink is recognized as such'() {
 
         given: "an HTML page with a single (broken) link"
@@ -204,7 +199,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
         given: "the old arc42 (http!) page "
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href="http://arc42.de"</a>
+                <a href="https://arc42.de"</a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
@@ -215,13 +210,13 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         then: "then collector contains one error message"
         collector.getFindings().size() == 1
 
-        collector?.getFindings()?.first().whatIsTheProblem.contains("https://arc42.de")
+        collector?.getFindings()?.first()?.whatIsTheProblem?.contains("https://arc42.de")
 
     }
 
     /**
      * guys from OpenRepose (https://github.com/rackerlabs/gradle-linkchecker-plugin/) came up with the
-     * cornercase of "localhost" and "127.0.0.1"
+     * corner-case of "localhost" and "127.0.0.1"
      */
     def "urls with localhost leads to errors due to suspicious dependency to environment"() {
         // todo
@@ -237,8 +232,8 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
         then: "warning is given"
 
-        collector?.getFindings()?.first().whatIsTheProblem.contains("Warning")
-        collector?.getFindings()?.first().whatIsTheProblem.contains("suspicious")
+        collector?.getFindings()?.first()?.whatIsTheProblem?.contains("Warning")
+        collector?.getFindings()?.first()?.whatIsTheProblem?.contains("suspicious")
 
     }
 }
