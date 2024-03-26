@@ -11,6 +11,7 @@ plugins {
     id 'java'
 
     alias(libs.plugins.gradle.versions)
+    alias(libs.plugins.sonar)
 }
 
 allprojects {
@@ -84,7 +85,20 @@ configure(subprojects) {
         finalizedBy jacocoTestReport // report is always generated after tests run
     }
     jacocoTestReport {
+        reports {
+            xml.required = true
+        }
         dependsOn check // tests are required to run before generating the report
+    }
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", System.getenv("SONAR_PROJECT_KEY") ?: "aim42_htmlSanityCheck"
+        property "sonar.organization", System.getenv('SONAR_ORGANIZATION') ?: "aim42"
+        property "sonar.host.url", System.getenv('SONAR_URL') ?: "https://sonarcloud.io"
+        property "sonar.scm.provider", "git"
+        property "sonar.coverage.jacoco.xmlReportPaths", "**/build/reports/jacoco/test/jacocoTestReport.xml"
     }
 }
 

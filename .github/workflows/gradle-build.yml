@@ -1,24 +1,36 @@
-name: Gradle Build and Test
+name: Build and Test
 on:
   pull_request:
   push:
   workflow_dispatch:
+env:
+  SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION || 'aim42' }}
+  SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY || 'aim42_htmlSanityCheck' }}
 jobs:
   gradle:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
-          # Always build with JDK 8 initially
-          java-version: 8
+          # SonarQube requires JDK 17 or higher
+          java-version: 17
+
+      - name: Cache JDK
+        uses: actions/cache@v4
+        with:
+          path: ~/.jdk
+          key: ${{ runner.os }}-jdk
+          restore-keys: ${{ runner.os }}-jdk
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
-
 
       - name: Cache Gradle packages
         uses: actions/cache@v4
@@ -58,3 +70,19 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: test-java-os-mix.yml
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Analyze with SonarCloud
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          ./gradlew sonar -Psonar.branch.name=${BRANCH_NAME} --info --scan
+
