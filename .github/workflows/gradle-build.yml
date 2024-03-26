@@ -7,8 +7,8 @@ jobs:
   gradle:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           # Always build with JDK 8 initially
@@ -21,7 +21,7 @@ jobs:
 
 
       - name: Cache Gradle packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
@@ -38,7 +38,7 @@ jobs:
             **/build/test-results/**/*.xml
 
       - name: JaCoCo Test Coverage Report
-        uses: PavanMudigonda/jacoco-reporter@v4.9
+        uses: PavanMudigonda/jacoco-reporter@v5.0
         with:
           coverage_results_path: "htmlSanityCheck-gradle-plugin/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
           coverage_report_name: Coverage
@@ -46,7 +46,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         with:
           name: maven-repo
           path: build/maven-repo
