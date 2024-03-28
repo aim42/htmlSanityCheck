@@ -5,9 +5,12 @@ slf4j-version = '2.0.16'
 
 [libraries]
 commons-validator = 'commons-validator:commons-validator:1.9.0'
+# Use latest 3.x Groovy Version to use Spock for Groovy 3 as long as Gradle uses Groovy 3
+groovy-bom = 'org.codehaus.groovy:groovy-bom:3.0.22'
 jsoup = 'org.jsoup:jsoup:1.18.1'
 junit-vintage = { module = 'org.junit.vintage:junit-vintage-engine', version.ref = 'junit5-version' }
 lombok = 'org.projectlombok:lombok:1.18.34'
+mockito = "org.mockito:mockito-junit-jupiter:3.12.4"
 picocli-impl = { module = 'info.picocli:picocli', version.ref = "picocli-version" }
 picocli-annotationprocessor = { module = 'info.picocli:picocli-codegen', version.ref = "picocli-version" }
 slf4j-bom = { module = "org.slf4j:slf4j-bom", version.ref = "slf4j-version" }
