@@ -34,8 +34,8 @@ jobs:
 
       - name: Execute integration test (on Unixes)
         run: |
+          cd integration-test/gradle-plugin
           uname -a
           ./gradlew --version
-          ./gradlew info
-          ./gradlew integrationTestOnly --scan
+          ./gradlew htmlSanityCheck --scan
 

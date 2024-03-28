@@ -18,8 +18,9 @@ htmlSanityCheck {
     checkingResultsDir = file("build/reports")
     failOnErrors = true
 
-    logger.quiet "docToolchain> HSC sourceDir: ${sourceDir.absolutePath}"
-    logger.quiet "docToolchain> HSC checkingResultsDir: ${checkingResultsDir.absolutePath}"
+    logger.quiet "HSC version: ${htmlSanityCheckVersion}"
+    logger.quiet "HSC sourceDir: ${sourceDir.absolutePath}"
+    logger.quiet "HSC checkingResultsDir: ${checkingResultsDir.absolutePath}"
 }
 
 tasks.register("clean", Delete) {
