@@ -13,17 +13,22 @@ jobs:
         java-version: [ 11, 17, 21 ]
     runs-on: ${{ matrix.os-version }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out
+        uses: actions/checkout@v4
+
       - name: Download Artifacts
         uses: dawidd6/action-download-artifact@v3
         with:
           workflow: gradle-build.yml
           name: maven-repo
           path: build/maven-repo
-      - uses: actions/setup-java@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
+
       - name: Execute integration test (on Unixes)
         run: |
           uname -a
