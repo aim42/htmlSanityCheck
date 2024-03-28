@@ -74,11 +74,9 @@ public class JaroStrategy implements SimilarityStrategy {
         int transpositions = transpositions(m1, m2);
 
         // Calculate the distance.
-        double dist =
-                (m1.length() / ((double) shorter.length()) +
-                        m2.length() / ((double) longer.length()) +
-                        (m1.length() - transpositions) / ((double) m1.length())) / 3.0;
-        return dist;
+        return (m1.length() / ((double)shorter.length()) +
+                m2.length() / ((double)longer.length()) +
+                (m1.length() - transpositions) / ((double)m1.length())) / 3.0;
 
 
     }

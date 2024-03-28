@@ -53,8 +53,8 @@ public class AscendingComparatorTest {
 		SimilarityScore first = new SimilarityScore("First", 0.96);
 		SimilarityScore second = new SimilarityScore("Second", 0.96);
 		AscendingSimilarityScoreComparator c = new AscendingSimilarityScoreComparator();
-		assertEquals(c.compare(first, second), 0);
-		assertEquals(c.compare(second, first), 0);
+		assertEquals(0, c.compare(first, second));
+		assertEquals(0, c.compare(second, first));
 	}
 
 }

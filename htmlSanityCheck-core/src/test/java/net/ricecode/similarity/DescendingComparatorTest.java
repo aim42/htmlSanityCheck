@@ -53,8 +53,8 @@ public class DescendingComparatorTest {
 		SimilarityScore first = new SimilarityScore("First", 0.96);
 		SimilarityScore second = new SimilarityScore("Second", 0.96);
 		DescendingSimilarityScoreComparator c = new DescendingSimilarityScoreComparator();
-		assertEquals(c.compare(first, second), 0);
-		assertEquals(c.compare(second, first), 0);
+		assertEquals(0, c.compare(first, second));
+		assertEquals(0, c.compare(second, first));
 	}
 
 }

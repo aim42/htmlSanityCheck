@@ -66,7 +66,6 @@ public class StringSimilarityServiceImpl implements StringSimilarityService {
         return scores;
     }
 
-
     /**
      * Calculates the similarity score of a single feature.
      *
@@ -124,7 +123,7 @@ public class StringSimilarityServiceImpl implements StringSimilarityService {
             List<SimilarityScore> scores = scoreAll(features, target);
             scores.sort(new DescendingSimilarityScoreComparator());
 
-            // fails if n> scores.size(): result = scores.subList(0, n);
+            // fails if n> scores.size(): result = scores.subList(0, n); //NOSONAR(S125)
             result = scores.subList(0, Math.min(scores.size(), n));
 
         }

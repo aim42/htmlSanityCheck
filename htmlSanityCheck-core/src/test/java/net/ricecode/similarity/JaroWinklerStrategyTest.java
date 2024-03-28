@@ -24,44 +24,41 @@
 package net.ricecode.similarity;
 
 import org.junit.Test;
-
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import java.util.Arrays;
+import java.util.Collection;
 import static org.junit.Assert.assertEquals;
 
+@RunWith(Parameterized.class)
 public class JaroWinklerStrategyTest {
 
-	@Test
-	public void testOneTranspostion() {
-		SimilarityStrategy s = new JaroWinklerStrategy();
-		String first = "Martha";
-		String second = "Marhta";
-		double expected = 0.961;
-		double delta = 0.001;
-		double actual = s.score(first, second);
-		assertEquals(expected, actual, delta);
+	private String first;
+	private String second;
+	private double expected;
+	private double delta;
+
+	public JaroWinklerStrategyTest(String first, String second, double expected, double delta) {
+		this.first = first;
+		this.second = second;
+		this.expected = expected;
+		this.delta = delta;
+	}
+
+	@Parameterized.Parameters
+	public static Collection<Object[]> data() {
+		return Arrays.asList(new Object[][]{
+				{"Martha", "Marhta", 0.961, 0.001},
+				{"Dwayne", "Duane", 0.840, 0.001},
+				{"Dixon", "Dicksonx", 0.813, 0.001}
+		});
 	}
 
 	@Test
-	public void testSoundAlike() {
+	public void testWithMultipleCases() {
 		SimilarityStrategy s = new JaroWinklerStrategy();
-		String first = "Dwayne";
-		String second = "Duane";
-		double expected = 0.840;
-		double delta = 0.001;
 		double actual = s.score(first, second);
 		assertEquals(expected, actual, delta);
-		
-	}
-	
-	@Test
-	public void testMisspelledSoundAlike() {
-		SimilarityStrategy s = new JaroWinklerStrategy();
-		String first = "Dixon";
-		String second = "Dicksonx";
-		double expected = 0.813;
-		double delta = 0.001;
-		double actual = s.score(first, second);
-		assertEquals(expected, actual, delta);
-		
 	}
 	
 	@Test
