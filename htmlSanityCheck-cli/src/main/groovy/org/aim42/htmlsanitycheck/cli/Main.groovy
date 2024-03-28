@@ -2,6 +2,7 @@ package org.aim42.htmlsanitycheck.cli
 
 import org.aim42.htmlsanitycheck.AllChecksRunner
 import org.aim42.htmlsanitycheck.Configuration
+import org.aim42.htmlsanitycheck.check.AllCheckers
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import picocli.CommandLine
@@ -87,12 +88,13 @@ class Main implements Runnable {
                 System.exit(1)
             }
 
-            var configuration = new Configuration()
-            configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDir, main.srcDir)
-            configuration.addConfigurationItem(Configuration.ITEM_NAME_sourceDocuments, srcDocuments)
-
             var resultsDirectory = new File(main.resultsDirectoryName)
-            configuration.addConfigurationItem((Configuration.ITEM_NAME_checkingResultsDir), resultsDirectory)
+            var configuration = Configuration.builder()
+                    .sourceDir(main.srcDir)
+                    .sourceDocuments(srcDocuments as Set)
+                    .checkingResultsDir(resultsDirectory)
+                    .checksToExecute(AllCheckers.CHECKER_CLASSES)
+                    .build()
 
             if (configuration.isValid()) {
                 // create output directory for checking results

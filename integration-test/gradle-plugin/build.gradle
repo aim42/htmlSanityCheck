@@ -68,7 +68,7 @@ buildReadmeGradlePlugin.dependsOn(buildReadmeRoot)
 //buildReadmeGradlePlugin.dependsOn(copyReadmeResources)
 
 htmlSanityCheck {
-    sourceDir file("build/docs")
+    sourceDir = file("../common/src/test/resources")
 
     checkingResultsDir = file("build/reports")
     failOnErrors = true
