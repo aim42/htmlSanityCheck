@@ -32,11 +32,16 @@ public class Configuration {
     File sourceDir;
     File checkingResultsDir;
     File junitResultsDir;
-    Boolean consoleReport;
-    Boolean failOnErrors;
-    Integer httpConnectionTimeout;
-    Boolean ignoreLocalhost;
-    Boolean ignoreIPAddresses;
+    @Builder.Default
+    Boolean consoleReport = false;
+    @Builder.Default
+    Boolean failOnErrors = false;
+    @Builder.Default
+    Integer httpConnectionTimeout = 5000;
+    @Builder.Default
+    Boolean ignoreLocalhost = false;
+    @Builder.Default
+    Boolean ignoreIPAddresses = false;
     /*
      * Explanation for configuring http status codes:
      * The standard http status codes are defined in class @link NetUtil and can
