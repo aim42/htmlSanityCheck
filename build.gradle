@@ -169,6 +169,7 @@ configure(subprojects) {
     description "${rootProject.description} - Module ${project.name}"
 
     dependencies {
+        implementation platform(libs.groovy.bom)
         implementation platform(libs.slf4j.bom)
 
         testImplementation platform(libs.spock)

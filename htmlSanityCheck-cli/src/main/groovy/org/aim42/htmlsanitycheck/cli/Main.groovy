@@ -2,6 +2,7 @@ package org.aim42.htmlsanitycheck.cli
 
 import org.aim42.htmlsanitycheck.AllChecksRunner
 import org.aim42.htmlsanitycheck.Configuration
+import org.aim42.htmlsanitycheck.check.AllCheckers
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import picocli.CommandLine
