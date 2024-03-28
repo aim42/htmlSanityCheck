@@ -16,6 +16,7 @@ htmlSanityCheck {
 
     // where to put results of sanityChecks...
     checkingResultsDir = file("build/reports")
+    failOnErrors = true
 
     logger.quiet "docToolchain> HSC sourceDir: ${sourceDir.absolutePath}"
     logger.quiet "docToolchain> HSC checkingResultsDir: ${checkingResultsDir.absolutePath}"
