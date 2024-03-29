@@ -292,13 +292,23 @@ sonar {
     }
 }
 
-tasks.register("integrationTestOnly") {
+tasks.register("publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository") {
+    group("Publishing")
+    description("Publishes all publications to the local Maven repository")
+}
+publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository.configure {
+    dependsOn(":htmlSanityCheck-core:publishMavenJavaPublicationToMyLocalRepositoryForFullIntegrationTestsRepository",
+            ":htmlSanityCheck-gradle-plugin:publishPluginMavenPublicationToMyLocalRepositoryForFullIntegrationTestsRepository",
+            ":htmlSanityCheck-gradle-plugin:publishHtmlSanityCheckPluginMarkerMavenPublicationToMyLocalRepositoryForFullIntegrationTestsRepository"
+    )
+}
+
 final String INTEGRATION_TEST_DIRECTORY = "integration-test"
 final String INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN = "${INTEGRATION_TEST_DIRECTORY}/gradle-plugin"
 final String INTEGRATION_TEST_DIRECTORY_CLI = "${INTEGRATION_TEST_DIRECTORY}/cli"
 
-static void cleanBuild(String baseDirectory) {
-    File integrationTestBuildDir = new File("${baseDirectory}/${Project.DEFAULT_BUILD_DIR_NAME}")
+static void cleanBuild(final File baseDirectory) {
+    File integrationTestBuildDir = new File(baseDirectory, "${Project.DEFAULT_BUILD_DIR_NAME}")
     if (integrationTestBuildDir.exists()) {
         integrationTestBuildDir.eachFileRecurse { file ->
             file.delete()
@@ -308,72 +318,92 @@ static void cleanBuild(String baseDirectory) {
     assert !integrationTestBuildDir.exists()
 }
 
-tasks.register("integrationTestGradlePlugin") {
+tasks.register("integrationTestGradlePluginOnly") {
     group("Verification")
-    description("Run gradle-plugin integration tests")
+    description("Run gradle-plugin integration tests (only)")
+
+    final File testIndex = new File(file(INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN), "${Project.DEFAULT_BUILD_DIR_NAME}/reports/index.html")
+    outputs.file testIndex
 
     doLast {
         def result = exec {
             workingDir INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN
-            commandLine "./gradlew",
+            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "gradlew.bat" : "./gradlew",
                     "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}", "--scan"
         }
         logger.debug "Script output: $result"
-        final File testIndex = new File(INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN, "${Project.DEFAULT_BUILD_DIR_NAME}/reports/index.html")
         assert testIndex.exists()
     }
 }
-integrationTestGradlePlugin.dependsOn(
-        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository'
-)
-integrationTestGradlePlugin.configure {
-    shouldRunAfter(':htmlSanityCheck-gradle-plugin:check')
+integrationTestGradlePluginOnly.configure {
+    mustRunAfter('publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository')
 }
+tasks.register("integrationTestGradlePlugin") {
+    group("Verification")
+    description("Run overall gradle-plugin integration tests (and publish first)")
+}
+integrationTestGradlePlugin.dependsOn('publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
+        'integrationTestGradlePluginOnly')
 tasks.register("cleanIntegrationTestGradlePlugin", Delete) {
     group("Build")
     description("Deletes the result directory from gradle-plugin integration tests")
 
     doLast {
-        cleanBuild INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN
+        cleanBuild file(INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN)
     }
 }
 clean.dependsOn cleanIntegrationTestGradlePlugin
 
-tasks.register("integrationTestCli") {
+tasks.register("integrationTestCliOnly") {
     group("Verification")
-    description("Run CLI integration tests")
+    description("Run CLI integration tests (only)")
 
     final String BUILD_REPORTS_DIRECTORY = "${Project.DEFAULT_BUILD_DIR_NAME}/reports"
+    final File testIndex = new File(file(INTEGRATION_TEST_DIRECTORY_CLI), "${BUILD_REPORTS_DIRECTORY}/index.html")
+
+    outputs.file testIndex
 
     doLast {
         def result = exec {
             workingDir INTEGRATION_TEST_DIRECTORY_CLI
-            new File(BUILD_REPORTS_DIRECTORY).mkdirs()
-            commandLine "../../htmlSanityCheck-cli/${Project.DEFAULT_BUILD_DIR_NAME}/install/hsc/bin/hsc", "-r", BUILD_REPORTS_DIRECTORY, "../common/src/test/resources"
+            file(BUILD_REPORTS_DIRECTORY).mkdirs()
+            String hscScriptFileName = "../../htmlSanityCheck-cli/${Project.DEFAULT_BUILD_DIR_NAME}/install/hsc/bin/hsc"
+            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "${hscScriptFileName}.bat" : hscScriptFileName,
+                    "-r", BUILD_REPORTS_DIRECTORY, "../common/src/test/resources"
         }
         logger.debug "Script output: ${result}"
-        final File testIndex = new File(INTEGRATION_TEST_DIRECTORY_CLI, "${BUILD_REPORTS_DIRECTORY}/index.html")
         assert testIndex.exists()
     }
 }
-integrationTestCli.dependsOn(
-        ':htmlSanityCheck-cli:installDist'
-)
+integrationTestCliOnly.configure {
+    mustRunAfter(':htmlSanityCheck-cli:installDist')
+}
+tasks.register("integrationTestCli") {
+    group("Verification")
+    description("Run overall CLI integration tests (and publish first)")
+}
 integrationTestCli.configure {
-    shouldRunAfter(':htmlSanityCheck-cli:check')
+    dependsOn(':htmlSanityCheck-cli:installDist', 'integrationTestCliOnly')
 }
 tasks.register("cleanIntegrationTestCli", Delete) {
     group("Build")
     description("Deletes the result directory from CLI integration tests")
 
     doLast {
-        cleanBuild INTEGRATION_TEST_DIRECTORY_CLI
+        cleanBuild file(INTEGRATION_TEST_DIRECTORY_CLI)
     }
 }
 //noinspection GroovyAssignabilityCheck
 clean.dependsOn cleanIntegrationTestCli
-integrationTestCli.dependsOn cleanIntegrationTestCli
+//integrationTestCli.dependsOn cleanIntegrationTestCli
+tasks.register("integrationTestOnly") {
+    group("Verification")
+    description("Run overall integration tests (only)")
+}
+integrationTestOnly.dependsOn(
+        'integrationTestGradlePluginOnly',
+        'integrationTestCliOnly'
+)
 
 tasks.register("integrationTest") {
     group("Verification")
