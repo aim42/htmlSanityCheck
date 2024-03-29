@@ -45,10 +45,23 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
 
-      - name: Execute integration test
+      - name: Execute integration test (Unix)
+        if: runner.os != 'Windows'
         run: |
           cd integration-test/gradle-plugin
           uname -a
           ./gradlew --version
           ./gradlew htmlSanityCheck --scan
 
+      - name: Execute integration test (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          uname -a
+          cmd /c "echo off && gradlew.bat --version"
+          cmd /c "echo off && gradlew.bat info"
+          cmd /c "echo off && gradlew.bat integrationTestOnly --scan"
+
+        # If we ever need to debug the file system contents
+        #   Get-ChildItem -Recurse -File | Format-Table Name, Length, LastWriteTime
+        #   Get-ChildItem -Recurse -File ./integration-test | Format-Table Name, Length, LastWriteTime
