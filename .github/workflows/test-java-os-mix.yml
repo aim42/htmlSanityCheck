@@ -57,6 +57,19 @@ jobs:
           ./gradlew --version
           ./gradlew htmlSanityCheck --scan
 
+      - name: Execute integration test (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          uname -a
+          cmd /c "echo off && gradlew.bat --version"
+          cmd /c "echo off && gradlew.bat info"
+          cmd /c "echo off && gradlew.bat integrationTestOnly --scan"
+
+        # If we ever need to debug the file system contents
+        #   Get-ChildItem -Recurse -File | Format-Table Name, Length, LastWriteTime
+        #   Get-ChildItem -Recurse -File ./integration-test | Format-Table Name, Length, LastWriteTime
+
       - name: Collect state upon failure
         if: failure()
         run: |
