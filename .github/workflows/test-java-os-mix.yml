@@ -45,7 +45,7 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
 
-      - name: Execute integration test (on Unixes)
+      - name: Execute integration test
         run: |
           cd integration-test/gradle-plugin
           uname -a
