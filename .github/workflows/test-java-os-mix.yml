@@ -28,6 +28,13 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/actions/wrapper-validation@v4
 
+      - name: Download (CLI) Artifacts
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: gradle-build.yml
+          name: CLI
+          path: htmlSanityCheck-cli/build/install
+
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
