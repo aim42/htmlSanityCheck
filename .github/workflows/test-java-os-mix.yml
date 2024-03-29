@@ -35,6 +35,9 @@ jobs:
           name: CLI
           path: htmlSanityCheck-cli/build/install
 
+      - name: Make file executable
+        run: chmod +x htmlSanityCheck-cli/build/install/hsc/bin/hsc
+
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
