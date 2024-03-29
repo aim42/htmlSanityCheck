@@ -345,7 +345,7 @@ tasks.register("integrationTestCliOnly") {
             workingDir INTEGRATION_TEST_DIRECTORY_CLI
             file(BUILD_REPORTS_DIRECTORY).mkdirs()
             String hscScriptFileName = "../../htmlSanityCheck-cli/${Project.DEFAULT_BUILD_DIR_NAME}/install/hsc/bin/hsc"
-            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "${hscScriptFileName}.bat" : hscScriptFileName,
+            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "${hscScriptFileName.replace('/', '\\')}.bat" : hscScriptFileName,
                     "-r", BUILD_REPORTS_DIRECTORY, "../common/src/test/resources"
         }
         logger.debug "Script output: ${result}"
