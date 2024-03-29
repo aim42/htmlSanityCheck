@@ -60,11 +60,17 @@ jobs:
           coverage_report_title: JaCoCo
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Artifacts
+      - name: Upload (Maven) Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: maven-repo
           path: build/maven-repo
+
+      - name: Upload (CLI) Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: CLI
+          path: htmlSanityCheck-cli/build/install
 
       - name: Trigger Test Matrix Workflow
         uses: benc-uk/workflow-dispatch@v1
