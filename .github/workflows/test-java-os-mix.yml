@@ -61,10 +61,10 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
+          cd integration-test/gradle-plugin
           uname -a
           cmd /c "echo off && gradlew.bat --version"
-          cmd /c "echo off && gradlew.bat info"
-          cmd /c "echo off && gradlew.bat integrationTestOnly --scan"
+          cmd /c "echo off && gradlew.bat htmlSanityCheck --scan"
 
         # If we ever need to debug the file system contents
         #   Get-ChildItem -Recurse -File | Format-Table Name, Length, LastWriteTime
