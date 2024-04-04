@@ -25,19 +25,6 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v4
-
-      - name: Download (CLI) Artifacts
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          workflow: gradle-build.yml
-          name: CLI
-          path: htmlSanityCheck-cli/build/install
-
-      - name: Make file executable
-        run: chmod +x htmlSanityCheck-cli/build/install/hsc/bin/hsc
-
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
@@ -50,21 +37,25 @@ jobs:
           name: build-artifacts
           path: .
 
-      - name: Execute integration test (on Unixes)
+      - name: Make HSC file executable
+        run: chmod +x htmlSanityCheck-cli/build/install/hsc/bin/hsc
+
+      - name: Execute (Gradle Plugin) integration test (on Unixes)
+        if: runner.os != 'Windows'
         run: |
           cd integration-test/gradle-plugin
           uname -a
           ./gradlew --version
           ./gradlew htmlSanityCheck --scan
 
-      - name: Execute integration test (Windows)
+      - name: Execute (Gradle Plugin) integration test (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
+          cd integration-test/gradle-plugin
           uname -a
           cmd /c "echo off && gradlew.bat --version"
-          cmd /c "echo off && gradlew.bat info"
-          cmd /c "echo off && gradlew.bat integrationTestOnly --scan"
+          cmd /c "echo off && gradlew.bat htmlSanityCheck --scan"
 
         # If we ever need to debug the file system contents
         #   Get-ChildItem -Recurse -File | Format-Table Name, Length, LastWriteTime
