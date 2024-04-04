@@ -10,31 +10,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * collects results for a specific type of @see Checker
- * (i.e. missing images, broken cross-references).
+ * Collects results for a specific type of @see Checker
+ * (i.e., missing images, broken cross-references).
  *
  * @author Gernot Starke <gs@gernotstarke.de>
  */
 
+@Getter
 public class SingleCheckResults implements CheckResults {
 
     // the actual findings
-    public List<Finding> findings;
+    private final List<Finding> findings;
     @Setter
-    @Getter
-    String whatIsChecked;    // i.e. "Missing Local Images Check"
+    private String whatIsChecked;    // i.e. "Missing Local Images Check"
     // source-whatIsTheProblem is checked against target-whatIsTheProblem
     @Setter
-    @Getter
-    String sourceItemName;    // i.e. image-src-attribute, anchor/link
+    private String sourceItemName;    // i.e. image-src-attribute, anchor/link
     @Setter
-    @Getter
-    private String targetItemName;    // i.e. local-image-file, id/bookmark
+    private String targetItemName;    // i.e., local-image-file, id/bookmark
     @Setter
-    @Getter
-    String generalRemark;     // i.e. "Internet not available"
-    @Getter
-    int nrOfItemsChecked;
+    private String generalRemark;     // i.e. "Internet not available"
+    private int nrOfItemsChecked;
     // nrOfIssues can be larger than findings.size(),
     // if some findings occur more than once
     private int nrOfIssues;
@@ -55,19 +51,19 @@ public class SingleCheckResults implements CheckResults {
 
 
     /**
-     * add a single finding to the collection,
+     * Add a single finding to the collection.
      *
-     * @param message: what kind of finding is it?
+     * @param message what kind of finding is it?
      */
     public void newFinding(String message) {
         addFinding(new Finding(message), 1);
     }
 
     /**
-     * add a single finding to the collection,
+     * Add a single finding to the collection.
      *
-     * @param message:         what kind of finding is it?
-     * @param nrOfOccurrences: how often does this occur?
+     * @param message what kind of finding is it?
+     * @param nrOfOccurrences how often does this occur?
      */
     public void newFinding(String message, int nrOfOccurrences) {
         addFinding(new Finding(message), nrOfOccurrences);
@@ -87,7 +83,7 @@ public class SingleCheckResults implements CheckResults {
     }
 
     /**
-     * add single Finding with multiple occurrences
+     * Add single Finding with multiple occurrences.
      */
     public void addFinding(Finding singleFinding, int nrOfOccurrences) {
         findings.add(singleFinding);
@@ -95,7 +91,7 @@ public class SingleCheckResults implements CheckResults {
     }
 
     /**
-     * bookkeeping on the number of checks
+     * Bookkeeping on the number of checks.
      */
     public void incNrOfChecks() {
         nrOfItemsChecked += 1;
@@ -106,7 +102,7 @@ public class SingleCheckResults implements CheckResults {
     }
 
     /**
-     * bookkeeping on the number of issues
+     * Bookkeeping on the number of issues.
      */
     public void incNrOfIssues() {
         nrOfIssues += 1;
@@ -132,7 +128,7 @@ public class SingleCheckResults implements CheckResults {
     }
 
     /**
-     * return a collection of finding-messages
+     * Return a collection of finding-messages
      * (used to simplify testing)
      */
     public List<String> getFindingMessages() {
@@ -150,7 +146,7 @@ public class SingleCheckResults implements CheckResults {
 
     @Override
     public String toString() {
-        return String.format ("Checking results for %s\n  %d '%s' items checked,\n  %d finding(s):\n    %s",
+        return String.format ("Checking results for %s%n  %d '%s' items checked,%n  %d finding(s):%n    %s",
                 whatIsChecked, nrOfItemsChecked, sourceItemName, nrOfIssues,
                 findings.stream().map(Finding::toString).collect(Collectors.joining("\n    ")));
     }
@@ -169,7 +165,7 @@ public class SingleCheckResults implements CheckResults {
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an
- "AS IS" BASIS,WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.

@@ -75,7 +75,7 @@ public class JUnitXmlReporter extends Reporter {
 			writer.writeAttribute("time", "0");
 			writer.writeAttribute("name", name);
 
-			for (SingleCheckResults singleCheckResult : pageResult.singleCheckResults) {
+			for (SingleCheckResults singleCheckResult : pageResult.getSingleCheckResults()) {
 				writer.writeStartElement("testcase");
 				writer.writeAttribute("assertions", String.valueOf(singleCheckResult.getNrOfItemsChecked()));
 				writer.writeAttribute("time", "0");

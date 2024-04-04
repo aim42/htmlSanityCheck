@@ -28,7 +28,11 @@ import java.util.function.Consumer;
  */
 
 public class ConsoleReporter extends Reporter {
-    protected Consumer<String> printer = System.out::println;
+
+    private static final String DOUBLE_DASH_LINE = String.join("", Collections.nCopies(50, "="));
+    private static final String DASH_LINE = String.join("", Collections.nCopies(50, "-"));
+
+    protected Consumer<String> printer = System.out::println; // NOSONAR(S106)
 
     // from AllChecksRunner - create ConsoleReporter with PerRunResults
     public ConsoleReporter(PerRunResults runResults) {
@@ -56,38 +60,41 @@ public class ConsoleReporter extends Reporter {
         printer.accept("======================");
         printer.accept(String.format("checked %d items on %d %s,", totalNrOfChecks(), totalNrOfPages(), pageStr));
         printer.accept(String.format("found %d %s, %d%% successful.", totalNrOfFindings(), issueStr, percentageSuccessful));
-        printer.accept(String.join("", Collections.nCopies(50, "-")));
+        printer.accept(DASH_LINE);
     }
 
     @Override
     protected void reportPageSummary(SinglePageResults pageResult) {
-        printer.accept(String.format("Summary for file %s\n", pageResult.getPageFileName()));
+        printer.accept(String.format("Summary for file %s%n", pageResult.getPageFileName()));
         printer.accept(String.format("page path  : %s", pageResult.getPageFilePath()));
         printer.accept(String.format("page title : %s", pageResult.getPageTitle()));
-        printer.accept(String.format("page size  : %d bytes", pageResult.pageSize));
+        printer.accept(String.format("page size  : %d bytes", pageResult.getPageSize()));
     }
 
     @Override
     protected void reportPageFooter() {
-        printer.accept(String.join("", Collections.nCopies(50, "=")));
+        printer.accept(DOUBLE_DASH_LINE);
     }
 
     @Override
     protected void reportSingleCheckSummary(SingleCheckResults singleCheckResults) {
-        for (Finding finding : singleCheckResults.getFindings()) {
-            printer.accept(finding.toString());
-        }
+        printer.accept("\n");
+        printer.accept(DASH_LINE);
 
-        printer.accept(String.join("", Collections.nCopies(50, "-")));
+        printer.accept(String.format("Results for %s", singleCheckResults.getWhatIsChecked()));
+        printer.accept(String.format("%d %s checked,",
+                singleCheckResults.getNrOfItemsChecked(), singleCheckResults.getSourceItemName()));
+        printer.accept(String.format("%d %s found.%n",
+                singleCheckResults.getNrOfIssues(), singleCheckResults.getTargetItemName()));
+        printer.accept(String.format("%s", singleCheckResults.getGeneralRemark()));
     }
 
     @Override
     protected void reportSingleCheckDetails(SingleCheckResults singleCheckResults) {
-        for (Finding finding : singleCheckResults.findings) {
+        for (Finding finding : singleCheckResults.getFindings()) {
             printer.accept(finding.toString());
         }
-        printer.accept("\n");
-        printer.accept(String.join("", Collections.nCopies(50, "-")));
+        printer.accept(DASH_LINE);
     }
 
     @Override

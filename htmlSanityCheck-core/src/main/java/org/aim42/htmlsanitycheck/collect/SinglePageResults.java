@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.collect;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +13,14 @@ import java.util.List;
  * Instances of this class will be contained in {@link SingleCheckResults}
  */
 @AllArgsConstructor
+@Getter
 public class SinglePageResults implements PageResults {
 
-    public String pageFileName; // from where we read the HTML
-    public String pageFilePath; // the complete path from where we read
-    public String pageTitle;    // as given in the <title> attribute
-    public int pageSize;     // size in byte
-
-
-    public List<SingleCheckResults> singleCheckResults;
+    private String pageFileName; // from where we read the HTML
+    private String pageFilePath; // the complete path from where we read
+    private String pageTitle;    // as given in the <title> attribute
+    private int pageSize;     // size in byte
+    private List<SingleCheckResults> singleCheckResults;
 
 
     // some variants for construction
@@ -32,17 +32,10 @@ public class SinglePageResults implements PageResults {
         this.pageSize = 0;
     }
 
-    public SinglePageResults(SingleCheckResults scr) {
-        this();
-        this.singleCheckResults.add(scr);
-    }
-
-
     /**
      * Allows adding the results of a single check
      **/
     public void addResultsForSingleCheck(SingleCheckResults resultsForSingleCheck) {
-
         singleCheckResults.add(resultsForSingleCheck);
     }
 

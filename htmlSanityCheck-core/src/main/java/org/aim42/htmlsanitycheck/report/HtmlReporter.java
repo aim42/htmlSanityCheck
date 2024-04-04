@@ -25,7 +25,7 @@ public class HtmlReporter extends Reporter {
     private final String resultsOutputDir;
     private FileWriter writer;
 
-    protected void write(String content) {
+    private void write(String content) {
         try {
             writer.write(content);
         } catch (IOException e) {
@@ -61,7 +61,7 @@ public class HtmlReporter extends Reporter {
     }
 
     /*
-    we need some static files next to the report html.. css, js and logo stuff.
+    We need some static files next to the report html.. css, js and logo stuff.
 
     Originally I posted this as a question to the gradle forum:
     http://forums.gradle.org/gradle/topics/-html-checking-plugin-how-to-copy-required-css-to-output-directory
@@ -161,7 +161,7 @@ public class HtmlReporter extends Reporter {
     @Override
     public void reportOverallSummary() {
         write("<img class=\"logo\" src=\"htmlsanitycheck-logo.png\" alt=\"htmlSC\" align=\"right\"/>");
-        write("<h1>HTML Sanity Check Results </h1>");
+        write("<h1>HTML Sanity Check Results</h1>");
         write(overallSummaryInfoBox());
         write(allPagesSummaryTable());
         write("<hr>");
@@ -170,7 +170,7 @@ public class HtmlReporter extends Reporter {
     private String overallSummaryInfoBox() {
         int percentageSuccessful = SummarizerUtil.percentSuccessful(totalNrOfChecks(), totalNrOfFindings());
         String pageStr = (totalNrOfPages() > 1) ? "pages" : "page";
-        String issueStr = (totalNrOfFindings() > 1) ? "issues" : "issue";
+        String issueStr = (totalNrOfFindings() != 1) ? "issues" : "issue";
         Float f = Float.valueOf(runResults.checkingTookHowManyMillis()) / 1000;
         String duration = String.format("%.3f", f) + "sec";
 
@@ -221,16 +221,16 @@ public class HtmlReporter extends Reporter {
                 SummarizerUtil.percentSuccessful(spr.nrOfItemsCheckedOnPage(), spr.nrOfFindingsOnPage());
 
         String pageHref =
-                CreateLinkUtil.convertToLink(spr.pageFileName);
+                CreateLinkUtil.convertToLink(spr.getPageFileName());
 
         return String.format(
-                "<tr>\n" +
-                        "  <td class=\"%s\"><a href=\"#%s\">%s</a></td>\n" +
-                        "  <td class=\"number\">%d</td>\n" +
-                        "  <td class=\"number\">%d</td>\n" +
-                        "  <td class=\"number %s\">%d%%</td>\n" +
+                "<tr>%n" +
+                        "  <td class=\"%s\"><a href=\"#%s\">%s</a></td>%n" +
+                        "  <td class=\"number\">%d</td>%n" +
+                        "  <td class=\"number\">%d</td>%n" +
+                        "  <td class=\"number %s\">%d%%</td>%n" +
                         "</tr>",
-                classStr, pageHref, spr.pageFileName, spr.nrOfItemsCheckedOnPage(), spr.nrOfFindingsOnPage(), classStr, percentageSuccessful);
+                classStr, pageHref, spr.getPageFileName(), spr.nrOfItemsCheckedOnPage(), spr.nrOfFindingsOnPage(), classStr, percentageSuccessful);
     }
 
     private static String allPagesSummaryTableFooter() {
@@ -246,10 +246,8 @@ public class HtmlReporter extends Reporter {
 
     private static String infoBoxColumn(String id, String countStr, String label) {
         return String.format(
-                "\n<td>\n" +
-                        "  <div class=\"infoBox\" id=\"%s\">\n" +
-                        "      <div class=\"counter\">%s</div>\n" +
-                        "      %s</div>\n" +
+                "%n<td>%n" +
+                        "  <div class=\"infoBox\" id=\"%s\"><div class=\"counter\">%s</div>%s</div>%n" +
                         "</td>",
                 id, countStr, label
         );
@@ -263,11 +261,9 @@ public class HtmlReporter extends Reporter {
     private static String infoBoxPercentage(int percentageSuccessful) {
         String percentageClass = (percentageSuccessful != 100) ? "infoBox failures" : "infoBox success";
         return String.format(
-                "<td>\n" +
-                        "<div class=\"%s\" id=\"successRate\">\n" +
-                        "<div class=\"percent\">%d%%</div>\n" +
-                        "successful</div>\n" +
-                        "</td>\n",
+                "<td>%n" +
+                        "<div class=\"%s\" id=\"successRate\"><div class=\"percent\">%d%%</div>successful</div>%n" +
+                        "</td>%n",
                 percentageClass, percentageSuccessful
         );
     }
@@ -279,17 +275,17 @@ public class HtmlReporter extends Reporter {
 
     @Override
     protected void reportPageSummary(SinglePageResults pageResult) {
-        String pageID = CreateLinkUtil.convertToLink(pageResult.pageFileName);
+        String pageID = CreateLinkUtil.convertToLink(pageResult.getPageFileName());
 
 
         write(String.format(
-                "\n\n<h1 id=\"%s\">Results for %s </h1>\n",
-                pageID, pageResult.pageFileName
+                "%n%n<h1 id=\"%s\">Results for %s </h1>%n",
+                pageID, pageResult.getPageFileName()
         ));
 
         write(String.format(
-                "location : %s <p>\n",
-                pageResult.pageFilePath
+                "location : %s <p>%n",
+                pageResult.getPageFilePath()
         ));
 
         int nrOfItemsChecked = pageResult.nrOfItemsCheckedOnPage();
@@ -303,7 +299,7 @@ public class HtmlReporter extends Reporter {
 
         write(infoBoxHeader());
 
-        int pageSize = pageResult.pageSize;
+        int pageSize = pageResult.getPageSize();
         String sizeUnit = (pageSize >= 1_000_000) ? "MByte" : "kByte";
 
         String pageSizeStr = String.valueOf(SummarizerUtil.threeDigitTwoDecimalPlaces(pageSize));
@@ -325,7 +321,7 @@ public class HtmlReporter extends Reporter {
     protected void reportPageFooter() {
         String footerContent = "Your footer content here";
 
-        write(String.format("%s\n", footerContent));
+        write(String.format("%s%n", footerContent));
     }
 
     // TODO: add "GeneralRemark" to output, if it exists
@@ -334,14 +330,14 @@ public class HtmlReporter extends Reporter {
         String headerClass = (singleCheckResults.nrOfProblems() > 0) ? "failures" : "success";
 
         write(String.format(
-                "\n<div class=\"%s\"><h3>%s</h3></div>\n\n",
+                "%n<div class=\"%s\"><h3>%s</h3></div>%n%n",
                 headerClass, singleCheckResults.getWhatIsChecked()
         ));
 
         write(String.format(
-                "%d %s checked,\n" +
-                        "%d %s found.<br>\n" +
-                        "%s\n",
+                "%d %s checked,%n" +
+                        "%d %s found.<br>%n" +
+                        "%s%n",
                 singleCheckResults.getNrOfItemsChecked(),
                 singleCheckResults.getSourceItemName(),
                 singleCheckResults.nrOfProblems(),
@@ -355,13 +351,13 @@ public class HtmlReporter extends Reporter {
         if (!checkResults.getFindings().isEmpty()) {
 
             write("\n  <ul>\n");
-            checkResults.getFindings().forEach(finding -> write(String.format("      <li> %s </li>\n", finding.toString())));
+            checkResults.getFindings().forEach(finding -> write(String.format("      <li> %s </li>%n", finding.toString())));
             write("  </ul>\n");
         }
     }
 
     /**
-     * tries to find a writable directory. First tries dirName,
+     * Tries to find a writable directory. First tries dirName,
      * if that does not work takes User.dir as second choice.
      *
      * @param dirName : e.g. /Users/aim42/projects/htmlsc/build/report/htmlchecks
@@ -371,7 +367,7 @@ public class HtmlReporter extends Reporter {
         File outputFolder = new File(dirName);
 
         if (!outputFolder.isDirectory() || !outputFolder.canWrite()) {
-            outputFolder = new File (System.getProperty("user.dir"));
+            outputFolder = new File(System.getProperty("user.dir"));
             log.warn("Could not write to '{}', using '{}' instead.", dirName, outputFolder);
         }
 
@@ -384,19 +380,19 @@ public class HtmlReporter extends Reporter {
     protected void closeReport() {
         try {
             write(String.format(
-                    "<!-- scroll-to-top icon -->\n" +
-                            "<div class=\"scroll-top-wrapper\">\n" +
-                            "<img src=\"arrow-up.png\" alt=\"to top\"/>\n" +
-                            "</div>\n" +
-                            "<div id=\"footer\">\n" +
-                            "Generated by <a href=\"https://www.aim42.org\">htmlSanityCheck</a> (version %s) at %s\n" +
-                            "</div>\n", createdByHSCVersion, createdOnDate
+                    "<!-- scroll-to-top icon -->%n" +
+                            "<div class=\"scroll-top-wrapper\">%n" +
+                            "<img src=\"arrow-up.png\" alt=\"to top\"/>%n" +
+                            "</div>%n" +
+                            "<div id=\"footer\">%n" +
+                            "Generated by <a href=\"https://www.aim42.org\">htmlSanityCheck</a> (version %s) at %s%n" +
+                            "</div>%n", createdByHSCVersion, createdOnDate
             ));
             write("</body></html>\n");
             writer.flush();
 
             String logMessage = String.format(
-                    "wrote report to %s%s%s\n",
+                    "wrote report to %s%s%s%n",
                     resultsOutputDir, File.separatorChar, REPORT_FILENAME
             );
             log.info(logMessage);

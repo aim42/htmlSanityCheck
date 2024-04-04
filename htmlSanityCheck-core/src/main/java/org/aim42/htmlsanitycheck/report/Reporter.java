@@ -43,7 +43,7 @@ public abstract class Reporter {
      */
     public List<SinglePageResults> addCheckingResultsForOnePage(SinglePageResults singlePageResults) {
         pageResults.add(singlePageResults);
-        return pageResults.stream().sorted(Comparator.comparing(a -> a.pageTitle)).collect(Collectors.toList());// enforce sorting, fixing issue #128 // Todo: XCheck if issues is solved after migration to java
+        return pageResults.stream().sorted(Comparator.comparing(a -> a.getPageTitle())).collect(Collectors.toList());// enforce sorting, fixing issue #128 // Todo: XCheck if issues is solved after migration to java
     }
 
     /**
@@ -73,7 +73,7 @@ public abstract class Reporter {
     }
 
     protected void reportPageDetails(SinglePageResults pageResults) {
-        for (SingleCheckResults resultForOneCheck : pageResults.singleCheckResults) {
+        for (SingleCheckResults resultForOneCheck : pageResults.getSingleCheckResults()) {
             reportSingleCheckSummary(resultForOneCheck);
             reportSingleCheckDetails(resultForOneCheck);
         }
