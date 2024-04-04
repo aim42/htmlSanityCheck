@@ -99,6 +99,8 @@ sonar {
         property "sonar.host.url", System.getenv('SONAR_URL') ?: "https://sonarcloud.io"
         property "sonar.scm.provider", "git"
         property "sonar.coverage.jacoco.xmlReportPaths", "**/build/reports/jacoco/test/jacocoTestReport.xml"
+        property "sonar.buildbreaker.skip", "false"
+        property "sonar.qualitygate.wait", true
     }
 }
 
