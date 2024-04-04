@@ -27,6 +27,9 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v2
+
       - name: Execute Gradle build
         run: ./gradlew clean check integrationTest --scan --stacktrace
 

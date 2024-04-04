@@ -16,6 +16,9 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
 
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v2
+
       - name: Download Artifacts
         uses: dawidd6/action-download-artifact@v3
         with:
