@@ -24,7 +24,7 @@ public class ProductVersion {
             props.load(RESOURCE.openConnection().getInputStream());
             return props.getProperty("version");
         } catch (IOException E) {
-            logger.debug("ProductVersion cannot be obtained due to IOException.");
+            logger.error("ProductVersion cannot be obtained due to IOException.");
         }
         return "[unknown]";
     }
