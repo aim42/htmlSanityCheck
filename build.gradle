@@ -10,6 +10,7 @@ buildscript {
 plugins {
     id 'java'
 
+    alias(libs.plugins.jqassistant)
     alias(libs.plugins.gradle.versions)
 }
 
@@ -87,6 +88,23 @@ configure(subprojects) {
         dependsOn check // tests are required to run before generating the report
     }
 }
+
+ext {
+    jqaversion = "2.1.0"
+    kejqapluginversion = "1.12.0"
+}
+
+jqassistant {
+    toolVersion jqaversion
+//    plugins "com.buschmais.jqassistant.plugin:java:$jqaversion"
+//    plugins "de.kontext-e.jqassistant.plugin:jqassistant.plugin.git:$kejqapluginversion"
+
+    // TODO Which Options are available? '-reset' seems to fail
+//    options "-reset"
+
+    scanDirs "."
+}
+
 
 tasks.register("integrationTestOnly") {
     group("Verification")
