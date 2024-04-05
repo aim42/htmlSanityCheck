@@ -9,6 +9,7 @@ import org.junit.Before
 import org.junit.Test
 
 import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertTrue
 
 // see end-of-file for license information
 
@@ -23,10 +24,8 @@ class JUnitXmlReporterTest {
     JUnitXmlReporter reporter
 	File outputPath
 
-    String whatToExpect
-
     @Before
-    public void setUp() {
+    void setUp() {
         singleCheckResults = new SingleCheckResults()
 
         singleFinding = new Finding("")
@@ -40,7 +39,7 @@ class JUnitXmlReporterTest {
     }
 
 	@After
-	public void tearDown() {
+	void tearDown() {
 		if (outputPath) {
 			outputPath.traverse {
 				System.err.println "${it}: ${it.text}"
@@ -49,20 +48,44 @@ class JUnitXmlReporterTest {
 		outputPath?.deleteDir()
 	}
 	
-	private generateReportAndReturnTestsuiteNode() {
-		reporter.reportFindings()
-		new XmlSlurper().parse(new File(reporter.outputPath))
-	}
+    @Test(expected = RuntimeException.class)
+    void testInitReportWithNonWritableDirectory() throws IOException {
+        // Create a temporary directory
+        File tempDir = tempFolder.newFolder()
+
+        // Make the directory non-writable
+        assertTrue("Could not make temp directory non-writable", tempDir.setWritable(false))
+
+        // Create a new JUnitXmlReporter with the non-writable directory
+        PerRunResults runResults = new PerRunResults()
+        new JUnitXmlReporter(runResults, tempDir.getAbsolutePath()).initReport()
+    }
 
     @Test
-    public void testEmptyReporter() {
+    void testEmptyFilepath() {
+        SinglePageResults singlePageResultsWithoutFilepath
+            =new SinglePageResults(
+                "test.html",
+                null,
+                "Test Page",
+                1000,
+                new ArrayList<>())
+        PerRunResults runResults = new PerRunResults()
+        runResults.addPageResults(singlePageResultsWithoutFilepath)
+        new JUnitXmlReporter( runResults, outputPath.absolutePath ).reportPageSummary(singlePageResultsWithoutFilepath)
+        def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
+        assertEquals("Test Page", testsuite.@name.text())
+    }
+
+    @Test
+    void testEmptyReporter() {
 		reporter.reportFindings()
 		assertEquals("Empty reporter has no JUnit results", 0, outputPath.listFiles().length)
     }
 
 
     @Test
-    public void testZeroChecks() {
+    void testZeroChecks() {
         addSingleCheckResultsToReporter( singleCheckResults )
 
 		reporter.reportFindings()
@@ -73,7 +96,7 @@ class JUnitXmlReporterTest {
     }
 
     @Test
-    public void testSingleFindingWithoutChecks() {
+    void testSingleFindingWithoutChecks() {
         // now add one finding, but no check.. (nonsense, should never occur)
         singleCheckResults.addFinding(singleFinding)
         addSingleCheckResultsToReporter( singleCheckResults )
@@ -88,7 +111,7 @@ class JUnitXmlReporterTest {
 
 
     @Test
-    public void testOneFindingOneCheck() {
+    void testOneFindingOneCheck() {
         singleCheckResults.addFinding(singleFinding)
         singleCheckResults.incNrOfChecks()
 
@@ -103,7 +126,7 @@ class JUnitXmlReporterTest {
     }
 
     @Test
-    public void testOneFindingTenChecks() {
+    void testOneFindingTenChecks() {
         // one finding, ten checks.. 90% successful
         singleCheckResults.addFinding(singleFinding)
         singleCheckResults.nrOfItemsChecked = 10
@@ -119,7 +142,7 @@ class JUnitXmlReporterTest {
     }
 
     @Test
-    public void testThreeFindingsTenChecks() {
+    void testThreeFindingsTenChecks() {
         // three findings, ten checks.. 70% successful
         for (int i = 1; i<=3; i++) {
             singleCheckResults.addFinding( new Finding("finding $i"))
@@ -138,7 +161,7 @@ class JUnitXmlReporterTest {
 
 
     @Test
-    public void testOneFindingSixChecks() {
+    void testOneFindingSixChecks() {
         singleCheckResults.addFinding(singleFinding)
         singleCheckResults.nrOfItemsChecked = 6
 
@@ -153,7 +176,7 @@ class JUnitXmlReporterTest {
     }
 
     @Test
-    public void test99Findings200Checks() {
+    void test99Findings200Checks() {
         int nrOfChecks = 200
         int nrOfFindings = 99
 

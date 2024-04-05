@@ -47,7 +47,7 @@ public class HtmlReporter extends Reporter {
         try {
             writer = createWriter(outputFile);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
 
         initWriterWithHtmlHeader();
@@ -72,29 +72,17 @@ public class HtmlReporter extends Reporter {
     https://github.com/gradle/gradle/blob/master/subprojects/performance/src/testFixtures/groovy/org/gradle/performance/results/ReportGenerator.java#L50-50
 
      */
-    private void copyResourceFromJarToDirectory(String resourceName, File outputDirectory) {
+    private void copyResourceFromJarToDirectory(String resourceName, File outputDirectory) throws IOException {
         URL resource = getClass().getClassLoader().getResource(resourceName);
 
-        // https://github.com/aim42/htmlSanityCheck/issues/305
-        // unfortunately we currently are not able to use try-with-ressources yet.
-        InputStream stream = null;
-        try {
-            if (resource != null) {
-                stream = resource.openStream();
-            } else {
-                throw new IOException("Resource not found: " + resourceName);
-            }
+        if (resource == null) {
+            throw new IOException("Resource not found: " + resourceName);
+        }
+
+        try (InputStream stream = resource.openStream()) {
             Files.copy(stream, new File(outputDirectory, resourceName).toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (final IOException e) {
             throw new UncheckedIOException(e);
-        } finally {
-            try {
-                if (stream != null) {
-                    stream.close();
-                }
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
         }
     }
 
@@ -146,7 +134,13 @@ public class HtmlReporter extends Reporter {
     private void copyRequiredResourceFiles(String outputDirectoryPath, List<String> requiredResources) {
         File outputDir = new File(outputDirectoryPath);
 
-        requiredResources.forEach(resource -> copyResourceFromJarToDirectory(resource, outputDir));
+        requiredResources.forEach(resource -> {
+            try {
+                copyResourceFromJarToDirectory(resource, outputDir);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        });
     }
 
 
@@ -174,18 +168,17 @@ public class HtmlReporter extends Reporter {
         Float f = Float.valueOf(runResults.checkingTookHowManyMillis()) / 1000;
         String duration = String.format("%.3f", f) + "sec";
 
-        return (infoBoxHeader()
-                // pages
-                + infoBoxColumn("pages", String.valueOf(totalNrOfPages()), pageStr)
-                // checks
-                + infoBoxColumn("checks", String.valueOf(totalNrOfChecks()), "checks")
-                // findings/issues
-                + infoBoxColumn("findings", String.valueOf(totalNrOfFindings()), issueStr)
-                // timer
-                + infoBoxColumn("duration", duration, "duration")
-                + infoBoxSeparator()
-                + infoBoxPercentage(percentageSuccessful)
-                + infoBoxFooter());
+        // pages
+        // checks
+        // findings/issues
+        // timer
+        return String.format("%s%s%s%s%s%s%s%s",
+                infoBoxHeader(),
+                infoBoxColumn("pages", String.valueOf(totalNrOfPages()), pageStr),
+                infoBoxColumn("checks", String.valueOf(totalNrOfChecks()), "checks"), // NOSONAR(S1192)
+                infoBoxColumn("findings", String.valueOf(totalNrOfFindings()), issueStr),
+                infoBoxColumn("duration", duration, "duration"),
+                infoBoxSeparator(), infoBoxPercentage(percentageSuccessful), infoBoxFooter());
     }
 
     // TODO: write summary table for pages

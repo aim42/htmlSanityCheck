@@ -2,7 +2,12 @@ package org.aim42.htmlsanitycheck.tools;
 
 // created by https://www.geekality.net/2013/09/27/java-ignore-ssl-certificate-errors/
 
-import javax.net.ssl.*;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -16,7 +21,7 @@ public final class TrustAllCertificates implements X509TrustManager, HostnameVer
             TrustAllCertificates trustAll = new TrustAllCertificates();
 
             // Install the all-trusting trust manager
-            SSLContext sc = SSLContext.getInstance("SSL");
+            SSLContext sc = SSLContext.getInstance("SSL"); // NOSONAR(S4423) - we intenionally use the weakest protocol
             sc.init(null,
                     new TrustManager[]{trustAll},
                     new java.security.SecureRandom());
@@ -29,18 +34,18 @@ public final class TrustAllCertificates implements X509TrustManager, HostnameVer
         }
     }
 
-    public X509Certificate[] getAcceptedIssuers() {
-        return null;
+    public X509Certificate[] getAcceptedIssuers() { // NOSONAR(S1186)
+        return new X509Certificate[0];
     }
 
-    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+    public void checkClientTrusted(X509Certificate[] certs, String authType) { // NOSONAR(S1186)
     }
 
-    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+    public void checkServerTrusted(X509Certificate[] certs, String authType) { // NOSONAR(S1186)
     }
 
     public boolean verify(String hostname, SSLSession session) {
-        return true;
+        return true; // NOSONAR(S5527)
     }
 }
 

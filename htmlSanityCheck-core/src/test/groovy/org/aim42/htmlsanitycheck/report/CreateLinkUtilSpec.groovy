@@ -22,6 +22,6 @@ class CreateLinkUtilSpec extends Specification {
         "file://test.htm"     | "fileXXXtestXhtm"
         "file:///a/b/test.txt"| "fileXXXXaXbXtestXtxt"
         "/a/b@§!.%&"          | "XaXbXXXXXX"
-
+        "Hello World\\Path!"  | "HelloXWorldXPathX"
     }
 }
