@@ -1,6 +1,6 @@
 package org.aim42.htmlsanitycheck.report;
 
-import org.aim42.htmlsanitycheck.ProductVersion;
+import org.aim42.htmlsanitycheck.ProductInformation;
 import org.aim42.htmlsanitycheck.collect.PerRunResults;
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
 import org.aim42.htmlsanitycheck.collect.SinglePageResults;
@@ -19,10 +19,9 @@ public abstract class Reporter {
     /**
      * create the reporter
      */
-    public Reporter() {
+    protected Reporter() {
         this.createdOnDate =  new SimpleDateFormat("dd. MMMM yyyy, HH:mm").format(new Date());
-        this.createdByHSCVersion = ProductVersion.getVersion();
-
+        this.createdByHSCVersion = ProductInformation.VERSION;
     }
 
     /**
@@ -31,7 +30,7 @@ public abstract class Reporter {
      * @param runResults the results for the report
      * @see PerRunResults, as the latter contains all findings.
      */
-    public Reporter(PerRunResults runResults) {
+    protected Reporter(PerRunResults runResults) {
         this();
         this.runResults = runResults;
         this.pageResults = runResults.getResultsForAllPages();
@@ -43,7 +42,7 @@ public abstract class Reporter {
      */
     public List<SinglePageResults> addCheckingResultsForOnePage(SinglePageResults singlePageResults) {
         pageResults.add(singlePageResults);
-        return pageResults.stream().sorted(Comparator.comparing(a -> a.getPageTitle())).collect(Collectors.toList());// enforce sorting, fixing issue #128 // Todo: XCheck if issues is solved after migration to java
+        return pageResults.stream().sorted(Comparator.comparing(SinglePageResults::getPageTitle)).collect(Collectors.toList());
     }
 
     /**

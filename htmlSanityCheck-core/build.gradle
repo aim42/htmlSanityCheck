@@ -1,5 +1,9 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
+plugins {
+    alias(libs.plugins.gitProperties)
+}
+
 dependencies {
     implementation (libs.commons.validator) {
         // Having a vulnerability here ...
@@ -19,6 +23,33 @@ dependencies {
     testImplementation 'org.codehaus.groovy:groovy-xml'
 }
 
+gitProperties {
+    // specify the location of the generated file
+//    gitPropertiesResourceDir = file("${project.projectDir}/build/resources/main")
+
+    // specify the properties to include
+    keys = ['git.branch',
+            'git.build.host',
+            'git.build.user.email',
+            'git.build.user.name',
+            'git.build.version',
+            'git.closest.tag.commit.count',
+            'git.closest.tag.name',
+            'git.commit.id',
+            'git.commit.id.abbrev',
+            'git.commit.id.describe',
+            'git.commit.message.full',
+            'git.commit.message.short',
+            'git.commit.time',
+            'git.commit.user.email',
+            'git.commit.user.name',
+            'git.dirty',
+            'git.remote.origin.url',
+            'git.tags',
+            'git.total.commit.count',
+    ]
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -35,7 +66,9 @@ tasks.register('copyResourceImages', Copy) {
 }
 
 processResources {
-    dependsOn copyResourceImages
+    dependsOn copyResourceImages, generateGitProperties
+
+//    duplicatesStrategy = DuplicatesStrategy.INHERIT
 
     exclude '**/*.png'
     inputs.property "version", project.version

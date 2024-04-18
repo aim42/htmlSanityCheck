@@ -1,6 +1,6 @@
 package org.aim42.htmlsanitycheck.report;
 
-import org.aim42.htmlsanitycheck.ProductVersion;
+import org.aim42.htmlsanitycheck.ProductInformation;
 import org.aim42.htmlsanitycheck.collect.Finding;
 import org.aim42.htmlsanitycheck.collect.PerRunResults;
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
@@ -44,7 +44,7 @@ public class ConsoleReporter extends Reporter {
         Long millis = runResults.checkingTookHowManyMillis();
 
         printer.accept("********* HTML Sanity Checker findings report *********");
-        printer.accept(String.format("created on %s by version %s", createdOnDate, ProductVersion.getVersion()));
+        printer.accept(String.format("created on %s by version %s", createdOnDate, ProductInformation.VERSION));
         printer.accept(String.format("checking took %s msecs.", millis));
         printer.accept("");
     }

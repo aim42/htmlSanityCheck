@@ -29,6 +29,36 @@ class HtmlReporterTest {
     }
 
     @Test
+    void testInitReport() {
+        htmlReporter.initReport()
+        String content = getResultContents()
+
+        [
+                "git.branch",
+                "git.build.host",
+                "git.build.user.email",
+                "git.build.user.name",
+                "git.build.version",
+                "git.closest.tag.commit.count",
+                "git.closest.tag.name",
+                "git.commit.id",
+                "git.commit.id.abbrev",
+                "git.commit.id.describe",
+                "git.commit.message.full",
+                "git.commit.message.short",
+                "git.commit.time",
+                "git.commit.user.email",
+                "git.commit.user.name",
+                "git.dirty",
+                "git.remote.origin.url",
+                "git.tags",
+                "git.total.commit.count"
+        ].each { String key ->
+            assertTrue("Git Property '${key}' expected", content.contains(key))
+        }
+    }
+
+    @Test
     void testReportPageSummary() {
         htmlReporter.initReport()
         // Prepare the HtmlReporter with some data
@@ -106,7 +136,7 @@ class HtmlReporterTest {
                 "/path/to/test.html",
                 "Test Page",
                 1000,
-                [new Finding("Issue 1"), new Finding("Issue 2")])
+                [new Finding("Issue 1"), new Finding("Issue 2")] as List<SingleCheckResults>)
         SingleCheckResults singleCheckResults = new SingleCheckResults()
         singleCheckResults.setWhatIsChecked("Test Checks")
         singleCheckResults.setSourceItemName("Test Source")
@@ -137,7 +167,7 @@ class HtmlReporterTest {
                 "/path/to/test.html",
                 "Test Page",
                 1000,
-                [new Finding("Issue 1"), new Finding("Issue 2")])
+                [new Finding("Issue 1"), new Finding("Issue 2")] as List<SingleCheckResults>)
         SingleCheckResults singleCheckResults = new SingleCheckResults()
         singleCheckResults.setWhatIsChecked("Test Checks")
         singleCheckResults.setSourceItemName("Test Source")
@@ -166,6 +196,7 @@ class HtmlReporterTest {
         } catch (IOException e) {
             fail("Failed to read report file '${reporFile}': ${e}")
         }
+        return ""
     }
 }
 

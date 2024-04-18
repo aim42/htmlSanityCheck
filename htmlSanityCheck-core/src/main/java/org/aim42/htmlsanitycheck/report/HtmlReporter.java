@@ -17,6 +17,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.aim42.htmlsanitycheck.ProductInformation.GIT_PROPERTIES;
+
 public class HtmlReporter extends Reporter {
 
     private static final Logger log = LoggerFactory.getLogger(HtmlReporter.class);
@@ -123,9 +125,23 @@ public class HtmlReporter extends Reporter {
                         "    $('html, body').animate({scrollTop: offsetTop}, 500, 'linear');\n" +
                         "}\n" +
                         "</script>\n" +
+                        gitPropertiesAsComments() +
                         "</head>\n" +
                         "<body id=\"top\">\n");
     }
+
+    private String gitPropertiesAsComments() {
+        StringBuilder sb = new StringBuilder("<!-- Git Properties -->\n");
+
+        GIT_PROPERTIES.forEach((key, value) -> sb.append("<!-- ")
+                .append(key)
+                .append(": '")
+                .append(value)
+                .append("' -->\n"));
+
+        return sb.toString();
+    }
+
 
     /*
      * copy css, javaScript and image/icon files to the html output directory,
@@ -216,7 +232,7 @@ public class HtmlReporter extends Reporter {
         String pageHref =
                 CreateLinkUtil.convertToLink(spr.getPageFileName());
 
-        return String.format(
+        return java.lang.String.format(
                 "<tr>%n" +
                         "  <td class=\"%s\"><a href=\"#%s\">%s</a></td>%n" +
                         "  <td class=\"number\">%d</td>%n" +
@@ -238,7 +254,7 @@ public class HtmlReporter extends Reporter {
     }
 
     private static String infoBoxColumn(String id, String countStr, String label) {
-        return String.format(
+        return java.lang.String.format(
                 "%n<td>%n" +
                         "  <div class=\"infoBox\" id=\"%s\"><div class=\"counter\">%s</div>%s</div>%n" +
                         "</td>",
@@ -253,7 +269,7 @@ public class HtmlReporter extends Reporter {
 
     private static String infoBoxPercentage(int percentageSuccessful) {
         String percentageClass = (percentageSuccessful != 100) ? "infoBox failures" : "infoBox success";
-        return String.format(
+        return java.lang.String.format(
                 "<td>%n" +
                         "<div class=\"%s\" id=\"successRate\"><div class=\"percent\">%d%%</div>successful</div>%n" +
                         "</td>%n",
