@@ -36,3 +36,6 @@ src/docs/website/_site
 lib
 src/docs/resources/graphics/.DS_Store
 /.sdkmanrc
+.envrc
+*.log
+tmp/
