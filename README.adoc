@@ -32,6 +32,7 @@ are planned for future releases.
 image:https://img.shields.io/badge/License-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"]
 image:https://github.com/aim42/htmlSanityCheck/actions/workflows/gradle-build.yml/badge.svg[]
 image:https://sonarcloud.io/api/project_badges/measure?project=aim42_htmlSanityCheck&metric=alert_status[alt='Quality Gate Status']
+image:https://jitpack.io/v/org.aim42.htmlSanityCheck/htmlSanityCheck.svg[alt='JitPack Build']
 
 == Installation
 
