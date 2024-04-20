@@ -20,11 +20,11 @@ jobs:
           # SonarQube requires JDK 17 or higher
           java-version: 17
 
-      - name: Cache JDK
+      - name: Cache Gradle Toolchain JDKs
         uses: actions/cache@v4
         with:
-          path: ~/.jdk
-          key: ${{ runner.os }}-jdk
+          path: ~/.gradle/jdks
+          key: "${{ runner.os }}-gradle-jdks"
           restore-keys: ${{ runner.os }}-jdk
 
       - name: Setup Gradle
@@ -36,7 +36,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          key: "${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}"
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Validate Gradle Wrapper
