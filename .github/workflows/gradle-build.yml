@@ -40,7 +40,7 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v2
+        uses: gradle/actions/wrapper-validation@v3
 
       - name: Execute Gradle build
         run: ./gradlew clean check integrationTest --scan --stacktrace
