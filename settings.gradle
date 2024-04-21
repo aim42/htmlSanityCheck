@@ -7,20 +7,20 @@ pluginManagement {
 
 plugins {
     // to report build results back to gradle.org
-    id "com.gradle.enterprise" version "3.17.2"
+    id 'com.gradle.develocity' version '3.17.2'
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
 }
 
-gradleEnterprise {
+develocity {
     buildScan {
-        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-        termsOfServiceAgree = 'yes'
+        termsOfUseUrl = 'https://gradle.com/terms-of-service'
+        termsOfUseAgree = 'yes'
 
-        publishAlwaysIf(System.getenv("GRADLE_BUILD_SCAN") == 'true')
+        publishing.onlyIf { System.getenv("GRADLE_BUILD_SCAN") == 'true' }
     }
 }
 
 rootProject.name = 'htmlSanityCheck'
 
-include 'htmlSanityCheck-core',
-        'htmlSanityCheck-gradle-plugin'
+include('htmlSanityCheck-core')
+include('htmlSanityCheck-gradle-plugin')
