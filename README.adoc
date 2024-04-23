@@ -1,4 +1,4 @@
-= image:./htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
+= image:htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
 :icons: font
 // Align version with ./gradle.properties file
 :version: 2.0.0
@@ -8,7 +8,7 @@
 
 :asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin
 
-:asciidoc-url: http://asciidoctor.org
+:asciidoc-url: https://asciidoctor.org
 :gradle-url: https://gradle.org/
 
 :gernotstarke: https://github.com/gernotstarke
@@ -21,13 +21,12 @@ ifdef::env-github[:outfilesuffix: .adoc]
 
 This project provides some basic sanity checking on html files.
 
-It can be helpful in case of html generated from e.g. {asciidoc-url}[Asciidoctor],
-Markdown or other formats - as converters usually don't check for missing images
+It can be helpful in case of html generated from, e.g., {asciidoc-url}[Asciidoctor],
+Markdown or other formats -- as converters usually don't check for missing images
 or broken links.
 
-It can be used as Gradle plugin. Standalone Java and graphical UI
-are planned for future releases.
-
+It can be used as a Gradle plugin.
+Standalone Java and graphical UI are planned for future releases.
 
 image:https://img.shields.io/badge/License-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"]
 image:https://github.com/aim42/htmlSanityCheck/actions/workflows/gradle-build.yml/badge.svg[]
@@ -39,11 +38,10 @@ image:https://jitpack.io/v/org.aim42.htmlSanityCheck/htmlSanityCheck.svg[alt='Ji
 Use the following snippet inside a Gradle build file:
 
 .build.gradle
-[source,groovy]
-[subs="attributes"]
+[source,groovy,subs="attributes"]
 ----
 plugins {
-  id 'org.aim42.{project}' version '{version}' // <1>
+    id 'org.aim42.{project}' version '{version}' // <1>
 }
 ----
 <1> Checkout <<box:current-version,current version>>
@@ -51,8 +49,7 @@ plugins {
 OR
 
 .build.gradle
-[source,groovy]
-[subs="attributes"]
+[source,groovy,subs="attributes"]
 ----
 buildscript {
     repositories {
@@ -89,24 +86,25 @@ The plugin adds a new task named `htmlSanityCheck`.
 This task exposes a few properties as part of its configuration:
 
 [horizontal]
-sourceDir:: (mandatory) directory where the html files are located. Type: File. Default: `build/docs`.
-sourceDocuments:: (optional) an override to process several source files, which may be a subset of all
-                      files available in [x-]`${sourceDir}`. Type: `org.gradle.api.file.FileCollection`.
-                      Defaults to all files in [x-]`${sourceDir}` whose names end with `.html`.
+sourceDir:: (mandatory) directory where the html files are located.
+Type: File.
+Default: `build/docs`.
+sourceDocuments:: (optional) an override to process several source files, which may be a subset of all files available in [x-]`${sourceDir}`.
+Type: `org.gradle.api.file.FileCollection`.
+Defaults to all files in [x-]`${sourceDir}` whose names end with `.html`.
 
 checkingResultsDir:: (optional) directory where the checking results written to.
-                      Defaults to `${buildDir}/reports/htmlSanityCheck/`
+Defaults to `${buildDir}/reports/htmlSanityCheck/`
 
-junitResultsDir:: (optional) directory where the results written to in JUnit XML format. JUnit XML can be
-                  read by many tools including CI environments.
-				  Defaults to `${buildDir}/test-results/htmlchecks/`
+junitResultsDir:: (optional) directory where the results are written to in JUnit XML format.
+JUnit XML can be read by many tools, including CI environments.
+Defaults to `${buildDir}/test-results/htmlchecks/`
 
 failOnErrors:: (optional) if set to "true", the build will fail if any error was found in the checked pages.
-                      Defaults to `false`
+Defaults to `false`
 
-checkerClasses:: (optional) a set of checker classes to be executed. Defaults to all available checker classes.
-
-
+checkerClasses:: (optional) a set of checker classes to be executed.
+Defaults to all available checker classes.
 
 == Examples
 
@@ -127,28 +125,24 @@ htmlSanityCheck {
 }
 ----
 
-
 .build.gradle (extensive example)
-[source, groovy]
+[source,groovy,subs='attributes']
 ----
 
 import org.aim42.htmlsanitycheck.check.*
 
 buildscript {
     repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-        jcenter()
+        mavenCentral()
+        // This is only necessary for older releases (< 2.00)
+        gradlePluginPortal()
     }
 }
 
-
 plugins {
-    id 'org.aim42.htmlsanitycheck' version '1.1.1'
+    id 'org.aim42.htmlsanitycheck' version '{version}'
     id 'org.asciidoctor.convert' version '1.5.8'
 }
-
 
 // ==== path definitions =====
 // ===========================
@@ -192,9 +186,7 @@ asciidoctor {
 
 apply plugin: 'org.aim42.htmlSanityCheck'
 
-
 htmlSanityCheck {
-
     // ensure asciidoctor->html runs first
     // and images are copied to build directory
 
@@ -243,11 +235,9 @@ htmlSanityCheck {
 |===
 | The overall goal is to create neat and clear reports,
 showing eventual errors within HTML files - as shown in the adjoining figure.
-| image:sample-hsc-report.jpg[width="200", link="./sample-hsc-report.jpg"
-  (click on thumbnail for details)]
+| image:sample-hsc-report.jpg[width="200",link="sample-hsc-report.jpg"
+(click on thumbnail for details)]
 |===
-
-
 
 == Types of Sanity Checks
 
@@ -268,34 +258,36 @@ In this example, the bookmark is _misspelled_.
 Use checkerClass _BrokenCrossReferencesChecker_.
 
 === Missing Images Files
-Images, referenced in '<img src="XYZ"...' tags, refer to external files. The existence of
-these files is checked by the plugin.
+
+Images, referenced in `<img src="XYZ"...` tags, refer to external files.
+The plugin checks the existence of these files.
 
 Use checkerClass _MissingImageFilesChecker_.
 
 === Multiple Definitions of Bookmarks or ID's
-If any is defined more than once, any anchor linking to it will be confused :-)
+
+If any is defined more than once, any anchor linking to it will be confused.
 
 Use checkerClass _DuplicateIdChecker_.
 
 === Missing Local Resources
-All files (e.g. downloads) referenced from html.
+
+All files, (e.g., downloads) referenced from html.
 
 Use checkerClass _MissingLocalResourcesChecker_.
 
 === Missing Alt-tags in Images
-Image-tags should contain an alt-attribute that the browser displays when the original image
-file cannot be found or cannot be rendered. Having alt-attributes is good and defensive style.
+
+Image-tags should contain an alt-attribute that the browser displays when the original image file cannot be found or cannot be rendered.
+Having alt-attributes is a good and defensive style.
 
 Use checkerClass _MissingAltInImageTagsChecker_.
 
 === Broken HTTP Links
-The current version (derived from branch 1.0.0-RC-2) contains a simple
-implementation that identifies errors
-(status >400) and warnings (status 1xx or 3xx).
 
-StatusCodes are configurable ranges (as some people might
-want some content behind paywalls NOT to result in errors...)
+The current version (derived from branch 1.0.0-RC-2) contains a simple implementation that identifies errors (status >400) and warnings (status `1xx` or `3xx`).
+
+StatusCodes are configurable ranges (as some people might want some content behind paywalls NOT to result in errors...)
 
 Localhost or numerical IP addresses are currently NOT marked as suspicious.
 
@@ -304,84 +296,76 @@ Please comment in case you have additional requirements.
 Use checkerClass _BrokenHttpLinksChecker_.
 
 === Other types of external links
-*planned*: ftp, ntp or other protocols are currently not checked,
-but should...
 
-
+*planned*: ftp, ntp or other protocols are currently not checked, but should...
 
 == Technical Documentation
-In addition to checking HTML, this project serves as an example for http://arc42.de[arc42].
+
+In addition to checking HTML, this project serves as an example for https://arc42.de[arc42].
 
 Please see our https://aim42.github.io/htmlSanityCheck/arc42/About-This-Docu.html[software architecture documentation].
 
-
 == Fundamentals
+
 This tiny piece rests on incredible groundwork:
 
 * https://jsoup.org[Jsoup HTML parser] and analysis toolkit - robust and easy-to-use.
 
 * IntelliJ IDEA - my (Gernot) best (programming) friend.
 
-* Of course, Groovy, Gradle, JUnit and Spockframework.
-
+* Of course, Groovy, Gradle, JUnit and Spock framework.
 
 == Ideas and Origin
 
 * The plugin heavily relies on code provided by {gradle-url}[Gradle].
 
-* Inspiration on code organization, implementation and testing of the plugin
-came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by [@AAlmiray].
+* Inspiration on code organization, implementation and testing of the plugin came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by [@AAlmiray].
 
 * Code for string similarity calculation by
-  https://github.com/rrice/java-string-similarity[Ralph Rice].
+https://github.com/rrice/java-string-similarity[Ralph Rice].
 
 * Initial implementation, maintenance and documentation by {gernotstarke}[Gernot Starke].
 
 == Development
 
-In case you want to checkout, fork and/or contribute:
+In case you want to check out, fork and/or contribute:
 The documentation is maintained using the awesome
-https://github.com/docToolchain/docToolchain[docToolchain],
-created by https://rdmueller.github.io/[@rdmueller].
+https://github.com/docToolchain/docToolchain[docToolchain], created by https://rdmueller.github.io/[@rdmueller].
 
-After checkout you should execute:
+After checkout, you should execute:
 
 `git submodule update -i`
 
 to ensure that the docToolchain submodule is downloaded.
-
 
 === Helpful Sources for Development
 
 Several sources provided help during development:
 
 * https://www.gradle.org/docs/current/userguide/custom_plugins.html[Gradle guide on writing custom plugins]
-* The code4reference tutorial an Gradle custom plugins,
-http://code4reference.com/2012/08/gradle-custom-plugin-part-1/[part 1] and
-http://code4reference.com/2012/08/gradle-custom-plugin-part-2/[part 2].
 * Of course, the https://jsoup.org/apidocs/[JSoup API documentation]
 
 == Similar Projects
 
-* The https://github.com/rackerlabs/gradle-linkchecker-plugin[gradle-linkchecker-plugin] is an (open source) gradle plugin
-which validates that all links in a local HTML file tree go out to other existing local files or remote web locations.
+* The https://github.com/rackerlabs/gradle-linkchecker-plugin[gradle-linkchecker-plugin] is an (open source) Gradle plugin which validates that all links in a local HTML file tree go out to other existing local files or remote web locations.
 It creates a simple text file report and might be a complement to this `HtmlSanityChecker`.
-
-* https://bmuschko.com/blog/golang-with-gradle/[Benjamin Muschko] has created a (go-based) command-line tool
-to check links, called https://github.com/bmuschko/link-verifier[link verifier]
+* https://bmuschko.com/blog/golang-with-gradle/[Benjamin Muschko] has created a (Go-based) command-line tool to check links, called https://github.com/bmuschko/link-verifier[link verifier].
+* https://github.com/gjtorikian/html-proofer[html-proofer] is written in Ruby and provides different usage scenarios (programmatically, CLI, and Docker).
+* https://github.com/wjdp/htmltest[htmltest] is also written in Go(Lang) and claims to be rapid compared to `html-proofer` (stay tuned; we have plans for HSC to run with Graal in a quick way).
 
 == Contributing
+
 Please report {plugin-issues}[issues or suggestions].
 
-Want to improve the plugin: Fork our {plugin-url}[repository] and
-send a pull request.
+Want to improve the plugin: Fork our {plugin-url}[repository] and send a pull request.
 
 == Licence
-Currently code is published under the Apache-2.0 licence,
-documentation under Creative-Commons-Sharealike-4.0.
 
-Some day I'll unify that :-)
+Currently, code is published under the Apache-2.0 licence, documentation under Creative-Commons-Sharealike-4.0.
+Some day we'll unify that :-)
 
-Big thanx to Structure-101 for helping us analyze and restructure our code...
+== Kudos
 
-image:./structure101-logo.png[link="https://structure101.com"]
+Big thanx to image:./structure101-logo.png[alt='Structure-101',link="https://structure101.com"] for helping us analyze and restructure our code.
+
+
