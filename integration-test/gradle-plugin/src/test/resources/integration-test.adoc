@@ -1,3 +1,4 @@
 = Just a very simple (integration) test
+include::config.ad[]
 
-of https://github.com/aim42/htmlSanityCheck/[]
+of {hsc-url}

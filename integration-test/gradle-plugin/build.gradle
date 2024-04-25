@@ -7,8 +7,10 @@ repositories {
     mavenCentral()
 }
 
-task copyResources(type: Copy) {
-    from "src/test/resources"
+def projectRoot = "../.."
+def sourceDirectory = "src/test/resources"
+task copyReadmeResources(type: Copy) {
+    from projectRoot
     include '*.jpg'
     include '*.png'
     include '*.properties'
@@ -16,8 +18,9 @@ task copyResources(type: Copy) {
 }
 
 asciidoctor {
-    sourceDir file("src/test/resources")
-    sources { include '*.adoc' }
+    sourceDir sourceDirectory
+    sources { include '**/*.adoc' }
+    baseDirFollowsSourceFile()
     outputDir file("build/docs")
 
     forkOptions JavaVersion.current() >= JavaVersion.VERSION_1_9
@@ -27,10 +30,20 @@ asciidoctor {
             : {}
 }
 
+task buildReadmeRoot(type: org.asciidoctor.gradle.jvm.AsciidoctorTask) {
+    sourceDir projectRoot
+    sources {
+        include 'README.adoc'
+        include 'htmlSanityCheck-gradle-plugin/README.adoc'
+    }
+    baseDirFollowsSourceFile()
+    outputDir file("build/docs")
+}
+buildReadmeRoot.dependsOn(copyReadmeResources)
+
 htmlSanityCheck {
     sourceDir file("build/docs")
 
-    // where to put results of sanityChecks...
     checkingResultsDir = file("build/reports")
     failOnErrors = true
 
@@ -38,7 +51,8 @@ htmlSanityCheck {
     logger.quiet "HSC sourceDir: ${sourceDir.absolutePath}"
     logger.quiet "HSC checkingResultsDir: ${checkingResultsDir.absolutePath}"
 }
-htmlSanityCheck.dependsOn(copyResources, asciidoctor)
+htmlSanityCheck.dependsOn(asciidoctor)
+htmlSanityCheck.dependsOn(buildReadmeRoot)
 
 /*
  * Copyright Gerd Aschemann and aim42 contributors.

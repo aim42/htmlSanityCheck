@@ -1,0 +1,23 @@
+:icons: font
+:toc: left
+:imagesdir: .
+
+// :outfilesuffix: adoc
+
+// Align the version with ./gradle.properties file
+:version: 2.0.0
+
+:asciidoc-url: https://asciidoctor.org
+:asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin
+:gerdaschemann: https://github.com/ascheman
+:gernotstarke: https://github.com/gernotstarke
+:gradle-plugin-url: https://plugins.gradle.org/
+:gradle-url: https://gradle.org/
+:jitpack-url: https://jitpack.io/
+:maven-url: https://maven.apache.org/
+:plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
+:plugin-url: https://github.com/aim42/htmlSanityCheck
+:project-bugs: https://github.com/aim42/htmlSanityCheck/issues?q=is%3Aopen+is%3Aissue+label%3Abug
+:project-issues: https://github.com/aim42/htmlSanityCheck/issues
+:project-url: https://github.com/aim42/htmlSanityCheck
+:project: htmlSanityCheck

@@ -15,27 +15,21 @@ endif::[]
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
 
-:asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin
-
-:asciidoc-url: https://asciidoctor.org
-:gradle-url: https://gradle.org/
-
-:gernotstarke: https://github.com/gernotstarke
-:project: htmlSanityCheck
-:project-url: https://github.com/aim42/htmlSanityCheck
-:project-issues: https://github.com/aim42/htmlSanityCheck/issues
-:project-bugs: https://github.com/aim42/htmlSanityCheck/issues?q=is%3Aopen+is%3Aissue+label%3Abug
-
-ifdef::env-github[:outfilesuffix: .adoc]
-
+[.lead]
+====
 This project provides some basic sanity checking on html files.
 
 It can be helpful in case of html generated from, e.g., {asciidoc-url}[Asciidoctor],
 Markdown or other formats -- as converters usually don't check for missing images
 or broken links.
+====
 
-It can be used as a Gradle plugin.
-Standalone Java and graphical UI are planned for future releases.
+It can be currently used
+
+* Programmatically from Java (or other JVM languages), or
+* As a xref:htmlSanityCheck-gradle-plugin/README.adoc[Gradle plugin].
+
+Standalone Java (CLI) executable and a https://maven.apache.org[Apache Maven] Plugin are planned for future releases.
 
 image:https://img.shields.io/badge/License-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"]
 image:https://github.com/aim42/htmlSanityCheck/actions/workflows/gradle-build.yml/badge.svg[]
@@ -96,16 +90,16 @@ This task exposes a few properties as part of its configuration:
 sourceDir:: (mandatory) directory where the html files are located.
 Type: File.
 Default: `build/docs`.
-sourceDocuments:: (optional) an override to process several source files, which may be a subset of all files available in [x-]`${sourceDir}`.
+sourceDocuments:: (optional) an override to process several source files, which may be a subset of all files available in `+{sourceDir}+`.
 Type: `org.gradle.api.file.FileCollection`.
-Defaults to all files in [x-]`${sourceDir}` whose names end with `.html`.
+Defaults to all files in `+{sourceDir}+` whose names end with `.html`.
 
 checkingResultsDir:: (optional) directory where the checking results written to.
-Defaults to `${buildDir}/reports/htmlSanityCheck/`
+Defaults to `+{buildDir}+/reports/htmlSanityCheck/`
 
 junitResultsDir:: (optional) directory where the results are written to in JUnit XML format.
 JUnit XML can be read by many tools, including CI environments.
-Defaults to `${buildDir}/test-results/htmlchecks/`
+Defaults to `+{buildDir}+/test-results/htmlchecks/`
 
 failOnErrors:: (optional) if set to "true", the build will fail if any error was found in the checked pages.
 Defaults to `false`
@@ -242,7 +236,7 @@ htmlSanityCheck {
 |===
 | The overall goal is to create neat and clear reports,
 showing eventual errors within HTML files - as shown in the adjoining figure.
-| image:sample-hsc-report.jpg[width="200",link="sample-hsc-report.jpg"
+| image:sample-hsc-report.jpg[width="200",link="{imagesdir}/sample-hsc-report.jpg"
 (click on thumbnail for details)]
 |===
 
@@ -331,7 +325,10 @@ This tiny piece rests on incredible groundwork:
 * Code for string similarity calculation by
 https://github.com/rrice/java-string-similarity[Ralph Rice].
 
-* Initial implementation, maintenance and documentation by {gernotstarke}[Gernot Starke].
+* Implementation, maintenance and documentation by
+* Current implementation, main
+** Initially: {gernotstarke}[Gernot Starke],
+** Currently: {gerdaschemann}[Gerd Aschemann] and several other contributors.
 
 == Development
 
@@ -339,17 +336,23 @@ In case you want to check out, fork and/or contribute:
 The documentation is maintained using the awesome
 https://github.com/docToolchain/docToolchain[docToolchain], created by https://rdmueller.github.io/[@rdmueller].
 
-After checkout, you should execute:
+The complete documentation can be build and checked
 
-`git submodule update -i`
-
-to ensure that the docToolchain submodule is downloaded.
+[source,bash,subs="attributes+"]
+----
+./dtcw \
+  generateHtml \
+  generateSite \# <1>
+  htmlSanityCheck # <2>
+----
+<1> This does currently only work with a JDK 8.x (at least on MacOS)
+<2> The docToolchain `htmlSanityCheck` task uses a released version of HSC (not the current development version) by default.
 
 === Helpful Sources for Development
 
 Several sources provided help during development:
 
-* https://www.gradle.org/docs/current/userguide/custom_plugins.html[Gradle guide on writing custom plugins]
+* Gradle guide on https://www.gradle.org/docs/current/userguide/custom_plugins.html[writing custom plugins]
 * Of course, the https://jsoup.org/apidocs/[JSoup API documentation]
 
 == Similar Projects

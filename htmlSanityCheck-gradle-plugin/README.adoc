@@ -1,0 +1,88 @@
+:doctype: book
+include::../asciidoctor-config.ad[]
+
+= HSC Gradle Plugin
+
+The {gradle-url}[Gradle] plugin of HTML Sanity Check (xref:../README.adoc[HSC]) enables to check generated or native HTML documentation from the Gradle build.
+
+[[sec:installation]]
+== Installation (Gradle Plugin)
+
+=== Default Installation
+
+Use the following snippet inside a Gradle build file:
+
+.build.gradle
+[source,groovy,subs="attributes+"]
+----
+plugins {
+    id 'org.aim42.{project}' version '{version}' // <1>
+}
+----
+<1> Checkout <<box:current-version,current version>>
+
+And add the following to
+
+.settings.gradle
+[source,groovy,subs="attributes+"]
+----
+pluginManagement {
+    repositories {
+        maven { url "{jitpack-url}" } // <1>
+        mavenCentral()
+        gradlePluginPortal() // <2>
+    }
+}
+----
+
+=== Legacy Installation
+
+In case of https://docs.gradle.org/current/userguide/plugins.html#sec:old_plugin_application[legacy plugin usage]
+
+.build.gradle
+[source,groovy,subs="attributes+"]
+----
+buildscript {
+    repositories {
+        maven { url "{jitpack-url}" } // <1>
+        mavenCentral()
+        gradlePluginPortal() // <2>
+    }
+
+    dependencies {
+        classpath ('gradle.plugin.org.aim42:{project}:{version}') // <2>
+    }
+}
+
+apply plugin: 'org.aim42.{project}'
+----
+<1> In case you would like to use an older version (< 2.x) or a current development version, check out <<sec:other-versions>>
+<2> Check out <<box:current-version,current version>>
+
+[[box:current-version]]
+[IMPORTANT]
+.Latest (development) version
+====
+The current development version is defined in link:../gradle.properties[]
+
+[source]
+----
+include::../gradle.properties[tag=version]
+----
+====
+
+== Usage
+
+== Example
+
+[[sec:other-versions]]
+== Old and development versions
+
+[[sec:old-versions]]
+=== Old versions
+
+https://plugins.gradle.org/plugin/org.aim42.htmlSanityCheck[Old versions] (< `2.x`) are available from the {gradle-plugin-url} repository.
+
+[[sec:development-versions]]
+=== Development versions
+
