@@ -2,35 +2,61 @@ name: GitHub Pages
 
 on:
   push:
-    branches:
-      - main  # Set a branch name to trigger deployment
-#  pull_request:
+    tags:
+      - release/current
+    paths:
+      - .github/workflows/gh-pages.yml
+      - src/docs
+      - self-check
+      - docToolchainConfig.groovy
+      - dtcw
+      - dtcw.bat
+      - generate-pages
   workflow_dispatch: {}
 
 jobs:
-  deploy:
+  pages:
     runs-on: ubuntu-20.04
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+      group: "${{ github.workflow }}-${{ github.ref }}"
     env:
       DTC_HEADLESS: true
     steps:
-      - uses: actions/checkout@v2
-      - name: exportExcel
-        run: ./dtcw exportExcel
-      - name: generateSite
-        run: ./dtcw generateSite
-      - name: removeDraft
-        run: find build/microsite/output/. -name "*-draft.html" -type f -delete
-      - name: generatePdf
-        run: ./dtcw generatePdf
-      - name: htmlSanityCheck
-        run: ./dtcw htmlSanityCheck
-      - name: copyToPublic
-        run: cp -r ./build/pdf ./build/microsite/output && cp -r ./build/report/htmlchecks ./build/microsite/output && cp -r ./build/microsite/output ./public
+      - name: Install dot (Graphviz)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: "${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}"
+          restore-keys: ${{ runner.os }}-gradle
+
+      - name: Cache .doctoolchain
+        uses: actions/cache@v2
+        with:
+          path: ~/.doctoolchain
+          key: "${{ runner.os }}-doctoolchain-${{ hashFiles('**/lockfiles') }}"
+          restore-keys: ${{ runner.os }}-doctoolchain
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          # SonarQube requires JDK 17 or higher
+          java-version: 17
+
+      - name: Check out
+        uses: actions/checkout@v2
+
+      - name: Generate Pages
+        run: ./generate-pages
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-#        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/tags/release/current' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public

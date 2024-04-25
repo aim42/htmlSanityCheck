@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+: "${DTC_VERSION:=3.3.1}"
+: "${DTC_TASKS:=exportExcel generateHTML generateSite generatePdf}"
+
+# Generate GH Pages with docToolchain
+test -d "${HOME}/.doctoolchain/docToolchain-${DTC_VERSION}" || ./dtcw local install doctoolchain
+# test -d "${HOME}/.doctoolchain/jdk" || ./dtcw local install java
+
+set -eu
+
+rm -rf build public
+
+./gradlew publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository
+
+./dtcw local "${DTC_TASKS}"
+find build/microsite/output/. -name "*-draft.html" -type f -delete
+cp -rp ./build/pdf ./build/microsite/output
+cp -p ./build/html5/arc42/hsc_arc42.html ./build/microsite/output/arc42/hsc_arc42-standalone.html
+cp -rp ./build/html5/images/* ./build/microsite/output/images/
+# ./dtcw htmlSanityCheck
+(cd self-check && ../gradlew htmlSanityChec)
+cp -rp ./build/reports/htmlchecks ./build/microsite/output
+cp -rp ./build/microsite/output ./public

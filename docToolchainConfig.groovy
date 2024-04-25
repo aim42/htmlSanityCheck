@@ -254,10 +254,6 @@ exportEA.with {
 htmlSanityCheck.with {
     sourceDir = 'microsite/output'
     resultsFolder = 'html-sanity-check'
-    httpSuccessCodes = [ 429 ]
-//    sourceDir = 'html5'
-//    sourceDir = "microsite/output"
-//    checkingResultsDir = '${user.home}/build/microsite/output/htmlchecks'
 }
 //end::htmlSanityCheckConfig[]
 
