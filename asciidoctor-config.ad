@@ -1,6 +1,6 @@
 :icons: font
 :toc: left
-:imagesdir: .
+ifndef::imagesdir[:imagesdir: .]
 
 // :outfilesuffix: adoc
 

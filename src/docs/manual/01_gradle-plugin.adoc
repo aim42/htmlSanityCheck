@@ -1,0 +1,10 @@
+:filename: manual/01_gradle-plugin.adoc
+:imagesdir: ../images
+:jbake-menu: Manual
+:jbake-order: 30
+:jbake-title: HTML Sanity Check (Gradle Plugin)
+
+ifndef::projectRootDir[:projectRootDir: ../../..]
+:xrefToManual: 01_manual.adoc
+
+include::{projectRootDir}/htmlSanityCheck-gradle-plugin/README.adoc[leveloffset=+1]

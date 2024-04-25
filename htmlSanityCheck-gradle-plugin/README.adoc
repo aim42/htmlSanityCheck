@@ -1,9 +1,15 @@
 :doctype: book
 include::../asciidoctor-config.ad[]
 
+ifndef::xrefToManual[:xrefToManual: ../README.adoc]
+:gradleProperties: link:../gradle.properties[]
+ifdef::jbake-type[]
+:gradleProperties: {project-url}/gradle.properties[]
+endif::jbake-type[]
+
 = HSC Gradle Plugin
 
-The {gradle-url}[Gradle] plugin of HTML Sanity Check (xref:../README.adoc[HSC]) enables to check generated or native HTML documentation from the Gradle build.
+The {gradle-url}[Gradle] plugin of HTML Sanity Check (xref:{xrefToManual}[HSC]) enables to check generated or native HTML documentation from the Gradle build.
 
 [[sec:installation]]
 == Installation (Gradle Plugin)
@@ -63,7 +69,7 @@ apply plugin: 'org.aim42.{project}'
 [IMPORTANT]
 .Latest (development) version
 ====
-The current development version is defined in link:../gradle.properties[]
+The current development version is defined in {gradleProperties}
 
 [source]
 ----

@@ -15,6 +15,8 @@ endif::[]
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
 
+ifndef::xrefToGradlePlugin[:xrefToGradlePlugin: htmlSanityCheck-gradle-plugin/README.adoc]
+
 [.lead]
 ====
 This project provides some basic sanity checking on html files.
@@ -27,7 +29,7 @@ or broken links.
 It can be currently used
 
 * Programmatically from Java (or other JVM languages), or
-* As a xref:htmlSanityCheck-gradle-plugin/README.adoc[Gradle plugin].
+* As a xref:{xrefToGradlePlugin}[Gradle plugin].
 
 Standalone Java (CLI) executable and a https://maven.apache.org[Apache Maven] Plugin are planned for future releases.
 
@@ -376,6 +378,6 @@ Some day we'll unify that :-)
 
 == Kudos
 
-Big thanx to image:./structure101-logo.png[alt='Structure-101',link="https://structure101.com"] for helping us analyze and restructure our code.
+Big thanx to image:structure101-logo.png[alt='Structure-101',link="https://structure101.com"] for helping us analyze and restructure our code.
 
 
