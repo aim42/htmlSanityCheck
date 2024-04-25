@@ -1,12 +1,9 @@
 [versions]
-groovy-version = '3.0.17'
 junit5-version = '5.10.2'
 slf4j-version = '2.0.13'
 
 [libraries]
 commons-validator = 'commons-validator:commons-validator:1.8.0'
-# Use Groovy which corresponds to a Gradle version (of hsc build)
-groovy-bom = { module = 'org.codehaus.groovy:groovy-bom', version.ref = 'groovy-version' }
 jsoup = 'org.jsoup:jsoup:1.17.2'
 junit-vintage = { module = 'org.junit.vintage:junit-vintage-engine', version.ref = 'junit5-version' }
 lombok = 'org.projectlombok:lombok:1.18.32'

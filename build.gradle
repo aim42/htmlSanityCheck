@@ -217,7 +217,7 @@ configure(subprojects) {
     }
 }
 
-def groovyVersion = libs.groovy.bom.get().version
+def groovyVersion = GroovySystem.version
 def groovyVersionMajorMinor = groovyVersion.split('\\.')[0..1].join('.')
 
 tasks.named("dependencyUpdates").configure {

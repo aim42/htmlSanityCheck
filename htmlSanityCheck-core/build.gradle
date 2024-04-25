@@ -19,7 +19,7 @@ dependencies {
     testCompileOnly libs.lombok
     testAnnotationProcessor libs.lombok
 
-    testImplementation platform(libs.groovy.bom)
+    testImplementation platform("org.codehaus.groovy:groovy-bom:${GroovySystem.version}")
     testImplementation 'org.codehaus.groovy:groovy-xml'
 }
 
