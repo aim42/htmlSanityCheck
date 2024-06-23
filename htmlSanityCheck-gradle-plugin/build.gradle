@@ -25,7 +25,6 @@ dependencies {
             gradleTestKit()
     )
 
-    implementation libs.jsoup
     implementation gradleApi()
     implementation project(":htmlSanityCheck-core")
 }
