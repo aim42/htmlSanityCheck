@@ -68,15 +68,9 @@ by making $MODULE_DIR$ your default.
 image:intellij-run-configuration.jpg[]
 
 
-== Building the Plugin
+== Building and Uploading the Plugin
 
-=== Uploading / Publishing to Maven Central and Bintray
-
-t.b.c.
-
-=== Uploading to Gradle Plugin Repository
-Currently we use the Gradle Plugin Repository to host the plugin - which is very simple
-to configure for users.
+Check out https://aim42.github.io/htmlSanityCheck/development/publishing.html[Publishing] (on the Development Docs Site) for further instructions.
 
 == Design Discussions
 

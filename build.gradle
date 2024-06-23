@@ -40,6 +40,22 @@ allprojects {
     }
 }
 
+// tag::mavenBuildRepo[]
+File baseBuildDir = file("${project.rootDir}/build")
+File mavenBuildRepo = new File(baseBuildDir, "maven-repo")
+// end::mavenBuildRepo[]
+
+// tag::artifactsZip[]
+String artifactsZip = 'publish-to-maven-central.zip'
+// end::artifactsZip[]
+
+task zipArtifacts(type: Zip) {
+    from mavenBuildRepo
+    exclude '**/maven-metadata.xml*'
+    archiveFileName.set(artifactsZip)
+    destinationDirectory.set(baseBuildDir)
+}
+
 configure(subprojects) {
     apply plugin: 'java'
     apply plugin: 'groovy'
@@ -61,15 +77,56 @@ configure(subprojects) {
         toolchain {
             languageVersion = JavaLanguageVersion.of(8)
         }
+        withSourcesJar()
     }
 
     publishing {
+        publications.all { publication ->
+            if (publication instanceof MavenPublication) {
+                publication.pom {
+                    name = project.name
+                    description = project.description
+                    url = "https://aim42.github.io/htmlSanityCheck/"
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'gstarke'
+                            name = 'Gernot Starke'
+                            email = 'gs@gernotstarke.de'
+                        }
+                        developer {
+                            id = 'ascheman'
+                            name = 'Gerd Aschemann'
+                            email = 'gerd@aschemann.net'
+                        }
+                        developer {
+                            id = 'rdmueller'
+                            name = 'Ralf D. Müller'
+                            email = 'ralf.d.mueller@gmail.com'
+                        }
+                        developer {
+                            id = 'ruhrotht'
+                            name = 'Thomas Ruhroth'
+                            email = 'Thomas.Ruhroth@msg.group'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/aim42/htmlSanityCheck.git'
+                        developerConnection = 'scm:git:ssh://github.com/aim42/htmlSanityCheck.git'
+                        url = 'https://github.com/aim42/htmlSanityCheck'
+                    }
+                }
+            }
+        }
         repositories {
             maven {
                 name = 'myLocalRepositoryForFullIntegrationTests'
-                //noinspection GrDeprecatedAPIUsage
-                File baseDir = file(project.parent.buildDir)
-                url = new File(baseDir, "maven-repo")
+                url = mavenBuildRepo
             }
             mavenLocal()
         }
@@ -91,7 +148,7 @@ configure(subprojects) {
 }
 
 def groovyVersion = libs.groovy.bom.get().version
-def groovyVersionMajorMinor = groovyVersion.split('\\.')[0..1] .join('.')
+def groovyVersionMajorMinor = groovyVersion.split('\\.')[0..1].join('.')
 
 tasks.named("dependencyUpdates").configure {
     gradleReleaseChannel = true

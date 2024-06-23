@@ -1,39 +1,75 @@
 :filename: development/publishing.adoc
 === Publishing kbd:htmlSC Releases
 
-==== Automating the Upload of a Gradle Plugin
-Puh - handling Bintray or JCenter is
-https://java.dzone.com/articles/enjoy-bintray-and-use-it-pain[not funny].
+==== Background
 
-==== Handling (Secret) Credentials
-We use Etienne Studers awesome
-https://github.com/etiennestuder/gradle-credentials-plugin[Gradle-Credentials plugin]
-to allow automatic deployment to public portals (like Bintray, JCenter and/or Gradle-Plugin-Portal)
-and keep the appropriate passwords/API-keys secret.
+Our Gradle build stores all artifacts and their meta-data (POM + module files,
+as well as their respective hashes and signatures) in a local Maven repository.
+They are subject to integration tests.
+Finally, they can be uploaded to Maven Central (as ZIP file).
 
-Brief instructions below - for details see the
-https://github.com/etiennestuder/gradle-credentials-plugin[credentials plugin]
-
-. integrate the plugin in the buildfile
-. get the required credentials from the Bintray website (or wherever you want to publish artifacts)
-. add the required credentials:
+* The build stores these files to the root build directory.
 +
-[source]
+[source, groovy]
 ----
-> gradle addCredentials --key bintrayUserName --value <your-Bintray-username>
-:addCredentials
-
-BUILD SUCCESSFUL
-
-> gradle addCredentials --key bintrayApiKey --value <some-long-key>
+include::../../../build.gradle[tag=mavenBuildRepo]
 ----
-. Within the buildfile you can now access these credentials as follows:
+
+* And it stores the ZIP file there as well
 +
-[source]
+[source, groovy]
 ----
-// include these lines in your build.gradle:
-println "Username        : " + credentials.bintrayUserName
-println "Bintray API Key : " + credentials.bintrayApiKey
+include::../../../build.gradle[tag=artifactsZip]
 ----
 
+==== Publishing actions
 
+Adjust version number::
+Set the version number in xref:../../../gradle.properties[] to the next value.
+
+Build / publish local::
+Generate artifacts and publish them to the local Maven repository for integration tests
++
+[source,bash,subs="callouts+"]
+----
+./gradlew clean integrationTests # <1>
+----
+<1> This will implicitly call the task `publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository` which pushes all required files for publication to the repository.
+
+Sign::
+Sign artifacts, POMs, and modules with GPG.
++
+[source,bash]
+----
+for i in $(find build -name "*.jar" -o -name "*.pom" -o -name "*.module"); do \
+  gpg --yes -ab ${i}; \
+done
+----
+
++
+[NOTE]
+.Setup PGP / GnuPG
+====
+Setting up PGP (or GnuPG) is out of scope for this document.
+
+Please refer to the respective documentation.
+====
+
+Build ZIP::
+Create a ZIP-File from all artifacts, POMs, and modules, their hashes, and signatures.
++
+[source, bash]
+----
+./gradlew zipArtifacts
+----
+
+Upload ZIP to Maven Central::
+Finally, upload the resulting ZIP file (manually) to Maven Central,
+i.e., https://central.sonatype.com/publishing[Sonatype Central].
++
+[CAUTION]
+.Credentials needed
+====
+You need respective credentials to upload files to Maven Central for the `org.aim42.htmlSanityCheck` namespace.
+Talk to Gernot Starke to get these permissions.
+====

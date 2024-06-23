@@ -12,10 +12,36 @@ tasks.named('check') {
 }
 
 gradlePlugin {
+    website = 'https://aim42.github.io/htmlSanityCheck/'
+    vcsUrl = 'https://github.com/aim42/HtmlSanityCheck.git'
     plugins {
         htmlSanityCheck {
             id = 'org.aim42.htmlSanityCheck'
             implementationClass = 'org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin'
+            displayName = 'Gradle HtmlSanityCheck Plugin'
+            description = project.description
+        }
+    }
+}
+
+groovydoc {
+    source = sourceSets.main.groovy.srcDirs
+    classpath = configurations.compileClasspath
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    archiveClassifier = 'javadoc'
+    from groovydoc.destinationDir
+}
+
+artifacts {
+    archives groovydocJar
+}
+
+publishing {
+    publications {
+        pluginMaven(MavenPublication) {
+            artifact groovydocJar
         }
     }
 }
