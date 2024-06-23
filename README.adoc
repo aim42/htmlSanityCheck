@@ -2,6 +2,15 @@
 :icons: font
 // Align version with ./gradle.properties file
 :version: 2.0.0
+:toc: left
+:toclevels: 3
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
 
 :plugin-url: https://github.com/aim42/htmlSanityCheck
 :plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
@@ -38,7 +47,7 @@ image:https://jitpack.io/v/org.aim42.htmlSanityCheck/htmlSanityCheck.svg[alt='Ji
 Use the following snippet inside a Gradle build file:
 
 .build.gradle
-[source,groovy,subs="attributes"]
+[source,groovy,subs="attributes+"]
 ----
 plugins {
     id 'org.aim42.{project}' version '{version}' // <1>
@@ -49,13 +58,11 @@ plugins {
 OR
 
 .build.gradle
-[source,groovy,subs="attributes"]
+[source,groovy,subs="attributes+"]
 ----
 buildscript {
     repositories {
-        maven {
-              url "https://plugins.gradle.org/m2/"
-            }
+        mavenCentral()
     }
 
     dependencies {
