@@ -53,6 +53,7 @@ dependencies {
 
     implementation gradleApi()
     implementation project(":htmlSanityCheck-core")
+    testImplementation libs.jsoup
 }
 
 /*
