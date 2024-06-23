@@ -27,6 +27,7 @@ public abstract class Checker {
         this.myConfig = pConfig;
     }
 
+    // tag::performCheckTemplateMethod[]
     /**
      * * template method for performing a single type of checks on the given @see HtmlPage.
      * <p>
@@ -44,6 +45,7 @@ public abstract class Checker {
 
         return check(pageToCheck);// <1> delegate check() to subclass
     }
+    // end::performCheckTemplateMethod[]
 
     /**
      * Initialize with suitable description.
