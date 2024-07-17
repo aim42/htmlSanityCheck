@@ -19,6 +19,12 @@ asciidoctor {
     sourceDir file("src/test/resources")
     sources { include '*.adoc' }
     outputDir file("build/docs")
+
+    forkOptions JavaVersion.current() >= JavaVersion.VERSION_1_9
+            ? { jvmArgs '--add-opens', 'java.base/sun.nio.ch=ALL-UNNAMED',
+                        '--add-opens', 'java.base/java.io=ALL-UNNAMED'
+              }
+            : {}
 }
 
 htmlSanityCheck {
