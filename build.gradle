@@ -59,6 +59,9 @@ zipArtifacts.dependsOn(
         ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
         ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository'
 )
+zipArtifacts.doFirst {
+    project.ext.set('enableSigning', 'true')
+}
 
 configure(subprojects) {
     apply plugin: 'java'
@@ -152,6 +155,7 @@ configure(subprojects) {
     }
 
     signing {
+        required = { project.hasProperty('enableSigning') && project.property('enableSigning') == 'true' }
         sign publishing.publications
     }
 }
