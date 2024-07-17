@@ -55,6 +55,10 @@ task zipArtifacts(type: Zip) {
     archiveFileName.set(artifactsZip)
     destinationDirectory.set(baseBuildDir)
 }
+zipArtifacts.dependsOn(
+        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
+        ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository'
+)
 
 configure(subprojects) {
     apply plugin: 'java'
@@ -62,6 +66,7 @@ configure(subprojects) {
     apply plugin: 'maven-publish'
 
     apply plugin: 'jacoco'
+    apply plugin: 'signing'
 
     description "${rootProject.description} - Module ${project.name}"
 
@@ -144,6 +149,10 @@ configure(subprojects) {
             xml.required = true
         }
         dependsOn check // tests are required to run before generating the report
+    }
+
+    signing {
+        sign publishing.publications
     }
 }
 
