@@ -109,6 +109,20 @@ class WebSpec extends Specification {
 
     }
 
+    @Unroll
+    def "invalid URIs throw InvalidUriSyntaxException"(String invalidUri) {
+        when:
+        Web.isLocalResource(invalidUri)
+
+        then:
+        thrown(Web.InvalidUriSyntaxException)
+
+        where:
+        invalidUri << [
+                "://missing-scheme",
+                "file://invalid|path"
+        ]
+    }
 
     @Unroll
     def "check for valid ip address"(boolean isValidIP, String ipa) {
