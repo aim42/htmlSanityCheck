@@ -2,13 +2,11 @@ package org.aim42.htmlsanitycheck.check;
 
 import org.aim42.htmlsanitycheck.Configuration;
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
-import org.aim42.htmlsanitycheck.html.HtmlElement;
 import org.aim42.htmlsanitycheck.html.HtmlPage;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class DuplicateIdChecker extends Checker {
     private Set<String> idStringsSet;
@@ -16,17 +14,6 @@ public class DuplicateIdChecker extends Checker {
 
     public DuplicateIdChecker(Configuration pConfig) {
         super(pConfig);
-    }
-
-    /**
-     * find all tags with specific id value
-     *
-     * @param id
-     * @param allTags List of tags containing id-attribute
-     */
-    public static List<HtmlElement> getAllTagsWithSpecificId(final String idString, List<HtmlElement> allTags) {
-        return allTags.stream().filter(htmlElement -> htmlElement.getIdAttribute().equals(idString)).collect(Collectors.toList());
-
     }
 
     @Override
@@ -51,7 +38,7 @@ public class DuplicateIdChecker extends Checker {
     }
 
     private void checkForDuplicateIds(Set<String> idStringsSet) {
-        idStringsSet.forEach(oneIdString -> checkForDuplicateDefinition(oneIdString));
+        idStringsSet.forEach(this::checkForDuplicateDefinition);
     }
 
     private void checkForDuplicateDefinition(final String idString) {

@@ -75,40 +75,6 @@ class DuplicateIdCheckerTest {
         assertEquals("expected three findings", 3, collector?.nrOfProblems())
     }
 
-    @Test
-    void testGetAllTagsWithSpecificId() {
-        String HTML_WITH_DUPLICATE_ID = '''
-           <html>
-             <head></head>
-              <body>
-                   <h1 id="aim42">dummy-heading-1</h1>
-                   <a href="#aim42">link-to-aim42</a>
-                   <h2 id="aim42">aim42 </h3>
-                   <h2 id="aim43">aim43 </h3>
-                   <h2 id="aim44">aim44 </h3>
-
-              </body>
-           </html>'''
-
-        pageToCheck = new HtmlPage(HTML_WITH_DUPLICATE_ID)
-        List tagsWithId = pageToCheck.getAllIds()
-        //Set idStringsSet = pageToCheck.getAllIdStrings().toSet()
-
-        assertEquals("Expected 4 tags with ids", 4, tagsWithId.size())
-
-        List<HtmlElement> expectedAim43Ids =
-                DuplicateIdChecker.getAllTagsWithSpecificId( "aim43", tagsWithId)
-        assertEquals(" Expected ONE tag with id='aim43", 1, expectedAim43Ids.size() )
-
-
-        List<HtmlElement> expectedAim42Ids =
-                DuplicateIdChecker.getAllTagsWithSpecificId( "aim42", tagsWithId)
-        assertEquals(" Expected TWO tags with id='aim42", 2, expectedAim42Ids.size() )
-
-
-
-    }
-
 }
 
 /*=====================================================================
