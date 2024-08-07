@@ -35,16 +35,19 @@ class WebSpec extends Specification {
         errorCode << [400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 500, 501, 502, 503, 504, 505]
     }
 
-    def "is internet connection available"() {
-
+    def "internet connection is available"() {
         // Stubbing in the following manner DOES NOT WORK!!!
         //given: "we're disconnected from the internet..."
         //Stub(NetUtil)
         //NetUtil.isInternetConnectionAvailable(_) >> false
 
-
         expect:
         Web.isInternetConnectionAvailable()
+    }
+
+    def "internet connection is not available"() {
+        expect:
+        !Web.isInternetConnectionAvailable("ThIs-Is.A.Hostname.Which.does.notexist.mail")
     }
 
     //@Unroll
@@ -65,23 +68,6 @@ class WebSpec extends Specification {
 
     }
 
-
-    @Unroll
-    def "identify invalid links"(boolean isValid, String link) {
-        expect:
-        Web.isValidURL(link) == isValid
-
-        where:
-
-        isValid | link
-        true    | "http://arc42.de/index.html"
-        true    | "#localRef"
-        true    | "file://images/image.jpg"
-
-        false   | "#Context Analysis"
-        false   | "//10.0.0.1/index.html"
-
-    }
 
     @Unroll
     def "identify local resource links"(boolean isLocal, String link) {

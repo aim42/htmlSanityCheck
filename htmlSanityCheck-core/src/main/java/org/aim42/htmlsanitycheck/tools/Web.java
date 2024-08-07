@@ -3,10 +3,8 @@ package org.aim42.htmlsanitycheck.tools;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
 import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.HashSet;
@@ -75,10 +73,13 @@ public class Web {
      * @return true if the Internet is seemingly available
      */
     public static boolean isInternetConnectionAvailable() {
+        return isInternetConnectionAvailable("google.com");
+    }
 
+    protected static boolean isInternetConnectionAvailable(String host) {
         try {
             // if we can get google's address, there is the Internet...
-            InetAddress.getByName("google.com");
+            InetAddress.getByName(host);
             return true;
         } catch (UnknownHostException e) {
             // we cannot resolve Google, there might be no internet connection
@@ -156,6 +157,7 @@ public class Web {
     }
 
     private static final Pattern ILLEGAL_CHARS_REGEX = Pattern.compile("[ *$]");
+
     /**
      * helper to identify invalid characters in link
      *
@@ -216,35 +218,6 @@ public class Web {
         }
 
         return aUri.getScheme().equalsIgnoreCase("file");
-    }
-
-
-    /**
-     * Checks if this String represents a valid URI/URL
-     *
-     * @param link the URL to be checked
-     * @return boolean
-     */
-    public static boolean isValidURL(String link) {
-        // TODO: refactor this code to use  org.apache.commons.validator.routines.*
-
-        boolean isValid;
-
-        if (isCrossReference(link)) {
-            return true;
-
-        } else {
-            try {
-                new URL(link).toURI();
-                isValid = true;
-            } catch (MalformedURLException | URISyntaxException e) {
-                isValid = false;
-                // ignore
-
-            }
-        }
-
-        return isValid;
     }
 }
 
