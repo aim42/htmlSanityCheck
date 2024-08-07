@@ -1,7 +1,6 @@
-package org.aim42.htmlsanitycheck.html
+package org.aim42.htmlsanitycheck.tools
 
 import org.junit.Test
-import org.aim42.htmlsanitycheck.tools.Web
 
 import static org.junit.Assert.assertFalse
 import static org.junit.Assert.assertTrue
@@ -9,13 +8,13 @@ import static org.junit.Assert.assertTrue
 // see end-of-file for license information
 
 
-class URLUtilTest {
+class WebTest {
 
     private static final AIM = "aim42.org"
     private static final IMG = "image.jpg"
 
     @Test
-    public void testFileURL() {
+    void testFileURL() {
         String fileURL = "file://$IMG"
 
         Boolean actual = Web.isRemoteURL(fileURL)
@@ -33,7 +32,7 @@ class URLUtilTest {
     }
 
     @Test
-    public void testHTTPUrl() {
+    void testHTTPUrl() {
         String httpURL = "http://$AIM/$IMG"
         Boolean actual = Web.isRemoteURL(httpURL)
         assertTrue("$httpURL shall be recognized as remote url but wasn't", actual)
@@ -42,7 +41,7 @@ class URLUtilTest {
 
 
     @Test
-    public void testRemoteURLs() {
+    void testRemoteURLs() {
         def prefixes = ["http", "HTTP", "https", "HTTPS", "hTtPs",
                         "ftp", "FTP", "fTP", "telnet", "TELNET",
                         "gopher", "ssh", "SSH"]
@@ -55,7 +54,7 @@ class URLUtilTest {
     }
 
     @Test
-    public void testMailtoLink() {
+    void testMailtoLink() {
         List<String> prefixes = ["mailto", "MAILTO", "mailTO"]
 
         prefixes.each { prefix ->
@@ -66,7 +65,7 @@ class URLUtilTest {
     }
 
     @Test
-    public void testRelativeFilePath() {
+    void testRelativeFilePath() {
         List<String> paths = ["./$IMG", "../$IMG", "$IMG",
                               "../../$IMG", "$IMG", "#$IMG",
                               "images/aim42-logo.png"
@@ -81,7 +80,7 @@ class URLUtilTest {
 
 
     @Test
-    public void testLocalResources() {
+    void testLocalResources() {
         List<String> locals = ["file://test.html", "test.html", "./test.html",
                                "down/loads/test.htm", "test.htm", "test.HTM",
                                "../down/loads/test.docx",
@@ -104,7 +103,7 @@ class URLUtilTest {
     }
 
     @Test
-    public void testLinkToFileCheckDoesNotRelyOnDefaultLocale() {
+    void testLinkToFileCheckDoesNotRelyOnDefaultLocale() {
         Locale defaultLocale = Locale.getDefault()
         try {
             Locale.setDefault(new Locale("tr", "TR"))
@@ -122,7 +121,7 @@ class URLUtilTest {
      * tests if cross-references (intra-document-links) are recognized
      */
     @Test
-    public void testSimpleStringIsCrossReference() {
+    void testSimpleStringIsCrossReference() {
         List<String> crossRefs = ["#xref", "#A1B2c3", "#abcdefghijklmnopqrsuvwyz"]
 
         crossRefs.each { cf ->
@@ -133,7 +132,7 @@ class URLUtilTest {
     }
 
     @Test
-    public void testPathIsNoCrossReference() {
+    void testPathIsNoCrossReference() {
         List<String> paths = ["api/Checker.html",
                               "api/doc/Checker.html",
                               "images/xref", "Anotherfile.html",
@@ -151,11 +150,11 @@ class URLUtilTest {
 
     // tag::GenericURIExample[]
     @Test
-    public void testGenericURISyntax() {
+    void testGenericURISyntax() {
         // based upon an example from the Oracle(tm) Java tutorial:
         // http://docs.oracle.com/javase/tutorial/networking/urls/urlInfo.html
         def aURL =
-                new URL("http://example.com:42/docs/tutorial/index.html?name=aim42#INTRO");
+                new URL("http://example.com:42/docs/tutorial/index.html?name=aim42#INTRO")
         aURL.with {
             assert getProtocol() == "http"
             assert getAuthority() == "example.com:42"
