@@ -16,10 +16,13 @@ import java.util.stream.IntStream;
 
 public class Web {
 
+    private Web() {
+        // Intentionally left empty
+    }
 
     /**
-     * functions to identify categories of string-representations of URLs and URIs,
-     * e.g. isRemote, isCrossReference, isValidIP
+     * Functions to identify categories of string-representations of URLs and URIs,
+     * e.g., isRemote, isCrossReference, isValidIP
      */
 
     // these are regarded as "Success" when checking
@@ -32,11 +35,11 @@ public class Web {
 
     public static final Set<Integer> HTTP_REDIRECT_CODES = initHttpReturnCodes(301, 303, 307, 308);
 
-    public static final Set<String> POSSIBLE_EXTENSIONS = initExtentions();
+    public static final Set<String> POSSIBLE_EXTENSIONS = initExtensions();
 
-    static private final Pattern httpPattern = Pattern.compile("^https?:");
+    private static final Pattern httpPattern = Pattern.compile("^https?:");
 
-    static private final Pattern mailPattern = Pattern.compile("^(?i)(mailto):.*$");
+    private static final Pattern mailPattern = Pattern.compile("^(?i)(mailto):.*$");
 
     private static final Pattern dataImagePattern = Pattern.compile("^(?i)(data:image).*$");
 
@@ -44,13 +47,13 @@ public class Web {
 
     private static final Pattern linkPattern = Pattern.compile("^//.*$");
 
-    private static Set<Integer> initHttpReturnCodes(int alow, int ahigh, int blow, int high) {
-        Set<Integer> result = IntStream.rangeClosed(alow, ahigh).collect(HashSet::new, Set::add, Set::addAll);
-        result.addAll(IntStream.rangeClosed(blow, high).collect(HashSet::new, Set::add, Set::addAll));
+    private static Set<Integer> initHttpReturnCodes(int aLow, int aHigh, int bLow, int bHigh) {
+        Set<Integer> result = IntStream.rangeClosed(aLow, aHigh).collect(HashSet::new, Set::add, Set::addAll);
+        result.addAll(IntStream.rangeClosed(bLow, bHigh).collect(HashSet::new, Set::add, Set::addAll));
         return Collections.unmodifiableSet(result);
     }
 
-    private static Set<String> initExtentions() {
+    private static Set<String> initExtensions() {
         Set<String> result = new HashSet<>(8);
         result.add("html");
         result.add("htm");
@@ -69,21 +72,21 @@ public class Web {
      * Our approximation is DNS resolution: if google.com can be resolved to an IP address,
      * there should be an active and usable internet connection available.
      *
-     * @return true if Internet is (seemingly available
+     * @return true if the Internet is seemingly available
      */
-    static public boolean isInternetConnectionAvailable() {
+    public static boolean isInternetConnectionAvailable() {
 
         try {
-            // if we can get google's address, there is Internet...
+            // if we can get google's address, there is the Internet...
             InetAddress.getByName("google.com");
             return true;
         } catch (UnknownHostException e) {
-            // we cannot resolve google, there might be no internet connection
+            // we cannot resolve Google, there might be no internet connection
             return false;
         }
     }
 
-    static public boolean isWebUrl(String possibleUrl) {
+    public static boolean isWebUrl(String possibleUrl) {
         return httpPattern.matcher(possibleUrl).find();
     }
 
@@ -142,7 +145,7 @@ public class Web {
      * Checks if this String represents a cross-reference,
      * that is an intra-document link
      *
-     * @param xref the cross reference to be checked
+     * @param xref the cross-reference to be checked
      */
     public static boolean isCrossReference(String xref) {
 
@@ -170,8 +173,6 @@ public class Web {
      * (1) "file://path/filename.ext" or
      * (2) is a path, e.g. "directory/filename.ext" or directory or
      * (3) starts with //, e.g. "index.html"
-     *
-     * @see class URLUtilSpec for details
      */
     public static boolean isLocalResource(String link) {
         // handle corner cases
@@ -187,7 +188,7 @@ public class Web {
             try {
                 aUri = new URI(link);
             } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
+                throw new InvalidUriSyntaxException(e);
             }
 
             return (
@@ -200,6 +201,11 @@ public class Web {
         }
     }
 
+    public static class InvalidUriSyntaxException extends RuntimeException {
+        public InvalidUriSyntaxException(Throwable cause) {
+            super(cause);
+        }
+    }
 
     /**
      * helper to identify "file scheme"
@@ -229,14 +235,12 @@ public class Web {
 
         } else {
             try {
-                URI aUri = new URL(link).toURI();
+                new URL(link).toURI();
                 isValid = true;
-            } catch (MalformedURLException e) {
+            } catch (MalformedURLException | URISyntaxException e) {
                 isValid = false;
                 // ignore
 
-            } catch (URISyntaxException e1) {
-                isValid = false;
             }
         }
 
@@ -245,9 +249,8 @@ public class Web {
 }
 
 
-/* ***********************************************************************
+/*************************************************************************
  * This is free software - without ANY guarantee!
- *
  *
  * Copyright Dr. Gernot Starke, arc42.org
  *

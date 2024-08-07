@@ -28,7 +28,7 @@ public abstract class Reporter {
      * Usually a Reporter instance shall be constructed with its appropriate
      *
      * @param runResults the results for the report
-     * @see PerRunResults, as the latter contains all findings.
+     * @see PerRunResults as the latter contains all findings.
      */
     protected Reporter(PerRunResults runResults) {
         this();
