@@ -87,6 +87,17 @@ jreleaser {
         github {
             repoOwner = 'aim42'
             overwrite = true
+
+            tagName = '{{projectVersion}}'
+
+            changelog {
+                external = 'CHANGELOG.md'
+            }
+
+            prerelease {
+                enabled = true
+                pattern = '.*-rc\\d+$'
+            }
         }
     }
 

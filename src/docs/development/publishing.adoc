@@ -89,6 +89,9 @@ echo empty | gpg --clearsign -o /dev/null
 Adjust version number::
 Set the version number in xref:../../../gradle.properties[] to the next value.
 
+Maintain ChangeLog::
+Add the respective changes to xref:../../../CHANGELOG.md[]
+
 Build / Test::
 Clean, check (test), and perform integration tests:
 +
@@ -102,15 +105,19 @@ Sign artifacts and load them up to Maven Central via https://jreleaser.org[JRele
 +
 [source,bash,subs="callouts+"]
 ----
-./gradlew jreleaserDeploy -PenableSigning=true -Psigning.password=... # <1> <2>
+./gradlew jreleaserRelease -PenableSigning=true -Psigning.password=... # <1> <2>
 ----
 <1> Checkout <<sec:artifact-signing>> for more information.
 <2> The `enableSigning` flag is necessary to enforce signing (which is not necessary for local installations,
 integration testing, etc.)
 
-The `jreleaserDeploy` task will implicitly call the task `signAll` which signs
++
+The `jreleaserRelease` task will
+
+* Implicitly call the task `signAll` which signs
 and pushes all required files for publication to a local repository.
-JReleaser picks them up from there and loads them up to the Maven Central staging area as a new version.
+* Then pick them up from there and load them up to the Maven Central staging area as a new version.
+* https://github.com/aim42/htmlSanityCheck/releases[Release current state to GitHub] and tag the current version accordingly.
 
 [TIP]
 .Use GPG Agent (command) in practice
