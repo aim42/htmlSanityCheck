@@ -29,6 +29,7 @@ Additionally, you need to create https://central.sonatype.org/publish/generate-p
 ===== Artifact signing
 
 To successfully upload artifacts and other files (POM etc.), a valid PGP signature is required.
+A proper GPG (agent) setup is beyond the scope of this tutorial.
 Therefore, you need to set up GnuPG in your local `+${HOME}/.gradle/gradle.properties+`,
 according to the https://docs.gradle.org/current/userguide/signing_plugin.html#sec:signatory_credentials[Gradle Signatory documentation].
 
@@ -36,17 +37,52 @@ Add the following entries:
 
 [source,properties]
 ----
-signing.keyId=24875D73
-signing.secretKeyRingFile=/Users/me/.gnupg/secring.gpg <1>
-signing.password=<SECRET> # <2>
+signing.keyId=24875D73 <1>
+signing.secretKeyRingFile=/Users/me/.gnupg/secring.gpg <2>
+signing.password=<SECRET> # <3>
 ----
-<1> Note that you need to specify the literal path to your home directory; it is not possible to refer to system properties like `+${user.home}+` here.
-<2> Instead of putting the clear text password into the file, you should  provide it on the command line when calling Gradle
+<1> You have to provide the id of your key (of course).
+<2> Note that you need to specify the literal path to your home directory; it is not possible to refer to system properties like `+${user.home}+` here.
+<3> Instead of putting the clear text password into the file, you should  provide it on the command line when calling Gradle
 +
 [source,shell]
 ----
 ./gradlew -Psigning.password=... <task>
 ----
+
+[[tip:gpg-agent]]
+[TIP]
+.Use GPG Agent
+====
+Alternatively,
+you may use the https://linux.die.net/man/1/gpg-agent[GPG Agent] of your https://gnupg.org/[GnuPG] installation
+to cache the secret in memory,
+thereby reducing the risk of accidentally exposing the clear text passphrase in your command line or environment.
+
+You can make use of it by setting the flag `useGpgCmd` to `true`:
+
+[source,shell]
+----
+./gradlew -PuseGpgCmd=true <task>
+----
+
+Note that the (native) `gpg` command is used in background and that it cannot request the passphrase when executed.
+This may lead to errors like
+
+[source]
+----
+gpg: Sorry, we are in batchmode - can't get input
+
+FAILURE: Build failed with an exception.
+----
+
+In this case, you have to make sure the agent is started and the password is cached, e.g., by executing
+
+[source,shell]
+----
+echo empty | gpg --clearsign -o /dev/null
+----
+====
 
 ==== Publishing actions
 
@@ -75,6 +111,17 @@ integration testing, etc.)
 The `jreleaserDeploy` task will implicitly call the task `signAll` which signs
 and pushes all required files for publication to a local repository.
 JReleaser picks them up from there and loads them up to the Maven Central staging area as a new version.
+
+[TIP]
+.Use GPG Agent (command) in practice
+====
+If you have GPG configured properly, you may use the <<tip:gpg-agent,GPG-Agent>>.
+
+[source,bash,subs="callouts+"]
+----
+./gradlew jreleaserDeploy -PenableSigning=true -PuseGpgCmd=true
+----
+====
 
 Publish on Maven Central::
 Finally, publish the staged version on Maven Central,

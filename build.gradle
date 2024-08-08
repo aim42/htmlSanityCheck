@@ -199,6 +199,9 @@ configure(subprojects) {
 
     signing {
         required = { project.hasProperty('enableSigning') && project.property('enableSigning') == 'true' }
+        if (project.hasProperty('useGpgCmd') && project.property('useGpgCmd') == 'true') {
+            useGpgCmd()
+        }
         sign publishing.publications
     }
 }
