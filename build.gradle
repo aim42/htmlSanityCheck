@@ -10,6 +10,8 @@ plugins {
 
     alias(libs.plugins.gradle.versions)
     alias(libs.plugins.sonar)
+
+    alias(libs.plugins.jreleaser)
 }
 
 allprojects {
@@ -54,22 +56,54 @@ File baseBuildDir = file("${project.rootDir}/build")
 File mavenBuildRepo = new File(baseBuildDir, "maven-repo")
 // end::mavenBuildRepo[]
 
-// tag::artifactsZip[]
-String artifactsZip = 'publish-to-maven-central.zip'
-// end::artifactsZip[]
-
-task zipArtifacts(type: Zip) {
-    from mavenBuildRepo
-    exclude '**/maven-metadata.xml*'
-    archiveFileName.set(artifactsZip)
-    destinationDirectory.set(baseBuildDir)
+task signAll() {
+    doLast {
+        logger.quiet("Signed all artifacts for upload with JReleaser")
+    }
 }
-zipArtifacts.dependsOn(
+signAll.dependsOn(
+        ':htmlSanityCheck-core:signMavenJavaPublication',
+        ':htmlSanityCheck-gradle-plugin:signHtmlSanityCheckPluginMarkerMavenPublication',
+        ':htmlSanityCheck-gradle-plugin:signPluginMavenPublication'
+)
+
+jreleaserDeploy.dependsOn(
+        'signAll',
         ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
         ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository'
 )
-zipArtifacts.doFirst {
-    project.ext.set('enableSigning', 'true')
+
+jreleaser {
+    project {
+        license = 'Apache-2.0'
+        links {
+            homepage = urls.website
+        }
+        inceptionYear = '2014'
+        copyright = '2024'
+    }
+
+    release {
+        github {
+            repoOwner = 'aim42'
+            overwrite = true
+        }
+    }
+
+    deploy {
+        active = 'NEVER'
+
+        maven {
+            mavenCentral {
+                app {
+                    active = 'ALWAYS'
+                    sign = false
+                    url = 'https://central.sonatype.com/api/v1/publisher'
+                    stagingRepository(mavenBuildRepo.toString())
+                }
+            }
+        }
+    }
 }
 
 configure(subprojects) {

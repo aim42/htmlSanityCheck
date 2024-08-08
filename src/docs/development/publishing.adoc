@@ -1,36 +1,35 @@
 :filename: development/publishing.adoc
 === Publishing kbd:htmlSC Releases
 
-==== Background
+kbd:htmlSC (Core and Gradle plugin) can be published to https://central.sonatype.com/search?q=org.aim42.htmlSanityCheck[Maven Central] (MC) for retrieval by its consumers.
 
-Our Gradle build stores all artifacts and their meta-data (POM + module files,
-as well as their respective hashes and signatures) in a local Maven repository.
-They are subject to integration tests.
-Finally, they can be uploaded to Maven Central (as ZIP file).
+Traditional retrieval as Gradle plugin from https://plugins.gradle.org[Gradle Plugin Portal] is still possible,
+as they are redirecting plugin downloads automatically to Maven Central.
 
-[[item:local-repository]]
-* The build stores these files to the root build directory.
-+
-[source,groovy]
-.Local Maven repository for integration testing and publication
-----
-include::../../../build.gradle[tag=mavenBuildRepo]
-----
+WARNING: Only note that newer versions (>= 2.0.0) currently do not show up in the https://plugins.gradle.org/search?term=org.aim42.htmlSanityCheck[web interface].
 
-[[item:zip-file]]
-* And it stores the ZIP file there as well
-+
-[source,groovy]
-.Generated ZIP file for publication
-----
-include::../../../build.gradle[tag=artifactsZip]
-----
+==== Prerequisites
 
-[IMPORTANT]
-.Setup GnuPG signing
+===== Maven Central (Sonatype) account
+
+Make yourself familiar with https://central.sonatype.org/publish-ea/publish-ea-guide/[the publishing process].
+
+[CAUTION]
+.Credentials needed
 ====
-To successfully sign the artifacts
-you need to set up GnuPG in your local `+${HOME}/.gradle/gradle.properties+`,
+You need respective credentials to upload files to Maven Central for the `org.aim42.htmlSanityCheck` namespace.
+Talk to Gernot Starke to get these permissions.
+====
+
+You will need to https://central.sonatype.org/register/central-portal/#create-an-account[sign up for Maven Central]
+(or, to be more precise, to its provider, Sonatype).
+Additionally, you need to create https://central.sonatype.org/publish/generate-portal-token/[a portal token].
+
+[[sec:artifact-signing]]
+===== Artifact signing
+
+To successfully upload artifacts and other files (POM etc.), a valid PGP signature is required.
+Therefore, you need to set up GnuPG in your local `+${HOME}/.gradle/gradle.properties+`,
 according to the https://docs.gradle.org/current/userguide/signing_plugin.html#sec:signatory_credentials[Gradle Signatory documentation].
 
 Add the following entries:
@@ -38,40 +37,45 @@ Add the following entries:
 [source,properties]
 ----
 signing.keyId=24875D73
-signing.password=secret # <1>
-signing.secretKeyRingFile=/Users/me/.gnupg/secring.gpg <2>
+signing.secretKeyRingFile=/Users/me/.gnupg/secring.gpg <1>
+signing.password=<SECRET> # <2>
 ----
-<1> Instead of provisioning the clear text password, you could also provide it on the command line when calling Gradle:
+<1> Note that you need to specify the literal path to your home directory; it is not possible to refer to system properties like `+${user.home}+` here.
+<2> Instead of putting the clear text password into the file, you should  provide it on the command line when calling Gradle
 +
 [source,shell]
 ----
 ./gradlew -Psigning.password=... <task>
 ----
-<2> Note that you need to specify the literal path to your home directory; it is not possible to refer to system properties like `+${user.home}+` here.
-====
 
 ==== Publishing actions
 
 Adjust version number::
 Set the version number in xref:../../../gradle.properties[] to the next value.
 
-Build / publish local / sign::
-Generate artifacts and publish them to the local Maven repository for integration tests
+Build / Test::
+Clean, check (test), and perform integration tests:
 +
 [source,bash,subs="callouts+"]
 ----
-./gradlew clean integrationTest zipArtifacts # <1> <2>
+./gradlew clean check integrationTest
 ----
-<1> The `integrationTest` task will implicitly call the task `publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository` which pushes all required files for publication to the <<item:local-repository,repository>>.
-<2> The `zipArtifacts` task will generate the <<item:zip-file,ZIP file>> for publication.
 
-Upload ZIP to Maven Central::
-Finally, upload the resulting ZIP file (manually) to Maven Central,
-i.e., https://central.sonatype.com/publishing[Sonatype Central].
+Sign / Upload to Maven Central::
+Sign artifacts and load them up to Maven Central via https://jreleaser.org[JReleaser].
 +
-[CAUTION]
-.Credentials needed
-====
-You need respective credentials to upload files to Maven Central for the `org.aim42.htmlSanityCheck` namespace.
-Talk to Gernot Starke to get these permissions.
-====
+[source,bash,subs="callouts+"]
+----
+./gradlew jreleaserDeploy -PenableSigning=true -Psigning.password=... # <1> <2>
+----
+<1> Checkout <<sec:artifact-signing>> for more information.
+<2> The `enableSigning` flag is necessary to enforce signing (which is not necessary for local installations,
+integration testing, etc.)
+
+The `jreleaserDeploy` task will implicitly call the task `signAll` which signs
+and pushes all required files for publication to a local repository.
+JReleaser picks them up from there and loads them up to the Maven Central staging area as a new version.
+
+Publish on Maven Central::
+Finally, publish the staged version on Maven Central,
+i.e., https://central.sonatype.com/publishing[Sonatype Central].
