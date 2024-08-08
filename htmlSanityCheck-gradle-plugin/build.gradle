@@ -2,6 +2,8 @@ plugins {
     id 'java-gradle-plugin'
     id 'jacoco-report-aggregation'
 
+    id("com.gradle.plugin-publish") version "1.2.1"
+
     // The CodeNarc plugin performs quality checks on your project’s
     // Groovy source files using CodeNarc and generates reports from these checks.
     // id 'codenarc'
@@ -20,6 +22,7 @@ gradlePlugin {
             implementationClass = 'org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin'
             displayName = 'Gradle HtmlSanityCheck Plugin'
             description = project.description
+            tags.set(["html", "checks", "quality", "text", "asciidoctor", "documentation"])
         }
     }
 }
@@ -45,6 +48,8 @@ publishing {
         }
     }
 }
+
+generateMetadataFileForPluginMavenPublication.dependsOn('groovydocJar')
 
 dependencies {
     testImplementation(
