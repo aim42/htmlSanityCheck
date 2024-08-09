@@ -3,54 +3,26 @@ on:
   pull_request:
   push:
   workflow_dispatch:
-env:
-  SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION || 'aim42' }}
-  SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY || 'aim42_htmlSanityCheck' }}
 jobs:
-  gradle:
+  build-artifacts:
+    uses: ./.github/workflows/build-artifacts.yml
+    with:
+      # SonarQube requires JDK 17 or higher
+      java-version: '17'
+      run-sonar: true
+
+  post-build:
+    needs: build-artifacts
     runs-on: ubuntu-latest
     steps:
       - name: Check out
         uses: actions/checkout@v4
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
         with:
-          distribution: temurin
-          # SonarQube requires JDK 17 or higher
-          java-version: 17
-
-      - name: Cache Gradle Toolchain JDKs
-        uses: actions/cache@v4
-        with:
-          path: ~/.gradle/jdks
-          key: "${{ runner.os }}-gradle-jdks"
-          restore-keys: ${{ runner.os }}-jdk
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.gradle/caches
-          key: "${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}"
-          restore-keys: ${{ runner.os }}-gradle
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v4
-
-      - name: Execute Gradle build
-        run: ./gradlew clean check integrationTest --scan --stacktrace
-
-      - name: Dump current state when error
-        run: |
-          env
-          pwd
-          find build */build integration-test/*/build -ls
-        if: failure()
+          name: build-artifacts
+          path: .
 
       - name: 'Publish Test Results'
         uses: EnricoMi/publish-unit-test-result-action/linux@v2
@@ -67,29 +39,14 @@ jobs:
           coverage_report_title: JaCoCo
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: maven-repo
-          path: build/maven-repo
-
-      - name: Trigger Test Matrix Workflow
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: test-java-os-mix.yml
-
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: Analyze with SonarCloud
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Collect state upon failure
+        if: failure()
         run: |
-          BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          ./gradlew sonar -Psonar.branch.name=${BRANCH_NAME} --info --scan
-
+          echo "Git:"
+          git status
+          echo "Env:"
+          env
+          echo "PWD:"
+          pwd
+          echo "Files:"
+          find * -ls

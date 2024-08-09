@@ -11,7 +11,14 @@ on:
         default: false
 
 jobs:
+  build-artifacts:
+    uses: ./.github/workflows/build-artifacts.yml
+    with:
+      # SonarQube requires JDK 17 or higher
+      java-version: '17'
+
   pages:
+    needs: build-artifacts
     runs-on: ubuntu-latest
     concurrency:
       group: "${{ github.workflow }}-${{ github.ref }}"
@@ -37,21 +44,23 @@ jobs:
           key: "${{ runner.os }}-doctoolchain-${{ hashFiles('**/lockfiles') }}"
           restore-keys: ${{ runner.os }}-doctoolchain
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          # SonarQube requires JDK 17 or higher
-          java-version: 17
-
       - name: Check out
         uses: actions/checkout@v2
 
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: .
+
       - name: Validate Gradle Wrapper
         uses: gradle/actions/wrapper-validation@v4
-
-      - name: Execute Gradle build
-        run: ./gradlew clean check integrationTest --scan --stacktrace
 
       - name: Generate Pages
         run: ./generate-pages

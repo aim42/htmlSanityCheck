@@ -1,12 +1,18 @@
 name: HTML Sanity Check Matrix Test
 on:
+  pull_request:
   push:
-    paths:
-      - .github/workflows/test-java-os-mix.yml
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 jobs:
+  build-artifacts:
+    uses: ./.github/workflows/build-artifacts.yml
+    with:
+      # SonarQube requires JDK 17 or higher
+      java-version: '17'
+
   test-java-os-mix:
+    needs: build-artifacts
     strategy:
       matrix:
         os-version: [ ubuntu-latest, macos-14, windows-latest ]
@@ -22,18 +28,17 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/actions/wrapper-validation@v4
 
-      - name: Download Artifacts
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          workflow: gradle-build.yml
-          name: maven-repo
-          path: build/maven-repo
-
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: .
 
       - name: Execute integration test (on Unixes)
         run: |
@@ -42,3 +47,14 @@ jobs:
           ./gradlew --version
           ./gradlew htmlSanityCheck --scan
 
+      - name: Collect state upon failure
+        if: failure()
+        run: |
+          echo "Git:"
+          git status
+          echo "Env:"
+          env
+          echo "PWD:"
+          pwd
+          echo "Files:"
+          find * -ls

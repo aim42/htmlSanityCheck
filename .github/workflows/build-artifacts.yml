@@ -1,0 +1,88 @@
+name: Build Artifacts
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        required: true
+        type: string
+        default: '17'
+      run-sonar:
+        required: false
+        type: boolean
+        default: false
+env:
+  SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION || 'aim42' }}
+  SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY || 'aim42_htmlSanityCheck' }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ inputs.java-version }}
+
+      - name: Cache Gradle Toolchain JDKs
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/jdks
+          key: "${{ runner.os }}-gradle-jdks"
+          restore-keys: ${{ runner.os }}-jdk
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: "${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}"
+          restore-keys: ${{ runner.os }}-gradle
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
+      - name: Execute Gradle build
+        run: ./gradlew clean check integrationTest --scan --stacktrace
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        if: ${{ inputs.run-sonar }}
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Analyze with SonarCloud
+        if: ${{ inputs.run-sonar }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          ./gradlew sonar -Psonar.branch.name=${BRANCH_NAME} --info --scan
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            **/build
+
+      - name: Collect state upon failure
+        if: failure()
+        run: |
+          echo "Git:"
+          git status
+          echo "Env:"
+          env
+          echo "PWD:"
+          pwd
+          echo "Files:"
+          find * -ls
