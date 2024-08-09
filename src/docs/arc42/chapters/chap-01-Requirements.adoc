@@ -106,13 +106,13 @@ An example, visualized:
 image::uri-generic-example.png[]
 
 The `java.net.URL` class contains a generic parser for URLs and URIs.
-See the following snippet, taken from the unit test class `URLUtilTest.groovy`:
+See the following snippet, taken from the unit test class `WebTest.groovy`:
 
 
 [source, groovy]
 .Generic URI Structure
 ----
-include::{coretestpath}/htmlsanitycheck/html/URLUtilTest.groovy[tags=GenericURIExample]
+include::{coretestpath}/htmlsanitycheck/tools/WebTest.groovy[tags=GenericURIExample]
 
 ----
 
