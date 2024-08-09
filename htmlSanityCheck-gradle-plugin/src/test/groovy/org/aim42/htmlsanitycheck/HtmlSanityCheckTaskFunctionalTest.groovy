@@ -16,7 +16,7 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
     private final static INVALID_HTML = """<body><span id="id"/><span id="id"/></body> """
     private final static GRADLE_VERSIONS = [ // 6.x or older does not work!
                                             '7.6.3', // latest 7.x
-                                            '8.0.2', '8.1.1', '8.2.1', '8.3', '8.4', '8.5', '8.6', '8.7' // all 8.x (latest patches)
+                                            '8.0.2', '8.1.1', '8.2.1', '8.3', '8.4', '8.5', '8.6', '8.7', '8.8', '8.9' // all 8.x (latest patches)
                                            ]
 
     @Rule
