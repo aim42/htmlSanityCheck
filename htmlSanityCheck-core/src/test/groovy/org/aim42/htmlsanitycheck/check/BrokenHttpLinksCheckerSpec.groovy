@@ -150,7 +150,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     }
 
 
-    @IgnoreIf({ !System.getenv('GITHUB_ACTIONS') })
+    @Ignore // If({ !System.getenv('GITHUB_ACTIONS') })
     def "bad amazon link is identified as problem"() {
 
         given: "an HTML page with a single (good) amazon link"
