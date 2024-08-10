@@ -45,6 +45,13 @@ jobs:
       - name: Execute Gradle build
         run: ./gradlew clean check integrationTest --scan --stacktrace
 
+      - name: Dump current state when error
+        run: |
+          env
+          pwd
+          find build */build integration-test/*/build -ls
+        if: failure()
+
       - name: 'Publish Test Results'
         uses: EnricoMi/publish-unit-test-result-action/linux@v2
         if: always()
