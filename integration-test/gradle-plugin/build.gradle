@@ -11,15 +11,26 @@ def projectRoot = "../.."
 def sourceDirectory = "src/test/resources"
 task copyReadmeResources(type: Copy) {
     from projectRoot
-    include '*.jpg'
-    include '*.png'
+//    include '*.jpg'
+//    include '*.png'
     include '*.properties'
     into "build/docs"
+    doLast {
+        String linkPath = "build/docs/images"
+        java.nio.file.Path target = java.nio.file.Paths.get("../../../../src/docs/images")
+        File linkFile = file(linkPath)
+        java.nio.file.Path link = linkFile.toPath()
+        logger.quiet("Creating symlink from '{}' to '{}'", target, link)
+        if (linkFile.exists()) {
+            linkFile.delete()
+        }
+        java.nio.file.Files.createSymbolicLink(link, target)
+    }
 }
 
-asciidoctor {
+task buildDocs(type: org.asciidoctor.gradle.jvm.AsciidoctorTask) {
     sourceDir sourceDirectory
-    sources { include '**/*.adoc' }
+    sources { include '*.adoc' }
     baseDirFollowsSourceFile()
     outputDir file("build/docs")
 
@@ -34,12 +45,29 @@ task buildReadmeRoot(type: org.asciidoctor.gradle.jvm.AsciidoctorTask) {
     sourceDir projectRoot
     sources {
         include 'README.adoc'
+    }
+    baseDirFollowsSourceFile()
+    outputDir file("build/docs")
+    attributes (
+            "imagesdir": "images"
+    )
+}
+buildReadmeRoot.dependsOn(copyReadmeResources)
+buildReadmeRoot.dependsOn(buildDocs)
+
+task buildReadmeGradlePlugin(type: org.asciidoctor.gradle.jvm.AsciidoctorTask) {
+    sourceDir projectRoot
+    sources {
         include 'htmlSanityCheck-gradle-plugin/README.adoc'
     }
     baseDirFollowsSourceFile()
     outputDir file("build/docs")
+    attributes (
+            "imagesdir": "../images"
+    )
 }
-buildReadmeRoot.dependsOn(copyReadmeResources)
+buildReadmeGradlePlugin.dependsOn(buildReadmeRoot)
+//buildReadmeGradlePlugin.dependsOn(copyReadmeResources)
 
 htmlSanityCheck {
     sourceDir file("build/docs")
@@ -51,8 +79,9 @@ htmlSanityCheck {
     logger.quiet "HSC sourceDir: ${sourceDir.absolutePath}"
     logger.quiet "HSC checkingResultsDir: ${checkingResultsDir.absolutePath}"
 }
-htmlSanityCheck.dependsOn(asciidoctor)
+htmlSanityCheck.dependsOn(buildDocs)
 htmlSanityCheck.dependsOn(buildReadmeRoot)
+htmlSanityCheck.dependsOn(buildReadmeGradlePlugin)
 
 /*
  * Copyright Gerd Aschemann and aim42 contributors.
