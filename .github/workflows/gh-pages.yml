@@ -5,9 +5,9 @@ on:
   push:
   workflow_dispatch:
     inputs:
-      perform_step:
+      publish_gh_pages:
         type: boolean
-        description: 'Publish GH Page'
+        description: 'Publish GH Pages'
         default: false
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
     needs: build-artifacts
     runs-on: ubuntu-latest
     concurrency:
-      group: "${{ github.workflow }}-${{ github.ref }}"
+      group: "${{ github.workflow }}-${{ github.ref }}-${{ inputs.publish_gh_pages }}"
     env:
       DTC_HEADLESS: true
     steps:
@@ -72,13 +72,53 @@ jobs:
           path: public
           retention-days: 7
 
-  publish:
+  publish-to-github:
     runs-on: ubuntu-latest
     needs: pages
-    if: ${{ github.event.inputs.perform_step }}
+    environment: github-pages
+    if: ${{ github.event.inputs.publish_gh_pages }}
     steps:
+      - name: Download GitHub Pages Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: public
+
       - name: Deploy Pages
         uses: actions/deploy-pages@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+  publish-to-netlify:
+    runs-on: ubuntu-latest
+    needs: pages
+    environment: netlify
+    if: ${{ !github.event.inputs.publish_gh_pages }}
+    steps:
+      - name: Download GitHub Pages Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: download
+
+      - name: Unpack GH Pages
+        run: |
+          mkdir -p public
+          tar -x -C public -v -f download/artifact.tar
+
+      - name: Cache Netlify CLI
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-netlify-cli-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-netlify-cli
+
+      - name: Deploy to Netlify
+        uses: South-Paw/action-netlify-cli@v2
+        id: netlify
+        with:
+          # be sure to escape any double quotes with a backslash
+          args: 'deploy --debug --dir ./public --message \"draft [${{ github.sha }}]\"'
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
