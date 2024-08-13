@@ -13,7 +13,7 @@
 include::chapters/_config.adoc[]
 // ---------------------------------
 
-<<<<
+<<<
 
 image:arc42-logo.png[arc42, link={arc42-url}, float=left]
 
@@ -23,7 +23,7 @@ template^], freely available at {arc42-url}[{arc42-url}^].
 [small]#This material is open source and provided under the Creative Commons Sharealike 4.0 license.
 It comes *without any guarantee*. Use on your own risk.
 arc42 and its structure by Dr. Peter Hruschka and Dr. Gernot Starke.
-Asciidoc version initiated by Markus Schärtel and Jürgen Krey,
+AsciiDoc version initiated by Markus Schärtel and Jürgen Krey,
 completed and maintained by Ralf Müller and Gernot Starke.#
 
 [small]#Version {hsc-version} of {docdate}#
@@ -45,39 +45,39 @@ abbreviated with HSC
 
 include::About-This-Docu.adoc[]
 
-<<<<
+<<<
 
 include::chapters/chap-01-Requirements.adoc[]
 
-<<<<
+<<<
 
 include::chapters/chap-02-Constraints.adoc[]
 
-<<<<
+<<<
 
 include::chapters/chap-03-Context.adoc[]
 
-<<<<
+<<<
 
 include::chapters/chap-04-SolutionStrategy.adoc[]
 
-<<<<
+<<<
 
 include::chapters/chap-05-BuildingBlocks.adoc[]
 
-<<<<
+<<<
 
 include::chapters/chap-06-Runtime.adoc[]
 
-<<<<
+<<<
 
 include::chapters/chap-07-Deployment.adoc[]
 
-<<<<
+<<<
 
 include::chapters/chap-08-Concepts.adoc[]
 
-<<<<
+<<<
 
 include::chapters/chap-09-Decisions.adoc[]
 

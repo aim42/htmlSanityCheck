@@ -55,7 +55,7 @@ See {xrefAlgorithmMissingLocalResourcesChecker}
 Duplicate link targets:: link-targets can occur several times with the same name - so the browser cannot know which is the desired target.
 See {xrefAlgorithmDuplicateIdChecker}.
 
-.Illegal links:: The links (aka anchors or URIs) can contain illegal characters or violate HTML link syntax. See {xrefAlgorithmIllegalLinkChecker}.
+Illegal links:: The links (aka anchors or URIs) can contain illegal characters or violate HTML link syntax. See {xrefAlgorithmIllegalLinkChecker}.
 
 Broken external links:: External http links can be broken due to myriads of reasons: misspelled, link-target currently offline, illegal link syntax.
 See {xrefAlgorithmBrokenHttpLinksChecker}.

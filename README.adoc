@@ -5,9 +5,9 @@ ifndef::xrefToGradlePlugin[:xrefToGradlePlugin: htmlSanityCheck-gradle-plugin/RE
 
 [.lead]
 ====
-This project provides some basic sanity checking on html files.
+This project provides some basic sanity checking on HTML files.
 
-It can be helpful in case of html generated from, e.g., {asciidoc-url}[Asciidoctor],
+It can be helpful in case of HTML generated from, e.g., {asciidoc-url}[Asciidoctor],
 Markdown or other formats -- as converters usually don't check for missing images
 or broken links.
 ====
@@ -68,7 +68,7 @@ showing eventual errors within HTML files - as shown in the adjoining figure.
 
 === Broken Cross References (aka Broken Internal Links)
 
-Finds all '<a href="XYZ">' where XYZ is not defined.
+Find all '<a href="XYZ">' where XYZ is not defined.
 
 .src/broken.html
 [source,html]
@@ -97,7 +97,7 @@ Use checkerClass _DuplicateIdChecker_.
 
 === Missing Local Resources
 
-All files, (e.g., downloads) referenced from html.
+All files, (e.g., downloads) referenced from HTML.
 
 Use checkerClass _MissingLocalResourcesChecker_.
 
@@ -122,7 +122,7 @@ Use checkerClass _BrokenHttpLinksChecker_.
 
 === Other types of external links
 
-*planned*: ftp, ntp or other protocols are currently not checked, but should...
+`ftp`, `ntp` or other protocols are currently not checked, but should...
 
 == Technical Documentation
 
@@ -144,13 +144,12 @@ This tiny piece rests on incredible groundwork:
 
 * The plugin heavily relies on code provided by {gradle-url}[Gradle].
 
-* Inspiration on code organization, implementation and testing of the plugin came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by [@AAlmiray].
+* Inspiration on code organization, implementation and testing of the plugin came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by https://github.com/aalmiray[Andres Almiray].
 
 * Code for string similarity calculation by
 https://github.com/rrice/java-string-similarity[Ralph Rice].
 
 * Implementation, maintenance and documentation by
-* Current implementation, main
 ** Initially: {gernotstarke}[Gernot Starke],
 ** Currently: {gerdaschemann}[Gerd Aschemann] and several other contributors.
 
@@ -164,7 +163,7 @@ In case you want to check out, fork and/or contribute, take a look into our http
 It creates a simple text file report and might be a complement to this `HtmlSanityChecker`.
 * https://bmuschko.com/blog/golang-with-gradle/[Benjamin Muschko] has created a (Go-based) command-line tool to check links, called https://github.com/bmuschko/link-verifier[link verifier].
 * https://github.com/gjtorikian/html-proofer[html-proofer] is written in Ruby and provides different usage scenarios (programmatically, CLI, and Docker).
-* https://github.com/wjdp/htmltest[htmltest] is also written in Go(Lang) and claims to be rapid compared to `html-proofer` (stay tuned; we have plans for HSC to run with Graal in a quick way).
+* https://github.com/wjdp/htmltest[htmltest] is also written in Go(Lang) and claims to be rapid compared to `html-proofer` (stay tuned; we have plans for HSC to run with Graal quickly).
 
 == Contributing
 
@@ -176,7 +175,7 @@ Fork our {project-url}[repository] and send a pull request.
 == Licence
 
 Currently, code is published under the Apache-2.0 licence, documentation under Creative-Commons-Sharealike-4.0.
-Some day we'll unify that :-)
+Some day we'll unify that 😬.
 
 == Kudos
 

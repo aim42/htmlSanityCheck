@@ -369,7 +369,7 @@ public class HtmlReporter extends Reporter {
      * Tries to find a writable directory. First tries dirName,
      * if that does not work takes User.dir as second choice.
      *
-     * @param dirName : e.g. /Users/aim42/projects/htmlsc/build/report/htmlchecks
+     * @param dirName : e.g. /Users/aim42/projects/htmlsc/build/reports/htmlchecks
      * @return complete path to a writable file that does not currently exist.
      */
     private File createOutputFile(String dirName) {

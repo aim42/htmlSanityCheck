@@ -228,7 +228,8 @@ https://plugins.gradle.org/plugin/org.aim42.htmlSanityCheck[Old versions] (< `2.
 [[sec:development-versions]]
 === Development versions
 
-In case you want to use a current development (or arbitrary branch or tag) version from Github, add the following to your `settings.gradle`:
+In case you want to use a current development (or arbitrary branch or tag) version from GitHub,
+add the following to your `settings.gradle`:
 
 .settings.gradle
 [source,groovy,subs="attributes+"]
