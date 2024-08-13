@@ -1,6 +1,7 @@
 include::_config.adoc[]
 :jbake-menu: arc42
 :jbake-order: 10
+// Keep this local (redundant in each file) as it cannot be moved to some config file (?)!
 :jbake-rightColumnHtml: <a href="../../pdf/arc42/hsc_arc42.pdf"><i class="fa fa-file fa-fw"></i> Download PDF</a>
 
 == Introduction and Goals

@@ -1,4 +1,5 @@
 :jbake-order: 0
+// Keep this local (redundant in each file) as it cannot be moved to some config file (?)!
 :jbake-rightColumnHtml: <a href="../pdf/arc42/hsc_arc42.pdf"><i class="fa fa-file fa-fw"></i> Download PDF</a>
 include::chapters/_config.adoc[]
 :numbered!:
