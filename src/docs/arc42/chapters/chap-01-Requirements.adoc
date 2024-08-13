@@ -10,7 +10,7 @@ include::_config.adoc[]
 kbd:[HtmlSC] shall support authors creating digital formats
 with hyperlinks and integration of images and similar resources.
 
-[[requirements]]
+[[sec:requirements]]
 === Requirements Overview
 
 The overall goal of kbd:[HtmlSC] is to create neat and clear reports,
@@ -18,7 +18,6 @@ showing errors within HTML files - as shown in the adjoining figure.
 
 image:sample-hsc-report.jpg[width="200", link="/images/sample-hsc-report.jpg"
   (click on thumbnail for details)]
-
 
 
 ==== Basic Usage
@@ -61,7 +60,7 @@ See {xrefAlgorithmMissingImgAltAttributeChecker}.
 Checking and reporting these errors and flaws is the central _business requirement_ of kbd:[HtmlSC].
 
 Important terms (*domain terms*) of html sanity checking is documented in a (small)
-xref:chap-08-Concepts.adoc#sec:html-checking-domain-model[domain model].
+{xrefConceptDomainModel}.
 ****
 
 ==== General Functionality
@@ -69,7 +68,7 @@ xref:chap-08-Concepts.adoc#sec:html-checking-domain-model[domain model].
 .General Requirements
 include::../../excel/Requirements.xlsx/General.adoc[]
 
-[[requiredChecks]]
+[[sec:requiredChecks]]
 ==== Types of Sanity Checks
 
 .Required Checks

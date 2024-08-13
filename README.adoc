@@ -49,8 +49,6 @@ Depending on your <<sec:usage>> find respective
 
 * xref:{xrefToGradlePlugin}#sec:examples[Gradle Plugin] examples, and
 * Core library examples (TBD).
-* xref:{xrefToGradlePlugin}#sec:examples[Gradle Plugin] examples, and
-* Core library examples (TBD).
 
 == Typical Output
 

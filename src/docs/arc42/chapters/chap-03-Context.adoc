@@ -48,4 +48,4 @@ kbd:[HtmlSC] binaries are uploaded to this server.
 |===
 
 
-Details see xref:chap-07-Deployment.adoc#deployment-view[deployment view].
+Details see {xrefDeplomentView}.

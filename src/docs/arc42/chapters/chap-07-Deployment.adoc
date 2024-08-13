@@ -2,7 +2,7 @@
 :jbake-order: 70
 :jbake-rightColumnHtml: <a href="../../pdf/arc42/hsc_arc42.pdf"><i class="fa fa-file fa-fw"></i> Download PDF</a>
 include::_config.adoc[]
-[[deployment-view]]
+[[sec:deployment-view]]
 == Deployment View
 
 :filename: arc42/chapters/chap-07-Deployment.adoc

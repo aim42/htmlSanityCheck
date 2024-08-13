@@ -14,7 +14,7 @@ include::chap-08-html-encapsulation.adoc[]
 
 
 
-[[reporting-concept]]
+[[sec:reporting-concept]]
 === Flexible Reporting
 kbd:[HtmlSC] allows for different output formats:
 

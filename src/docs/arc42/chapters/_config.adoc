@@ -48,7 +48,15 @@ ifndef::projectRootDir[:projectRootDir: ../../../..]
 :xrefAlgorithmIllegalLinkChecker: <<IllegalLinkChecker,IllegalLinkChecker>>
 :xrefAlgorithmBrokenHttpLinksChecker: <<BrokenHttpLinksChecker,BrokenHttpLinksChecker>>
 :xrefAlgorithmMissingImgAltAttributeChecker: <<MissingImgAltAttributeChecker,MissingImgAltAttributeChecker>>
+:xrefConceptCheckerCore: <<sec:checker_blackbox,CheckerCore>>
 :xrefConceptCheckingAlgorithms: <<checking-concept,concept for checking algorithms>>
+:xrefConceptDomainModel: <<sec:html-checking-domain-model,domain model>>
+:xrefConceptHtmlEncapsulation: <<sec:html-encapsulation,HTML encapsulation concept>>
+:xrefConceptReporting: <<sec:reporting-concept,reporting concept>>
+:xrefConceptGradlePlugin: <<sec:gradle-plugin-concept,Gradle plugin concept>>
+:xrefDeplomentView: <<sec:deployment-view,deployment view>>
+:xrefRequirementsGradleIntegration: <<sec:requirements,required Gradle integration>>
+:xrefRequirementsRequiredChecks: <<sec:requiredChecks,Required Checks>>
 
 ifdef::jbake-type[]
 :xrefAlgorithmBrokenCrossReferencesChecker: xref:chap-08-Concepts.adoc#BrokenCrossReferencesChecker[BrokenCrossReferencesChecker]
@@ -58,5 +66,13 @@ ifdef::jbake-type[]
 :xrefAlgorithmMissingImageFilesChecker: xref:chap-08-Concepts.adoc#MissingImageFilesChecker[MissingImageFilesChecker]
 :xrefAlgorithmMissingImgAltAttributeChecker: xref:chap-08-Concepts.adoc#MissingImgAltAttributeChecker[MissingImgAltAttributeChecker]
 :xrefAlgorithmMissingLocalResourcesChecker: xref:chap-08-Concepts.adoc#MissingLocalResourcesChecker[MissingLocalResourcesChecker]
+:xrefConceptCheckerCore: xref:chap-08-Concepts.adoc#sec:checker_blackbox[CheckerCore]
 :xrefConceptCheckingAlgorithms: xref:chap-08-Concepts.adoc#checking-concept[concept for checking algorithms]
+:xrefConceptDomainModel: xref:chap-08-Concepts.adoc#sec:html-checking-domain-model[domain model]
+:xrefConceptHtmlEncapsulation: xref:chap-08-Concepts.adoc#sec:html-encapsulation[HTML encapsulation concept]
+:xrefConceptReporting: xref:chap-08-Concepts.adoc#sec:reporting-concept[reporting concept]
+:xrefConceptGradlePlugin: xref:chap-08-Concepts.adoc#sec:gradle-plugin-concept[Gradle plugin concept]
+:xrefDeplomentView: xref:chap-07-Deployment.adoc#sec:deployment-view[deployment view]
+:xrefRequirementsGradleIntegration: xref:chap-01-Requirements.adoc#sec:requirements[required Gradle integration]
+:xrefRequirementsRequiredChecks: xref:chap-01-Requirements.adoc#sec:requiredChecks[Required Checks]
 endif::jbake-type[]

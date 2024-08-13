@@ -1,6 +1,6 @@
 :jbake-menu: -
 include::_config.adoc[]
-[[html-encapsulation]]
+[[sec:html-encapsulation]]
 === Encapsulate HTML Parsing
 
 :filename: arc42/chapters/chap-08-html-encapsulation.adoc

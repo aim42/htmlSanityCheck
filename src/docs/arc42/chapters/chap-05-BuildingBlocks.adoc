@@ -20,7 +20,7 @@ Rationale::
 
 We used _functional decomposition_ to separate responsibilities:
 
-* xref:chap-08-Concepts.adoc#checker_blackbox[CheckerCore] shall encapsulate checking logic and Html parsing/processing.
+* {xrefConceptCheckerCore} shall encapsulate checking logic and Html parsing/processing.
 * all kinds of outputs (console, html-file, graphical) shall be handled in a separate component
   (`Reporter`)
 * Implementation of Gradle specific stuff shall be encapsulated.
@@ -31,9 +31,9 @@ Contained Blackboxes::
 [cols="1,3" options=""]
 .HtmlSanityChecker building blocks
 |===
-| <<checker_blackbox, HSC Core>> | hsc core: html parsing and sanity checking, configuration, reporting.
-| HSC Gradle Plugin | integrates the Gradle build tool with kbd:[HtmlSC],
-enabling arbitrary gradle builds to use kbd:[HtmlSC] functionality.
+| <<sec:checker_blackbox, HSC Core>> | hsc core: html parsing and sanity checking, configuration, reporting.
+| HSC Gradle Plugin | integrates the Gradle build tool with HSC,
+enabling arbitrary gradle builds to use HSC functionality.
 | HSC Maven Plugin | (planned, not yet implemented)
 | HSC Graphical Interface | (planned, not implemented)
 
@@ -62,7 +62,7 @@ Interfaces::
 |===
 
 
-[[checker_blackbox]]
+[[sec:checker_blackbox]]
 ==== _HSC Core_ (Blackbox)
 
 Intent/Responsibility:: HSC_Core contains the core functions

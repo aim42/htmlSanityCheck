@@ -1,6 +1,6 @@
 :jbake-menu: -
 include::_config.adoc[]
-[[gradle-plugin-concept]]
+[[sec:gradle-plugin-concept]]
 === Gradle Plugin Concept and Development
 
 :filename: arc42/chapters/chap-08-gradle-plugin.adoc
@@ -8,7 +8,7 @@ include::../_feedback.adoc[]
 
 You should definitely read the original https://gradle.org/docs/current/userguide/userguide.html[Gradle User Guide] on custom plugin development.
 
-To enable the xref:chap-01-Requirements.adoc#requirements[required Gradle integration],
+To enable the {xrefRequirementsGradleIntegration},
 we implement a lean wrapper as described in the Gradle user guide.
 
 

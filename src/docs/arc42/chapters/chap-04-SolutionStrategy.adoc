@@ -9,8 +9,8 @@ include::_config.adoc[]
 * Implement kbd:[HtmlSC] in Java with minimal
 external dependencies. Wrap this implementation into a {gradle-url}
 plugin, so it can be used within automated builds. Details are given
-in the xref:chap-08-Concepts.adoc#gradle-plugin-concept[Gradle plugin concept].
+in the {xrefConceptGradlePlugin}.
 
 * Apply the _template-method-pattern_ (see e.g. {template-method-pattern-url}) to enable:
 ** multiple checking algorithms. See the {xrefConceptCheckingAlgorithms},
-** both HTML (file) and text (console) output. See the xref:chap-08-Concepts.adoc#reporting-concept[reporting concept].
+** both HTML (file) and text (console) output. See the {xrefConceptReporting}.
