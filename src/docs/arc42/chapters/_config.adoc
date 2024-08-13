@@ -59,6 +59,7 @@ ifndef::projectRootDir[:projectRootDir: ../../../..]
 :xrefRequirementsRequiredChecks: <<sec:requiredChecks,Required Checks>>
 
 ifdef::jbake-type[]
+:sectnums!:
 :xrefAlgorithmBrokenCrossReferencesChecker: xref:chap-08-Concepts.adoc#BrokenCrossReferencesChecker[BrokenCrossReferencesChecker]
 :xrefAlgorithmBrokenHttpLinksChecker: xref:chap-08-Concepts.adoc#BrokenHttpLinksChecker[BrokenHttpLinksChecker]
 :xrefAlgorithmDuplicateIdChecker: xref:chap-08-Concepts.adoc#DuplicateIdChecker[DuplicateIdChecker]
