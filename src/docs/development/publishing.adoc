@@ -1,5 +1,17 @@
 :filename: development/publishing.adoc
-=== Publishing kbd:[htmlSC] Releases
+:jbake-title: Publishing HSC Releases
+:jbake-type: page_toc
+:jbake-status: published
+:jbake-menu: development
+:jbake-order: 80
+== {jbake-title}
+:icons: font
+:toc:
+:toclevels: 3
+:toc-position: right
+:experimental:
+:markdown-suffix: md
+ifdef::backend-html5[:markdown-suffix: html]
 
 HSC (Core and Gradle plugin) can be published to https://central.sonatype.com/search?q=org.aim42.htmlSanityCheck[Maven Central] (MC) for retrieval by its consumers.
 
@@ -8,9 +20,9 @@ as they are redirecting plugin downloads automatically to Maven Central.
 
 WARNING: Only note that newer versions (>= 2.0.0) currently do not show up in the https://plugins.gradle.org/search?term=org.aim42.htmlSanityCheck[web interface].
 
-==== Prerequisites
+== Prerequisites
 
-===== Maven Central (Sonatype) account
+=== Maven Central (Sonatype) account
 
 Make yourself familiar with https://central.sonatype.org/publish-ea/publish-ea-guide/[the publishing process].
 
@@ -26,7 +38,7 @@ You will need to https://central.sonatype.org/register/central-portal/#create-an
 Additionally, you need to create https://central.sonatype.org/publish/generate-portal-token/[a portal token].
 
 [[sec:artifact-signing]]
-===== Artifact signing
+=== Artifact signing
 
 To successfully upload artifacts and other files (POM etc.), a valid PGP signature is required.
 A proper GPG (agent) setup is beyond the scope of this tutorial.
@@ -55,7 +67,7 @@ signing.password=<SECRET> # <3>
 .Use GPG Agent
 ====
 Alternatively,
-you may use the https://linux.die.net/man/1/gpg-agent[GPG Agent] of your https://gnupg.org/[GnuPG] installation
+you may use the https://www.gnupg.org/documentation/manuals/gnupg24/gpg-agent.1.html[GPG Agent] of your https://gnupg.org/[GnuPG] installation
 to cache the secret in memory,
 thereby reducing the risk of accidentally exposing the clear text passphrase in your command line or environment.
 
@@ -84,13 +96,13 @@ echo empty | gpg --clearsign -o /dev/null
 ----
 ====
 
-==== Publishing actions
+== Publishing actions
 
 Adjust version number::
-Set the version number in xref:../../../gradle.properties[] to the next value.
+Set the version number in xref:gradle.properties[../../../gradle.properties] to the next value.
 
 Maintain ChangeLog::
-Add the respective changes to xref:../../../CHANGELOG.md[]
+Add the respective changes to xref:CHANGELOG.{markdown-suffix}[../../../CHANGELOG.md]
 
 Build / Test::
 Clean, check (test), and perform integration tests:
