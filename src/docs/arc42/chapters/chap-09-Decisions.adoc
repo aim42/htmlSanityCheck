@@ -10,11 +10,6 @@ include::_config.adoc[]
 
 :filename: arc42/chapters/chap-09-Decisions.adoc
 
-=== Checking of external links postponed
-In the current release, we won't check external links.
-These checks have been postponed to later versions.
-
-
 
 === HTML Parsing with jsoup
 To check HTML we parse it into an internal (DOM-like) representation.
