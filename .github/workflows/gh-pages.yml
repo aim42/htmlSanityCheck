@@ -3,11 +3,16 @@ name: GitHub Pages
 on:
   pull_request:
   push:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      perform_step:
+        type: boolean
+        description: 'Publish GH Page'
+        default: false
 
 jobs:
   pages:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     concurrency:
       group: "${{ github.workflow }}-${{ github.ref }}"
     env:
@@ -45,10 +50,20 @@ jobs:
       - name: Generate Pages
         run: ./generate-pages
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/tags/release/current' }}
+      - name: Upload Artifacts
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          name: github-pages
+          path: public
+          retention-days: 7
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: pages
+    if: ${{ github.event.inputs.perform_step }}
+    steps:
+      - name: Deploy Pages
+        uses: actions/deploy-pages@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
