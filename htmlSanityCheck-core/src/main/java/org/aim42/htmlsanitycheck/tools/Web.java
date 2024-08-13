@@ -6,11 +6,11 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.IntStream;
 
 public class Web {
 
@@ -25,13 +25,45 @@ public class Web {
 
     // these are regarded as "Success" when checking
     // http(s) links
-    public static final Set<Integer> HTTP_SUCCESS_CODES = initHttpReturnCodes(200, 208, 226, 226);
+    public static final Set<Integer> HTTP_SUCCESS_CODES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+            // tag::HTTP_SUCCESS_CODES[]
+            200, 201, 202, 203, 204,
+            205, 206, 207, 208, 226
+            // end::HTTP_SUCCESS_CODES[]
+    )));
 
-    public static final Set<Integer> HTTP_WARNING_CODES = initHttpReturnCodes(100, 102, 300, 308);
+    public static final Set<Integer> HTTP_REDIRECT_CODES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+            // tag::HTTP_REDIRECT_CODES[]
+            300, 301, 302, 303, 304,
+            305, 306, 307, 308
+            // end::HTTP_REDIRECT_CODES[]
+    )));
 
-    public static final Set<Integer> HTTP_ERROR_CODES = initHttpReturnCodes(400, 451, 500, 511);
+    private static Set<Integer> join (Set<Integer> first, Set<Integer> second) {
+        Set<Integer> result = new HashSet<>(first);
+        result.addAll(second);
 
-    public static final Set<Integer> HTTP_REDIRECT_CODES = initHttpReturnCodes(301, 303, 307, 308);
+        return Collections.unmodifiableSet(result);
+    }
+
+    public static final Set<Integer> HTTP_WARNING_CODES = join (Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+            // tag::HTTP_WARNING_CODES[]
+            100, 101, 102
+            // end::HTTP_WARNING_CODES[]
+    ))), HTTP_REDIRECT_CODES);
+
+    public static final Set<Integer> HTTP_ERROR_CODES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+            // tag::HTTP_ERROR_CODES[]
+            400, 401, 402, 403, 404,
+            405, 406, 407, 408, 409,
+            410, 411, 412, 413, 414,
+            415, 416, 417, 418, 421,
+            422, 423, 424, 425, 426,
+            428, 429, 431, 451,
+            500, 501, 502, 503, 504,
+            505, 506, 507, 508, 510, 511
+            // end::HTTP_ERROR_CODES[]
+    )));
 
     public static final Set<String> POSSIBLE_EXTENSIONS = initExtensions();
 
@@ -44,12 +76,6 @@ public class Web {
     private static final Pattern remoteImagePattern = Pattern.compile("^(?i)(https?|ftp|telnet|ssh|ssl|gopher|localhost)://.*");
 
     private static final Pattern linkPattern = Pattern.compile("^//.*$");
-
-    private static Set<Integer> initHttpReturnCodes(int aLow, int aHigh, int bLow, int bHigh) {
-        Set<Integer> result = IntStream.rangeClosed(aLow, aHigh).collect(HashSet::new, Set::add, Set::addAll);
-        result.addAll(IntStream.rangeClosed(bLow, bHigh).collect(HashSet::new, Set::add, Set::addAll));
-        return Collections.unmodifiableSet(result);
-    }
 
     private static Set<String> initExtensions() {
         Set<String> result = new HashSet<>(8);
@@ -79,6 +105,7 @@ public class Web {
     protected static boolean isInternetConnectionAvailable(String host) {
         try {
             // if we can get google's address, there is the Internet...
+            //noinspection ResultOfMethodCallIgnored
             InetAddress.getByName(host);
             return true;
         } catch (UnknownHostException e) {
