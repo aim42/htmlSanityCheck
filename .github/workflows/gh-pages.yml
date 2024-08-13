@@ -47,6 +47,12 @@ jobs:
       - name: Check out
         uses: actions/checkout@v2
 
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
+      - name: Execute Gradle build
+        run: ./gradlew clean check integrationTest --scan --stacktrace
+
       - name: Generate Pages
         run: ./generate-pages
 
