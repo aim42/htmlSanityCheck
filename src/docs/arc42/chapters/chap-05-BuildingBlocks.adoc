@@ -191,7 +191,7 @@ overall `RunResults`, single-page results (`PageResults`) and single-check resul
 [source, groovy]
 .Interface RunResults
 ----
-include::{coresourcepath}/htmlsanitycheck/collect/RunResults.java[tags=RunResultInterface]
+include::{core-source-path}/htmlsanitycheck/collect/RunResults.java[tags=RunResultInterface]
 ----
 
 
@@ -199,12 +199,12 @@ include::{coresourcepath}/htmlsanitycheck/collect/RunResults.java[tags=RunResult
 [source, groovy]
 .Interface PageResults
 ----
-include::{coresourcepath}/htmlsanitycheck/collect/PageResults.java[tags=PageResultInterface]
+include::{core-source-path}/htmlsanitycheck/collect/PageResults.java[tags=PageResultInterface]
 ----
 
 
 [source, groovy]
 .Interface CheckResults
 ----
-include::{coresourcepath}/htmlsanitycheck/collect/CheckResults.java[tags=CheckResultsInterface]
+include::{core-source-path}/htmlsanitycheck/collect/CheckResults.java[tags=CheckResultsInterface]
 ----

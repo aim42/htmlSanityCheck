@@ -11,17 +11,10 @@ You should definitely read the original https://gradle.org/docs/current/userguid
 To enable the {xrefRequirementsGradleIntegration},
 we implement a lean wrapper as described in the Gradle user guide.
 
-
-
 [source, groovy]
-class HtmlSanityCheckPlugin implements Plugin<Project> {
-    void apply(Project project) {
-	project.task('htmlSanityCheck',
-		type: HtmlSanityCheckTask,
-		group: 'Check')
-    }
-}
-
+----
+include::{gradle-plugin-source-path}/htmlsanitycheck/HtmlSanityCheckPlugin.groovy[tag=gradle-plugin-implementation]
+----
 
 ==== Directory Structure and Required Files
 

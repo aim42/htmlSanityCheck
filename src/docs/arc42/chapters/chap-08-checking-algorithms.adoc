@@ -18,7 +18,7 @@ The invariant steps are implemented in the abstract base class, while the varian
 [source, java, linenums, highlight='16']
 .Template method "performCheck"
 ----
-include::{coresourcepath}/htmlsanitycheck/check/Checker.java[tags=performCheckTemplateMethod,indent=0]
+include::{core-source-path}/htmlsanitycheck/check/Checker.java[tags=performCheckTemplateMethod,indent=0]
 ----
 
 ifndef::imagesdir[:imagesdir: ../../images]

@@ -25,7 +25,10 @@ import java.util.List;
 public class AllCheckers {
     public static final List<Class<? extends Checker>> CHECKER_CLASSES =
             Arrays.asList(
-                    // Keep the list ordering to ensure comparability with HSC 1.x versions
+                    // tag::checker-classes[]
+                    // Keep the list ordering to ensure
+                    // report ordering comparability
+                    // with HSC 1.x versions
                     MissingAltInImageTagsChecker.class,
                     MissingImageFilesChecker.class,
                     DuplicateIdChecker.class,
@@ -33,5 +36,6 @@ public class AllCheckers {
                     ImageMapChecker.class,
                     BrokenCrossReferencesChecker.class,
                     MissingLocalResourcesChecker.class
+                    // end::checker-classes[]
             );
 }

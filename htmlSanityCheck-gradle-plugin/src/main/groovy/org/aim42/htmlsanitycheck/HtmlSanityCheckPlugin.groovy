@@ -6,6 +6,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
+// tag::gradle-plugin-implementation[]
 class HtmlSanityCheckPlugin implements Plugin<Project> {
 
     final static String HTML_SANITY_CHECK = "htmlSanityCheck"
@@ -19,6 +20,7 @@ class HtmlSanityCheckPlugin implements Plugin<Project> {
 
     }
 }
+// end::gradle-plugin-implementation[]
 
 
 /*========================================================================
