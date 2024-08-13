@@ -1,0 +1,18 @@
+:filename: development/design-decisions.adoc
+:jbake-title: Design Discussions
+:jbake-type: page_toc
+:jbake-status: published
+:jbake-menu: development
+:jbake-order: 20
+== {jbake-title}
+:icons: font
+:toc: right
+:toclevels: 3
+:toc-position: right
+// :experimental:
+
+include::_includes/issue-185.adoc[leveloffset=+1]
+include::_includes/issue-190.adoc[leveloffset=+1]
+include::_includes/issue-219.adoc[leveloffset=+1]
+include::_includes/issue-244.adoc[leveloffset=+1]
+include::_includes/issue-252.adoc[leveloffset=+1]

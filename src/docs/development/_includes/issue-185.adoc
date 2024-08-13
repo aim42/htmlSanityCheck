@@ -15,7 +15,7 @@ writing a new checker, especially should there be
 no central _registry_ of checkers.
 
 Up to v 1.0.0-RC-1 we violated the OCP and allowed
-major redundancies in code:
+major redundancies in the code:
 
 [source,java]
 ----
@@ -31,8 +31,6 @@ class AllCheckers {
              MissingLocalResourcesChecker].toSet()
 }
 ----
-
-
 
 
 === Solution Approach
