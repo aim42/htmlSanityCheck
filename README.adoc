@@ -20,7 +20,7 @@ image:https://jitpack.io/v/org.aim42.htmlSanityCheck/htmlSanityCheck.svg[alt='Ji
 [[sec:usage,usage]]
 == Usage
 
-kbd:[HtmlSC] can be currently used
+HSC can be currently used
 
 * As a xref:{xrefToGradlePlugin}#sec:usage[Gradle plugin], or
 * Programmatically from Java or other JVM languages (TBD).

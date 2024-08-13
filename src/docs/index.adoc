@@ -16,13 +16,13 @@ image::{improveDocImage}[link={repositoryDocsDir}index.adoc, float=right]
 
 *The Problem*: Languages like AsciiDoc or Markdown allow for easy writing and
 hyperlinking. When they are transformed to HTML the _sanity_ of links
-and images is not checked - that's where kbd:[HtmlSC] comes into play...
+and images is not checked - that's where HSC comes into play...
 
 *The Solution*:
 
 image::htmlsanitycheck-overview.png["Overview", title="Overview"]
 
-kbd:[HtmlSC] can perform various content and semantic checks on HTML files,
+HSC can perform various content and semantic checks on HTML files,
 e.g. check for missing images, broken internal links, duplicate targets etc.
 
 It is open source software and provides documentation for the following
@@ -42,7 +42,7 @@ types of stakeholders:
 | link:DevelopmentGuide.html[Development Guide]
 | software developers,
 | Describes development environment,
-  building kbd:[HtmlSC] and its documentation.
+  building HSC and its documentation.
 
 | arc42-user, (methodical) software developer or architect
 | link:hsc_arc42.html[Architecture Documentation] 

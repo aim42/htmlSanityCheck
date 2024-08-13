@@ -16,12 +16,11 @@ ifndef::imagesdir[:imagesdir: ../images]
 :project-url: https://github.com/aim42/htmlSanityCheck
 :project-issues: https://github.com/aim42/htmlSanityCheck/issues
 :project-bugs: https://github.com/aim42/htmlSanityCheck/issues?q=is%3Aopen+is%3Aissue+label%3Abug
-:repositoryDocsDir: https://github.com/aim42/htmlSanityCheck/blob/main/src/docs/
 :improveDocImage: https://img.shields.io/badge/improve-this%20doc-orange.svg
 :project-name: asciidoctor-gradle-plugin
 :project-report-issue-link: https://github.com/aim42/htmlSanityCheck/issues/new?title=&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:
-:project-repository-docs-link: https://github.com/aim42/htmlSanityCheck/blob/main/src/docs/
-:project-repository-docs-edit-link: https://github.com/aim42/htmlSanityCheck/edit/main/src/docs/
+:project-repository-docs-link: https://github.com/aim42/htmlSanityCheck/blob/develop/src/docs/
+:project-repository-docs-edit-link: https://github.com/aim42/htmlSanityCheck/edit/develop/src/docs/
 
 ifndef::projectRootDir[:projectRootDir: ../../../..]
 

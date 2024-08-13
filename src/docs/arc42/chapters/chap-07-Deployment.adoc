@@ -15,11 +15,11 @@ image::ea/htmlSanityCheck/hsc-deployment.png["Deployment", title="Deployment"]
 .Deployment
 |===
 | Node / Artifact | Description
-| hsc plugin binary | compiled version of kbd:[HtmlSC], including required dependencies.
-| hsc-development | where development of kbd:[HtmlSC] takes place
+| hsc plugin binary | compiled version of HSC, including required dependencies.
+| hsc-development | where development of HSC takes place
 | artifact repository (https://repo1.maven.org/maven2/[Maven Central]) | public Java artifact repository, cf. https://search.maven.org/[Maven Central Search].
 | hsc user computer | where arbitrary documentation takes place with html as output formats.
-| build.gradle    |  Gradle build script configuring (among other things) the kbd:[HtmlSC] plugin to check _some documentation_.
+| build.gradle    |  Gradle build script configuring (among other things) the HSC plugin to check _some documentation_.
 |===
 
 The three nodes (_computers_) shown in <<img-deployment>> are connected via Internet.

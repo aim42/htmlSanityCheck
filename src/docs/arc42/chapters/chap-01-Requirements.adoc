@@ -8,13 +8,13 @@ include::_config.adoc[]
 
 :filename: arc42/chapters/chap-01-Requirements.adoc
 
-kbd:[HtmlSC] shall support authors creating digital formats
+HSC shall support authors creating digital formats
 with hyperlinks and integration of images and similar resources.
 
 [[sec:requirements]]
 === Requirements Overview
 
-The overall goal of kbd:[HtmlSC] is to create neat and clear reports,
+The overall goal of HSC is to create neat and clear reports,
 showing errors within HTML files - as shown in the adjoining figure.
 
 image:sample-hsc-report.jpg[width="200", link="/images/sample-hsc-report.jpg"
@@ -23,12 +23,17 @@ image:sample-hsc-report.jpg[width="200", link="/images/sample-hsc-report.jpg"
 
 ==== Basic Usage
 
-. A user configures the location (directory and filename) of one or more HTML file(s),
-. and the corresponding images directory.
-. kbd:[HtmlSC] performs various checks on the HTML and
-. reports its results either on the console or as HTML report.
+Precondition::
+A user configures the location (directory and filename) of one or more HTML file(s), including the corresponding image's directory.
+Action::
+HSC performs various checks on the files, and
+Postcondition::
+Reports its results either on the console or as HTML report.
 
-kbd:[HtmlSC] can run from the command line or as {gradle-url}-plugin.
+HSC can run
+
+* From the command line (CLI), or
+* As {gradle-url}-plugin.
 
 
 .Terminology: What Can Go Wrong in HTML Files?
@@ -58,7 +63,7 @@ See {xrefAlgorithmBrokenHttpLinksChecker}.
 Missing Alt Attribute in Image Tags:: Images missing an alt-attribute.
 See {xrefAlgorithmMissingImgAltAttributeChecker}.
 
-Checking and reporting these errors and flaws is the central _business requirement_ of kbd:[HtmlSC].
+Checking and reporting these errors and flaws is the central _business requirement_ of HSC.
 
 Important terms (*domain terms*) of html sanity checking is documented in a (small)
 {xrefConceptDomainModel}.
@@ -117,7 +122,7 @@ include::{core-test-path}/htmlsanitycheck/tools/WebTest.groovy[tags=GenericURIEx
 
 
 URIs are used to *reference* other resources.
-For  kbd:[HtmlSC] it is useful to distinguish between internal (== local)and external references:
+For  HSC it is useful to distinguish between internal (== local)and external references:
 
 * Internal references, a.k.a. Cross-References
 * External references

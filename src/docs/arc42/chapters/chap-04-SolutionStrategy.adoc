@@ -7,7 +7,7 @@ include::_config.adoc[]
 
 :filename: arc42/chapters/chap-04-SolutionStrategy.adoc
 
-* Implement kbd:[HtmlSC] in Java with minimal
+* Implement HSC in Java with minimal
 external dependencies. Wrap this implementation into a {gradle-url}
 plugin, so it can be used within automated builds. Details are given
 in the {xrefConceptGradlePlugin}.

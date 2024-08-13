@@ -1,7 +1,7 @@
 :filename: development/publishing.adoc
 === Publishing kbd:[htmlSC] Releases
 
-kbd:[htmlSC] (Core and Gradle plugin) can be published to https://central.sonatype.com/search?q=org.aim42.htmlSanityCheck[Maven Central] (MC) for retrieval by its consumers.
+HSC (Core and Gradle plugin) can be published to https://central.sonatype.com/search?q=org.aim42.htmlSanityCheck[Maven Central] (MC) for retrieval by its consumers.
 
 Traditional retrieval as Gradle plugin from https://plugins.gradle.org[Gradle Plugin Portal] is still possible,
 as they are redirecting plugin downloads automatically to Maven Central.

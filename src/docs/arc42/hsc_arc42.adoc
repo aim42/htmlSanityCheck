@@ -51,7 +51,7 @@ include::_feedback.adoc[]
 [NOTE]
 ====
 Within the following text, the "Html Sanity Checker" shall be
-abbreviated with kbd:[HtmlSC]
+abbreviated with HSC
 ====
 
 include::About-This-Docu.adoc[]

@@ -34,7 +34,7 @@ Check HTML programmatically by using an existing API that provides access and fi
 methods to the DOM-tree of the file(s) to be checked.
 
 Decision Criteria::
-* few dependencies, so the kbd:[HtmlSC] binary stays as small as possible.
+* few dependencies, so the HSC binary stays as small as possible.
 * accessor and finder methods to find images, links and link-targets within the DOM tree.
 
 Alternatives::
@@ -56,4 +56,4 @@ we use the sources instead, primarily:
 
 [NOTE]
 The actual implementation of the similarity comparison has been postponed
-to a later release of kbd:[HtmlSC]
+to a later release of HSC

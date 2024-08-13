@@ -21,10 +21,10 @@ image::ea/htmlSanityCheck/hsc-context.png["Business Context", title="Business Co
 | user | documents software with toolchain that generates html. Wants to ensure that
 links within this html are valid.
 | build system |
-| local html files | kbd:[HtmlSC] reads and parses local html files and
+| local html files | HSC reads and parses local html files and
 performs sanity checks within those.
-| local image files | kbd:[HtmlSC] checks if linked images exist as (local) files.
-| external web resources | kbd:[HtmlSC] can be configured to optionally check for the existence
+| local image files | HSC checks if linked images exist as (local) files.
+| external web resources | HSC can be configured to optionally check for the existence
 of external web resources. Due to the nature of web systems, this check might need a significant
 amount of time and might yield invalid results due to network and latency issues.
 |===
@@ -32,7 +32,7 @@ amount of time and might yield invalid results due to network and latency issues
 
 === Deployment Context
 
-The following diagram shows the participating computers ({node}) with their technical connections plus the major {artifact} of kbd:[HtmlSC], the hsc-plugin-binary.
+The following diagram shows the participating computers ({node}) with their technical connections plus the major {artifact} of HSC, the hsc-plugin-binary.
 
 image::deployment-context.png["Deployment Context", title="Deployment Context"]
 
@@ -40,12 +40,12 @@ image::deployment-context.png["Deployment Context", title="Deployment Context"]
 .Deployment Context
 |===
 | Node / Artifact | Description
-| {node} hsc-development | where development of kbd:[HtmlSC] takes place
-| {artifact} hsc-plugin-binary | compiled and packaged version of kbd:[HtmlSC] including required dependencies. 
+| {node} hsc-development | where development of HSC takes place
+| {artifact} hsc-plugin-binary | compiled and packaged version of HSC including required dependencies.
 | {node} artifact repository (https://repo1.maven.org/maven2/[Maven Central]) | public Java artifact repository, cf. https://search.maven.org/[Maven Central Search].
-kbd:[HtmlSC] binaries are uploaded to this server.
+HSC binaries are uploaded to this server.
 | {node} hsc user computer | where arbitrary documentation takes place with html as output formats.
-| {artifact} build.gradle | Gradle build script configuring (among other things) the kbd:[HtmlSC] plugin to perform the Html checking.
+| {artifact} build.gradle | Gradle build script configuring (among other things) the HSC plugin to perform the Html checking.
 |===
 
 

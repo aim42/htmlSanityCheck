@@ -6,7 +6,7 @@ include::_config.adoc[]
 :filename: arc42/chapters/chap-08-checking-algorithms.adoc
 include::../_feedback.adoc[]
 
-kbd:[HtmlSC] uses the template-method-pattern to enable flexible checking algorithms:
+HSC uses the template-method-pattern to enable flexible checking algorithms:
 
 [quote,{template-method-pattern-url}]
 The Template Method defines a skeleton of an algorithm in an operation, and defers some steps to subclasses.

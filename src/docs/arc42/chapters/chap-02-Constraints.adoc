@@ -7,7 +7,7 @@ include::_config.adoc[]
 
 :filename: arc42/chapters/chap-02-Constraints.adoc
 
-kbd:[HtmlSC] shall be:
+HSC shall be:
 
 * platform-independent and should run on the major operating systems
 (Windows(TM), Linux, and Mac-OS(TM))

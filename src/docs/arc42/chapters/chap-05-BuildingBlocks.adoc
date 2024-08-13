@@ -47,16 +47,16 @@ Interfaces::
 | Interface | Description
 
 | usage via shell
-| an (arc42) user uses a command line shell to call kbd:[HtmlSC]
+| an (arc42) user uses a command line shell to call HSC
 
 | Buildsystem
-| Currently restricted to Gradle: The build system uses kbd:[HtmlSC] as configured in the buildscript.
+| Currently restricted to Gradle: The build system uses HSC as configured in the buildscript.
 
 | Local filesystem
-| kbd:[HtmlSC] needs access to several local files, especially the html page to be checked and to the corresponding image directories.
+| HSC needs access to several local files, especially the html page to be checked and to the corresponding image directories.
 
 | External websites
-| to check external links, kbd:[HtmlSC] needs to access external sites via http HEAD or GET requests.
+| to check external links, HSC needs to access external sites via http HEAD or GET requests.
 
 |===
 
@@ -64,7 +64,7 @@ Interfaces::
 [[sec:checker_blackbox]]
 ==== _HSC Core_ (Blackbox)
 
-Intent/Responsibility:: HSC_Core contains the core functions
+Intent/Responsibility:: HSC Core contains the core functions
 to perform the various sanity checks. It parses the html file
 into a DOM-like in-memory representation, which is then
 used to perform the actual checks.
@@ -73,7 +73,7 @@ used to perform the actual checks.
 Interfaces::
 
 [cols="2,4", options="header"]
-.HSC_Core Interfaces
+.HSC Core Interfaces
 |===
 | Interface (From-To) | Description
 
@@ -81,7 +81,7 @@ Interfaces::
 | Uses the #AllChecksRunner class.
 
 | Gradle Plugin -> Checker
-| Exposes kbd:[HtmlSC] via a standard Gradle plugin,
+| Exposes HSC via a standard Gradle plugin,
 as described in the Gradle user guide.
 |===
 
@@ -93,10 +93,10 @@ Files::
 
 === Building Blocks - Level 2
 
-==== _HSC-Core_ (Whitebox)
+==== _HSC Core_ (Whitebox)
 
 
-image::ea/htmlSanityCheck/hsc-core.png["Whitebox", title="HSC-Core (Whitebox)"]
+image::ea/htmlSanityCheck/hsc-core.png["Whitebox", title="HSC Core (Whitebox)"]
 
 Rationale::
 This structures follows a strictly functional decomposition:
@@ -108,7 +108,7 @@ This structures follows a strictly functional decomposition:
 Contained Blackboxes::
 
 [cols="1,4" options=""]
-.HSC-Core building blocks
+.HSC Core building blocks
 |===
 | Checker
 | Abstract class, used in form of the template-pattern. Shall be subclassed
