@@ -2,6 +2,7 @@
 :jbake-status: published
 :jbake-menu: development
 = Development Docs
+:icons: font
 :toc:
 :toclevels: 2
 :toc-position: right
@@ -14,12 +15,20 @@ image::{improveDocImage}[link={repositoryDocsDir}DevelopmentGuide.adoc, float=ri
 
 == Prerequisites
 
+=== General Prerequisites
+
+Make yourself familiar with
+
+* The https://gradle.org[Gradle] build system,
+* https://jsoup.org/apidocs/[JSoup API documentation].
+
 === Prerequisites for Gradle Plugin Development
-You should definitely read the original [Gradle User Guide] on custom plugin development.
+
+You should definitely read the original https://www.gradle.org/docs/current/userguide/custom_plugins.html[Gradle Plugin Development Guide] on custom plugin development.
 
 
-=== Adding New Checks
-To add new checks you have to subclass from 'org.aim42.htmlsanitycheck.check.Checker'
+== Adding New Checks
+To add new checks, you have to subclass from 'org.aim42.htmlsanitycheck.check.Checker'
 and implement the 'performCheck' method - which requires an 'HtmlPage' instance as parameter.
 
 Don't forget to:
@@ -28,32 +37,37 @@ gives many examples
 * add your checker class to the 'public static AllCheckers' list (Set, to be precise)
 of available checkers. This set is used to configure the 'AllChecksRunner' class.
 
+== Directory Structure and Required Files
 
-=== Directory Structure and Required Files
+=== Core Module
+
+TBD
+
+=== Gradle Plugin
 
 ----
 |-htmlSanityCheck
-   |  |-src
-   |  |  |-main
-   |  |  |  |-org
-   |  |  |  |  |-aim42
-   |  |  |  |  |  |-htmlsanitycheck
-   |  |  |  |  |  |  | ...
-   |  |  |  |  |  |  |-HtmlSanityCheckPlugin.groovy // <1>
-   |  |  |  |  |  |  |-HtmlSanityCheckTask.groovy
-   |  |  |  |-resources
-   |  |  |  |  |-META-INF                          // <2>
-   |  |  |  |  |  |-gradle-plugins
-   |  |  |  |  |  |  |-htmlSanityCheck.properties  // <3>
-   |  |  |-test
-   |  |  |  |-org
-   |  |  |  |  |-aim42
-   |  |  |  |  |  |-htmlsanitycheck
-   |  |  |  |  |  |  | ...
-   |  |  |  |  |  |  |-HtmlSanityCheckPluginTest
+   |  htmlSanityCheck-gradle-plugin
+   |  |  |-src
+   |  |  |  |-main
+   |  |  |  |  |-org
+   |  |  |  |  |  |-aim42
+   |  |  |  |  |  |  |-htmlsanitycheck
+   |  |  |  |  |  |  |  | ...
+   |  |  |  |  |  |  |  |-HtmlSanityCheckPlugin.groovy // <1>
+   |  |  |  |  |  |  |  |-HtmlSanityCheckTask.groovy
+   |  |  |  |  |-resources
+   |  |  |  |  |  |-META-INF                          // <2>
+   |  |  |  |  |  |  |-gradle-plugins
+   |  |  |  |  |  |  |  |-htmlSanityCheck.properties  // <3>
+   |  |  |  |-test
+   |  |  |  |  |-org
+   |  |  |  |  |  |-aim42
+   |  |  |  |  |  |  |-htmlsanitycheck
+   |  |  |  |  |  |  |  | ...
+   |  |  |  |  |  |  |  |-HtmlSanityCheckPluginTest
    |
 ----
-
 <1> the actual plugin code, a xyzPlugin and xyzTask groovy files
 <2> Gradle expects plugin properties in META-INF
 <3> Property file containing the name of the actual implementation class:
@@ -67,12 +81,11 @@ by making $MODULE_DIR$ your default.
 
 image:intellij-run-configuration.jpg[]
 
+== Building the Plugin
 
-== Building and Uploading the Plugin
-
-Check out https://aim42.github.io/htmlSanityCheck/development/publishing.html[Publishing] (on the Development Docs Site) for further instructions.
+include::development/publishing.adoc[leveloffset=+1]
 
 == Design Discussions
 
-include::development/issue-185.adoc[]
-include::development/issue-190.adoc[]
+include::development/issue-185.adoc[leveloffset=+2]
+include::development/issue-190.adoc[leveloffset=+2]
