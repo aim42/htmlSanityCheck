@@ -1,17 +1,8 @@
 name: GitHub Pages
 
 on:
+  pull_request:
   push:
-    tags:
-      - release/current
-    paths:
-      - .github/workflows/gh-pages.yml
-      - src/docs
-      - self-check
-      - docToolchainConfig.groovy
-      - dtcw
-      - dtcw.bat
-      - generate-pages
   workflow_dispatch: {}
 
 jobs:
