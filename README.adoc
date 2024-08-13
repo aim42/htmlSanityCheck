@@ -1,19 +1,6 @@
-= image:htmlsanitycheck-logo.png[Html-SC] Html Sanity Check
-:icons: font
-// Align version with ./gradle.properties file
-:version: 2.0.0
-:toc: left
-:toclevels: 3
-ifdef::env-github[]
-:tip-caption: :bulb:
-:note-caption: :information_source:
-:important-caption: :heavy_exclamation_mark:
-:caution-caption: :fire:
-:warning-caption: :warning:
-endif::[]
-
-:plugin-url: https://github.com/aim42/htmlSanityCheck
-:plugin-issues: https://github.com/aim42/htmlSanityCheck/issues
+= image:htmlsanitycheck-logo.png[HSC] Html Sanity Check (HSC)
+// ifndef::sourceDir[:sourcedir: .]
+include::asciidoctor-config.ad[]
 
 ifndef::xrefToGradlePlugin[:xrefToGradlePlugin: htmlSanityCheck-gradle-plugin/README.adoc]
 
@@ -25,13 +12,6 @@ It can be helpful in case of html generated from, e.g., {asciidoc-url}[Asciidoct
 Markdown or other formats -- as converters usually don't check for missing images
 or broken links.
 ====
-
-It can be currently used
-
-* Programmatically from Java (or other JVM languages), or
-* As a xref:{xrefToGradlePlugin}[Gradle plugin].
-
-Standalone Java (CLI) executable and a https://maven.apache.org[Apache Maven] Plugin are planned for future releases.
 
 image:https://img.shields.io/badge/License-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"]
 image:https://github.com/aim42/htmlSanityCheck/actions/workflows/gradle-build.yml/badge.svg[]
@@ -82,155 +62,38 @@ include::gradle.properties[tag=version]
 ----
 ====
 
+[[sec:usage,usage]]
 == Usage
 
-The plugin adds a new task named `htmlSanityCheck`.
+kbd:[HtmlSC] can be currently used
 
-This task exposes a few properties as part of its configuration:
+* As a xref:{xrefToGradlePlugin}#sec:usage[Gradle plugin], or
+* Programmatically from Java or other JVM languages (TBD).
 
-[horizontal]
-sourceDir:: (mandatory) directory where the html files are located.
-Type: File.
-Default: `build/docs`.
-sourceDocuments:: (optional) an override to process several source files, which may be a subset of all files available in `+{sourceDir}+`.
-Type: `org.gradle.api.file.FileCollection`.
-Defaults to all files in `+{sourceDir}+` whose names end with `.html`.
+[NOTE]
+.Future releases
+====
+In the future, we plan to provide
 
-checkingResultsDir:: (optional) directory where the checking results written to.
-Defaults to `+{buildDir}+/reports/htmlSanityCheck/`
+* A standalone Java (CLI) executable, and
+* An https://maven.apache.org[Apache Maven] Plugin.
+====
 
-junitResultsDir:: (optional) directory where the results are written to in JUnit XML format.
-JUnit XML can be read by many tools, including CI environments.
-Defaults to `+{buildDir}+/test-results/htmlchecks/`
+[[sec:installation]]
+== Installation
 
-failOnErrors:: (optional) if set to "true", the build will fail if any error was found in the checked pages.
-Defaults to `false`
+Depending on your <<sec:usage>> you have to
 
-checkerClasses:: (optional) a set of checker classes to be executed.
-Defaults to all available checker classes.
+* Install the xref:{xrefToGradlePlugin}#sec:installation[Gradle Plugin], or
+* Install the core library for programmatic use (TBD).
 
+[[sec:examples]]
 == Examples
 
-.build.gradle (small example)
-[source,groovy]
-----
-apply plugin: 'org.aim42.htmlSanityCheck'
+Depending on your <<sec:usage>> find respective
 
-htmlSanityCheck {
-    sourceDir = new File( "$buildDir/docs" )
-
-    // where to put results of sanityChecks...
-    checkingResultsDir = new File( "$buildDir/report/htmlchecks" )
-
-    // fail build on errors?
-    failOnErrors = true
-
-}
-----
-
-.build.gradle (extensive example)
-[source,groovy,subs='attributes']
-----
-
-import org.aim42.htmlsanitycheck.check.*
-
-buildscript {
-    repositories {
-        mavenCentral()
-        // This is only necessary for older releases (< 2.00)
-        gradlePluginPortal()
-    }
-}
-
-plugins {
-    id 'org.aim42.htmlsanitycheck' version '{version}'
-    id 'org.asciidoctor.convert' version '1.5.8'
-}
-
-// ==== path definitions =====
-// ===========================
-
-// location of AsciiDoc files
-def asciidocSrcPath = "$projectDir/src/asciidoc"
-
-// location of images used in AsciiDoc documentation
-def srcImagesPath = "$asciidocSrcPath/images"
-
-// results of asciidoc compilation (HTML)
-// (input for htmlSanityCheck)
-// this is the default path for asciidoc-gradle-convert
-def htmlOutputPath = "$buildDir/asciidoc/html5"
-
-// images used by generated html
-def targetImagesPath =   htmlOutputPath + "/images"
-
-// where HTMLSanityCheck checking results ares stored
-def checkingResultsPath = "$buildDir/report/htmlchecks"
-
-
-apply plugin: 'org.asciidoctor.convert'
-
-asciidoctor {
-    sourceDir = new File( asciidocSrcPath )
-
-    options backends: ['html5'],
-            doctype: 'book',
-            icons: 'font',
-            sectlink: true,
-            sectanchors: true
-
-    resources {
-        from( srcImagesPath )
-        into targetImagesPath
-    }
-
-
-}
-
-apply plugin: 'org.aim42.htmlSanityCheck'
-
-htmlSanityCheck {
-    // ensure asciidoctor->html runs first
-    // and images are copied to build directory
-
-    dependsOn asciidoctor
-
-    sourceDir = new File( htmlOutputPath )
-
-    // files to check, specified as a file tree with filtering
-    sourceDocuments = fileTree(sourceDir) {
-        include "many-errors.html", "no-errors.html"
-    }
-
-    // where to put results of sanityChecks...
-    checkingResultsDir = new File( checkingResultsPath )
-
-    // fail build on errors?
-    failOnErrors = false
-
-   // http connection timeout in milliseconds
-    httpConnectionTimeout = 1000
-
-    // which statuscodes shall be interpreted as warning, error or success
-    // defaults to standard
-    httpWarningCodes = [401]
-    // httpErrorCodes
-    // httpSuccessCodes
-
-    // only execute a subset of all available checks
-    // available checker:
-    //   * BrokenCrossReferencesChecker
-    //   * BrokenHttpLinksChecker
-    //   * DuplicateIdChecker
-    //   * ImageMapChecker
-    //   * MissingAltInImageTagsChecker
-    //   * MissingImageFilesChecker
-    //   * MissingLocalResourcesChecker
-    checkerClasses = [DuplicateIdChecker, MissingImageFilesChecker]
-
-}
-
-----
+* xref:{xrefToGradlePlugin}#sec:examples[Gradle Plugin] examples, and
+* Core library examples (TBD).
 
 == Typical Output
 
@@ -334,28 +197,7 @@ https://github.com/rrice/java-string-similarity[Ralph Rice].
 
 == Development
 
-In case you want to check out, fork and/or contribute:
-The documentation is maintained using the awesome
-https://github.com/docToolchain/docToolchain[docToolchain], created by https://rdmueller.github.io/[@rdmueller].
-
-The complete documentation can be build and checked
-
-[source,bash,subs="attributes+"]
-----
-./dtcw \
-  generateHtml \
-  generateSite \# <1>
-  htmlSanityCheck # <2>
-----
-<1> This does currently only work with a JDK 8.x (at least on MacOS)
-<2> The docToolchain `htmlSanityCheck` task uses a released version of HSC (not the current development version) by default.
-
-=== Helpful Sources for Development
-
-Several sources provided help during development:
-
-* Gradle guide on https://www.gradle.org/docs/current/userguide/custom_plugins.html[writing custom plugins]
-* Of course, the https://jsoup.org/apidocs/[JSoup API documentation]
+In case you want to check out, fork and/or contribute, take a look into our https://aim42.github.io/htmlSanityCheck/[Development Information]
 
 == Similar Projects
 
@@ -367,9 +209,10 @@ It creates a simple text file report and might be a complement to this `HtmlSani
 
 == Contributing
 
-Please report {plugin-issues}[issues or suggestions].
+Please report {project-issues}[issues or suggestions].
 
-Want to improve the plugin: Fork our {plugin-url}[repository] and send a pull request.
+Want to improve the project?
+Fork our {project-url}[repository] and send a pull request.
 
 == Licence
 

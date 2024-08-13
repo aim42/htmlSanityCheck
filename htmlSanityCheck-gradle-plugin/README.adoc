@@ -27,19 +27,6 @@ plugins {
 ----
 <1> Checkout <<box:current-version,current version>>
 
-And add the following to
-
-.settings.gradle
-[source,groovy,subs="attributes+"]
-----
-pluginManagement {
-    repositories {
-        maven { url "{jitpack-url}" } // <1>
-        mavenCentral()
-        gradlePluginPortal() // <2>
-    }
-}
-----
 
 === Legacy Installation
 
@@ -77,9 +64,158 @@ include::../gradle.properties[tag=version]
 ----
 ====
 
+[[sec:usage]]
 == Usage
 
-== Example
+The plugin adds a new task named `htmlSanityCheck`.
+
+This task exposes a few properties as part of its configuration:
+
+[horizontal]
+sourceDir:: (mandatory) directory where the html files are located.
+Type: File.
+Default: `build/docs`.
+sourceDocuments:: (optional) an override to process several source files, which may be a subset of all files available in `+{sourceDir}+`.
+Type: `org.gradle.api.file.FileCollection`.
+Defaults to all files in `+{sourceDir}+` whose names end with `.html`.
+
+checkingResultsDir:: (optional) directory where the checking results written to.
+Defaults to `+{buildDir}+/reports/htmlSanityCheck/`
+
+junitResultsDir:: (optional) directory where the results are written to in JUnit XML format.
+JUnit XML can be read by many tools, including CI environments.
+Defaults to `+{buildDir}+/test-results/htmlchecks/`
+
+failOnErrors:: (optional) if set to "true", the build will fail if any error was found in the checked pages.
+Defaults to `false`
+
+checkerClasses:: (optional) a set of checker classes to be executed.
+Defaults to all available checker classes.
+
+[[sec:examples]]
+== Examples
+
+.build.gradle (small example)
+[source,groovy]
+----
+apply plugin: 'org.aim42.htmlSanityCheck'
+
+htmlSanityCheck {
+    sourceDir = new File( "$buildDir/docs" )
+
+    // where to put results of sanityChecks...
+    checkingResultsDir = new File( "$buildDir/report/htmlchecks" )
+
+    // fail build on errors?
+    failOnErrors = true
+
+}
+----
+
+.build.gradle (extensive example)
+[source,groovy,subs='attributes']
+----
+
+import org.aim42.htmlsanitycheck.check.*
+
+buildscript {
+    repositories {
+        mavenCentral()
+        // This is only necessary for older releases (< 2.00)
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id 'org.aim42.htmlsanitycheck' version '{version}'
+    id 'org.asciidoctor.convert' version '1.5.8'
+}
+
+// ==== path definitions =====
+// ===========================
+
+// location of AsciiDoc files
+def asciidocSrcPath = "$projectDir/src/asciidoc"
+
+// location of images used in AsciiDoc documentation
+def srcImagesPath = "$asciidocSrcPath/images"
+
+// results of asciidoc compilation (HTML)
+// (input for htmlSanityCheck)
+// this is the default path for asciidoc-gradle-convert
+def htmlOutputPath = "$buildDir/asciidoc/html5"
+
+// images used by generated html
+def targetImagesPath =   htmlOutputPath + "/images"
+
+// where HTMLSanityCheck checking results ares stored
+def checkingResultsPath = "$buildDir/report/htmlchecks"
+
+
+apply plugin: 'org.asciidoctor.convert'
+
+asciidoctor {
+    sourceDir = new File( asciidocSrcPath )
+
+    options backends: ['html5'],
+            doctype: 'book',
+            icons: 'font',
+            sectlink: true,
+            sectanchors: true
+
+    resources {
+        from( srcImagesPath )
+        into targetImagesPath
+    }
+
+
+}
+
+apply plugin: 'org.aim42.htmlSanityCheck'
+
+htmlSanityCheck {
+    // ensure asciidoctor->html runs first
+    // and images are copied to build directory
+
+    dependsOn asciidoctor
+
+    sourceDir = new File( htmlOutputPath )
+
+    // files to check, specified as a file tree with filtering
+    sourceDocuments = fileTree(sourceDir) {
+        include "many-errors.html", "no-errors.html"
+    }
+
+    // where to put results of sanityChecks...
+    checkingResultsDir = new File( checkingResultsPath )
+
+    // fail build on errors?
+    failOnErrors = false
+
+   // http connection timeout in milliseconds
+    httpConnectionTimeout = 1000
+
+    // which statuscodes shall be interpreted as warning, error or success
+    // defaults to standard
+    httpWarningCodes = [401]
+    // httpErrorCodes
+    // httpSuccessCodes
+
+    // only execute a subset of all available checks
+    // available checker:
+    //   * BrokenCrossReferencesChecker
+    //   * BrokenHttpLinksChecker
+    //   * DuplicateIdChecker
+    //   * ImageMapChecker
+    //   * MissingAltInImageTagsChecker
+    //   * MissingImageFilesChecker
+    //   * MissingLocalResourcesChecker
+    checkerClasses = [DuplicateIdChecker, MissingImageFilesChecker]
+
+}
+
+----
+
 
 [[sec:other-versions]]
 == Old and development versions
@@ -91,4 +227,39 @@ https://plugins.gradle.org/plugin/org.aim42.htmlSanityCheck[Old versions] (< `2.
 
 [[sec:development-versions]]
 === Development versions
+
+In case you want to use a current development (or arbitrary branch or tag) version from Github, add the following to your `settings.gradle`:
+
+.settings.gradle
+[source,groovy,subs="attributes+"]
+----
+pluginManagement {
+    repositories {
+        maven { url "{jitpack-url}" }
+    }
+}
+----
+
+Then you can use a respective version in your `build.gradle`:
+
+.build.gradle
+[source,groovy,subs="attributes+"]
+----
+plugins {
+    id 'org.aim42.{project}' version 'develop-SNAPSHOT'
+}
+----
+
+[NOTE]
+.JitPack builds
+====
+Building the desired version for the first time (or after some cache expiry at {jitpack-url}[JitPack]), you may experience a timeout.
+
+You can look up the https://jitpack.io/#org.aim42/htmlSanityCheck[current build state]:
+
+image::jitpack-branch-screenshot.png[]
+====
+
+
+
 
