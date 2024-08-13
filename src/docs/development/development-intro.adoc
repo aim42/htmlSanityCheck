@@ -1,33 +1,32 @@
-:filename: DevelopmentDocs.adoc
+:filename: development/development-intro.adoc
+:jbake-title: Introduction
+:jbake-type: page_toc
 :jbake-status: published
 :jbake-menu: development
-= Development Docs
+:jbake-order: 10
+== {jbake-title}
 :icons: font
-:toc:
+:toc: right
 :toclevels: 2
 :toc-position: right
 :experimental:
-:imagesdir: ./images
-:repositoryDocsDir: https://github.com/aim42/htmlSanityCheck/blob/main/src/docs/
-:improveDocImage: https://img.shields.io/badge/improve-this%20doc-orange.svg
+:imagesdir: ../images
 
-image::{improveDocImage}[link={repositoryDocsDir}DevelopmentGuide.adoc, float=right]
+=== Prerequisites
 
-== Prerequisites
-
-=== General Prerequisites
+==== General Prerequisites
 
 Make yourself familiar with
 
 * The https://gradle.org[Gradle] build system,
 * https://jsoup.org/apidocs/[JSoup API documentation].
 
-=== Prerequisites for Gradle Plugin Development
+==== Prerequisites for Gradle Plugin Development
 
 You should definitely read the original https://www.gradle.org/docs/current/userguide/custom_plugins.html[Gradle Plugin Development Guide] on custom plugin development.
 
 
-== Adding New Checks
+=== Adding New Checks
 To add new checks, you have to subclass from 'org.aim42.htmlsanitycheck.check.Checker'
 and implement the 'performCheck' method - which requires an 'HtmlPage' instance as parameter.
 
@@ -37,13 +36,13 @@ gives many examples
 * add your checker class to the 'public static AllCheckers' list (Set, to be precise)
 of available checkers. This set is used to configure the 'AllChecksRunner' class.
 
-== Directory Structure and Required Files
+=== Directory Structure and Required Files
 
-=== Core Module
+==== Core Module
 
 TBD
 
-=== Gradle Plugin
+==== Gradle Plugin
 
 ----
 |-htmlSanityCheck
@@ -74,18 +73,10 @@ TBD
 
  implementation-class=org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin
 
-=== Notes for IntelliJ Users
+==== Notes for IntelliJ Users
 If you work with IntelliJ, you should configure your run- and test configurations
 so that the working-directory is set to your current module - most easily done
 by making $MODULE_DIR$ your default.
 
 image:intellij-run-configuration.jpg[]
 
-== Building the Plugin
-
-include::development/publishing.adoc[leveloffset=+1]
-
-== Design Discussions
-
-include::development/issue-185.adoc[leveloffset=+2]
-include::development/issue-190.adoc[leveloffset=+2]
