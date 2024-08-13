@@ -2,9 +2,9 @@
 :toc: left
 ifndef::imagesdir[:imagesdir: src/docs/images]
 
-// :outfilesuffix: adoc
-
-// Align the version with ./gradle.properties file (of the development branch)
+// Align the version with
+// - ./gradle.properties file
+// - ./src/docs/arc42/chapters/_config.adoc
 :hsc-version: 2.0.0-rc0
 
 :asciidoc-url: https://asciidoctor.org

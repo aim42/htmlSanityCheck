@@ -7,6 +7,11 @@
 :email: gernot.starke@innoq.com
 :docdate: {docdate}
 
+// Align the version with
+// - ../../../../gradle.properties file
+// - ../../../../asciidoctor-config.ad
+:hsc-version: 2.0.0-rc0
+
 :project: htmlsanitycheck
 
 // where are the images located?
