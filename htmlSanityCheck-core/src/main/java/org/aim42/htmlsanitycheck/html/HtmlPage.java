@@ -103,7 +103,7 @@ public class HtmlPage {
     }
 
     /**
-     * @return list of all usemap-references y with <img src="x" usemap="y"
+     * @return list of all usemap-references y with &lt;img src="x" usemap="y" ...
      */
     public List<String> getAllUsemapRefs() {
         return getImagesWithUsemapDeclaration().stream()
@@ -133,7 +133,7 @@ public class HtmlPage {
     }
 
     /**
-     * builds an immutable list of <img...> tags, where
+     * Builds an immutable list of &lt;img...&gt; tags, where
      * the alt-tag is missing or empty ("").
      */
     public final List<HtmlElement> getAllImageTagsWithMissingAltAttribute() {
@@ -169,11 +169,11 @@ public class HtmlPage {
     }
 
     /**
-     * @return List < String >  of all href-attributes
+     * @return List<String> of all href-attributes
      * <p>
      * common pitfalls with hrefs:
      * - local hrefs start with # (like "#appendix")
-     * - remote hrefs should be valid URLs (like "<a href="https://google.com">https://google.com</a>")
+     * - remote hrefs should be valid URLs (like "&lt;a href="https://google.com"&gt;https://google.com&lt;/a&gt;")
      * - remote hrefs might start with other than http (e.g. https, mailto, telnet, ssh)
      * - hrefs might start with file://
      * - href might be empty string (nobody knows wtf this is good for, but html parsers usually accept it)
@@ -206,8 +206,15 @@ public class HtmlPage {
     }
 
     /**
-     * html-map has the following form:
-     * <map name="mapName"><area...><area...></map>
+     * An HTML map has the following form:
+     *
+     * <code>
+     *     &lt;map name="mapName"&gt;
+     *         &lt;area...&gt;
+     *         &lt;area...&gt;
+     *     &lt;/map&gt;
+     * </code>
+     *
      * <p>
      * collect all area elements for a given map.
      * If more than one map exists with this name, areas

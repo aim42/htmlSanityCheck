@@ -27,8 +27,8 @@ public abstract class SuggestingChecker extends Checker {
     /**
      * let the instance determine the list of possible values
      * Examples:
-     * - MissingImageFilesChecker -> collect the names of images files
-     * - BrokenCrossReferencesChecker -> collect all (internal) link targets
+     * - MissingImageFilesChecker → collect the names of images files
+     * - BrokenCrossReferencesChecker → collect all (internal) link targets
      **/
     protected abstract void setValidPossibilities();
 

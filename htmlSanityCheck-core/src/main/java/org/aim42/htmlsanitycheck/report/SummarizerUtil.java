@@ -2,10 +2,10 @@ package org.aim42.htmlsanitycheck.report;
 
 public class SummarizerUtil {
     /**
-     * returns the percentage of successful checks.
+     * Returns the percentage of successful checks.
      * <p>
      * Edge case:
-     * 0 checks -> 100% successful
+     * 0 checks → 100% successful
      */
     public static int percentSuccessful(int totalChecks, int totalNrOfFindings) {
 
