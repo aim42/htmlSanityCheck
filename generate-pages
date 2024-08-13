@@ -1,24 +1,47 @@
 #!/usr/bin/env bash
 
-: "${DTC_VERSION:=3.3.1}"
-: "${DTC_TASKS:=exportExcel generateHTML generateSite generatePdf}"
+: "${DTC_VERSION:=3.4.0}"
+: "${DTC_TASKS:=exportExcel generateHtml generateSite generatePdf}"
 
-# Generate GH Pages with docToolchain
+# Use a local version!
 test -d "${HOME}/.doctoolchain/docToolchain-${DTC_VERSION}" || ./dtcw local install doctoolchain
-# test -d "${HOME}/.doctoolchain/jdk" || ./dtcw local install java
+test -d "${HOME}/.doctoolchain/jdk" || ./dtcw local install java
 
-set -eu
+set -eu -o pipefail
 
-rm -rf build public
+run() {
+    local title="${1}"
+    shift
+    local action="${@}"
 
-./gradlew publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository
+    echo "##########################"
+    echo "### ${title} ###"
+    echo "####### Start ############"
 
-./dtcw local "${DTC_TASKS}"
-find build/microsite/output/. -name "*-draft.html" -type f -delete
-cp -rp ./build/pdf ./build/microsite/output
-cp -p ./build/html5/arc42/hsc_arc42.html ./build/microsite/output/arc42/hsc_arc42-standalone.html
-cp -rp ./build/html5/images/* ./build/microsite/output/images/
-# ./dtcw htmlSanityCheck
-(cd self-check && ../gradlew htmlSanityChec)
-cp -rp ./build/reports/htmlchecks ./build/microsite/output
-cp -rp ./build/microsite/output ./public
+    bash -c "${action}"
+
+    echo "######## End #############"
+    echo
+}
+
+run "CleanUp build"     rm -rf build/html5 build/microsite build/pdf
+run "DTC (tasks '${DTC_TASKS}' with version '${DTC_VERSION}')" \
+                        ./dtcw local "${DTC_TASKS}"
+
+run "CleanUp Internals" rm -rf build/microsite/output/excel
+run "CleanUp Drafts"    find build/microsite/output/. -name "*-draft.html" -type f -delete
+run "CleanUp Reports"   rm -rf build/report build/test-results
+run copyPdf             cp -rp build/pdf build/microsite/output
+run copyStandalone      cp -rp build/html5/images build/microsite/output \
+                          && mkdir -p build/microsite/output/single-page/ \
+                          && cp -p build/html5/arc42/hsc_arc42.html build/microsite/output/single-page/hsc_arc42-single-page.html
+run htmlSanityCheck     "(cd self-check && ../gradlew htmlSanityCheck)"
+run copyCheckResult     cp -rp build/reports/htmlchecks build/microsite/output
+run fixDocLinks         "sed -i .bak \
+                          -e 's, href=\"${PWD}/build/microsite/output/, href=\"../,g' \
+                          -e 's,\">${PWD}/build/microsite/output/,\">,g' \
+                          build/microsite/output/htmlchecks/index.html" \
+                        && rm -f build/microsite/output/htmlchecks/index.html.bak
+
+run "CleanUp public"    rm -rf public
+run copyToPublic        cp -rp build/microsite/output public

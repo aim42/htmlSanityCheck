@@ -1,0 +1,25 @@
+:filename: development/documentation-build.adoc
+:jbake-title: Documentation Build
+:jbake-type: page
+:jbake-status: published
+:jbake-menu: development
+:jbake-order: 70
+== {jbake-title}
+
+The documentation is maintained using the awesome
+https://github.com/docToolchain/docToolchain[docToolchain], created by https://rdmueller.github.io/[@rdmueller].
+
+Build the complete documentation by executing the following build script:
+
+[source,bash]
+----
+./generate-pages
+----
+
+Afterwards, open
+
+// TODO enable linking to right file when running outside of JBake
+// :doc-base: ../../../public
+ifdef::jbake-type[:doc-base: ..]
+* xref:{doc-base}/index.adoc[`public/index.html`] to check the results, or
+* The xref:{doc-base}/report/report.adoc[HSC report] to check the quality.
