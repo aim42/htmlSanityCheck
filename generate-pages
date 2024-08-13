@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
-: "${DTC_VERSION:=3.4.0}"
+: "${DTC_VERSION:=latest}"
+export DTC_VERSION
 : "${DTC_TASKS:=exportExcel generateHtml generateSite generatePdf}"
 
 # Use a local version!
-test -d "${HOME}/.doctoolchain/docToolchain-${DTC_VERSION}" || ./dtcw local install doctoolchain
+if test -d "${HOME}/.doctoolchain/docToolchain-${DTC_VERSION}"; then
+  if test "${DTC_VERSION}" = "latest"; then
+    (cd "${HOME}/.doctoolchain/docToolchain-${DTC_VERSION}" && git pull )
+  fi
+else
+  ./dtcw local install doctoolchain
+fi
 test -d "${HOME}/.doctoolchain/jdk" || ./dtcw local install java
 
 set -eu -o pipefail
@@ -12,7 +19,7 @@ set -eu -o pipefail
 run() {
     local title="${1}"
     shift
-    local action="${@}"
+    local action="${*}"
 
     echo "##########################"
     echo "### ${title} ###"
