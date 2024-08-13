@@ -37,7 +37,7 @@ arc42 and its structure by Dr. Peter Hruschka and Dr. Gernot Starke.
 Asciidoc version initiated by Markus Schärtel and Jürgen Krey,
 completed and maintained by Ralf Müller and Gernot Starke.#
 
-[small]#Version {version} of {docdate}#
+[small]#Version {hsc-version} of {docdate}#
 
 ifdef::backend-html5[]
 image:https://img.shields.io/badge/license-ccsa4-green.png[link="https://creativecommons.org/licenses/by-sa/4.0/"^]

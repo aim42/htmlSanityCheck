@@ -22,7 +22,7 @@ Use the following snippet inside a Gradle build file:
 [source,groovy,subs="attributes+"]
 ----
 plugins {
-    id 'org.aim42.{project}' version '{version}' // <1>
+    id 'org.aim42.{project}' version '{hsc-version}' // <1>
 }
 ----
 <1> Checkout <<box:current-version,current version>>
@@ -43,7 +43,7 @@ buildscript {
     }
 
     dependencies {
-        classpath ('gradle.plugin.org.aim42:{project}:{version}') // <2>
+        classpath ('gradle.plugin.org.aim42:{project}:{hsc-version}') // <4>
     }
 }
 
@@ -127,7 +127,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.aim42.htmlsanitycheck' version '{version}'
+    id 'org.aim42.htmlsanitycheck' version '{hsc-version}'
     id 'org.asciidoctor.convert' version '1.5.8'
 }
 
