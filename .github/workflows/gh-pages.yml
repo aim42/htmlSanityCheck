@@ -123,8 +123,15 @@ jobs:
         uses: South-Paw/action-netlify-cli@v2
         id: netlify
         with:
-          # be sure to escape any double quotes with a backslash
-          args: 'deploy --debug --dir ./public --message \"draft [${{ github.sha }}]\"'
+          args: deploy --dir ./public --message 'draft [${{ github.sha }}]' --json
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Output Netlify Preview URL
+        run: |
+          echo "The URL where the logs from the deployment can be found"
+          echo "${{ fromJson(steps.netlify.outputs.NETLIFY_OUTPUT).logs }}"
+          echo ""
+          echo "the URL of the draft site that Netlify provides"
+          echo "${{ fromJson(steps.netlify.outputs.NETLIFY_OUTPUT).deploy_url }}"
