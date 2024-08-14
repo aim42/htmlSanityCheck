@@ -1,5 +1,5 @@
 :filename: development/documentation-build.adoc
-:jbake-title: Documentation Build
+:jbake-title:  Building and Publishing HSC Documentation
 :jbake-type: page
 :jbake-status: published
 :jbake-menu: development
@@ -8,6 +8,8 @@
 
 The documentation is maintained using the awesome
 https://github.com/docToolchain/docToolchain[docToolchain], created by https://rdmueller.github.io/[@rdmueller].
+
+=== Local Documentation Build
 
 Build the complete documentation by executing the following build script:
 
@@ -22,4 +24,27 @@ Afterwards, open
 // :doc-base: ../../../public
 ifdef::jbake-type[:doc-base: ..]
 * xref:{doc-base}/index.adoc[`public/index.html`] to check the results, or
-* The xref:{doc-base}/report/report.adoc[HSC report] to check the quality.
+* The xref:{doc-base}/report/report.adoc[HSC report] (`public/report/report.html`) to check the quality.
+
+=== Publishing the Documentation
+
+A https://github.com/aim42/htmlSanityCheck/actions/workflows/gh-pages.yml[GitHub Action] builds the documentation on each push (or pull request).
+
+Default::
+For each branch,
+the GH action publishes the resulting documentation to https://www.netlify.com/[Netlify]
+(check the output of the GH Action for the URL).
+
+Production::
+To publish to https://aim42.github.io/htmlSanityCheck[GitHub Pages],
+you have to manually execute the https://github.com/aim42/htmlSanityCheck/actions/workflows/gh-pages.yml[GitHub Action]
+and check the box to publish to GH Pages:
++
+image::gh-pages-action-publish-screenshot.png[]
++
+[CAUTION]
+====
+In the future we might restrict publishing to particular branches
+to ensure the documentation aligns with certain states of development,
+e.g., `main` branch only.
+====
