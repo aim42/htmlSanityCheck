@@ -159,8 +159,11 @@ In case you want to check out, fork and/or contribute, take a look into our http
 
 == Similar Projects
 
-* The https://github.com/rackerlabs/gradle-linkchecker-plugin[gradle-linkchecker-plugin] is an (open source) Gradle plugin which validates that all links in a local HTML file tree go out to other existing local files or remote web locations.
-It creates a simple text file report and might be a complement to this `HtmlSanityChecker`.
+* Once upon a time the https://github.com/rackerlabs/[rackerlabs] hosted `gradle-linkchecker-plugin` which was an (open source) Gradle plugin.
+ It validated that all links in a local HTML file tree go out to other existing local files or remote web locations, creating a simple text file report.
++
+CAUTION: However, as of 2024-08-14 they have deleted the repository (there seems to be a fork in https://github.com/leonard84/gradle-linkchecker-plugin[]).
+* It was perhaps based on a similar approach (https://github.com/JamaSoftwareEngineering/linkchecker-maven-plugin[linkchecker-maven-plugin]) for https://maven.apache.org[Maven].
 * https://bmuschko.com/blog/golang-with-gradle/[Benjamin Muschko] has created a (Go-based) command-line tool to check links, called https://github.com/bmuschko/link-verifier[link verifier].
 * https://github.com/gjtorikian/html-proofer[html-proofer] is written in Ruby and provides different usage scenarios (programmatically, CLI, and Docker).
 * https://github.com/wjdp/htmltest[htmltest] is also written in Go(Lang) and claims to be rapid compared to `html-proofer` (stay tuned; we have plans for HSC to run with Graal quickly).
