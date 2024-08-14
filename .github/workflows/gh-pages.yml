@@ -65,6 +65,13 @@ jobs:
       - name: Generate Site
         run: ./generate-pages
 
+      - name: 'Publish Test Results'
+        uses: EnricoMi/publish-unit-test-result-action/linux@v2
+        if: always()
+        with:
+          files: |
+            **/build/test-results/**/*.xml
+
       - name: Upload Generated Site
         uses: actions/upload-pages-artifact@v3
         with:
