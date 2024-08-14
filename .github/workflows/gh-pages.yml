@@ -79,7 +79,7 @@ jobs:
     permissions:
       contents: read
       pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
+      id-token: write   # to verify the deployment, originates from an appropriate source
 
     # Deploy to the github-pages environment
     environment:
@@ -135,3 +135,18 @@ jobs:
           echo ""
           echo "the URL of the draft site that Netlify provides"
           echo "${{ fromJson(steps.netlify.outputs.NETLIFY_OUTPUT).deploy_url }}"
+
+      - name: Set Job Summary
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const deployUrl = JSON.parse(steps.netlify.outputs.NETLIFY_OUTPUT).deploy_url;
+            github.rest.checks.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              check_run_id: context.runId,
+              output: {
+                title: 'Netlify Deployment',
+                summary: `Netlify Preview URL: ${deployUrl}`
+              }
+            });
