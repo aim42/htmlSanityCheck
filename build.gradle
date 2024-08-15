@@ -81,6 +81,8 @@ jreleaser {
         }
         inceptionYear = '2014'
         copyright = '2024'
+
+        authors = ['Gernot Starke', 'Gerd Aschemann']
     }
 
     release {
@@ -113,6 +115,15 @@ jreleaser {
                     stagingRepository(mavenBuildRepo.toString())
                 }
             }
+        }
+    }
+
+    announce {
+        active = 'ALWAYS'
+
+        mastodon {
+            active = 'ALWAYS'
+            host = 'https://mastodon.social'
         }
     }
 }
