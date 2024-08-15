@@ -1,7 +1,14 @@
-name: Publish to Netlify
+name: Publish Site to Netlify
 
 on:
+  push:
+  pull_request:
   workflow_dispatch:
+    inputs:
+      publish_site:
+        type: boolean
+        description: 'Publish To Netlify'
+        default: false
 
 jobs:
   publish-to-netlify:
@@ -29,6 +36,7 @@ jobs:
           restore-keys: ${{ runner.os }}-netlify-cli
 
       - name: Deploy to Netlify
+        if: github.event.inputs.publish_site
         uses: South-Paw/action-netlify-cli@v2
         id: netlify
         with:
@@ -38,6 +46,7 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
       - name: Get Netlify Preview URL
+        if: github.event.inputs.publish_site
         id: netlify-status
         run: |
           echo "NETLIFY_DEPLOY_URL=${{ fromJson(steps.netlify.outputs.NETLIFY_OUTPUT).deploy_url }}" >> $GITHUB_OUTPUT

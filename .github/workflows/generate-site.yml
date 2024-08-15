@@ -73,3 +73,13 @@ jobs:
           name: github-pages
           path: public
           retention-days: 7
+
+      - name: Trigger Publish to Netlify Workflow
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: publish-site-to-netlify.yml
+
+      - name: Trigger Publish to GitHub Pages Workflow
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: publish-site-to-gh-pages.yml
