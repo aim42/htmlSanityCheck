@@ -40,7 +40,7 @@ ifndef::projectRootDir[:projectRootDir: ../../../..]
 :aim42-url: https://github.com/aim42
 
 :asciidoc-url: https://asciidoctor.org
-:gradle-url: https://gradle.org/[Gradle]
+:gradle-url: https://gradle.org/
 :groovy-url: https://www.groovy-lang.org/
 :template-method-pattern-url: https://sourcemaking.com/design_patterns/template_method
 
