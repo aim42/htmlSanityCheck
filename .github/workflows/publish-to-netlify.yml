@@ -1,0 +1,49 @@
+name: Publish to Netlify
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-to-netlify:
+    runs-on: ubuntu-latest
+    environment:
+      name: netlify
+      url: ${{ steps.netlify-status.outputs.NETLIFY_DEPLOY_URL }}
+    steps:
+      - name: Download Generated Site Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: download
+
+      - name: Unpack Generated Site
+        run: |
+          mkdir -p public
+          tar -x -C public -v -f download/artifact.tar
+
+      - name: Cache Netlify CLI
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-netlify-cli-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-netlify-cli
+
+      - name: Deploy to Netlify
+        uses: South-Paw/action-netlify-cli@v2
+        id: netlify
+        with:
+          args: deploy --dir ./public --message 'draft [${{ github.sha }}]' --json
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Get Netlify Preview URL
+        id: netlify-status
+        run: |
+          echo "NETLIFY_DEPLOY_URL=${{ fromJson(steps.netlify.outputs.NETLIFY_OUTPUT).deploy_url }}" >> $GITHUB_OUTPUT
+
+          echo "The URL where the logs from the deployment can be found"
+          echo "${{ fromJson(steps.netlify.outputs.NETLIFY_OUTPUT).logs }}"
+          echo ""
+          echo "the URL of the draft site that Netlify provides"
+          echo "${{ fromJson(steps.netlify.outputs.NETLIFY_OUTPUT).deploy_url }}/"

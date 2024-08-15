@@ -1,0 +1,75 @@
+name: Generate Site
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build-artifacts:
+    uses: ./.github/workflows/build-artifacts.yml
+    with:
+      # SonarQube requires JDK 17 or higher
+      java-version: '17'
+
+  generate-site:
+    needs: build-artifacts
+    runs-on: ubuntu-latest
+    concurrency:
+      group: "${{ github.workflow }}-${{ github.ref }}-${{ inputs.publish_gh_pages }}"
+    env:
+      DTC_HEADLESS: true
+    steps:
+      - name: Install dot (Graphviz)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: "${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}"
+          restore-keys: ${{ runner.os }}-gradle
+
+      - name: Cache .doctoolchain
+        uses: actions/cache@v4
+        with:
+          path: ~/.doctoolchain
+          key: "${{ runner.os }}-doctoolchain-${{ hashFiles('**/lockfiles') }}"
+          restore-keys: ${{ runner.os }}-doctoolchain
+
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: .
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
+      - name: Generate Site
+        run: ./generate-pages
+
+      - name: 'Publish Test Results'
+        uses: EnricoMi/publish-unit-test-result-action/linux@v2
+        if: always()
+        with:
+          files: |
+            **/build/test-results/**/*.xml
+
+      - name: Upload Generated Site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages
+          path: public
+          retention-days: 7
