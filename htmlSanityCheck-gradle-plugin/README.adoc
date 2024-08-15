@@ -1,3 +1,4 @@
+= HSC Gradle Plugin
 :doctype: book
 include::../asciidoctor-config.ad[]
 
@@ -6,8 +7,6 @@ ifndef::xrefToManual[:xrefToManual: ../README.adoc]
 ifdef::jbake-type[]
 :gradleProperties: {project-url}/blob/develop/gradle.properties[]
 endif::jbake-type[]
-
-= HSC Gradle Plugin
 
 The {gradle-url}[Gradle] plugin of HTML Sanity Check (xref:{xrefToManual}[HSC]) enables to check generated or native HTML documentation from the Gradle build.
 

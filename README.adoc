@@ -1,11 +1,12 @@
-include::asciidoctor-config.ad[]
 = image:htmlsanitycheck-logo.png[HSC] Html Sanity Check (HSC)
+:doctype: book
+include::asciidoctor-config.ad[]
 
 ifndef::xrefToGradlePlugin[:xrefToGradlePlugin: htmlSanityCheck-gradle-plugin/README.adoc]
 
 [.lead]
 ====
-This project provides some basic sanity checking on HTML files.
+https://aim42.github.io/htmlSanityCheck[HTML Sanity Check] (HSC) provides some basic sanity checking on HTML files.
 
 It can be helpful in case of HTML generated from, e.g., {asciidoc-url}[Asciidoctor],
 Markdown or other formats -- as converters usually don't check for missing images
