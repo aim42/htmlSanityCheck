@@ -1,0 +1,22 @@
+name: Publish GitHub Pages
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-to-github:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
