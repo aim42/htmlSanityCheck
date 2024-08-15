@@ -1,6 +1,6 @@
 plugins {
     id 'org.aim42.htmlSanityCheck' version "${htmlSanityCheckVersion}"
-    id 'org.asciidoctor.jvm.convert' version '4.0.2'
+    id 'org.asciidoctor.jvm.convert' version '4.0.3'
 }
 
 repositories {
@@ -11,8 +11,6 @@ def projectRoot = "../.."
 def sourceDirectory = "src/test/resources"
 task copyReadmeResources(type: Copy) {
     from projectRoot
-//    include '*.jpg'
-//    include '*.png'
     include '*.properties'
     into "build/docs"
     doLast {
