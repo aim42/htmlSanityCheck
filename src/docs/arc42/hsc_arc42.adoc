@@ -6,7 +6,7 @@
 :doctype: book
 :relfileprefix: chapters/
 
-= HTML Sanity Checker (HSC) Architecture Documentation
+= HTML Sanity Check (HSC) Architecture Documentation
 
 :imagesdir: ../images
 
@@ -39,8 +39,8 @@ include::_feedback.adoc[]
 
 [NOTE]
 ====
-Within the following text, the "Html Sanity Checker" shall be
-abbreviated with HSC
+Within the following text, the "HTML Sanity Check" shall be
+abbreviated with HSC.
 ====
 
 include::About-This-Docu.adoc[]

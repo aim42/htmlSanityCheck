@@ -44,7 +44,7 @@ class ConsoleReporterTest {
     @Test
     void testInitReport() {
         reporter.initReport()
-        String expectedOutput = "********* HTML Sanity Checker findings report *********"
+        String expectedOutput = "********* HTML Sanity Check findings report *********"
         assertTrue(outContent.toString().contains(expectedOutput))
     }
 

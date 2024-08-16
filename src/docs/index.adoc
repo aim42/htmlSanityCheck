@@ -1,6 +1,6 @@
 :filename: index.adoc
 :!toc:
-= image:htmlsanitycheck-logo.png[HTML Sanity Checker] Documentation Overview
+= image:htmlsanitycheck-logo.png[HTML Sanity Check] Documentation Overview
 Dr. Gernot Starke <gernot.starke@innoq.com>
 v0.9, 2014-09-02
 :imagesdir: ./images
@@ -39,13 +39,13 @@ types of stakeholders:
 | (planned) intended for writers and authors, explains
   how to check your (generated) html
 
-| link:DevelopmentGuide.html[Development Guide]
+| link:development/development-intro.adoc[Development Guide]
 | software developers,
 | Describes development environment,
   building HSC and its documentation.
 
 | arc42-user, (methodical) software developer or architect
-| link:hsc_arc42.html[Architecture Documentation] 
+| link:arc42/hsc_arc42.adoc[Architecture Documentation]
 | https://github.com/arc42[arc42]-based documentation,
   with requirements, quality-goals,
   context, building-blocks and

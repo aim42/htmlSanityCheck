@@ -43,7 +43,7 @@ public class ConsoleReporter extends Reporter {
     public void initReport() {
         Long millis = runResults.checkingTookHowManyMillis();
 
-        printer.accept("********* HTML Sanity Checker findings report *********");
+        printer.accept("********* HTML Sanity Check findings report *********");
         printer.accept(String.format("created on %s by version %s", createdOnDate, ProductInformation.VERSION));
         printer.accept(String.format("checking took %s msecs.", millis));
         printer.accept("");

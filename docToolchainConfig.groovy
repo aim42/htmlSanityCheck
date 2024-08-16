@@ -47,7 +47,7 @@ microsite.with {
     // is your microsite deployed with a context path?
     contextPath = '/'
     // used as title in the template
-    title='HTML Sanity Checker (HSC)'
+    title='HTML Sanity Check (HSC)'
     // used in the template for absolute uris
     host='https://localhost'
     // configure a port on which your preview server will run
