@@ -1,4 +1,0 @@
-= Just a very simple (integration) test
-include::config.ad[]
-
-of {hsc-url}

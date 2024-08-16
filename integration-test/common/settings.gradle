@@ -1,29 +1,4 @@
-plugins {
-    id 'org.aim42.htmlSanityCheck' version "${htmlSanityCheckVersion}"
-}
-
-repositories {
-    mavenCentral()
-}
-
-File reports = file("${Project.DEFAULT_BUILD_DIR_NAME}/reports")
-htmlSanityCheck {
-    sourceDir = file("../common/${Project.DEFAULT_BUILD_DIR_NAME}/docs")
-
-    checkingResultsDir = reports
-    failOnErrors = true
-
-    logger.quiet "HSC version: ${htmlSanityCheckVersion}"
-    logger.quiet "HSC sourceDir: ${sourceDir.absolutePath}"
-    logger.quiet "HSC checkingResultsDir: ${checkingResultsDir.absolutePath}"
-}
-
-task clean() {
-    description "Clean (${reports}"
-    group 'CleanUp'
-    reports.deleteDir()
-    file('${Project.DEFAULT_BUILD_DIR_NAME}/test-results').deleteDir()
-}
+rootProject.name = 'hsc-integration-test-common'
 
 /*
  * Copyright Gerd Aschemann and aim42 contributors.
