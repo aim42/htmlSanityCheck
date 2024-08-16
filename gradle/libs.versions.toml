@@ -10,7 +10,6 @@ wiremock-testcontainers-version = '1.0-alpha-14'
 [libraries]
 commons-validator = 'commons-validator:commons-validator:1.9.0'
 # Use latest 3.x Groovy Version to use Spock for Groovy 3 as long as Gradle uses Groovy 3
-groovy-bom = 'org.codehaus.groovy:groovy-bom:3.0.22'
 jsoup = 'org.jsoup:jsoup:1.18.3'
 junit-vintage = { module = 'org.junit.vintage:junit-vintage-engine', version.ref = 'junit5-version' }
 lombok = 'org.projectlombok:lombok:1.18.36'
