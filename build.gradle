@@ -52,7 +52,7 @@ ext.urls = [
 ]
 
 // tag::mavenBuildRepo[]
-File baseBuildDir = file("${project.rootDir}/build")
+File baseBuildDir = file("${project.rootDir}/${Project.DEFAULT_BUILD_DIR_NAME}")
 File mavenBuildRepo = new File(baseBuildDir, "maven-repo")
 // end::mavenBuildRepo[]
 
@@ -145,7 +145,6 @@ configure(subprojects) {
     description "${rootProject.description} - Module ${project.name}"
 
     dependencies {
-        implementation platform(libs.groovy.bom)
         implementation platform(libs.slf4j.bom)
 
         testImplementation platform(libs.spock)
