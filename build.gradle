@@ -56,6 +56,11 @@ File baseBuildDir = file("${project.rootDir}/build")
 File mavenBuildRepo = new File(baseBuildDir, "maven-repo")
 // end::mavenBuildRepo[]
 
+tasks.register("cleanMavenBuildRepo", Delete) {
+    description "Clean intermediate Maven Repository '${mavenBuildRepo}'"
+    delete mavenBuildRepo
+}
+
 task signAll() {
     doLast {
         logger.quiet("Signed all artifacts for upload with JReleaser")
@@ -282,19 +287,33 @@ publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository.confi
 }
 
 final String INTEGRATION_TEST_DIRECTORY = "integration-test"
-final String INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN = "${INTEGRATION_TEST_DIRECTORY}/gradle-plugin"
 final String INTEGRATION_TEST_DIRECTORY_CLI = "${INTEGRATION_TEST_DIRECTORY}/cli"
+final String INTEGRATION_TEST_DIRECTORY_COMMON = "${INTEGRATION_TEST_DIRECTORY}/common"
+final String INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN = "${INTEGRATION_TEST_DIRECTORY}/gradle-plugin"
 
-static void cleanBuild(final File baseDirectory) {
-    File integrationTestBuildDir = new File(baseDirectory, "${Project.DEFAULT_BUILD_DIR_NAME}")
-    if (integrationTestBuildDir.exists()) {
-        integrationTestBuildDir.eachFileRecurse { file ->
-            file.delete()
+tasks.register("integrationTestPrepare") {
+    group("Verification")
+    description("Prepare integration tests data")
+
+    doLast {
+        def result = exec {
+            workingDir INTEGRATION_TEST_DIRECTORY_COMMON
+            commandLine System.getProperty("os.name") ==~ /Windows.*/
+                    ? "..\\..\\gradlew.bat"
+                    : "../../gradlew", "clean", "buildReadmeAll"
         }
-        integrationTestBuildDir.deleteDir()
+        logger.debug "Script output: $result"
     }
-    assert !integrationTestBuildDir.exists()
 }
+tasks.register("cleanIntegrationTestCommon", Delete) {
+    description("Deletes the common data for integration tests")
+
+    doLast {
+        delete(file(INTEGRATION_TEST_DIRECTORY_COMMON))
+    }
+}
+//clean.dependsOn(cleanIntegrationTestCommon)
+integrationTestPrepare.mustRunAfter(cleanIntegrationTestCommon)
 
 tasks.register("integrationTestGradlePluginOnly") {
     group("Verification")
@@ -313,6 +332,7 @@ tasks.register("integrationTestGradlePluginOnly") {
     }
 }
 integrationTestGradlePluginOnly.configure {
+    dependsOn(integrationTestPrepare)
     mustRunAfter('publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository')
 }
 tasks.register("integrationTestGradlePlugin") {
@@ -326,10 +346,9 @@ tasks.register("cleanIntegrationTestGradlePlugin", Delete) {
     description("Deletes the result directory from gradle-plugin integration tests")
 
     doLast {
-        cleanBuild file(INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN)
+        delete(file(INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN))
     }
 }
-clean.dependsOn cleanIntegrationTestGradlePlugin
 
 tasks.register("integrationTestCliOnly") {
     group("Verification")
@@ -345,7 +364,7 @@ tasks.register("integrationTestCliOnly") {
             workingDir INTEGRATION_TEST_DIRECTORY_CLI
             file(BUILD_REPORTS_DIRECTORY).mkdirs()
             String hscScriptFileName = "../../htmlSanityCheck-cli/${Project.DEFAULT_BUILD_DIR_NAME}/install/hsc/bin/hsc"
-            String params =  "-r ${BUILD_REPORTS_DIRECTORY} ../common/src/test/resources"
+            String params = "-r ${BUILD_REPORTS_DIRECTORY} ../common/${Project.DEFAULT_BUILD_DIR_NAME}/docs"
             if (System.getProperty("os.name") ==~ /Windows.*/) {
                 commandLine 'cmd', '/c', "echo off && ${hscScriptFileName.replace('/', '\\')}.bat ${params}"
             } else {
@@ -357,6 +376,7 @@ tasks.register("integrationTestCliOnly") {
     }
 }
 integrationTestCliOnly.configure {
+    dependsOn(integrationTestPrepare)
     mustRunAfter(':htmlSanityCheck-cli:installDist')
 }
 tasks.register("integrationTestCli") {
@@ -371,12 +391,9 @@ tasks.register("cleanIntegrationTestCli", Delete) {
     description("Deletes the result directory from CLI integration tests")
 
     doLast {
-        cleanBuild file(INTEGRATION_TEST_DIRECTORY_CLI)
+        delete(file(INTEGRATION_TEST_DIRECTORY_CLI))
     }
 }
-//noinspection GroovyAssignabilityCheck
-clean.dependsOn cleanIntegrationTestCli
-//integrationTestCli.dependsOn cleanIntegrationTestCli
 tasks.register("integrationTestOnly") {
     group("Verification")
     description("Run overall integration tests (only)")
