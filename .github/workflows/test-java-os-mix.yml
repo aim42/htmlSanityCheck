@@ -45,8 +45,8 @@ jobs:
         run: |
           cd integration-test/gradle-plugin
           uname -a
-          ./gradlew --version
-          ./gradlew htmlSanityCheck --scan
+          ../../gradlew --version
+          ../../gradlew htmlSanityCheck --scan
 
       - name: Execute (Gradle Plugin) integration test (Windows)
         if: runner.os == 'Windows'
@@ -54,8 +54,8 @@ jobs:
         run: |
           cd integration-test/gradle-plugin
           uname -a
-          cmd /c "echo off && gradlew.bat --version"
-          cmd /c "echo off && gradlew.bat htmlSanityCheck --scan"
+          cmd /c "echo off && ..\..\gradlew.bat --version"
+          cmd /c "echo off && ..\..\gradlew.bat htmlSanityCheck --scan"
 
       - name: Collect state upon failure (On Unix)
         if: failure() && runner.os != 'Windows'
