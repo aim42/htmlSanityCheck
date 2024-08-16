@@ -1,0 +1,1 @@
+🚀 HTML Sanity Check (#HSC) {{projectVersion}} has been released! {{releaseNotesUrl}} (#HTMLSanityCheck)

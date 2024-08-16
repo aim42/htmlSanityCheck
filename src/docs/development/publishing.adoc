@@ -96,26 +96,50 @@ echo empty | gpg --clearsign -o /dev/null
 ----
 ====
 
+=== JReleaser Credentials / Environment Settings
+
+You will have to set the following environment variable to perform misc. https://jreleaser.org[JReleaser] actions.
+
+[source,shell]
+----
+export JRELEASER_MAVENCENTRAL_STAGE=UPLOAD # <1>
+export JRELEASER_GITHUB_TOKEN=... # <2>
+export JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_USERNAME=... # <3>
+export JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_PASSWORD=... # <3>
+export JRELEASER_ANNOUNCE_MASTODON_ACCESS_TOKEN=... <4>
+----
+<1> Maven Central publications require two steps.
+This variable setting enables <<sec:stage-to-maven-central, upload to the staging area>>, perform <<sec:publish-to-maven-central,the final publication>> interactively.
+<2> Get an appropriate GitHub token (needs write access to the repository).
+<3> Create a deployment user and password in your Maven Central (Sonatype) https://central.sonatype.com/account[account]footnote:[This is a different user/password than your login user.].
+<4> Access token for your Mastodon Account (on https://mastodon.social[]footnote:[Publishing to a different Mastodon server requires more changes.]).
+
+
 == Publishing actions
 
-Adjust version number::
+=== Adjust version number
+
 Set the version number in xref:gradle.properties[../../../gradle.properties] to the next value.
 
-Maintain ChangeLog::
+=== Maintain ChangeLog
+
 Add the respective changes to xref:CHANGELOG.{markdown-suffix}[../../../CHANGELOG.md]
 
-Build / Test::
+=== Build / Test
+
 Clean, check (test), and perform integration tests:
-+
-[source,bash,subs="callouts+"]
+
+[source,shell]
 ----
 ./gradlew clean check integrationTest
 ----
 
-Sign / Upload to Maven Central::
+[[sec:stage-to-maven-central]]
+=== Sign / Upload to Maven Central
+
 Sign artifacts and load them up to Maven Central via https://jreleaser.org[JReleaser].
-+
-[source,bash,subs="callouts+"]
+
+[source,shell]
 ----
 ./gradlew jreleaserRelease -PenableSigning=true -Psigning.password=... # <1> <2>
 ----
@@ -142,6 +166,17 @@ If you have GPG configured properly, you may use the <<tip:gpg-agent,GPG-Agent>>
 ----
 ====
 
-Publish on Maven Central::
-Finally, publish the staged version on Maven Central,
+[[sec:publish-to-maven-central]]
+=== Publish on Maven Central
+
+Publish the staged version on Maven Central,
 i.e., https://central.sonatype.com/publishing[Sonatype Central].
+
+=== Announce new release on Socia Media
+
+Finally, announce the new release on Social Media, i.e., https://mastodon.social/deck/tags/HTMLSanityCheck[Mastodon (Social)].
+
+[source,bash]
+----
+./gradlew jreleaserAnnounce
+----

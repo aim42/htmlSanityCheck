@@ -124,6 +124,8 @@ jreleaser {
         mastodon {
             active = 'ALWAYS'
             host = 'https://mastodon.social'
+
+            statusTemplate = 'src/templates/jreleaser/mastodon.tpl'
         }
     }
 }
