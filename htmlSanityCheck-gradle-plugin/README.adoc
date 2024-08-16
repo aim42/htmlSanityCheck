@@ -314,6 +314,15 @@ htmlSanityCheck {
 
 ----
 
+== Compatibility
+
+The Plugin has been tested with the following Gradle versions:
+
+[source]
+.Tested Gradle versions
+----
+include::src/test/groovy/org/aim42/htmlsanitycheck/HtmlSanityCheckTaskFunctionalTest.groovy[tag=tested-gradle-versions,indent=0]
+----
 
 [[sec:development-versions]]
 == Development versions

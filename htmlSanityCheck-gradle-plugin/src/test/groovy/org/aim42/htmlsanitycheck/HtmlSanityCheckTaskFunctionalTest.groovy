@@ -14,12 +14,15 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 class HtmlSanityCheckTaskFunctionalTest extends Specification {
     private final static VALID_HTML = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"><html><head></head><body></body><html>"""
     private final static INVALID_HTML = """<body><span id="id"/><span id="id"/></body> """
-    private final static GRADLE_VERSIONS = [ // 6.x or older does not work!
-                                            '7.6.3', // latest 7.x
-                                            '8.0.2', '8.1.1', '8.2.1', '8.3', '8.4',
-                                             '8.5', '8.6', '8.7', '8.8', '8.9',
-                                             '8.10' // all 8.x (latest patches)
-                                           ]
+    private final static GRADLE_VERSIONS = [
+            // tag::tested-gradle-versions[]
+            // 6.x or older does not work!
+            '7.6.3', // latest 7.x
+            '8.0.2', '8.1.1', '8.2.1', '8.3', '8.4',
+            '8.5', '8.6', '8.7', '8.8', '8.9',
+            '8.10' // all 8.x minor versions (latest patch release)
+            // end::tested-gradle-versions[]
+    ]
 
     @Rule
     TemporaryFolder testProjectDir = new TemporaryFolder()
@@ -134,10 +137,10 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
 
     private GradleRunner runnerForHtmlSanityCheckTask(String gradleVersion) {
         GradleRunner.create()
-            .withGradleVersion(gradleVersion)
-            .withProjectDir(testProjectDir.root)
-            .withPluginClasspath()
-            .withArguments('htmlSanityCheck')
+                .withGradleVersion(gradleVersion)
+                .withProjectDir(testProjectDir.root)
+                .withPluginClasspath()
+                .withArguments('htmlSanityCheck')
     }
 
     private static class HtmlReport {
