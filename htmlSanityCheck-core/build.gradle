@@ -25,7 +25,6 @@ dependencies {
 
 gitProperties {
     // specify the location of the generated file
-//    gitPropertiesResourceDir = file("${project.projectDir}/build/resources/main")
 
     // specify the properties to include
     keys = ['git.branch',
