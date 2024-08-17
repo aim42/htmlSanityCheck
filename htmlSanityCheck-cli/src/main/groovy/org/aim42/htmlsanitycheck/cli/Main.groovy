@@ -25,11 +25,7 @@ class Main implements Runnable {
 
     MainRunner runner
 
-    Main() {
-        Main(new MainRunner())
-    }
-
-    Main(MainRunner runner) {
+    protected Main(MainRunner runner) {
         this.runner = runner
     }
 
@@ -49,11 +45,11 @@ class Main implements Runnable {
     File[] srcDocs
 
     static void main(String[] args) {
-        MainRunner runner = new MainRunner()
-        Main app = new Main(runner)
-        CommandLine cmd = new CommandLine(app)
-        runner.setMain(app)
-        runner.setCmd(cmd)
+        MainRunner mainRunner = new MainRunner()
+        Main main = new Main(mainRunner)
+        CommandLine cmd = new CommandLine(main)
+        mainRunner.setMain(main)
+        mainRunner.setCmd(cmd)
         cmd.execute(args)
     }
 
@@ -66,16 +62,7 @@ class Main implements Runnable {
                 .collect { it.toFile() }
     }
 
-    static class MainRunner implements CommandLine.IFactory {
-
-        @Override
-        <T> T create(Class<T> cls) throws Exception {
-            if (cls == Main.class) {
-                return (T) new Main()
-            } else {
-                throw new IllegalArgumentException("Cannot create CLI applications of class '${cls}'")
-            }
-        }
+    static class MainRunner {
 
         Main main
         CommandLine cmd
