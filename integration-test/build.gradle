@@ -5,6 +5,12 @@ version = htmlSanityCheckVersion
 final String INTEGRATION_TEST_DIRECTORY_COMMON = "common"
 final String INTEGRATION_TEST_DIRECTORY_COMMON_BUILD = "common/${BUILD_DIRECTORY}"
 
+final static String gradleCall() {
+    return System.getProperty("os.name") ==~ /Windows.*/
+            ? "..\\..\\gradlew.bat"
+            : "../../gradlew"
+}
+
 tasks.register("cleanIntegrationTestCommon", Delete) {
     group("Build")
     description("Deletes the common data for integration tests")
