@@ -40,22 +40,18 @@ jobs:
       - name: Make HSC file executable
         run: chmod +x htmlSanityCheck-cli/build/install/hsc/bin/hsc
 
-      - name: Execute (Gradle Plugin) integration test (on Unixes)
+      - name: Execute integration tests (Unixes)
         if: runner.os != 'Windows'
         run: |
-          cd integration-test/gradle-plugin
           uname -a
-          ../../gradlew --version
-          ../../gradlew htmlSanityCheck --scan
+          ./gradlew integrationTestOnly --scan
 
-      - name: Execute (Gradle Plugin) integration test (Windows)
+      - name: Execute integration tests (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          cd integration-test/gradle-plugin
           uname -a
-          cmd /c "echo off && ..\..\gradlew.bat --version"
-          cmd /c "echo off && ..\..\gradlew.bat htmlSanityCheck --scan"
+          cmd /c "echo off && gradlew.bat integrationTestOnly --scan"
 
       - name: Collect state upon failure (On Unix)
         if: failure() && runner.os != 'Windows'
