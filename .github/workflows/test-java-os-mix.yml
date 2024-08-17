@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+env:
+  GRADLE_DEBUG: ''
+
 jobs:
   build-artifacts:
     uses: ./.github/workflows/build-artifacts.yml
@@ -22,6 +25,27 @@ jobs:
             java-version: 8
     runs-on: ${{ matrix.os-version }}
     steps:
+      - name: Detect and Set Debug Mode (Unixes)
+        if: runner.os != 'Windows'
+        run: |
+          if [ "${{ secrets.ACTIONS_RUNNER_DEBUG }}" == "true" ]; then
+            echo "GRADLE_DEBUG=--debug" >> $GITHUB_ENV
+            echo "Debug mode is enabled."
+          else
+            echo "Debug mode is not enabled."
+          fi
+
+      - name: Detect and Set Debug Mode (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          if ($env:RUNNER_DEBUG) {
+              "GRADLE_DEBUG=--debug" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+              Write-Output "Debug mode is enabled."
+          } else {
+              Write-Output "Debug mode is not enabled."
+          }
+
       - name: Check out
         uses: actions/checkout@v4
 
@@ -45,15 +69,16 @@ jobs:
         run: |
           uname -a
           cd integration-test
-          ../gradlew integrationTest --scan
+          ../gradlew integrationTest --scan ${GRADLE_DEBUG}
 
       - name: Execute integration tests (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
           uname -a
-          cd integration-test
-          cmd /c "echo off && ..\gradlew.bat integrationTest --scan"
+          cd ./integration-test/
+          pwd
+          cmd /c "echo off && ..\gradlew.bat integrationTest --scan $env:GRADLE_DEBUG"
 
       - name: Collect state upon failure (On Unix)
         if: failure() && runner.os != 'Windows'
@@ -74,8 +99,11 @@ jobs:
           echo "Git:"
           git status
           echo "Env:"
-          env
-          echo "PWD:"
-          pwd
+          env | sort
+          $currentDirectory = Get-Location
+          Write-Output "Current Directory: '$currentDirectory'"
           echo "Files:"
-          Get-ChildItem -Recurse -File | Format-Table Name, Length, LastWriteTime
+          $files = Get-ChildItem -Recurse -File
+          foreach ($file in $files) {
+            Write-Output $file.FullName
+          }
