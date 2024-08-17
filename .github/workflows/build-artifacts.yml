@@ -75,8 +75,8 @@ jobs:
           path: |
             **/build
 
-      - name: Collect state upon failure
-        if: failure()
+      - name: Collect state upon failure (On Unix)
+        if: failure() && runner.os != 'Windows'
         run: |
           echo "Git:"
           git status
@@ -86,3 +86,16 @@ jobs:
           pwd
           echo "Files:"
           find * -ls
+
+      - name: Collect state upon failure (On Windows)
+        if: failure() && runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          echo "Git:"
+          git status
+          echo "Env:"
+          env
+          echo "PWD:"
+          pwd
+          echo "Files:"
+          Get-ChildItem -Recurse -File | Format-Table Name, Length, LastWriteTime
