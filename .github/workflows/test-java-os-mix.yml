@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+env:
+  GRADLE_DEBUG: ''
+
 jobs:
   build-artifacts:
     uses: ./.github/workflows/build-artifacts.yml
@@ -22,6 +25,28 @@ jobs:
             java-version: 8
     runs-on: ${{ matrix.os-version }}
     steps:
+      - name: Detect and Set Debug Mode (Unixes)
+        if: runner.os != 'Windows'
+        run: |
+          if [ "${{ secrets.ACTIONS_RUNNER_DEBUG }}" == "true" ]; then
+            echo "GRADLE_DEBUG=--debug" >> $GITHUB_ENV
+            echo "Debug mode is enabled."
+          else
+            echo "Debug mode is not enabled."
+          fi
+
+      - name: Detect and Set Debug Mode (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $debugMode = $env:ACTIONS_RUNNER_DEBUG
+          if ($debugMode -eq "true") {
+            echo "GRADLE_DEBUG=--debug" >> $env:GITHUB_ENV
+            echo "Debug mode is enabled."
+          } else {
+            echo "Debug mode is not enabled."
+          }
+
       - name: Check out
         uses: actions/checkout@v4
 
@@ -45,7 +70,7 @@ jobs:
         run: |
           uname -a
           cd integration-test
-          ../gradlew integrationTest --scan
+          ../gradlew integrationTest --scan ${GRADLE_DEBUG}
 
       - name: Execute integration tests (Windows)
         if: runner.os == 'Windows'
@@ -53,7 +78,9 @@ jobs:
         run: |
           uname -a
           cd integration-test
-          cmd /c "echo off && ..\gradlew.bat integrationTest --scan"
+          pwd
+          $gradle_debug = Get-Item "Env:GRADLE_DEBUG"
+          cmd /c "echo off && ..\gradlew.bat integrationTest --scan $gradle_debug"
 
       - name: Collect state upon failure (On Unix)
         if: failure() && runner.os != 'Windows'
