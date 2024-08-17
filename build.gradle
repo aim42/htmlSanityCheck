@@ -12,6 +12,8 @@ plugins {
     alias(libs.plugins.sonar)
 
     alias(libs.plugins.jreleaser)
+
+    id 'com.dorongold.task-tree' version '4.0.0'
 }
 
 allprojects {
@@ -61,7 +63,7 @@ tasks.register("cleanMavenBuildRepo", Delete) {
     delete mavenBuildRepo
 }
 
-task signAll() {
+tasks.register('signAll') {
     doLast {
         logger.quiet("Signed all artifacts for upload with JReleaser")
     }
@@ -171,7 +173,7 @@ configure(subprojects) {
                     licenses {
                         license {
                             name = 'The Apache License, Version 2.0'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
                         }
                     }
                     developers {
@@ -277,8 +279,7 @@ sonar {
 tasks.register("publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository") {
     group("Publishing")
     description("Publishes all publications to the local Maven repository")
-}
-publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository.configure {
+
     dependsOn(":htmlSanityCheck-core:publishMavenJavaPublicationToMyLocalRepositoryForFullIntegrationTestsRepository",
             ":htmlSanityCheck-gradle-plugin:publishPluginMavenPublicationToMyLocalRepositoryForFullIntegrationTestsRepository",
             ":htmlSanityCheck-gradle-plugin:publishHtmlSanityCheckPluginMarkerMavenPublicationToMyLocalRepositoryForFullIntegrationTestsRepository"
@@ -286,130 +287,49 @@ publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository.confi
 }
 
 final String INTEGRATION_TEST_DIRECTORY = "integration-test"
-final String INTEGRATION_TEST_DIRECTORY_CLI = "${INTEGRATION_TEST_DIRECTORY}/cli"
-final String INTEGRATION_TEST_DIRECTORY_COMMON = "${INTEGRATION_TEST_DIRECTORY}/common"
-final String INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN = "${INTEGRATION_TEST_DIRECTORY}/gradle-plugin"
 
-tasks.register("integrationTestPrepare") {
-    group("Verification")
-    description("Prepare integration tests data")
-
-    doLast {
-        def result = exec {
-            workingDir INTEGRATION_TEST_DIRECTORY_COMMON
-            commandLine System.getProperty("os.name") ==~ /Windows.*/
-                    ? "..\\..\\gradlew.bat"
-                    : "../../gradlew", "clean", "buildReadmeAll"
-        }
-        logger.debug "Script output: $result"
-    }
-}
-tasks.register("cleanIntegrationTestCommon", Delete) {
-    description("Deletes the common data for integration tests")
-
-    doLast {
-        delete(file(INTEGRATION_TEST_DIRECTORY_COMMON))
-    }
-}
-//clean.dependsOn(cleanIntegrationTestCommon)
-integrationTestPrepare.mustRunAfter(cleanIntegrationTestCommon)
-
-tasks.register("integrationTestGradlePluginOnly") {
-    group("Verification")
-    description("Run gradle-plugin integration tests (only)")
-
-    final File testIndex = new File(file(INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN), "${Project.DEFAULT_BUILD_DIR_NAME}/reports/index.html")
-    outputs.file testIndex
-
-    doLast {
-        def result = exec {
-            workingDir INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN
-            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "..\\..\\gradlew.bat" : "../../gradlew", "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}"
-        }
-        logger.debug "Script output: $result"
-        assert testIndex.exists()
-    }
-}
-integrationTestGradlePluginOnly.configure {
-    dependsOn(integrationTestPrepare)
-    mustRunAfter('publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository')
-}
-tasks.register("integrationTestGradlePlugin") {
-    group("Verification")
-    description("Run overall gradle-plugin integration tests (and publish first)")
-}
-integrationTestGradlePlugin.dependsOn('publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        'integrationTestGradlePluginOnly')
-tasks.register("cleanIntegrationTestGradlePlugin", Delete) {
-    group("Build")
-    description("Deletes the result directory from gradle-plugin integration tests")
-
-    doLast {
-        delete(file(INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN))
-    }
-}
-
-tasks.register("integrationTestCliOnly") {
-    group("Verification")
-    description("Run CLI integration tests (only)")
-
-    final String BUILD_REPORTS_DIRECTORY = "${Project.DEFAULT_BUILD_DIR_NAME}/reports"
-    final File testIndex = new File(file(INTEGRATION_TEST_DIRECTORY_CLI), "${BUILD_REPORTS_DIRECTORY}/index.html")
-
-    outputs.file testIndex
-
-    doLast {
-        def result = exec {
-            workingDir INTEGRATION_TEST_DIRECTORY_CLI
-            file(BUILD_REPORTS_DIRECTORY).mkdirs()
-            String hscScriptFileName = "../../htmlSanityCheck-cli/${Project.DEFAULT_BUILD_DIR_NAME}/install/hsc/bin/hsc"
-            String params = "-r ${BUILD_REPORTS_DIRECTORY} ../common/${Project.DEFAULT_BUILD_DIR_NAME}/docs"
-            if (System.getProperty("os.name") ==~ /Windows.*/) {
-                commandLine 'cmd', '/c', "echo off && ${hscScriptFileName.replace('/', '\\')}.bat ${params}"
-            } else {
-                commandLine 'sh', '-c', "${hscScriptFileName} ${params}"
-            }
-        }
-        logger.debug "Script output: ${result}"
-        assert testIndex.exists()
-    }
-}
-integrationTestCliOnly.configure {
-    dependsOn(integrationTestPrepare)
-    mustRunAfter(':htmlSanityCheck-cli:installDist')
-}
-tasks.register("integrationTestCli") {
-    group("Verification")
-    description("Run overall CLI integration tests (and publish first)")
-}
-integrationTestCli.configure {
-    dependsOn(':htmlSanityCheck-cli:installDist', 'integrationTestCliOnly')
-}
-tasks.register("cleanIntegrationTestCli", Delete) {
-    group("Build")
-    description("Deletes the result directory from CLI integration tests")
-
-    doLast {
-        delete(file(INTEGRATION_TEST_DIRECTORY_CLI))
-    }
-}
 tasks.register("integrationTestOnly") {
     group("Verification")
-    description("Run overall integration tests (only)")
-}
-integrationTestOnly.dependsOn(
-        'integrationTestGradlePluginOnly',
-        'integrationTestCliOnly'
-)
+    description("Perform all Integration Tests")
 
+    doLast {
+        def result = exec {
+            workingDir INTEGRATION_TEST_DIRECTORY
+            commandLine((System.getProperty("os.name") ==~ /Windows.*/
+                    ? "..\\gradlew.bat"
+                    : "../gradlew"),
+                    "integrationTest")
+        }
+        logger.debug "Script output: ${result}"
+    }
+}
 tasks.register("integrationTest") {
     group("Verification")
     description("Run overall integration tests")
 }
-integrationTest.dependsOn(
-        'integrationTestGradlePlugin',
-        'integrationTestCli'
+integrationTestOnly.mustRunAfter(publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository,
+        ':htmlSanityCheck-cli:installDist')
+integrationTest.dependsOn(publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository,
+        ':htmlSanityCheck-cli:installDist',
+        integrationTestOnly
 )
+tasks.register("cleanIntegrationTest", Delete) {
+    group("Build")
+    description("Perform clean for Integration Tests")
+
+    doLast {
+        def result = exec {
+            workingDir INTEGRATION_TEST_DIRECTORY
+            commandLine((System.getProperty("os.name") ==~ /Windows.*/
+                    ? "..\\gradlew.bat"
+                    : "../gradlew"),
+                    "clean")
+        }
+        logger.debug "Script output: ${result}"
+    }
+}
+clean.dependsOn(cleanIntegrationTest)
+
 
 /*
  * Copyright Gernot Starke and aim42 contributors.
