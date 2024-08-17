@@ -44,14 +44,16 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           uname -a
-          ./gradlew integrationTestOnly --scan
+          cd integration-test
+          ../gradlew integrationTest --scan
 
       - name: Execute integration tests (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
           uname -a
-          cmd /c "echo off && gradlew.bat integrationTestOnly --scan"
+          cd integration-test
+          cmd /c "echo off && ..\gradlew.bat integrationTest --scan"
 
       - name: Collect state upon failure (On Unix)
         if: failure() && runner.os != 'Windows'

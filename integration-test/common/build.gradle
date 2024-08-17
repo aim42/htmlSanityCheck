@@ -7,27 +7,20 @@ repositories {
 }
 
 def projectRoot = "../.."
-task copyReadmeResources(type: Copy) {
+tasks.register('copyReadmeResources', Copy) {
     group 'Verification'
     description 'Copy resources of READMEs for integration test'
 
-    from projectRoot
-    include '*.properties'
-    into "${Project.DEFAULT_BUILD_DIR_NAME}/docs"
-    doLast {
-        String linkPath = "${Project.DEFAULT_BUILD_DIR_NAME}/docs/images"
-        java.nio.file.Path target = java.nio.file.Paths.get("../../../../src/docs/images")
-        File linkFile = file(linkPath)
-        java.nio.file.Path link = linkFile.toPath()
-        logger.quiet("Creating symlink from '{}' to '{}'", target, link)
-        if (linkFile.exists()) {
-            linkFile.delete()
-        }
-        java.nio.file.Files.createSymbolicLink(link, target)
+    from(projectRoot) {
+        include '*.properties'
     }
+    from("${projectRoot}/src/docs") {
+        include 'images/**'
+    }
+    into "${Project.DEFAULT_BUILD_DIR_NAME}/docs"
 }
 
-task buildReadmeRoot(type: org.asciidoctor.gradle.jvm.AsciidoctorTask) {
+tasks.register('buildReadmeRoot', org.asciidoctor.gradle.jvm.AsciidoctorTask) {
     group 'Verification'
     description 'Convert root README for integration test'
 
@@ -37,13 +30,13 @@ task buildReadmeRoot(type: org.asciidoctor.gradle.jvm.AsciidoctorTask) {
     }
     baseDirFollowsSourceFile()
     outputDir file("${Project.DEFAULT_BUILD_DIR_NAME}/docs")
-    attributes (
+    attributes(
             "imagesdir": "images"
     )
 }
 buildReadmeRoot.dependsOn(copyReadmeResources)
 
-task buildReadmeGradlePlugin(type: org.asciidoctor.gradle.jvm.AsciidoctorTask) {
+tasks.register('buildReadmeGradlePlugin', org.asciidoctor.gradle.jvm.AsciidoctorTask) {
     group 'Verification'
     description 'Convert Gradle Plugin README for integration test'
 
@@ -53,13 +46,13 @@ task buildReadmeGradlePlugin(type: org.asciidoctor.gradle.jvm.AsciidoctorTask) {
     }
     baseDirFollowsSourceFile()
     outputDir file("${Project.DEFAULT_BUILD_DIR_NAME}/docs")
-    attributes (
+    attributes(
             "imagesdir": "../images"
     )
 }
 buildReadmeGradlePlugin.dependsOn(buildReadmeRoot)
 
-task buildReadmeAll() {
+tasks.register('buildReadmeAll') {
     group 'Verification'
     description 'Convert all READMEs for integration test'
 }
