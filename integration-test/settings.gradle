@@ -1,3 +1,17 @@
+plugins {
+    // to report build results back to gradle.org
+    id 'com.gradle.develocity' version '3.17.6'
+}
+
+develocity {
+    buildScan {
+        termsOfUseUrl = 'https://gradle.com/terms-of-service'
+        termsOfUseAgree = 'yes'
+
+        publishing.onlyIf { System.getenv("GRADLE_BUILD_SCAN") == 'true' }
+    }
+}
+
 rootProject.name = 'hsc-integration-test'
 
 /*
