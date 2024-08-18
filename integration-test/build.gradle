@@ -27,9 +27,11 @@ tasks.register("integrationTestPrepare") {
     doLast {
         def result = exec {
             workingDir INTEGRATION_TEST_DIRECTORY_COMMON
-            commandLine ((System.getProperty("os.name") ==~ /Windows.*/
-                    ? "..\\..\\gradlew.bat"
-                    : "../../gradlew"), "clean", "buildReadmeAll")
+            if (System.getProperty("os.name") ==~ /Windows.*/) {
+                commandLine('cmd', '/c', '..\\..\\gradlew.bat', "clean", "buildReadmeAll")
+            } else {
+                commandLine("../../gradlew", "clean", "buildReadmeAll")
+            }
         }
         logger.debug "Script output: $result"
     }
@@ -65,9 +67,11 @@ tasks.register("integrationTestGradlePlugin") {
     doLast {
         def result = exec {
             workingDir INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN
-            commandLine ((System.getProperty("os.name") ==~ /Windows.*/
-                    ? "..\\..\\gradlew.bat"
-                    : "../../gradlew"), "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}")
+            if (System.getProperty("os.name") ==~ /Windows.*/) {
+                commandLine('cmd', '/c', '..\\..\\gradlew.bat', "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}")
+            } else {
+                commandLine("../../gradlew", "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}")
+            }
         }
         logger.debug "Script output: $result"
         assert testIndex.exists()
