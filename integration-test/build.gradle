@@ -5,12 +5,6 @@ version = htmlSanityCheckVersion
 final String INTEGRATION_TEST_DIRECTORY_COMMON = "common"
 final String INTEGRATION_TEST_DIRECTORY_COMMON_BUILD = "common/${BUILD_DIRECTORY}"
 
-final static String gradleCall() {
-    return System.getProperty("os.name") ==~ /Windows.*/
-            ? "..\\..\\gradlew.bat"
-            : "../../gradlew"
-}
-
 tasks.register("cleanIntegrationTestCommon", Delete) {
     group("Build")
     description("Deletes the common data for integration tests")
@@ -33,7 +27,11 @@ tasks.register("integrationTestPrepare") {
     doLast {
         def result = exec {
             workingDir INTEGRATION_TEST_DIRECTORY_COMMON
-            commandLine (gradleCall(), "clean", "buildReadmeAll")
+            if (System.getProperty("os.name") ==~ /Windows.*/) {
+                commandLine('cmd', '/c', '..\\..\\gradlew.bat', "clean", "buildReadmeAll")
+            } else {
+                commandLine("../../gradlew", "clean", "buildReadmeAll")
+            }
         }
         logger.debug "Script output: $result"
     }
@@ -69,7 +67,11 @@ tasks.register("integrationTestGradlePlugin") {
     doLast {
         def result = exec {
             workingDir INTEGRATION_TEST_DIRECTORY_GRADLE_PLUGIN
-            commandLine (gradleCall(), "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}")
+            if (System.getProperty("os.name") ==~ /Windows.*/) {
+                commandLine('cmd', '/c', '..\\..\\gradlew.bat', "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}")
+            } else {
+                commandLine("../../gradlew", "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}")
+            }
         }
         logger.debug "Script output: $result"
         assert testIndex.exists()
