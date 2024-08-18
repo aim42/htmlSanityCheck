@@ -72,6 +72,18 @@ jobs:
           path: public
           retention-days: 7
 
+      - name: Collect state upon failure
+        if: failure()
+        run: |
+          echo "Git:"
+          git status
+          echo "Env:"
+          env
+          echo "PWD:"
+          pwd
+          echo "Files:"
+          find * -ls
+
   publish:
     runs-on: ubuntu-latest
     needs: pages
