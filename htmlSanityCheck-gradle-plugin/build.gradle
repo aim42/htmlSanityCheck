@@ -14,8 +14,8 @@ tasks.named('check') {
 }
 
 gradlePlugin {
-    website = 'https://aim42.github.io/htmlSanityCheck/'
-    vcsUrl = 'https://github.com/aim42/HtmlSanityCheck.git'
+    website = rootProject.ext.urls['website']
+    vcsUrl = rootProject.ext.urls['scm']
     plugins {
         htmlSanityCheck {
             id = 'org.aim42.htmlSanityCheck'

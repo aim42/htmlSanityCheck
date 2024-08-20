@@ -45,7 +45,7 @@ allprojects {
 }
 
 ext.urls = [
-        website            : "https://aim42.github.io/htmlSanityCheck/",
+        website            : "https://hsc.aim42.org/",
         issueTracker       : 'https://github.com/aim42/htmlSanityCheck/issues',
 
         scm                : 'https://github.com/aim42/htmlSanityCheck.git',
