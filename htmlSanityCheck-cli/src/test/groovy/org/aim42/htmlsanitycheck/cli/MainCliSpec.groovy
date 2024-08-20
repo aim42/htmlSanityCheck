@@ -50,10 +50,10 @@ class MainCliSpec extends Specification {
 
         where:
         args                        | expectedExitCode | runnerWasCalled
-        "-h"                        | 0                | false
-        "--help"                    | 0                | false
-        "-V"                        | 0                | false
-        "--version"                 | 0                | false
+        "-h"                        | 2                | false
+        "--help"                    | 2                | false
+        "-V"                        | 0                | true
+        "--version"                 | 0                | true
         ""                          | 0                | true
         "."                         | 0                | true
         "-r /tmp/results"           | 0                | true
@@ -68,8 +68,8 @@ class MainCliSpec extends Specification {
         Main.main(args)
 
         then:
-        outContent.toString().contains("Usage: hsc")
-        outContent.toString().contains("Check HTML files for Sanity")
+        errContent.toString().contains("Usage: hsc")
+        errContent.toString().contains("Check HTML files for Sanity")
     }
 
     def "test with empty source directory"() {
