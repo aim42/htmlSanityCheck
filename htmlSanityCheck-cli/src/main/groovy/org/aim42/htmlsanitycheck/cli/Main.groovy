@@ -2,6 +2,7 @@ package org.aim42.htmlsanitycheck.cli
 
 import org.aim42.htmlsanitycheck.AllChecksRunner
 import org.aim42.htmlsanitycheck.Configuration
+import org.aim42.htmlsanitycheck.ProductInformation
 import org.aim42.htmlsanitycheck.check.AllCheckers
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -16,7 +17,6 @@ import java.nio.file.Paths
 // see end-of-file for license information
 
 @Command(name = "hsc", mixinStandardHelpOptions = true,
-        version = "hsc 2.0.0",
         description = "Check HTML files for Sanity",
         showDefaultValues = true
 )
@@ -28,6 +28,9 @@ class Main implements Runnable {
     protected Main(MainRunner runner) {
         this.runner = runner
     }
+
+    @Option(names = ["-V", "--version"], description = "Display version information")
+    boolean versionRequested
 
     @Option(names = ["-r", "--resultsDir"], description = "Results Directory")
     String resultsDirectoryName = "/tmp/results"
@@ -68,6 +71,11 @@ class Main implements Runnable {
         CommandLine cmd
 
         void run() {
+            if (main.versionRequested) {
+                System.out.println("Version: ${ProductInformation.VERSION}")
+                return
+            }
+
             def srcDocuments = main.srcDocs ?: main.findFiles()
             if (!srcDocuments) {
                 System.err.println("Please specify at least one src document (either explicitly or implicitly)")
