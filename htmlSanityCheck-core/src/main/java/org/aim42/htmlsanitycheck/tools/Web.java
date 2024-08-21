@@ -158,6 +158,9 @@ public class Web {
                 || startsWithIP(imgSrc);
     }
 
+    public static boolean isVirtualURL(String resource) {
+        return resource.startsWith("javascript:");
+    }
 
     /**
      * Checks if this String represents a data-image-URI
@@ -211,6 +214,7 @@ public class Web {
                 || (link.isEmpty())
                 || isCrossReference(link)      // "#link" or similar
                 || isRemoteURL(link)           // "mailto:", "http" etc
+                || isVirtualURL(link)          // "javascript:" ...
         ) {
             return false;
         } else {
