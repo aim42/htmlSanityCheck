@@ -6,9 +6,7 @@ import picocli.CommandLine
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import java.nio.file.Files
-
-class MainCliSpec extends Specification {
+class HscCommandSpec extends Specification {
 
     private final static VALID_HTML = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"><html><head></head><body></body><html>"""
     private final static INVALID_HTML = """<body><span id="id"/><span id="id"/></body> """
@@ -38,8 +36,8 @@ class MainCliSpec extends Specification {
     @Unroll
     def "test hsc with #args"() {
         given:
-        Main.MainRunner myAppRunner = Mock(Main.MainRunner)
-        def cmdLine = new CommandLine(new Main(myAppRunner))
+        HscCommand.HscRunner myAppRunner = Mock(HscCommand.HscRunner)
+        def cmdLine = new CommandLine(new HscCommand(myAppRunner))
 
         when:
         def exitCode = cmdLine.execute(args.split())
@@ -65,7 +63,7 @@ class MainCliSpec extends Specification {
         String[] args = ["-h"]
 
         when:
-        Main.main(args)
+        HscCommand.main(args)
 
         then:
         errContent.toString().contains("Usage: hsc")
@@ -82,7 +80,7 @@ class MainCliSpec extends Specification {
         String[] args = [testProjectDir.getRoot()]
 
         when:
-        Main.main(args)
+        HscCommand.main(args)
 
         then:
         mockSecurityManager.exitCalled == 1
@@ -99,7 +97,7 @@ class MainCliSpec extends Specification {
         String[] args = [testProjectDir.getRoot()]
 
         when:
-        Main.main(args)
+        HscCommand.main(args)
 
         then:
         outContent.toString().contains("found 0 issue, 100% successful.")
