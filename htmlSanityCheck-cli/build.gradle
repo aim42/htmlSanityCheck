@@ -21,7 +21,7 @@ compileGroovy {
 }
 
 application {
-    mainClass = 'org.aim42.htmlsanitycheck.cli.Main'
+    mainClass = 'org.aim42.htmlsanitycheck.cli.HscCommand'
     applicationName = 'hsc'
 }
 
