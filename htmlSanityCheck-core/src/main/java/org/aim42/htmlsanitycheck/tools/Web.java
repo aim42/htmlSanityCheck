@@ -34,23 +34,22 @@ public class Web {
 
     public static final Set<Integer> HTTP_REDIRECT_CODES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
             // tag::HTTP_REDIRECT_CODES[]
-            300, 301, 302, 303, 304,
-            305, 306, 307, 308
+            301, 302, 303, 307, 308
             // end::HTTP_REDIRECT_CODES[]
     )));
 
-    private static Set<Integer> join (Set<Integer> first, Set<Integer> second) {
+    private static Set<Integer> extendedByRedirects(Set<Integer> first) {
         Set<Integer> result = new HashSet<>(first);
-        result.addAll(second);
+        result.addAll(Web.HTTP_REDIRECT_CODES);
 
         return Collections.unmodifiableSet(result);
     }
 
-    public static final Set<Integer> HTTP_WARNING_CODES = join (Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+    public static final Set<Integer> HTTP_WARNING_CODES = extendedByRedirects(new HashSet<>(Arrays.asList(
             // tag::HTTP_WARNING_CODES[]
             100, 101, 102
             // end::HTTP_WARNING_CODES[]
-    ))), HTTP_REDIRECT_CODES);
+    )));
 
     public static final Set<Integer> HTTP_ERROR_CODES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
             // tag::HTTP_ERROR_CODES[]
