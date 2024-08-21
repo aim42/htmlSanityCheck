@@ -20,12 +20,12 @@ import java.nio.file.Paths
         description = "Check HTML files for Sanity",
         showDefaultValues = true
 )
-class Main implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(Main.class)
+class HscCommand implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(HscCommand.class)
 
-    MainRunner runner
+    HscRunner runner
 
-    protected Main(MainRunner runner) {
+    protected HscCommand(HscRunner runner) {
         this.runner = runner
     }
 
@@ -48,11 +48,11 @@ class Main implements Runnable {
     File[] srcDocs
 
     static void main(String[] args) {
-        MainRunner mainRunner = new MainRunner()
-        Main main = new Main(mainRunner)
-        CommandLine cmd = new CommandLine(main)
-        mainRunner.setMain(main)
-        mainRunner.setCmd(cmd)
+        HscRunner hscRunner = new HscRunner()
+        HscCommand hscCommand = new HscCommand(hscRunner)
+        CommandLine cmd = new CommandLine(hscCommand)
+        hscRunner.setHscCommand(hscCommand)
+        hscRunner.setCmd(cmd)
         cmd.execute(args)
     }
 
@@ -65,27 +65,27 @@ class Main implements Runnable {
                 .collect { it.toFile() }
     }
 
-    static class MainRunner {
+    static class HscRunner {
 
-        Main main
+        HscCommand hscCommand
         CommandLine cmd
 
         void run() {
-            if (main.versionRequested) {
+            if (hscCommand.versionRequested) {
                 System.out.println("Version: ${ProductInformation.VERSION}")
                 return
             }
 
-            def srcDocuments = main.srcDocs ?: main.findFiles()
+            def srcDocuments = hscCommand.srcDocs ?: hscCommand.findFiles()
             if (!srcDocuments) {
                 System.err.println("Please specify at least one src document (either explicitly or implicitly)")
                 cmd.usage(System.out)
                 System.exit(1)
             }
 
-            var resultsDirectory = new File(main.resultsDirectoryName)
+            var resultsDirectory = new File(hscCommand.resultsDirectoryName)
             var configuration = Configuration.builder()
-                    .sourceDir(main.srcDir)
+                    .sourceDir(hscCommand.srcDir)
                     .sourceDocuments(srcDocuments as Set)
                     .checkingResultsDir(resultsDirectory)
                     .checksToExecute(AllCheckers.CHECKER_CLASSES)
