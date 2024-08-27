@@ -18,7 +18,7 @@ class HtmlSanityCheckTaskFunctionalTest extends Specification {
                                             '7.6.3', // latest 7.x
                                             '8.0.2', '8.1.1', '8.2.1', '8.3', '8.4',
                                              '8.5', '8.6', '8.7', '8.8', '8.9',
-                                             '8.10' // all 8.x (latest patches)
+                                             '8.10', '8.10.1' // all 8.x (latest patches)
                                            ]
 
     @Rule
