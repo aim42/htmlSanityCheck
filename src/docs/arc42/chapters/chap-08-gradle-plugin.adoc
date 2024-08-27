@@ -13,7 +13,7 @@ we implement a lean wrapper as described in the Gradle user guide.
 
 [source, groovy]
 ----
-include::{gradle-plugin-source-path}/htmlsanitycheck/HtmlSanityCheckPlugin.groovy[tag=gradle-plugin-implementation]
+include::{gradle-plugin-source-path}/htmlsanitycheck/gradle/HtmlSanityCheckPlugin.groovy[tag=gradle-plugin-implementation]
 ----
 
 ==== Directory Structure and Required Files

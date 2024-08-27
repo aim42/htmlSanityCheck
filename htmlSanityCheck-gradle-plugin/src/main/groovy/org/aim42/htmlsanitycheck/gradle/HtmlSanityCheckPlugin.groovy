@@ -1,6 +1,6 @@
 // see end-of-file for license information
 
-package org.aim42.htmlsanitycheck
+package org.aim42.htmlsanitycheck.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -12,12 +12,10 @@ class HtmlSanityCheckPlugin implements Plugin<Project> {
     final static String HTML_SANITY_CHECK = "htmlSanityCheck"
 
     void apply(Project project) {
-
-        project.task( HTML_SANITY_CHECK,
-                type: HtmlSanityCheckTask,
-                description: "performs semantic checks on html files",
-                group: LifecycleBasePlugin.VERIFICATION_GROUP)
-
+        project.tasks.register(HTML_SANITY_CHECK, HtmlSanityCheckTask) {
+            it.description = "performs semantic checks on html files"
+            it.group = LifecycleBasePlugin.VERIFICATION_GROUP
+        }
     }
 }
 // end::gradle-plugin-implementation[]

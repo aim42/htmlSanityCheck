@@ -1,5 +1,7 @@
-package org.aim42.htmlsanitycheck
+package org.aim42.htmlsanitycheck.gradle
 
+import org.aim42.htmlsanitycheck.AllChecksRunner
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.check.AllCheckers
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
@@ -98,8 +100,8 @@ class HtmlSanityCheckTask extends DefaultTask {
         outputs.upToDateWhen { false }
 
         // give sensible default for output directory, see https://github.com/aim42/htmlSanityCheck/issues/205
-        checkingResultsDir = new File(project.buildDir, '/reports/htmlSanityCheck/')
-        junitResultsDir = new File(project.buildDir, '/test-results/htmlSanityCheck/')
+        checkingResultsDir = new File(project.DEFAULT_BUILD_DIR_NAME, '/reports/htmlSanityCheck/')
+        junitResultsDir = new File(project.DEFAULT_BUILD_DIR_NAME, '/test-results/htmlSanityCheck/')
 
 
     }
@@ -159,9 +161,6 @@ Your build configuration included 'failOnErrors=true', and ${nrOfFindingsOnAllPa
 See ${checkingResultsDir} for a detailed report."""
                 throw new GradleException(failureMsg)
             }
-        } else {
-            logger.warn("""Fatal configuration errors preventing checks:\n
-            ${myConfig.toString()}""")
         }
     }
 
@@ -177,7 +176,7 @@ See ${checkingResultsDir} for a detailed report."""
     protected Configuration setupConfiguration() {
 
         Configuration result = Configuration.builder()
-                .sourceDocuments(sourceDocuments.files)
+                .sourceDocuments(sourceDocuments?.files)
                 .sourceDir(sourceDir)
                 .checkingResultsDir(checkingResultsDir)
                 .junitResultsDir(junitResultsDir)
