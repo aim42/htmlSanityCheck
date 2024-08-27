@@ -33,7 +33,7 @@ plugins {
 
 === Legacy Installation
 
-In case of https://docs.gradle.org/current/userguide/plugins.html#sec:old_plugin_application[legacy plugin usage]
+In the case of https://docs.gradle.org/current/userguide/plugins.html#sec:old_plugin_application[legacy plugin usage]
 
 .build.gradle
 [source,groovy,subs="attributes+"]
@@ -55,7 +55,7 @@ apply plugin: 'org.aim42.{project}'
 <1> In case you would like to use a development version (or even branch), check out <<sec:development-versions,development versions>>.
 <2> Beginning with version `2.x` all releases will be published to https://central.sonatype.com/artifact/org.aim42.htmlSanityCheck/org.aim42.htmlSanityCheck.gradle.plugin[Maven Central].
 <3> The https://plugins.gradle.org[Gradle Plugin Portal] contains https://plugins.gradle.org/plugin/org.aim42.htmlSanityCheck[most versions] or will redirect downloads of newer versions to Maven Central.
-<4> Check out <<box:current-version,current version>>.
+<4> Check out <<box:current-version,the current version>>.
 
 [[box:current-version]]
 [IMPORTANT]
@@ -317,6 +317,15 @@ htmlSanityCheck {
 
 ----
 
+== Compatibility
+
+The Plugin has been tested with the following Gradle versions:
+
+[source]
+.Tested Gradle versions
+----
+include::src/test/groovy/org/aim42/htmlsanitycheck/gradle/HtmlSanityCheckTaskFunctionalSpec.groovy[tag=tested-gradle-versions,indent=0]
+----
 
 [[sec:development-versions]]
 == Development versions
