@@ -1,16 +1,20 @@
 package org.aim42.htmlsanitycheck.gradle
 
 import org.aim42.htmlsanitycheck.MisconfigurationException
+import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.testfixtures.ProjectBuilder
-import spock.lang.Specification
 
-class HtmlSanityCheckTaskSpec extends Specification {
+class HtmlSanityCheckTaskSpec extends HtmlSanityCheckBaseSpec {
+    Project project
+    Task task
+
+    def setup () {
+        project = ProjectBuilder.builder().withProjectDir(testProjectDir.root).build()
+        task = project.tasks.register(HtmlSanityCheckPlugin.HTML_SANITY_CHECK, HtmlSanityCheckTask).get()
+    }
 
     def "should initialize task with defaults"() {
-        given:
-        def project = ProjectBuilder.builder().build()
-        def task = project.tasks.register('htmlSanityCheck', HtmlSanityCheckTask)
-
         expect:
         task.failOnErrors == false
         task.httpConnectionTimeout == 5000
@@ -20,17 +24,12 @@ class HtmlSanityCheckTaskSpec extends Specification {
         task.junitResultsDir == new File(project.DEFAULT_BUILD_DIR_NAME, '/test-results/htmlSanityCheck/')
     }
 
-    def "should set source directory and files"() {
+    def "should work with simple file"() {
         given:
-        def project = ProjectBuilder.builder().build()
-        def task = project.tasks.register('htmlSanityCheck', HtmlSanityCheckTask.class)
-        def sourceDir = new File(project.DEFAULT_BUILD_DIR_NAME, "/resources/test/resources")
-        sourceDir.mkdirs()
-        def testFile = new File(sourceDir, "file-to-test.html")
-        testFile << """<html></html>"""
+        htmlFile << VALID_HTML
 
         when:
-        task.sourceDir = sourceDir
+        task.setSourceDir(testProjectDir.root)
         task.httpSuccessCodes = [299]
         task.httpErrorCodes = [599]
         task.httpWarningCodes = [199]
@@ -41,11 +40,6 @@ class HtmlSanityCheckTaskSpec extends Specification {
     }
 
     def "should throw exception if configuration is invalid"() {
-        given:
-        def project = ProjectBuilder.builder().build()
-        def task = project.tasks.register('htmlSanityCheck', HtmlSanityCheckTask.class)
-        task.failOnErrors = true
-
         when:
         task.sanityCheckHtml()
 
