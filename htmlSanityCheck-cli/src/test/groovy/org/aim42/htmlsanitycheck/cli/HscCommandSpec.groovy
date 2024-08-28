@@ -77,7 +77,7 @@ class HscCommandSpec extends Specification {
         SecurityManager originalSecurityManager = System.getSecurityManager()
         SecurityManager mockSecurityManager = new NoExitSecurityMock(originalSecurityManager)
         System.setSecurityManager(mockSecurityManager)
-        String[] args = [testProjectDir.getRoot()]
+        String[] args = [testProjectDir.root]
 
         when:
         HscCommand.main(args)
@@ -94,7 +94,7 @@ class HscCommandSpec extends Specification {
     def "test with valid HTML file"() {
         given:
         htmlFile << VALID_HTML
-        String[] args = [testProjectDir.getRoot()]
+        String[] args = [testProjectDir.root]
 
         when:
         HscCommand.main(args)
