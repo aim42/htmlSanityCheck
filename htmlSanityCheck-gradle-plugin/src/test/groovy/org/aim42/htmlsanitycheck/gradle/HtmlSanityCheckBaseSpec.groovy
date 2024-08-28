@@ -41,4 +41,5 @@ class HtmlSanityCheckBaseSpec extends Specification {
             }
         """.stripIndent()
     }
+
 }

@@ -4,7 +4,6 @@ import org.aim42.htmlsanitycheck.MisconfigurationException
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
-import spock.lang.Specification
 
 class HtmlSanityCheckTaskSpec extends HtmlSanityCheckBaseSpec {
     Project project
@@ -16,10 +15,6 @@ class HtmlSanityCheckTaskSpec extends HtmlSanityCheckBaseSpec {
     }
 
     def "should initialize task with defaults"() {
-        given:
-        def project = ProjectBuilder.builder().build()
-        def task = project.tasks.register('htmlSanityCheck', HtmlSanityCheckTask)
-
         expect:
         task.failOnErrors == false
         task.httpConnectionTimeout == 5000
@@ -45,11 +40,6 @@ class HtmlSanityCheckTaskSpec extends HtmlSanityCheckBaseSpec {
     }
 
     def "should throw exception if configuration is invalid"() {
-        given:
-        def project = ProjectBuilder.builder().build()
-        def task = project.tasks.register('htmlSanityCheck', HtmlSanityCheckTask.class)
-        task.failOnErrors = true
-
         when:
         task.sanityCheckHtml()
 
