@@ -25,7 +25,7 @@ class HtmlReporterTest {
     @Before
     void setUp() {
         runResults = new PerRunResults()
-        htmlReporter = new HtmlReporter(runResults, tempDir.getRoot().getAbsolutePath())
+        htmlReporter = new HtmlReporter(runResults, tempDir.root.getAbsolutePath())
     }
 
     @Test
@@ -189,7 +189,7 @@ class HtmlReporterTest {
 
     private String getResultContents() {
         htmlReporter.closeReport()
-        File reportFile = new File(tempDir.getRoot(), "index.html")
+        File reportFile = new File(tempDir.root, "index.html")
         try {
             String content = new String(Files.readAllBytes(reportFile.toPath()))
             return content
