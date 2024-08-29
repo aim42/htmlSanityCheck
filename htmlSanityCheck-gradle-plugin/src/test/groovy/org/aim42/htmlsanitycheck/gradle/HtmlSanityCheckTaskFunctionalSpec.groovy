@@ -1,8 +1,4 @@
 package org.aim42.htmlsanitycheck.gradle
-<<<<<<<< HEAD:htmlSanityCheck-gradle-plugin/src/test/groovy/org/aim42/htmlsanitycheck/gradle/HtmlSanityCheckTaskFunctionalSpec.groovy
-
-========
->>>>>>>> f9828f0 (#318 Move Gradle plugin classes to sub package):htmlSanityCheck-gradle-plugin/src/test/groovy/org/aim42/htmlsanitycheck/gradle/HtmlSanityCheckTaskFunctionalTest.groovy
 
 import org.gradle.testkit.runner.GradleRunner
 import org.jsoup.Jsoup
