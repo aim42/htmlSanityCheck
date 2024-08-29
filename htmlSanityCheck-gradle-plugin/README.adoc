@@ -321,11 +321,23 @@ htmlSanityCheck {
 
 The Plugin has been tested with the following Gradle versions:
 
-[source]
+[source,groovy]
 .Tested Gradle versions
 ----
 include::src/test/groovy/org/aim42/htmlsanitycheck/gradle/HtmlSanityCheckTaskFunctionalSpec.groovy[tag=tested-gradle-versions,indent=0]
 ----
+
+[NOTE]
+====
+The full range of Gradle versions is only tested in CI (GitHub action).
+The local test only tests the latest Gradle version:
+
+[source,groovy]
+.Restricting versions to the latest versions locally
+----
+include::src/test/groovy/org/aim42/htmlsanitycheck/gradle/HtmlSanityCheckTaskFunctionalSpec.groovy[tag=restrict-gradle-versions-locally,indent=0]
+----
+====
 
 [[sec:development-versions]]
 == Development versions

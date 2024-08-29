@@ -4,18 +4,37 @@ package org.aim42.htmlsanitycheck.gradle
 import org.gradle.testkit.runner.GradleRunner
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.lang.Unroll
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
-    private final static GRADLE_VERSIONS = [ // 6.x or older does not work!
-                                             '7.6.3', // latest 7.x
-                                             '8.0.2', '8.1.1', '8.2.1', '8.3', '8.4',
-                                             '8.5', '8.6', '8.7', '8.8', '8.9',
-                                             '8.10.1' // all 8.x (latest patches)
-    ]
+
+    // @Slf4j does not initialize logger for static initializer
+    private static final Logger log = LoggerFactory.getLogger(HtmlSanityCheckTaskFunctionalSpec)
+
+    private final static List<String> getVersions(List<String> versions) {
+        // tag::restrict-gradle-versions-locally[]
+        def result = System.getenv("GITHUB_ACTION") ? versions : [versions[-1]]
+        // end::restrict-gradle-versions-locally[]
+        log.warn("Testing HSC Gradle plugin with versions '{}'", result)
+        return result
+    }
+
+    private final static String[] GRADLE_VERSIONS = getVersions([
+            // tag::tested-gradle-versions[]
+            // Test execution in CI will execute all versions.
+            // Local test is restricted to latest version
+            // 6.x or older does not work!
+            '7.6.3', // latest 7.x
+            '8.0.2', '8.1.1', '8.2.1', '8.3', '8.4',
+            '8.5', '8.6', '8.7', '8.8', '8.9',
+            '8.10.1' // all 8.x minor versions (latest patch release)
+            // end::tested-gradle-versions[]
+    ])
 
     @Unroll
     def "can execute htmlSanityCheck task with Gradle version #gradleVersion"() {
@@ -24,7 +43,7 @@ class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
         createBuildFile()
 
         when:
-        def result = runnerForHtmlSanityCheckTask(gradleVersion).build()
+        def result = runnerForHtmlSanityCheckTask(gradleVersion as String).build()
 
         then:
         result.task(":htmlSanityCheck").outcome == SUCCESS
@@ -43,7 +62,7 @@ class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
 
         when:
 
-        def result = runnerForHtmlSanityCheckTask(gradleVersion).buildAndFail()
+        def result = runnerForHtmlSanityCheckTask(gradleVersion as String).buildAndFail()
 
         then:
         result.task(":htmlSanityCheck").outcome == FAILED
@@ -66,7 +85,7 @@ class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
         """)
 
         when:
-        def result = runnerForHtmlSanityCheckTask(gradleVersion).build()
+        def result = runnerForHtmlSanityCheckTask(gradleVersion as String).build()
 
         then:
         result.task(":htmlSanityCheck").outcome == SUCCESS
@@ -84,7 +103,7 @@ class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
         """)
 
         when:
-        runnerForHtmlSanityCheckTask(gradleVersion).build()
+        runnerForHtmlSanityCheckTask(gradleVersion as String).build()
         def htmlReportFile = new File(testProjectDir.root, "build/index.html")
 
         then:
