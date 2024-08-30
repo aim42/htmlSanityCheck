@@ -5,6 +5,7 @@
 :jbake-title: HTML Sanity Check (Generic)
 
 ifndef::projectRootDir[:projectRootDir: ../../..]
+:xrefToCli: 01_cli.adoc
 :xrefToGradlePlugin: 01_gradle-plugin.adoc
 
 include::{projectRootDir}/README.adoc[leveloffset=+1]
