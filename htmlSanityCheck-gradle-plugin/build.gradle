@@ -1,14 +1,9 @@
 plugins {
     id 'java-gradle-plugin'
-    id 'jacoco-report-aggregation'
 
     // The CodeNarc plugin performs quality checks on your project’s
     // Groovy source files using CodeNarc and generates reports from these checks.
     // id 'codenarc'
-}
-
-tasks.named('check') {
-    dependsOn tasks.named('testCodeCoverageReport', JacocoReport)
 }
 
 gradlePlugin {
