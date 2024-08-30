@@ -8,6 +8,8 @@ buildscript {
 plugins {
     id 'java'
 
+    id 'jacoco-report-aggregation'
+
     alias(libs.plugins.gradle.versions)
     alias(libs.plugins.sonar)
 
@@ -40,6 +42,25 @@ allprojects {
                     println "=" * 80
                 }
     }
+}
+
+dependencies {
+    // Add all subprojects to the aggregation
+    subprojects.forEach {
+        jacocoAggregation it
+    }
+}
+
+reporting {
+    reports {
+        testCodeCoverageReport(JacocoCoverageReport) {
+            testType = TestSuiteType.UNIT_TEST
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('testCodeCoverageReport', JacocoReport)
 }
 
 ext.urls = [
