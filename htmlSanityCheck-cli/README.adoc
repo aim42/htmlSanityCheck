@@ -1,0 +1,208 @@
+= HSC CLI Module
+:doctype: book
+include::../asciidoctor-config.ad[]
+
+ifdef::env-github[]
+:imagesdir: ../src/docs/images
+endif::env-github[]
+ifndef::xrefToManual[:xrefToManual: ../README.adoc]
+:gradleProperties: link:../gradle.properties[]
+ifdef::jbake-type[:gradleProperties: {project-url}/blob/develop/gradle.properties[]]
+
+The Command Line Interface (CLI) module of HTML Sanity Check (xref:{xrefToManual}[HSC]) enables to check generated or native HTML documentation from the command line.
+
+== Installation (Command Line Interface)
+
+=== Prerequisites
+
+* Java 8 or higher (`java` executable required on the OS search path (`${PATH} on Linux/macOS, `%path%` on Windows).
+
+=== Download
+
+Download the latest version of the HSC CLI from the https://github.com/aim42/htmlSanityCheck/releases[release page].
+
+== Usage
+
+The CLI tool can be executed with the following command.
+If the `sourceDirectory` is omitted, HSC uses the current directory as base-directory to search for HTML files.
+
+Linux / macOS::
++
+[source,sh]
+----
+hsc [ options ] [ sourceDirectory ]
+----
+
+Windows::
++
+[source,powershell]
+----
+hsc.bat [ options ] [ sourceDirectory ]
+----
+
+=== Options
+
+The CLI tool exposes a few options as part of its configuration:
+
+[horizontal]
+<sourceDirectory> (optional):: Directory where the HTML files are located.
++
+Type: Directory
++
+Default: Currrent directory (`.`)
+
+`--sourceDocuments` <...> (optional):: An override to process several source files, which must be a subset of all files available in `sourceDir`.
++
+Type: List of files
++
+Default: All files in `sourceDir` whose names end with `.html`
+
+`--checkingResultsDir` <...> (optional):: Directory where HSC writes the checking results.
++
+Type: Directory
++
+Default: `./reports/htmlSanityCheck/`
+
+`--junitResultsDir` <...> (optional):: Directory where HSC writes the results in JUnit XML format.
+JUnit XML can be read by many tools, including CI environments.
++
+Type: Directory
++
+Default: `./test-results/htmlchecks/`
+
+`--failOnErrors` (optional):: Fail the build if any error was found in the checked pages.
++
+Type: Boolean
++
+Default: `false`
+
+`--httpConnectionTimeout` <value> (optional):: Timeout for HTTP requests in milliseconds.
++
+Type: Integer
++
+Default: `5000`
+
+`--ignoreLocalHost` (optional):: Ignore localhost as hostname.
++
+Type: Boolean
++
+Default: `false`
+
+`--ignoreIPAddresses` (optional):: Ignore IP addresses as hostname.
++
+Type: Boolean
++
+Default: `false`
+
+`--checkerClasses` <...> (optional):: The set of checker classes to be executed.
++
+Type: List
++
+Default:
++
+[source,groovy]
+.Checker Classes
+----
+include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/check/AllCheckers.java[tag=checker-classes,indent=0]
+----
+
+
+`--httpWarningCodes` (optional):: HTTP response codes treated as warning.
++
+Type: List
++
+Default:
++
+[source,groovy]
+----
+include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/Web.java[tag=HTTP_WARNING_CODES,indent=0]
+// Redirects included
+include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/Web.java[tag=HTTP_REDIRECT_CODES,indent=0]
+----
++
+[NOTE]
+.HTTP Redirects
+====
+Note that HTTP redirects are treated as a warning to make the user aware of the correct or new location (cf. {project-issues}/244[Issue 244]).
+Some HSC reports contain the respective location.
+====
+
+`--httpErrorCodes` (optional):: HTTP response codes treated as error.
++
+Type: List
++
+Default:
++
+[source,groovy]
+----
+include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/Web.java[tag=HTTP_ERROR_CODES,indent=0]
+----
+
+`--httpSuccessCodes` (optional):: HTTP response codes treated as success.
++
+Type: List
++
+Default:
++
+[source,groovy]
+----
+include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/Web.java[tag=HTTP_SUCCESS_CODES,indent=0]
+----
+
+[[sidebar:http-response-codes]]
+.HTTP response code handling
+****
+The lists shown above are the default HTTP response codes handled by HSC.
+The mentioned configurations effectively move the configured codes around, i.e., if you add `308` to `httpErrorCodes` it is automatically removed from its default list (`httpWarningCodes`).
+****
+
+== Examples
+
+=== Basic Example
+
+[source,sh]
+----
+java -jar htmlSanityCheck-cli-<version>.jar --sourceDir ./docs
+----
+
+=== Extended Example
+
+[source,sh]
+----
+java -jar htmlSanityCheck-cli-<version>.jar \
+  --sourceDir ./docs \
+  --checkingResultsDir ./report/htmlchecks \
+  --failOnErrors true \
+  --httpConnectionTimeout 1000 \
+  --checkerClasses DuplicateIdChecker,MissingImageFilesChecker
+----
+
+== Compatibility
+
+The CLI tool has been tested with the following Java versions:
+
+* Java 8
+* Java 11
+* Java 17
+* Java 21
+
+== Development Versions
+
+In case you want to use a current development (or arbitrary branch or tag) version from GitHub, you can build the CLI tool from source.
+
+Clone the repository::
++
+[source,sh]
+----
+git clone https://github.com/aim42/htmlSanityCheck.git
+cd htmlSanityCheck
+----
+
+Build the CLI tool::
++
+[source,sh]
+----
+./gradlew integrationTest
+----
++
+Gradle generates the application to `htmlSanityCheck-cli/build/install/hsc/`.

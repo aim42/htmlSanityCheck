@@ -2,6 +2,7 @@
 :doctype: book
 include::asciidoctor-config.ad[]
 
+ifndef::xrefToCli[:xrefToCli: htmlSanityCheck-cli/README.adoc]
 ifndef::xrefToGradlePlugin[:xrefToGradlePlugin: htmlSanityCheck-gradle-plugin/README.adoc]
 
 [.lead]
@@ -29,6 +30,7 @@ image:https://img.shields.io/github/issues/aim42/htmlSanityCheck.svg[link="https
 HSC can be currently used
 
 * As a xref:{xrefToGradlePlugin}#sec:usage[Gradle plugin], or
+* As a xref:{xrefToCli}#sec:usage[Command Line Interface tool] (CLI), or
 * Programmatically from Java or other JVM languages (TBD).
 
 [NOTE]

@@ -50,13 +50,31 @@ tasks.register('buildReadmeGradlePlugin', org.asciidoctor.gradle.jvm.Asciidoctor
             "imagesdir": "../images"
     )
 }
-buildReadmeGradlePlugin.dependsOn(buildReadmeRoot)
+buildReadmeGradlePlugin.dependsOn(copyReadmeResources)
+buildReadmeGradlePlugin.mustRunAfter(buildReadmeRoot)
+
+tasks.register('buildReadmeCli', org.asciidoctor.gradle.jvm.AsciidoctorTask) {
+    group 'Verification'
+    description 'Convert CLI README for integration test'
+
+    sourceDir projectRoot
+    sources {
+        include 'htmlSanityCheck-cli/README.adoc'
+    }
+    baseDirFollowsSourceFile()
+    outputDir file("${Project.DEFAULT_BUILD_DIR_NAME}/docs")
+    attributes(
+            "imagesdir": "../images"
+    )
+}
+buildReadmeCli.dependsOn(copyReadmeResources)
+buildReadmeCli.mustRunAfter(buildReadmeGradlePlugin)
 
 tasks.register('buildReadmeAll') {
     group 'Verification'
     description 'Convert all READMEs for integration test'
 }
-buildReadmeAll.dependsOn(buildReadmeRoot, buildReadmeGradlePlugin)
+buildReadmeAll.dependsOn(buildReadmeRoot, buildReadmeGradlePlugin, buildReadmeCli)
 build.dependsOn(buildReadmeAll)
 
 /*
