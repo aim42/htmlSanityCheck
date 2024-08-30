@@ -22,6 +22,7 @@ develocity {
 
 rootProject.name = 'htmlSanityCheck'
 
+include('htmlSanityCheck-cli')
 include('htmlSanityCheck-core')
 include('htmlSanityCheck-gradle-plugin')
-include('htmlSanityCheck-cli')
+include('htmlSanityCheck-maven-plugin')

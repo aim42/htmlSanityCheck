@@ -1,4 +1,4 @@
-package org.aim42.hatmlSanityChecker;
+package org.aim42.htmlsanitychecker.maven;
 
 import org.aim42.htmlsanitycheck.AllChecksRunner;
 import org.aim42.htmlsanitycheck.Configuration;
@@ -8,9 +8,9 @@ import org.aim42.htmlsanitycheck.check.Checker;
 import org.aim42.htmlsanitycheck.collect.PerRunResults;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import java.io.File;
@@ -28,7 +28,7 @@ import java.util.Set;
  * @goal sanity-check
  * @phase verify
  * @requiresDependencyResolution runtime
- * @author Gernot Starke
+ * @author Thomas Ruhroth
  */
 @Mojo(name = "sanity-check", defaultPhase = LifecyclePhase.VERIFY, requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class HtmlSanityCheckMojo extends AbstractMojo {
