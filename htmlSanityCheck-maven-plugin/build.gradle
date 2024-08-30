@@ -1,0 +1,49 @@
+plugins {
+    id "java-gradle-plugin"
+}
+
+// TODO do we need this?
+description = 'HSC Maven Mojo'
+
+dependencies {
+    implementation project(":htmlSanityCheck-core")
+    implementation('org.apache.maven.plugin-tools:maven-plugin-tools-api:3.15.0')
+    implementation('org.apache.maven.plugin-tools:maven-plugin-annotations:3.15.0')
+}
+
+tasks.register('copyClasses', Copy) {
+    dependsOn(compileJava)
+    from 'build/classes/java/main'
+    into 'build/maven/target/classes'
+}
+
+tasks.register('generatePom', Copy) {
+    dependsOn(copyClasses)
+    from 'src/main/maven'
+    into 'build/maven'
+    filesMatching("**/pom.*") {
+        expand(version: project.version)
+    }
+}
+
+tasks.register('generateMavenPlugin', CrossPlatformExec) {
+    dependsOn(generatePom)
+    // currently it seems to be the more or less only clean solution
+    // to generate a plugin.xml file to use maven directly
+    // if anyone has a better solution please let us know!
+    buildCommand 'mvn', '-nsu', '-U', '-f', 'build/maven/pom.xml', 'plugin:descriptor', '--batch-mode',
+            '-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
+}
+
+class CrossPlatformExec extends Exec {
+    void buildCommand(String command, String... commandArgs) {
+        if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+            executable = 'cmd'
+            args = ['/c', command]
+        } else {
+            executable = command
+        }
+        args(commandArgs.toList())
+    }
+}
+
