@@ -1,0 +1,10 @@
+:filename: manual/20_cli.adoc
+:imagesdir: ../images
+:jbake-menu: Manual
+:jbake-order: 20
+:jbake-title: HTML Sanity Check (CLI Tool)
+
+ifndef::projectRootDir[:projectRootDir: ../../..]
+:xrefToManual: 10_manual.adoc
+
+include::{projectRootDir}/htmlSanityCheck-cli/README.adoc[leveloffset=+1]

@@ -156,7 +156,7 @@ include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/W
 .HTTP Redirects
 ====
 Note that HTTP redirects are treated as a warning to make the user aware of the correct or new location (cf. {project-issues}/244[Issue 244]).
-Some HSC reports often contain the respective location.
+Some HSC reports contain the respective location.
 ====
 
 
