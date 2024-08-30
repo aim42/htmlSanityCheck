@@ -59,12 +59,13 @@ apply plugin: 'org.aim42.{project}'
 
 [[box:current-version]]
 [IMPORTANT]
-.Latest (development) version
+.Latest (development) versions
 ====
-// TODO differentiate between released/latest (from main branch) and develop(ment) versions as soon as current develop branch is merged to main
-The current (development) version is defined in {gradleProperties}
-
+* The latest https://github.com/aim42/htmlSanityCheck/releases[release version] is defined in https://github.com/aim42/htmlSanityCheck/blob/main/gradle.properties[`gradle.properties` on `main` branch].
+* The current (development) version is defined in {gradleProperties}
++
 [source]
+.Development version
 ----
 include::../gradle.properties[tag=version]
 ----
