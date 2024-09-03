@@ -4,6 +4,7 @@ import org.aim42.htmlsanitycheck.AllChecksRunner
 import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.ProductInformation
 import org.aim42.htmlsanitycheck.check.AllCheckers
+import org.apache.log4j.Level
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import picocli.CommandLine
@@ -28,6 +29,11 @@ class HscCommand implements Runnable {
     protected HscCommand(HscRunner runner) {
         this.runner = runner
     }
+
+    @Option(names = ["-v", "--verbose"],
+            description = "Increase verbosity. Repeatable, cumulative -v -vv -vvv",
+            fallbackValue = "true", arity = "0..3")
+    private boolean[] verbosity;
 
     @Option(names = ["-V", "--version"], description = "Display version information")
     boolean versionRequested
@@ -70,7 +76,35 @@ class HscCommand implements Runnable {
         HscCommand hscCommand
         CommandLine cmd
 
+        private static void setLogLevel(final Level level) {
+            org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("org.aim42.htmlsanitycheck"
+            );
+            logger.setLevel(level);
+        }
+
+        private void configureLogging() {
+            if (hscCommand.verbosity != null) {
+                int verbosityLevel = hscCommand.verbosity.length;
+                switch (verbosityLevel) {
+                    case 0:
+                        // Default logging level
+                        break;
+                    case 1:
+                        setLogLevel(Level.INFO);
+                        break;
+                    case 2:
+                        setLogLevel(Level.DEBUG);
+                        break;
+                    case 3:
+                    default:
+                        setLogLevel(Level.TRACE);
+                        break;
+                }
+            }
+        }
+
         void run() {
+            configureLogging();
             if (hscCommand.versionRequested) {
                 System.out.println("Version: ${ProductInformation.VERSION}")
                 return
@@ -94,8 +128,9 @@ class HscCommand implements Runnable {
             // if we have no valid configuration, abort with exception
             configuration.validate()
             logger.fine("Starting HTML sanity check")
-            // create output directory for checking results
-            resultsDirectory.mkdirs()
+            logger.info("Starting HTML sanity check");
+                // create output directory for checking results
+                resultsDirectory.mkdirs()
 
             // create an AllChecksRunner...
             var allChecksRunner = new AllChecksRunner(configuration)
