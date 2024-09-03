@@ -9,7 +9,8 @@ dependencies {
     implementation platform("org.codehaus.groovy:groovy-bom:${GroovySystem.version}")
     implementation 'org.codehaus.groovy:groovy'
     implementation 'org.slf4j:slf4j-api'
-    implementation 'org.slf4j:slf4j-simple'
+    implementation 'org.slf4j:slf4j-log4j12'
+//    implementation 'ch.qos.logback:logback-classic:1.2.11'
 
     implementation project(":htmlSanityCheck-core")
 
