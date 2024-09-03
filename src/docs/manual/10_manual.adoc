@@ -1,11 +1,11 @@
-:filename: manual/01_manual.adoc
+:filename: manual/10_manual.adoc
 :imagesdir: ../images
 :jbake-menu: Manual
 :jbake-order: 10
 :jbake-title: HTML Sanity Check (Generic)
 
 ifndef::projectRootDir[:projectRootDir: ../../..]
-:xrefToCli: 01_cli.adoc
-:xrefToGradlePlugin: 01_gradle-plugin.adoc
+:xrefToCli: 20_cli.adoc
+:xrefToGradlePlugin: 30_gradle-plugin.adoc
 
 include::{projectRootDir}/README.adoc[leveloffset=+1]
