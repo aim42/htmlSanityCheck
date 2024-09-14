@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>doc-test-docs</artifactId>
+    <groupId>org.aim42</groupId>
+    <version>0.1-SNAPSHOT</version>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>dorg.aim42.htmlSanityCheck</groupId>
+                <artifactId>htmlsanitycheck-maven-plugin</artifactId>
+                <version>${htmlSanityCheckVersion}</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>htmlSanityCheck</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDocuments>
+                        <file>file-to-test.html</file>
+                    </sourceDocuments>
+                    <sourceDir>src/</sourceDir>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

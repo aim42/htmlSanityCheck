@@ -1,6 +1,7 @@
 package org.aim42.htmlsanitycheck.gradle
 
 
+import org.gradle.internal.component.external.model.ComponentVariant
 import org.gradle.testkit.runner.GradleRunner
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
