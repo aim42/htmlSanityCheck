@@ -40,4 +40,5 @@ src/docs/resources/graphics/.DS_Store
 .envrc
 *.log
 tmp/
+.gradle2/
 public/

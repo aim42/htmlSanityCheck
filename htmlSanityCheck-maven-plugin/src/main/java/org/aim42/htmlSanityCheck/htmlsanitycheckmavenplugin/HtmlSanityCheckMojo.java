@@ -1,4 +1,4 @@
-package org.aim42.htmlsanitychecker.maven;
+package org.aim42.htmlSanityCheck.htmlsanitycheckmavenplugin;
 
 import org.aim42.htmlsanitycheck.AllChecksRunner;
 import org.aim42.htmlsanitycheck.Configuration;
