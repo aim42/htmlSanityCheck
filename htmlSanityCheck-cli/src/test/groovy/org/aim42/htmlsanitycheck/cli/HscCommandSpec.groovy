@@ -13,6 +13,9 @@ class HscCommandSpec extends Specification {
 
     @Rule
     TemporaryFolder testProjectDir = new TemporaryFolder()
+    @Rule
+    TemporaryFolder testResultsDir = new TemporaryFolder()
+
     File htmlFile
     ByteArrayOutputStream outContent
     ByteArrayOutputStream errContent
@@ -94,14 +97,31 @@ class HscCommandSpec extends Specification {
     def "test with valid HTML file"() {
         given:
         htmlFile << VALID_HTML
-        String[] args = [testProjectDir.root]
+        String[] args = ["-r", testResultsDir.root, testProjectDir.root]
 
         when:
         HscCommand.main(args)
 
         then:
-        outContent.toString().contains("found 0 issue, 100% successful.")
+        File resultFile = new File (testResultsDir.root, 'index.html')
+        resultFile.exists()
+        String result = resultFile.text
+        result.toString().contains("<div class=\"infoBox success\" id=\"successRate\"><div class=\"percent\">100%</div>successful</div>")
     }
 
+    def "test with invalid HTML file"() {
+        given:
+        htmlFile << INVALID_HTML
+        String[] args = ["-r", testResultsDir.root, testProjectDir.root]
+
+        when:
+        HscCommand.main(args)
+
+        then:
+        File resultFile = new File (testResultsDir.root, 'index.html')
+        resultFile.exists()
+        String result = resultFile.text
+        result.toString().contains("<div class=\"infoBox failures\" id=\"successRate\"><div class=\"percent\">0%</div>successful</div>\n")
+    }
 
 }
