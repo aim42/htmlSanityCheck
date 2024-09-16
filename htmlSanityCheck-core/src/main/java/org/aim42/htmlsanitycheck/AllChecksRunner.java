@@ -82,8 +82,11 @@ public class AllChecksRunner {
      * Performs all available checks on pageToCheck
      */
     public PerRunResults performAllChecks() throws IOException {
+        return performAllChecks(true);
+    }
 
-        logger.debug("entered performAllChecks");
+    public PerRunResults performAllChecks(boolean useConsoleReporter) throws IOException {
+        logger.debug("entered performAllChecks ({})", useConsoleReporter);
 
         for (File file : filesToCheck) {
             resultsForAllPages.addPageResults(
@@ -96,7 +99,9 @@ public class AllChecksRunner {
         // and then report the results
         reportCheckingResultsOnLogger();
         /* Determines if the report is output to the console. */
-        reportCheckingResultsOnConsole();
+        if (useConsoleReporter) {
+            reportCheckingResultsOnConsole();
+        }
         if (checkingResultsDir != null) {
             reportCheckingResultsAsHTML(checkingResultsDir.getAbsolutePath());
         }
@@ -147,7 +152,6 @@ public class AllChecksRunner {
         Reporter reporter = new ConsoleReporter(resultsForAllPages);
 
         reporter.reportFindings();
-
     }
 
     /**
@@ -156,16 +160,13 @@ public class AllChecksRunner {
      */
     private void reportCheckingResultsOnLogger() {
         Reporter reporter = new LoggerReporter(resultsForAllPages, logger);
-
         reporter.reportFindings();
-
     }
 
     /**
      * Report results in HTML file(s)
      */
     private void reportCheckingResultsAsHTML(String resultsDir) {
-
         Reporter reporter = new HtmlReporter(resultsForAllPages, resultsDir);
         reporter.reportFindings();
     }
@@ -174,7 +175,6 @@ public class AllChecksRunner {
      * Report results in JUnit XML
      */
     private void reportCheckingResultsAsJUnitXml(String resultsDir) {
-
         Reporter reporter = new JUnitXmlReporter(resultsForAllPages, resultsDir);
         reporter.reportFindings();
     }
