@@ -63,9 +63,9 @@ public class HtmlReporter extends Reporter {
     }
 
     /*
-    We need some static files next to the report html.. css, js and logo stuff.
+    We need some static files next to the report HTML, CSS, js and logo stuff.
 
-    Originally I posted this as a question to the gradle forum:
+    Originally I posted this as a question to the Gradle forum:
     http://forums.gradle.org/gradle/topics/-html-checking-plugin-how-to-copy-required-css-to-output-directory
 
     Answers were:
@@ -144,7 +144,7 @@ public class HtmlReporter extends Reporter {
 
 
     /*
-     * copy css, javaScript and image/icon files to the html output directory,
+     * copy CSS, JavaScript and image/icon files to the HTML output directory,
      *
      */
     private void copyRequiredResourceFiles(String outputDirectoryPath, List<String> requiredResources) {
@@ -283,22 +283,22 @@ public class HtmlReporter extends Reporter {
     }
 
     @Override
-    protected void reportPageSummary(SinglePageResults pageResult) {
-        String pageID = CreateLinkUtil.convertToLink(pageResult.getPageFileName());
+    protected void reportPageSummary(SinglePageResults singlePageResults) {
+        String pageID = CreateLinkUtil.convertToLink(singlePageResults.getPageFileName());
 
 
         write(String.format(
                 "%n%n<h1 id=\"%s\">Results for %s </h1>%n",
-                pageID, pageResult.getPageFileName()
+                pageID, singlePageResults.getPageFileName()
         ));
 
         write(String.format(
                 "location : <a href=\"%s\">%s</a> <p>%n",
-                pageResult.getPageFilePath(), pageResult.getPageFilePath()
+                singlePageResults.getPageFilePath(), singlePageResults.getPageFilePath()
         ));
 
-        int nrOfItemsChecked = pageResult.nrOfItemsCheckedOnPage();
-        int nrOfFindings = pageResult.nrOfFindingsOnPage();
+        int nrOfItemsChecked = singlePageResults.nrOfItemsCheckedOnPage();
+        int nrOfFindings = singlePageResults.nrOfFindingsOnPage();
 
         int percentageSuccessful = SummarizerUtil.percentSuccessful(
                 nrOfItemsChecked,
@@ -308,7 +308,7 @@ public class HtmlReporter extends Reporter {
 
         write(infoBoxHeader());
 
-        int pageSize = pageResult.getPageSize();
+        int pageSize = singlePageResults.getPageSize();
         String sizeUnit = (pageSize >= 1_000_000) ? "MByte" : "kByte";
 
         String pageSizeStr = String.valueOf(SummarizerUtil.threeDigitTwoDecimalPlaces(pageSize));
@@ -366,8 +366,8 @@ public class HtmlReporter extends Reporter {
     }
 
     /**
-     * Tries to find a writable directory. First tries dirName,
-     * if that does not work takes User.dir as second choice.
+     * Tries to find a writable directory.
+     * First try `dirName`, if that does not work, take `User.dir` as second choice.
      *
      * @param dirName : e.g. /Users/aim42/projects/htmlsc/build/reports/htmlchecks
      * @return complete path to a writable file that does not currently exist.
@@ -400,11 +400,8 @@ public class HtmlReporter extends Reporter {
             write("</body></html>\n");
             writer.flush();
 
-            String logMessage = String.format(
-                    "wrote report to %s%s%s%n",
-                    resultsOutputDir, File.separatorChar, REPORT_FILENAME
-            );
-            log.info(logMessage);
+            log.info("wrote a report to '{}{}{}'",
+                    resultsOutputDir, File.separatorChar, REPORT_FILENAME);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -424,7 +421,7 @@ Copyright Gernot Starke and aim42 contributors
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an
- "AS IS" BASIS,WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.

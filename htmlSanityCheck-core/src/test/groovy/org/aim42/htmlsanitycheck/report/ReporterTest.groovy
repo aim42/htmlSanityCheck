@@ -25,7 +25,7 @@ class ReporterTest {
             }
 
             @Override
-            protected void reportPageSummary(SinglePageResults pageResult) {
+            protected void reportPageSummary(SinglePageResults singlePageResults) {
             }
 
             @Override
@@ -44,13 +44,13 @@ class ReporterTest {
     }
 
     @Test
-    public void testNothingReportedWithEmptyResults() {
+    void testNothingReportedWithEmptyResults() {
         SinglePageResults spr = new SinglePageResults()
         runResults.addPageResults(spr)
 
         reporter.reportFindings()
 
-        assertEquals("Empty ConsoleReporter has no check", 0, reporter.totalNrOfChecks())
+        assertEquals("Empty Reporter has no checks", 0, reporter.totalNrOfChecks())
         assertEquals("Empty Reporter shall have no findings", 0, reporter.totalNrOfFindings())
     }
 }

@@ -53,8 +53,8 @@ public class JUnitXmlReporter extends Reporter {
     }
 
     @Override
-    protected void reportPageSummary(SinglePageResults pageResult) {
-        String name = filenameOrTitleOrRandom(pageResult);
+    protected void reportPageSummary(SinglePageResults singlePageResults) {
+        String name = filenameOrTitleOrRandom(singlePageResults);
         String sanitizedPath = name.replaceAll("[^A-Za-z0-9_-]+", "_");
         File testOutputFile = new File(outputPath, "TEST-unit-html-" + sanitizedPath + ".xml");
 
@@ -64,13 +64,13 @@ public class JUnitXmlReporter extends Reporter {
 
             writer.writeStartDocument();
             writer.writeStartElement("testsuite");
-            writer.writeAttribute("tests", String.valueOf(pageResult.nrOfItemsCheckedOnPage()));
-            writer.writeAttribute("failures", String.valueOf(pageResult.nrOfFindingsOnPage()));
+            writer.writeAttribute("tests", String.valueOf(singlePageResults.nrOfItemsCheckedOnPage()));
+            writer.writeAttribute("failures", String.valueOf(singlePageResults.nrOfFindingsOnPage()));
             writer.writeAttribute("errors", "0");
             writer.writeAttribute("time", "0");
             writer.writeAttribute("name", name);
 
-            for (SingleCheckResults singleCheckResult : pageResult.getSingleCheckResults()) {
+            for (SingleCheckResults singleCheckResult : singlePageResults.getSingleCheckResults()) {
                 writer.writeStartElement("testcase");
                 writer.writeAttribute("assertions", String.valueOf(singleCheckResult.getNrOfItemsChecked()));
                 writer.writeAttribute("time", "0");

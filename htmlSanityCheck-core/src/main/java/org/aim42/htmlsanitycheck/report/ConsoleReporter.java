@@ -64,11 +64,11 @@ public class ConsoleReporter extends Reporter {
     }
 
     @Override
-    protected void reportPageSummary(SinglePageResults pageResult) {
-        printer.accept(String.format("Summary for file %s%n", pageResult.getPageFileName()));
-        printer.accept(String.format("page path  : %s", pageResult.getPageFilePath()));
-        printer.accept(String.format("page title : %s", pageResult.getPageTitle()));
-        printer.accept(String.format("page size  : %d bytes", pageResult.getPageSize()));
+    protected void reportPageSummary(SinglePageResults singlePageResults) {
+        printer.accept(String.format("Summary for file %s%n", singlePageResults.getPageFileName()));
+        printer.accept(String.format("page path  : %s", singlePageResults.getPageFilePath()));
+        printer.accept(String.format("page title : %s", singlePageResults.getPageTitle()));
+        printer.accept(String.format("page size  : %d bytes", singlePageResults.getPageSize()));
     }
 
     @Override

@@ -20,7 +20,7 @@ public abstract class Reporter {
      * create the reporter
      */
     protected Reporter() {
-        this.createdOnDate =  new SimpleDateFormat("dd. MMMM yyyy, HH:mm").format(new Date());
+        this.createdOnDate = new SimpleDateFormat("dd. MMMM yyyy, HH:mm").format(new Date());
         this.createdByHSCVersion = ProductInformation.VERSION;
     }
 
@@ -40,9 +40,8 @@ public abstract class Reporter {
     /**
      * add checking results for one page
      */
-    public List<SinglePageResults> addCheckingResultsForOnePage(SinglePageResults singlePageResults) {
+    public void addCheckingResultsForOnePage(SinglePageResults singlePageResults) {
         pageResults.add(singlePageResults);
-        return pageResults.stream().sorted(Comparator.comparing(SinglePageResults::getPageTitle)).collect(Collectors.toList());
     }
 
     /**
@@ -51,28 +50,22 @@ public abstract class Reporter {
      * Uses template-method to delegate most concrete implementations to subclasses
      */
     public void reportFindings() {
-
         initReport();
-
         reportOverallSummary();
-
         reportAllPages();
-
         closeReport();
     }
 
     private void reportAllPages() {
-
         for (SinglePageResults pageResult : pageResults) {
             reportPageSummary(pageResult);// delegated to subclass
             reportPageDetails(pageResult);// implemented below
             reportPageFooter();// delegated to subclass
         }
-
     }
 
-    protected void reportPageDetails(SinglePageResults pageResults) {
-        for (SingleCheckResults resultForOneCheck : pageResults.getSingleCheckResults()) {
+    protected void reportPageDetails(SinglePageResults singlePageResults) {
+        for (SingleCheckResults resultForOneCheck : singlePageResults.getSingleCheckResults()) {
             reportSingleCheckSummary(resultForOneCheck);
             reportSingleCheckDetails(resultForOneCheck);
         }
@@ -97,7 +90,7 @@ public abstract class Reporter {
 
     protected abstract void reportOverallSummary();
 
-    protected abstract void reportPageSummary(SinglePageResults pageResult);
+    protected abstract void reportPageSummary(SinglePageResults singlePageResults);
 
     protected abstract void reportPageFooter();
 

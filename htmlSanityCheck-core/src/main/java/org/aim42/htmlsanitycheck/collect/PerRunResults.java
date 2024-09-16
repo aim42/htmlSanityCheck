@@ -5,24 +5,24 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Collects checking results of 1..n html files which are checked together in one "run".
+ * Collects checking results of 1..n HTML files which are checked together in one "run".
  * <p>
- * Can keep results spanning more than one file (e.g. unused-image-files).
+ * Can keep results spanning more than one file (e.g., unused-image-files).
  */
 public class PerRunResults implements RunResults {
 
-    public final static Long ILLEGAL_TIMER = -7353315L;
+    public static final Long ILLEGAL_TIMER = -7353315L;
     // magic number - also used in tests
-    private final static Long TIMER_STILL_RUNNING = 42L;
+    private static final Long TIMER_STILL_RUNNING = 42L;
     // unused images is the only check concerning all pages...
     private final List<SinglePageResults> resultsForAllPages;
-    // checking time is important - therefore we maintain a timer
+    // checking time is important - therefore, we maintain a timer
     private final Long startedCheckingTimeMillis;
     private Long finishedCheckingTimeMillis;
 
 
     /**
-     * constructs a container for all checking results, including:
+     * Constructs a container for all checking results, including
      * + checking results for every page (contained in @see SinglePageResults instances)
      * + results for the rather quirky @see UnusedImagesChecker
      * + a simple timer to validate the checks ran fast enough
@@ -36,7 +36,7 @@ public class PerRunResults implements RunResults {
     }
 
     /**
-     * return the List of results for the pages
+     * Return the List of results for the pages
      */
     @Override
     public List<SinglePageResults> getResultsForAllPages() {
@@ -44,14 +44,14 @@ public class PerRunResults implements RunResults {
     }
 
     /**
-     * stop the checking timer
+     * Stop the checking timer
      */
     public void stopTimer() {
         finishedCheckingTimeMillis = System.currentTimeMillis();
     }
 
     /**
-     * query the timer
+     * Query the timer
      * if timer has not yet been stopped - return a crazy number
      */
     @Override
@@ -67,13 +67,12 @@ public class PerRunResults implements RunResults {
 
 
     /**
-     * adds one kind of checking results.
+     * Adds one kind of checking results.
      *
      * @param pageResults : checking results for a single HTML page
      */
     public void addPageResults(SinglePageResults pageResults) {
         assert resultsForAllPages != null;
-
         resultsForAllPages.add(pageResults);
     }
 
@@ -86,7 +85,7 @@ public class PerRunResults implements RunResults {
     }
 
     /**
-     * returns the total number of checks performed on all pages
+     * Returns the total number of checks performed on all pages
      */
     @Override
     public int nrOfChecksPerformedOnAllPages() {
@@ -94,12 +93,10 @@ public class PerRunResults implements RunResults {
         return resultsForAllPages.stream()
                 .map(SinglePageResults::nrOfItemsCheckedOnPage)
                 .reduce(Integer::sum).orElse(0);
-
-
     }
 
     /**
-     * returns the total number of findings on all pages
+     * Returns the total number of findings on all pages
      */
     @Override
     public int nrOfFindingsOnAllPages() {
