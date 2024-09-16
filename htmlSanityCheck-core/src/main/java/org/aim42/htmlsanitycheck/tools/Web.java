@@ -190,7 +190,7 @@ public class Web {
 
     }
 
-    private static final Pattern ILLEGAL_CHARS_REGEX = Pattern.compile("[ *$]");
+    private static final Pattern ILLEGAL_CHARS_REGEX = Pattern.compile("[ *$<>]");
 
     /**
      * helper to identify invalid characters in link
