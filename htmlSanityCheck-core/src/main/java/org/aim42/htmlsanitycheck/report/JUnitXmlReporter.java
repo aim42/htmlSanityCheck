@@ -48,7 +48,7 @@ public class JUnitXmlReporter extends Reporter {
     @Override
     protected void initReport() {
         if (!outputPath.canWrite() && !outputPath.mkdirs()) {
-            throw new RuntimeException("Cannot create or write to " + outputPath);
+            throw new RuntimeException("Cannot create or write to " + outputPath); //NOSONAR(S112)
         }
     }
 
@@ -92,7 +92,7 @@ public class JUnitXmlReporter extends Reporter {
 
             writer.flush();
         } catch (IOException | XMLStreamException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); //NOSONAR(S112)
         }
     }
 

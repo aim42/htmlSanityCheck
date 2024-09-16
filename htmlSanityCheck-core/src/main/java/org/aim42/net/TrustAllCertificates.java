@@ -41,7 +41,7 @@ public final class TrustAllCertificates implements X509TrustManager, HostnameVer
         }
         catch (NoSuchAlgorithmException | KeyManagementException e)
         {
-            throw new RuntimeException("Failed setting up all thrusting certificate manager.", e); //NOSONAR(S112)
+            throw new RuntimeException("Failed to set up all thrusting certificate managers.", e); //NOSONAR(S112)
         }
 
     }

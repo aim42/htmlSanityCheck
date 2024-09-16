@@ -96,7 +96,7 @@ public class MissingImageFilesChecker extends Checker {
         try {
             decodedRelativePathtoImageFile = URLDecoder.decode(relativePathToImageFile,"UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); //NOSONAR(S112)
         }
 
         File imageFile = new File(parentDir, decodedRelativePathtoImageFile);

@@ -101,7 +101,7 @@ public class BrokenCrossReferencesChecker extends SuggestingChecker {
         try {
             linkTarget = URLDecoder.decode(linkTarget, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); //NOSONAR(S112)
         }
 
         if (!listOfIds.contains(linkTarget)) {
