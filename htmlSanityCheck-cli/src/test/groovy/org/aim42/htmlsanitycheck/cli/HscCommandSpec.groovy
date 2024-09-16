@@ -73,17 +73,23 @@ class HscCommandSpec extends Specification {
         errContent.toString().contains("Check HTML files for Sanity")
     }
 
-    def "test with empty source directory"() {
+    @Unroll
+    // For misc. log levels
+    def "test with empty source directory and verbosity #args"() {
         given:
         TemporaryFolder testProjectDir = new TemporaryFolder()
         testProjectDir.create()
         SecurityManager originalSecurityManager = System.getSecurityManager()
         SecurityManager mockSecurityManager = new NoExitSecurityMock(originalSecurityManager)
         System.setSecurityManager(mockSecurityManager)
-        String[] args = [testProjectDir.root]
+        List<String> mainArgs = new ArrayList<>()
+        if (args) {
+            mainArgs.add(args)
+        }
+        mainArgs.add(testProjectDir.root)
 
         when:
-        HscCommand.main(args)
+        HscCommand.main(mainArgs as String[])
 
         then:
         mockSecurityManager.exitCalled == 1
@@ -92,6 +98,15 @@ class HscCommandSpec extends Specification {
 
         cleanup:
         testProjectDir.delete()
+
+        where:
+        args << [
+                "",
+                "-v",
+                "-vv",
+                "-vvv",
+                "-vvvv"
+        ]
     }
 
     def "test with valid HTML file"() {
@@ -103,7 +118,7 @@ class HscCommandSpec extends Specification {
         HscCommand.main(args)
 
         then:
-        File resultFile = new File (testResultsDir.root, 'index.html')
+        File resultFile = new File(testResultsDir.root, 'index.html')
         resultFile.exists()
         String result = resultFile.text
         result.toString().contains("<div class=\"infoBox success\" id=\"successRate\"><div class=\"percent\">100%</div>successful</div>")
@@ -118,7 +133,7 @@ class HscCommandSpec extends Specification {
         HscCommand.main(args)
 
         then:
-        File resultFile = new File (testResultsDir.root, 'index.html')
+        File resultFile = new File(testResultsDir.root, 'index.html')
         resultFile.exists()
         String result = resultFile.text
         result.toString().contains("<div class=\"infoBox failures\" id=\"successRate\"><div class=\"percent\">0%</div>successful</div>\n")
