@@ -16,9 +16,9 @@ or broken links.
 
 image:https://img.shields.io/badge/License-Apache%202.0-blue.svg[link="https://opensource.org/licenses/Apache-2.0"]
 image:https://img.shields.io/badge/License-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"]
-image:https://github.com/aim42/htmlSanityCheck/actions/workflows/gradle-build.yml/badge.svg[]
-image:https://sonarcloud.io/api/project_badges/measure?project=aim42_htmlSanityCheck&metric=alert_status[alt='Quality Gate Status']
-image:https://jitpack.io/v/org.aim42.htmlSanityCheck/htmlSanityCheck.svg[alt='JitPack Build']
+image:https://github.com/aim42/htmlSanityCheck/actions/workflows/gradle-build.yml/badge.svg[link=https://sonarcloud.io/project/overview?id=aim42_htmlSanityCheck]
+image:https://sonarcloud.io/api/project_badges/measure?project=aim42_htmlSanityCheck&metric=alert_status[alt='Quality Gate Status',link=https://sonarcloud.io/project/overview?id=aim42_htmlSanityCheck]
+image:https://jitpack.io/v/org.aim42.htmlSanityCheck/htmlSanityCheck.svg[alt='JitPack Build',link=https://jitpack.io/#org.aim42/htmlSanityCheck]
 image:https://img.shields.io/github/issues/aim42/htmlSanityCheck.svg[link="https://github.com/aim42/htmlSanityCheck/issues"]
 
 

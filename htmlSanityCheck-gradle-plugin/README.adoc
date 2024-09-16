@@ -2,6 +2,9 @@
 :doctype: book
 include::../asciidoctor-config.ad[]
 
+image:https://img.shields.io/gradle-plugin-portal/v/org.aim42.htmlSanityCheck[Gradle Plugin Portal Version]
+image:https://img.shields.io/maven-central/v/org.aim42.htmlSanityCheck/org.aim42.htmlSanityCheck.gradle.plugin[Maven Central Version]
+
 ifdef::env-github[]
 :imagesdir: ../src/docs/images
 endif::env-github[]
