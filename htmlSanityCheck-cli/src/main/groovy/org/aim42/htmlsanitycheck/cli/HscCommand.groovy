@@ -51,8 +51,8 @@ class HscCommand implements Runnable {
     }
 
     static {
-        LogManager logManager = LogManager.getLogManager();
-        logManager.reset();
+        LogManager logManager = LogManager.getLogManager()
+        logManager.reset()
 
         rootLogger = Logger.getLogger("org.aim42.htmlsanitycheck")
         logger = Logger.getLogger(HscCommand.class.name)
@@ -72,7 +72,7 @@ class HscCommand implements Runnable {
     }
 
     @Option(names = ["-v", "--verbose"],
-            description = "Increase verbosity. Repeatable, cumulative -v -vv -vvv",
+            description = "Increase verbosity. Repeatable, cumulative, i.e., -v, -vv, -vvv, or -vvvv",
             fallbackValue = "true", arity = "0..3")
     private boolean[] verbosity
 
