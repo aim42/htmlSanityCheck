@@ -84,9 +84,15 @@ public class ConsoleReporter extends Reporter {
         printer.accept(String.format("Results for %s", singleCheckResults.getWhatIsChecked()));
         printer.accept(String.format("%d %s checked,",
                 singleCheckResults.getNrOfItemsChecked(), singleCheckResults.getSourceItemName()));
-        printer.accept(String.format("%d %s found.%n",
+        printer.accept(String.format("%d %s found.",
                 singleCheckResults.getNrOfIssues(), singleCheckResults.getTargetItemName()));
-        printer.accept(String.format("%s", singleCheckResults.getGeneralRemark()));
+        printOptional(singleCheckResults.getGeneralRemark());
+    }
+
+    private void printOptional(String optional) {
+        if (null != optional && !optional.equals("")) {
+            printer.accept(optional);
+        }
     }
 
     @Override
