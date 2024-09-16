@@ -65,7 +65,7 @@ class WebSpec extends Specification {
 
         true                 | "#Context Analysis" // regression test, contains blank
         true                 | "*Context-Analysis" // * is not allowed
-
+        true                 | "../concepts/workflow.html#<em>catalog</em>" // < etc. ist not allowed
     }
 
 
