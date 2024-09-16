@@ -108,6 +108,7 @@ class WebSpec extends Specification {
         false   | "10.0.0.1/index.html"  // this is a valid REMOTE address, defaults to http or https
 
         false   | "javascript:dummy"
+        false   | "xmxaxixlxtxo:ixnxfxox@xaxrxcx4x2x.xdxex"
     }
 
     @Unroll
