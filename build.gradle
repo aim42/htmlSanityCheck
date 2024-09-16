@@ -19,8 +19,8 @@ allprojects {
     version = htmlSanityCheckVersion
 
     repositories {
-        mavenLocal()
         mavenCentral()
+        mavenLocal()
     }
 
     tasks.register("info") {
