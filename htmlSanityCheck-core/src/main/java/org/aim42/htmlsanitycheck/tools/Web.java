@@ -229,6 +229,11 @@ public class Web {
                 throw new InvalidUriSyntaxException(e);
             }
 
+            if (null == aUri.getPath()) {
+                log.warn("'{}' does not have a valid (URI) path", link);
+                return false;
+            }
+
             return (
                     (isLinkToFile(aUri)) // (1)
                             ||
