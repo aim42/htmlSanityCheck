@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aim42.htmlsanitycheck.Configuration;
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
 import org.aim42.htmlsanitycheck.html.HtmlElement;
@@ -14,6 +15,7 @@ import java.net.URLDecoder;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@Slf4j
 public class MissingImageFilesChecker extends Checker {
 
     private static final Logger logger = LoggerFactory.getLogger(MissingImageFilesChecker.class);
@@ -35,6 +37,7 @@ public class MissingImageFilesChecker extends Checker {
 
     @Override
     protected SingleCheckResults check(final HtmlPage pageToCheck) {
+        log.trace("Checking '{}'", pageToCheck.getFile());
         final File file1 = pageToCheck.getFile();
         final File file = (file1 == null ? null : file1.getParentFile());
         currentDir = file != null ? file : baseDir;

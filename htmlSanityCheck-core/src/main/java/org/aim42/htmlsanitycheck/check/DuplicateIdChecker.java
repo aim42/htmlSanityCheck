@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aim42.htmlsanitycheck.Configuration;
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
 import org.aim42.htmlsanitycheck.html.HtmlPage;
@@ -8,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 public class DuplicateIdChecker extends Checker {
     private Set<String> idStringsSet;
     private List<String> idStringsList;
@@ -25,6 +27,7 @@ public class DuplicateIdChecker extends Checker {
 
     @Override
     protected SingleCheckResults check(final HtmlPage pageToCheck) {
+        log.trace("Checking '{}'", pageToCheck.getFile());
 
         //get list of all tagsWithId '<... id="XYZ"...' in html file
 

@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.tools;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
 import java.net.InetAddress;
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+@Slf4j
 public class Web {
 
     private Web() {
@@ -219,6 +221,7 @@ public class Web {
         } else {
             URI aUri;
             try {
+                log.trace("Trying to resolve URI for '{}'", link);
                 aUri = new URI(link);
             } catch (URISyntaxException e) {
                 throw new InvalidUriSyntaxException(e);

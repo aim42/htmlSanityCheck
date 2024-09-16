@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aim42.htmlsanitycheck.Configuration;
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
 import org.aim42.htmlsanitycheck.html.HtmlPage;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class MissingLocalResourcesChecker extends Checker {
     public static final String MLRC_MESSAGE_PREFIX = "local resource";
     public static final String MLRC_MESSAGE_MISSING = "missing";
@@ -47,6 +49,7 @@ public class MissingLocalResourcesChecker extends Checker {
 
     @Override
     protected SingleCheckResults check(final HtmlPage pageToCheck) {
+        log.trace("Checking '{}'", pageToCheck.getFile());
         //get list of all anchor-tags containing href="xyz" in html file
         List<String> allHrefs = pageToCheck.getAllHrefStrings();
 

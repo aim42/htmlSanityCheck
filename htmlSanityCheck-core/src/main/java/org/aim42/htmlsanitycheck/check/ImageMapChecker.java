@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aim42.htmlsanitycheck.Configuration;
 import org.aim42.htmlsanitycheck.collect.Finding;
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
@@ -23,6 +24,7 @@ import java.util.Set;
  * <p>
  * see also: <a href="http://www.w3schools.com/tags/tag_map.asp">http://www.w3schools.com/tags/tag_map.asp</a>
  **/
+@Slf4j
 public class ImageMapChecker extends Checker {
     private List<String> mapNames;
     private List<HtmlElement> imagesWithUsemapRefs;
@@ -44,6 +46,7 @@ public class ImageMapChecker extends Checker {
 
     @Override
     protected SingleCheckResults check(final HtmlPage pageToCheck) {
+        log.trace("Checking '{}'", pageToCheck.getFile());
 
         this.pageToCheck = pageToCheck;
 

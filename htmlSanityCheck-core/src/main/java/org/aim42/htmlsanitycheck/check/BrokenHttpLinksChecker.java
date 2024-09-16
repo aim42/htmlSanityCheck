@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.check;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aim42.htmlsanitycheck.Configuration;
 import org.aim42.htmlsanitycheck.collect.Finding;
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
@@ -20,6 +21,7 @@ import java.util.Set;
  *
  * @see <a href="https://www.w3schools.com/tags/att_a_href.asp">https://www.w3schools.com/tags/att_a_href.asp</a>
  */
+@Slf4j
 class BrokenHttpLinksChecker extends Checker {
 
     // get the (configured) statusCodes, just syntactic sugar...
@@ -51,6 +53,7 @@ class BrokenHttpLinksChecker extends Checker {
 
     @Override
     protected SingleCheckResults check(final HtmlPage pageToCheck) {
+        log.trace("Checking '{}'", pageToCheck.getFile());
 
         //get set of all a-tags "<a href=..." in html file,
         // restricted to http(s) links
