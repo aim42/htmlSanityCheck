@@ -22,12 +22,13 @@ WARNING: Only note that newer versions (>= 2.0.0) currently do not show up in th
 
 == Prerequisites
 
+[[sec:maven-central-account]]
 === Maven Central (Sonatype) account
 
 Make yourself familiar with https://central.sonatype.org/publish-ea/publish-ea-guide/[the publishing process].
 
 [CAUTION]
-.Credentials needed
+.Maven Central credentials needed
 ====
 You need respective credentials to upload files to Maven Central for the `org.aim42.htmlSanityCheck` namespace.
 Talk to Gernot Starke to get these permissions.
@@ -35,7 +36,41 @@ Talk to Gernot Starke to get these permissions.
 
 You will need to https://central.sonatype.org/register/central-portal/#create-an-account[sign up for Maven Central]
 (or, to be more precise, to its provider, Sonatype).
-Additionally, you need to create https://central.sonatype.org/publish/generate-portal-token/[a portal token].
+Additionally,
+you need
+to create https://central.sonatype.org/publish/generate-portal-token/[a portal token]footnote:[This is a different user/password than your login user.].
+
+Check out <<sec:release-environment>> how to inject these credentials in your environment for publication activities.
+
+[[sec:prerequisits-gpp]]
+=== Gradle Plugin Portal
+
+It is possible to publish new versions of the Plugin to the https://plugins.gradle.org/[Gradle Plugin Portal] (GPP).
+
+[[caution:gpp-publisher]]
+[CAUTION]
+.Unique publisher required
+====
+Only one person at a time can take responsibility for publishing of plugins (Or new versions) to GPP.
+Currently, this is https://plugins.gradle.org/u/GerdAschemann[Gerd Aschemann] (following https://plugins.gradle.org/u/gernotstarke[Gernot Starke]).
+Only the current maintainer can change the ownership (by creating a new ownership transformation request at https://github.com/gradle/plugin-portal-requests[]).
+====
+
+After creating a user, you need to `login` to GPP:
+
+[source,shell]
+----
+:htmlSanityCheck-gradle-plugin
+----
+
+This will put the respective key and secret to your `~/.gradle/gradle.properties` file.
+Alternatively, you can set these as environment variables:
+
+[source,shell]
+----
+export GRADLE_PUBLISH_KEY=...
+export GRADLE_PUBLISH_SECRET=...
+----
 
 [[sec:artifact-signing]]
 === Artifact signing
@@ -96,6 +131,7 @@ echo empty | gpg --clearsign -o /dev/null
 ----
 ====
 
+[[sec:release-environment]]
 === JReleaser Credentials / Environment Settings
 
 You will have to set the following environment variable to perform misc. https://jreleaser.org[JReleaser] actions.
@@ -109,9 +145,11 @@ export JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_PASSWORD=... # <3>
 export JRELEASER_ANNOUNCE_MASTODON_ACCESS_TOKEN=... <4>
 ----
 <1> Maven Central publications require two steps.
-This variable setting enables <<sec:stage-to-maven-central, upload to the staging area>>, perform <<sec:publish-to-maven-central,the final publication>> interactively.
+This variable setting enables <<sec:stage-to-maven-central,
+upload to the staging area>>, perform <<sec:publish-to-maven-central,the final publication>> interactively.
 <2> Get an appropriate GitHub token (needs write access to the repository).
-<3> Create a deployment user and password in your Maven Central (Sonatype) https://central.sonatype.com/account[account]footnote:[This is a different user/password than your login user.].
+<3> Follow the <<sec:maven-central-account,steps above>> to get the required Maven credentials.
+Create a deployment user and password in your Maven Central (Sonatype) https://central.sonatype.com/account[account].
 <4> Access token for your Mastodon Account (on https://mastodon.social[]footnote:[Publishing to a different Mastodon server requires more changes.]).
 
 
@@ -166,13 +204,31 @@ If you have GPG configured properly, you may use the <<tip:gpg-agent,GPG-Agent>>
 ----
 ====
 
+=== Publish on Gradle Plugin Portal
+
+Set the respective credentials (cf. <<sec:prerequisits-gpp,GPP Prerequisites>>).
+Then publish on GPP:
+
+[source,shell]
+----
+./gradlew -Pprofile=gpp :htmlSanityCheck-gradle-plugin:publishPlugins # <1>
+----
+<1> An additional `--validate-only` allows to check credentials
+
+Performing this for the first time after a <<caution:gpp-publisher,Change of the maintainer>> may take some time as the Gradle team will perform some checks.
+
+[TIP]
+====
+You can delete the published version if you fail with one of the other steps.
+====
+
 [[sec:publish-to-maven-central]]
 === Publish on Maven Central
 
 Publish the staged version on Maven Central,
 i.e., https://central.sonatype.com/publishing[Sonatype Central].
 
-=== Announce new release on Socia Media
+=== Announce new release on Social Media
 
 Finally, announce the new release on Social Media, i.e., https://mastodon.social/deck/tags/HTMLSanityCheck[Mastodon (Social)].
 

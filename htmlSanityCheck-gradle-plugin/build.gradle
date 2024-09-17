@@ -1,4 +1,5 @@
 plugins {
+    id 'com.gradle.plugin-publish' version '1.3.0' apply false
     id 'java-gradle-plugin'
     id 'jacoco-report-aggregation'
 
@@ -7,6 +8,18 @@ plugins {
     // id 'codenarc'
 }
 
+def profile = project.hasProperty('profile') ? project.property('profile') : 'no-gpp'
+
+afterEvaluate {
+    if (profile == 'gpp') {
+        apply plugin: 'com.gradle.plugin-publish'
+
+        generateMetadataFileForPluginMavenPublication {
+            dependsOn(groovydocJar)
+        }
+    }
+}
+//
 tasks.named('check') {
     dependsOn tasks.named('testCodeCoverageReport', JacocoReport)
 }
@@ -20,6 +33,7 @@ gradlePlugin {
             implementationClass = 'org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin'
             displayName = 'Gradle HtmlSanityCheck Plugin'
             description = project.description
+            tags = ["checks", "quality", "documentation", "html", "asciidoctor", "test"]
         }
     }
 }
