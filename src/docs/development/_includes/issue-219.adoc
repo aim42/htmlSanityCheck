@@ -1,7 +1,7 @@
 :filename: development/issue-219.adoc
-ifndef::plantumldir[:plantumldir: .plantuml/]
+include::../../_common.adoc[]
 
-== Handling 403 and 405 Status Codes
+== {issue-open} Handling 403 and 405 Status Codes (219)
 
 
 https://github.com/aim42/htmlSanityCheck/issues/219[Issue 219]
@@ -30,7 +30,7 @@ page exists.
 
 === Proposed Approach
 
-[plantuml,"{plantumldir}GET-after-HEAD-failapproach",svg]
+[plantuml,GET-after-HEAD-failapproach,svg]
 ....
 @startuml
 skinparam maxmessagesize 80
@@ -60,7 +60,7 @@ endfooter
 @enduml
 ....
 
-Reason for this "double check" is to keep the transmitted data volume low (and performance higher).
+The reason for this "double check" is to keep the transmitted data volume low (and performance higher).
 
 The general behavior we implement shall be the following
 `

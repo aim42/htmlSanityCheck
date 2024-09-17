@@ -1,0 +1,3 @@
+ifndef::imagesdir[:imagesdir: ./images]
+:issue-open: 🟢
+:issue-closed: 🟣

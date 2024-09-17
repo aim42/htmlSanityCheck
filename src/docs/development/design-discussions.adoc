@@ -7,12 +7,17 @@
 == {jbake-title}
 :icons: font
 :toc: right
-:toclevels: 3
+:toclevels: 4
 :toc-position: right
 // :experimental:
 
-include::_includes/issue-185.adoc[leveloffset=+1]
-include::_includes/issue-190.adoc[leveloffset=+1]
-include::_includes/issue-219.adoc[leveloffset=+1]
-include::_includes/issue-244.adoc[leveloffset=+1]
-include::_includes/issue-252.adoc[leveloffset=+1]
+=== Open Issues
+
+include::_includes/issue-185.adoc[leveloffset=+2]
+include::_includes/issue-219.adoc[leveloffset=+2]
+include::_includes/issue-252.adoc[leveloffset=+2]
+
+=== Resolved Issues
+
+include::_includes/issue-244.adoc[leveloffset=+2]
+include::_includes/issue-190.adoc[leveloffset=+2]

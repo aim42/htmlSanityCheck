@@ -1,14 +1,14 @@
 :filename: development/issue-190.adoc
-ifndef::plantumldir[:plantumldir: .plantuml/]
+include::../../_common.adoc[]
 
-== Refactoring the Main Checking Loop
+== {issue-closed} Refactoring the Main Checking Loop (190)
 
 https://github.com/aim42/htmlSanityCheck/issues/190[Issue 190]
 proposes to merge the two classes AllChecksRunner and ChecksRunner.
 
 === Proposed (new) Scenario
 
-[plantuml,"{plantumldir}mainloop-new",svg]
+[plantuml,mainloop-new,svg]
 ....
 include::MainLoop-new.puml[]
 ....

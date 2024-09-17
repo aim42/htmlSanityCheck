@@ -8,7 +8,7 @@ include::_config.adoc[]
 === Whitebox HtmlSanityChecker
 
 
-[plantuml,"{plantumldir}whitbox-hsc-level-1",svg]
+[plantuml,whitbox-hsc-level-1,svg]
 ....
 include::../../plantuml/whitebox-hsc-level-1.puml[]
 ....

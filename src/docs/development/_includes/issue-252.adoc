@@ -1,17 +1,14 @@
 :filename: development/issue-252.adoc
+include::../../_common.adoc[]
 
-== Issue 252 (MissingLocalResourcesChecker gives false positives)
+== {issue-open} MissingLocalResourcesChecker gives false positives (252)
 
-****
-.Problem Description
+=== Problem
 
-The MLR-Checker currently gives false positives ("false alarms")
-if the link has a form like
+https://github.com/aim42/htmlSanityCheck/issues/252[Issue 252]: complains that the MLR-Checker currently gives false positives ("false alarms") if the link has a form like
 
 [source,html]
 <a href="/foo">
-
-****
 
 === Background
 
@@ -28,7 +25,6 @@ can actually mean one of the following:
 
 where the extension is one of the following: `html, htm, shtml, phtml, php, asp, aspx, xml`
 
-
 === Proposed Approach
 
 * Define a proper name for the "link without extension" (`prefixOnlyHref`)
@@ -38,9 +34,6 @@ where the extension is one of the following: `html, htm, shtml, phtml, php, asp,
 The default should be the list given above.
 
 * Add these defaults to `Web`
-
-
-
 
 === Decision
 

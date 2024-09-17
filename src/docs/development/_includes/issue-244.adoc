@@ -1,6 +1,7 @@
 :filename: development/issue-244.adoc
+include::../../_common.adoc[]
 
-== Handling 30x Status Codes
+== {issue-closed} Handling 30x Status Codes (244)
 
 
 https://github.com/aim42/htmlSanityCheck/issues/244[Issue 244]

@@ -1,12 +1,14 @@
 :filename: development/issue-185.adoc
+include::../../_common.adoc[]
 
-== Automated Checker Factory
+== {issue-open} Automated Checker Factory (185)
 
 https://github.com/aim42/htmlSanityCheck/issues/185[Issue 185]
 proposes to automatically detect and instantiate Checker
-(sub-)classes.
+(sub-) classes.
 
 === Problem
+
 We want to adhere to the Open-Close principle (OCP)
 when adding new checkers:
 
@@ -37,12 +39,8 @@ class AllCheckers {
 
 A solution needs to address two issues:
 
-1.) _find_ all Checker subclasses
-One approach here relies on Java annotations,
-described by https://farenda.com/spring-find-annotated-classes/[Przemysław Wojnowski],
-and uses the https://github.com/ronmamo/reflections[Reflections] library.
-
-2.) _instantiate_ these classes (aka _Factory_ for the checkers)
+. _find_ all Checker subclasses, e.g., by https://www.baeldung.com/java-scan-annotations-runtime[Java Annotations].
+. _instantiate_ these classes (aka _Factory_ for the checkers)
 
 
 
