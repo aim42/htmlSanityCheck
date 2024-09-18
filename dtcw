@@ -12,7 +12,7 @@ set -o pipefail
 
 # See https://github.com/docToolchain/docToolchain/releases for available versions.
 # Set DTC_VERSION to "latest" to get the latest, yet unreleased version.
-: "${DTC_VERSION:=3.4.0}"
+: "${DTC_VERSION:=3.4.1}"
 
 # if not set, public docker hub is used
 : "${DTC_DOCKER_PREFIX:=}"
@@ -150,8 +150,8 @@ usage() {
     cat <<EOF
 dtcw - Create awesome documentation the easy way with docToolchain.
 
-       ./dtcw [local] install {doctoolchain | java }
 Usage: ./dtcw [environment] [option...] [task...]
+       ./dtcw [local] install {doctoolchain | java }
 
 Use 'local', 'sdk' or 'docker' as first argument to force the use of a specific
 docToolchain environment:
