@@ -42,7 +42,7 @@ run copyPdf             cp -rp build/pdf build/microsite/output
 run copyStandalone      cp -rp build/html5/images build/microsite/output \
                           && mkdir -p build/microsite/output/single-page/ \
                           && cp -p build/html5/arc42/hsc_arc42.html build/microsite/output/single-page/hsc_arc42-single-page.html
-run htmlSanityCheck     "(cd self-check && ../gradlew htmlSanityCheck)"
+run htmlSanityCheck     "(cd self-check && ../gradlew htmlSanityCheck --refresh-dependencies)"
 run copyCheckResult     cp -rp build/reports/htmlchecks build/microsite/output
 run fixDocLinks         "sed -i .bak \
                           -e 's, href=\"${PWD}/build/microsite/output/, href=\"../,g' \
