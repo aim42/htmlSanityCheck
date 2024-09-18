@@ -57,7 +57,6 @@ public class AllChecksRunner {
 
     /**
      * runs all available checks
-     *
      */
 
     public AllChecksRunner(Configuration configuration) {
@@ -75,12 +74,12 @@ public class AllChecksRunner {
         this.checkingResultsDir = configuration.getCheckingResultsDir();
         this.junitResultsDir = configuration.getJunitResultsDir();
 
-        logger.debug("AllChecksRunner created with " + this.checkers.size() + " checkers for " + filesToCheck.size() + " files");
+        logger.debug("AllChecksRunner created with {} checkers for {} files",
+                this.checkers.size(), filesToCheck.size());
     }
 
     /**
      * Performs all available checks on pageToCheck
-     *
      */
     public PerRunResults performAllChecks() throws IOException {
 
@@ -110,9 +109,9 @@ public class AllChecksRunner {
     }
 
     /**
-     *  Performs all configured checks on a single HTML file.
+     * Performs all configured checks on a single HTML file.
      * <p>
-     *  Creates a {@link org.aim42.htmlsanitycheck.collect.SinglePageResults} instance to keep checking results.
+     * Creates a {@link org.aim42.htmlsanitycheck.collect.SinglePageResults} instance to keep checking results.
      */
     protected SinglePageResults performChecksForOneFile(File thisFile) throws IOException {
 
@@ -178,15 +177,5 @@ public class AllChecksRunner {
 
         Reporter reporter = new JUnitXmlReporter(resultsForAllPages, resultsDir);
         reporter.reportFindings();
-    }
-
-    /**
-     * Runs the checks from the command
-     * line with default settings...
-     */
-    public static void main(String[] args) {
-        // TODO: read parameter from command line
-
-        // Empty method is currently marked "prio-2" issue by CodeNarc... we'll ignore that
     }
 }

@@ -23,7 +23,6 @@ import org.gradle.api.tasks.TaskAction
  */
 class HtmlSanityCheckTask extends DefaultTask {
 
-    //
     // we support checking several named files
     @InputFiles
     FileCollection sourceDocuments
@@ -79,11 +78,7 @@ class HtmlSanityCheckTask extends DefaultTask {
 
     // private stuff
     // **************************************************************************
-
-    private Set<File> allFilesToCheck
-
     private Configuration myConfig
-
 
     /**
      * Sets sensible defaults for important attributes.
@@ -92,16 +87,13 @@ class HtmlSanityCheckTask extends DefaultTask {
      * by setting outputs.upToDateWhen to false.
      */
     HtmlSanityCheckTask() {
-
         // Never consider this task up-to-date.
         // thx https://github.com/stevesaliman/gradle-cobertura-plugin/commit/d61191f7d5f4e8e89abcd5f3839a210985526648
         outputs.upToDateWhen { false }
 
         // give sensible default for output directory, see https://github.com/aim42/htmlSanityCheck/issues/205
-        checkingResultsDir = new File(project.buildDir, '/reports/htmlSanityCheck/')
-        junitResultsDir = new File(project.buildDir, '/test-results/htmlSanityCheck/')
-
-
+        checkingResultsDir = new File(project.DEFAULT_BUILD_DIR_NAME, '/reports/htmlSanityCheck/')
+        junitResultsDir = new File(project.DEFAULT_BUILD_DIR_NAME, '/test-results/htmlSanityCheck/')
     }
 
     void setSourceDir(File sourceDir) {
@@ -112,13 +104,12 @@ class HtmlSanityCheckTask extends DefaultTask {
         }
     }
 
-/**
- * entry point for several html sanity checks
- * @author Gernot Starke <gs@gernotstarke.de>
- */
+    /**
+     * Entry point for several html sanity checks
+     * @author Gernot Starke <gs@gernotstarke.de>
+     */
     @TaskAction
     void sanityCheckHtml() {
-
         // tell us about these parameters
         logBuildParameter()
 
@@ -126,48 +117,43 @@ class HtmlSanityCheckTask extends DefaultTask {
         myConfig = setupConfiguration()
 
         // if we have no valid configuration, abort with exception
-        if (myConfig.isValid()) {
+        myConfig.validate()
 
-            // create output directory for checking results
-            checkingResultsDir.mkdirs()
-            assert checkingResultsDir.isDirectory()
-            assert checkingResultsDir.canWrite()
-            if (junitResultsDir) {
-                junitResultsDir.mkdirs()
-                assert junitResultsDir.isDirectory()
-                assert junitResultsDir.canWrite()
-            }
+        // create output directory for checking results
+        checkingResultsDir.mkdirs()
+        assert checkingResultsDir.isDirectory()
+        assert checkingResultsDir.canWrite()
+        if (junitResultsDir) {
+            junitResultsDir.mkdirs()
+            assert junitResultsDir.isDirectory()
+            assert junitResultsDir.canWrite()
+        }
 
-            // TODO: unclear: do we need to adjust pathnames if running on Windows(tm)??
+        // TODO: unclear: do we need to adjust path-names if running on Windows(tm)??
 
-            logger.info("buildfile-info", sourceDocuments?.toString())
-            logger.info("allFilesToCheck" + allFilesToCheck.toString(), "")
+        logger.info("Source documents: '{}'", sourceDocuments)
 
-            // create an AllChecksRunner...
-            def allChecksRunner = new AllChecksRunner(myConfig)
+        // create an AllChecksRunner...
+        def allChecksRunner = new AllChecksRunner(myConfig)
 
-            // ... and perform the actual checks
-            def allChecks = allChecksRunner.performAllChecks()
+        // ... and perform the actual checks
+        def allChecks = allChecksRunner.performAllChecks()
 
-            // check for findings and fail build if requested
-            def nrOfFindingsOnAllPages = allChecks.nrOfFindingsOnAllPages()
-            logger.debug("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
+        // check for findings and fail build if requested
+        def nrOfFindingsOnAllPages = allChecks.nrOfFindingsOnAllPages()
+        logger.debug("Found ${nrOfFindingsOnAllPages} error(s) on all checked pages")
 
-            if (failOnErrors && nrOfFindingsOnAllPages > 0) {
-                def failureMsg = """
+        if (failOnErrors && nrOfFindingsOnAllPages > 0) {
+            def failureMsg = """
 Your build configuration included 'failOnErrors=true', and ${nrOfFindingsOnAllPages} error(s) were found on all checked pages.
 See ${checkingResultsDir} for a detailed report."""
-                throw new GradleException(failureMsg)
-            }
-        } else {
-            logger.warn("""Fatal configuration errors preventing checks:\n
-            ${myConfig.toString()}""")
+            throw new GradleException(failureMsg)
         }
     }
 
     /**
      * setup a @Configuration instance containing all given configuration parameters
-     * from the gradle buildfile.
+     * from the gradle build-file.
      *
      * This method has to be updated in case of new configuration parameters!!
      *
@@ -177,7 +163,7 @@ See ${checkingResultsDir} for a detailed report."""
     protected Configuration setupConfiguration() {
 
         Configuration result = Configuration.builder()
-                .sourceDocuments(sourceDocuments.files)
+                .sourceDocuments(sourceDocuments?.files)
                 .sourceDir(sourceDir)
                 .checkingResultsDir(checkingResultsDir)
                 .junitResultsDir(junitResultsDir)
@@ -210,16 +196,13 @@ See ${checkingResultsDir} for a detailed report."""
 
     private void logBuildParameter() {
         logger.info "=" * 70
-        logger.info "Parameters given to sanityCheck plugin from gradle buildfile..."
+        logger.info "Parameters given to sanityCheck plugin from gradle build-file..."
         logger.info "Files to check  : $sourceDocuments"
         logger.info "Source directory: $sourceDir"
         logger.info "Results dir     : $checkingResultsDir"
         logger.info "JUnit dir       : $junitResultsDir"
         logger.info "Fail on errors  : $failOnErrors"
-
     }
-
-
 }
 
 /*========================================================================

@@ -46,8 +46,8 @@ public class Configuration {
      * httpSuccessCodes = [503]
      * <p>
      * During configuration initialization, the value(s) of httpSuccessCodes will be:
-     * 1.) set-added to httpSuccessCodes,
-     * 2.) set-subtracted from the warnings and errors.
+     * 1.) Set-added to httpSuccessCodes,
+     * 2.) Set-subtracted from the warnings and errors.
      */
     // Make modifiable copies!
     final Set<Integer> httpWarningCodes = new HashSet<>(Web.HTTP_WARNING_CODES);
@@ -75,7 +75,7 @@ public class Configuration {
     }
 
     /**
-     * overwrites httpSuccessCodes configuration
+     * Overrides httpSuccessCodes configuration
      */
     public void overrideHttpSuccessCodes(Set<Integer> additionalSuccessCodes) {
         if (null != additionalSuccessCodes) {
@@ -86,12 +86,12 @@ public class Configuration {
                     }
             );
         } else {
-            log.warn("Trying to override http success codes with empty set of codes");
+            log.warn("Trying to override http success codes with an empty set of codes");
         }
     }
 
     /**
-     * overwrites httpWarningCodes configuration
+     * Overrides httpWarningCodes configuration
      */
     public void overrideHttpWarningCodes(Set<Integer> additionalWarningCodes) {
         if (null != additionalWarningCodes) {
@@ -102,12 +102,12 @@ public class Configuration {
                     }
             );
         } else {
-            log.warn("Trying to override http warning codes with empty set of codes");
+            log.warn("Trying to override http warning codes with an empty set of codes");
         }
     }
 
     /**
-     * overwrites httpErrorCodes configuration
+     * Overrides httpErrorCodes configuration
      */
     public void overrideHttpErrorCodes(Set<Integer> additionalErrorCodes) {
         if (null != additionalErrorCodes) {
@@ -118,17 +118,17 @@ public class Configuration {
                     }
             );
         } else {
-            log.warn("Trying to override http error codes with empty set of codes");
+            log.warn("Trying to override http error codes with an empty set of codes");
         }
     }
 
     /**
-     * checks plausibility of configuration:
-     * We need at least one html file as input, maybe several
+     * Checks plausibility of configuration:
+     * We need at least one HTML file as input, maybe several
      */
-    public Boolean isValid() throws MisconfigurationException {
+    public void validate() throws MisconfigurationException {
 
-        // cannot check if source director is null (= unspecified)
+        // cannot check if the source directory is null (= unspecified)
         if ((sourceDir == null)) {
             throw new MisconfigurationException("source directory must not be null");
         }
@@ -154,10 +154,5 @@ public class Configuration {
         if (checksToExecute == null || checksToExecute.isEmpty()) {
             throw new MisconfigurationException("checks to execute have to be a non-empty list");
         }
-
-
-        // if no exception has been thrown until now,
-        // the configuration seems to be valid..
-        return true;
     }
 }

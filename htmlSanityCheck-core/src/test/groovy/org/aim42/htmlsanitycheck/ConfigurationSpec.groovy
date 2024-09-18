@@ -37,7 +37,6 @@ class ConfigurationSpec extends Specification {
 
         and: "503 is NOT contained in warningCodes"
         !myConfig.getHttpWarningCodes().contains(newSuccessCode)
-
     }
 
     def "can overwrite http warning codes"() {
@@ -88,8 +87,7 @@ class ConfigurationSpec extends Specification {
 
         when: "we create a configuration with this single file"
         myConfig.setSourceConfiguration(tempDir, [htmlFile] as Set)
-
-        myConfig.isValid()
+        myConfig.validate()
 
         then:
         htmlFile.exists()
@@ -111,29 +109,26 @@ class ConfigurationSpec extends Specification {
         myConfig.setSourceConfiguration(srcDir, srcDocs as Set)
 
         when: "configuration is validated..."
-        myConfig.isValid()
+        myConfig.validate()
 
         then: "an exception is thrown"
         thrown MisconfigurationException
 
-
         where:
-
-        srcDir                        | srcDocs
-        null                          | null
+        srcDir                          | srcDocs
+        null                            | null
         new File("/_non/exists_/d_ir/") | null
         new File("/_non/exists_/d_ir/") | []
 
         // existing but empty directory is absurd too...
-        File.createTempDir()          | []
-
+        File.createTempDir()            | []
     }
 
     // this spec is a syntactic variation of the data (table-)driven test
     def "empty configuration makes no sense"() {
 
         when:
-        myConfig.isValid()
+        myConfig.validate()
 
         then:
         thrown MisconfigurationException
@@ -151,14 +146,21 @@ class ConfigurationSpec extends Specification {
                 .build()
 
         when:
-        myConfig.valid
+        myConfig.validate()
 
         then:
         def e = thrown(MisconfigurationException)
         e.message == "checks to execute have to be a non-empty list"
 
         where:
-        checkersToExecute << [[] as List]
+        checkersToExecute << [[] as List<Class<? extends Checker>>]
     }
 
+    // The following methods only increase code coverage without providing any test at all
+    def "cannot overwrite http error codes with null list"() {
+        expect: "we overwrite the standard Configurations with null"
+        myConfig.overrideHttpSuccessCodes(null)
+        myConfig.overrideHttpWarningCodes(null)
+        myConfig.overrideHttpErrorCodes(null)
+    }
 }
