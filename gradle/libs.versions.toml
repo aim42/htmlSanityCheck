@@ -9,7 +9,7 @@ junit-vintage = { module = 'org.junit.vintage:junit-vintage-engine', version.ref
 lombok = 'org.projectlombok:lombok:1.18.34'
 slf4j-api = { module = 'org.slf4j:slf4j-api', version.ref = 'slf4j-version' }
 slf4j-nop = { module = 'org.slf4j:slf4j-nop', version.ref = 'slf4j-version' }
-spock = 'org.spockframework:spock-bom:2.3-groovy-3.0'
+spock = 'org.spockframework:spock-bom:2.3-groovy-4.0'
 
 [plugins]
 gradle-versions = { id= 'com.github.ben-manes.versions', version = '0.51.0' }
