@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.cli
 
+import groovy.transform.TypeChecked
 import org.aim42.htmlsanitycheck.AllChecksRunner
 import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.ProductInformation
@@ -10,6 +11,7 @@ import picocli.CommandLine.Option
 import picocli.CommandLine.Parameters
 
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.logging.Formatter
 import java.util.logging.ConsoleHandler
@@ -25,6 +27,7 @@ import java.util.logging.SimpleFormatter
         description = "Check HTML files for Sanity",
         showDefaultValues = true
 )
+@TypeChecked
 class HscCommand implements Runnable {
     private static final Logger rootLogger
     private static ConsoleHandler consoleHandler
@@ -109,7 +112,7 @@ class HscCommand implements Runnable {
                 .filter({ path ->
                     suffixes.any { suffix -> path.toString().endsWith(".${suffix}") }
                 })
-                .collect { it.toFile() }
+                .collect { Path path ->  path.toFile() }
     }
 
     static class HscRunner {
