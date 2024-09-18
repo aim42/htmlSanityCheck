@@ -52,9 +52,10 @@ TBD
    |  |  |  |  |-org
    |  |  |  |  |  |-aim42
    |  |  |  |  |  |  |-htmlsanitycheck
-   |  |  |  |  |  |  |  | ...
-   |  |  |  |  |  |  |  |-HtmlSanityCheckPlugin.groovy // <1>
-   |  |  |  |  |  |  |  |-HtmlSanityCheckTask.groovy
+   |  |  |  |  |  |  |  |-gradle
+   |  |  |  |  |  |  |  |  | ...
+   |  |  |  |  |  |  |  |  |-HtmlSanityCheckPlugin.groovy // <1>
+   |  |  |  |  |  |  |  |  |-HtmlSanityCheckTask.groovy
    |  |  |  |  |-resources
    |  |  |  |  |  |-META-INF                          // <2>
    |  |  |  |  |  |  |-gradle-plugins
@@ -63,15 +64,16 @@ TBD
    |  |  |  |  |-org
    |  |  |  |  |  |-aim42
    |  |  |  |  |  |  |-htmlsanitycheck
-   |  |  |  |  |  |  |  | ...
-   |  |  |  |  |  |  |  |-HtmlSanityCheckPluginTest
+   |  |  |  |  |  |  |  |-gradle
+   |  |  |  |  |  |  |  |  | ...
+   |  |  |  |  |  |  |  |  |-HtmlSanityCheckPluginSpec
    |
 ----
 <1> the actual plugin code, a xyzPlugin and xyzTask groovy files
 <2> Gradle expects plugin properties in META-INF
 <3> Property file containing the name of the actual implementation class:
 
- implementation-class=org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin
+ implementation-class=org.aim42.htmlsanitycheck.gradle.HtmlSanityCheckPlugin
 
 ==== Notes for IntelliJ Users
 If you work with IntelliJ, you should configure your run- and test configurations

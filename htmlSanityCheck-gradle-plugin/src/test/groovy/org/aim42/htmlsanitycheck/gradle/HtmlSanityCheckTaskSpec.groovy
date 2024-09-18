@@ -1,5 +1,6 @@
-package org.aim42.htmlsanitycheck
+package org.aim42.htmlsanitycheck.gradle
 
+import org.aim42.htmlsanitycheck.MisconfigurationException
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder

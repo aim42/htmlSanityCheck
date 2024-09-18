@@ -30,7 +30,7 @@ gradlePlugin {
     plugins {
         htmlSanityCheck {
             id = 'org.aim42.htmlSanityCheck'
-            implementationClass = 'org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin'
+            implementationClass = 'org.aim42.htmlsanitycheck.gradle.HtmlSanityCheckPlugin'
             displayName = 'Gradle HtmlSanityCheck Plugin'
             description = project.description
             tags = ["checks", "quality", "documentation", "html", "asciidoctor", "test"]

@@ -1,23 +1,19 @@
 // see end-of-file for license information
 
-package org.aim42.htmlsanitycheck
+package org.aim42.htmlsanitycheck.gradle
 
+import groovy.transform.TypeChecked
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.language.base.plugins.LifecycleBasePlugin
 
+@TypeChecked
 // tag::gradle-plugin-implementation[]
 class HtmlSanityCheckPlugin implements Plugin<Project> {
 
     final static String HTML_SANITY_CHECK = "htmlSanityCheck"
 
     void apply(Project project) {
-
-        project.task( HTML_SANITY_CHECK,
-                type: HtmlSanityCheckTask,
-                description: "performs semantic checks on html files",
-                group: LifecycleBasePlugin.VERIFICATION_GROUP)
-
+        project.tasks.register( HTML_SANITY_CHECK, HtmlSanityCheckTask.class)
     }
 }
 // end::gradle-plugin-implementation[]

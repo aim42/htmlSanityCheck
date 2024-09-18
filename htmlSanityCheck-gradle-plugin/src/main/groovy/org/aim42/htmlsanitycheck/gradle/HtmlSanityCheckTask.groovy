@@ -1,6 +1,11 @@
-package org.aim42.htmlsanitycheck
+package org.aim42.htmlsanitycheck.gradle
 
+import groovy.transform.TypeChecked
+import groovy.transform.TypeCheckingMode
+import org.aim42.htmlsanitycheck.AllChecksRunner
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.check.AllCheckers
+import org.aim42.htmlsanitycheck.check.Checker
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.file.FileCollection
@@ -10,6 +15,7 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 // see end-of-file for license information
 
@@ -21,6 +27,7 @@ import org.gradle.api.tasks.TaskAction
  *
  * @author Gernot Starke
  */
+@TypeChecked
 class HtmlSanityCheckTask extends DefaultTask {
 
     // we support checking several named files
@@ -74,7 +81,7 @@ class HtmlSanityCheckTask extends DefaultTask {
     Set<Integer> httpSuccessCodes
 
     @Input
-    List<Class> checkerClasses = AllCheckers.CHECKER_CLASSES
+    List<Class<? extends Checker>> checkerClasses = AllCheckers.CHECKER_CLASSES
 
     // private stuff
     // **************************************************************************
@@ -87,6 +94,8 @@ class HtmlSanityCheckTask extends DefaultTask {
      * by setting outputs.upToDateWhen to false.
      */
     HtmlSanityCheckTask() {
+        description = "performs semantic checks on html files"
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
         // Never consider this task up-to-date.
         // thx https://github.com/stevesaliman/gradle-cobertura-plugin/commit/d61191f7d5f4e8e89abcd5f3839a210985526648
         outputs.upToDateWhen { false }
@@ -96,6 +105,7 @@ class HtmlSanityCheckTask extends DefaultTask {
         junitResultsDir = new File(project.DEFAULT_BUILD_DIR_NAME, '/test-results/htmlSanityCheck/')
     }
 
+    @TypeChecked(TypeCheckingMode.SKIP)
     void setSourceDir(File sourceDir) {
         this.sourceDir = sourceDir
         if (sourceDocuments == null) {

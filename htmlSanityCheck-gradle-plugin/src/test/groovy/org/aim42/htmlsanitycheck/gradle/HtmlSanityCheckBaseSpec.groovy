@@ -1,4 +1,4 @@
-package org.aim42.htmlsanitycheck
+package org.aim42.htmlsanitycheck.gradle
 
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder

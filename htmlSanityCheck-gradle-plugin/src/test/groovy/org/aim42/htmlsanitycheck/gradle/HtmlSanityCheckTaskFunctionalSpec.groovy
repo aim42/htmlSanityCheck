@@ -1,4 +1,4 @@
-package org.aim42.htmlsanitycheck
+package org.aim42.htmlsanitycheck.gradle
 
 
 import org.gradle.testkit.runner.GradleRunner

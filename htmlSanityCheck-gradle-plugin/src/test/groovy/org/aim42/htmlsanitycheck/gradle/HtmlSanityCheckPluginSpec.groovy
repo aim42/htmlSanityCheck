@@ -1,4 +1,5 @@
-package org.aim42.htmlsanitycheck
+package org.aim42.htmlsanitycheck.gradle
+
 
 import org.gradle.api.Project
 import org.gradle.language.base.plugins.LifecycleBasePlugin
