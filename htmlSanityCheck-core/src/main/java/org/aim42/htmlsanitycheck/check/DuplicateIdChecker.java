@@ -11,7 +11,6 @@ import java.util.Set;
 
 @Slf4j
 public class DuplicateIdChecker extends Checker {
-    private Set<String> idStringsSet;
     private List<String> idStringsList;
 
     public DuplicateIdChecker(Configuration pConfig) {
@@ -27,6 +26,7 @@ public class DuplicateIdChecker extends Checker {
 
     @Override
     protected SingleCheckResults check(final HtmlPage pageToCheck) {
+        Set<String> idStringsSet;
         log.trace("Checking '{}'", pageToCheck.getFile());
 
         //get list of all tagsWithId '<... id="XYZ"...' in html file
@@ -54,21 +54,5 @@ public class DuplicateIdChecker extends Checker {
             getCheckingResults().newFinding("id \"" + idString + "\" has " + nrOfOccurrences + " definitions.");
         }
 
-    }
-
-    public Set<String> getIdStringsSet() {
-        return idStringsSet;
-    }
-
-    public void setIdStringsSet(Set<String> idStringsSet) {
-        this.idStringsSet = idStringsSet;
-    }
-
-    public List<String> getIdStringsList() {
-        return idStringsList;
-    }
-
-    public void setIdStringsList(List<String> idStringsList) {
-        this.idStringsList = idStringsList;
     }
 }

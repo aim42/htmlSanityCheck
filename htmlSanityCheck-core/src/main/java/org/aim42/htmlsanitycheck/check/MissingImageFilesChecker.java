@@ -45,7 +45,7 @@ public class MissingImageFilesChecker extends Checker {
         //get list of all image-tags "<img..." in html file
         images = pageToCheck.getAllImageTags();
 
-        logger.debug("images to check: " + images);
+        logger.debug("images to check: {}", images);
 
         checkAllImages();
 
@@ -67,9 +67,9 @@ public class MissingImageFilesChecker extends Checker {
         boolean isRemoteURL = Web.isRemoteURL(imageSrcAttribute);
         boolean isDataURI = Web.isDataURI(imageSrcAttribute);
         if (!isRemoteURL) {
+            getCheckingResults().incNrOfChecks();
             if (isDataURI) {
                 // bookkeeping:
-                getCheckingResults().incNrOfChecks();
 
                 doesDataURIContainData(imageSrcAttribute);
 
@@ -77,7 +77,6 @@ public class MissingImageFilesChecker extends Checker {
                 //we have a simple local image
 
                 // bookkeeping:
-                getCheckingResults().incNrOfChecks();
 
                 doesImageFileExist(imageSrcAttribute);
             }

@@ -91,8 +91,10 @@ check for duplicate map names
         Set<String> mapNameSet = new HashSet<>(mapNames);
 
         mapNameSet.stream()
-                .peek(a -> getCheckingResults().incNrOfChecks())
-                .filter(name -> mapNames.stream().filter(name2 -> name2.equals(name)).count() > 1)
+                .filter(name -> {
+                    getCheckingResults().incNrOfChecks();
+                    return mapNames.stream().filter(name2 -> name2.equals(name)).count() > 1;
+                })
                 .forEach(mapName ->
                         getCheckingResults().addFinding(
                                 new Finding(mapNames.stream().filter(name2 -> name2.equals(mapName)).count() + " imagemaps with identical name \"" + mapName + "\" exist.")));
@@ -138,8 +140,10 @@ check for duplicate map names
         // TODO replace checkEmptyMaps with additional check here
 
         areaHrefs.stream()
-                .peek(a -> getCheckingResults().incNrOfChecks())
-                .filter(Web::isCrossReference)
+                .filter(href -> {
+                    getCheckingResults().incNrOfChecks();
+                    return Web.isCrossReference(href);
+                })
                 .forEach(href -> checkLocalHref(href, mapName, areaHrefs));
 
     }

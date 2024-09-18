@@ -24,6 +24,10 @@ import java.util.Set;
 @Slf4j
 class BrokenHttpLinksChecker extends Checker {
 
+    static {
+        TrustAllCertificates.install();
+    }
+
     // get the (configured) statusCodes, just syntactic sugar...
     private final Set<Integer> successCodes;
     private final Set<Integer> warningCodes;
@@ -97,91 +101,84 @@ class BrokenHttpLinksChecker extends Checker {
 
 
     protected void doubleCheckSingleHttpLink(String href) {
-
-
-        // to create appropriate error messages
-        String problem;
-
         // bookkeeping:
         getCheckingResults().incNrOfChecks();
 
         try {
             URL url = new URL(href);
-
-            // check if localhost-URL
             checkIfLocalhostURL(url, href);
-
-            // check if (numerical) IP address
             checkIfIPAddress(url, href);
-
-            try {
-                HttpURLConnection firstConnection = getNewURLConnection(url);
-
-                // try to connect
-                firstConnection.connect();
-                int responseCode = firstConnection.getResponseCode();
-
-                // issue 218 and 219: some web servers respond with 403 or 405
-                // when given HEAD requests. Therefore, try GET
-                if (successCodes.contains(responseCode)) {
-                    return;
-                }
-                // issue 244: special case for redirects
-                // thanks to https://stackoverflow.com/questions/39718059/read-from-url-in-groovy-with-redirect
-                else if (Web.HTTP_REDIRECT_CODES.contains(responseCode)) {
-                    String newLocation;
-                    if (firstConnection.getHeaderField("Location") != null) {
-                        newLocation = firstConnection.getHeaderField("Location");
-
-                        problem = String.format("Warning: %s returned statuscode %d, new location: %s", href, responseCode, newLocation);
-                        getCheckingResults().addFinding(new Finding(problem));
-
-                    }
-                }
-                // in case of errors or warnings,
-                // try again with GET.
-                else {
-                    HttpURLConnection secondConnection = getNewURLConnection(url);
-                    secondConnection.setRequestMethod("GET");
-                    int finalResponseCode = secondConnection.getResponseCode();
-                    secondConnection.disconnect();
-
-                    if (successCodes.contains(finalResponseCode)) {
-                        return;
-                    } else if (warningCodes.contains(finalResponseCode)) {
-                        problem = "Warning:";
-                    } else if (errorCodes.contains(finalResponseCode)) {
-                        problem = "Error:";
-                    } else {
-                        problem = "Error: Unknown or unclassified response code:";
-                    }
-
-                    problem += String.format(" %s returned statuscode %d.", href, responseCode);
-
-                    getCheckingResults().addFinding(new Finding(problem));
-
-                } // else
-
-                // cleanup firstConnection
-                firstConnection.disconnect();
-
-            } catch (UnknownHostException exception) {
-                Finding unknownHostFinding = new Finding("Unknown host with href=" + href);
-                getCheckingResults().addFinding(unknownHostFinding);
-            } catch (IOException exception) {
-                Finding someException = new Finding("exception " + exception + " with href=" + href);
-                getCheckingResults().addFinding(someException);
-            }
+            checkHttpLinkWithRetry(url, href);
         } catch (MalformedURLException exception) {
             Finding malformedURLFinding = new Finding("malformed URL exception with href=" + href);
             getCheckingResults().addFinding(malformedURLFinding);
         }
     }
 
+    private void checkHttpLinkWithRetry(URL url, String href) {
+        String problem;
+        try {
+            HttpURLConnection firstConnection = getNewURLConnection(url);
+
+            // try to connect
+            firstConnection.connect();
+            int responseCode = firstConnection.getResponseCode();
+
+            // issue 218 and 219: some web servers respond with 403 or 405
+            // when given HEAD requests. Therefore, try to GET
+            if (successCodes.contains(responseCode)) {
+                return;
+            }
+            // issue 244: special case for redirects
+            // thanks to https://stackoverflow.com/questions/39718059/read-from-url-in-groovy-with-redirect
+            else if (Web.HTTP_REDIRECT_CODES.contains(responseCode)) {
+                String newLocation;
+                if (firstConnection.getHeaderField("Location") != null) {
+                    newLocation = firstConnection.getHeaderField("Location");
+
+                    problem = String.format("Warning: %s returned statuscode %d, new location: %s", href, responseCode, newLocation);
+                    getCheckingResults().addFinding(new Finding(problem));
+
+                }
+            }
+            // in case of errors or warnings,
+            // try again with GET.
+            else {
+                HttpURLConnection secondConnection = getNewURLConnection(url);
+                secondConnection.setRequestMethod("GET");
+                int finalResponseCode = secondConnection.getResponseCode();
+                secondConnection.disconnect();
+
+                if (successCodes.contains(finalResponseCode)) {
+                    return;
+                } else if (warningCodes.contains(finalResponseCode)) {
+                    problem = "Warning:";
+                } else if (errorCodes.contains(finalResponseCode)) {
+                    problem = "Error:";
+                } else {
+                    problem = "Error: Unknown or unclassified response code:";
+                }
+
+                problem += String.format(" %s returned statuscode %d.", href, responseCode);
+
+                getCheckingResults().addFinding(new Finding(problem));
+
+            } // else
+
+            // cleanup firstConnection
+            firstConnection.disconnect();
+
+        } catch (UnknownHostException exception) {
+            Finding unknownHostFinding = new Finding("Unknown host with href=" + href);
+            getCheckingResults().addFinding(unknownHostFinding);
+        } catch (IOException exception) {
+            Finding someException = new Finding("exception " + exception + " with href=" + href);
+            getCheckingResults().addFinding(someException);
+        }
+    }
+
 
     private HttpURLConnection getNewURLConnection(URL url) throws IOException {
-
-        TrustAllCertificates.install();
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("HEAD");
@@ -205,7 +202,7 @@ class BrokenHttpLinksChecker extends Checker {
 
     // if configured, ip addresses in URLs yield warnings
     private void checkIfIPAddress(URL url, String href) {
-        if (!getMyConfig().getIgnoreIPAddresses()) {
+        if (!getMyConfig().isIgnoreIPAddresses()) {
             String host = url.getHost();
 
             if (host.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")) {
@@ -217,7 +214,7 @@ class BrokenHttpLinksChecker extends Checker {
 
     // if configured ,localhost-URLs yield warnings!
     private void checkIfLocalhostURL(URL url, String href) {
-        if (!getMyConfig().getIgnoreLocalhost()) {
+        if (!getMyConfig().isIgnoreLocalhost()) {
             String host = url.getHost();
             if (("localhost".equals(host)) || host.startsWith("127.0.0")) {
                 Finding localhostWarning = new Finding("Warning: localhost urls indicates suspicious environment dependency: href=" + href);

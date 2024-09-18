@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aim42.htmlsanitycheck.Configuration;
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
 import org.aim42.htmlsanitycheck.html.HtmlPage;
+import org.aim42.htmlsanitycheck.tools.InvalidUriSyntaxException;
 import org.aim42.htmlsanitycheck.tools.Web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +62,7 @@ public class MissingLocalResourcesChecker extends Checker {
         // created from the List of all by toSet() method
         Set<String> localResourcesSet = new HashSet<>(localResourcesList);
 
-        logger.debug("local resources set: " + localResourcesSet);
+        logger.debug("local resources set: {}", localResourcesSet);
 
         final File file1 = pageToCheck.getFile();
         final File file = (file1 == null ? null : file1.getParentFile());
@@ -82,7 +83,7 @@ public class MissingLocalResourcesChecker extends Checker {
     private void checkSingleLocalResource(String localResource) {
         // the localResource is either path+filename  or filename or directory
 
-        logger.debug("single resource to be checked: + " + localResource);
+        logger.debug("single resource to be checked: {}", localResource);
 
         // bookkeeping:
         getCheckingResults().incNrOfChecks();
@@ -92,13 +93,12 @@ public class MissingLocalResourcesChecker extends Checker {
         try {
             localResourcePath = new URI(localResource).getPath();
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            throw new InvalidUriSyntaxException(e);
         }
 
         if (localResourcePath == null) {
             // For example, javascript:;
             return;
-
         }
 
 

@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,11 +33,18 @@ public class Configuration {
     File sourceDir;
     File checkingResultsDir;
     File junitResultsDir;
-    Boolean consoleReport;
-    Boolean failOnErrors;
-    Integer httpConnectionTimeout;
-    Boolean ignoreLocalhost;
-    Boolean ignoreIPAddresses;
+    @Builder.Default
+    Boolean consoleReport = false;
+    @Builder.Default
+    Boolean failOnErrors = false;
+    @Builder.Default
+    Integer httpConnectionTimeout = 5000;
+    @Getter(AccessLevel.NONE)
+    @Builder.Default
+    Boolean ignoreLocalhost = false;
+    @Getter(AccessLevel.NONE)
+    @Builder.Default
+    Boolean ignoreIPAddresses = false;
     /*
      * Explanation for configuring http status codes:
      * The standard http status codes are defined in class @link NetUtil and can
@@ -154,5 +162,13 @@ public class Configuration {
         if (checksToExecute == null || checksToExecute.isEmpty()) {
             throw new MisconfigurationException("checks to execute have to be a non-empty list");
         }
+    }
+
+    public boolean isIgnoreLocalhost() {
+        return ignoreLocalhost != null && ignoreLocalhost;
+    }
+
+    public boolean isIgnoreIPAddresses() {
+        return ignoreIPAddresses != null && ignoreIPAddresses;
     }
 }

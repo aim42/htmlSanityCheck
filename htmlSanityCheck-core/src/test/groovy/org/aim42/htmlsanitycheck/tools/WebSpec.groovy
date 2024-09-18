@@ -116,7 +116,7 @@ class WebSpec extends Specification {
         Web.isLocalResource(invalidUri)
 
         then:
-        thrown(Web.InvalidUriSyntaxException)
+        thrown(InvalidUriSyntaxException)
 
         where:
         invalidUri << [

@@ -47,6 +47,7 @@ public class Web {
         return Collections.unmodifiableSet(result);
     }
 
+    @SuppressWarnings("squid:S2386") // The Set is computed
     public static final Set<Integer> HTTP_WARNING_CODES = extendedByRedirects(new HashSet<>(Arrays.asList(
             // tag::HTTP_WARNING_CODES[]
             100, 101, 102
@@ -67,6 +68,7 @@ public class Web {
             // end::HTTP_ERROR_CODES[]
     )));
 
+    @SuppressWarnings("squid:S2386") // The Set is computed
     public static final Set<String> POSSIBLE_EXTENSIONS = initExtensions();
 
     private static final Pattern httpPattern = Pattern.compile("^https?:");
@@ -234,12 +236,6 @@ public class Web {
                             ||
                             (!aUri.getPath().isEmpty()) // (2)
             );
-        }
-    }
-
-    public static class InvalidUriSyntaxException extends RuntimeException {
-        public InvalidUriSyntaxException(Throwable cause) {
-            super(cause);
         }
     }
 

@@ -31,8 +31,8 @@ public class MissingAltInImageTagsChecker extends Checker {
         getCheckingResults().setNrOfChecks(pageToCheck.getAllImageTags().size());
 
         // see HtmlPageSpec for behavior: missing or empty alt-attributes are included...
-        pageToCheck.getAllImageTagsWithMissingAltAttribute().stream()
-                .forEach(element -> reportSingleImageTagWithMissingAlt(element));
+        pageToCheck.getAllImageTagsWithMissingAltAttribute()
+                .forEach(this::reportSingleImageTagWithMissingAlt);
 
 
         return getCheckingResults();
