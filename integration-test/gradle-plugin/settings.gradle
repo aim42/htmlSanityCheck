@@ -6,6 +6,20 @@ pluginManagement {
     }
 }
 
+plugins {
+    // to report build results back to gradle.org
+    id 'com.gradle.develocity' version '3.18.1'
+}
+
+develocity {
+    buildScan {
+        termsOfUseUrl = 'https://gradle.com/terms-of-service'
+        termsOfUseAgree = 'yes'
+
+        publishing.onlyIf { System.getenv("GRADLE_BUILD_SCAN") == 'true' }
+    }
+}
+
 rootProject.name = 'hsc-integration-test-gradle-plugin'
 
 /*

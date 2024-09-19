@@ -298,7 +298,8 @@ tasks.register("integrationTestOnly") {
     doLast {
         def result = exec {
             workingDir INTEGRATION_TEST_DIRECTORY
-            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "gradlew.bat" : "./gradlew", "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}"
+            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "gradlew.bat" : "./gradlew",
+                    "clean", "htmlSanityCheck", "-PhtmlSanityCheckVersion=${project.version}", "--scan"
         }
         logger.debug "Script output: $result"
         File integrationTestDirectory = file(INTEGRATION_TEST_DIRECTORY)
