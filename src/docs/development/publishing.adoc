@@ -60,7 +60,7 @@ After creating a user, you need to `login` to GPP:
 
 [source,shell]
 ----
-:htmlSanityCheck-gradle-plugin
+./gradlew -Pprofile=gpp :htmlSanityCheck-gradle-plugin:login
 ----
 
 This will put the respective key and secret to your `~/.gradle/gradle.properties` file.
