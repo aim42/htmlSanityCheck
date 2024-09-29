@@ -349,7 +349,7 @@ tasks.register("integrationTestMavenOnly") {
         }
         logger.debug "Script output: $result"
         File integrationTestDirectory = file(INTEGRATION_TEST_DIRECTORY)
-        final File testIndex = new File(integrationTestDirectory, "build/reports/index.html")
+        final File testIndex = new File(integrationTestDirectory, "target/reports/htmlSanityCheck/index.html")
         assert testIndex.exists()
     }
 }
@@ -438,6 +438,13 @@ tasks.register("integrationTest") {
 
 integrationTest.dependsOn(
     'integrationTestMaven',
+        'integrationTestGradle'
+
+)
+
+
+integrationTest.mustRunAfter(
+        'integrationTestMaven',
         'integrationTestGradle'
 
 )
