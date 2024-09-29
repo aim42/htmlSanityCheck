@@ -10,22 +10,22 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>dorg.aim42.htmlSanityCheck</groupId>
+                <groupId>org.aim42.htmlSanityCheck</groupId>
                 <artifactId>htmlsanitycheck-maven-plugin</artifactId>
-                <version>${htmlSanityCheckVersion}</version>
+                <version>2.0.0-rc1</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>
                         <goals>
-                            <goal>htmlSanityCheck</goal>
+                            <goal>sanity-check</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
                     <sourceDocuments>
-                        <file>file-to-test.html</file>
+                        <file>src/file-to-test.html</file>
                     </sourceDocuments>
-                    <sourceDir>src/</sourceDir>
+                    <sourceDir>src</sourceDir>
                 </configuration>
             </plugin>
         </plugins>
