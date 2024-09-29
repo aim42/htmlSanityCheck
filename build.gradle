@@ -44,6 +44,15 @@ allprojects {
     }
 }
 
+subprojects {
+// Exclude the 'donotbuild' subproject from compiling Java code
+    if (project.name == 'htmlsanitycheck-maven-plugin') {
+        tasks.withType(JavaCompile) {
+            enabled = false
+        }
+    }
+}
+
 dependencies {
     // Add all subprojects to the aggregation
     subprojects.forEach {
@@ -289,7 +298,7 @@ sonar {
     }
 }
 
-tasks.register("integrationTestOnly") {
+tasks.register("integrationTestGradleOnly") {
     group("Verification")
     description("Run overall integration tests (no publish)")
 
@@ -327,20 +336,43 @@ tasks.register("integrationTestMavenOnly") {
     }
 }
 
+tasks.register("buildMavenPuginWithMaven") {
+    group("compile")
+    description("Use maven to build the maven plugin")
+
+    final String BUILD_DIRECTORY = "htmlsanitycheck-maven-plugin"
+
+    doLast {
+        def result = exec {
+            workingDir BUILD_DIRECTORY
+            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "mvnw.bat" : "./mvnw",
+                    "clean", "install", "-DhtmlSanityCheckVersion ${project.version}", "-ssettings.xml"
+        }
+        logger.debug "Script output: $result"
+    }
+}
+
+buildMavenPuginWithMaven.mustRunAfter(
+        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
+)
+
+buildMavenPuginWithMaven.dependsOn(
+        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
+)
 
 
-integrationTestOnly.mustRunAfter(
+integrationTestGradleOnly.mustRunAfter(
         ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
         ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository'
 )
-tasks.register("integrationTest") {
+tasks.register("integrationTestGradle") {
     group("Verification")
     description("Run overall integration tests (and publish first)")
 }
-integrationTest.dependsOn(
+integrationTestGradle.dependsOn(
         ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
         ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        'integrationTestOnly'
+        'integrationTestGradleOnly'
 )
 
 integrationTestMavenOnly.mustRunAfter(
@@ -355,14 +387,24 @@ tasks.register("integrationTestMaven") {
 
 integrationTestMavenOnly.dependsOn(
         ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        ':htmlsanitycheck-gradle-plugin:buildMavenPuginWithMaven',
-        'integrationTestOnly'
+        'buildMavenPuginWithMaven'
 )
 
 integrationTestMaven.dependsOn(
         ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        ':htmlsanitycheck-gradle-plugin:buildMavenPuginWithMaven',
+        'buildMavenPuginWithMaven',
         'integrationTestMavenOnly'
+)
+
+tasks.register("integrationTest") {
+    group("Verification")
+    description("Run overall integration tests (and publish first)")
+}
+
+integrationTest.dependsOn(
+    'integrationTestMaven',
+        'integrationTestGradle'
+
 )
 
 /*
