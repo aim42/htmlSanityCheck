@@ -1,0 +1,192 @@
+= HSC Maven Plugin
+:doctype: book
+include::../asciidoctor-config.ad[]
+
+image:https://img.shields.io/maven-plugin-portal/v/org.aim42.htmlSanityCheck[Maven Plugin Portal Version]
+image:https://img.shields.io/maven-central/v/org.aim42.htmlSanityCheck/org.aim42.htmlSanityCheck.maven.plugin[Maven Central Version]
+
+ifdef::env-github[]
+:imagesdir: ../src/docs/images
+endif::env-github[]
+ifndef::xrefToManual[:xrefToManual: ../README.adoc]
+:mavenProperties: link:../maven.properties[]
+ifdef::jbake-type[:mavenProperties: {project-url}/blob/develop/maven.properties[]]
+
+The {maven-url}[Maven] plugin of HTML Sanity Check (xref:{xrefToManual}[HSC]) enables to check generated or native HTML documentation from the Maven build.
+
+[[sec:installation]]
+== Installation (Maven Plugin)
+
+=== Default Installation
+
+Use the following snippet inside a Maven build file:
+
+.build.maven
+[source,xml,subs="attributes+"]
+----
+   <plugin>
+                <groupId>org.aim42.htmlSanityCheck</groupId>
+                <artifactId>htmlsanitycheck-maven-plugin</artifactId>
+                <version>2.0.0-rc1</version> // <1>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>sanity-check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDocuments>
+                        <file>src/file-to-test.html</file> <2>
+                    </sourceDocuments>
+                    <sourceDir>src</sourceDir> <3>
+                </configuration>
+            </plugin>
+----
+<1> Checkout <<box:current-version,current version>>
+<2> List the files you want tio check here.
+<3> Directory where the HTML files are located.
+
+
+[[sec:usage]]
+== Usage
+
+This task exposes a few properties as part of its configuration:
+
+[horizontal]
+`sourceDir` (mandatory):: Directory where the HTML files are located.
++
+Type: Directory.
+
+`sourceDocuments` (optional):: An override to process several source files, which may be a subset of all files available in `+{sourceDir}+`.
++
+Type: `org.maven.api.file.FileCollection`.
++
+Default: All files in `+{sourceDir}+` whose names end with `.html`.
+
+`checkingResultsDir` (optional):: Directory where the checking results written to.
++
+Type: Directory.
++
+Default: `+{buildDir}+/reports/htmlSanityCheck/`
+
+`junitResultsDir` (optional):: Directory where the results are written to in JUnit XML format.
+JUnit XML can be read by many tools, including CI environments.
++
+Type: Directory.
++
+Default: `+{buildDir}+/test-results/htmlchecks/`
+
+`failOnErrors` (optional):: Fail the build if any error was found in the checked pages.
++
+Type: Boolean.
++
+Default: `false`.
+
+`httpConnectionTimeout` (optional):: Timeout for http requests in ms.
++
+Type: Integer.
++
+Default: `5000`.
+
+`ignoreLocalHost` (optional):: Ignore localhost as hostname.
++
+Type: Boolean.
++
+Default: `false`.
+
+`ignoreIPAddresses` (optional):: Ignore IP addresses as hostname.
++
+Type: Boolean.
++
+Default: `false`.
+
+`checkerClasses` (optional):: The set of checker classes to be executed.
++
+Type: List.
++
+Default: All available checker classes.
++
+[source,groovy]
+.Checker Classes
+----
+include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/check/AllCheckers.java[tag=checker-classes,indent=0]
+----
+
+`httpWarningCodes` (optional):: Additional HTTP response codes treated as warning.
++
+Type: List.
++
+Default:
++
+[source,groovy]
+----
+include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/Web.java[tag=HTTP_WARNING_CODES,indent=0]
+// Redirects included
+include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/Web.java[tag=HTTP_REDIRECT_CODES,indent=0]
+----
++
+
+[NOTE]
+.HTTP Redirects
+====
+Note that HTTP redirects are treated as a warning to make the user aware of the correct or new location (cf. {project-issues}/244[Issue 244]).
+Some HSC reports often contain the respective location.
+====
+
+
+
+`httpErrorCodes` (optional):: Additional HTTP response codes treated as error.
++
+Type: List.
++
+Default:
++
+[source,groovy]
+----
+include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/Web.java[tag=HTTP_ERROR_CODES,indent=0]
+----
+
+`httpSuccessCodes` (optional):: Additional HTTP response codes treated as success.
++
+Type: List.
++
+Default:
++
+[source,groovy]
+----
+include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/Web.java[tag=HTTP_SUCCESS_CODES,indent=0]
+----
+
+[[sidebar:http-response-codes]]
+.HTTP response code handling
+****
+The lists shown above are the default HTTP response codes handled by HSC.
+The mentioned configurations effectively move the configured codes around, i.e., if you add `308` to `httpErrorCodes` it is automatically removed from its default list (`httpWarningCodes`).
+****
+
+
+[[sec:examples]]
+== Examples
+
+=== Small Example
+`build.maven`
+[source,groovy]
+----
+tbd
+----
+
+=== Extended example
+
+.`build.maven`
+[source,groovy,subs='attributes']
+----
+
+tbd
+
+----
+
+== Compatibility
+
+The Plugin is only tested with Maven 3.9.x, but should also work with previous versions later than Maven 3.6.x.
