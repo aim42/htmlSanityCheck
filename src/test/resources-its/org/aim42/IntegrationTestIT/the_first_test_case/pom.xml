@@ -11,8 +11,8 @@
         <plugins>
             <plugin>
                 <groupId>org.aim42.htmlSanityCheck</groupId>
-                <artifactId>htmlsanitycheck-maven-plugin</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <artifactId>htmlSanityCheck-maven-plugin</artifactId>
+                <version>2.0.0-rc1</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>
