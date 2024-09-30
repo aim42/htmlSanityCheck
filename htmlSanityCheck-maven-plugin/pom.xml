@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.aim42.htmlSanityCheck</groupId>
-    <artifactId>htmlsanitycheck-maven-plugin</artifactId>
+    <artifactId>htmlSanityCheck-maven-plugin</artifactId>
     <name>HTML Sanitycheck Maven Plugin</name>
     <version>2.0.0-rc1</version>
     <packaging>maven-plugin</packaging>
