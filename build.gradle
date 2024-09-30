@@ -48,7 +48,7 @@ allprojects {
 
 subprojects {
 // Exclude the 'donotbuild' subproject from compiling Java code
-    if (project.name == 'htmlsanitycheck-maven-plugin') {
+    if (project.name == 'htmlSanityCheck-maven-plugin') {
         tasks.withType(JavaCompile) {
             enabled = false
         }
@@ -358,7 +358,7 @@ tasks.register("buildMavenPuginWithMaven") {
     group("compile")
     description("Use maven to build the maven plugin")
 
-    final String BUILD_DIRECTORY = "htmlsanitycheck-maven-plugin"
+    final String BUILD_DIRECTORY = "htmlSanityCheck-maven-plugin"
 
     doLast {
         def result = exec {
@@ -412,7 +412,7 @@ clean.dependsOn(cleanIntegrationTest)
 
 integrationTestMavenOnly.mustRunAfter(
         ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        ':htmlsanitycheck-maven-plugin:publishToMavenLocal'
+        ':htmlSanityCheck-maven-plugin:publishToMavenLocal'
 )
 
 tasks.register("integrationTestMaven") {
