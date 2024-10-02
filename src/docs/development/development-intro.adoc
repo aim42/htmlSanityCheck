@@ -30,10 +30,12 @@ You should definitely read the original https://www.gradle.org/docs/current/user
 To add new checks, you have to subclass from 'org.aim42.htmlsanitycheck.check.Checker'
 and implement the 'performCheck' method - which requires an 'HtmlPage' instance as parameter.
 
-Don't forget to:
-* write a test or spec for your checker - the code in 'test/groovy/org.aim42.htmlsanitycheck.check'
+Remember to:
+
+* Write a (JUnit) test or (Spock) spec for your checker -
+the code in https://github.com/aim42/htmlSanityCheck/tree/develop/htmlSanityCheck-core/src/test/groovy/org/aim42/htmlsanitycheck/check[htmlSanityCheck-core/src/test/groovy/org/aim42/htmlsanitycheck/check]
 gives many examples
-* add your checker class to the 'public static AllCheckers' list (Set, to be precise)
+* Add your checker class to the https://github.com/aim42/htmlSanityCheck/blob/develop/htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/check/AllCheckers.java[`public static AllCheckers`] list
 of available checkers. This set is used to configure the 'AllChecksRunner' class.
 
 === Directory Structure and Required Files
