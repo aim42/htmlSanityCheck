@@ -1,22 +1,61 @@
-title=ChangeLog
-date=2024-06-23
-type=page
-tags=ChangeLog
-status=published
-filename=CHANGELOG.md
-order=90
-~~~~~~
-# HtmlSanityCheck - ChangeLog
+# ChangeLog
+
+## 2.0.0-rc1
+
+### Publication (2.0.0-rc1)
+
+- [Documentation](https://hsc.aim42.org)
+- [Maven Central](https://central.sonatype.com/namespace/org.aim42.htmlSanityCheck)
+- [Gradle Plugin Portal](https://plugins.gradle.org/search?term=org.aim42.htmlSanityCheck)
+
+### Changes (2.0.0-rc1)
+
+#### Features (2.0.0-rc1)
+
+- Add [Develocity](https://scans.gradle.com/) build scans
+- Add [JReleaser](https://jreleaser.org/)
+- Improve Signing (for Maven Central)
+- [#343](https://github.com/aim42/htmlSanityCheck/issues/343) - Clean up and improve code and docs
+- Misc. dependency/plugin version bumps
+- Execute the full integration test with misc. Gradle version only on CI (to improve local build/test speed)
+- Reduce empty lines from console reporting
+- Move Gradle classes to gradle subdirectory and improve type safety in plugin implementation
+- Ensure that self-check always uses latest build
+- Enable upload to Gradle Plugin Portal
+- [#258](https://github.com/aim42/htmlSanityCheck/issues/258) - Change to new (replaced) hsc.aim42.org documentation page
+- Add Mastodon announcement (incl. credentials) via JReleaser
+- Consequently rename 'HTML Sanity Checker' -> 'HTML Sanity Check'
+- Set GitHub specific admonition icons in README files
+- [#332](https://github.com/aim42/htmlSanityCheck/issues/332) - Update and fix documentation
+- Derive Groovy version from implicit (Gradle) dependency
+- Add GPG agent configuration
+- Release to Maven Central via JReleaser
+- Unify utility classes (and tests) for Web and URLs
+
+#### BugFixes (2.0.0-rc1)
+
+- Avoid NPE in config initialization
+- Replace outdated/missing link from [#185](https://github.com/aim42/htmlSanityCheck/issues/185)
+- Fix/Update badges and contained links
+- Search MavenCentral first for dependencies to avoid strange Gradle errors with Maven local repository
+- [#153](https://github.com/aim42/htmlSanityCheck/issues/153) - Rollback HTTP redirect codes to bbc210fb and ignore 'javascript:' URLs
+- Fix Gradle URLs
+- Fix image dir for GitHub subdirectory README
+- Fix GitHub representation of AsciiDoc in README files
+- Avoid JPMS warnings for AsciiDoctor task
+
+### New Contributors (2.0.0-rc1)
+- [Sandra Parsick](https://github.com/sparsick) (GA)
 
 ## 2.0.0-rc0
 
-### Publication
+### Publication (2.0.0-rc0)
 
 - [Maven Central](https://central.sonatype.com/namespace/org.aim42.htmlSanityCheck)
 
-### Changes
+### Changes (2.0.0-rc0)
 
-#### Features
+#### Features (2.0.0-rc0)
 
 - [#322](https://github.com/aim42/htmlSanityCheck/issues/322) - Add Git properties
 - [#321](https://github.com/aim42/htmlSanityCheck/issues/321) - Enable JitPack builds
@@ -26,12 +65,12 @@ order=90
 - [#312](https://github.com/aim42/htmlSanityCheck/issues/312) - Port HSC from Groovy to Java (in order to prepare [#314](https://github.com/aim42/htmlSanityCheck/issues/314), the proposed Maven plugin)
 - [#309](https://github.com/aim42/htmlSanityCheck/issues/309) - Modularize htmlSanityChecker → gradle plugin + core (GA/BK/JT)
 
-#### BugFixes
+#### BugFixes (2.0.0-rc0)
 
 - [#323](https://github.com/aim42/htmlSanityCheck/issues/323) - Bump jquery due to (moderate) security warnings
 
 
-### New Contributors
+### New Contributors (2.0.0-rc0)
 - [Gerd Aschemann](https://github.com/ascheman) (GA)
 - [Björn Kasteleiner](https://github.com/bjkastel) (BK)
 - [Thomas Ruhroth](https://github.com/truhroth) (TR)

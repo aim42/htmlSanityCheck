@@ -31,6 +31,7 @@ structure101-actions.xml
 structure101-spec.xml
 archunit-0.5.0.jar
 ~$*
+src/docs/development/CHANGELOG.md
 src/docs/excel
 src/docs/website/_site
 lib
