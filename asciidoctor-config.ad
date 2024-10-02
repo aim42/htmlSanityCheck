@@ -5,7 +5,7 @@ ifndef::imagesdir[:imagesdir: src/docs/images]
 // Align the version with
 // - ./gradle.properties file
 // - ./src/docs/arc42/chapters/_config.adoc
-:hsc-version: 2.0.0-rc0
+:hsc-version: 2.0.0-rc1
 
 :asciidoc-url: https://asciidoctor.org
 :asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin
