@@ -15,10 +15,7 @@ ifdef::backend-html5[:markdown-suffix: html]
 
 HSC (Core and Gradle plugin) can be published to https://central.sonatype.com/search?q=org.aim42.htmlSanityCheck[Maven Central] (MC) for retrieval by its consumers.
 
-Traditional retrieval as Gradle plugin from https://plugins.gradle.org[Gradle Plugin Portal] is still possible,
-as they are redirecting plugin downloads automatically to Maven Central.
-
-WARNING: Only note that newer versions (>= 2.0.0) currently do not show up in the https://plugins.gradle.org/search?term=org.aim42.htmlSanityCheck[web interface].
+Additionally, the Gradle plugin can be published to https://plugins.gradle.org[Gradle Plugin Portal] (GPP).
 
 == Prerequisites
 
@@ -45,7 +42,7 @@ Check out <<sec:release-environment>> how to inject these credentials in your en
 [[sec:prerequisits-gpp]]
 === Gradle Plugin Portal
 
-It is possible to publish new versions of the Plugin to the https://plugins.gradle.org/[Gradle Plugin Portal] (GPP).
+It is possible to publish new versions of the Plugin to the https://plugins.gradle.org/[Gradle Plugin Portal].
 
 [[caution:gpp-publisher]]
 [CAUTION]
@@ -173,25 +170,23 @@ Clean, check (test), and perform integration tests:
 ----
 
 [[sec:stage-to-maven-central]]
-=== Sign / Upload to Maven Central
+=== Sign / Stage to Maven Central
 
 Sign artifacts and load them up to Maven Central via https://jreleaser.org[JReleaser].
 
 [source,shell]
 ----
-./gradlew jreleaserRelease -PenableSigning=true -Psigning.password=... # <1> <2>
+./gradlew jreleaserDeploy -PenableSigning=true -Psigning.password=... # <1> <2>
 ----
 <1> Checkout <<sec:artifact-signing>> for more information.
 <2> The `enableSigning` flag is necessary to enforce signing (which is not necessary for local installations,
 integration testing, etc.)
 
-+
-The `jreleaserRelease` task will
+The `jreleaserDeploy` task will
 
 * Implicitly call the task `signAll` which signs
 and pushes all required files for publication to a local repository.
 * Then pick them up from there and load them up to the Maven Central staging area as a new version.
-* https://github.com/aim42/htmlSanityCheck/releases[Release current state to GitHub] and tag the current version accordingly.
 
 [TIP]
 .Use GPG Agent (command) in practice
@@ -223,10 +218,29 @@ You can delete the published version if you fail with one of the other steps.
 ====
 
 [[sec:publish-to-maven-central]]
-=== Publish on Maven Central
+=== Publish Release
 
-Publish the staged version on Maven Central,
+==== Publish to GitHub
+
+[source,shell]
+----
+./gradlew jreleaserRelease
+----
+
+The `jreleaserRelease` task will release the https://github.com/aim42/htmlSanityCheck/releases[current state to GitHub]
+and tag the current version accordingly.
+
+==== Publish on Maven Central
+
+Eventually publish the <<sec:stage-to-maven-central,staged version>> on Maven Central,
 i.e., https://central.sonatype.com/publishing[Sonatype Central].
+
+[CAUTION]
+====
+Once published, you cannot roll back the release on Maven Central as releases are immutable.
+Hence, run this step as the very last one if everything else ran smoothly.
+====
+
 
 === Announce new release on Social Media
 
