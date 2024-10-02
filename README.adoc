@@ -155,10 +155,6 @@ https://github.com/rrice/java-string-similarity[Ralph Rice].
 ** Initially: {gernotstarke}[Gernot Starke],
 ** Currently: {gerdaschemann}[Gerd Aschemann] and several other contributors.
 
-== Development
-
-In case you want to check out, fork and/or contribute, take a look into our https://hsc.aim42.org/[Development Information]
-
 == Similar Projects
 
 * Once upon a time the https://github.com/rackerlabs/[rackerlabs] hosted `gradle-linkchecker-plugin` which was an (open source) Gradle plugin.
@@ -170,12 +166,11 @@ CAUTION: However, as of 2024-08-14 they have deleted the repository (there seems
 * https://github.com/gjtorikian/html-proofer[html-proofer] is written in Ruby and provides different usage scenarios (programmatically, CLI, and Docker).
 * https://github.com/wjdp/htmltest[htmltest] is also written in Go(Lang) and claims to be rapid compared to `html-proofer` (stay tuned; we have plans for HSC to run with Graal quickly).
 
-== Contributing
+== Development & Contributing
 
-Please report {project-issues}[issues or suggestions].
+* Please report {project-issues}[issues or suggestions].
 
-Want to improve the project?
-Fork our {project-url}[repository] and send a pull request.
+* In case you want to check out, build, fork and/or contribute, take a look into our https://hsc.aim42.org/development/development-intro.html[Development Information]
 
 == Licence
 
