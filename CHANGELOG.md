@@ -45,7 +45,7 @@
 - Avoid JPMS warnings for AsciiDoctor task
 
 ### New Contributors (2.0.0-rc1)
-- [Sandra Parsick](https://github.com/sparsick) (GA)
+- [Sandra Parsick](https://github.com/sparsick) (SP)
 
 ## 2.0.0-rc0
 
