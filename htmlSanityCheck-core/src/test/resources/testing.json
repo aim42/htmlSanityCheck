@@ -1,0 +1,56 @@
+{
+  "mappings" : [
+    {
+      "request": {
+        "method": "HEAD",
+        "urlPattern": "/(google|goodurl1|goodurl2|goodurl3)"
+      },
+      "response": {
+        "status": 200,
+        "body": "Hello, world!",
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/(google|goodurl1|goodurl2|goodurl3)"
+      },
+      "response": {
+        "status": 200,
+        "body": "Hello, world!",
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/badurl"
+      },
+      "response": {
+        "status": 400,
+        "body": "Bad URL!",
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "HEAD",
+        "urlPattern": "/badurl"
+      },
+      "response": {
+        "status": 400,
+        "body": "Bad URL!",
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    }
+  ]
+}

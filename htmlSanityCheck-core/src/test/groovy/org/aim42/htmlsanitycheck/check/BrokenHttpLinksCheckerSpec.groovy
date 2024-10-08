@@ -4,14 +4,9 @@ import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
-import org.aim42.htmlsanitycheck.tools.Web
-import spock.lang.Ignore
-import spock.lang.IgnoreIf
-import spock.lang.Specification
-import spock.lang.Unroll
-
+import org.wiremock.integrations.testcontainers.WireMockContainer
+import spock.lang.*
 // see end-of-file for license information
-
 
 class BrokenHttpLinksCheckerSpec extends Specification {
 
@@ -20,8 +15,31 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     SingleCheckResults collector
 
     private Configuration myConfig
+    static private int port
+
+
+
+    @Shared
+    WireMockContainer wireMockServer = new WireMockContainer("wiremock/wiremock:3.9.1-1")
+    .withMappingFromResource("testing.json")
+    .withExposedPorts(8080)
+
+
+
+
+
 
     /** executed once before all specs are executed **/
+    def setupSpec() {
+        wireMockServer.start()
+        port = wireMockServer.getMappedPort(8080)
+    }
+
+    /** executed once after all specs are executed **/
+    def cleanupSpec() {
+        wireMockServer.stop()
+    }
+
 
     /* executed before every single spec */
 
@@ -63,7 +81,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def "one syntactically correct http URL is ok"() {
         given: "an HTML page with a single correct anchor/link"
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href="https://google.com">google</a>
+                <a href="http://localhost:$port/google">google</a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
@@ -98,9 +116,9 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         collector.nrOfProblems() == 0
 
         where:
-           goodUrl << ["https://junit.org/junit4/javadoc/latest/org/junit/Before.html",
-                       "https://plumelib.org/plume-util/api/org/plumelib/util/DeterministicObject.html",
-                       "https://people.csail.mit.edu/cpacheco/publications/randoop-case-study-abstract.html"
+           goodUrl << ["http://localhost:$port/goodurl1",
+                       "http://localhost:$port/goodurl2",
+                       "http://localhost:$port/goodurl3"
            ]
     }
 
@@ -108,7 +126,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def "single bad link is identified as problem"() {
 
         given: "an HTML page with a single (bad) link"
-        String badhref = "https://arc42.org/ui98jfuhenu87djch"
+        String badhref = "http://localhost:$port/badurl"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${badhref}>nonexisting arc42 link</a>
                 $HtmlConst.HTML_END """
