@@ -4,8 +4,17 @@ import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
+import org.aim42.htmlsanitycheck.test.dns.CustomHostNameResolver
 import org.wiremock.integrations.testcontainers.WireMockContainer
-import spock.lang.*
+import spock.lang.Ignore
+import spock.lang.IgnoreIf
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Unroll
+
+import java.lang.reflect.Field
+import java.lang.reflect.Proxy
+
 // see end-of-file for license information
 
 class BrokenHttpLinksCheckerSpec extends Specification {
@@ -24,15 +33,14 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     .withMappingFromResource("testing.json")
     .withExposedPorts(8080)
 
-
-
-
-
+    @Shared
+    CustomHostNameResolver customHostNameResolver = new CustomHostNameResolver()
 
     /** executed once before all specs are executed **/
     def setupSpec() {
         wireMockServer.start()
         port = wireMockServer.getMappedPort(8080)
+        registerCustomDnsResolver()
     }
 
     /** executed once after all specs are executed **/
@@ -40,6 +48,29 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         wireMockServer.stop()
     }
 
+    // Custom method to register the DNS resolver
+    private void registerCustomDnsResolver() {
+        try {
+            Field implField = InetAddress.class.getDeclaredField("impl");
+            implField.setAccessible(true);
+            Object currentImpl = implField.get(null);
+
+            Proxy newImpl = (Proxy) Proxy.newProxyInstance(
+                    currentImpl.getClass().getClassLoader(),
+                    currentImpl.getClass().getInterfaces(),
+                    (proxy, method, args) -> {
+                        if ("lookupAllHostAddr".equals(method.getName()) && args.length == 1 && args[0] instanceof String) {
+                            return customHostNameResolver.resolve((String) args[0]);
+                        }
+                        return method.invoke(currentImpl, args);
+                    }
+            );
+
+            implField.set(null, newImpl);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to register custom DNS resolver", e);
+        }
+    }
 
     /* executed before every single spec */
 
@@ -81,7 +112,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def "one syntactically correct http URL is ok"() {
         given: "an HTML page with a single correct anchor/link"
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href="http://localhost:$port/google">google</a>
+                <a href="http://${CustomHostNameResolver.WIREMOCK_HOST}:$port/google">google</a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
@@ -116,9 +147,9 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         collector.nrOfProblems() == 0
 
         where:
-           goodUrl << ["http://localhost:$port/goodurl1",
-                       "http://localhost:$port/goodurl2",
-                       "http://localhost:$port/goodurl3"
+           goodUrl << ["http://${CustomHostNameResolver.WIREMOCK_HOST}:$port/goodurl1",
+                       "http://${CustomHostNameResolver.WIREMOCK_HOST}:$port/goodurl2",
+                       "http://${CustomHostNameResolver.WIREMOCK_HOST}:$port/goodurl3"
            ]
     }
 
