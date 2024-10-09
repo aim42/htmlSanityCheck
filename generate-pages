@@ -32,7 +32,7 @@ run() {
 }
 
 run "CleanUp build"     rm -rf build/html5 build/microsite build/pdf
-run "Create CHANGELOG"  "cat src/docs/templates/CHANGELOG-head.md CHANGELOG.md > src/docs/development/CHANGELOG.md"
+run "Create CHANGELOG"  "cat src/templates/CHANGELOG-head.md CHANGELOG.md > src/docs/development/CHANGELOG.md"
 
 run "DTC (tasks '${DTC_TASKS}' with version '${DTC_VERSION}')" \
                         ./dtcw local "${DTC_TASKS} --refresh-dependencies --scan"

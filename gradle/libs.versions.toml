@@ -1,5 +1,5 @@
 [versions]
-junit5-version = '5.11.1'
+junit5-version = '5.11.2'
 slf4j-version = '2.0.16'
 
 [libraries]
