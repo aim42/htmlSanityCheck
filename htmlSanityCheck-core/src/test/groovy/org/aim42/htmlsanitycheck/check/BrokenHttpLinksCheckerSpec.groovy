@@ -27,10 +27,9 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     static private int port
 
 
-
     @Shared
     WireMockContainer wireMockServer = new WireMockContainer("wiremock/wiremock:3.9.1-1")
-    .withMappingFromResource("testing.json")
+    .withMappingFromResource("mappings.json")
     .withExposedPorts(8080)
 
     @Shared
@@ -112,7 +111,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def "one syntactically correct http URL is ok"() {
         given: "an HTML page with a single correct anchor/link"
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href="http://${CustomHostNameResolver.WIREMOCK_HOST}:$port/google">google</a>
+                <a href="http://google.com:$port">google</a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
@@ -125,7 +124,6 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
         and: "the result is ok"
         collector.nrOfProblems() == 0
-
     }
 
 
@@ -147,9 +145,9 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         collector.nrOfProblems() == 0
 
         where:
-           goodUrl << ["http://${CustomHostNameResolver.WIREMOCK_HOST}:$port/goodurl1",
-                       "http://${CustomHostNameResolver.WIREMOCK_HOST}:$port/goodurl2",
-                       "http://${CustomHostNameResolver.WIREMOCK_HOST}:$port/goodurl3"
+           goodUrl << ["http://junit.org:$port/junit4",
+                       "http://plumelib.org:$port/plume-util",
+                       "http://people.csail.mit.edu:$port/cpacheco"
            ]
     }
 
@@ -157,7 +155,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def "single bad link is identified as problem"() {
 
         given: "an HTML page with a single (bad) link"
-        String badhref = "http://localhost:$port/badurl"
+        String badhref = "http://arc42.org:$port/ui98jfuhenu87djch"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${badhref}>nonexisting arc42 link</a>
                 $HtmlConst.HTML_END """
@@ -180,7 +178,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     //@Ignore("test currently breaks. see issue-219")
     def "amazon does not deliver 405 statuscode for links that really exist"() {
         given: "an HTML page with a single (good) amazon link"
-        String goodAmazonLink = "https://www.amazon.com/dp/B01A2QL9SS"
+        String goodAmazonLink = "http://www.amazon.com:$port/dp/B01A2QL9SS"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${goodAmazonLink}>Amazon</a>
                 $HtmlConst.HTML_END """
@@ -195,7 +193,6 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
         and: "the result is ok"
         collector.nrOfProblems() == 0
-
     }
 
 
@@ -223,7 +220,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def 'bad link #badLink is recognized as such'() {
 
         given: "an HTML page with a single (broken) link"
-        String goodURL = "https://mock.codes/${badLink}"
+        String goodURL = "http://mock.codes$port/${badLink}"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${goodURL}>${badLink}</a>
                 $HtmlConst.HTML_END """
