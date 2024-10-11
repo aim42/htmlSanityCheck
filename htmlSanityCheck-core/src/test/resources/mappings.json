@@ -1,0 +1,16 @@
+{
+  "mappings" : [
+    {
+      "request": {
+        "method": "HEAD",
+        "urlPattern": "/google"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    }
+  ]
+}

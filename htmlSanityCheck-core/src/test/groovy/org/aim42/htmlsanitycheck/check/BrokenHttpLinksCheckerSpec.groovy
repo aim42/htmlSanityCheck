@@ -5,8 +5,10 @@ import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.tools.Web
+import org.wiremock.integrations.testcontainers.WireMockContainer
 import spock.lang.Ignore
 import spock.lang.IgnoreIf
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -20,8 +22,23 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     SingleCheckResults collector
 
     private Configuration myConfig
+    static private int port
+
+    @Shared
+    WireMockContainer wireMockServer = new WireMockContainer("wiremock/wiremock:3.9.1-1")
+            .withMappingFromResource("mappings.json")
+            .withExposedPorts(8080)
 
     /** executed once before all specs are executed **/
+    def setupSpec() {
+        wireMockServer.start()
+        port = wireMockServer.getMappedPort(8080)
+    }
+
+    /** executed once after all specs are executed **/
+    def cleanupSpec() {
+        wireMockServer.stop()
+    }
 
     /* executed before every single spec */
 
@@ -63,7 +80,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def "one syntactically correct http URL is ok"() {
         given: "an HTML page with a single correct anchor/link"
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href="https://google.com">google</a>
+                <a href="http://localhost:$port/google">google</a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
