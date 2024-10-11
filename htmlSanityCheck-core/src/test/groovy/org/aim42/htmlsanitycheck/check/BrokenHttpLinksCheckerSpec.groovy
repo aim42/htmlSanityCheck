@@ -7,15 +7,11 @@ import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.test.dns.CustomHostNameResolver
 import org.wiremock.integrations.testcontainers.WireMockContainer
 import spock.lang.Ignore
-import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-
 import java.lang.reflect.Field
 import java.lang.reflect.Proxy
-
-
 // see end-of-file for license information
 
 
@@ -81,16 +77,6 @@ class BrokenHttpLinksCheckerSpec extends Specification {
             throw new RuntimeException("Failed to register custom DNS resolver", e);
         }
     }
-    /**
-     * checking for internet connectivity is a somewhat brittle - as there's no such thing as "the internet"
-     * (the checker will most likely use google.com as a proxy for "internet"
-     */
-    // todo: test that properly
-    @IgnoreIf({ !System.getenv('GITHUB_ACTIONS') })
-    def "recognize if there is internet connectivity"() {
-        expect: "if there is no internet connection, testing should fail"
-        Web.isInternetConnectionAvailable()
-    }
 
     def "empty page has no errors"() {
         given: "an empty HTML page"
@@ -112,7 +98,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def "one syntactically correct http URL is ok"() {
         given: "an HTML page with a single correct anchor/link"
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href="http://${CustomHostNameResolver.WIREMOCK_HOST}:$port/google">google</a>
+                <a href="http://google.com:$port">google</a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
@@ -147,9 +133,9 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         collector.nrOfProblems() == 0
 
         where:
-           goodUrl << ["https://junit.org/junit4/javadoc/latest/org/junit/Before.html",
-                       "https://plumelib.org/plume-util/api/org/plumelib/util/DeterministicObject.html",
-                       "https://people.csail.mit.edu/cpacheco/publications/randoop-case-study-abstract.html"
+           goodUrl << ["http://junit.org:$port/junit4",
+                       "http://plumelib.org:$port/plume-util",
+                       "http://people.csail.mit.edu:$port/cpacheco"
            ]
     }
 
@@ -157,7 +143,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def "single bad link is identified as problem"() {
 
         given: "an HTML page with a single (bad) link"
-        String badhref = "https://arc42.org/ui98jfuhenu87djch"
+        String badhref = "http://arc42.org:$port/ui98jfuhenu87djch"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${badhref}>nonexisting arc42 link</a>
                 $HtmlConst.HTML_END """
@@ -177,10 +163,10 @@ class BrokenHttpLinksCheckerSpec extends Specification {
      * where HEAD requests are always answered with 405 instead of 200...
      */
 
-    //@Ignore("test currently breaks. see issue-219")
+
     def "amazon does not deliver 405 statuscode for links that really exist"() {
         given: "an HTML page with a single (good) amazon link"
-        String goodAmazonLink = "https://www.amazon.com/dp/B01A2QL9SS"
+        String goodAmazonLink = "http://www.amazon.com:$port/dp/B01A2QL9SS"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${goodAmazonLink}>Amazon</a>
                 $HtmlConst.HTML_END """
@@ -223,7 +209,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def 'bad link #badLink is recognized as such'() {
 
         given: "an HTML page with a single (broken) link"
-        String goodURL = "https://mock.codes/${badLink}"
+        String goodURL = "http://mock.codes$port/${badLink}"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${goodURL}>${badLink}</a>
                 $HtmlConst.HTML_END """
