@@ -1,6 +1,7 @@
 [versions]
 junit5-version = '5.11.2'
 slf4j-version = '2.0.16'
+string-similarity-version = '1.0.0'
 
 [libraries]
 commons-validator = 'commons-validator:commons-validator:1.9.0'
@@ -9,6 +10,7 @@ junit-vintage = { module = 'org.junit.vintage:junit-vintage-engine', version.ref
 lombok = 'org.projectlombok:lombok:1.18.34'
 slf4j-api = { module = 'org.slf4j:slf4j-api', version.ref = 'slf4j-version' }
 slf4j-nop = { module = 'org.slf4j:slf4j-nop', version.ref = 'slf4j-version' }
+string-similarity = {module = 'net.ricecode:string-similarity', version.ref ='string-similarity-version'}
 spock = 'org.spockframework:spock-bom:2.3-groovy-3.0'
 
 [plugins]
