@@ -1,3 +1,6 @@
+permissions:
+  checks: write
+
 name: Build and Test
 on:
   pull_request:
