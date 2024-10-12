@@ -13,12 +13,11 @@ dependencies {
     testImplementation libs.slf4j.nop
     // jsoup is our awesome html parser, see jsoup.org
     implementation libs.jsoup
-
+    implementation libs.string.similarity
     compileOnly libs.lombok
     annotationProcessor libs.lombok
     testCompileOnly libs.lombok
     testAnnotationProcessor libs.lombok
-
     testImplementation platform("org.codehaus.groovy:groovy-bom:${GroovySystem.version}")
     testImplementation 'org.codehaus.groovy:groovy-xml'
 }

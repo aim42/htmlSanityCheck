@@ -4,6 +4,7 @@ import net.ricecode.similarity.JaroWinklerStrategy;
 import net.ricecode.similarity.SimilarityScore;
 import net.ricecode.similarity.StringSimilarityService;
 import net.ricecode.similarity.StringSimilarityServiceImpl;
+import org.aim42.htmlsanitycheck.comparator.SimilarityScoreComparator;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,8 +47,10 @@ public class Suggester {
 
         // the "*." operator is the coolest thing in groovy:
         // applies the method to all elements of the collection (usually known as "map")
-        return service.findBestN(options, target, n)
+        return service.scoreAll(options, target)
                 .stream()
+                .sorted(new SimilarityScoreComparator())
+                .limit(n)
                 .map(SimilarityScore::getKey)
                 .collect(Collectors.toList());
     }

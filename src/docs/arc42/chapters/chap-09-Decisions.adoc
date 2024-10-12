@@ -43,12 +43,7 @@ Find details on how HSC implements HTML parsing in the {xrefConceptHtmlEncapsula
 
 === String Similarity Checking with https://wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance[Jaro-Winkler-Distance]
 
-The small https://github.com/rrice/java-string-similarity[java-string-similarity] library (by Ralph Allen Rice) contains implementations of several similarity-calculation algorithms. As it is *not available* as public binary,
-we use the sources instead, primarily:
+The small https://github.com/rrice/java-string-similarity[java-string-similarity] library (by Ralph Allen Rice) contains implementations of several similarity-calculation algorithms.
+As it is public binary, available at central https://central.sonatype.com/artifact/net.ricecode/string-similarity[maven repository] we have used it as external library dependencies.
+Primarily we have used Jaro-Winkler strategy to find similarity.
 
-  net.ricecode.similarity.JaroWinklerStrategyTest
-  net.ricecode.similarity.JaroWinklerStrategy
-
-[NOTE]
-The actual implementation of the similarity comparison has been postponed
-to a later release of HSC
