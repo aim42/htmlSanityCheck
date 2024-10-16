@@ -1,10 +1,11 @@
 package org.aim42.htmlSanityCheck.htmlsanitycheckmavenplugin;
 
-import org.junit.jupiter.api.Test;
+
 import org.aim42.htmlsanitycheck.Configuration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 
 class HtmlSanityCheckMojoTest {
 
@@ -13,7 +14,7 @@ class HtmlSanityCheckMojoTest {
     void setupConfiguration() {
         HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
         Configuration config = mojo.setupConfiguration();
-        assertTrue(config != null);
+        Assertions.assertThat(config).isNotNull();
 
     }
 }
