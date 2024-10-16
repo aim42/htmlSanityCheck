@@ -42,3 +42,5 @@ src/docs/resources/graphics/.DS_Store
 tmp/
 .gradle2/
 public/
+integration-test/maven-plugin/target/
+htmlSanityCheck-maven-plugin/target/
