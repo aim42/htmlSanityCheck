@@ -18,7 +18,8 @@ public class CustomHostNameResolver {
             "plumelib.org",
             "people.csail.mit.edu",
             "arc42.org",
-            "mock.codes"
+            "mock.codes",
+            "arc42.de"
     );
 
     static {

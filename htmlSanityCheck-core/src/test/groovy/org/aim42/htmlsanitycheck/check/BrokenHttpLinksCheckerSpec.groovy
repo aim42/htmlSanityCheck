@@ -185,11 +185,10 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     }
 
 
-    @Ignore // If({ !System.getenv('GITHUB_ACTIONS') })
     def "bad amazon link is identified as problem"() {
 
         given: "an HTML page with a single (good) amazon link"
-        String badAmazonLink = "https://www.amazon.com/dp/4242424242"
+        String badAmazonLink = "https://www.amazon.com:$port/dp/4242424242"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${badAmazonLink}>Amazon</a>
                 $HtmlConst.HTML_END """
@@ -228,12 +227,12 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
     }
 
-    @Ignore
+
     def 'redirects are recognized and their new location is contained in warning message'() {
 
         given: "the old arc42 (http!) page "
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href="https://arc42.de"</a>
+                <a href="http://arc42.de:$port/old"</a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
