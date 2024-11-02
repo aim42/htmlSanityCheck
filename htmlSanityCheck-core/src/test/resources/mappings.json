@@ -97,7 +97,7 @@
     {
       "request": {
         "method": "GET_OR_HEAD",
-        "urlPattern": "/403"
+        "urlPattern": "/(403 | dp/4242424242)"
       },
       "response": {
         "status": 403,
@@ -283,6 +283,18 @@
         "status": 507,
         "headers": {
           "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/old"
+      },
+      "response": {
+        "status": 302,
+        "headers": {
+          "Location": "https://arc42.de"
         }
       }
     }
