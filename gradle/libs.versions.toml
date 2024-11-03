@@ -1,7 +1,10 @@
+# Keep lexicographical (alphabetical) order everywhere!
 [versions]
-junit5-version = '5.11.2'
+junit5-version = '5.11.3'
 slf4j-version = '2.0.16'
 string-similarity-version = '1.0.0'
+testcontainers-version = '1.20.3'
+wiremock-testcontainers-version = '1.0-alpha-14'
 
 [libraries]
 commons-validator = 'commons-validator:commons-validator:1.9.0'
@@ -12,11 +15,13 @@ slf4j-api = { module = 'org.slf4j:slf4j-api', version.ref = 'slf4j-version' }
 slf4j-nop = { module = 'org.slf4j:slf4j-nop', version.ref = 'slf4j-version' }
 string-similarity = {module = 'net.ricecode:string-similarity', version.ref ='string-similarity-version'}
 spock = 'org.spockframework:spock-bom:2.3-groovy-3.0'
+testcontainers-junit-jupiter = { module = 'org.testcontainers:junit-jupiter', version.ref = 'testcontainers-version' }
+wiremock-testcontainers = { module = 'org.wiremock.integrations.testcontainers:wiremock-testcontainers-module', version.ref = 'wiremock-testcontainers-version' }
 
 [plugins]
 gradle-versions = { id= 'com.github.ben-manes.versions', version = '0.51.0' }
 sonar = { id = 'org.sonarqube', version = '5.1.0.4882' }
-jreleaser = {  id = 'org.jreleaser', version = '1.13.1'}
+jreleaser = {  id = 'org.jreleaser', version = '1.15.0'}
 gitProperties = { id = 'com.gorylenko.gradle-git-properties', version = '2.4.2' }
 
 # Copyright Gerd Aschemann and aim42 contributors.

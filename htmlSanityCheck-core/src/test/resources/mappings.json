@@ -1,0 +1,302 @@
+{
+  "mappings" : [
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/(|junit4|plume-util|cpacheco)"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/dp/B01A2QL9SS"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "HEAD",
+        "urlPattern": "/dp/B01A2QL9SS"
+      },
+      "response": {
+        "status": 405,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/ui98jfuhenu87djch"
+      },
+      "response": {
+        "status": 400,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/400"
+      },
+      "response": {
+        "status": 400,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },{
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "401"
+      },
+      "response": {
+        "status": 401,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/401"
+      },
+      "response": {
+        "status": 401,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },{
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/402"
+      },
+      "response": {
+        "status": 402,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/(403 | dp/4242424242)"
+      },
+      "response": {
+        "status": 403,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/404"
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/405"
+      },
+      "response": {
+        "status": 405,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/406"
+      },
+      "response": {
+        "status": 406,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/408"
+      },
+      "response": {
+        "status": 408,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/409"
+      },
+      "response": {
+        "status": 409,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/410"
+      },
+      "response": {
+        "status": 410,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/429"
+      },
+      "response": {
+        "status": 429,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/431"
+      },
+      "response": {
+        "status": 431,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/500"
+      },
+      "response": {
+        "status": 500,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/501"
+      },
+      "response": {
+        "status": 501,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/502"
+      },
+      "response": {
+        "status": 502,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/504"
+      },
+      "response": {
+        "status": 504,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/505"
+      },
+      "response": {
+        "status": 505,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/506"
+      },
+      "response": {
+        "status": 506,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/507"
+      },
+      "response": {
+        "status": 507,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET_OR_HEAD",
+        "urlPattern": "/old"
+      },
+      "response": {
+        "status": 302,
+        "headers": {
+          "Location": "https://arc42.de"
+        }
+      }
+    }
+  ]
+}

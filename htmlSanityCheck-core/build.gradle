@@ -20,6 +20,9 @@ dependencies {
     testAnnotationProcessor libs.lombok
     testImplementation platform("org.codehaus.groovy:groovy-bom:${GroovySystem.version}")
     testImplementation 'org.codehaus.groovy:groovy-xml'
+
+    testImplementation libs.wiremock.testcontainers
+    testImplementation libs.testcontainers.junit.jupiter
 }
 
 gitProperties {
