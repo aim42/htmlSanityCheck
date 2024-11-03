@@ -165,23 +165,23 @@
                             <goal>prepare-agent</goal>
                         </goals>
                         <configuration>
-                            <append>false</append>
+                            <!--                            <append>false</append>-->
                             <destFile>build/jacoco/test.exec</destFile>
                             <propertyName>surefireArgLine</propertyName>
                         </configuration>
                     </execution>
                     <!-- set arg line property for failsafe -->
-                    <execution>
-                        <id>prepare-agent-integration</id>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
-                        <configuration>
-                            <append>true</append>
-                            <destFile>build/jacoco/test.exec</destFile>
-                            <propertyName>failsafeArgLine</propertyName>
-                        </configuration>
-                    </execution>
+                    <!--                    <execution>-->
+                    <!--                        <id>prepare-agent-integration</id>-->
+                    <!--                        <goals>-->
+                    <!--                            <goal>prepare-agent-integration</goal>-->
+                    <!--                        </goals>-->
+                    <!--                        <configuration>-->
+                    <!--                            <append>true</append>-->
+                    <!--                            <destFile>build/jacoco/test.exec</destFile>-->
+                    <!--                            <propertyName>failsafeArgLine</propertyName>-->
+                    <!--                        </configuration>-->
+                    <!--                    </execution>-->
                 </executions>
             </plugin>
             <plugin>
