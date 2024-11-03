@@ -12,38 +12,34 @@ include::_config.adoc[]
 
 
 === HTML Parsing with jsoup
-To check HTML we parse it into an internal (DOM-like) representation.
-For this task we use {jsoup-url}, an open-source parser without
-external dependencies.
+
+To check HTML, we parse it into an internal (DOM-like) representation.
+For this task we use {jsoup-url}, an open-source parser without external dependencies.
 
 To quote from the jsoup website:
 
 [quote]
-jsoup is a Java library for working with real-world HTML.
-It provides a very convenient API for extracting and manipulating data,
-using the best of DOM, CSS, and jQuery-like methods.
-
+`jsoup` is a Java library for working with real-world HTML.
+It provides a very convenient API for extracting and manipulating data, using the best of DOM, CSS, and jQuery-like methods.
 
 Goals of this decision::
-Check HTML programmatically by using an existing API that provides access and finder
-methods to the DOM-tree of the file(s) to be checked.
+Check HTML programmatically by using an existing API that provides access and finder methods to the DOM tree of the file(s) to be checked.
 
 Decision Criteria::
-* few dependencies, so the HSC binary stays as small as possible.
-* accessor and finder methods to find images, links and link-targets within the DOM tree.
+* Few dependencies, so the HSC binary stays as small as possible.
+* Accessor and finder methods to find images, links and link-targets within the DOM tree.
 
 Alternatives::
 
-* HTTPUnit: a testing framework for web applications and -sites. Its main focus is web testing and it suffers from a large number of dependencies.
-* jsoup: a plain HTML parser without any dependencies (!) and a rich API to access all HTML elements in DOM-like syntax.
-
+* `HTTPUnit`: a testing framework for web applications and sites.
+Its main focus is web testing, and it suffers from a large number of dependencies.
+* `jsoup`: a plain HTML parser without any dependencies (!) and a rich API to access all HTML elements in DOM-like syntax.
 
 Find details on how HSC implements HTML parsing in the {xrefConceptHtmlEncapsulation}.
-
 
 === String Similarity Checking with https://wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance[Jaro-Winkler-Distance]
 
 The small https://github.com/rrice/java-string-similarity[java-string-similarity] library (by Ralph Allen Rice) contains implementations of several similarity-calculation algorithms.
-As it is public binary, available at central https://central.sonatype.com/artifact/net.ricecode/string-similarity[maven repository] we have used it as external library dependencies.
-Primarily we have used Jaro-Winkler strategy to find similarity.
+As it is a public binary, available at https://central.sonatype.com/artifact/net.ricecode/string-similarity[Maven Central], we have used it as external library dependencies.
+Primarily, we have used Jaro-Winkler strategy to find similarity.
 

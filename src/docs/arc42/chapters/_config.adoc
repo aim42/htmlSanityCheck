@@ -10,7 +10,7 @@
 // Align the version with
 // - ../../../../gradle.properties file
 // - ../../../../asciidoctor-config.ad
-:hsc-version: 2.0.0-rc1
+:hsc-version: 2.0.0-rc2
 
 :project: htmlsanitycheck
 

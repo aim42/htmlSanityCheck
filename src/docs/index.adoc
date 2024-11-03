@@ -14,16 +14,15 @@ v0.9, 2014-09-02
 
 image::{improveDocImage}[link={repositoryDocsDir}index.adoc, float=right]
 
-*The Problem*: Languages like AsciiDoc or Markdown allow for easy writing and
-hyperlinking. When they are transformed to HTML the _sanity_ of links
-and images is not checked - that's where HSC comes into play...
+*The Problem*: Languages like AsciiDoc or Markdown allow for easy writing and hyperlinking.
+When they are transformed to HTML, the _sanity_ of links and images is not checked - that's where HSC comes into play...
 
 *The Solution*:
 
 image::htmlsanitycheck-overview.png["Overview", title="Overview"]
 
 HSC can perform various content and semantic checks on HTML files,
-e.g. check for missing images, broken internal links, duplicate targets etc.
+e.g., check for missing images, broken internal links, duplicate targets, etc.
 
 It is open source software and provides documentation for the following
 types of stakeholders:
@@ -34,13 +33,13 @@ types of stakeholders:
 | Documentation
 | Content
 
-| Asciidoc, Markdown etc. author
+| AsciiDoc, Markdown etc. author
 | User Guide
 | (planned) intended for writers and authors, explains
-  how to check your (generated) html
+  how to check your (generated) HTML
 
 | link:development/development-intro.adoc[Development Guide]
-| software developers,
+| Software developers,
 | Describes development environment,
   building HSC and its documentation.
 
@@ -54,7 +53,7 @@ types of stakeholders:
 
 |===
 
-The {project-url}[repository is located on Github].
+The {project-url}[repository is located on GitHub].
 
 ifdef::backend-html5[]
 *Status*:

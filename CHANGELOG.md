@@ -1,5 +1,39 @@
 # ChangeLog
 
+## Publication (Generic)
+
+- [Documentation](https://hsc.aim42.org)
+- [Maven Central](https://central.sonatype.com/namespace/org.aim42.htmlSanityCheck)
+- [Gradle Plugin Portal](https://plugins.gradle.org/search?term=org.aim42.htmlSanityCheck)
+
+## 2.0.0-rc2
+
+### Changes (2.0.0-rc2)
+
+#### Improvements (2.0.0-rc2)
+
+- [#330](https://github.com/aim42/htmlSanityCheck/issues/330) - Replace incorporated `net.ricecode` components
+- [#331](https://github.com/aim42/htmlSanityCheck/issues/331) - Use mocks for remote/integration testing
+
+#### Version Bumps (2.0.0-rc2)
+
+- Gradle Wrapper
+- Junit5
+- WireMock and TestContainers
+- JReleaser
+
+#### Misc. Changes (2.0.0-rc2)
+
+- Drop ignored (flaky) tests (thanks again to RC)
+- Refer to Apache license directly from ASF site (due to flaky HSC checks of former location)
+- Fix typos, simplify the language, and align with technical writer conventions of the ChangeLog and other documentation
+- Fix generating the ChangeLog.md file (header) for the documentation
+
+### New Contributors (2.0.0-rc2)
+
+- [Rehan Chalana](https://github.com/RehanChalana) (RC)
+- [Prankur Tiwari](https://github.com/Prankurtiwari) (PT)
+
 ## 2.0.0-rc1
 
 ### Publication (2.0.0-rc1)
@@ -19,15 +53,15 @@
 - Misc. dependency/plugin version bumps
 - Execute the full integration test with misc. Gradle version only on CI (to improve local build/test speed)
 - Reduce empty lines from console reporting
-- Move Gradle classes to gradle subdirectory and improve type safety in plugin implementation
-- Ensure that self-check always uses latest build
+- Move Gradle classes to Gradle subdirectory and improve type safety in plugin implementation
+- Ensure that self-check always uses the latest build
 - Enable upload to Gradle Plugin Portal
 - [#258](https://github.com/aim42/htmlSanityCheck/issues/258) - Change to new (replaced) hsc.aim42.org documentation page
 - Add Mastodon announcement (incl. credentials) via JReleaser
-- Consequently rename 'HTML Sanity Checker' -> 'HTML Sanity Check'
+- Consequently, rename 'HTML Sanity Checker' → 'HTML Sanity Check'
 - Set GitHub specific admonition icons in README files
 - [#332](https://github.com/aim42/htmlSanityCheck/issues/332) - Update and fix documentation
-- Derive Groovy version from implicit (Gradle) dependency
+- Derive the Groovy version from implicit (Gradle) dependency
 - Add GPG agent configuration
 - Release to Maven Central via JReleaser
 - Unify utility classes (and tests) for Web and URLs
@@ -35,7 +69,7 @@
 #### BugFixes (2.0.0-rc1)
 
 - Avoid NPE in config initialization
-- Replace outdated/missing link from [#185](https://github.com/aim42/htmlSanityCheck/issues/185)
+- Replace an outdated/missing link from [#185](https://github.com/aim42/htmlSanityCheck/issues/185)
 - Fix/Update badges and contained links
 - Search MavenCentral first for dependencies to avoid strange Gradle errors with Maven local repository
 - [#153](https://github.com/aim42/htmlSanityCheck/issues/153) - Rollback HTTP redirect codes to bbc210fb and ignore 'javascript:' URLs
@@ -45,6 +79,7 @@
 - Avoid JPMS warnings for AsciiDoctor task
 
 ### New Contributors (2.0.0-rc1)
+
 - [Sandra Parsick](https://github.com/sparsick) (SP)
 
 ## 2.0.0-rc0
@@ -62,7 +97,7 @@
 - [#320](https://github.com/aim42/htmlSanityCheck/issues/320) - Add SonarQube (SonarCloud) analysis
 - [#317](https://github.com/aim42/htmlSanityCheck/issues/317) - Add test coverage reports (aka. JaCoCo)
 - [#315](https://github.com/aim42/htmlSanityCheck/issues/315) - Introduce dependabot to become aware of dependency updates
-- [#312](https://github.com/aim42/htmlSanityCheck/issues/312) - Port HSC from Groovy to Java (in order to prepare [#314](https://github.com/aim42/htmlSanityCheck/issues/314), the proposed Maven plugin)
+- [#312](https://github.com/aim42/htmlSanityCheck/issues/312) - Port HSC from Groovy to Java (to prepare [#314](https://github.com/aim42/htmlSanityCheck/issues/314), the proposed Maven plugin)
 - [#309](https://github.com/aim42/htmlSanityCheck/issues/309) - Modularize htmlSanityChecker → gradle plugin + core (GA/BK/JT)
 
 #### BugFixes (2.0.0-rc0)
@@ -110,7 +145,7 @@ April 8th 2016: Add JUnit XML reporting to support automated tools.
 
 ## 0.9.3
 June 14th 2015: published on Gradle Plugin Repository
-May 14th 2015: reverted subproject structure, as it led to numerous build problems.
+May 14th 2015: reverted subproject structure, as it led to many build problems.
 
 ## 0.8.0
 It could not be published on Bintray due to these issues.
