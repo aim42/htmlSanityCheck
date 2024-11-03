@@ -31,12 +31,14 @@ import net.ricecode.similarity.SimilarityScore;
 import net.ricecode.similarity.SimilarityStrategy;
 import net.ricecode.similarity.StringSimilarityService;
 import net.ricecode.similarity.StringSimilarityServiceImpl;
+import org.aim42.htmlsanitycheck.comparator.SimilarityScoreComparator;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -51,7 +53,7 @@ public class StringSimilarityServiceImplTest {
         strategy = new JaroWinklerStrategy();
         service = new StringSimilarityServiceImpl(strategy);
 
-        features = new ArrayList<String>();
+        features = new ArrayList<>();
     }
 
     @Test
@@ -67,7 +69,7 @@ public class StringSimilarityServiceImplTest {
         features.add(c2);
         features.add(c3);
 
-        List<SimilarityScore> bestTwo = service.findBestN(features, target, 2);
+        List<SimilarityScore> bestTwo = service.scoreAll(features, target).stream().sorted(new SimilarityScoreComparator()).limit(2).collect(Collectors.toList());
 
 
         assertEquals(2, bestTwo.size());
@@ -82,9 +84,9 @@ public class StringSimilarityServiceImplTest {
 
     @Test
     public void testFindBestZero() {
-        assert features.size() == 0;
+        assert features.isEmpty();
 
-        List<SimilarityScore> best = service.findBestN(features, "none", 2);
+        List<SimilarityScore> best = service.scoreAll(features, "none").stream().sorted(new SimilarityScoreComparator()).collect(Collectors.toList());
 
         assertEquals("empty list of candidates shall yield empty result", 0, best.size());
 
@@ -96,7 +98,7 @@ public class StringSimilarityServiceImplTest {
 
         features = Arrays.asList("McDommy", "NicClumsy");
 
-        List<SimilarityScore> bestThree = service.findBestN(features, target, 3);
+        List<SimilarityScore> bestThree = service.scoreAll(features, target).stream().sorted(new SimilarityScoreComparator()).limit(3).collect(Collectors.toList());
 
         assertEquals("even if list is too short, valid result is returned", 2, bestThree.size());
     }
@@ -116,7 +118,7 @@ public class StringSimilarityServiceImplTest {
         features.add(c2);
         features.add(c3);
 
-        List<SimilarityScore> scores = service.scoreAll(features, target);
+        List<SimilarityScore> scores = service.scoreAll(features, target).stream().sorted(new SimilarityScoreComparator()).collect(Collectors.toList());
 
         assertEquals(3, scores.size());
 
@@ -179,7 +181,7 @@ public class StringSimilarityServiceImplTest {
                 "Kadabra", "Kakuna", "Kangaskhan", "Karrablast", "Kecleon", "Kingdra"
         );
 
-        List<SimilarityScore> scores = service.scoreAll(features, target);
+        List<SimilarityScore> scores = service.scoreAll(features, target).stream().sorted(new SimilarityScoreComparator()).collect(Collectors.toList());
 
         assertEquals(267, scores.size());
 
