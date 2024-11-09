@@ -157,31 +157,21 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.12</version>
                 <executions>
-                    <!-- set arg line property for surefire -->
                     <execution>
                         <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
-                        <configuration>
-                            <!--                            <append>false</append>-->
-                            <destFile>build/jacoco/test.exec</destFile>
-                            <propertyName>surefireArgLine</propertyName>
-                        </configuration>
                     </execution>
-                    <!-- set arg line property for failsafe -->
-                    <!--                    <execution>-->
-                    <!--                        <id>prepare-agent-integration</id>-->
-                    <!--                        <goals>-->
-                    <!--                            <goal>prepare-agent-integration</goal>-->
-                    <!--                        </goals>-->
-                    <!--                        <configuration>-->
-                    <!--                            <append>true</append>-->
-                    <!--                            <destFile>build/jacoco/test.exec</destFile>-->
-                    <!--                            <propertyName>failsafeArgLine</propertyName>-->
-                    <!--                        </configuration>-->
-                    <!--                    </execution>-->
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
