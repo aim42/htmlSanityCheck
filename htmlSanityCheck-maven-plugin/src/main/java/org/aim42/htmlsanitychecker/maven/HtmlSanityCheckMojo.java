@@ -25,10 +25,10 @@ import java.util.Set;
  * initializes the AllChecksRunner,
  * which does all the checking and reporting work.
  *
+ * @author Thomas Ruhroth
  * @goal sanity-check
  * @phase verify
  * @requiresDependencyResolution runtime
- * @author Thomas Ruhroth
  */
 @Mojo(name = "sanity-check", defaultPhase = LifecyclePhase.VERIFY, requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class HtmlSanityCheckMojo extends AbstractMojo {
@@ -78,36 +78,33 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
 
 // Check if configuration is valid
         try {
-            if (myConfig.isValid()) {
-    // Create output directories
-                checkingResultsDir.mkdirs();
-                if (!checkingResultsDir.isDirectory() || !checkingResultsDir.canWrite()) {
-                    throw new MojoExecutionException("Cannot write to checking results directory.");
+            myConfig.validate();
+            // Create output directories
+            checkingResultsDir.mkdirs();
+            if (!checkingResultsDir.isDirectory() || !checkingResultsDir.canWrite()) {
+                throw new MojoExecutionException("Cannot write to checking results directory.");
+            }
+            if (junitResultsDir != null) {
+                junitResultsDir.mkdirs();
+                if (!junitResultsDir.isDirectory() || !junitResultsDir.canWrite()) {
+                    throw new MojoExecutionException("Cannot write to JUnit results directory.");
                 }
-                if (junitResultsDir != null) {
-                    junitResultsDir.mkdirs();
-                    if (!junitResultsDir.isDirectory() || !junitResultsDir.canWrite()) {
-                        throw new MojoExecutionException("Cannot write to JUnit results directory.");
-                    }
-                }
+            }
 
-    // Perform checks
-                AllChecksRunner allChecksRunner = new AllChecksRunner(myConfig);
-                PerRunResults allChecks = allChecksRunner.performAllChecks();
+            // Perform checks
+            AllChecksRunner allChecksRunner = new AllChecksRunner(myConfig);
+            PerRunResults allChecks = allChecksRunner.performAllChecks();
 
-    // Handle findings
-                int nrOfFindingsOnAllPages = allChecks.nrOfFindingsOnAllPages();
-                getLog().debug("Found " + nrOfFindingsOnAllPages + " error(s) on all checked pages");
+            // Handle findings
+            int nrOfFindingsOnAllPages = allChecks.nrOfFindingsOnAllPages();
+            getLog().debug("Found " + nrOfFindingsOnAllPages + " error(s) on all checked pages");
 
-                if (failOnErrors && nrOfFindingsOnAllPages > 0) {
-                    String failureMsg = String.format(
-                            "Your build configuration included 'failOnErrors=true', and %d error(s) were found on all checked pages. See %s for a detailed report.",
-                            nrOfFindingsOnAllPages, checkingResultsDir
-                    );
-                    throw new MojoExecutionException(failureMsg);
-                }
-            } else {
-                getLog().warn("Fatal configuration errors preventing checks:\n" + myConfig.toString());
+            if (failOnErrors && nrOfFindingsOnAllPages > 0) {
+                String failureMsg = String.format(
+                        "Your build configuration included 'failOnErrors=true', and %d error(s) were found on all checked pages. See %s for a detailed report.",
+                        nrOfFindingsOnAllPages, checkingResultsDir
+                );
+                throw new MojoExecutionException(failureMsg);
             }
         } catch (MisconfigurationException e) {
             throw new MojoExecutionException(e);
