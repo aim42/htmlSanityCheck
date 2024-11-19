@@ -10,7 +10,7 @@ wiremock-testcontainers-version = '1.0-alpha-14'
 commons-validator = 'commons-validator:commons-validator:1.9.0'
 jsoup = 'org.jsoup:jsoup:1.18.1'
 junit-vintage = { module = 'org.junit.vintage:junit-vintage-engine', version.ref = 'junit5-version' }
-lombok = 'org.projectlombok:lombok:1.18.34'
+lombok = 'org.projectlombok:lombok:1.18.36'
 slf4j-api = { module = 'org.slf4j:slf4j-api', version.ref = 'slf4j-version' }
 slf4j-nop = { module = 'org.slf4j:slf4j-nop', version.ref = 'slf4j-version' }
 string-similarity = {module = 'net.ricecode:string-similarity', version.ref ='string-similarity-version'}
