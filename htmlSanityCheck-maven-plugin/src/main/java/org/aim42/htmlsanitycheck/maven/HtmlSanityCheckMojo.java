@@ -1,4 +1,4 @@
-package org.aim42.htmlSanityCheck.htmlsanitycheckmavenplugin;
+package org.aim42.htmlsanitycheck.maven;
 
 import org.aim42.htmlsanitycheck.AllChecksRunner;
 import org.aim42.htmlsanitycheck.Configuration;
@@ -106,24 +106,6 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
                     throw new MojoExecutionException("Cannot write to JUnit results directory.");
                 }
             }
-
-            // Perform checks
-            AllChecksRunner allChecksRunner = new AllChecksRunner(myConfig);
-            PerRunResults allChecks = allChecksRunner.performAllChecks();
-
-            // Handle findings
-            int nrOfFindingsOnAllPages = allChecks.nrOfFindingsOnAllPages();
-            getLog().debug("Found " + nrOfFindingsOnAllPages + " error(s) on all checked pages");
-
-            if (failOnErrors && nrOfFindingsOnAllPages > 0) {
-                String failureMsg = String.format(
-                        "Your build configuration included 'failOnErrors=true', and %d error(s) were found on all checked pages. See %s for a detailed report.",
-                        nrOfFindingsOnAllPages, checkingResultsDir
-                );
-                throw new MojoExecutionException(failureMsg);
-            }
-
-
         } catch (MisconfigurationException e) {
             throw new MojoExecutionException(e);
         } catch (IOException e) {
