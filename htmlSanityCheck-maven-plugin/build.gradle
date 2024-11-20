@@ -1,14 +1,28 @@
+import java.util.stream.Collectors
+
+import static org.gradle.internal.os.OperatingSystem.current
+
 plugins {
     id "java-gradle-plugin"
 }
 
-// TODO do we need this?
 description = 'HSC Maven Mojo'
+
+ext {
+    mavenPluginToolsVersion = "3.15.1"
+}
 
 dependencies {
     implementation project(":htmlSanityCheck-core")
-    implementation('org.apache.maven.plugin-tools:maven-plugin-tools-api:3.15.0')
-    implementation('org.apache.maven.plugin-tools:maven-plugin-annotations:3.15.0')
+    implementation("org.apache.maven.plugin-tools:maven-plugin-tools-api:${mavenPluginToolsVersion}")
+    implementation("org.apache.maven.plugin-tools:maven-plugin-annotations:${mavenPluginToolsVersion}")
+
+    testImplementation libs.junit.jupiter
+    testImplementation 'org.assertj:assertj-core:3.26.3'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 tasks.register('copyClasses', Copy) {
@@ -22,7 +36,8 @@ tasks.register('generatePom', Copy) {
     from 'src/main/maven'
     into 'build/maven'
     filesMatching("**/pom.*") {
-        expand(version: project.version)
+        expand(version: project.version,
+                mavenPluginToolsVersion: project.mavenPluginToolsVersion)
     }
 }
 
@@ -31,18 +46,54 @@ tasks.register('generateMavenPlugin', CrossPlatformExec) {
     // currently it seems to be the more or less only clean solution
     // to generate a plugin.xml file to use maven directly
     // if anyone has a better solution please let us know!
-    buildCommand '-nsu', '-U', '-f', 'build/maven/pom.xml', 'plugin:descriptor', '--batch-mode',
+    buildCommand '-nsu',
+            '-U',
+            '-f', 'build/maven/pom.xml',
+            '-s', 'settings.xml',
+            'plugin:descriptor',
+            '--batch-mode',
             '-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
 }
 
 class CrossPlatformExec extends Exec {
     void buildCommand(String... commandArgs) {
-        if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+        if (current().isWindows()) {
             executable = 'cmd'
             args = ['/c', 'mvnw.bat']
         } else {
             executable = './mvnw'
         }
         args(commandArgs.toList())
+    }
+}
+
+// This ensures that other HSC modules are published to ../build/maven-repo already (in particular core)
+generateMavenPlugin.configure {
+    List<Task> thisProjectsPublishTasks = getTasks().withType(PublishToMavenLocal).stream().collect(Collectors.toList())
+    mustRunAfter(rootProject.getAllTasks(true).values().stream()
+            .flatMap(Set::stream)
+            .filter(task -> task instanceof PublishToMavenLocal)
+            .filter(task -> !thisProjectsPublishTasks.contains(task))
+            .collect(Collectors.toList())
+    )
+    onlyIf {
+        logger.debug("TaskGraph at generateMavenPlugin: " + gradle.taskGraph.getAllTasks().stream().map(Task::getName).collect(Collectors.toList()))
+        gradle.taskGraph.getAllTasks().stream().anyMatch(thisProjectsPublishTasks::contains)
+    }
+}
+
+java {
+    withJavadocJar()
+}
+
+javadoc {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
     }
 }
