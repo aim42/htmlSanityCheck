@@ -122,11 +122,31 @@ tasks.register("integrationTestCli") {
     }
 }
 
+final String INTEGRATION_TEST_DIRECTORY_MAVEN = "maven-plugin"
+
+tasks.register("integrationTestMaven") {
+    group("Verification")
+    description("Run overall integration tests (no publish)")
+
+    doLast {
+        def result = exec {
+            workingDir INTEGRATION_TEST_DIRECTORY_MAVEN
+            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "mvnw.bat" : "./mvnw",
+                    "clean", "verify", "-Dhsc.version=${project.version}", "-ssettings.xml"
+        }
+        logger.debug "Script output: $result"
+        File integrationTestDirectory = file(INTEGRATION_TEST_DIRECTORY_MAVEN)
+        final File testIndex = new File(integrationTestDirectory, "target/reports/htmlSanityCheck/index.html")
+        assert testIndex.exists()
+    }
+}
+
+
 tasks.register("integrationTest") {
     group("Verification")
     description("Run all integration tests (without any installations etc.)")
 
-    dependsOn(integrationTestGradlePlugin, integrationTestCli)
+    dependsOn(integrationTestGradlePlugin, integrationTestCli, integrationTestMaven)
 }
 
 tasks.register("clean", Delete) {

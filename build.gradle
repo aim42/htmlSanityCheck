@@ -313,15 +313,16 @@ tasks.register("publishAllPublicationsToMyLocalRepositoryForFullIntegrationTests
 
     dependsOn(":htmlSanityCheck-core:publishMavenJavaPublicationToMyLocalRepositoryForFullIntegrationTestsRepository",
             ":htmlSanityCheck-gradle-plugin:publishPluginMavenPublicationToMyLocalRepositoryForFullIntegrationTestsRepository",
-            ":htmlSanityCheck-gradle-plugin:publishHtmlSanityCheckPluginMarkerMavenPublicationToMyLocalRepositoryForFullIntegrationTestsRepository"
+            ":htmlSanityCheck-gradle-plugin:publishHtmlSanityCheckPluginMarkerMavenPublicationToMyLocalRepositoryForFullIntegrationTestsRepository",
+            ":htmlSanityCheck-maven-plugin:publishPluginMavenPublicationToMyLocalRepositoryForFullIntegrationTestsRepository",
     )
 }
 
 final String INTEGRATION_TEST_DIRECTORY = "integration-test"
 
-tasks.register("integrationTestGradleOnly") {
+tasks.register("integrationTestOnly") {
     group("Verification")
-    description("Perform all Integration Tests")
+    description("Perform all Integration Tests (Only)")
 
     doLast {
         def result = exec {
@@ -335,63 +336,6 @@ tasks.register("integrationTestGradleOnly") {
     }
 }
 
-tasks.register("integrationTestMavenOnly") {
-    group("Verification")
-    description("Run overall integration tests (no publish)")
-
-    final String INTEGRATION_TEST_DIRECTORY = "integration-test/maven-plugin"
-
-    doLast {
-        def result = exec {
-            workingDir INTEGRATION_TEST_DIRECTORY
-            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "mvnw.bat" : "./mvnw",
-                    "clean", "verify", "-DhtmlSanityCheckVersion ${project.version}", "-ssettings.xml"
-        }
-        logger.debug "Script output: $result"
-        File integrationTestDirectory = file(INTEGRATION_TEST_DIRECTORY)
-        final File testIndex = new File(integrationTestDirectory, "target/reports/htmlSanityCheck/index.html")
-        assert testIndex.exists()
-    }
-}
-
-tasks.register("buildMavenPuginWithMaven") {
-    group("compile")
-    description("Use maven to build the maven plugin")
-
-    final String BUILD_DIRECTORY = "htmlSanityCheck-maven-plugin"
-
-    doLast {
-        def result = exec {
-            workingDir BUILD_DIRECTORY
-            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "mvnw.bat" : "./mvnw",
-                    "clean", "install", "-DhtmlSanityCheckVersion ${project.version}", "-ssettings.xml"
-        }
-        logger.debug "Script output: $result"
-    }
-}
-
-buildMavenPuginWithMaven.mustRunAfter(
-        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-)
-
-buildMavenPuginWithMaven.dependsOn(
-        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-)
-
-
-integrationTestGradleOnly.mustRunAfter(
-        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository'
-)
-tasks.register("integrationTestGradle") {
-    group("Verification")
-    description("Run overall integration tests")
-}
-integrationTestGradle.dependsOn(
-        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        'integrationTestGradleOnly'
-)
 tasks.register("cleanIntegrationTest", Delete) {
     group("Build")
     description("Perform clean for Integration Tests")
@@ -409,44 +353,15 @@ tasks.register("cleanIntegrationTest", Delete) {
 }
 clean.dependsOn(cleanIntegrationTest)
 
-
-integrationTestMavenOnly.mustRunAfter(
-        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        ':htmlSanityCheck-maven-plugin:publishToMavenLocal'
-)
-
-tasks.register("integrationTestMaven") {
-    group("Verification")
-    description("Run overall integration tests (and publish first)")
-}
-
-integrationTestMavenOnly.dependsOn(
-        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        'buildMavenPuginWithMaven'
-)
-
-integrationTestMaven.dependsOn(
-        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        'buildMavenPuginWithMaven',
-        'integrationTestMavenOnly'
-)
-
 tasks.register("integrationTest") {
     group("Verification")
-    description("Run overall integration tests (and publish first)")
+    description("Run overall integration tests (and publish/install first)")
 }
 
 integrationTest.dependsOn(
-    'integrationTestMaven',
-        'integrationTestGradle'
-
-)
-
-
-integrationTest.mustRunAfter(
-        'integrationTestMaven',
-        'integrationTestGradle'
-
+        'publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
+        ':htmlSanityCheck-cli:installDist',
+        'integrationTestOnly',
 )
 
 /*
