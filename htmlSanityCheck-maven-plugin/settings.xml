@@ -3,23 +3,4 @@
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
 
     <localRepository>../build/maven-repo</localRepository>
-
-<!--    <profiles>-->
-<!--        <profile>-->
-<!--            <activation>-->
-<!--                <activeByDefault>true</activeByDefault>-->
-<!--            </activation>-->
-<!--            <repositories>-->
-<!--                <repository>-->
-<!--                    <releases>-->
-<!--                        <enabled/>-->
-<!--                        <updatePolicy>-->
-<!--                            never-->
-<!--                        </updatePolicy>-->
-<!--                    </releases>-->
-<!--                </repository>-->
-<!--            </repositories>-->
-<!--        </profile>-->
-<!--    </profiles>-->
-
 </settings>
