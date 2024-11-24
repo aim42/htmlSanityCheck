@@ -19,10 +19,14 @@ dependencies {
 
     testImplementation libs.junit.jupiter
     testImplementation 'org.assertj:assertj-core:3.26.3'
+
+    testImplementation 'com.soebes.itf.jupiter.extension:itf-assertj:0.13.1'
+    testImplementation 'com.soebes.itf.jupiter.extension:itf-jupiter-extension:0.13.1'
 }
 
 test {
     useJUnitPlatform()
+    exclude '**/*IT.class'
 }
 
 tasks.register('copyClasses', Copy) {
