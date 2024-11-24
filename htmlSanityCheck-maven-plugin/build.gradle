@@ -3,10 +3,8 @@ import java.util.stream.Collectors
 import static org.gradle.internal.os.OperatingSystem.current
 
 plugins {
-    id "java-gradle-plugin"
+    id "java"
 }
-
-description = 'HSC Maven Mojo'
 
 ext {
     mavenPluginToolsVersion = "3.15.1"
@@ -88,10 +86,6 @@ generateMavenPlugin.configure {
 
 java {
     withJavadocJar()
-}
-
-javadoc {
-    options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 publishing {
