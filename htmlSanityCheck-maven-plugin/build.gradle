@@ -71,16 +71,18 @@ class CrossPlatformExec extends Exec {
 
 // This ensures that other HSC modules are published to ../build/maven-repo already (in particular core)
 generateMavenPlugin.configure {
-    List<Task> thisProjectsPublishTasks = getTasks().withType(PublishToMavenLocal).stream().collect(Collectors.toList())
-    mustRunAfter(rootProject.getAllTasks(true).values().stream()
-            .flatMap(Set::stream)
-            .filter(task -> task instanceof PublishToMavenLocal)
-            .filter(task -> !thisProjectsPublishTasks.contains(task))
-            .collect(Collectors.toList())
+    dependsOn(
+            project.configurations.implementation.dependencies.withType(ProjectDependency).collect { dep ->
+                project.rootProject.findProject(dep.dependencyProject.path).tasks
+            }.flatten().stream()
+                    .filter(task -> {
+                        logger.debug("Checking '${task.name}' of '${task.project}' with class '${task.class}'")
+                        task.name == 'publishMavenJavaPublicationToMyLocalRepositoryForFullIntegrationTestsRepository'
+                    })
+                    .collect(Collectors.toList())
     )
     onlyIf {
-        logger.debug("TaskGraph at generateMavenPlugin: " + gradle.taskGraph.getAllTasks().stream().map(Task::getName).collect(Collectors.toList()))
-        gradle.taskGraph.getAllTasks().stream().anyMatch(thisProjectsPublishTasks::contains)
+        gradle.taskGraph.getAllTasks().stream().anyMatch { task -> task.name == 'jar' }
     }
 }
 
