@@ -300,12 +300,13 @@ sonar {
 
 tasks.register("publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository") {
     group("Publishing")
-    description("Publishes all publications to the local Maven repository")
+    description("Publishes all publications to the local Maven integration (test) repository")
 
-    dependsOn(":htmlSanityCheck-core:publishMavenJavaPublicationToMyLocalRepositoryForFullIntegrationTestsRepository",
-            ":htmlSanityCheck-gradle-plugin:publishPluginMavenPublicationToMyLocalRepositoryForFullIntegrationTestsRepository",
+    dependsOn(":htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository",
+            ":htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository",
+            // For some reason it is necessary to add this task explicitly though it should be part of the above "publishAllPubli..." task
             ":htmlSanityCheck-gradle-plugin:publishHtmlSanityCheckPluginMarkerMavenPublicationToMyLocalRepositoryForFullIntegrationTestsRepository",
-            ":htmlSanityCheck-maven-plugin:publishPluginMavenPublicationToMyLocalRepositoryForFullIntegrationTestsRepository",
+            ":htmlSanityCheck-maven-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository",
     )
 }
 
@@ -347,12 +348,17 @@ clean.dependsOn(cleanIntegrationTest)
 tasks.register("integrationTest") {
     group("Verification")
     description("Run overall integration tests (and publish/install first)")
+    dependsOn(
+            ':publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
+            ':htmlSanityCheck-cli:installDist',
+            'integrationTestOnly',
+    )
+    mustRunAfter(':clean')
 }
 
-integrationTest.dependsOn(
-        'publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
+integrationTestOnly.mustRunAfter(
+        ':publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
         ':htmlSanityCheck-cli:installDist',
-        'integrationTestOnly',
 )
 
 /*
