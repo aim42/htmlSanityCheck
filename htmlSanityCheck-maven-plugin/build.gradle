@@ -90,6 +90,30 @@ java {
     withJavadocJar()
 }
 
+jar.configure {
+    dependsOn(generateMavenPlugin, "generatePomFileForMavenJavaPublication")
+    doFirst {
+        copy {
+            from('build/maven') {
+                include 'pom.properties'
+            }
+            into "build/classes/java/main/META-INF/maven/${project.group}/${project.name}"
+        }
+        copy {
+            from 'build/publications/mavenJava/pom-default.xml'
+            into "build/classes/java/main/META-INF/maven/${project.group}/${project.name}"
+            rename { 'pom.xml' }
+        }
+        copy {
+            from('build/maven/target/classes') {
+                include '**/*.xml'
+                exclude '**/*.class'
+            }
+            into 'build/classes/java/main'
+        }
+    }
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
