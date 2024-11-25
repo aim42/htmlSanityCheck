@@ -67,10 +67,10 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
         logBuildParameter();
 
-// Setup configuration
+        // Setup configuration
         Configuration myConfig = setupConfiguration();
 
-// Check if configuration is valid
+        // Check if configuration is valid
         try {
             myConfig.validate();
             // Create output directories
@@ -99,12 +99,6 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
                         nrOfFindingsOnAllPages, checkingResultsDir
                 );
                 throw new MojoExecutionException(failureMsg);
-            }
-            if (junitResultsDir != null) {
-                junitResultsDir.mkdirs();
-                if (!junitResultsDir.isDirectory() || !junitResultsDir.canWrite()) {
-                    throw new MojoExecutionException("Cannot write to JUnit results directory.");
-                }
             }
         } catch (MisconfigurationException e) {
             throw new MojoExecutionException(e);
@@ -146,7 +140,7 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
         if (httpSuccessCodes != null && !httpSuccessCodes.isEmpty()) {
             result.overrideHttpSuccessCodes(httpSuccessCodes);
         }
-        if (httpErrorCodes != null &&  !httpErrorCodes.isEmpty()) {
+        if (httpErrorCodes != null && !httpErrorCodes.isEmpty()) {
             result.overrideHttpErrorCodes(httpErrorCodes);
         }
         if (httpErrorCodes != null && !httpWarningCodes.isEmpty()) {
