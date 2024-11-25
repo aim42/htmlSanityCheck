@@ -166,7 +166,7 @@ Clean, check (test), and perform integration tests:
 
 [source,shell]
 ----
-./gradlew clean check integrationTest
+./gradlew clean && ./gradlew check integrationTest
 ----
 
 [[sec:stage-to-maven-central]]
