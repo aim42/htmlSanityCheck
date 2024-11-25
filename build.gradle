@@ -46,15 +46,6 @@ allprojects {
     }
 }
 
-subprojects {
-// Exclude the 'donotbuild' subproject from compiling Java code
-    if (project.name == 'htmlSanityCheck-maven-plugin') {
-        tasks.withType(JavaCompile) {
-            enabled = false
-        }
-    }
-}
-
 dependencies {
     // Add all subprojects to the aggregation
     subprojects.forEach {
