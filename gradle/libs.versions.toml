@@ -3,7 +3,7 @@
 junit5-version = '5.11.3'
 slf4j-version = '2.0.16'
 string-similarity-version = '1.0.0'
-testcontainers-version = '1.20.3'
+testcontainers-version = '1.20.4'
 wiremock-testcontainers-version = '1.0-alpha-14'
 
 [libraries]
