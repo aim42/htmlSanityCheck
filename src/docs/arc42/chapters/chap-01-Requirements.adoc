@@ -33,7 +33,9 @@ Reports its results either on the console or as HTML report.
 HSC can run
 
 * From the command line (CLI), or
-* As {gradle-url}[Gradle]-plugin.
+* As {gradle-url}[Gradle]-plugin, or
+* As {maven-url}[Maven]-plugin.
+
 
 
 .Terminology: What Can Go Wrong in HTML Files?

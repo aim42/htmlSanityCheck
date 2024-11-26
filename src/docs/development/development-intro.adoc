@@ -18,12 +18,13 @@
 
 Make yourself familiar with
 
-* The https://gradle.org[Gradle] build system,
+* The{gradle-url}[Gradle] build system,
+* the {maven-url}[Maven] build system,
 * https://jsoup.org/apidocs/[JSoup API documentation].
 
 ==== Prerequisites for Gradle Plugin Development
 
-You should definitely read the original https://www.gradle.org/docs/current/userguide/custom_plugins.html[Gradle Plugin Development Guide] on custom plugin development.
+You should definitely read the original https://www.gradle.org/docs/current/userguide/custom_plugins.html[Gradle Plugin Development Guide] and the https://maven.apache.org/plugin-developers/index.html[Maven User Guide] on custom plugin development.
 
 
 === Adding New Checks
@@ -83,4 +84,8 @@ so that the working-directory is set to your current module - most easily done
 by making $MODULE_DIR$ your default.
 
 image:intellij-run-configuration.jpg[]
+
+==== Maven Plugin
+
+To be done //todo
 

@@ -7,5 +7,6 @@
 ifndef::projectRootDir[:projectRootDir: ../../..]
 :xrefToCli: 20_cli.adoc
 :xrefToGradlePlugin: 30_gradle-plugin.adoc
+:xrefToMavenPlugin: 40_maven-plugin.adoc
 
 include::{projectRootDir}/README.adoc[leveloffset=+1]
