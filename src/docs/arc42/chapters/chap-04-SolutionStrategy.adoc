@@ -7,10 +7,11 @@ include::_config.adoc[]
 
 :filename: arc42/chapters/chap-04-SolutionStrategy.adoc
 
-* Implement HSC in Java with minimal
-external dependencies. Wrap this implementation into a {gradle-url}[Gradle]
-plugin, so it can be used within automated builds. Details are given
-in the {xrefConceptGradlePlugin}.
+* Implement HSC in Java with minimal external dependencies.
+** Implement a core libary for the functionality with minimal external dependencies and tool independent.
+** Wrap this implementation into a {gradle-url}[Gradle] and a {maven-url}[Maven] plugin, so it can be used within automated builds.
+Details are given in the {xrefConceptGradlePlugin} and {xrefConceptMavenPlugin}.
+** Create a command line interface.
 
 * Apply the _template-method-pattern_ (see e.g. {template-method-pattern-url}) to enable:
 ** multiple checking algorithms. See the {xrefConceptCheckingAlgorithms},

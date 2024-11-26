@@ -23,12 +23,12 @@ rectangle "HtmlSanityCheck (Level 1)" as HSC {
 
 
 [HSC Graphical UI] <<planned>> as ui
-[HSC Maven Plugin]  <<planned>> as mavenplugin
+[HSC Maven Plugin] as mavenplugin
 
 [FileUtil] as futil
 [NetUtil] as netutil
 
-mavenplugin .down-> core
+mavenplugin -down-> core
 ui .down-> core
 
 core -> futil
@@ -44,7 +44,7 @@ netutil -down-> web
 
 
 bs -down-> [HSC Gradle Plugin]
-bs .down.> mavenplugin
+bs -down-> mavenplugin
 
 core -down-> files
 core -down-> web

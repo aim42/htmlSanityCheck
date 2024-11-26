@@ -33,7 +33,8 @@ Contained Blackboxes::
 | <<sec:checker_blackbox, HSC Core>> | hsc core: html parsing and sanity checking, configuration, reporting.
 | HSC Gradle Plugin | integrates the Gradle build tool with HSC,
 enabling arbitrary gradle builds to use HSC functionality.
-| HSC Maven Plugin | (planned, not yet implemented)
+| HSC Maven Plugin | integrates the Maven build tool with HSC,
+enabling arbitrary maven builds to use HSC functionality.
 | HSC Graphical Interface | (planned, not implemented)
 
 |===

@@ -9,6 +9,7 @@ include::_config.adoc[]
 
 include::chap-08-checking-domain.adoc[]
 include::chap-08-gradle-plugin.adoc[]
+include::chap-08-maven-plugin.adoc[]
 
 include::chap-08-checking-algorithms.adoc[]
 include::chap-08-html-encapsulation.adoc[]

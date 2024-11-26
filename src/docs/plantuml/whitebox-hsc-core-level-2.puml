@@ -35,6 +35,8 @@ checker -->reporter
 checker --> suggester
 checker -left-> futil
 checker -> netutil
+checker -down-> files
+checker -down-> web
 
 suggester -left-> files
 
@@ -46,8 +48,12 @@ netutil -down-> web
 [HSC Gradle Plugin] as gradleplugin
 gradleplugin -down-> config
 gradleplugin -down-> acr
-checker -down-> web
-checker -down-> files
+
+[HSV Maven Plungin] as mavenplugin
+mavenplugin -down-> config
+mavenplugin -down-> acr
+
+
 
 
 @enduml
