@@ -4,6 +4,7 @@ include::asciidoctor-config.ad[]
 
 ifndef::xrefToCli[:xrefToCli: htmlSanityCheck-cli/README.adoc]
 ifndef::xrefToGradlePlugin[:xrefToGradlePlugin: htmlSanityCheck-gradle-plugin/README.adoc]
+ifndef::xrefToMavenPlugin[:xrefToMavenPlugin: htmlSanityCheck-maven-plugin/README.adoc]
 
 [.lead]
 ====
@@ -31,16 +32,8 @@ HSC can be currently used
 
 * As a xref:{xrefToGradlePlugin}#sec:usage[Gradle plugin], or
 * As a xref:{xrefToCli}#sec:usage[Command Line Interface tool] (CLI), or
+* As a xref:{xrefToMavenPlugin}#sec:usage[Maven Plugin], or
 * Programmatically from Java or other JVM languages (TBD).
-
-[NOTE]
-.Future releases
-====
-In the future, we plan to provide
-
-* A standalone Java (CLI) executable, and
-* An https://maven.apache.org[Apache Maven] Plugin.
-====
 
 [[sec:installation]]
 == Installation
@@ -48,6 +41,7 @@ In the future, we plan to provide
 Depending on your <<sec:usage>> you have to
 
 * Install the xref:{xrefToGradlePlugin}#sec:installation[Gradle Plugin], or
+* Install the xref:{xrefToMavenPlugin}#sec:installation[Maven Plugin], or
 * Install the core library for programmatic use (TBD).
 
 [[sec:examples]]

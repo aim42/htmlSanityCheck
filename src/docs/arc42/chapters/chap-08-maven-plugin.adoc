@@ -1,0 +1,34 @@
+:jbake-menu: -
+include::_config.adoc[]
+[[sec:maven-plugin-concept]]
+=== Maven Plugin Concept and Development
+
+:filename: arc42/chapters/chap-08-maven-plugin.adoc
+include::../_feedback.adoc[]
+
+Basic information on creating a Maven Plugin is described in the https://maven.apache.org/plugin-developers/index.html[Maven User Guide] chapter of plugin development.
+
+[source, java]
+----
+include::{maven-plugin-source-path}/htmlSanityCheck/maven/HtmlSanityCheckMojo.java[tag=maven-plugin-implementation]
+----
+
+
+==== Directory Structure and Required Files
+
+To be dome //todo
+
+==== Passing Parameters From Buildfile to Plugin
+To be done
+
+==== Building the Plugin
+
+The plugin code itself is built with maven.
+
+==== Uploading to Public Archives
+
+TBD
+
+==== Further Information on Creating Maven Plugins
+
+The https://maven.apache.org/plugin-developers/index.html[Maven user guide] describes how to write a plugins.

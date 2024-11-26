@@ -33,14 +33,18 @@ ifndef::projectRootDir[:projectRootDir: ../../../..]
 :core-test-path:   {projectRootDir}/htmlSanityCheck-core/src/test/groovy/org/aim42
 :gradle-plugin-source-path: {projectRootDir}/htmlSanityCheck-gradle-plugin/src/main/groovy/org/aim42
 :gradle-plugin-test-path:   {projectRootDir}/htmlSanityCheck-gradle-plugin/src/test/groovy/org/aim42
+:maven-plugin-source-path: {projectRootDir}/htmlSanityCheck-maven-plugin/src/main/java/org/aim42
+:maven-plugin-test-path:   {projectRootDir}/htmlSanityCheck-maven-plugin/src/test/java/org/aim42
 
 :asciidoctor-gradle-plugin-url: https://github.com/asciidoctor/asciidoctor-gradle-plugin
+:asciidoctor-maven-plugin-url: https://github.com/asciidoctor/asciidoctor-maven-plugin
 
 :arc42-url: https://github.com/arc42
 :aim42-url: https://github.com/aim42
 
 :asciidoc-url: https://asciidoctor.org
 :gradle-url: https://gradle.org/
+:maven-url: https://maven.apache.org
 :groovy-url: https://www.groovy-lang.org/
 :template-method-pattern-url: https://sourcemaking.com/design_patterns/template_method
 
@@ -60,6 +64,7 @@ ifndef::projectRootDir[:projectRootDir: ../../../..]
 :xrefConceptHtmlEncapsulation: <<sec:html-encapsulation,HTML encapsulation concept>>
 :xrefConceptReporting: <<sec:reporting-concept,reporting concept>>
 :xrefConceptGradlePlugin: <<sec:gradle-plugin-concept,Gradle plugin concept>>
+:xrefConceptMavenPlugin: <<sec:maven-plugin-concept,Maven plugin concept>>
 :xrefDeplomentView: <<sec:deployment-view,deployment view>>
 :xrefRequirementsGradleIntegration: <<sec:requirements,required Gradle integration>>
 :xrefRequirementsRequiredChecks: <<sec:requiredChecks,Required Checks>>
@@ -79,6 +84,7 @@ ifdef::jbake-type[]
 :xrefConceptHtmlEncapsulation: xref:chap-08-Concepts.adoc#sec:html-encapsulation[HTML encapsulation concept]
 :xrefConceptReporting: xref:chap-08-Concepts.adoc#sec:reporting-concept[reporting concept]
 :xrefConceptGradlePlugin: xref:chap-08-Concepts.adoc#sec:gradle-plugin-concept[Gradle plugin concept]
+:xrefConceptMavenPlugin: xref:chap-08-Concepts.adoc#sec:maven-plugin-concept[Maven plugin concept]
 :xrefDeplomentView: xref:chap-07-Deployment.adoc#sec:deployment-view[deployment view]
 :xrefRequirementsGradleIntegration: xref:chap-01-Requirements.adoc#sec:requirements[required Gradle integration]
 :xrefRequirementsRequiredChecks: xref:chap-01-Requirements.adoc#sec:requiredChecks[Required Checks]
