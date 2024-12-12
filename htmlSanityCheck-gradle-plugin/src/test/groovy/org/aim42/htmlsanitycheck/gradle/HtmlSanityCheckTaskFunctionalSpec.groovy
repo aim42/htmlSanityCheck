@@ -31,8 +31,8 @@ class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
             // 6.x or older does not work!
             '7.6.3', // latest 7.x
             '8.0.2', '8.1.1', '8.2.1', '8.3', '8.4',
-            '8.5', '8.6', '8.7', '8.8', '8.9',
-            '8.10.2' // all 8.x minor versions (latest patch release)
+            '8.5', '8.6', '8.7', '8.8', '8.9', '8.10.2',
+            '8.11.1' // all 8.x minor versions (latest patch release)
             // end::tested-gradle-versions[]
     ])
 
