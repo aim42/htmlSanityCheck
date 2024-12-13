@@ -49,7 +49,7 @@ jobs:
           echo "Git:"
           git status
           echo "Env:"
-          env
+          env | sort
           echo "PWD:"
           pwd
           echo "Files:"
