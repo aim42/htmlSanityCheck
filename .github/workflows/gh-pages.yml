@@ -39,14 +39,14 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
-          key: "${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}"
-          restore-keys: ${{ runner.os }}-gradle
+          key: "${{ runner.os }}-gradle-caches }}"
+          restore-keys: ${{ runner.os }}-gradle-caches
 
       - name: Cache .doctoolchain
         uses: actions/cache@v2
         with:
           path: ~/.doctoolchain
-          key: "${{ runner.os }}-doctoolchain-${{ hashFiles('**/lockfiles') }}"
+          key: "${{ runner.os }}-doctoolchain }}"
           restore-keys: ${{ runner.os }}-doctoolchain
 
       - name: Check out

@@ -31,7 +31,7 @@ jobs:
         with:
           path: ~/.gradle/jdks
           key: "${{ runner.os }}-gradle-jdks"
-          restore-keys: ${{ runner.os }}-jdk
+          restore-keys: ${{ runner.os }}-gradle-jdks
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -42,8 +42,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
-          key: "${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}"
-          restore-keys: ${{ runner.os }}-gradle
+          key: "${{ runner.os }}-gradle-caches }}"
+          restore-keys: ${{ runner.os }}-gradle-caches
 
       - name: Validate Gradle Wrapper
         uses: gradle/actions/wrapper-validation@v4
