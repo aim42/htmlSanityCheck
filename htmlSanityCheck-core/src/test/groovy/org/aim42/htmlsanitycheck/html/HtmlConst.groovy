@@ -1,10 +1,8 @@
-package org.aim42.htmlsanitycheck.html;
-
+package org.aim42.htmlsanitycheck.html
 
 class HtmlConst {
-    public static final String HTML_HEAD = "<!DOCTYPE HTML> <html><head></head><body>";
-    public static final String HTML_END = "</body></html>";
-
+    static final String HTML_HEAD = "<!DOCTYPE HTML> <html><head></head><body>"
+    static final String HTML_END = "</body></html>"
 }
 
 

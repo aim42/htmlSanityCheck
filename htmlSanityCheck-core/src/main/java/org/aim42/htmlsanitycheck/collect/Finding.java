@@ -9,21 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A single "finding" from any check, i.e.:
- * A single "finding" from any check, i.e.:
+ * A single "finding" from any check, i.e.,
  * - a missing image file
  * - a missing label/id/bookmark (== broken link)
  * - a duplicate label/id/bookmark
  */
+@Getter
 public class Finding {
 
-    @Getter
-    String whatIsTheProblem; // i.e. which image is missing, which link/anchor is undefined
-    @Getter
+    String whatIsTheProblem; // i.e., which image is missing, which link/anchor is undefined
     int nrOfOccurrences;// how often does this specific finding occur in the checked-page
     // suggestions are ordered: getAt(0) yields the best, getAt(1) the second and so forth
     @Setter
-    @Getter
     List<String> suggestions;
 
     public Finding() {
@@ -31,17 +28,17 @@ public class Finding {
     }
 
     /**
-     * no finding should exist without giving an explanation ("whatIsTheProblem")
+     * No finding should exist without giving an explanation ("whatIsTheProblem")
      * about what went wrong.
      *
-     * @param whatIsTheProblem An explanation of what went wrong (i.e. name of missing file)
+     * @param whatIsTheProblem An explanation of what went wrong (i.e., name of the missing file)
      */
     public Finding(String whatIsTheProblem) {
         this(whatIsTheProblem, 1, new ArrayList<>(3));
     }
 
     /**
-     * finding with explanation and several occurences
+     * Finding with explanation and several occurrences
      */
     public Finding(String whatIsTheProblem, int nrOfOccurrences) {
         this(whatIsTheProblem, nrOfOccurrences, new ArrayList<>(3));
@@ -49,7 +46,7 @@ public class Finding {
 
 
     /**
-     * most general constructor:
+     * Most general constructor:
      * create Finding with explanation and nrOfOccurrences
      *
      * @param whatIsTheProblem An explanation of what went wrong (i.e. name of missing file)
@@ -62,7 +59,7 @@ public class Finding {
     }
 
     /**
-     * create Finding with explanation and suggestions
+     * Create Finding with explanation and suggestions
      *
      * @param whatIsTheProblem explanation what went wrong
      * @param suggestions      what could have been meant

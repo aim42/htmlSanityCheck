@@ -6,14 +6,13 @@ import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.test.dns.CustomHostNameResolver
 import org.wiremock.integrations.testcontainers.WireMockContainer
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import java.lang.reflect.Field
 import java.lang.reflect.Proxy
-// see end-of-file for license information
 
+// see end-of-file for license information
 
 class BrokenHttpLinksCheckerSpec extends Specification {
 
@@ -40,9 +39,10 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     }
 
     /* executed before every single spec */
+
     def setup() {
         myConfig = new Configuration()
-        brokenHttpLinksChecker = new BrokenHttpLinksChecker( myConfig )
+        brokenHttpLinksChecker = new BrokenHttpLinksChecker(myConfig)
 
         collector = new SingleCheckResults()
     }
@@ -57,24 +57,24 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     // Custom method to register the DNS resolver
     private void registerCustomDnsResolver() {
         try {
-            Field implField = InetAddress.class.getDeclaredField("impl");
-            implField.setAccessible(true);
-            Object currentImpl = implField.get(null);
+            Field implField = InetAddress.class.getDeclaredField("impl")
+            implField.setAccessible(true)
+            Object currentImpl = implField.get(null)
 
             Proxy newImpl = (Proxy) Proxy.newProxyInstance(
                     currentImpl.getClass().getClassLoader(),
                     currentImpl.getClass().getInterfaces(),
                     (proxy, method, args) -> {
-                        if ("lookupAllHostAddr".equals(method.getName()) && args.length == 1 && args[0] instanceof String) {
-                            return customHostNameResolver.resolve((String) args[0]);
+                        if ("lookupAllHostAddr" == method.getName() && args.length == 1 && args[0] instanceof String) {
+                            return customHostNameResolver.resolve((String) args[0])
                         }
-                        return method.invoke(currentImpl, args);
+                        return method.invoke(currentImpl, args)
                     }
-            );
+            )
 
-            implField.set(null, newImpl);
+            implField.set(null, newImpl)
         } catch (Exception e) {
-            throw new RuntimeException("Failed to register custom DNS resolver", e);
+            throw new RuntimeException("Failed to register custom DNS resolver", e)
         }
     }
 
@@ -97,6 +97,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
     def "one syntactically correct http URL is ok"() {
         given: "an HTML page with a single correct anchor/link"
+        //noinspection HttpUrlsUsage
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href="http://google.com:$port">google</a>
                 $HtmlConst.HTML_END """
@@ -133,16 +134,18 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         collector.nrOfProblems() == 0
 
         where:
-           goodUrl << ["http://junit.org:$port/junit4",
-                       "http://plumelib.org:$port/plume-util",
-                       "http://people.csail.mit.edu:$port/cpacheco"
-           ]
+        //noinspection HttpUrlsUsage
+        goodUrl << ["http://junit.org:$port/junit4",
+                    "http://plumelib.org:$port/plume-util",
+                    "http://people.csail.mit.edu:$port/cpacheco"
+        ]
     }
 
 
     def "single bad link is identified as problem"() {
 
         given: "an HTML page with a single (bad) link"
+        //noinspection HttpUrlsUsage
         String badhref = "http://arc42.org:$port/ui98jfuhenu87djch"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${badhref}>nonexisting arc42 link</a>
@@ -166,6 +169,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
     def "amazon does not deliver 405 statuscode for links that really exist"() {
         given: "an HTML page with a single (good) amazon link"
+        //noinspection HttpUrlsUsage
         String goodAmazonLink = "http://www.amazon.com:$port/dp/B01A2QL9SS"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${goodAmazonLink}>Amazon</a>
@@ -208,6 +212,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def 'bad link #badLink is recognized as such'() {
 
         given: "an HTML page with a single (broken) link"
+        //noinspection HttpUrlsUsage
         String goodURL = "http://mock.codes$port/${badLink}"
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href=${goodURL}>${badLink}</a>
@@ -231,6 +236,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def 'redirects are recognized and their new location is contained in warning message'() {
 
         given: "the old arc42 (http!) page "
+        //noinspection HttpUrlsUsage
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href="http://arc42.de:$port/old"</a>
                 $HtmlConst.HTML_END """
