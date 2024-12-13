@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,14 +19,11 @@ import java.util.List;
 public class Finding {
 
     String whatIsTheProblem; // i.e., which image is missing, which link/anchor is undefined
-    int nrOfOccurrences;// how often does this specific finding occur in the checked-page
+    int nrOfOccurrences; // how often does this specific finding occur in the checked-page
     // suggestions are ordered: getAt(0) yields the best, getAt(1) the second and so forth
     @Setter
     List<String> suggestions;
-
-    public Finding() {
-        this("");
-    }
+    Throwable throwable;
 
     /**
      * No finding should exist without giving an explanation ("whatIsTheProblem")
@@ -34,46 +32,68 @@ public class Finding {
      * @param whatIsTheProblem An explanation of what went wrong (i.e., name of the missing file)
      */
     public Finding(String whatIsTheProblem) {
-        this(whatIsTheProblem, 1, new ArrayList<>(3));
+        this(whatIsTheProblem, 1, new ArrayList<>(3), null);
     }
 
     /**
-     * Finding with explanation and several occurrences
+     * Finding with explanation and several occurrences.
+     *
+     * @param whatIsTheProblem An explanation of what went wrong (i.e., name of the missing file).
+     * @param throwable        The throwable instance representing an exception or error related to this occurrence.
+     */
+    public Finding(final String whatIsTheProblem, final Throwable throwable) {
+        this(whatIsTheProblem, 1, new ArrayList<>(1), throwable);
+    }
+
+    /**
+     * Finding with explanation and several occurrences.
+     *
+     * @param whatIsTheProblem An explanation of what went wrong (i.e., name of the missing file).
+     * @param nrOfOccurrences  The number of occurrences of a specific issue or event.
      */
     public Finding(String whatIsTheProblem, int nrOfOccurrences) {
-        this(whatIsTheProblem, nrOfOccurrences, new ArrayList<>(3));
+        this(whatIsTheProblem, nrOfOccurrences, new ArrayList<>(3), null);
     }
 
-
     /**
-     * Most general constructor:
-     * create Finding with explanation and nrOfOccurrences
+     * Finding with explanation and several occurrences, as well as suggestions.
      *
-     * @param whatIsTheProblem An explanation of what went wrong (i.e. name of missing file)
+     * @param whatIsTheProblem An explanation of what went wrong (i.e., name of the missing file).
+     * @param nrOfOccurrences  The number of occurrences of a specific issue or event.
+     * @param suggestions      A list of suggestions related to resolving or addressing the issue.
      */
     public Finding(String whatIsTheProblem, int nrOfOccurrences, List<String> suggestions) {
+        this(whatIsTheProblem, nrOfOccurrences, suggestions, null);
+    }
+
+    /**
+     * Most general constructor: Create Finding with all attributes.
+     *
+     * @param whatIsTheProblem An explanation of what went wrong (i.e., name of the missing file).
+     * @param nrOfOccurrences  The number of occurrences of a specific issue or event.
+     * @param suggestions      A list of suggestions related to resolving or addressing the issue.
+     * @param throwable        The throwable instance representing an exception or error related to this occurrence.
+     */
+    public Finding(String whatIsTheProblem, int nrOfOccurrences,
+                   List<String> suggestions, Throwable throwable) {
         this.whatIsTheProblem = whatIsTheProblem;
         this.nrOfOccurrences = nrOfOccurrences;
         this.suggestions = suggestions;
-
+        this.throwable = throwable;
     }
 
-    /**
-     * Create Finding with explanation and suggestions
-     *
-     * @param whatIsTheProblem explanation what went wrong
-     * @param suggestions      what could have been meant
-     */
-    public Finding(String whatIsTheProblem, List<String> suggestions) {
-        this(whatIsTheProblem, 1, suggestions);
-    }
 
     @Override
     public String toString() {
         String refCount = (nrOfOccurrences > 1) ? String.format(" (reference count: %d)", nrOfOccurrences) : "";
         String suggestionStr = (!suggestions.isEmpty()) ? "\n (Suggestions: " + String.join(",", suggestions) + ")" : "";
+        String stackTrace = (null != throwable)
+                ? "\nStackTrace:\n\t" + String.join("\n\t", Arrays.stream(throwable.getStackTrace())
+                .map(StackTraceElement::toString)
+                .toArray(String[]::new))
+                : "";
 
-        return whatIsTheProblem + refCount + (suggestionStr.isEmpty() ? "" : suggestionStr);
+        return whatIsTheProblem + refCount + suggestionStr + stackTrace;
     }
 
 

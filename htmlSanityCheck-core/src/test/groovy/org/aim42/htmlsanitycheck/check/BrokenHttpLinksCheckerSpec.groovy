@@ -275,6 +275,27 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         collector?.getFindings()?.first()?.whatIsTheProblem?.contains("suspicious")
 
     }
+
+    def "expect an unknown host exception"() {
+        given: "an HTML page with a link to a non-resolvable hostname"
+        String unknownHost = "http://nonexistent-host.fake"
+        String HTML = """$HtmlConst.HTML_HEAD
+                     <a href="${unknownHost}">Broken Link</a>
+                     $HtmlConst.HTML_END """
+
+        htmlPage = new HtmlPage(HTML)
+
+        when: "the page is checked"
+        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+        then: "the exception is caught and an appropriate problem is recorded"
+        collector.getFindings()?.size() == 1
+
+        and: "the problem describes the unknown host exception"
+        collector.getFindings()?.first()?.whatIsTheProblem?.contains("Unknown host with href=")
+        collector.getFindings()?.first()?.whatIsTheProblem?.contains("nonexistent-host.fake")
+        collector.getFindings()?.first()?.throwable instanceof UnknownHostException
+    }
 }
 
 /************************************************************************

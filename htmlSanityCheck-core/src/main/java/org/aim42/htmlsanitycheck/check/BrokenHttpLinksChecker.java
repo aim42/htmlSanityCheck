@@ -169,10 +169,10 @@ class BrokenHttpLinksChecker extends Checker {
             firstConnection.disconnect();
 
         } catch (UnknownHostException exception) {
-            Finding unknownHostFinding = new Finding("Unknown host with href=" + href);
+            Finding unknownHostFinding = new Finding("Unknown host with href=" + href, exception);
             getCheckingResults().addFinding(unknownHostFinding);
         } catch (IOException exception) {
-            Finding someException = new Finding("exception " + exception + " with href=" + href);
+            Finding someException = new Finding("exception " + exception + " with href=" + href, exception);
             getCheckingResults().addFinding(someException);
         }
     }
