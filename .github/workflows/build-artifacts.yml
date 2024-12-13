@@ -86,3 +86,4 @@ jobs:
           pwd
           echo "Files:"
           find * -ls
+          ./gradlew javaToolchains
