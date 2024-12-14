@@ -61,7 +61,7 @@ class CrossPlatformExec extends Exec {
     void buildCommand(String... commandArgs) {
         if (current().isWindows()) {
             executable = 'cmd'
-            args = ['/c', 'mvnw.bat']
+            args = ['/c', 'mvnw.cmd']
         } else {
             executable = './mvnw'
         }
