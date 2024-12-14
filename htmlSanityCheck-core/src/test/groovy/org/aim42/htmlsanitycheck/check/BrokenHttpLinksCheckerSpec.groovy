@@ -20,7 +20,6 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     HtmlPage htmlPage
     SingleCheckResults collector
 
-    private Configuration myConfig
     static private int port
 
     @Shared
@@ -41,8 +40,10 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     /* executed before every single spec */
 
     def setup() {
-        myConfig = new Configuration()
-        brokenHttpLinksChecker = new BrokenHttpLinksChecker(myConfig)
+        Configuration configuration = Configuration.builder()
+                .retries(3)
+                .build()
+        brokenHttpLinksChecker = new BrokenHttpLinksChecker(configuration)
 
         collector = new SingleCheckResults()
     }

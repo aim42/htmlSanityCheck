@@ -83,6 +83,9 @@ class HtmlSanityCheckTask extends DefaultTask {
     @Input
     List<Class<? extends Checker>> checkerClasses = AllCheckers.CHECKER_CLASSES
 
+    @Input
+    Integer retries = 0
+
     // private stuff
     // **************************************************************************
     private Configuration myConfig
@@ -187,6 +190,7 @@ See ${checkingResultsDir} for a detailed report."""
                 .ignoreIPAddresses(ignoreIPAddresses)
 
                 .checksToExecute(checkerClasses)
+                .retries(retries)
                 .build()
 
         // in case we have configured specific interpretations of http status codes

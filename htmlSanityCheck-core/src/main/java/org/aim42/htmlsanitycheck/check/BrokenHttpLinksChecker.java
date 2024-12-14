@@ -17,7 +17,7 @@ import java.util.Set;
 
 
 /**
- * Check html anchor href attributes
+ * Check HTML anchor href attributes
  *
  * @see <a href="https://www.w3schools.com/tags/att_a_href.asp">https://www.w3schools.com/tags/att_a_href.asp</a>
  */
@@ -32,15 +32,13 @@ class BrokenHttpLinksChecker extends Checker {
     private final Set<Integer> successCodes;
     private final Set<Integer> warningCodes;
     private final Set<Integer> errorCodes;
-    // all href attributes with http(s) protocol,
-    // including potential duplicates
-    // need that to calculate "nrOfOccurrences"
-    // the pure http/https-hrefs a set, duplicates are removed here
+    // all href attributes with http(s) protocol, including potential duplicates, need
+    // to calculate "nrOfOccurrences" the pure http/https-hrefs a set, duplicates are removed here
     private Set<String> hrefSet;
 
 
-    BrokenHttpLinksChecker(Configuration pConfig) {
-        super(pConfig);
+    BrokenHttpLinksChecker(Configuration configuration) {
+        super(configuration);
 
         errorCodes = getMyConfig().getHttpErrorCodes();
         warningCodes = getMyConfig().getHttpWarningCodes();
@@ -59,7 +57,7 @@ class BrokenHttpLinksChecker extends Checker {
     protected SingleCheckResults check(final HtmlPage pageToCheck) {
         log.trace("Checking '{}'", pageToCheck.getFile());
 
-        //get set of all a-tags "<a href=..." in html file,
+        // get a set of all a-tags "<a href=..." in HTML file,
         // restricted to http(s) links
 
         hrefSet = pageToCheck.getAllHttpHrefStringsAsSet();
@@ -82,11 +80,11 @@ class BrokenHttpLinksChecker extends Checker {
     }
 
     /**
-     * check all http(s) links
+     * Check all http(s) links
      * TODO: use GPARS to check several links in parallel, as sequential checking might take too long
      **/
     private void checkAllHttpLinks() {
-        // for all hrefSet check if the corresponding link is valid
+        // Check if the corresponding link is valid for all hrefSet
         hrefSet.forEach(this::doubleCheckSingleHttpLink);
     }
 
@@ -98,8 +96,6 @@ class BrokenHttpLinksChecker extends Checker {
      * we try again with a GET, to get the "finalResponseCode" -
      * which we then categorize as success, error or warning
      */
-
-
     protected void doubleCheckSingleHttpLink(String href) {
         // bookkeeping:
         getCheckingResults().incNrOfChecks();
@@ -108,14 +104,14 @@ class BrokenHttpLinksChecker extends Checker {
             URL url = new URL(href);
             checkIfLocalhostURL(url, href);
             checkIfIPAddress(url, href);
-            checkHttpLinkWithRetry(url, href);
+            checkHttpLinkWithRetry(url, href, getMyConfig().getRetries());
         } catch (MalformedURLException exception) {
             Finding malformedURLFinding = new Finding("malformed URL exception with href=" + href);
             getCheckingResults().addFinding(malformedURLFinding);
         }
     }
 
-    private void checkHttpLinkWithRetry(URL url, String href) {
+    private void checkHttpLinkWithRetry(URL url, String href, int retries) {
         String problem;
         try {
             HttpURLConnection firstConnection = getNewURLConnection(url);
@@ -124,7 +120,7 @@ class BrokenHttpLinksChecker extends Checker {
             firstConnection.connect();
             int responseCode = firstConnection.getResponseCode();
 
-            // issue 218 and 219: some web servers respond with 403 or 405
+            // Issue 218 and 219: some web servers respond with 403 or 405
             // when given HEAD requests. Therefore, try to GET
             if (successCodes.contains(responseCode)) {
                 return;
@@ -169,8 +165,13 @@ class BrokenHttpLinksChecker extends Checker {
             firstConnection.disconnect();
 
         } catch (UnknownHostException exception) {
-            Finding unknownHostFinding = new Finding("Unknown host with href=" + href, exception);
-            getCheckingResults().addFinding(unknownHostFinding);
+            if (retries > 0) {
+                log.warn("Unknown host exception with href={}, retrying another {} times", href, retries);
+                checkHttpLinkWithRetry(url, href, retries - 1);
+            } else {
+                Finding unknownHostFinding = new Finding("Unknown host with href=" + href, exception);
+                getCheckingResults().addFinding(unknownHostFinding);
+            }
         } catch (IOException exception) {
             Finding someException = new Finding("exception " + exception + " with href=" + href, exception);
             getCheckingResults().addFinding(someException);
@@ -212,12 +213,12 @@ class BrokenHttpLinksChecker extends Checker {
         }
     }
 
-    // if configured ,localhost-URLs yield warnings!
+    // if configured, localhost-URLs yield warnings!
     private void checkIfLocalhostURL(URL url, String href) {
         if (!getMyConfig().isIgnoreLocalhost()) {
             String host = url.getHost();
             if (("localhost".equals(host)) || host.startsWith("127.0.0")) {
-                Finding localhostWarning = new Finding("Warning: localhost urls indicates suspicious environment dependency: href=" + href);
+                Finding localhostWarning = new Finding("Warning: localhost urls indicate suspicious environment dependency: href=" + href);
                 getCheckingResults().addFinding(localhostWarning);
             }
         }

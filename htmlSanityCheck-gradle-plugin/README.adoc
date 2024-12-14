@@ -28,8 +28,8 @@ plugins {
     id 'org.aim42.{project}' version '{hsc-version}' // <1>
 }
 ----
-<1> Checkout <<box:current-version,current version>>
 
+<1> Checkout <<box:current-version,current version>>
 
 === Legacy Installation
 
@@ -52,6 +52,7 @@ buildscript {
 
 apply plugin: 'org.aim42.{project}'
 ----
+
 <1> In case you would like to use a development version (or even branch), check out <<sec:development-versions,development versions>>.
 <2> Beginning with version `2.x` all releases will be published to https://central.sonatype.com/artifact/org.aim42.htmlSanityCheck/org.aim42.htmlSanityCheck.gradle.plugin[Maven Central].
 <3> The https://plugins.gradle.org[Gradle Plugin Portal] contains https://plugins.gradle.org/plugin/org.aim42.htmlSanityCheck[most versions] or will redirect downloads of newer versions to Maven Central.
@@ -61,8 +62,8 @@ apply plugin: 'org.aim42.{project}'
 [IMPORTANT]
 .Latest (development) versions
 ====
-* The latest https://github.com/aim42/htmlSanityCheck/releases[release version] is defined in https://github.com/aim42/htmlSanityCheck/blob/main/gradle.properties[`gradle.properties` on `main` branch].
-* The current (development) version is defined in {gradleProperties}
+* https://github.com/aim42/htmlSanityCheck/blob/main/gradle.properties[`gradle.properties` on `main` branch] defines the latest https://github.com/aim42/htmlSanityCheck/releases[release version].
+* {gradleProperties} defines the current (development) version.
 +
 [source]
 .Development version
@@ -79,7 +80,7 @@ The plugin adds a new task named `htmlSanityCheck`.
 This task exposes a few properties as part of its configuration:
 
 [horizontal]
-`sourceDir` (mandatory):: Directory where the HTML files are located.
+`sourceDir` (mandatory):: Directory containing the HTML files to check.
 +
 Type: Directory.
 
@@ -95,14 +96,14 @@ Type: Directory.
 +
 Default: `+{buildDir}+/reports/htmlSanityCheck/`
 
-`junitResultsDir` (optional):: Directory where the results are written to in JUnit XML format.
-JUnit XML can be read by many tools, including CI environments.
+`junitResultsDir` (optional):: Directory where HSC writes the results in JUnit XML format.
+Many tools support https://github.com/testmoapp/junitxml[JUnit XML] format, including CI environments.
 +
 Type: Directory.
 +
 Default: `+{buildDir}+/test-results/htmlchecks/`
 
-`failOnErrors` (optional):: Fail the build if any error was found in the checked pages.
+`failOnErrors` (optional):: Fail the build if any checked of the pages contains an error.
 +
 Type: Boolean.
 +
@@ -125,6 +126,15 @@ Default: `false`.
 Type: Boolean.
 +
 Default: `false`.
+
+`retries` (optional):: Retry on failed requests (e.g., network issues).
++
+*Note*: Currently only used for `UnknownHostException`s (cf.
+{project-issues}/270[#270]).
++
+Type: Integer.
++
+Default: `0`.
 
 `checkerClasses` (optional):: The set of checker classes to be executed.
 +
@@ -155,11 +165,10 @@ include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/W
 [NOTE]
 .HTTP Redirects
 ====
-Note that HTTP redirects are treated as a warning to make the user aware of the correct or new location (cf. {project-issues}/244[Issue 244]).
+Note that HSC treats HTTP redirects as a warning to make the user aware of the correct or new location (cf.
+{project-issues}/244[Issue 244]).
 Some HSC reports often contain the respective location.
 ====
-
-
 
 `httpErrorCodes` (optional):: Additional HTTP response codes treated as error.
 +
@@ -190,12 +199,13 @@ The lists shown above are the default HTTP response codes handled by HSC.
 The mentioned configurations effectively move the configured codes around, i.e., if you add `308` to `httpErrorCodes` it is automatically removed from its default list (`httpWarningCodes`).
 ****
 
-
 [[sec:examples]]
 == Examples
 
 === Small Example
+
 `build.gradle`
+
 [source,groovy]
 ----
 apply plugin: 'org.aim42.htmlSanityCheck'
@@ -269,8 +279,6 @@ asciidoctor {
         from( srcImagesPath )
         into targetImagesPath
     }
-
-
 }
 
 apply plugin: 'org.aim42.htmlSanityCheck'
@@ -320,7 +328,7 @@ htmlSanityCheck {
 
 == Compatibility
 
-The Plugin has been tested with the following Gradle versions:
+We test the Plugin with the following Gradle versions:
 
 [source,groovy]
 .Tested Gradle versions
@@ -330,7 +338,7 @@ include::src/test/groovy/org/aim42/htmlsanitycheck/gradle/HtmlSanityCheckTaskFun
 
 [NOTE]
 ====
-The full range of Gradle versions is only tested in CI (GitHub action).
+We test the full range of Gradle versions only in CI (GitHub action) as it is time-consuming.
 The local test only tests the latest Gradle version:
 
 [source,groovy]

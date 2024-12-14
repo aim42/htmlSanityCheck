@@ -65,13 +65,13 @@ task buildReadmeGradlePlugin(type: org.asciidoctor.gradle.jvm.AsciidoctorTask) {
     )
 }
 buildReadmeGradlePlugin.dependsOn(buildReadmeRoot)
-//buildReadmeGradlePlugin.dependsOn(copyReadmeResources)
 
 htmlSanityCheck {
     sourceDir file("build/docs")
 
     checkingResultsDir = file("build/reports")
     failOnErrors = true
+    retries = 3
 
     logger.quiet "HSC version: ${htmlSanityCheckVersion}"
     logger.quiet "HSC sourceDir: ${sourceDir.absolutePath}"
