@@ -11,6 +11,7 @@ import javax.xml.stream.XMLStreamWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.UUID;
 
 /************************************************************************
@@ -80,7 +81,13 @@ public class JUnitXmlReporter extends Reporter {
                     writer.writeStartElement("failure");
                     writer.writeAttribute("type", singleCheckResult.getSourceItemName() + " - " + singleCheckResult.getTargetItemName());
                     writer.writeAttribute("message", finding.getWhatIsTheProblem());
-                    writer.writeCharacters(finding.getSuggestions() != null ? String.join(", ", finding.getSuggestions()) : "");
+                    String suggestions = finding.getSuggestions() != null && !finding.getSuggestions().isEmpty()
+                            ? "Suggestions:\n\t" + String.join("\n\t", finding.getSuggestions())
+                            : "";
+                    String stackTrace = finding.getThrowable() != null
+                            ? "Stacktrace:\n\t" + Arrays.toString(finding.getThrowable().getStackTrace())
+                            : "";
+                    writer.writeCData(suggestions + "\n" + stackTrace);
                     writer.writeEndElement(); // end of <failure>
                 }
 

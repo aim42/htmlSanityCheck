@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.report
 
+import groovy.xml.XmlSlurper
 import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
@@ -18,11 +19,11 @@ class JUnitXmlReporterTest {
 
     Finding singleFinding
     SingleCheckResults singleCheckResults
-    SinglePageResults  singlePageResults
-    PerRunResults      runResults
+    SinglePageResults singlePageResults
+    PerRunResults runResults
 
     JUnitXmlReporter reporter
-	File outputPath
+    File outputPath
 
     @Before
     void setUp() {
@@ -35,19 +36,19 @@ class JUnitXmlReporterTest {
         runResults = new PerRunResults()
 
         outputPath = File.createTempDir()
-        reporter = new JUnitXmlReporter( runResults, outputPath.absolutePath )
+        reporter = new JUnitXmlReporter(runResults, outputPath.absolutePath)
     }
 
-	@After
-	void tearDown() {
-		if (outputPath) {
-			outputPath.traverse {
-				System.err.println "${it}: ${it.text}"
-			}
-		}
-		outputPath?.deleteDir()
-	}
-	
+    @After
+    void tearDown() {
+        if (outputPath) {
+            outputPath.traverse {
+                System.err.println "${it}: ${it.text}"
+            }
+        }
+        outputPath?.deleteDir()
+    }
+
     @Test(expected = RuntimeException.class)
     void testInitReportWithNonWritableDirectory() throws IOException {
         // Create a temporary directory
@@ -64,32 +65,31 @@ class JUnitXmlReporterTest {
     @Test
     void testEmptyFilepath() {
         SinglePageResults singlePageResultsWithoutFilepath
-            =new SinglePageResults(
-                "test.html",
+                = new SinglePageResults("test.html",
                 null,
                 "Test Page",
                 1000,
                 new ArrayList<>())
         PerRunResults runResults = new PerRunResults()
         runResults.addPageResults(singlePageResultsWithoutFilepath)
-        new JUnitXmlReporter( runResults, outputPath.absolutePath ).reportPageSummary(singlePageResultsWithoutFilepath)
+        new JUnitXmlReporter(runResults, outputPath.absolutePath).reportPageSummary(singlePageResultsWithoutFilepath)
         def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
         assertEquals("Test Page", testsuite.@name.text())
     }
 
     @Test
     void testEmptyReporter() {
-		reporter.reportFindings()
-		assertEquals("Empty reporter has no JUnit results", 0, outputPath.listFiles().length)
+        reporter.reportFindings()
+        assertEquals("Empty reporter has no JUnit results", 0, outputPath.listFiles().length)
     }
 
 
     @Test
     void testZeroChecks() {
-        addSingleCheckResultsToReporter( singleCheckResults )
+        addSingleCheckResultsToReporter(singleCheckResults)
 
-		reporter.reportFindings()
-		def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
+        reporter.reportFindings()
+        def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
         assertEquals("Zero checks expected", "0", testsuite.@tests.text())
         assertEquals("Zero findings expected", "0", testsuite.@failures.text())
         assertEquals("Zero testcases expected", 1, testsuite.testcase.size())
@@ -99,10 +99,10 @@ class JUnitXmlReporterTest {
     void testSingleFindingWithoutChecks() {
         // now add one finding, but no check.. (nonsense, should never occur)
         singleCheckResults.addFinding(singleFinding)
-        addSingleCheckResultsToReporter( singleCheckResults )
+        addSingleCheckResultsToReporter(singleCheckResults)
 
-		reporter.reportFindings()
-		def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
+        reporter.reportFindings()
+        def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
         assertEquals("expected no check", "0", testsuite.@tests.text())
         assertEquals("expected one finding", "1", testsuite.@failures.text())
         assertEquals("One testcase expected", 1, testsuite.testcase.size())
@@ -115,10 +115,10 @@ class JUnitXmlReporterTest {
         singleCheckResults.addFinding(singleFinding)
         singleCheckResults.incNrOfChecks()
 
-        addSingleCheckResultsToReporter( singleCheckResults )
+        addSingleCheckResultsToReporter(singleCheckResults)
 
-		reporter.reportFindings()
-		def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
+        reporter.reportFindings()
+        def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
         assertEquals("Expect one finding", "1", testsuite.@failures.text())
         assertEquals("Expect one check", "1", testsuite.@tests.text())
         assertEquals("One testcase expected", 1, testsuite.testcase.size())
@@ -131,10 +131,10 @@ class JUnitXmlReporterTest {
         singleCheckResults.addFinding(singleFinding)
         singleCheckResults.nrOfItemsChecked = 10
 
-        addSingleCheckResultsToReporter( singleCheckResults )
+        addSingleCheckResultsToReporter(singleCheckResults)
 
-		reporter.reportFindings()
-		def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
+        reporter.reportFindings()
+        def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
         assertEquals("Expect one finding", "1", testsuite.@failures.text())
         assertEquals("Expect ten checks", "10", testsuite.@tests.text())
         assertEquals("Expect one testcase", 1, testsuite.testcase.size())
@@ -144,15 +144,15 @@ class JUnitXmlReporterTest {
     @Test
     void testThreeFindingsTenChecks() {
         // three findings, ten checks.. 70% successful
-        for (int i = 1; i<=3; i++) {
-            singleCheckResults.addFinding( new Finding("finding $i"))
+        for (int i = 1; i <= 3; i++) {
+            singleCheckResults.addFinding(new Finding("finding $i"))
         }
         singleCheckResults.nrOfItemsChecked = 10
 
-        addSingleCheckResultsToReporter( singleCheckResults )
+        addSingleCheckResultsToReporter(singleCheckResults)
 
-		reporter.reportFindings()
-		def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
+        reporter.reportFindings()
+        def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
         assertEquals("Expect three findings", "3", testsuite.@failures.text())
         assertEquals("Expect ten checks", "10", testsuite.@tests.text())
         assertEquals("Expect one testcases", 1, testsuite.testcase.size())
@@ -165,10 +165,10 @@ class JUnitXmlReporterTest {
         singleCheckResults.addFinding(singleFinding)
         singleCheckResults.nrOfItemsChecked = 6
 
-        addSingleCheckResultsToReporter( singleCheckResults )
+        addSingleCheckResultsToReporter(singleCheckResults)
 
-		reporter.reportFindings()
-		def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
+        reporter.reportFindings()
+        def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
         assertEquals("Expect one finding", "1", testsuite.@failures.text())
         assertEquals("Expect six checks", "6", testsuite.@tests.text())
         assertEquals("Expect one testcases", 1, testsuite.testcase.size())
@@ -181,24 +181,49 @@ class JUnitXmlReporterTest {
         int nrOfFindings = 99
 
         for (int i = 1; i <= nrOfFindings; i++) {
-            singleCheckResults.addFinding( new Finding( "finding $i"))
+            singleCheckResults.addFinding(new Finding("finding $i"))
         }
         singleCheckResults.nrOfItemsChecked = nrOfChecks
 
-        addSingleCheckResultsToReporter( singleCheckResults )
+        addSingleCheckResultsToReporter(singleCheckResults)
 
-		reporter.reportFindings()
-		def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
-        assertEquals("Expect $nrOfFindings findings", nrOfFindings as String, testsuite.@failures.text() )
-        assertEquals("Expect $nrOfChecks checks", nrOfChecks as String, testsuite.@tests.text() )
+        reporter.reportFindings()
+        def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
+        assertEquals("Expect $nrOfFindings findings", nrOfFindings as String, testsuite.@failures.text())
+        assertEquals("Expect $nrOfChecks checks", nrOfChecks as String, testsuite.@tests.text())
         assertEquals("Expect one testcase", 1, testsuite.testcase.size())
         assertEquals("Expect $nrOfChecks testcase failures", nrOfFindings, testsuite.testcase.failure.size())
     }
 
-	
-    private void addSingleCheckResultsToReporter( SingleCheckResults scr ) {
+    @Test
+    void testFindingWithThrowable() {
+        // Create a single finding with a throwable
+        Throwable testThrowable = new RuntimeException("Test exception message")
+        def singleFinding = new Finding("TestMessage", testThrowable)
+
+        // Add the finding with the throwable to the check results
+        singleCheckResults.addFinding(singleFinding)
+        singleCheckResults.incNrOfChecks()
+
+        // Add the single check results to the reporter
+        addSingleCheckResultsToReporter(singleCheckResults)
+
+        // Generate the report
+        reporter.reportFindings()
+        def testsuite = new XmlSlurper().parse(outputPath.listFiles()[0])
+
+        // Verify the generated XML structure and contents
+        assertEquals("Expect one finding", "1", testsuite.@failures.text())
+        assertEquals("Expect one check", "1", testsuite.@tests.text())
+        assertEquals("One testcase expected", 1, testsuite.testcase.size())
+        assertEquals("One testcase failure expected", 1, testsuite.testcase.failure.size())
+        assertTrue("Failure text should contain a stack trace",
+                testsuite.testcase.failure.text() ==~ /.*\nStacktrace:\n\t.+/)
+    }
+
+    private void addSingleCheckResultsToReporter(SingleCheckResults scr) {
         SinglePageResults spr = new SinglePageResults()
-        spr.addResultsForSingleCheck( scr )
-        reporter.addCheckingResultsForOnePage( spr )
+        spr.addResultsForSingleCheck(scr)
+        reporter.addCheckingResultsForOnePage(spr)
     }
 }
