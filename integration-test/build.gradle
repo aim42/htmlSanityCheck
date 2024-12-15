@@ -1,3 +1,7 @@
+plugins {
+    id 'base'
+}
+
 final String BUILD_DIRECTORY = "${Project.DEFAULT_BUILD_DIR_NAME}"
 
 version = htmlSanityCheckVersion
@@ -124,34 +128,61 @@ tasks.register("integrationTestCli") {
 
 final String INTEGRATION_TEST_DIRECTORY_MAVEN = "maven-plugin"
 
-tasks.register("integrationTestMaven") {
+tasks.register("cleanIntegrationTestMavenPlugin") {
     group("Verification")
-    description("Run overall integration tests (no publish)")
+    description("Deletes the result directory of maven-plugin integration tests")
+
+    File integrationTestDirectory = file(INTEGRATION_TEST_DIRECTORY_MAVEN)
+    final File testIndex = new File(integrationTestDirectory, "target/reports/index.html")
+
+    outputs.file testIndex
 
     doLast {
         def result = exec {
             workingDir INTEGRATION_TEST_DIRECTORY_MAVEN
             commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "cmd /c mvnw.cmd" : "./mvnw",
-                    "clean", "verify", "-Dhsc.version=${project.version}", "-ssettings.xml"
+                    "clean", "-Dhsc.version=${project.version}", "-ssettings.xml"
         }
-        logger.debug "Script output: $result"
-        File integrationTestDirectory = file(INTEGRATION_TEST_DIRECTORY_MAVEN)
-        final File testIndex = new File(integrationTestDirectory, "target/reports/htmlSanityCheck/index.html")
-        assert testIndex.exists()
+
+    }
+
+    outputs.upToDateWhen {
+        !testIndex.exists()
     }
 }
 
+tasks.register("integrationTestMavenPlugin") {
+    group("Verification")
+    description("Run Maven integration tests (only)")
+
+    File integrationTestDirectory = file(INTEGRATION_TEST_DIRECTORY_MAVEN)
+    final File testIndex = new File(integrationTestDirectory, "target/reports/index.html")
+
+    outputs.file testIndex
+
+    doLast {
+        def result = exec {
+            workingDir INTEGRATION_TEST_DIRECTORY_MAVEN
+            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "cmd /c mvnw.cmd" : "./mvnw",
+                    "verify", "-Dhsc.version=${project.version}", "-ssettings.xml"
+        }
+        logger.debug "Script output: $result"
+        assert testIndex.exists()
+    }
+}
 
 tasks.register("integrationTest") {
     group("Verification")
     description("Run all integration tests (without any installations etc.)")
 
-    dependsOn(integrationTestGradlePlugin, integrationTestCli, integrationTestMaven)
+    dependsOn(integrationTestGradlePlugin, integrationTestCli, integrationTestMavenPlugin)
 }
 
-tasks.register("clean", Delete) {
+tasks.register("cleanIntegrationTest", Delete) {
     group("Build")
-    description("Deletes all builds")
+    description("Deletes all integration test builds")
 
-    dependsOn(cleanIntegrationTestCommon, cleanIntegrationTestGradlePlugin, cleanIntegrationTestCli)
+    dependsOn(cleanIntegrationTestCommon, cleanIntegrationTestGradlePlugin,
+            cleanIntegrationTestCli, cleanIntegrationTestMavenPlugin)
 }
+clean.dependsOn(cleanIntegrationTest)
