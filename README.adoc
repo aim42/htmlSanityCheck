@@ -41,6 +41,7 @@ HSC can be currently used
 Depending on your <<sec:usage>> you have to
 
 * Install the xref:{xrefToGradlePlugin}#sec:installation[Gradle Plugin], or
+* Install the xref:{xrefToCli}#sec:installation[Command Line Interface tool] (CLI), or
 * Install the xref:{xrefToMavenPlugin}#sec:installation[Maven Plugin], or
 * Install the core library for programmatic use (TBD).
 
