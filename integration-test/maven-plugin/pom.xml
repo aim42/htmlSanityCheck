@@ -26,9 +26,15 @@
                 </executions>
                 <configuration>
                     <sourceDocuments>
-                        <file>src/file-to-test.html</file>
+                        <file>../common/build/docs/htmlSanityCheck-gradle-plugin/README.html</file>
+                        <file>../common/build/docs/htmlSanityCheck-maven-plugin/README.html</file>
+                        <file>../common/build/docs/htmlSanityCheck-cli/README.html</file>
+                        <file>../common/build/docs/README.html</file>
                     </sourceDocuments>
-                    <sourceDir>src</sourceDir>
+                    <sourceDir>../common/build/docs</sourceDir>
+                    <checkingResultsDir>${project.build.directory}/reports</checkingResultsDir>
+                    <failOnErrors>true</failOnErrors>
+                    <junitResultsDir>${project.build.directory}/test-results/htmlSanityCheck</junitResultsDir>
                 </configuration>
             </plugin>
         </plugins>
