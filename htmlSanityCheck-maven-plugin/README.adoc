@@ -24,25 +24,25 @@ Use the following snippet inside a Maven build file:
 .build.maven
 [source,xml,subs="attributes+"]
 ----
-   <plugin>
-                <groupId>org.aim42.htmlSanityCheck</groupId>
-                <artifactId>htmlSanityCheck-maven-plugin</artifactId>
-                <version>{hsc-version}</version> // <1>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>sanity-check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <sourceDocuments>
-                        <file>src/file-to-test.html</file> <2>
-                    </sourceDocuments>
-                    <sourceDir>src</sourceDir> <3>
-                </configuration>
-            </plugin>
+<plugin>
+    <groupId>org.aim42.htmlSanityCheck</groupId>
+    <artifactId>htmlSanityCheck-maven-plugin</artifactId>
+    <version>{hsc-version}</version> // <1>
+    <executions>
+        <execution>
+            <phase>compile</phase>
+            <goals>
+                <goal>sanity-check</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+        <sourceDocuments>
+            <file>src/file-to-test.html</file> <2>
+        </sourceDocuments>
+        <sourceDir>src</sourceDir> <3>
+    </configuration>
+</plugin>
 ----
 <1> Checkout <<box:current-version,current version>>
 <2> List the files you want tio check here.
