@@ -302,10 +302,12 @@ tasks.register("publishAllPublicationsToMyLocalRepositoryForFullIntegrationTests
     group("Publishing")
     description("Publishes all publications to the local Maven integration (test) repository")
 
-    dependsOn(":htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository",
-            ":htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository",
-            // For some reason it is necessary to add this task explicitly though it should be part of the above "publishAllPubli..." task
+    dependsOn(
+            // For some reason it is necessary to add this task explicitly though it should be part of the
+            // ":htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository" task
             ":htmlSanityCheck-gradle-plugin:publishHtmlSanityCheckPluginMarkerMavenPublicationToMyLocalRepositoryForFullIntegrationTestsRepository",
+            ":htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository",
+            ":htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository",
             ":htmlSanityCheck-maven-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository",
     )
 }
@@ -315,6 +317,11 @@ final String INTEGRATION_TEST_DIRECTORY = "integration-test"
 tasks.register("integrationTestOnly") {
     group("Verification")
     description("Perform all Integration Tests (Only)")
+
+    dependsOn(
+            ':publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
+            ':htmlSanityCheck-cli:installDist',
+    )
 
     doLast {
         def result = exec {
@@ -349,17 +356,9 @@ tasks.register("integrationTest") {
     group("Verification")
     description("Run overall integration tests (and publish/install first)")
     dependsOn(
-            ':publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-            ':htmlSanityCheck-cli:installDist',
             'integrationTestOnly',
     )
-    mustRunAfter(':clean')
 }
-
-integrationTestOnly.mustRunAfter(
-        ':publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        ':htmlSanityCheck-cli:installDist',
-)
 
 /*
  * Copyright Gernot Starke and aim42 contributors.
