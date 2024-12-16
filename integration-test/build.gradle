@@ -140,8 +140,11 @@ tasks.register("cleanIntegrationTestMavenPlugin") {
     doLast {
         def result = exec {
             workingDir INTEGRATION_TEST_DIRECTORY_MAVEN
-            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "cmd /c mvnw.cmd" : "./mvnw",
-                    "clean", "-Dhsc.version=${project.version}", "-ssettings.xml"
+            if (System.getProperty("os.name") ==~ /Windows.*/) {
+                commandLine "cmd", "/c", "mvnw.cmd", "clean", "-Dhsc.version=${project.version}", "-ssettings.xml"
+            } else {
+                commandLine "./mvnw", "clean", "-Dhsc.version=${project.version}", "-ssettings.xml"
+            }
         }
 
     }
@@ -163,8 +166,11 @@ tasks.register("integrationTestMavenPlugin") {
     doLast {
         def result = exec {
             workingDir INTEGRATION_TEST_DIRECTORY_MAVEN
-            commandLine System.getProperty("os.name") ==~ /Windows.*/ ? "cmd /c mvnw.cmd" : "./mvnw",
-                    "verify", "-Dhsc.version=${project.version}", "-ssettings.xml"
+            if (System.getProperty("os.name") ==~ /Windows.*/) {
+                commandLine "cmd", "/c", "mvnw.cmd", "verify", "-Dhsc.version=${project.version}", "-ssettings.xml"
+            } else {
+                commandLine "./mvnw", "verify", "-Dhsc.version=${project.version}", "-ssettings.xml"
+            }
         }
         logger.debug "Script output: $result"
         assert testIndex.exists()
