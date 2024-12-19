@@ -186,8 +186,7 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
     static PerRunResults performChekcs(Configuration myConfig) throws MojoExecutionException {
         try {
             AllChecksRunner allChecksRunner = new AllChecksRunner(myConfig);
-            PerRunResults allChecks = allChecksRunner.performAllChecks();
-            return allChecks;
+            return allChecksRunner.performAllChecks();
         } catch (IOException e) {
             throw new MojoExecutionException(e);
         }
@@ -200,6 +199,11 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
         // Setup configuration
         Configuration myConfig = setupConfiguration();
 
+        execute(myConfig);
+
+    }
+
+     void execute(Configuration myConfig) throws MojoExecutionException {
         // Check if configuration is valid
         try {
             myConfig.validate();
@@ -218,7 +222,6 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
 
         // Handle findings
         handleFindings(allChecks.nrOfFindingsOnAllPages(), myConfig);
-
     }
 
     void handleFindings(int nrOfFindingsOnAllPages, Configuration config) throws MojoExecutionException {

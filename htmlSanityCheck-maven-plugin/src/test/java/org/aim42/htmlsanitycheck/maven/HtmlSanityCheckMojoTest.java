@@ -1,18 +1,26 @@
 package org.aim42.htmlsanitycheck.maven;
 
 import org.aim42.htmlsanitycheck.Configuration;
+import org.aim42.htmlsanitycheck.check.AllCheckers;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
 
 class HtmlSanityCheckMojoTest {
+
+    final static String VALID_HTML = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"><html><head></head><body></body><html>";
+
     @Test
     void setupConfiguration() {
         HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
@@ -65,14 +73,30 @@ class HtmlSanityCheckMojoTest {
         mojo.createoutputDirs(path.toFile(), "Fehlertext");
 
         // Check
-        Assertions.assertThat(path.toFile().exists()).isTrue();
-        Assertions.assertThat(path.toFile().canWrite()).isTrue();
-        Assertions.assertThat(path.toFile().isDirectory()).isTrue();
+        Assertions.assertThat(path.toFile()).exists();
+        Assertions.assertThat(path.toFile()).canWrite();
+        Assertions.assertThat(path.toFile()).isDirectory();
 
         // Clean up
-        Files.deleteIfExists(path);
-        Files.deleteIfExists(tempDir.resolve("testdir/anotherTestdir"));
-        Files.deleteIfExists(tempDir.resolve("testdir"));
+        deleteDirectory(tempDir.toFile());
+    }
+
+    @Test
+    void createoutputDirsFail() throws IOException {
+
+        // Set stage - Create a File, that is no dir to provoke an exception  and create a mojo
+        Path tempDir = Files.createTempFile("MojoTest", "");
+
+        Assumptions.assumeThat(tempDir).isNotNull();
+
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+
+        // Check
+        Assertions.assertThatThrownBy(() -> mojo.createoutputDirs(tempDir.toFile(), "Fehlertext"))
+                .isInstanceOf(MojoExecutionException.class)
+                .hasMessageContaining("Fehlertext");
+
+        // Clean up
         Files.deleteIfExists(tempDir);
     }
 
@@ -92,8 +116,49 @@ class HtmlSanityCheckMojoTest {
                 .isInstanceOf(MojoExecutionException.class)
                 .hasMessageContaining("2 error(s)");
 
-        // Clea uo
+        // Clean up
         Files.deleteIfExists(tempDir);
+    }
+
+    @Test
+    void execute() throws IOException, MojoExecutionException {
+        Path junitDir = Files.createTempDirectory("MojoJunit");
+        Path resultDir = Files.createTempDirectory("MojoJunit");
+        Path sourceDir = Files.createTempDirectory("MojoSource");
+        sourceDir.toFile().deleteOnExit();
+        File sourceFile = new File(sourceDir.toFile(), "test.html");
+        Files.write(sourceFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
+        Set<File> fileset = new HashSet<>();
+        fileset.add(sourceFile);
+
+        Configuration myConfig = Configuration.builder()
+                .checksToExecute(AllCheckers.CHECKER_CLASSES)
+                .junitResultsDir(junitDir.toFile())
+                .checkingResultsDir(resultDir.toFile())
+                .sourceDir(sourceDir.toFile())
+                .sourceDocuments(fileset)
+                .build();
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+
+        mojo.execute(myConfig);
+
+
+        // Clean up
+        deleteDirectory(junitDir.toFile());
+        deleteDirectory(resultDir.toFile());
+    }
+
+
+    // Helper functions
+
+    void deleteDirectory(File directoryToBeDeleted) throws IOException {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        Files.deleteIfExists(directoryToBeDeleted.toPath());
     }
 
 
