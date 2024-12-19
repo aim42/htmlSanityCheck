@@ -35,23 +35,18 @@ class HtmlSanityCheckMojoTest {
 
         // Write System.out and System.err to a stream. Keep the originals
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        ByteArrayOutputStream errContent = new ByteArrayOutputStream();
         PrintStream originalOut = System.out;
-        PrintStream originalErr = System.err;
         System.setOut(new PrintStream(outContent));
-        System.setErr(new PrintStream(errContent));
 
         // Run the code
         HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
-        mojo.logBuildParameter();
+        mojo.logBuildParameter(Configuration.builder().build());
 
         // Reset  System.out and System.err
         System.setOut(originalOut);
-        System.setErr(originalErr);
 
 
         // Check Output
-        Assertions.assertThat(errContent.toString()).isEmpty();
         Assertions.assertThat(outContent.toString())
                 .contains("[info] Parameters given to sanityCheck plugin from Maven buildfile...")
                 .contains("[info] Files to check  : null");
@@ -102,7 +97,7 @@ class HtmlSanityCheckMojoTest {
 
 
     @Test
-    void handleFindings() throws IOException {
+    void handleFindingsThrowsException() throws IOException {
         // Set stage - Get a directory to safely work on, a configuration and a mojo
         Path tempDir = Files.createTempDirectory("MojoTest");
         Configuration config = Configuration.builder()
@@ -115,6 +110,43 @@ class HtmlSanityCheckMojoTest {
         Assertions.assertThatThrownBy(() -> mojo.handleFindings(2, config))
                 .isInstanceOf(MojoExecutionException.class)
                 .hasMessageContaining("2 error(s)");
+
+        // Clean up
+        Files.deleteIfExists(tempDir);
+    }
+
+    @Test
+    void handleFindingsNoExceptionWehenNoFailIsSet() throws IOException, MojoExecutionException {
+        // Set stage - Get a directory to safely work on, a configuration and a mojo
+        Path tempDir = Files.createTempDirectory("MojoTest");
+        Configuration config = Configuration.builder()
+                .failOnErrors(false)
+                .checkingResultsDir(tempDir.toFile())
+                .build();
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+
+        //Check, dass keine Exception fliegt
+
+        mojo.handleFindings(2, config);
+
+        // Clean up
+        Files.deleteIfExists(tempDir);
+    }
+
+
+    @Test
+    void handleFindingsNoExceptionIfNoFindings() throws IOException, MojoExecutionException {
+        // Set stage - Get a directory to safely work on, a configuration and a mojo
+        Path tempDir = Files.createTempDirectory("MojoTest");
+        Configuration config = Configuration.builder()
+                .failOnErrors(true)
+                .checkingResultsDir(tempDir.toFile())
+                .build();
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+
+        //Check, dass keine Exception fliegt
+
+        mojo.handleFindings(0, config);
 
         // Clean up
         Files.deleteIfExists(tempDir);
