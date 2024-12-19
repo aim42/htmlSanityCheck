@@ -194,17 +194,12 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
 
     // tag::maven-plugin-implementation[]
     public void execute() throws MojoExecutionException {
-        logBuildParameter();
-
-        // Setup configuration
-        Configuration myConfig = setupConfiguration();
-
-        execute(myConfig);
-
+        execute(setupConfiguration());
     }
 
      void execute(Configuration myConfig) throws MojoExecutionException {
         // Check if configuration is valid
+         logBuildParameter(myConfig);
         try {
             myConfig.validate();
         } catch (MisconfigurationException e) {
@@ -245,15 +240,15 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
     }
 
 
-    void logBuildParameter() {
+    void logBuildParameter(Configuration myConfig) {
         // Log build parameters
         getLog().info(String.join("", Collections.nCopies(70, "=")));
         getLog().info("Parameters given to sanityCheck plugin from Maven buildfile...");
-        getLog().info("Files to check  : " + sourceDocuments);
-        getLog().info("Source directory: " + sourceDir);
-        getLog().info("Results dir     : " + checkingResultsDir);
-        getLog().info("JUnit dir       : " + junitResultsDir);
-        getLog().info("Fail on errors  : " + failOnErrors);
+        getLog().info("Files to check  : " + myConfig.getSourceDocuments());
+        getLog().info("Source directory: " + myConfig.getSourceDir());
+        getLog().info("Results dir     : " + myConfig.getCheckingResultsDir());
+        getLog().info("JUnit dir       : " + myConfig.getJunitResultsDir());
+        getLog().info("Fail on errors  : " + myConfig.getFailOnErrors());
     }
 
     protected Configuration setupConfiguration() {
