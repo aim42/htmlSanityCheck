@@ -36,7 +36,7 @@ public class Configuration {
     @Builder.Default
     Boolean consoleReport = false;
     @Builder.Default
-    Boolean failOnErrors = false;
+    Boolean failOnErrors = true;
     @Builder.Default
     Integer httpConnectionTimeout = 5000;
     @Getter(AccessLevel.NONE)
