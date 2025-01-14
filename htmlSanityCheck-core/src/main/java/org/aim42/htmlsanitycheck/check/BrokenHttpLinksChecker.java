@@ -13,7 +13,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 
 /**
@@ -23,7 +25,6 @@ import java.util.Set;
  */
 @Slf4j
 class BrokenHttpLinksChecker extends Checker {
-
     static {
         TrustAllCertificates.install();
     }
@@ -37,6 +38,7 @@ class BrokenHttpLinksChecker extends Checker {
     // need that to calculate "nrOfOccurrences"
     // the pure http/https-hrefs a set, duplicates are removed here
     private Set<String> hrefSet;
+    private Set<Pattern> excludePatterns;
 
 
     BrokenHttpLinksChecker(Configuration pConfig) {
@@ -45,6 +47,8 @@ class BrokenHttpLinksChecker extends Checker {
         errorCodes = getMyConfig().getHttpErrorCodes();
         warningCodes = getMyConfig().getHttpWarningCodes();
         successCodes = getMyConfig().getHttpSuccessCodes();
+        Set<String> exclude = getMyConfig().getExclude();
+        setExclude(exclude);
     }
 
     @Override
@@ -101,6 +105,15 @@ class BrokenHttpLinksChecker extends Checker {
 
 
     protected void doubleCheckSingleHttpLink(String href) {
+        // Check if the href matches any of the regular expressions in the exclude set
+        if (excludePatterns != null) {
+            for (Pattern pattern : excludePatterns) {
+                if (pattern.matcher(href).matches()) {
+                    // Skip checking this URL
+                    return;
+                }
+            }
+        }
         // bookkeeping:
         getCheckingResults().incNrOfChecks();
 
@@ -224,10 +237,19 @@ class BrokenHttpLinksChecker extends Checker {
     }
 
 
+    public void setExclude(Set<String> exclude) {
+        // Create patterns from exclude
+        excludePatterns = new HashSet<>();
+        if (exclude != null) {
+            for (String url : exclude) {
+                excludePatterns.add(Pattern.compile(url));
+            }
+        }
+    }
 }
 
 /*========================================================================
- Copyright Gernot Starke and aim42 contributors
+  Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

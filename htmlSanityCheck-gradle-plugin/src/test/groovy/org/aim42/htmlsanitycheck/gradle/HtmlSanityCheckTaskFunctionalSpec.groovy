@@ -36,6 +36,24 @@ class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
             // end::tested-gradle-versions[]
     ])
 
+    final static VALID_HTML_WITH_EXCLUDED_URL = """
+        <html>
+        <body>
+        <a href="http://example.com/excluded">Excluded URL</a>
+        <a href="https://example.com/excluded">Excluded URL</a>
+        <a href="http://example.com/included">Included URL</a>
+        </body>
+        </html>
+    """
+    final static VALID_HTML_WITH_EXCLUDED_HOST = """
+        <html>
+        <body>
+        <a href="http://excluded.com/page">Excluded Host</a>
+        <a href="http://included.com/page">Included Host</a>
+        </body>
+        </html>
+    """
+
     @Unroll
     def "can execute htmlSanityCheck task with Gradle version #gradleVersion"() {
         given:
@@ -108,6 +126,44 @@ class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
 
         then:
         new HtmlReport(htmlReportFile).fileResults*.checkCount == [1]
+
+        where:
+        gradleVersion << GRADLE_VERSIONS
+    }
+
+    @Unroll
+    def "can exclude specific URLs with exclude and Gradle version #gradleVersion"() {
+        given:
+        htmlFile << VALID_HTML_WITH_EXCLUDED_URL
+        createBuildFile("""
+                exclude = ['http://example.com/excluded']
+        """)
+
+        when:
+        def result = runnerForHtmlSanityCheckTask(gradleVersion as String).build()
+
+        then:
+        result.task(":htmlSanityCheck").outcome == SUCCESS
+        !result.output.contains("http://example.com/excluded")
+
+        where:
+        gradleVersion << GRADLE_VERSIONS
+    }
+
+    @Unroll
+    def "can exclude specific hosts with exclude and Gradle version #gradleVersion"() {
+        given:
+        htmlFile << VALID_HTML_WITH_EXCLUDED_HOST
+        createBuildFile("""
+                exclude = ['.*excluded.com.*']
+        """)
+
+        when:
+        def result = runnerForHtmlSanityCheckTask(gradleVersion as String).build()
+
+        then:
+        result.task(":htmlSanityCheck").outcome == SUCCESS
+        !result.output.contains("http://excluded.com")
 
         where:
         gradleVersion << GRADLE_VERSIONS
