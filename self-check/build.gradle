@@ -11,6 +11,9 @@ htmlSanityCheck {
 
     failOnErrors = true
 
+    urlsToExclude = [ "https://www.aim42.org/"]
+    hostsToExclude = [ "www.aim42.org" ]
+
     logger.quiet "HSC version: ${htmlSanityCheckVersion}"
     logger.quiet "HSC sourceDir: ${sourceDir.absolutePath}"
     logger.quiet "HSC checkingResultsDir: ${checkingResultsDir.absolutePath}"

@@ -254,6 +254,8 @@ exportEA.with {
 htmlSanityCheck.with {
     sourceDir = 'microsite/output'
     resultsFolder = 'html-sanity-check'
+    //urlsToExclude = ['http://example.com/excluded', 'http://example.com/excluded2']
+    //hostsToExclude = ['example2.com', 'example3', 'example4']
 }
 //end::htmlSanityCheckConfig[]
 

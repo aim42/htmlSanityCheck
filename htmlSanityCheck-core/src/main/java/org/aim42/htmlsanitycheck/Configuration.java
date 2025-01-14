@@ -45,6 +45,9 @@ public class Configuration {
     @Getter(AccessLevel.NONE)
     @Builder.Default
     Boolean ignoreIPAddresses = false;
+    Set<String> urlsToExclude;
+    Set<String> hostsToExclude;
+
     /*
      * Explanation for configuring http status codes:
      * The standard http status codes are defined in class @link NetUtil and can

@@ -113,6 +113,44 @@ class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
         gradleVersion << GRADLE_VERSIONS
     }
 
+    @Unroll
+    def "can exclude specific URLs with urlsToExclude and Gradle version #gradleVersion"() {
+        given:
+        htmlFile << VALID_HTML_WITH_EXCLUDED_URL
+        createBuildFile("""
+                urlsToExclude = ['http://example.com/excluded']
+        """)
+
+        when:
+        def result = runnerForHtmlSanityCheckTask(gradleVersion as String).build()
+
+        then:
+        result.task(":htmlSanityCheck").outcome == SUCCESS
+        !result.output.contains("http://example.com/excluded")
+
+        where:
+        gradleVersion << GRADLE_VERSIONS
+    }
+
+    @Unroll
+    def "can exclude specific hosts with hostToExclude and Gradle version #gradleVersion"() {
+        given:
+        htmlFile << VALID_HTML_WITH_EXCLUDED_HOST
+        createBuildFile("""
+                hostsToExclude = ['excluded.com']
+        """)
+
+        when:
+        def result = runnerForHtmlSanityCheckTask(gradleVersion as String).build()
+
+        then:
+        result.task(":htmlSanityCheck").outcome == SUCCESS
+        !result.output.contains("http://excluded.com")
+
+        where:
+        gradleVersion << GRADLE_VERSIONS
+    }
+
     private GradleRunner runnerForHtmlSanityCheckTask(String gradleVersion) {
         GradleRunner.create()
                 .withGradleVersion(gradleVersion)

@@ -37,6 +37,8 @@ class BrokenHttpLinksChecker extends Checker {
     // need that to calculate "nrOfOccurrences"
     // the pure http/https-hrefs a set, duplicates are removed here
     private Set<String> hrefSet;
+    private Set<String> urlsToExclude;
+    private Set<String> hostsToExclude;
 
 
     BrokenHttpLinksChecker(Configuration pConfig) {
@@ -45,6 +47,8 @@ class BrokenHttpLinksChecker extends Checker {
         errorCodes = getMyConfig().getHttpErrorCodes();
         warningCodes = getMyConfig().getHttpWarningCodes();
         successCodes = getMyConfig().getHttpSuccessCodes();
+        urlsToExclude = getMyConfig().getUrlsToExclude();
+        hostsToExclude = getMyConfig().getHostsToExclude();
     }
 
     @Override
@@ -101,6 +105,25 @@ class BrokenHttpLinksChecker extends Checker {
 
 
     protected void doubleCheckSingleHttpLink(String href) {
+        if (urlsToExclude != null && urlsToExclude.contains(href)) {
+            // Skip checking this URL
+            return;
+        }
+
+        // Check if the host of the URL is in the hostsToExclude list
+        try {
+            URL url = new URL(href);
+            String host = url.getHost();
+            if (hostsToExclude != null && hostsToExclude.contains(host)) {
+                // Skip checking this URL
+                return;
+            }
+        } catch (MalformedURLException e) {
+            // Handle the exception if the URL is malformed
+            Finding malformedURLFinding = new Finding("malformed URL exception with href=" + href);
+            getCheckingResults().addFinding(malformedURLFinding);
+            return;
+        }
         // bookkeeping:
         getCheckingResults().incNrOfChecks();
 
