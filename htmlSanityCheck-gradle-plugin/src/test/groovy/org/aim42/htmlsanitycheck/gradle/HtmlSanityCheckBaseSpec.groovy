@@ -7,22 +7,6 @@ import spock.lang.Specification
 class HtmlSanityCheckBaseSpec extends Specification {
     final static VALID_HTML = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"><html><head></head><body></body><html>"""
     final static INVALID_HTML = """<body><span id="id"/><span id="id"/></body> """
-    final static VALID_HTML_WITH_EXCLUDED_URL = """
-        <html>
-        <body>
-        <a href="http://example.com/excluded">Excluded URL</a>
-        <a href="http://example.com/included">Included URL</a>
-        </body>
-        </html>
-    """
-    final static VALID_HTML_WITH_EXCLUDED_HOST = """
-        <html>
-        <body>
-        <a href="http://excluded.com/page">Excluded Host</a>
-        <a href="http://included.com/page">Included Host</a>
-        </body>
-        </html>
-    """
 
     @Rule
     TemporaryFolder testProjectDir = new TemporaryFolder()

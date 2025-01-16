@@ -36,6 +36,23 @@ class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
             // end::tested-gradle-versions[]
     ])
 
+    final static VALID_HTML_WITH_EXCLUDED_URL = """
+        <html>
+        <body>
+        <a href="http://example.com/excluded">Excluded URL</a>
+        <a href="http://example.com/included">Included URL</a>
+        </body>
+        </html>
+    """
+    final static VALID_HTML_WITH_EXCLUDED_HOST = """
+        <html>
+        <body>
+        <a href="http://excluded.com/page">Excluded Host</a>
+        <a href="http://included.com/page">Included Host</a>
+        </body>
+        </html>
+    """
+
     @Unroll
     def "can execute htmlSanityCheck task with Gradle version #gradleVersion"() {
         given:
