@@ -13,7 +13,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 
 /**
@@ -23,7 +25,6 @@ import java.util.Set;
  */
 @Slf4j
 class BrokenHttpLinksChecker extends Checker {
-
     static {
         TrustAllCertificates.install();
     }
@@ -37,8 +38,8 @@ class BrokenHttpLinksChecker extends Checker {
     // need that to calculate "nrOfOccurrences"
     // the pure http/https-hrefs a set, duplicates are removed here
     private Set<String> hrefSet;
-    private Set<String> urlsToExclude;
-    private Set<String> hostsToExclude;
+    private Set<Pattern> urlPatternsToExclude;
+    private Set<Pattern> hostPatternsToExclude;
 
 
     BrokenHttpLinksChecker(Configuration pConfig) {
@@ -47,8 +48,10 @@ class BrokenHttpLinksChecker extends Checker {
         errorCodes = getMyConfig().getHttpErrorCodes();
         warningCodes = getMyConfig().getHttpWarningCodes();
         successCodes = getMyConfig().getHttpSuccessCodes();
-        urlsToExclude = getMyConfig().getUrlsToExclude();
-        hostsToExclude = getMyConfig().getHostsToExclude();
+        Set<String> urlsToExclude = getMyConfig().getUrlsToExclude();
+        Set<String> hostsToExclude = getMyConfig().getHostsToExclude();
+        setUrlsToExclude(urlsToExclude);
+        setHostsToExclude(hostsToExclude);
     }
 
     @Override
@@ -86,37 +89,46 @@ class BrokenHttpLinksChecker extends Checker {
     }
 
     /**
-     * check all http(s) links
-     * TODO: use GPARS to check several links in parallel, as sequential checking might take too long
-     **/
+      * check all http(s) links
+      * TODO: use GPARS to check several links in parallel, as sequential checking might take too long
+      **/
     private void checkAllHttpLinks() {
         // for all hrefSet check if the corresponding link is valid
         hrefSet.forEach(this::doubleCheckSingleHttpLink);
     }
 
     /**
-     * Double-Check a single http(s) link:
-     * Some servers don't accept head request and send errors like 403 or 405,
-     * instead of 200.
-     * Therefore, we double-check: in case of errors or warnings,
-     * we try again with a GET, to get the "finalResponseCode" -
-     * which we then categorize as success, error or warning
-     */
+      * Double-Check a single http(s) link:
+      * Some servers don't accept head request and send errors like 403 or 405,
+      * instead of 200.
+      * Therefore, we double-check: in case of errors or warnings,
+      * we try again with a GET, to get the "finalResponseCode" -
+      * which we then categorize as success, error or warning
+      */
 
 
     protected void doubleCheckSingleHttpLink(String href) {
-        if (urlsToExclude != null && urlsToExclude.contains(href)) {
-            // Skip checking this URL
-            return;
+        // Check if the href matches any of the regular expressions in the urlPatternsToExclude set
+        if (urlPatternsToExclude != null) {
+            for (Pattern pattern : urlPatternsToExclude) {
+                if (pattern.matcher(href).matches()) {
+                    // Skip checking this URL
+                    return;
+                }
+            }
         }
 
-        // Check if the host of the URL is in the hostsToExclude list
+        // Check if the host of the URL matches any of the regular expressions in the hostPatternsToExclude set
         try {
             URL url = new URL(href);
             String host = url.getHost();
-            if (hostsToExclude != null && hostsToExclude.contains(host)) {
-                // Skip checking this URL
-                return;
+            if (hostPatternsToExclude != null) {
+                for (Pattern pattern : hostPatternsToExclude) {
+                    if (pattern.matcher(host).matches()) {
+                        // Skip checking this URL
+                        return;
+                    }
+                }
             }
         } catch (MalformedURLException e) {
             // Handle the exception if the URL is malformed
@@ -247,10 +259,31 @@ class BrokenHttpLinksChecker extends Checker {
     }
 
 
+    public void setUrlsToExclude(Set<String> urlsToExclude) {
+        // Create patterns from urlsToExclude
+        urlPatternsToExclude = new HashSet<>();
+        if (urlsToExclude != null) {
+            for (String url : urlsToExclude) {
+                urlPatternsToExclude.add(Pattern.compile(url));
+            }
+        }
+    }
+
+    public void setHostsToExclude(Set<String> hostsToExclude) {
+        // Create patterns from hostsToExclude
+        hostPatternsToExclude = new HashSet<>();
+        if (hostsToExclude != null) {
+            for (String host : hostsToExclude) {
+                hostPatternsToExclude.add(Pattern.compile(host));
+            }
+        }
+    }
+
+
 }
 
 /*========================================================================
- Copyright Gernot Starke and aim42 contributors
+  Copyright Gernot Starke and aim42 contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

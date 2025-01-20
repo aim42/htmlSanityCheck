@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.aim42.htmlsanitycheck.check.AllCheckers;
@@ -45,7 +46,9 @@ public class Configuration {
     @Getter(AccessLevel.NONE)
     @Builder.Default
     Boolean ignoreIPAddresses = false;
+    @Setter
     Set<String> urlsToExclude;
+    @Setter
     Set<String> hostsToExclude;
 
     /*

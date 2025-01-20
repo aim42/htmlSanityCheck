@@ -163,4 +163,26 @@ class ConfigurationSpec extends Specification {
         myConfig.overrideHttpWarningCodes(null)
         myConfig.overrideHttpErrorCodes(null)
     }
+
+    def "can set and retrieve urlsToExclude"() {
+        given: "a set of URLs to exclude"
+        Set<String> urlsToExclude = ["http://example.com", "http://test.com"]
+
+        when: "we set the urlsToExclude in the configuration"
+        myConfig.urlsToExclude = urlsToExclude
+
+        then: "the configuration should contain these URLs"
+        myConfig.getUrlsToExclude() == urlsToExclude
+    }
+
+    def "can set and retrieve hostsToExclude"() {
+        given: "a set of hosts to exclude"
+        Set<String> hostsToExclude = ["example.com", "test.com"]
+
+        when: "we set the hostsToExclude in the configuration"
+        myConfig.hostsToExclude = hostsToExclude
+
+        then: "the configuration should contain these hosts"
+        myConfig.getHostsToExclude() == hostsToExclude
+    }
 }

@@ -189,6 +189,28 @@ include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/W
 The lists shown above are the default HTTP response codes handled by HSC.
 The mentioned configurations effectively move the configured codes around, i.e., if you add `308` to `httpErrorCodes` it is automatically removed from its default list (`httpWarningCodes`).
 ****
+`urlsToExclude` (optional):: A list URLs that should be excluded from the sanity check. These URLs can be written as regular expressions.
++
+Type: List.
++
+Default: Empty list
++
+[source,groovy]
+----
+[]
+----
+
+`hostsToExclude` (optional):: A list of hosts that should be excluded from the sanity check. These hosts can be written as regular expressions.
++
+Type: List.
++
+Default: Empty list
++
+[source,groovy]
+----
+[]
+----
+
 
 
 [[sec:examples]]
@@ -313,6 +335,12 @@ htmlSanityCheck {
     //   * MissingImageFilesChecker
     //   * MissingLocalResourcesChecker
     checkerClasses = [DuplicateIdChecker, MissingImageFilesChecker]
+
+    // URLs to exclude from checking
+    urlsToExclude = ['(http|https)://example.com/.*', "http://another-example.com/skip"]
+
+    // Hosts to exclude from checking
+    hostsToExclude = ["exclude-host.com", "skip-host.org"]
 
 }
 
