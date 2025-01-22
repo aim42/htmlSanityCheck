@@ -340,7 +340,7 @@ htmlSanityCheck {
     urlsToExclude = ['(http|https)://example.com/.*', "http://another-example.com/skip"]
 
     // Hosts to exclude from checking
-    hostsToExclude = ["exclude-host.com", "skip-host.org"]
+    hostsToExclude = ["exclude-host.*", "skip-host.org"]
 
 }
 
