@@ -275,10 +275,13 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         given: "HTML page with url to be excluded"
         String HTML = """$HtmlConst.HTML_HEAD
                          <a href="http://exclude-this-url.com">Excluded URL</a>
+                         <a href="https://exclude-this-url.com">Excluded URL</a>
+                         <a href="https://exclude-this-url.org">Excluded URL</a>
+                         <a href="https://exclude-also-this-url.org">Excluded URL</a>
                          $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
-        Set<String> urlsToExclude = ["http://exclude-this-url.com"]
+        Set<String> urlsToExclude = ["(http|https)://exclude-this-url.*", "(http|https)://exclude-also-this-url.org"]
         brokenHttpLinksChecker.setUrlsToExclude(urlsToExclude)
 
         when: "page is checked"
@@ -292,10 +295,12 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         given: "HTML page with host to be excluded"
         String HTML = """$HtmlConst.HTML_HEAD
                          <a href="http://exclude-this-host.com/page">Excluded Host</a>
+                         <a href="http://exclude-this-host.org/page">Excluded Host</a>
+                         <a href="http://exclude-also-this-host.com/page">Excluded Host</a>
                          $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
-        Set<String> hostsToExclude = ["exclude-this-host.com"]
+        Set<String> hostsToExclude = ["exclude-this-host.*", "exclude-also-this-host.*"]
         brokenHttpLinksChecker.setHostsToExclude(hostsToExclude)
 
         when: "page is checked"
