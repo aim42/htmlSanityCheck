@@ -1,6 +1,5 @@
 @startuml
 skinparam maxmessagesize 80
-Gradle -> HSC: sanityCheckHtml()
 participant HSCTask as HSC
 activate HSC
 

@@ -19,7 +19,7 @@ import java.util.Set;
 
 class HtmlSanityCheckMojoTest {
 
-    final static String VALID_HTML = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"><html><head></head><body></body><html>";
+    static final String VALID_HTML = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"><html><head></head><body></body><html>";
 
     @Test
     void setupConfiguration() {
@@ -153,7 +153,7 @@ class HtmlSanityCheckMojoTest {
     }
 
     @Test
-    void execute() throws IOException, MojoExecutionException {
+    void execuuserte() throws IOException, MojoExecutionException {
         Path junitDir = Files.createTempDirectory("MojoJunit");
         Path resultDir = Files.createTempDirectory("MojoJunit");
         Path sourceDir = Files.createTempDirectory("MojoSource");

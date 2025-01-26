@@ -12,7 +12,11 @@ include::_config.adoc[]
 
 === Business Context
 
-image::ea/htmlSanityCheck/hsc-context.png["Business Context", title="Business Context"]
+[plantuml,hsc-context,svg]
+....
+include::../../plantuml/hsc-context.puml["Business Context", title="Business Context"]
+....
+
 
 [options="header", cols="1,4"]
 .Business Context
@@ -34,18 +38,26 @@ amount of time and might yield invalid results due to network and latency issues
 
 The following diagram shows the participating computers ({node}) with their technical connections plus the major {artifact} of HSC, the hsc-plugin-binary.
 
-image::deployment-context.png["Deployment Context", title="Deployment Context"]
+[plantuml,deployment-context,svg]
+....
+include::../../plantuml/deployment-context.puml["Deployment Context", title="Deployment Context"]
+....
 
 [options="header", cols="1,3"]
 .Deployment Context
 |===
 | Node / Artifact | Description
 | {node} hsc-development | where development of HSC takes place
-| {artifact} hsc-plugin-binary | compiled and packaged version of HSC including required dependencies.
+| {artifact} hsc-cli | compiled and packaged version of HSC including required dependencies.
+| {artifact} hsc-maven-plugin | compiled and packaged version of HSC including required dependencies.
+| {artifact} hsc-gradle-plugin | compiled and packaged version of HSC including required dependencies.
+| {artifact} hsc-core | compiled and packaged version of HSC core functionality including required dependencies.
 | {node} artifact repository (https://repo1.maven.org/maven2/[Maven Central]) | public Java artifact repository, cf. https://search.maven.org/[Maven Central Search].
 HSC binaries are uploaded to this server.
 | {node} hsc user computer | where arbitrary documentation takes place with html as output formats.
 | {artifact} build.gradle | Gradle build script configuring (among other things) the HSC plugin to perform the Html checking.
+| {artifact} build.maven | Maven POM configuring (among other things) the HSC plugin to perform the Html checking.
+| {artifact} commandline | Commandline used to invole the hsc command line interface.
 |===
 
 

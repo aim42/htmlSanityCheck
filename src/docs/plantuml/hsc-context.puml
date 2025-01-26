@@ -1,0 +1,22 @@
+@startuml
+frame "cmp hsc-context" {
+
+    component hsc as "HTML Sanity check"
+    artifact images as "local images"
+    artifact html as "local html file(s)"
+    artifact website as "external website & resources"
+    :user:
+    :Build System \n(e.g. gradle, maven, commandline): as builduser
+
+
+    user -[dashed]-> hsc
+    builduser -[dashed]-> hsc
+    hsc -[dashed]-> images : checks
+    html -left[dashed]-> images : references
+    hsc -[dashed]-> html : checks
+    hsc -[dashed]-> website : <<risk>>\nchecks
+    html -right[dashed]-> website : <<postponed>> \nreferences
+
+
+}
+@enduml

@@ -43,3 +43,7 @@ The small https://github.com/rrice/java-string-similarity[java-string-similarity
 As it is a public binary, available at https://central.sonatype.com/artifact/net.ricecode/string-similarity[Maven Central], we have used it as external library dependencies.
 Primarily, we have used Jaro-Winkler strategy to find similarity.
 
+=== Changing Groovy to Plain Java
+In 2024/2025 we decided to port the html sanity checker to plain java, because in some environments the use of the groovy-framework caused trouble.
+In some cases different versions of the groovey enwironment uesed in maven projekts result in an incompatibility that renders the build not working.
+Using plain java we get rid of all gropvy dependencies and therefore eleminating all version conflicts.

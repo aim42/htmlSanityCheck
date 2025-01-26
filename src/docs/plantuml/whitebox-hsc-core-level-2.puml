@@ -53,6 +53,9 @@ gradleplugin -down-> acr
 mavenplugin -down-> config
 mavenplugin -down-> acr
 
+[HSV cli] as cli
+cli -down-> config
+cli -down-> acr
 
 
 
