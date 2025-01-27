@@ -9,26 +9,39 @@ include::_config.adoc[]
 :filename: arc42/chapters/chap-07-Deployment.adoc
 
 [[img-deployment]]
-image::ea/htmlSanityCheck/hsc-deployment.png["Deployment", title="Deployment"]
+.Deploymentfootnote:[This diagram is outdated and needs replacement, e.g., with a PlantUML diagram.]
+image::ea/htmlSanityCheck/hsc-deployment.png["Deployment"]
 
 [options="header", cols="1,4"]
 .Deployment
 |===
 | Node / Artifact | Description
-| hsc plugin binary | compiled version of HSC, including required dependencies.
-| hsc-development | where development of HSC takes place
-| artifact repository (https://repo1.maven.org/maven2/[Maven Central]) | public Java artifact repository, cf. https://search.maven.org/[Maven Central Search].
-| hsc user computer | where arbitrary documentation takes place with html as output formats.
-| build.gradle    |  Gradle build script configuring (among other things) the HSC plugin to check _some documentation_.
+
+| HSC plugin binary
+| The compiled version of HSC, including required dependencies.
+
+| hsc-development
+| Where development of HSC takes place
+
+| Artifact Repository (https://repo1.maven.org/maven2/[Maven Central])
+| Public Java artifact repository, cf. https://search.maven.org/[Maven Central Search].
+
+| HSC user computer
+| Where arbitrary documentation takes place with HTML as output formats.
+
+| `build.gradle`
+| Gradle build script configuring (among other things) the HSC plugin to check _some documentation_.
+
 |===
 
 The three nodes (_computers_) shown in <<img-deployment>> are connected via Internet.
 
-Sanity checker will:
+Sanity checker will be:
 
-. be bundled as a single jar,
-. be uploaded to the Bintray repository, 
-. referencable within a gradle buildfile,
-. provide a +main+ method with parameters and options, so all checks can be
-called from the command line.
+. Bundled
+.. As a core jar file (including all checkers and reporters),
+.. As a respective Plugin jar file for Maven and Gradle,
+.. As a CLI jar file, providing a +main+ method with parameters and options to run all checks from the command line,
+. Uploaded to the Maven Central repository (Gradle Plugin also to Gradle Plugin Portal),
+. Referencable within a Gradle build-file.
 

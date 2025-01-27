@@ -1,38 +1,36 @@
 @startuml
+skinparam linetype ortho
+
 frame "cmp deployment-context" {
 
-
-node hscUser as "hsc's users computer" {
+  node hscUser as "hsc's users computer" {
     artifact htmlfiles as "html files"
     artifact gradle as "build.gradle"
     artifact maven as "build.maven"
     artifact commandline as "commandline"
+  }
 
-
-}
-
-
-node repro as "global artifact repository (e.g. maven central, bintrtay)" {
+  node repo as "global artifact repository (e.g., Maven Central)" {
     artifact hscCore as "hsc-core" <<binary>>
-    artifact hscMavenPlugin as"hsc-maven-plugin" <<binary>>
+
+    artifact hscMavenPlugin as "hsc-maven-plugin" <<binary>>
     artifact hscGradlePlugin as "hsc-gradle-plugin" <<binary>>
-    artifact hscCli as " hsc-cli" <<binary>>
+    artifact hscCli as "hsc-cli" <<binary>>
 
-}
+    hscMavenPlugin -up-> hscCore
+    hscGradlePlugin -up-> hscCore
+    hscCli -up-> hscCore
+  }
 
-
-node hscd as "hsc deployment" {
+  node hscd as "hsc deployment" {
     artifact hscSrc as " hsc" <<source>>
-}
+  }
 
-hscd --> repro : internet/https
-gradle -up[dashed]-> hscCore
-gradle -up[dashed]-> hscGradlePlugin
-maven -up[dashed]-> hscCore
-maven -up[dashed]-> hscMavenPlugin
-commandline -up[dashed]-> hscCore
-commandline -up[dashed]-> hscCli
+  hscd --> repo : internet/https
 
+  gradle -up[dashed]-> hscGradlePlugin
+  maven -up[dashed]-> hscMavenPlugin
+  commandline -up[dashed]-> hscCli
 }
 @enduml
 
