@@ -38,8 +38,7 @@ class BrokenHttpLinksChecker extends Checker {
     // need that to calculate "nrOfOccurrences"
     // the pure http/https-hrefs a set, duplicates are removed here
     private Set<String> hrefSet;
-    private Set<Pattern> urlPatternsToExclude;
-    private Set<Pattern> hostPatternsToExclude;
+    private Set<Pattern> excludePatterns;
 
 
     BrokenHttpLinksChecker(Configuration pConfig) {
@@ -48,10 +47,8 @@ class BrokenHttpLinksChecker extends Checker {
         errorCodes = getMyConfig().getHttpErrorCodes();
         warningCodes = getMyConfig().getHttpWarningCodes();
         successCodes = getMyConfig().getHttpSuccessCodes();
-        Set<String> urlsToExclude = getMyConfig().getUrlsToExclude();
-        Set<String> hostsToExclude = getMyConfig().getHostsToExclude();
-        setUrlsToExclude(urlsToExclude);
-        setHostsToExclude(hostsToExclude);
+        Set<String> exclude = getMyConfig().getExclude();
+        setExclude(exclude);
     }
 
     @Override
@@ -108,33 +105,14 @@ class BrokenHttpLinksChecker extends Checker {
 
 
     protected void doubleCheckSingleHttpLink(String href) {
-        // Check if the href matches any of the regular expressions in the urlPatternsToExclude set
-        if (urlPatternsToExclude != null) {
-            for (Pattern pattern : urlPatternsToExclude) {
+        // Check if the href matches any of the regular expressions in the exclude set
+        if (excludePatterns != null) {
+            for (Pattern pattern : excludePatterns) {
                 if (pattern.matcher(href).matches()) {
                     // Skip checking this URL
                     return;
                 }
             }
-        }
-
-        // Check if the host of the URL matches any of the regular expressions in the hostPatternsToExclude set
-        try {
-            URL url = new URL(href);
-            String host = url.getHost();
-            if (hostPatternsToExclude != null) {
-                for (Pattern pattern : hostPatternsToExclude) {
-                    if (pattern.matcher(host).matches()) {
-                        // Skip checking this URL
-                        return;
-                    }
-                }
-            }
-        } catch (MalformedURLException e) {
-            // Handle the exception if the URL is malformed
-            Finding malformedURLFinding = new Finding("malformed URL exception with href=" + href);
-            getCheckingResults().addFinding(malformedURLFinding);
-            return;
         }
         // bookkeeping:
         getCheckingResults().incNrOfChecks();
@@ -259,27 +237,15 @@ class BrokenHttpLinksChecker extends Checker {
     }
 
 
-    public void setUrlsToExclude(Set<String> urlsToExclude) {
-        // Create patterns from urlsToExclude
-        urlPatternsToExclude = new HashSet<>();
-        if (urlsToExclude != null) {
-            for (String url : urlsToExclude) {
-                urlPatternsToExclude.add(Pattern.compile(url));
+    public void setExclude(Set<String> exclude) {
+        // Create patterns from exclude
+        excludePatterns = new HashSet<>();
+        if (exclude != null) {
+            for (String url : exclude) {
+                excludePatterns.add(Pattern.compile(url));
             }
         }
     }
-
-    public void setHostsToExclude(Set<String> hostsToExclude) {
-        // Create patterns from hostsToExclude
-        hostPatternsToExclude = new HashSet<>();
-        if (hostsToExclude != null) {
-            for (String host : hostsToExclude) {
-                hostPatternsToExclude.add(Pattern.compile(host));
-            }
-        }
-    }
-
-
 }
 
 /*========================================================================

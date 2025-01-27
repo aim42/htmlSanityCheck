@@ -47,9 +47,7 @@ public class Configuration {
     @Builder.Default
     Boolean ignoreIPAddresses = false;
     @Setter
-    Set<String> urlsToExclude;
-    @Setter
-    Set<String> hostsToExclude;
+    Set<String> exclude;
 
     /*
      * Explanation for configuring http status codes:

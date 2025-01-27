@@ -274,15 +274,15 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def "urlsToExclude are not checked"() {
         given: "HTML page with url to be excluded"
         String HTML = """$HtmlConst.HTML_HEAD
-                         <a href="http://exclude-this-url.com">Excluded URL</a>
-                         <a href="https://exclude-this-url.com">Excluded URL</a>
-                         <a href="https://exclude-this-url.org">Excluded URL</a>
-                         <a href="https://exclude-also-this-url.org">Excluded URL</a>
+                         <a href="http://exclude-this-url.com:8080">Excluded URL</a>
+                         <a href="https://exclude-this-url.com:8443">Excluded URL</a>
+                         <a href="https://exclude-this-url.org:9090">Excluded URL</a>
+                         <a href="https://exclude-also-this-url.org:7070">Excluded URL</a>
                          $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
-        Set<String> urlsToExclude = ["(http|https)://exclude-this-url.*", "(http|https)://exclude-also-this-url.org"]
-        brokenHttpLinksChecker.setUrlsToExclude(urlsToExclude)
+        Set<String> urlsToExclude = ["(http|https)://exclude-this-url.*:\\d+", "(http|https)://exclude-also-this-url.org:\\d+"]
+        brokenHttpLinksChecker.setExclude(urlsToExclude)
 
         when: "page is checked"
         collector = brokenHttpLinksChecker.performCheck(htmlPage)
@@ -294,14 +294,15 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def "hostsToExclude are not checked"() {
         given: "HTML page with host to be excluded"
         String HTML = """$HtmlConst.HTML_HEAD
-                         <a href="http://exclude-this-host.com/page">Excluded Host</a>
-                         <a href="http://exclude-this-host.org/page">Excluded Host</a>
-                         <a href="http://exclude-also-this-host.com/page">Excluded Host</a>
+                         <a href="http://exclude-this-host.com:8080/page">Excluded Host</a>
+                         <a href="http://exclude-this-host.org:8443/page">Excluded Host</a>
+                         <a href="http://exclude-also-this-host.com:9090/page">Excluded Host</a>
+                         <a href="http://exclude-also-this-host.com:7070/page">Excluded Host</a>
                          $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
-        Set<String> hostsToExclude = ["exclude-this-host.*", "exclude-also-this-host.*"]
-        brokenHttpLinksChecker.setHostsToExclude(hostsToExclude)
+        Set<String> hostsToExclude = [".*exclude-this-host.*:\\d+/.*", ".*exclude-also-this-host.*:\\d+/.*"]
+        brokenHttpLinksChecker.setExclude(hostsToExclude)
 
         when: "page is checked"
         collector = brokenHttpLinksChecker.performCheck(htmlPage)
@@ -309,6 +310,27 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         then: "no findings are reported"
         collector.getFindings().isEmpty()
     }
+
+    def "mixedUrlsAndHostsToExclude are not checked"() {
+            given: "HTML page with mixed urls and hosts to be excluded"
+            String HTML = """$HtmlConst.HTML_HEAD
+                             <a href="http://exclude-this-url.com:8080">Excluded URL</a>
+                             <a href="https://exclude-this-host.com:8443/page">Excluded Host</a>
+                             <a href="http://exclude-this-url.org:9090">Excluded URL</a>
+                             <a href="https://exclude-also-this-host.org:7070/page">Excluded Host</a>
+                             $HtmlConst.HTML_END """
+
+            htmlPage = new HtmlPage(HTML)
+            Set<String> mixedToExclude = ["(http|https)://exclude-this-url\\.(com|org):\\d+", ".*exclude-this-host\\..*:\\d+/.*", ".*exclude-also-this-host\\..*:\\d+/.*"]
+            brokenHttpLinksChecker.setExclude(mixedToExclude)
+
+            when: "page is checked"
+            collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+            then: "no findings are reported"
+            collector.getFindings().isEmpty()
+        }
+
 
 }
 

@@ -40,6 +40,7 @@ class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
         <html>
         <body>
         <a href="http://example.com/excluded">Excluded URL</a>
+        <a href="https://example.com/excluded">Excluded URL</a>
         <a href="http://example.com/included">Included URL</a>
         </body>
         </html>
@@ -131,11 +132,11 @@ class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
     }
 
     @Unroll
-    def "can exclude specific URLs with urlsToExclude and Gradle version #gradleVersion"() {
+    def "can exclude specific URLs with exclude and Gradle version #gradleVersion"() {
         given:
         htmlFile << VALID_HTML_WITH_EXCLUDED_URL
         createBuildFile("""
-                urlsToExclude = ['http://example.com/excluded']
+                exclude = ['http://example.com/excluded']
         """)
 
         when:
@@ -150,11 +151,11 @@ class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
     }
 
     @Unroll
-    def "can exclude specific hosts with hostToExclude and Gradle version #gradleVersion"() {
+    def "can exclude specific hosts with exclude and Gradle version #gradleVersion"() {
         given:
         htmlFile << VALID_HTML_WITH_EXCLUDED_HOST
         createBuildFile("""
-                hostsToExclude = ['excluded.com']
+                exclude = ['.*excluded.com.*']
         """)
 
         when:
