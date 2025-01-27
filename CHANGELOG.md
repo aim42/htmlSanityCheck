@@ -6,6 +6,19 @@
 - [Maven Central](https://central.sonatype.com/namespace/org.aim42.htmlSanityCheck)
 - [Gradle Plugin Portal](https://plugins.gradle.org/search?term=org.aim42.htmlSanityCheck)
 
+## 2.0.0-rc3
+
+#### Improvements (2.0.0-rc3)
+
+- [#314](https://github.com/aim42/htmlSanityCheck/issues/314) - Implement Maven plugin
+- [#318](https://github.com/aim42/htmlSanityCheck/issues/318) - Implement Command Line Interface (CLI)
+
+#### Version Bumps (2.0.0-rc3)
+
+- TestContainers
+- JSoup
+- Lombok
+
 ## 2.0.0-rc2
 
 ### Changes (2.0.0-rc2)
