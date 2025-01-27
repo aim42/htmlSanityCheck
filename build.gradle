@@ -74,32 +74,34 @@ ext.urls = [
         developerConnection: 'scm:git:ssh://github.com/aim42/htmlSanityCheck.git'
 ]
 
-// tag::mavenBuildRepo[]
 File baseBuildDir = file("${project.rootDir}/${Project.DEFAULT_BUILD_DIR_NAME}")
 File mavenBuildRepo = new File(baseBuildDir, "maven-repo")
-// end::mavenBuildRepo[]
 
 tasks.register("cleanMavenBuildRepo", Delete) {
-    description "Clean intermediate Maven Repository '${mavenBuildRepo}'"
+    description "Clean intermediate local Maven Repository '${mavenBuildRepo}'"
     delete mavenBuildRepo
 }
 
-tasks.register('signAll') {
-    doLast {
-        logger.quiet("Signed all artifacts for upload with JReleaser")
-    }
+File mavenStagingRepo = new File(baseBuildDir, "staging-repo")
+
+tasks.register("cleanMavenStagingRepo", Delete) {
+    description "Clean intermediate staging Maven Repository '${mavenStagingRepo}'"
+    delete mavenBuildRepo
 }
-signAll.dependsOn(
-        ':htmlSanityCheck-core:signMavenJavaPublication',
-        ':htmlSanityCheck-gradle-plugin:signHtmlSanityCheckPluginMarkerMavenPublication',
-        ':htmlSanityCheck-gradle-plugin:signPluginMavenPublication'
+
+tasks.register("copyOrgAim42ToStagingRepo", Copy) {
+    description = "Copy 'org/aim42' from '${mavenBuildRepo}; to '${mavenStagingRepo}'"
+    from new File(mavenBuildRepo, "org/aim42")
+    into new File(mavenStagingRepo, "org/aim42")
+}
+
+copyOrgAim42ToStagingRepo.dependsOn(
+        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
+        ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
+        ':htmlSanityCheck-maven-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository'
 )
 
-jreleaserDeploy.dependsOn(
-        'signAll',
-        ':htmlSanityCheck-core:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
-        ':htmlSanityCheck-gradle-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository'
-)
+jreleaserDeploy.dependsOn(copyOrgAim42ToStagingRepo)
 
 jreleaser {
     project {
@@ -140,7 +142,7 @@ jreleaser {
                     active = 'ALWAYS'
                     sign = false
                     url = 'https://central.sonatype.com/api/v1/publisher'
-                    stagingRepository(mavenBuildRepo.toString())
+                    stagingRepository(mavenStagingRepo.toString())
                 }
             }
         }
