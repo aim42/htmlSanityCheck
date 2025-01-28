@@ -1,53 +1,54 @@
 package org.aim42.htmlsanitycheck
 
-import junit.framework.TestCase
 import org.aim42.htmlsanitycheck.check.AllCheckers
-import org.aim42.htmlsanitycheck.collect.SinglePageResults
+import org.aim42.htmlsanitycheck.check.Checker
+import org.aim42.htmlsanitycheck.collect.PageResults
+import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.junit.Test
+
+import static junit.framework.TestCase.assertEquals
 
 class AllChecksRunnerTest {
 
     final static String HTML_HEAD = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> <head></head><html>'
+    public static final String TESTFILE = "testfile.html"
 
-    private File tmpFile
-
-    private AllChecksRunner allChecksRunner
-
-    private Configuration myConfig = new Configuration()
+    private static AllChecksRunner prepareAllChecksRunner(final String htmlContent,
+                                                          final List<Class<? extends Checker>> checkerClasses
+                                                                  = AllCheckers.CHECKER_CLASSES) {
+        File tmpDir = File.createTempDir()
+        File tmpFile = new File(tmpDir, TESTFILE) << htmlContent
+        Configuration config = Configuration
+                .builder()
+                .sourceDir(tmpFile.parentFile)
+                .sourceDocuments([tmpFile] as Set)
+                .checksToExecute(checkerClasses)
+                .build()
+        AllChecksRunner allChecksRunner = new AllChecksRunner(config)
+        return allChecksRunner
+    }
 
     @Test
-    void testSingleCorrectHTMLFile() {
+    void testPerformAllChecksWithCorrectInput() {
         String HTML = """$HTML_HEAD<title>hsc</title><body></body></html>"""
+        AllChecksRunner allChecksRunner = prepareAllChecksRunner(HTML)
 
-        // create file with proper html content
-        tmpFile = File.createTempFile("testfile", ".html") <<HTML
-
-        myConfig.setSourceConfiguration(tmpFile.parentFile, [tmpFile] as Set)
-
-        // wrap fileToTest in Collection to comply to AllChecksRunner API
-        allChecksRunner = new AllChecksRunner(myConfig )
-
-        SinglePageResults pageResults = allChecksRunner.performChecksForOneFile(tmpFile)
-
+        PerRunResults allResults = allChecksRunner.performAllChecks()
+        PageResults pageResults = allResults.resultsForAllPages.get(0)
         // expectation:
-        // 4 checks run
+        // 7 checks run
         // 0 items checked
         // 0 findings
         // title = "hsc"
         int expected = AllCheckers.CHECKER_CLASSES.size()
 
-        TestCase.assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
+        assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
+        assertEquals("expected 0 items checked", 0, pageResults.nrOfItemsCheckedOnPage())
+        assertEquals("expected 0 findings", 0, pageResults.nrOfFindingsOnPage())
+        assertEquals("expected hsc title", "hsc", pageResults.pageTitle)
 
-        TestCase.assertEquals("expected 0 items checked", 0, pageResults.nrOfItemsCheckedOnPage())
-
-        TestCase.assertEquals("expected 0 findings", 0, pageResults.nrOfFindingsOnPage())
-
-        TestCase.assertEquals("expected hsc title", "hsc", pageResults.pageTitle)
-
-        String tmpFileName = tmpFile.name
-        TestCase.assertEquals("expected $tmpFileName as fileName", tmpFileName, pageResults.pageFileName )
+        assertEquals("expected ${TESTFILE} as fileName", TESTFILE, pageResults.pageFileName)
     }
-
 
     @Test
     void testSingleBrokenHtmlFile() {
@@ -57,39 +58,29 @@ class AllChecksRunnerTest {
                    <a href="#nonexisting">broken cross reference</a>
                 </html>"""
 
-        // create file
-        tmpFile = File.createTempFile("testfile", ".html") << HTML
+        AllChecksRunner allChecksRunner = prepareAllChecksRunner(HTML)
 
-        myConfig.setSourceConfiguration(tmpFile.parentFile, [tmpFile] as Set)
-
-        allChecksRunner = new AllChecksRunner( myConfig )
-
-        SinglePageResults pageResults = allChecksRunner.performChecksForOneFile( tmpFile )
+        PerRunResults allResults = allChecksRunner.performAllChecks()
+        PageResults pageResults = allResults.resultsForAllPages.get(0)
 
         int expected = AllCheckers.CHECKER_CLASSES.size()
-        TestCase.assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
+        assertEquals("expected $expected kinds of checks", expected, pageResults.singleCheckResults.size())
 
-        TestCase.assertEquals("expected 2 findings", 2, pageResults.nrOfFindingsOnPage())
+        assertEquals("expected 2 findings", 2, pageResults.nrOfFindingsOnPage())
 
     }
 
     @Test
     void testUsingSubsetOfChecks() {
-        tmpFile = File.createTempFile("testfile", ".html") << """$HTML_HEAD<body><title>hsc</title></body></html>"""
+        AllChecksRunner allChecksRunner
+                = prepareAllChecksRunner("""$HTML_HEAD<body><title>hsc</title></body></html>""",
+                [AllCheckers.CHECKER_CLASSES.first()])
 
-        Configuration config = Configuration
-                .builder()
-                .sourceDir(tmpFile.parentFile)
-                .sourceDocuments([tmpFile] as Set)
-                .checksToExecute([AllCheckers.CHECKER_CLASSES.first()])
-                .build()
+        PerRunResults allResults = allChecksRunner.performAllChecks()
+        PageResults pageResults = allResults.resultsForAllPages.get(0)
 
-        allChecksRunner = new AllChecksRunner(config)
-        SinglePageResults pageResults = allChecksRunner.performChecksForOneFile(tmpFile)
-
-        TestCase.assertEquals(1, pageResults.singleCheckResults.size())
+        assertEquals(1, pageResults.singleCheckResults.size())
     }
-
 }
 
 /************************************************************************

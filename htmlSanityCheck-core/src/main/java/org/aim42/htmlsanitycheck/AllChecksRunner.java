@@ -118,7 +118,7 @@ public class AllChecksRunner {
      * <p>
      * Creates a {@link org.aim42.htmlsanitycheck.collect.SinglePageResults} instance to keep checking results.
      */
-    protected SinglePageResults performChecksForOneFile(File thisFile) throws IOException {
+    private SinglePageResults performChecksForOneFile(File thisFile) throws IOException {
 
         // the currently processed (parsed) HTML page
         HtmlPage pageToCheck = HtmlPage.parseHtml(thisFile);
