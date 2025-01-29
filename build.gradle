@@ -101,7 +101,10 @@ copyOrgAim42ToStagingRepo.dependsOn(
         ':htmlSanityCheck-maven-plugin:publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository'
 )
 
-jreleaserDeploy.dependsOn(copyOrgAim42ToStagingRepo)
+jreleaserRelease.dependsOn(
+        ':htmlSanityCheck-cli:build',
+        copyOrgAim42ToStagingRepo,
+)
 
 jreleaser {
     project {
@@ -129,6 +132,17 @@ jreleaser {
             prerelease {
                 enabled = true
                 pattern = '.*-rc\\d+$'
+            }
+        }
+    }
+
+    distributions {
+        hsc {
+            artifact {
+                path = 'htmlSanityCheck-cli/build/distributions/{{distributionName}}-{{projectVersion}}.zip'
+            }
+            artifact {
+                path = 'htmlSanityCheck-cli/build/distributions/{{distributionName}}-{{projectVersion}}.tar'
             }
         }
     }

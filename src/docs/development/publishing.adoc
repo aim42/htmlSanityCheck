@@ -13,9 +13,14 @@
 :markdown-suffix: md
 ifdef::backend-html5[:markdown-suffix: html]
 
-HSC (Core and Gradle plugin) can be published to https://central.sonatype.com/search?q=org.aim42.htmlSanityCheck[Maven Central] (MC) for retrieval by its consumers.
+We publish
 
-Additionally, the Gradle plugin can be published to https://plugins.gradle.org[Gradle Plugin Portal] (GPP).
+* The HSC artifacts (Core, Maven plugin, and Gradle plugin) to https://central.sonatype.com/search?q=org.aim42.htmlSanityCheck[Maven Central] (MC) for retrieval by the common Java build tools,
+* The HSC Command Line Interface (CLI) to GitHub (project releases),
+* The HSC Gradle plugin additionally to https://plugins.gradle.org[Gradle Plugin Portal] (GPP).
+GPP redirects to MC for any plugin (version) it cannot resolve.
+But without separate publication, the search index of GPP does not contain the plugin.
+Hence, retrieval of the plugin via the GPP Web UI would be impossible in this case.
 
 == Prerequisites
 
@@ -72,7 +77,7 @@ export GRADLE_PUBLISH_SECRET=...
 [[sec:artifact-signing]]
 === Artifact signing
 
-To successfully upload artifacts and other files (POM etc.), a valid PGP signature is required.
+To successfully upload artifacts and other files (POM etc.), Maven Central requires a valid PGP signature.
 A proper GPG (agent) setup is beyond the scope of this tutorial.
 Therefore, you need to set up GnuPG in your local `+${HOME}/.gradle/gradle.properties+`,
 according to the https://docs.gradle.org/current/userguide/signing_plugin.html#sec:signatory_credentials[Gradle Signatory documentation].
@@ -120,7 +125,8 @@ gpg: Sorry, we are in batchmode - can't get input
 FAILURE: Build failed with an exception.
 ----
 
-In this case, you have to make sure the agent is started and the password is cached, e.g., by executing
+In this case, you have to make sure you started the agent and cached the password,
+e.g., by executing
 
 [source,shell]
 ----
@@ -142,7 +148,7 @@ export JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_PASSWORD=... # <3>
 export JRELEASER_ANNOUNCE_MASTODON_ACCESS_TOKEN=... <4>
 ----
 <1> Maven Central publications require two steps.
-This variable setting enables <<sec:stage-to-maven-central,
+This variable setting enables <<sec:stage-to-maven-central-and-release-to-github,
 upload to the staging area>>, perform <<sec:publish-to-maven-central,the final publication>> interactively.
 <2> Get an appropriate GitHub token (needs write access to the repository).
 <3> Follow the <<sec:maven-central-account,steps above>> to get the required Maven credentials.
@@ -169,36 +175,6 @@ Clean, check (test), and perform integration tests:
 ./gradlew clean && ./gradlew check integrationTest
 ----
 
-[[sec:stage-to-maven-central]]
-=== Sign / Stage to Maven Central
-
-Sign artifacts and load them up to Maven Central via https://jreleaser.org[JReleaser].
-
-[source,shell]
-----
-./gradlew jreleaserDeploy -PenableSigning=true -Psigning.password=... # <1> <2>
-----
-<1> Checkout <<sec:artifact-signing>> for more information.
-<2> The `enableSigning` flag is necessary to enforce signing (which is not necessary for local installations,
-integration testing, etc.)
-
-The `jreleaserDeploy` task will
-
-* Implicitly call the task `signAll` which signs
-and pushes all required files for publication to a local repository.
-* Then pick them up from there and load them up to the Maven Central staging area as a new version.
-
-[TIP]
-.Use GPG Agent (command) in practice
-====
-If you have GPG configured properly, you may use the <<tip:gpg-agent,GPG-Agent>>.
-
-[source,bash,subs="callouts+"]
-----
-./gradlew jreleaserDeploy -PenableSigning=true -PuseGpgCmd=true
-----
-====
-
 === Publish on Gradle Plugin Portal
 
 Set the respective credentials (cf. <<sec:prerequisits-gpp,GPP Prerequisites>>).
@@ -210,29 +186,52 @@ Then publish on GPP:
 ----
 <1> An additional `--validate-only` allows to check credentials
 
-Performing this for the first time after a <<caution:gpp-publisher,Change of the maintainer>> may take some time as the Gradle team will perform some checks.
+Performing this for the first time after a <<caution:gpp-publisher,Change of the maintainer>>
+may take some time as the Gradle team will perform some checks.
 
 [TIP]
 ====
-You can delete the published version if you fail with one of the other steps.
+You can delete the published version within 7 days if you fail with one of the following steps.
+
+Once <<sec:publish-to-maven-central,published on Maven Central>>, you should not roll back this step.
 ====
 
-[[sec:publish-to-maven-central]]
-=== Publish Release
+[[sec:stage-to-maven-central-and-release-to-github]]
+=== Sign / Stage to Maven Central and Publish to GitHub
 
-==== Publish to GitHub
+Sign artifacts and load them up to Maven Central via https://jreleaser.org[JReleaser].
 
 [source,shell]
 ----
-./gradlew jreleaserRelease
+./gradlew jreleaserRelease -PenableSigning=true -Psigning.password=... # <1> <2>
 ----
+<1> Checkout <<sec:artifact-signing>> for more information.
+<2> The `enableSigning` flag is necessary to enforce signing (which is not necessary for local installations,
+integration testing, etc.)
 
-The `jreleaserRelease` task will release the https://github.com/aim42/htmlSanityCheck/releases[current state to GitHub]
+The `jreleaserRelease` task will perform several steps (all can be rolled back)
+
+* Implicitly call the task `signAll` which signs
+and pushes all required files for publication to a local repository.
+* Pick them up from there and load them up to the Maven Central staging area as a new version.
+* Release the https://github.com/aim42/htmlSanityCheck/releases[current state to GitHub]
 and tag the current version accordingly.
 
-==== Publish on Maven Central
+[TIP]
+.Use GPG Agent (command) in practice
+====
+If you have GPG configured properly, you may use the <<tip:gpg-agent,GPG-Agent>>.
 
-Eventually publish the <<sec:stage-to-maven-central,staged version>> on Maven Central,
+[source,bash,subs="callouts+"]
+----
+./gradlew jreleaserRelease -PenableSigning=true -PuseGpgCmd=true
+----
+====
+
+[[sec:publish-to-maven-central]]
+=== Publish on Maven Central (final step)
+
+Eventually publish the <<sec:stage-to-maven-central-and-release-to-github,staged version>> on Maven Central,
 i.e., https://central.sonatype.com/publishing[Sonatype Central].
 
 [CAUTION]
@@ -241,6 +240,17 @@ Once published, you cannot roll back the release on Maven Central as releases ar
 Hence, run this step as the very last one if everything else ran smoothly.
 ====
 
+=== Publish documentation
+
+There is a https://github.com/aim42/htmlSanityCheck/actions/workflows/gh-pages.yml[GitHub Action Workflow]
+to generate and publish the HSC documentation as GitHub page.
+Upon pushing Git commits of HSC, it builds the site and checks its integrity contents (by HSC itself),
+but does not publish it.
+
+To finally publish https://hsc.aim42.org[the official documentation site],
+you have to trigger the workflow of the respective branch or tag with the checkmark _Publish GH Page_ set.
+
+image::trigger-gh-pages-workflow.png[alt="Publish HSC documentation site as GH page by (re-) running GH action workflow"]
 
 === Announce new release on Social Media
 
