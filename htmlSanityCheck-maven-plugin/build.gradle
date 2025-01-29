@@ -16,7 +16,7 @@ dependencies {
     implementation("org.apache.maven.plugin-tools:maven-plugin-annotations:${mavenPluginToolsVersion}")
 
     testImplementation libs.junit.jupiter
-    testImplementation 'org.assertj:assertj-core:3.26.3'
+    testImplementation 'org.assertj:assertj-core:3.27.3'
 
     testImplementation 'com.soebes.itf.jupiter.extension:itf-assertj:0.13.1'
     testImplementation 'com.soebes.itf.jupiter.extension:itf-jupiter-extension:0.13.1'
