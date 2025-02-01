@@ -1,0 +1,76 @@
+@startuml
+skinparam linetype ortho
+allowmixing
+
+frame "cmp HTML_Checking_Domain" {
+
+    class "(external) Hyperlink" as hyperlink #yellow
+    class "(internal) Cross Reference" as crossreference #yellow
+    class "Link" as link #yellow
+    class "link Target" as linktarget #yellow
+    class "URI" as uri #yellow
+    class "Resource" as resource #yellow
+    class "File" as file #yellow
+    class "Stylesheet" as stylesheet #yellow
+    class "Image File" as imagefile #yellow
+
+    class "HTML page" as htmlpage #lightblue
+    class "Checker" as checker #lightblue
+    class "HTMLElment" as htmlelement #lightblue
+    class "Finding" as finding #lightblue {
+    -item : String
+    -suggestion : String
+    }
+    class "Single Check Result" as singecheckresult #lightblue {
+    -whatIsChecked:String
+    -sourceItem: String
+    -targetItem:String
+    -nrOfItemsChecked:int
+    }
+
+    class "Single Page Result" as singlepasgeresult #lightblue {
+    -pageTitle:String
+    -pageName:String
+    }
+    class "RunResult" as runresult #lightblue {
+    -imageDirs:FileCollection
+    }
+
+    link <|-down- hyperlink
+    link <|-down- crossreference
+    linktarget <|-- resource
+    resource <|-- file
+    resource <|-- stylesheet
+    resource <|-- imagefile
+
+    uri -right[dashed]-> resource : describes
+    checker -left[dashed]-> linktarget : check target
+    checker -down[dashed]-> link : check link
+    checker -down[dashed]-> htmlpage : check
+    checker -down[dashed]-> finding : <<instantiate>> detects
+    checker -right[dashed]-> singecheckresult : <<instantiate>>
+
+    finding -[dashed]-> htmlelement : responsible
+    singecheckresult -[dashed]-> htmlpage : refers to
+
+    link "0..*"  <-down-> "1" linktarget : refences
+
+    htmlpage "0..*" o-- "0..*" link :contains
+
+    singecheckresult "1" o-- "0..*" finding
+    singecheckresult --o  singlepasgeresult
+    runresult o-- singlepasgeresult
+
+    rectangle "legende" {
+    rectangle "Implementation Class" #lightblue
+    rectangle "Domain Class" #yellow
+    }
+}
+
+
+
+
+
+
+@enduml
+

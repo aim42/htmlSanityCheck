@@ -7,7 +7,12 @@ include::_config.adoc[]
 :filename: arc42/chapters/chap-08-checking-domain.adoc
 include::../_feedback.adoc[]
 
-image::ea/htmlSanityCheck/HTML_Checking_Domain.png["HTML Checking Domain Model",title="HTML Checking Domain Model"]
+[[img-HTML_Checking_Domain]]
+.HTML Checking Domain Model
+[plantuml,HTML_Checking_Domain,svg]
+....
+include::../../plantuml/HTML_Checking_Domain.puml["HTML Checking Domain Model", title="HTML Checking Domain Model"]
+....
 
 [options="header",cols="1,4"]
 .Domain Model

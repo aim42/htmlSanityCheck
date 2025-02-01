@@ -1,0 +1,45 @@
+@startuml
+skinparam linetype ortho
+
+frame "cmp hsc-core" {
+
+component "hsc core" as hsc {
+  portout "local file system" as filesystem
+  portout "external resource" as extresource #pink
+  portin AllChecksRunner
+  portin Result
+  () Findings
+
+  component "All Checks Runner" as allChecksRunnerCmp
+  component "Reporter" as reporter
+  component "Html Parser" as htmlparser <<libary>>
+  component "Checker" as checker
+  component "Suggester" as suggester
+  component "Results Collector" as collector
+
+  AllChecksRunner -[dashed]-> allChecksRunnerCmp
+  allChecksRunnerCmp  -[dashed]-> htmlparser : parse
+  allChecksRunnerCmp  -[dashed]-> checker : create / execute
+  allChecksRunnerCmp  -[dashed]-> reporter : report findings
+  htmlparser  -[dashed]-> filesystem
+  checker -[dashed]-> filesystem
+  checker -[dashed]-> extresource
+  checker -right[dashed]-> suggester
+  checker -[dashed]-> Findings : add findings
+  reporter -[dashed]-> filesystem
+  reporter -[dashed]-> collector
+  Result -[dashed]-> collector
+  Findings - collector
+
+
+
+
+}
+
+rectangle legend {
+ rectangle planned #pink
+ rectangle implemented #lightgrey
+}
+
+}
+@enduml

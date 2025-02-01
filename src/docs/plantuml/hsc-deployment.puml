@@ -1,0 +1,47 @@
+@startuml
+'skinparam linetype ortho
+allowmixing
+
+frame "cmp hsc-deployment" {
+
+    node "hsc development" {
+        artifact "hsc depoyment spec" as spec <<deployment spec>> #lightgreen
+        component "Hml Sanity Check" as hsccheck #lightgreen
+        artifact jsoup #lightblue
+        artifact Groovy #lightblue
+        artifact JDK #lightblue
+        artifact Gradle #lightblue
+
+
+        JDK -- Groovy
+        JDK -- Gradle
+        hsccheck -[dashed]-> jsoup
+        }
+
+    node "global artifact repository (maven central)" {
+        artifact "hsc-plugin (fat-jar)" as jar <<binary>> #lightgreen
+    }
+
+    node "hsc usres computer" {
+      artifact "build-configuration (gradle, pom)" as build #lightblue
+      artifact "some documentation" as doc #lightblue
+      artifact "java runtime" #lightblue
+
+      build -[dashed]-> doc : build and check
+
+    }
+
+    build -up[dashed]-> jar : <<referenced-binary-version>>\n internet/https
+    spec -[dashed]-> jar : <<describe>>
+    jar -[dashed]-> hsccheck : <<compiled-from>>
+
+    rectangle legende {
+       rectangle "our stuff" #lightgreen
+       rectangle "other stuff" #lightblue
+    }
+
+
+
+}
+
+@enduml
