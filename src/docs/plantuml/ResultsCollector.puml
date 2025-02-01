@@ -1,0 +1,45 @@
+@startuml
+'skinparam linetype ortho
+allowmixing
+
+frame "cmp ResultsCollector" {
+
+component ResultsCollector {
+
+    portin "Findings" as findingsport
+    portout "Results" as resultsport
+
+    class "per-run results" as perrunResults
+    class "Single Page Results" as singlepageresults {
+        pageName:String
+        pageTitle:String
+        metaInfo:PageMetaInfo
+    }
+    class "Single Check Results" as singlecheckresults {
+    whatIsChecked:String
+    sourceItem:String
+    targetItem:String
+    nrOfItemsChecked:int
+    }
+    class Finding {
+    item:String
+    suggestion:String
+    }
+
+    findingsport -[dashed]-> singlecheckresults
+    perrunResults -[dashed]-> resultsport
+    perrunResults o-- "1..*" singlepageresults
+    perrunResults o-- "1" singlecheckresults : unused images
+    singlepageresults o-- singlecheckresults
+    singlecheckresults "1" o-right-  "0..*" Finding
+}
+
+component Reporter
+
+Reporter  -[dashed]->  resultsport
+
+}
+
+
+
+@enduml

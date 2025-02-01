@@ -1,0 +1,27 @@
+@startuml
+'skinparam linetype ortho
+
+frame "cmp template-method" {
+class Checker <<abstract>> {
++check():SingleCheckResults
++perfromCheck():void
+}
+class ImageFileExistsChecker {
+-baseDirectory:String
++check():SingleCheckResults
+}
+class InternalLinksChecker{
++check():SingleCheckResults
+}
+class DuplicateIdChecker {
++check():SingleCheckResults
+}
+
+note right of Checker : performCheck is the template method\n 1. initialize CheckingResults\n 2. check() deferred to the concrete subclass
+
+Checker <|-- ImageFileExistsChecker
+Checker <|-- InternalLinksChecker
+Checker <|-- DuplicateIdChecker
+}
+
+@enduml

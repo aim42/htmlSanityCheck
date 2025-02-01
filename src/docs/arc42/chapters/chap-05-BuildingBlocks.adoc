@@ -95,9 +95,12 @@ Files::
 === Building Blocks - Level 2
 
 ==== _HSC Core_ (Whitebox)
-
-
-image::ea/htmlSanityCheck/hsc-core.png["Whitebox", title="HSC Core (Whitebox)"]
+[[img-hsc-core]]
+.HSC Core (Whitebox)
+[plantuml,hsc-core,svg]
+....
+include::../../plantuml/hsc-core.puml["Whitebox", title="HSC Core (Whitebox)"]
+....
 
 Rationale::
 This structures follows a strictly functional decomposition:
@@ -147,7 +150,10 @@ It is based upon the extensible {xrefConceptCheckingAlgorithms}.
 [[ResultsCollector]]
 ==== ResultsCollector (Whitebox)
 
-image::ea/htmlSanityCheck/ResultsCollector.png["Whitebox", title="Results Collector (Whitebox)"]
+[plantuml,ResultsCollector,svg]
+....
+include::../../plantuml/ResultsCollector.puml["Whitebox", title="Results Collector (Whitebox)"]
+....
 
 Rationale::
 This structures follows the hierarchy of checks - namely managing results for:

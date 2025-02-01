@@ -10,7 +10,12 @@ include::_config.adoc[]
 
 [[img-deployment]]
 .Deploymentfootnote:[This diagram is outdated and needs replacement, e.g., with a PlantUML diagram.]
-image::ea/htmlSanityCheck/hsc-deployment.png["Deployment"]
+
+[plantuml,hsc-deployment,svg]
+....
+include::../../plantuml/hsc-deployment.puml["Deployment", title="Deployment"]
+....
+
 
 [options="header", cols="1,4"]
 .Deployment

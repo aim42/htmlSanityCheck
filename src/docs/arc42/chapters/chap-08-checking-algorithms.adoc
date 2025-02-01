@@ -23,7 +23,13 @@ include::{core-source-path}/htmlsanitycheck/check/Checker.java[tags=performCheck
 
 ifndef::imagesdir[:imagesdir: ../../images]
 
-image::ea/htmlSanityCheck/template-method.png["Template Method", title="Template-Method Overview"]
+[[img-template-method]]
+.Template-Method Overview
+[plantuml,template-method,svg]
+....
+include::../../plantuml/template-method.puml["Template Method", title="Template-Method Overview"]
+....
+
 
 [options="header", cols="1,4"]
 .Template Method
