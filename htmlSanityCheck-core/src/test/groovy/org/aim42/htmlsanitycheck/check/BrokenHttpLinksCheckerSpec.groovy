@@ -118,7 +118,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     def "regression for issue 272"(String goodUrl) {
         given: "an HTML page with a single correct anchor/link"
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href=$goodUrl>url that lead to unknown host</a>
+                <a href="${goodUrl}">url that lead to unknown host</a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
@@ -145,7 +145,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         given: "an HTML page with a single (bad) link"
         String badhref = "http://arc42.org:$port/ui98jfuhenu87djch"
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href=${badhref}>nonexisting arc42 link</a>
+                <a href="${badhref}">nonexisting arc42 link</a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
@@ -168,7 +168,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         given: "an HTML page with a single (good) amazon link"
         String goodAmazonLink = "http://www.amazon.com:$port/dp/B01A2QL9SS"
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href=${goodAmazonLink}>Amazon</a>
+                <a href="${goodAmazonLink}">Amazon</a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
@@ -190,7 +190,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         given: "an HTML page with a single (good) amazon link"
         String badAmazonLink = "https://www.amazon.com:$port/dp/4242424242"
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href=${badAmazonLink}>Amazon</a>
+                <a href="${badAmazonLink}">Amazon</a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
@@ -210,7 +210,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         given: "an HTML page with a single (broken) link"
         String goodURL = "http://mock.codes$port/${badLink}"
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href=${goodURL}>${badLink}</a>
+                <a href="${goodURL}">${badLink}</a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
@@ -232,7 +232,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
 
         given: "the old arc42 (http!) page "
         String HTML = """$HtmlConst.HTML_HEAD 
-                <a href="http://arc42.de:$port/old"</a>
+                <a href="http://arc42.de:$port/old"></a>
                 $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
@@ -269,6 +269,69 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         collector?.getFindings()?.first()?.whatIsTheProblem?.contains("suspicious")
 
     }
+
+
+    def "urlsToExclude are not checked"() {
+        given: "HTML page with url to be excluded"
+        String HTML = """$HtmlConst.HTML_HEAD
+                         <a href="http://exclude-this-url.com:8080">Excluded URL</a>
+                         <a href="https://exclude-this-url.com:8443">Excluded URL</a>
+                         <a href="https://exclude-this-url.org:9090">Excluded URL</a>
+                         <a href="https://exclude-also-this-url.org:7070">Excluded URL</a>
+                         $HtmlConst.HTML_END """
+
+        htmlPage = new HtmlPage(HTML)
+        Set<String> urlsToExclude = ["(http|https)://exclude-this-url.*:\\d+", "(http|https)://exclude-also-this-url.org:\\d+"]
+        brokenHttpLinksChecker.setExclude(urlsToExclude)
+
+        when: "page is checked"
+        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+        then: "no findings are reported"
+        collector.getFindings().isEmpty()
+    }
+
+    def "hostsToExclude are not checked"() {
+        given: "HTML page with host to be excluded"
+        String HTML = """$HtmlConst.HTML_HEAD
+                         <a href="http://exclude-this-host.com:8080/page">Excluded Host</a>
+                         <a href="http://exclude-this-host.org:8443/page">Excluded Host</a>
+                         <a href="http://exclude-also-this-host.com:9090/page">Excluded Host</a>
+                         <a href="http://exclude-also-this-host.com:7070/page">Excluded Host</a>
+                         $HtmlConst.HTML_END """
+
+        htmlPage = new HtmlPage(HTML)
+        Set<String> hostsToExclude = [".*exclude-this-host.*:\\d+/.*", ".*exclude-also-this-host.*:\\d+/.*"]
+        brokenHttpLinksChecker.setExclude(hostsToExclude)
+
+        when: "page is checked"
+        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+        then: "no findings are reported"
+        collector.getFindings().isEmpty()
+    }
+
+    def "mixedUrlsAndHostsToExclude are not checked"() {
+            given: "HTML page with mixed urls and hosts to be excluded"
+            String HTML = """$HtmlConst.HTML_HEAD
+                             <a href="http://exclude-this-url.com:8080">Excluded URL</a>
+                             <a href="https://exclude-this-host.com:8443/page">Excluded Host</a>
+                             <a href="http://exclude-this-url.org:9090">Excluded URL</a>
+                             <a href="https://exclude-also-this-host.org:7070/page">Excluded Host</a>
+                             $HtmlConst.HTML_END """
+
+            htmlPage = new HtmlPage(HTML)
+            Set<String> mixedToExclude = ["(http|https)://exclude-this-url\\.(com|org):\\d+", ".*exclude-this-host\\..*:\\d+/.*", ".*exclude-also-this-host\\..*:\\d+/.*"]
+            brokenHttpLinksChecker.setExclude(mixedToExclude)
+
+            when: "page is checked"
+            collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+            then: "no findings are reported"
+            collector.getFindings().isEmpty()
+        }
+
+
 }
 
 /************************************************************************
