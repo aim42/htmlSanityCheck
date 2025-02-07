@@ -2,8 +2,7 @@
 :doctype: book
 include::../asciidoctor-config.ad[]
 
-image:https://img.shields.io/maven-plugin-portal/v/org.aim42.htmlSanityCheck[Maven Plugin Portal Version]
-image:https://img.shields.io/maven-central/v/org.aim42.htmlSanityCheck/org.aim42.htmlSanityCheck.maven.plugin[Maven Central Version]
+image:https://img.shields.io/maven-central/v/org.aim42.htmlSanityCheck/htmlSanityCheck-maven-plugin[link=https://central.sonatype.com/artifact/org.aim42.htmlSanityCheck/htmlSanityCheck-maven-plugin]
 
 ifdef::env-github[]
 :imagesdir: ../src/docs/images
