@@ -6,6 +6,10 @@ ifndef::xrefToCli[:xrefToCli: htmlSanityCheck-cli/README.adoc]
 ifndef::xrefToGradlePlugin[:xrefToGradlePlugin: htmlSanityCheck-gradle-plugin/README.adoc]
 ifndef::xrefToMavenPlugin[:xrefToMavenPlugin: htmlSanityCheck-maven-plugin/README.adoc]
 
+ifdef::env-github[]
+TIP: Use the https://hsc.aim42.org/manual/10_manual.html[HSC Site] for a nicely rendered version of this manual.
+endif::env-github[]
+
 [.lead]
 ====
 https://hsc.aim42.org[HTML Sanity Check] (HSC) provides some basic sanity checking on HTML files.
@@ -58,7 +62,7 @@ Depending on your <<sec:usage>> find respective
 [cols="1,1",width="50%"]
 |===
 | The overall goal is to create neat and clear reports,
-showing eventual errors within HTML files - as shown in the adjoining figure.
+showing eventual errors within HTML files — as shown in the adjoining figure.
 | image:sample-hsc-report.jpg[width="200",link="{imagesdir}/sample-hsc-report.jpg"
 (click on thumbnail for details)]
 |===
@@ -133,9 +137,9 @@ Please see our https://hsc.aim42.org/arc42/About-This-Docu.html[software archite
 
 This tiny piece rests on incredible groundwork:
 
-* https://jsoup.org[Jsoup HTML parser] and analysis toolkit - robust and easy-to-use.
+* https://jsoup.org[Jsoup HTML parser] and analysis toolkit — robust and easy-to-use.
 
-* IntelliJ IDEA - my (Gernot) best (programming) friend.
+* IntelliJ IDEA — my (Gernot) best (programming) friend.
 
 * Of course, Groovy, Gradle, JUnit and Spock framework.
 
@@ -154,7 +158,7 @@ https://github.com/rrice/java-string-similarity[Ralph Rice].
 
 == Similar Projects
 
-* Once upon a time the https://github.com/rackerlabs/[rackerlabs] hosted `gradle-linkchecker-plugin` which was an (open source) Gradle plugin.
+* Once upon a time the https://github.com/rackerlabs/[racketeers] hosted `gradle-linkchecker-plugin` which was an (open source) Gradle plugin.
  It validated that all links in a local HTML file tree go out to other existing local files or remote web locations, creating a simple text file report.
 +
 CAUTION: However, as of 2024-08-14 they have deleted the repository (there seems to be a fork in https://github.com/leonard84/gradle-linkchecker-plugin[]).

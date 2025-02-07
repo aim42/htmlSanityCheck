@@ -9,13 +9,17 @@ ifndef::xrefToManual[:xrefToManual: ../README.adoc]
 :gradleProperties: link:../gradle.properties[]
 ifdef::jbake-type[:gradleProperties: {project-url}/blob/develop/gradle.properties[]]
 
+ifdef::env-github[]
+TIP: Use the https://hsc.aim42.org/manual/20_cli.html[HSC Site] for a nicely rendered version of this manual.
+endif::env-github[]
+
 The Command Line Interface (CLI) module of HTML Sanity Check (xref:{xrefToManual}[HSC]) enables to check generated or native HTML documentation from the command line.
 
 == Installation (Command Line Interface)
 
 === Prerequisites
 
-* Java 8 or higher (`java` executable required on the OS search path (`${PATH} on Linux/macOS, `%path%` on Windows).
+* Java 8 or higher (`java` executable required on the OS search path (`+${PATH}+` on Linux/macOS, `%path%` on Windows).
 
 === Download
 
@@ -49,7 +53,7 @@ The CLI tool exposes a few options as part of its configuration:
 +
 Type: Directory
 +
-Default: Currrent directory (`.`)
+Default: Current directory (`.`)
 
 `--sourceDocuments` <...> (optional):: An override to process several source files, which must be a subset of all files available in `sourceDir`.
 +

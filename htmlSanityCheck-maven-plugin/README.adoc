@@ -11,6 +11,10 @@ ifndef::xrefToManual[:xrefToManual: ../README.adoc]
 :mavenProperties: link:../maven.properties[]
 ifdef::jbake-type[:mavenProperties: {project-url}/blob/develop/maven.properties[]]
 
+ifdef::env-github[]
+TIP: Use the https://hsc.aim42.org/manual/40_maven-plugin.html[HSC Site] for a nicely rendered version of this manual.
+endif::env-github[]
+
 The {maven-url}[Maven] plugin of HTML Sanity Check (xref:{xrefToManual}[HSC]) enables to check generated or native HTML documentation from the Maven build.
 
 [[sec:installation]]
@@ -44,7 +48,7 @@ Use the following snippet inside a Maven build file:
 </plugin>
 ----
 <1> Checkout <<box:current-version,current version>>
-<2> List the files you want tio check here.
+<2> List the files you want to check here.
 <3> Directory where the HTML files are located.
 
 [[box:current-version]]

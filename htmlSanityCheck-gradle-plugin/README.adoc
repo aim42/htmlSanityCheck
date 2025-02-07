@@ -12,6 +12,10 @@ ifndef::xrefToManual[:xrefToManual: ../README.adoc]
 :gradleProperties: link:../gradle.properties[]
 ifdef::jbake-type[:gradleProperties: {project-url}/blob/develop/gradle.properties[]]
 
+ifdef::env-github[]
+TIP: Use the https://hsc.aim42.org/manual/30_gradle-plugin.html[HSC Site] for a nicely rendered version of this manual.
+endif::env-github[]
+
 The {gradle-url}[Gradle] plugin of HTML Sanity Check (xref:{xrefToManual}[HSC]) enables to check generated or native HTML documentation from the Gradle build.
 
 [[sec:installation]]
