@@ -1,5 +1,6 @@
 plugins {
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 dependencies {
@@ -22,6 +23,12 @@ compileGroovy {
 application {
     mainClass = 'org.aim42.htmlsanitycheck.cli.HscCommand'
     applicationName = 'hsc'
+}
+
+shadowJar {
+    archiveClassifier.set('all')
+    mergeServiceFiles()
+    append 'META-INF/services'
 }
 
 /*
