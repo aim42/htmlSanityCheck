@@ -1,6 +1,8 @@
 plugins {
     id 'application'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'com.fussionlabs.gradle.docker-plugin' version '0.6.0'
+
 }
 
 dependencies {
@@ -29,6 +31,29 @@ shadowJar {
     archiveClassifier.set('all')
     mergeServiceFiles()
     append 'META-INF/services'
+}
+
+def dockerTags(Project project) {
+    String currentBranch = "${'git branch --show-current'.execute().text.trim()}"
+    def result = [
+            "${currentBranch == 'main' ? 'latest' : java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern('yyyyMMddHHmmss'))}" as String,
+            "${currentBranch.replaceAll('/', '-')}" as String,
+            ]
+    if (currentBranch == 'main') {
+        // On the main branch we should have the latest major prepended with 'v' for GH actions
+        result += [ 'v' + project.version.substring(0, 1) ]
+    }
+
+    return result
+}
+
+docker {
+    registry = "ghcr.io"
+    repository = "aim42/hsc"
+    platforms = ["linux/amd64", "linux/arm64"]
+    buildArgs = [VERSION: project.version]
+    dockerFilePath = "."
+    tags = dockerTags(project)
 }
 
 /*

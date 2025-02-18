@@ -1,0 +1,15 @@
+name: 'hsc'
+description: |
+  HSC (HTML Sanity Check) is a fast and lightweight tool for checking HTML, links, and accessibility issues. 
+  It helps ensure clean, error-free web content and integrates seamlessly into CI/CD workflows.
+inputs:
+  args:
+    description: 'CLI arguments (cf. https://hsc.aim42.org/manual/20_cli.html)'
+    required: false
+runs:
+  using: 'docker'
+  image: 'docker://ghcr.io/aim42/hsc:v2'
+  entrypoint: '/bin/sh'
+  args:
+  - -c
+  - java -jar /hsc.jar ${{ inputs.args }}
