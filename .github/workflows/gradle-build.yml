@@ -55,3 +55,59 @@ jobs:
           echo "Files:"
           find * -ls
           ./gradlew javaToolchains
+
+  publish-docker-images:
+    needs: build-artifacts
+    permissions:
+      packages: write
+      contents: read
+    env:
+      DOCKER_USERNAME: ${{ github.repository_owner }}
+      DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Cache Gradle Toolchain JDKs
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/jdks
+          key: "${{ runner.os }}-gradle-jdks"
+          restore-keys: ${{ runner.os }}-gradle-jdks
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: "${{ runner.os }}-gradle-caches }}"
+          restore-keys: ${{ runner.os }}-gradle-caches
+
+      - name: Execute Gradle build
+        run: ./gradlew dockerPush --scan --stacktrace
+
+      - name: Collect state upon failure
+        if: failure()
+        run: |
+          echo "Maven Repo:"
+          (cd $HOME && find .m2 -ls)
+          echo "Git:"
+          git status
+          echo "Env:"
+          env | sort
+          echo "PWD:"
+          pwd
+          echo "Files:"
+          find * -ls
+          ./gradlew javaToolchains
