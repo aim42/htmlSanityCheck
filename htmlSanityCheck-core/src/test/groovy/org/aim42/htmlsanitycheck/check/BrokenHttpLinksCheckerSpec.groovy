@@ -56,24 +56,24 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     // Custom method to register the DNS resolver
     private void registerCustomDnsResolver() {
         try {
-            Field implField = InetAddress.class.getDeclaredField("impl");
-            implField.setAccessible(true);
-            Object currentImpl = implField.get(null);
+            Field implField = InetAddress.class.getDeclaredField("impl")
+            implField.setAccessible(true)
+            Object currentImpl = implField.get(null)
 
             Proxy newImpl = (Proxy) Proxy.newProxyInstance(
                     currentImpl.getClass().getClassLoader(),
                     currentImpl.getClass().getInterfaces(),
                     (proxy, method, args) -> {
                         if ("lookupAllHostAddr".equals(method.getName()) && args.length == 1 && args[0] instanceof String) {
-                            return customHostNameResolver.resolve((String) args[0]);
+                            return customHostNameResolver.resolve((String) args[0])
                         }
-                        return method.invoke(currentImpl, args);
+                        return method.invoke(currentImpl, args)
                     }
-            );
+            )
 
-            implField.set(null, newImpl);
+            implField.set(null, newImpl)
         } catch (Exception e) {
-            throw new RuntimeException("Failed to register custom DNS resolver", e);
+            throw new RuntimeException("Failed to register custom DNS resolver", e)
         }
     }
 
