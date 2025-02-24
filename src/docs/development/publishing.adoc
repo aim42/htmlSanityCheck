@@ -13,10 +13,12 @@
 :markdown-suffix: md
 ifdef::backend-html5[:markdown-suffix: html]
 
-We publish
+We distribute HSC for different usage scenarios to appropriate repositories, i.e., we publish
 
 * The HSC artifacts (Core, Maven plugin, and Gradle plugin) to https://central.sonatype.com/search?q=org.aim42.htmlSanityCheck[Maven Central] (MC) for retrieval by the common Java build tools,
-* The HSC Command Line Interface (CLI) to GitHub (project releases),
+* The HSC Command Line Interface (CLI) distribution to
+** https://github.com/aim42/htmlSanityCheck/releases[GitHub] for download as ZIP- or TAR-File.
+** https://sdkman.io/sdks#hsc[SDKMAN] for convenient installation (`sdk install hsc`).
 * The HSC Gradle plugin additionally to https://plugins.gradle.org[Gradle Plugin Portal] (GPP).
 GPP redirects to MC for any plugin (version) it cannot resolve.
 But without separate publication, the search index of GPP does not contain the plugin.
@@ -73,6 +75,15 @@ Alternatively, you can set these as environment variables:
 export GRADLE_PUBLISH_KEY=...
 export GRADLE_PUBLISH_SECRET=...
 ----
+
+[[sec:sdkman-api-credentials]]
+=== SDKMAN
+
+We registered HSC already as Vendor with https://sdkman.io[SDKMAN].
+Publishing new releases requires https://github.com/sdkman/sdkman-cli/wiki/Vendor-onboarding-process#request-api-credentials[API credentials] (and authorization by an existing member of the HSC team,
+currently Gerd Aschemann).
+
+We publish new versions to SDKMAN via the respective https://sdkman.io/vendors[API], cf. <<sec:release-environment>>.
 
 [[sec:artifact-signing]]
 === Artifact signing
@@ -146,6 +157,8 @@ export JRELEASER_GITHUB_TOKEN=... # <2>
 export JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_USERNAME=... # <3>
 export JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_PASSWORD=... # <3>
 export JRELEASER_ANNOUNCE_MASTODON_ACCESS_TOKEN=... <4>
+export JRELEASER_SDKMAN_CONSUMER_KEY=... <5>
+export JRELEASER_SDKMAN_CONSUMER_TOKEN=... <5>
 ----
 <1> Maven Central publications require two steps.
 This variable setting enables <<sec:stage-to-maven-central-and-release-to-github,
@@ -154,6 +167,7 @@ upload to the staging area>>, perform <<sec:publish-to-maven-central,the final p
 <3> Follow the <<sec:maven-central-account,steps above>> to get the required Maven credentials.
 Create a deployment user and password in your Maven Central (Sonatype) https://central.sonatype.com/account[account].
 <4> Access token for your Mastodon Account (on https://mastodon.social[]footnote:[Publishing to a different Mastodon server requires more changes.]).
+<5> Key and Token for access to the <<sec:sdkman-api-credentials,SDKMAN API>>.
 
 
 == Publishing actions
@@ -199,7 +213,7 @@ Once <<sec:publish-to-maven-central,published on Maven Central>>, you should not
 [[sec:stage-to-maven-central-and-release-to-github]]
 === Sign / Stage to Maven Central and Publish to GitHub
 
-Sign artifacts and load them up to Maven Central via https://jreleaser.org[JReleaser].
+Sign artifacts and load them up to Maven Central and GitHub via https://jreleaser.org[JReleaser].
 
 [source,shell]
 ----
@@ -216,6 +230,7 @@ and pushes all required files for publication to a local repository.
 * Pick them up from there and load them up to the Maven Central staging area as a new version.
 * Release the https://github.com/aim42/htmlSanityCheck/releases[current state to GitHub]
 and tag the current version accordingly.
+This includes upload of ZIP- and TAR-application archives.
 
 [TIP]
 .Use GPG Agent (command) in practice
@@ -227,6 +242,17 @@ If you have GPG configured properly, you may use the <<tip:gpg-agent,GPG-Agent>>
 ./gradlew jreleaserRelease -PenableSigning=true -PuseGpgCmd=true
 ----
 ====
+
+=== Publish to SDKMAN
+
+[source,shell]
+----
+./gradlew jreleaserPublish
+----
+
+This step makes the current version available via SDKMAN.
+However, as SDKMAN downloads the respective release from <<sec:stage-to-maven-central-and-release-to-github,GitHub>>
+the publication to SDKMAN should follow the GitHub publication.
 
 [[sec:publish-to-maven-central]]
 === Publish on Maven Central (final step)

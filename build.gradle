@@ -144,6 +144,12 @@ jreleaser {
             artifact {
                 path = 'htmlSanityCheck-cli/build/distributions/{{distributionName}}-{{projectVersion}}.tar'
             }
+            active = 'ALWAYS'
+            distributionType = 'JAVA_BINARY'
+            stereotype = 'CLI'
+            sdkman {
+                active = 'ALWAYS'
+            }
         }
     }
 
@@ -170,6 +176,14 @@ jreleaser {
             host = 'https://mastodon.social'
 
             statusTemplate = 'src/templates/jreleaser/mastodon.tpl'
+        }
+    }
+
+    packagers {
+        sdkman {
+            active = 'ALWAYS'
+            candidate = 'hsc'
+            command = 'MAJOR'
         }
     }
 }

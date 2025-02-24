@@ -19,11 +19,18 @@ The Command Line Interface (CLI) module of HTML Sanity Check (xref:{xrefToManual
 
 === Prerequisites
 
-* Java 8 or higher (`java` executable required on the OS search path (`+${PATH}+` on Linux/macOS, `%path%` on Windows).
+The HSC CLI needs Java 8 (`java` executable) or higher on the respective OS search path (`+${PATH}+` on Linux/macOS, `%path%` on Windows).
+
+=== SDKMAN
+
+If you use https://sdkman.io[SDKMAN], you can install HSC as SDKMAN candidate: `sdk install hsc`.
 
 === Download
 
-Download the latest version of the HSC CLI from the https://github.com/aim42/htmlSanityCheck/releases[release page].
+Alternatively,
+
+* Download the HSC CLI from the https://github.com/aim42/htmlSanityCheck/releases[release{nbsp}page].
+* Unpack the file in a convenient place, e.g., `/usr/local/hsc`.
 
 == Usage
 
