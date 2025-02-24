@@ -19,7 +19,13 @@ import java.util.Set;
 
 class HtmlSanityCheckMojoTest {
 
-    static final String VALID_HTML = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"><html><head></head><body></body><html>";
+    static final String VALID_HTML = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\">  " +
+            "<html> " +
+            "  <head></head> " +
+            "  <body>" +
+            "    This <a href=\"https://tld.invalid/\">Invalid TLD</a> should not make a problem! " +
+            "  </body> " +
+            "<html>";
 
     @Test
     void setupConfiguration() {
@@ -162,6 +168,8 @@ class HtmlSanityCheckMojoTest {
         Files.write(sourceFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
         Set<File> fileset = new HashSet<>();
         fileset.add(sourceFile);
+        Set<String> excludes = new HashSet<>();
+        excludes.add("^.*\\.invalid.*");
 
         Configuration myConfig = Configuration.builder()
                 .checksToExecute(AllCheckers.CHECKER_CLASSES)
@@ -169,6 +177,7 @@ class HtmlSanityCheckMojoTest {
                 .checkingResultsDir(resultDir.toFile())
                 .sourceDir(sourceDir.toFile())
                 .sourceDocuments(fileset)
+                .excludes(excludes)
                 .build();
         HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
 

@@ -110,6 +110,16 @@ Default:
 include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/check/AllCheckers.java[tag=checker-classes,indent=0]
 ----
 
+`--excludes` (optional):: This is a set of regular expressions of URLs or even hosts that HSC should not check.
++
+Type: Set.
++
+Default: Empty list
++
+[source,groovy]
+----
+[]
+----
 
 `--httpWarningCodes` (optional):: HTTP response codes treated as warning.
 +

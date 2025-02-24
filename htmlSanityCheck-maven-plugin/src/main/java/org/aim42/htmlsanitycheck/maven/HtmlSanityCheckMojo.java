@@ -16,6 +16,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -183,6 +184,20 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
     @Parameter
     private List<Class<? extends Checker>> checkerClasses = AllCheckers.CHECKER_CLASSES;
 
+    /**
+     * (optional)
+     * Provides a set of patterns to exclude certain URLs (hosts) from being processed.
+     * <p>
+     * Patterns can include wildcards and will be matched against the hrefs.
+     * Useful for excluding hosts that frequently run into problems (temporarily not reachable etc.).
+     * <p>
+     * Type: Set of Strings.
+     * <p></p>
+     * Default: Empty set (no exclusions).
+     */
+    @Parameter
+    private Set<String> excludes = new HashSet<>();
+
     static PerRunResults performChecks(Configuration myConfig) throws MojoExecutionException {
         try {
             AllChecksRunner allChecksRunner = new AllChecksRunner(myConfig);
@@ -249,10 +264,12 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
         getLog().info("Results dir     : " + myConfig.getCheckingResultsDir());
         getLog().info("JUnit dir       : " + myConfig.getJunitResultsDir());
         getLog().info("Fail on errors  : " + myConfig.getFailOnErrors());
+        getLog().info("Excludes        : " + myConfig.getExcludes());
     }
 
     protected Configuration setupConfiguration() {
         Configuration result = Configuration.builder()
+                .excludes(excludes)
                 .sourceDocuments(sourceDocuments)
                 .sourceDir(sourceDir)
                 .checkingResultsDir(checkingResultsDir)

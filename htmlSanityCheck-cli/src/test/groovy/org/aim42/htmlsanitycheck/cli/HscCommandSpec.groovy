@@ -8,7 +8,13 @@ import spock.lang.Unroll
 
 class HscCommandSpec extends Specification {
 
-    private final static VALID_HTML = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"><html><head></head><body></body><html>"""
+    private final static VALID_HTML = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+        <html>
+            <head></head>
+            <body>
+                This <a href="https://tld.invalid/">Invalid TLD</a> should not make a problem!
+            </body>
+        <html>"""
     private final static INVALID_HTML = """<body><span id="id"/><span id="id"/></body> """
 
     @Rule
@@ -86,7 +92,7 @@ class HscCommandSpec extends Specification {
         if (args) {
             mainArgs.add(args)
         }
-        mainArgs.add(testProjectDir.root)
+        mainArgs.add(testProjectDir.root as String)
 
         when:
         HscCommand.main(mainArgs as String[])
@@ -112,7 +118,7 @@ class HscCommandSpec extends Specification {
     def "test with valid HTML file"() {
         given:
         htmlFile << VALID_HTML
-        String[] args = ["-r", testResultsDir.root, testProjectDir.root]
+        String[] args = ["-e", "^.*\\.invalid.*", "-r", testResultsDir.root, testProjectDir.root]
 
         when:
         HscCommand.main(args)

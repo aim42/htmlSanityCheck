@@ -88,6 +88,9 @@ class HscCommand implements Runnable {
     @Option(names = ["-s", "--suffix"], description = "File name suffixes to investigate", split = ",")
     String[] suffixes = ["html", "htm"]
 
+    @Option(names = ["-e", "--exclude"], description = "Exclude remote patterns to check", split = ',')
+    String[] excludes = []
+
     @Parameters(index = "0", arity = "0..1", description = "base directory (default: current directory)")
     File srcDir = new File(".").getAbsoluteFile()
 
@@ -172,6 +175,7 @@ class HscCommand implements Runnable {
                     .sourceDocuments(srcDocuments as Set)
                     .checkingResultsDir(resultsDirectory)
                     .checksToExecute(AllCheckers.CHECKER_CLASSES)
+                    .excludes(hscCommand.excludes as Set)
                     .build()
 
             // if we have no valid configuration, abort with exception
