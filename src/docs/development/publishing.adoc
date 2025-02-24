@@ -136,8 +136,7 @@ gpg: Sorry, we are in batchmode - can't get input
 FAILURE: Build failed with an exception.
 ----
 
-In this case, you have to make sure you started the agent and cached the password,
-e.g., by executing
+In this case, you have to start the agent and cache the password, e.g., by executing
 
 [source,shell]
 ----

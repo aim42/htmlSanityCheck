@@ -34,7 +34,7 @@ Alternatively,
 
 == Usage
 
-The CLI tool can be executed with the following command.
+Execute the CLI tool with the following command.
 If the `sourceDirectory` is omitted, HSC uses the current directory as base-directory to search for HTML files.
 
 Linux / macOS::
@@ -56,7 +56,7 @@ hsc.bat [ options ] [ sourceDirectory ]
 The CLI tool exposes a few options as part of its configuration:
 
 [horizontal]
-<sourceDirectory> (optional):: Directory where the HTML files are located.
+<sourceDirectory> (optional):: HSC searches this directory for HTML files.
 +
 Type: Directory
 +
@@ -75,13 +75,13 @@ Type: Directory
 Default: `./reports/htmlSanityCheck/`
 
 `--junitResultsDir` <...> (optional):: Directory where HSC writes the results in JUnit XML format.
-JUnit XML can be read by many tools, including CI environments.
+Many tools can read JUnit XML, including CI environments.
 +
 Type: Directory
 +
 Default: `./test-results/htmlchecks/`
 
-`--failOnErrors` (optional):: Fail the build if any error was found in the checked pages.
+`--failOnErrors` (optional):: Fail the build if HSC detected any error in the checked pages.
 +
 Type: Boolean
 +
@@ -144,7 +144,8 @@ include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/W
 [NOTE]
 .HTTP Redirects
 ====
-Note that HTTP redirects are treated as a warning to make the user aware of the correct or new location (cf. {project-issues}/244[Issue 244]).
+Note that HSC treats HTTP redirects as a warning to make the user aware of the correct
+or new location (cf.{nbsp}{project-issues}/244[Issue 244]).
 Some HSC reports contain the respective location.
 ====
 
@@ -159,7 +160,7 @@ Default:
 include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/Web.java[tag=HTTP_ERROR_CODES,indent=0]
 ----
 
-`--httpSuccessCodes` (optional):: HTTP response codes treated as success.
+`--httpSuccessCodes` (optional):: HTTP response codes that HSC treats as success.
 +
 Type: List
 +
@@ -200,7 +201,7 @@ java -jar htmlSanityCheck-cli-<version>.jar \
 
 == Compatibility
 
-The CLI tool has been tested with the following Java versions:
+We test the HSC CLI tool with the following Java versions:
 
 * Java 8
 * Java 11
