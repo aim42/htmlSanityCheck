@@ -14,9 +14,60 @@ env:
   SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION || 'aim42' }}
   SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY || 'aim42_htmlSanityCheck' }}
 jobs:
-  build:
+  # DO NOT MERGE THIS AS WE SHOULD GET A NEW VERSION FROM UPSTREAM
+  clone-and-install-docker-plugin:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out docker-plugin repository
+        uses: actions/checkout@v4
+        with:
+          repository: ascheman/docker-plugin
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Cache Gradle Toolchain JDKs
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/jdks
+          key: "${{ runner.os }}-gradle-jdks"
+          restore-keys: ${{ runner.os }}-gradle-jdks
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: "${{ runner.os }}-gradle-caches }}"
+          restore-keys: ${{ runner.os }}-gradle-caches
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
+      - name: Build and Publish to Maven Local
+        run: ./gradlew publishToMavenLocal
+
+      - name: Upload Maven Repository
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-repository
+          path: ~/.m2/repository
+
+  build:
+    needs: clone-and-install-docker-plugin
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Maven Repository
+        uses: actions/download-artifact@v4
+        with:
+          name: maven-repository
+          path: ~/.m2/repository
+
       - name: Check out
         uses: actions/checkout@v4
 

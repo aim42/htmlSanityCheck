@@ -66,6 +66,12 @@ jobs:
       DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     steps:
+      - name: Download Maven Repository
+        uses: actions/download-artifact@v4
+        with:
+          name: maven-repository
+          path: ~/.m2/repository
+
       - name: Check out
         uses: actions/checkout@v4
 
