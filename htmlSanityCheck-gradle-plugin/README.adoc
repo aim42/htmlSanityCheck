@@ -142,6 +142,17 @@ Default: All available checker classes.
 include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/check/AllCheckers.java[tag=checker-classes,indent=0]
 ----
 
+`excludes` (optional):: This is a set of regular expressions of URLs or even hosts that HSC should not check.
++
+Type: Set.
++
+Default: Empty list
++
+[source,groovy]
+----
+[]
+----
+
 `httpWarningCodes` (optional):: Additional HTTP response codes treated as warning.
 +
 Type: List.
@@ -193,16 +204,6 @@ include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/W
 The lists shown above are the default HTTP response codes handled by HSC.
 The mentioned configurations effectively move the configured codes around, i.e., if you add `308` to `httpErrorCodes` it is automatically removed from its default list (`httpWarningCodes`).
 ****
-`exclude` (optional):: A Set of regular expressions for URLs that should be excluded from the sanity check.
-+
-Type: Set.
-+
-Default: Empty list
-+
-[source,groovy]
-----
-[]
-----
 
 
 [[sec:examples]]
@@ -329,7 +330,7 @@ htmlSanityCheck {
     checkerClasses = [DuplicateIdChecker, MissingImageFilesChecker]
 
     // Exclude from checking
-    exclude = ["(http|https)exclude-this-url.*", ".*skip-host.org.*"]
+    excludes = ["(http|https)exclude-this-url.*", ".*skip-host.org.*"]
 }
 
 ----

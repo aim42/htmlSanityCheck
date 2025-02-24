@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.aim42.htmlsanitycheck.check.AllCheckers;
@@ -46,8 +45,8 @@ public class Configuration {
     @Getter(AccessLevel.NONE)
     @Builder.Default
     Boolean ignoreIPAddresses = false;
-    @Setter
-    Set<String> exclude;
+    @Builder.Default
+    Set<String> excludes = new HashSet<>();
 
     /*
      * Explanation for configuring http status codes:

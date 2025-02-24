@@ -6,7 +6,6 @@ import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.test.dns.CustomHostNameResolver
 import org.wiremock.integrations.testcontainers.WireMockContainer
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -271,18 +270,25 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     }
 
 
-    def "urlsToExclude are not checked"() {
-        given: "HTML page with url to be excluded"
+    def 'excludes are not checked'() {
+        given: "HTML page with excludes"
         String HTML = """$HtmlConst.HTML_HEAD
-                         <a href="http://exclude-this-url.com:8080">Excluded URL</a>
-                         <a href="https://exclude-this-url.com:8443">Excluded URL</a>
-                         <a href="https://exclude-this-url.org:9090">Excluded URL</a>
-                         <a href="https://exclude-also-this-url.org:7070">Excluded URL</a>
+                         <a href="http://exclude-this-host.com:8080">Excluded HOST</a>
+                         <a href="https://exclude-this-host.com:8443">Excluded HOST</a>
+                         <a href="https://exclude-this-host.org:9090">Excluded HOST</a>
+                         <a href="https://exclude-also-this-host.org:7070">Excluded HOST</a>
+
+                         <a href="http://exclude-this-url.com:8080/page">Excluded URL</a>
+                         <a href="http://exclude-this-url.org:8443/page">Excluded URL</a>
+                         <a href="http://exclude-also-this-url.com:9090/page">Excluded URL</a>
+                         <a href="http://exclude-also-this-url.com:7070/page">Excluded URL</a>
                          $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
-        Set<String> urlsToExclude = ["(http|https)://exclude-this-url.*:\\d+", "(http|https)://exclude-also-this-url.org:\\d+"]
-        brokenHttpLinksChecker.setExclude(urlsToExclude)
+        Set<String> excludes = ["(http|https)://exclude-this-(host|url).*:\\d+(/.+)?",
+                                "(http|https)://exclude-also-this-(host|url).(com|org):\\d+(/.+)?"]
+        Configuration config = Configuration.builder().excludes(excludes).build()
+        BrokenHttpLinksChecker brokenHttpLinksChecker = new BrokenHttpLinksChecker(config)
 
         when: "page is checked"
         collector = brokenHttpLinksChecker.performCheck(htmlPage)
@@ -290,48 +296,6 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         then: "no findings are reported"
         collector.getFindings().isEmpty()
     }
-
-    def "hostsToExclude are not checked"() {
-        given: "HTML page with host to be excluded"
-        String HTML = """$HtmlConst.HTML_HEAD
-                         <a href="http://exclude-this-host.com:8080/page">Excluded Host</a>
-                         <a href="http://exclude-this-host.org:8443/page">Excluded Host</a>
-                         <a href="http://exclude-also-this-host.com:9090/page">Excluded Host</a>
-                         <a href="http://exclude-also-this-host.com:7070/page">Excluded Host</a>
-                         $HtmlConst.HTML_END """
-
-        htmlPage = new HtmlPage(HTML)
-        Set<String> hostsToExclude = [".*exclude-this-host.*:\\d+/.*", ".*exclude-also-this-host.*:\\d+/.*"]
-        brokenHttpLinksChecker.setExclude(hostsToExclude)
-
-        when: "page is checked"
-        collector = brokenHttpLinksChecker.performCheck(htmlPage)
-
-        then: "no findings are reported"
-        collector.getFindings().isEmpty()
-    }
-
-    def "mixedUrlsAndHostsToExclude are not checked"() {
-            given: "HTML page with mixed urls and hosts to be excluded"
-            String HTML = """$HtmlConst.HTML_HEAD
-                             <a href="http://exclude-this-url.com:8080">Excluded URL</a>
-                             <a href="https://exclude-this-host.com:8443/page">Excluded Host</a>
-                             <a href="http://exclude-this-url.org:9090">Excluded URL</a>
-                             <a href="https://exclude-also-this-host.org:7070/page">Excluded Host</a>
-                             $HtmlConst.HTML_END """
-
-            htmlPage = new HtmlPage(HTML)
-            Set<String> mixedToExclude = ["(http|https)://exclude-this-url\\.(com|org):\\d+", ".*exclude-this-host\\..*:\\d+/.*", ".*exclude-also-this-host\\..*:\\d+/.*"]
-            brokenHttpLinksChecker.setExclude(mixedToExclude)
-
-            when: "page is checked"
-            collector = brokenHttpLinksChecker.performCheck(htmlPage)
-
-            then: "no findings are reported"
-            collector.getFindings().isEmpty()
-        }
-
-
 }
 
 /************************************************************************

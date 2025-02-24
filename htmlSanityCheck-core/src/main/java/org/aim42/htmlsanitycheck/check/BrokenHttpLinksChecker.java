@@ -16,6 +16,7 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 /**
@@ -38,7 +39,7 @@ class BrokenHttpLinksChecker extends Checker {
     // need that to calculate "nrOfOccurrences"
     // the pure http/https-hrefs a set, duplicates are removed here
     private Set<String> hrefSet;
-    private Set<Pattern> excludePatterns;
+    private Set<Pattern> excludes;
 
 
     BrokenHttpLinksChecker(Configuration pConfig) {
@@ -47,8 +48,7 @@ class BrokenHttpLinksChecker extends Checker {
         errorCodes = getMyConfig().getHttpErrorCodes();
         warningCodes = getMyConfig().getHttpWarningCodes();
         successCodes = getMyConfig().getHttpSuccessCodes();
-        Set<String> exclude = getMyConfig().getExclude();
-        setExclude(exclude);
+        setExcludes(getMyConfig().getExcludes());
     }
 
     @Override
@@ -106,8 +106,8 @@ class BrokenHttpLinksChecker extends Checker {
 
     protected void doubleCheckSingleHttpLink(String href) {
         // Check if the href matches any of the regular expressions in the exclude set
-        if (excludePatterns != null) {
-            for (Pattern pattern : excludePatterns) {
+        if (excludes != null) {
+            for (Pattern pattern : excludes) {
                 if (pattern.matcher(href).matches()) {
                     // Skip checking this URL
                     return;
@@ -237,14 +237,10 @@ class BrokenHttpLinksChecker extends Checker {
     }
 
 
-    public void setExclude(Set<String> exclude) {
-        // Create patterns from exclude
-        excludePatterns = new HashSet<>();
-        if (exclude != null) {
-            for (String url : exclude) {
-                excludePatterns.add(Pattern.compile(url));
-            }
-        }
+    private void setExcludes(Set<String> excludes) {
+        this.excludes = excludes != null ?
+                excludes.stream().map(Pattern::compile).collect(Collectors.toSet()) :
+                new HashSet<>();
     }
 }
 

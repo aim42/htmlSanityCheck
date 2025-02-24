@@ -169,10 +169,10 @@ class ConfigurationSpec extends Specification {
         Set<String> urlsToExclude = ["(http|https)://example\\.com", "http://test\\.com"]
 
         when: "we set the exclude in the configuration"
-        myConfig.exclude = urlsToExclude
+        myConfig.excludes = urlsToExclude
 
         then: "the configuration should contain these URLs"
-        myConfig.getExclude() == urlsToExclude
+        myConfig.getExcludes() == urlsToExclude
     }
 
     def "can set and retrieve hostsToExclude"() {
@@ -180,10 +180,10 @@ class ConfigurationSpec extends Specification {
         Set<String> hostsToExclude = [".*example\\.com.*", ".*myhost\\.(com|org):2000"]
 
         when: "we set the exclude in the configuration"
-        myConfig.exclude = hostsToExclude
+        myConfig.excludes = hostsToExclude
 
         then: "the configuration should contain these hosts"
-        myConfig.getExclude() == hostsToExclude
+        myConfig.getExcludes() == hostsToExclude
     }
 
     def "can set and retrieve urls and hosts to exclude"() {
@@ -196,10 +196,10 @@ class ConfigurationSpec extends Specification {
         ]
 
         when: "we set the exclude in the configuration"
-        myConfig.exclude = exclusions
+        myConfig.excludes = exclusions
 
         then: "the configuration should contain these URLs and hosts"
-        myConfig.getExclude() == exclusions
+        myConfig.getExcludes() == exclusions
     }
 
 }

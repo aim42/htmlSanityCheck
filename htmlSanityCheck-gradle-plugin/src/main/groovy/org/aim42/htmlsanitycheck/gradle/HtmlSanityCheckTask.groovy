@@ -81,7 +81,7 @@ class HtmlSanityCheckTask extends DefaultTask {
     Set<Integer> httpSuccessCodes
     @Optional
     @Input
-    Set<String> exclude
+    Set<String> excludes
 
     @Input
     List<Class<? extends Checker>> checkerClasses = AllCheckers.CHECKER_CLASSES
@@ -190,7 +190,7 @@ See ${checkingResultsDir} for a detailed report."""
                 .ignoreIPAddresses(ignoreIPAddresses)
 
                 .checksToExecute(checkerClasses)
-                .exclude(exclude)
+                .excludes(excludes)
                 .build()
 
         // in case we have configured specific interpretations of http status codes
@@ -216,7 +216,7 @@ See ${checkingResultsDir} for a detailed report."""
         logger.info "Results dir     : $checkingResultsDir"
         logger.info "JUnit dir       : $junitResultsDir"
         logger.info "Fail on errors  : $failOnErrors"
-        logger.info "exclude         : $exclude"
+        logger.info "excludes        : $excludes"
     }
 }
 
