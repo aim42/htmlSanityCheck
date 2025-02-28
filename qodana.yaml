@@ -1,0 +1,40 @@
+version: "1.0"
+linter: jetbrains/qodana-jvm-community:2024.3
+plugins:
+  - id: org.asciidoctor.intellij.asciidoc
+profile:
+  path: .qodana/asciidoc-inspection.xml
+exclude:
+  - name: Config
+    paths:
+      - .qodana
+      - qodana.yaml
+  - name: Misc
+    paths:
+      - LICENSE.txt
+  - name: Build
+    paths:
+      - .github
+      - build.gradle
+      - dtcw
+      - dtcw.bat
+      - dtcw.ps1
+      - gradle.properties
+      - gradle/
+      - gradlew
+      - gradlew.bat
+  - name: Examples / Tests
+    paths:
+      - examples/
+      - htmlSanityCheck-core/src/test/resources/file-to-test.adoc
+      - htmlSanityCheck-gradle-plugin/src/test/resources/file-to-test.adoc
+  - name: Generated
+    paths:
+      - htmlSanityCheck-cli/build/
+      - htmlSanityCheck-gradle-plugin/build/
+      - htmlSanityCheck-maven-plugin/target/
+      - integration-test/build/
+      - public/
+      - sandbox/
+      - self-check/build/
+      - test-sites/
