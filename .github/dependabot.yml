@@ -8,3 +8,8 @@ updates:
     ignore:
       - dependency-name: "org.spockframework:spock-bom"
         versions: ["2.3-groovy-4.0"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/" # Location of the GitHub Actions workflows
+    schedule:
+      interval: "weekly"
