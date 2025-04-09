@@ -43,14 +43,14 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle-caches
 
       - name: Cache .doctoolchain
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.doctoolchain
           key: "${{ runner.os }}-doctoolchain }}"
           restore-keys: ${{ runner.os }}-doctoolchain
 
       - name: Check out
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup JDK
         uses: actions/setup-java@v4
@@ -65,7 +65,7 @@ jobs:
           path: .
 
       - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v4
+        uses: gradle/wrapper-validation-action@v3
 
       - name: Generate Pages
         run: ./generate-pages
@@ -98,4 +98,3 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-
