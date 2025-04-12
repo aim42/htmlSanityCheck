@@ -6,6 +6,9 @@ htmlSanityCheck {
     sourceDir file("../build/microsite/output")
 
     checkingResultsDir = file("../build/reports/htmlchecks")
+    excludes = [
+            "https://www.baeldung.com/.*" // Baeldung seems to have implemented some anti-robot/GPT strategy?
+    ]
 
     httpSuccessCodes = [ 429 ]
 

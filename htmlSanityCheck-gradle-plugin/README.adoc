@@ -230,9 +230,8 @@ htmlSanityCheck {
 === Extended example
 
 .`build.gradle`
-[source,groovy,subs='attributes']
+[source,groovy,subs='attributes,callouts']
 ----
-
 import org.aim42.htmlsanitycheck.check.*
 
 buildscript {
@@ -330,10 +329,11 @@ htmlSanityCheck {
     checkerClasses = [DuplicateIdChecker, MissingImageFilesChecker]
 
     // Exclude from checking
-    excludes = ["(http|https)exclude-this-url.*", ".*skip-host.org.*"]
+    excludes = ["(http|https)://exclude.this/url.*", ".*skip-host.org.*", "https://www.baeldung.com/.*"] // <1>
 }
-
 ----
+
+<1> Note that some websites seem to exclude search engines and other robots recently, e.g., https://www.baeldung.com/[]
 
 == Compatibility
 

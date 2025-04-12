@@ -32,6 +32,9 @@
                         <file>../common/build/docs/htmlSanityCheck-cli/README.html</file>
                         <file>../common/build/docs/README.html</file>
                     </sourceDocuments>
+                    <excludes>
+                        <exclude>https://www.baeldung.com/.*</exclude>
+                    </excludes>
                     <sourceDir>../common/build/docs</sourceDir>
                     <checkingResultsDir>${project.build.directory}/reports</checkingResultsDir>
                     <failOnErrors>true</failOnErrors>
