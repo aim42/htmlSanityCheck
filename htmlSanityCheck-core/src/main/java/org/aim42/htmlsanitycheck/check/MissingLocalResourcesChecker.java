@@ -6,8 +6,6 @@ import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
 import org.aim42.htmlsanitycheck.html.HtmlPage;
 import org.aim42.htmlsanitycheck.tools.InvalidUriSyntaxException;
 import org.aim42.htmlsanitycheck.tools.Web;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URI;
@@ -22,8 +20,7 @@ public class MissingLocalResourcesChecker extends Checker {
     public static final String MLRC_MESSAGE_PREFIX = "local resource";
     public static final String MLRC_MESSAGE_MISSING = "missing";
     public static final String MLRC_REFCOUNT = ", reference count: ";
-    private static final Logger logger = LoggerFactory.getLogger(MissingLocalResourcesChecker.class);
-    // NOTE that we need, both the full list as well as the unique set of resources
+    // NOTE that we need, both the full list and the unique set of resources
     // List of the local resources referenced in anchor tags
     private List<String> localResourcesList;
     /**
@@ -51,7 +48,7 @@ public class MissingLocalResourcesChecker extends Checker {
     @Override
     protected SingleCheckResults check(final HtmlPage pageToCheck) {
         log.trace("Checking '{}'", pageToCheck.getFile());
-        //get list of all anchor-tags containing href="xyz" in html file
+        //get list of all anchor-tags containing href="xyz" in HTML file
         List<String> allHrefs = pageToCheck.getAllHrefStrings();
 
         // now filter out all local resources
@@ -62,7 +59,7 @@ public class MissingLocalResourcesChecker extends Checker {
         // created from the List of all by toSet() method
         Set<String> localResourcesSet = new HashSet<>(localResourcesList);
 
-        logger.debug("local resources set: {}", localResourcesSet);
+        log.debug("local resources set: {}", localResourcesSet);
 
         final File file1 = pageToCheck.getFile();
         final File file = (file1 == null ? null : file1.getParentFile());
@@ -81,41 +78,75 @@ public class MissingLocalResourcesChecker extends Checker {
     }
 
     private void checkSingleLocalResource(String localResource) {
-        // the localResource is either path+filename  or filename or directory
+        // the localResource is either path+filename or filename or directory
 
-        logger.debug("single resource to be checked: {}", localResource);
+        log.debug("single resource to be checked: {}", localResource);
 
         // bookkeeping:
         getCheckingResults().incNrOfChecks();
 
         // we need to strip the localResource of #anchor-parts
-        String localResourcePath;
+        URI localResourceURI;
         try {
-            localResourcePath = new URI(localResource).getPath();
+            localResourceURI = new URI(localResource);
         } catch (URISyntaxException e) {
             throw new InvalidUriSyntaxException(e);
         }
 
+        String scheme = localResourceURI.getScheme();
+        String localResourcePath = localResourceURI.getPath();
+        if (scheme != null && scheme.equals("file")) {
+            File localFile = new File(localResourcePath);
+            checkFile(localResourcePath, localFile);
+            return;
+        }
         if (localResourcePath == null) {
-            // For example, javascript:;
+            log.debug("Ignoring '{}'", localResource);
             return;
         }
 
-
-        File parentDir = localResourcePath.startsWith("/") ? baseDir : currentDir;
-
-        // we need the baseDir for robust checking of local resources...
-        File localFile = new File(parentDir, localResourcePath);
-
-        // action required if resource does not exist
-        if (!localFile.exists() || !localFile.isFile()) {
-            handleNonexistingLocalResource(localResource);
+        if (localResourcePath.startsWith("/")) {
+            File localFile = new File(baseDir, localResourcePath);
+            checkFile(localResourcePath, localFile);
+        } else {
+            File localFile = new File(currentDir, localResourcePath);
+            checkFile(localResource, localFile);
         }
-
     }
 
-    private void handleNonexistingLocalResource(final String nonExistingLocalResource) {
-        String findingText = MLRC_MESSAGE_PREFIX + " \"" + nonExistingLocalResource + "\" " + MLRC_MESSAGE_MISSING;
+    private void checkFile(String resourcePath, File file) {
+        // action required if resource does not exist
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                checkIndexFiles(resourcePath, file);
+            } else if (!file.isFile()) {
+                handleNonExistingLocalResource(resourcePath, "unknown type");
+            }
+        } else {
+            handleNonExistingLocalResource(resourcePath, "file does not exist");
+        }
+    }
+
+    private void checkIndexFiles(String resourcePath, File directory) {
+        if (!indexFileFound(directory)) {
+            handleNonExistingLocalResource(resourcePath, "directory without index");
+        }
+    }
+
+    private boolean indexFileFound(File directory) {
+        for (String indexFilename : getMyConfig().getIndexFilenames()) {
+            File indexFile = new File(directory, indexFilename);
+            if (indexFile.exists()) {
+                log.trace("Using index file '{}'", indexFile);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void handleNonExistingLocalResource(final String nonExistingLocalResource, final String reason) {
+        String findingText = MLRC_MESSAGE_PREFIX + " \"" + nonExistingLocalResource + "\" " + MLRC_MESSAGE_MISSING + " (\"" + reason + "\")";
 
         // how often is localResource referenced?
         int nrOfOccurrences = (int) localResourcesList.stream().filter(et -> et.equals(nonExistingLocalResource)).count();

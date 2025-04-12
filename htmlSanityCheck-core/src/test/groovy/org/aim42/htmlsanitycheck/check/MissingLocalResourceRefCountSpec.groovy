@@ -18,7 +18,7 @@ class MissingLocalResourceRefCountSpec extends Specification {
 
 
     private static final String msgPrefix = MissingLocalResourcesChecker.MLRC_MESSAGE_PREFIX
-    private static final String msgMissing = MissingLocalResourcesChecker.MLRC_MESSAGE_MISSING
+    private static final String msgMissing = MissingLocalResourcesChecker.MLRC_MESSAGE_MISSING + " (\"file does not exist\")"
     private static final String msgRefCount = MissingLocalResourcesChecker.MLRC_REFCOUNT
 
 

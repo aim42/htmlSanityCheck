@@ -11,10 +11,12 @@ import org.aim42.htmlsanitycheck.check.Checker;
 import org.aim42.htmlsanitycheck.tools.Web;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Handles (and can verify) configuration options.
@@ -48,6 +50,8 @@ public class Configuration {
     Boolean ignoreIPAddresses = false;
     @Builder.Default
     Set<Pattern> excludes = new HashSet<>();
+    @Builder.Default
+    Set<String> indexFilenames = defaultIndeFilenames();
 
     /*
      * Explanation for configuring http status codes:
@@ -72,10 +76,15 @@ public class Configuration {
         this.httpConnectionTimeout = 5000;// 5 secs as default timeout
         this.ignoreIPAddresses = false;// warning if numerical IP addresses
         this.ignoreLocalhost = false;// warning if localhost-URLs
-
+        this.indexFilenames
+                = defaultIndeFilenames();
         this.prefixOnlyHrefExtensions = Web.POSSIBLE_EXTENSIONS;
 
         this.checksToExecute = AllCheckers.CHECKER_CLASSES;
+    }
+
+    private static Set<String> defaultIndeFilenames() {
+        return Arrays.stream("index.html,index.htm".split(",")).collect(Collectors.toSet());
     }
 
     /**
