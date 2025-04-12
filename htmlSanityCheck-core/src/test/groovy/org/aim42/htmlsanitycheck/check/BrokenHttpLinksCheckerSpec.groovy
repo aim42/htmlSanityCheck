@@ -9,8 +9,10 @@ import org.wiremock.integrations.testcontainers.WireMockContainer
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+
 import java.lang.reflect.Field
 import java.lang.reflect.Proxy
+
 // see end-of-file for license information
 
 
@@ -274,19 +276,19 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         given: "HTML page with excludes"
         String HTML = """$HtmlConst.HTML_HEAD
                          <a href="http://exclude-this-host.com:8080">Excluded HOST</a>
-                         <a href="https://exclude-this-host.com:8443">Excluded HOST</a>
+                         <a href="https://exclude-this-host.com">Excluded HOST</a>
                          <a href="https://exclude-this-host.org:9090">Excluded HOST</a>
-                         <a href="https://exclude-also-this-host.org:7070">Excluded HOST</a>
+                         <a href="https://exclude-also-this-host.org">Excluded HOST</a>
 
-                         <a href="http://exclude-this-url.com:8080/page">Excluded URL</a>
+                         <a href="http://exclude-this-url.com/page">Excluded URL</a>
                          <a href="http://exclude-this-url.org:8443/page">Excluded URL</a>
-                         <a href="http://exclude-also-this-url.com:9090/page">Excluded URL</a>
+                         <a href="http://exclude-also-this-url.com/page">Excluded URL</a>
                          <a href="http://exclude-also-this-url.com:7070/page">Excluded URL</a>
                          $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
-        Set<String> excludes = ["(http|https)://exclude-this-(host|url).*:\\d+(/.+)?",
-                                "(http|https)://exclude-also-this-(host|url).(com|org):\\d+(/.+)?"]
+        Set<String> excludes = ["(http|https)://exclude-this-(host|url).*(:\\d+)?(/.+)?",
+                                "(http|https)://exclude-also-this-(host|url).(com|org)(:\\d+)?(/.+)?"]
         Configuration config = Configuration.builder().excludes(excludes).build()
         BrokenHttpLinksChecker brokenHttpLinksChecker = new BrokenHttpLinksChecker(config)
 

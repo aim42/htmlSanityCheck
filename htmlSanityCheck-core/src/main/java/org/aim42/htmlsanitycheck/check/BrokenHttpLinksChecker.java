@@ -107,7 +107,9 @@ class BrokenHttpLinksChecker extends Checker {
     protected void doubleCheckSingleHttpLink(String href) {
         // Check if the href matches any of the regular expressions in the exclude set
         if (excludes != null) {
+            log.debug("Checking excludes '{}' for '{}'", excludes, href);
             for (Pattern pattern : excludes) {
+                log.trace("Checking pattern '{}' for '{}'", pattern, href);
                 if (pattern.matcher(href).matches()) {
                     // Skip checking this URL
                     return;
