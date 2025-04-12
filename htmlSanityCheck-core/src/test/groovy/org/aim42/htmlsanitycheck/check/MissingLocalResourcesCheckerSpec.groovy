@@ -17,7 +17,7 @@ class MissingLocalResourcesCheckerSpec extends Specification {
 
     def setup() {
         myConfig = new Configuration()
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker( myConfig)
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
 
         collector = new SingleCheckResults()
     }
@@ -26,7 +26,6 @@ class MissingLocalResourcesCheckerSpec extends Specification {
      * short relative links like "xx/example" are often used as shorthand for
      * "xx/example.html"
      */
-
     def "link to existing local file is identified as correct"() {
         given: "link within index.html to local file example.html"
 
@@ -37,7 +36,7 @@ class MissingLocalResourcesCheckerSpec extends Specification {
         File d1 = File.createTempDir()
 
         // 2.) create index.html
-        File mainFile   = new File(d1, "index.html") << HTML
+        File mainFile = new File(d1, "index.html") << HTML
 
         // 3.) create local resource file example.html
         File exampleFile = new File(d1, "example.html") << HtmlConst.HTML_HEAD + HtmlConst.HTML_END
@@ -47,16 +46,13 @@ class MissingLocalResourcesCheckerSpec extends Specification {
         missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
 
         // 5.)
-        htmlPage = new HtmlPage( mainFile )
+        htmlPage = new HtmlPage(mainFile)
         when: "checks are performed"
         collector = missingLocalResourcesChecker.performCheck(htmlPage)
 
         then:
         collector.nrOfProblems() == 0
-
-
     }
-
 
     def "empty page has no errors"() {
         given: "an empty HTML page"

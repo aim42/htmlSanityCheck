@@ -11,8 +11,6 @@ import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertTrue
 
 class MissingLocalResourcesCheckerTest {
-
-
     Checker missingLocalResourcesChecker
     HtmlPage htmlPage
     SingleCheckResults collector
@@ -25,66 +23,55 @@ class MissingLocalResourcesCheckerTest {
         myConfig = new Configuration()
     }
 
-
     /**
      * test that we can find a referenced local file in subdirectory
      */
     @Test
     void testExistingLocalResourceIsFound() {
-
         def (File index, String fname, File d1) = createNestedTempDirWithFile()
-
         index << """<a href="d2/$fname">link to local resource"</a></body></html>"""
-
-        assertTrue( "newly created html file exists", index.exists())
+        assertTrue("newly created html file exists", index.exists())
 
         myConfig.setSourceConfiguration(d1, [index] as Set)
 
-        htmlPage = new HtmlPage( index )
+        htmlPage = new HtmlPage(index)
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker( myConfig)
-        collector = missingLocalResourcesChecker.performCheck( htmlPage )
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
+        collector = missingLocalResourcesChecker.performCheck(htmlPage)
 
         // assert that no issue is found (== the local resource d2/fname.html is found)
-        assertEquals( "expected zero finding", 0, collector.nrOfProblems())
-        assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
+        assertEquals("expected zero finding", 0, collector.nrOfProblems())
+        assertEquals("expected one check", 1, collector.nrOfItemsChecked)
     }
 
 
     @Test
     /**
      * a "complex" local reference is an anchor of the form <a href="dir/file.html#anchor>...
-     *
      */
     void testExistingComplexLocalReferenceIsFound() {
-
-       def (File index, String fname, File d1) = createNestedTempDirWithFile()
-
+        def (File index, String fname, File d1) = createNestedTempDirWithFile()
         index << """<a href="d2/$fname#anchor">link to local resource"</a></body></html>"""
-
-        assertTrue( "newly created html file exists", index.exists())
+        assertTrue("newly created html file exists", index.exists())
 
         myConfig.setSourceConfiguration(d1, [index] as Set)
 
-        htmlPage = new HtmlPage( index )
-
+        htmlPage = new HtmlPage(index)
         // pageToCheck shall contain ONE local resource / local-reference
         int nrOfLocalReferences = htmlPage.getAllHrefStrings().size()
-        assertEquals( "expected one reference", 1, nrOfLocalReferences)
+        assertEquals("expected one reference", 1, nrOfLocalReferences)
 
         // reference contained in pageToCheck shall be "d2/$fname#anchor"
         String localReference = htmlPage.getAllHrefStrings().first()
-        assertEquals( "expected d2/fname#anchor", "d2/$fname#anchor".toString(), localReference)
+        assertEquals("expected d2/fname#anchor", "d2/$fname#anchor".toString(), localReference)
 
-
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker( myConfig)
-        collector = missingLocalResourcesChecker.performCheck( htmlPage )
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
+        collector = missingLocalResourcesChecker.performCheck(htmlPage)
 
         // assert that no issue is found
         // (== the existinglocal resource d2/fname.html is found)
-        assertEquals( "expected zero finding", 0, collector.nrOfProblems())
-        assertEquals( "expected one check", 1, collector.nrOfItemsChecked)
-
+        assertEquals("expected zero finding", 0, collector.nrOfProblems())
+        assertEquals("expected one check", 1, collector.nrOfItemsChecked)
     }
 
 
@@ -95,17 +82,14 @@ class MissingLocalResourcesCheckerTest {
             <a href="#aim42">aim42</a>
            ${HtmlConst.HTML_END}"""
 
-        htmlPage = new HtmlPage( HTML )
+        htmlPage = new HtmlPage(HTML)
 
         missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
-        collector = missingLocalResourcesChecker.performCheck( htmlPage )
+        collector = missingLocalResourcesChecker.performCheck(htmlPage)
 
-
-        assertEquals( "expected zero finding", 0, collector.nrOfProblems())
-        assertEquals( "expected zero checks", 0, collector.nrOfItemsChecked)
-
+        assertEquals("expected zero finding", 0, collector.nrOfProblems())
+        assertEquals("expected zero checks", 0, collector.nrOfItemsChecked)
     }
-
 
 
     @Test
@@ -116,24 +100,22 @@ class MissingLocalResourcesCheckerTest {
             <a href="no/nex/ist/ing/dire/tory/test.pdf">another nonexisting download</a>
            ${HtmlConst.HTML_END}"""
 
-        htmlPage = new HtmlPage( HTML )
+        htmlPage = new HtmlPage(HTML)
 
         myConfig.setSourceConfiguration(new File("."), [] as Set)
         missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
-        collector = missingLocalResourcesChecker.performCheck( htmlPage )
+        collector = missingLocalResourcesChecker.performCheck(htmlPage)
 
-        int expected = 2
-
-        assertEquals( "expected $expected findings", expected, collector.nrOfProblems())
-        assertEquals( "expected $expected checks", expected, collector.nrOfItemsChecked)
-
+        int expectedChecks = 2
+        assertEquals("expected $expectedChecks checks", expectedChecks, collector.nrOfItemsChecked)
+        int expectedFindings = 2
+        assertEquals("expected $expectedFindings findings", expectedFindings, collector.nrOfProblems())
     }
 
 
     /*
     helper to created nested directory structure
      */
-
     private static List createNestedTempDirWithFile() {
         // 1.) create tmp directory d1 with subdir d2
         File d1 = File.createTempDir()
@@ -158,45 +140,42 @@ class MissingLocalResourcesCheckerTest {
         return [index, fname, d1]
     }
 
-
     @Test
     void testCheckAbsoluteResource() {
-		File tempFolder = File.createTempDir()
+        File tempFolder = File.createTempDir()
 
-		File filesFolder = new File(tempFolder, "files")
-		assertTrue("Cannot create ${filesFolder}", filesFolder.mkdirs())
-		new File(filesFolder, "doc.pdf").bytes = new byte[0]
-		
-		File htmlFile = new File(tempFolder, "index.html")
-		htmlFile.text = """<html><head><title>absolute resource test</title></head>
+        File filesFolder = new File(tempFolder, "files")
+        assertTrue("Cannot create ${filesFolder}", filesFolder.mkdirs())
+        new File(filesFolder, "doc.pdf").bytes = new byte[0]
+
+        File htmlFile = new File(tempFolder, "index.html")
+        htmlFile.text = """<html><head><title>absolute resource test</title></head>
 <body><p><a href="/files/doc.pdf" /></p></body>
 </html>"""
 
         myConfig.setSourceConfiguration(tempFolder, [htmlFile] as Set)
-
-        htmlPage = new HtmlPage( htmlFile )
+        htmlPage = new HtmlPage(htmlFile)
 
         int nrOfLocalReferences = htmlPage.getAllHrefStrings().size()
-        assertEquals( "expected one reference", 1, nrOfLocalReferences)
+        assertEquals("expected one reference", 1, nrOfLocalReferences)
 
         missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
 
-        collector = missingLocalResourcesChecker.performCheck( htmlPage )
+        collector = missingLocalResourcesChecker.performCheck(htmlPage)
 
-        int expected = 1
-        int actual = collector.nrOfItemsChecked
+        int expectedResources = 1
+        int actualResources = collector.nrOfItemsChecked
 
-        assertEquals("expected $expected resources, found $actual",
-                expected, actual)
+        assertEquals("expected $expectedResources resource(s), found $actualResources",
+                expectedResources, actualResources)
 
-        expected = 0
-        actual = collector.nrOfProblems()
+        int expectedFindings = 0
+        int actualFindings = collector.nrOfProblems()
 
-        assertEquals( "extected $expected finding, found $actual",
-                expected, actual)
-	}
+        assertEquals("extected $expectedFindings finding(s), found $actualFindings",
+                expectedFindings, actualFindings)
+    }
 }
-
 
 
 /************************************************************************

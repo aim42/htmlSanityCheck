@@ -69,11 +69,9 @@ public class MissingLocalResourcesChecker extends Checker {
         checkAllLocalResources(localResourcesSet);
 
         return getCheckingResults();
-
     }
 
     private void checkAllLocalResources(Set<String> localResources) {
-
         localResources.forEach(this::checkSingleLocalResource);
     }
 

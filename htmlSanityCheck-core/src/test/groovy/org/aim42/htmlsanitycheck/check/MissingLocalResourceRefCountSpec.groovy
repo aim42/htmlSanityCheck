@@ -10,24 +10,20 @@ import spock.lang.Unroll
 
 @Slf4j
 class MissingLocalResourceRefCountSpec extends Specification {
-
     // missing local resource name
     private static final String MIS_LOC_RES = "MissingLocalResource.html"
 
     private static final String badLocalRef = """<a href="${MIS_LOC_RES}">missing</a>"""
 
-
     private static final String msgPrefix = MissingLocalResourcesChecker.MLRC_MESSAGE_PREFIX
     private static final String msgMissing = MissingLocalResourcesChecker.MLRC_MESSAGE_MISSING + " (\"file does not exist\")"
     private static final String msgRefCount = MissingLocalResourcesChecker.MLRC_REFCOUNT
-
 
     private File tmpDir
     private File tmpHtmlFile
     private File tmpLocalResourceFile
 
     private Configuration myConfig = new Configuration()
-
 
     /*
      * data-driven test to specify behavior of MissingLocalResourceChecker reference counter:
@@ -63,7 +59,6 @@ class MissingLocalResourceRefCountSpec extends Specification {
         def missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
         SingleCheckResults collector = missingLocalResourcesChecker.performCheck(htmlPage)
 
-
         then:
         // our temporary  files still exists
         tmpHtmlFile.exists()
@@ -75,16 +70,12 @@ class MissingLocalResourceRefCountSpec extends Specification {
         // we get the correct finding-message
         collector.findings.first().whatIsTheProblem == result
 
-
         where:
-
         nrOfChecks | nrOfFindings | htmlSnippet     | result
         // one bad local reference:
         1          | 1            | badLocalRef     | """${msgPrefix} "${MIS_LOC_RES}" ${msgMissing}"""
-
         // two bad local references to the same file -> reference count == 2
         1          | 2            | badLocalRef * 2 | """${msgPrefix} "${MIS_LOC_RES}" ${msgMissing}${msgRefCount}2"""
-
         // five bad local references to the same file -> reference count == 5
         1          | 5            | badLocalRef * 5 | """${msgPrefix} "${MIS_LOC_RES}" ${msgMissing}${msgRefCount}5"""
     }
@@ -92,11 +83,9 @@ class MissingLocalResourceRefCountSpec extends Specification {
     /*
      * helper to create local resource
      */
-
     List createTempLocalResources(String htmlFileName, String htmlContent) {
         // 1.) create tmp directory tmpDir
         File tmpDir = File.createTempDir()
-
         // 2.) create tmp html file "index.html" linking to localResourceFile in directory tmpDir
         File indexFile = new File(tmpDir, htmlFileName) << htmlContent
 
