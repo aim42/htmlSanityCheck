@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Handles (and can verify) configuration options.
@@ -46,7 +47,7 @@ public class Configuration {
     @Builder.Default
     Boolean ignoreIPAddresses = false;
     @Builder.Default
-    Set<String> excludes = new HashSet<>();
+    Set<Pattern> excludes = new HashSet<>();
 
     /*
      * Explanation for configuring http status codes:

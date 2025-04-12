@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 class HtmlSanityCheckMojoTest {
 
@@ -168,8 +169,8 @@ class HtmlSanityCheckMojoTest {
         Files.write(sourceFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
         Set<File> fileset = new HashSet<>();
         fileset.add(sourceFile);
-        Set<String> excludes = new HashSet<>();
-        excludes.add("^.*\\.invalid.*");
+        Set<Pattern> excludes = new HashSet<>();
+        excludes.add(Pattern.compile("^.*\\.invalid.*"));
 
         Configuration myConfig = Configuration.builder()
                 .checksToExecute(AllCheckers.CHECKER_CLASSES)

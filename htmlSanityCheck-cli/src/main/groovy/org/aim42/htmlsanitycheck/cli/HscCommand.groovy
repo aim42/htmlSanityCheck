@@ -20,6 +20,7 @@ import java.util.logging.LogManager
 import java.util.logging.LogRecord
 import java.util.logging.Logger
 import java.util.logging.SimpleFormatter
+import java.util.regex.Pattern
 
 // see end-of-file for license information
 
@@ -89,7 +90,7 @@ class HscCommand implements Runnable {
     String[] suffixes = ["html", "htm"]
 
     @Option(names = ["-e", "--exclude"], description = "Exclude remote patterns to check", split = ',')
-    String[] excludes = []
+    Pattern[] excludes = []
 
     @Parameters(index = "0", arity = "0..1", description = "base directory (default: current directory)")
     File srcDir = new File(".").getAbsoluteFile()

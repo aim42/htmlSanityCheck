@@ -17,6 +17,9 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
+import java.util.regex.Pattern
+import java.util.stream.Collectors
+
 // see end-of-file for license information
 
 /**
@@ -190,7 +193,7 @@ See ${checkingResultsDir} for a detailed report."""
                 .ignoreIPAddresses(ignoreIPAddresses)
 
                 .checksToExecute(checkerClasses)
-                .excludes(excludes)
+                .excludes(excludes.stream().map(Pattern::compile).collect(Collectors.toSet()))
                 .build()
 
         // in case we have configured specific interpretations of http status codes

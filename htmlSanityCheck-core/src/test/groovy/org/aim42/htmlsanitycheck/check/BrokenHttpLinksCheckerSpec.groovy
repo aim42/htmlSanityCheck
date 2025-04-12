@@ -12,6 +12,7 @@ import spock.lang.Unroll
 
 import java.lang.reflect.Field
 import java.lang.reflect.Proxy
+import java.util.regex.Pattern
 
 // see end-of-file for license information
 
@@ -287,8 +288,8 @@ class BrokenHttpLinksCheckerSpec extends Specification {
                          $HtmlConst.HTML_END """
 
         htmlPage = new HtmlPage(HTML)
-        Set<String> excludes = ["(http|https)://exclude-this-(host|url).*(:\\d+)?(/.+)?",
-                                "(http|https)://exclude-also-this-(host|url).(com|org)(:\\d+)?(/.+)?"]
+        Set<Pattern> excludes = [Pattern.compile("(http|https)://exclude-this-(host|url).*(:\\d+)?(/.+)?"),
+                                 Pattern.compile("(http|https)://exclude-also-this-(host|url).(com|org)(:\\d+)?(/.+)?")]
         Configuration config = Configuration.builder().excludes(excludes).build()
         BrokenHttpLinksChecker brokenHttpLinksChecker = new BrokenHttpLinksChecker(config)
 

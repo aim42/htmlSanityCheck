@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /*
  No Javadoc for class due to https://stackoverflow.com/questions/28428833/maven-error-when-doing-packaging
@@ -269,7 +271,7 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
 
     protected Configuration setupConfiguration() {
         Configuration result = Configuration.builder()
-                .excludes(excludes)
+                .excludes(excludes.stream().map(Pattern::compile).collect(Collectors.toSet()))
                 .sourceDocuments(sourceDocuments)
                 .sourceDir(sourceDir)
                 .checkingResultsDir(checkingResultsDir)

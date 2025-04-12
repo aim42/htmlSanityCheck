@@ -16,7 +16,6 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 
 /**
@@ -239,10 +238,8 @@ class BrokenHttpLinksChecker extends Checker {
     }
 
 
-    private void setExcludes(Set<String> excludes) {
-        this.excludes = excludes != null ?
-                excludes.stream().map(Pattern::compile).collect(Collectors.toSet()) :
-                new HashSet<>();
+    private void setExcludes(Set<Pattern> excludes) {
+        this.excludes = excludes != null ? excludes : new HashSet<>();
     }
 }
 
