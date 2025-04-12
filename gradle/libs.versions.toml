@@ -13,7 +13,7 @@ jsoup = 'org.jsoup:jsoup:1.18.3'
 junit-jupiter = { module = 'org.junit.jupiter:junit-jupiter', version.ref = 'junit5-version' }
 junit-vintage = { module = 'org.junit.vintage:junit-vintage-engine', version.ref = 'junit5-version' }
 lombok = 'org.projectlombok:lombok:1.18.36'
-mockito = "org.mockito:mockito-junit-jupiter:5.15.2"
+mockito = "org.mockito:mockito-junit-jupiter:5.17.0"
 picocli-impl = { module = 'info.picocli:picocli', version.ref = "picocli-version" }
 picocli-annotationprocessor = { module = 'info.picocli:picocli-codegen', version.ref = "picocli-version" }
 slf4j-bom = { module = 'org.slf4j:slf4j-bom', version.ref = 'slf4j-version' }
