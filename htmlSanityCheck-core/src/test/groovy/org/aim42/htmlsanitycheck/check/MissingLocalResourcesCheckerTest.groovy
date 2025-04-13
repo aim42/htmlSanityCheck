@@ -11,15 +11,10 @@ import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertTrue
 
 class MissingLocalResourcesCheckerTest {
-    Checker missingLocalResourcesChecker
-    HtmlPage htmlPage
-    SingleCheckResults collector
-
     private Configuration myConfig
 
     @Before
     void setUp() {
-        collector = new SingleCheckResults()
         myConfig = new Configuration()
     }
 
@@ -28,20 +23,14 @@ class MissingLocalResourcesCheckerTest {
      */
     @Test
     void testExistingLocalResourceIsFound() {
-        def (File index, String fname, File d1) = createNestedTempDirWithFile()
-        index << """<a href="d2/$fname">link to local resource"</a></body></html>"""
-        assertTrue("newly created html file exists", index.exists())
+        def (File indexFile, File nestedFile, String fname, File rootDir, File subDir) = createNestedTempDirWithFile()
+        indexFile << """<a href="subdir/$fname">link to local resource"</a></body></html>"""
+        assertTrue("newly created html file exists", indexFile.exists())
 
-        myConfig.setSourceConfiguration(d1, [index] as Set)
+        HtmlPage indexPage = new HtmlPage(indexFile)
 
-        htmlPage = new HtmlPage(index)
-
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
-        collector = missingLocalResourcesChecker.performCheck(htmlPage)
-
-        // assert that no issue is found (== the local resource d2/fname.html is found)
-        assertEquals("expected zero finding", 0, collector.nrOfProblems())
-        assertEquals("expected one check", 1, collector.nrOfItemsChecked)
+        myConfig.setSourceConfiguration(rootDir, [indexFile] as Set)
+        checkLocalResources(indexPage)
     }
 
 
@@ -50,30 +39,36 @@ class MissingLocalResourcesCheckerTest {
      * a "complex" local reference is an anchor of the form <a href="dir/file.html#anchor>...
      */
     void testExistingComplexLocalReferenceIsFound() {
-        def (File index, String fname, File d1) = createNestedTempDirWithFile()
-        index << """<a href="d2/$fname#anchor">link to local resource"</a></body></html>"""
-        assertTrue("newly created html file exists", index.exists())
+        def (File indexFile, nestedFile, String fname, File rootDir, File subDir) = createNestedTempDirWithFile()
+        indexFile << """<a href="subdir/$fname#anchor">link to local resource"</a></body></html>"""
+        assertTrue("newly created html file exists", indexFile.exists())
 
-        myConfig.setSourceConfiguration(d1, [index] as Set)
 
-        htmlPage = new HtmlPage(index)
+        HtmlPage indexPage = new HtmlPage(indexFile)
         // pageToCheck shall contain ONE local resource / local-reference
-        int nrOfLocalReferences = htmlPage.getAllHrefStrings().size()
+        int nrOfLocalReferences = indexPage.getAllHrefStrings().size()
         assertEquals("expected one reference", 1, nrOfLocalReferences)
 
-        // reference contained in pageToCheck shall be "d2/$fname#anchor"
-        String localReference = htmlPage.getAllHrefStrings().first()
-        assertEquals("expected d2/fname#anchor", "d2/$fname#anchor".toString(), localReference)
+        // reference contained in pageToCheck shall be "subDir/$fname#anchor"
+        String localReference = indexPage.getAllHrefStrings().first()
+        assertEquals("expected subdir/fname#anchor", "subdir/$fname#anchor".toString(), localReference)
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
-        collector = missingLocalResourcesChecker.performCheck(htmlPage)
+        myConfig.setSourceConfiguration(rootDir, [indexFile] as Set)
+        checkLocalResources(indexPage)
 
-        // assert that no issue is found
-        // (== the existinglocal resource d2/fname.html is found)
-        assertEquals("expected zero finding", 0, collector.nrOfProblems())
-        assertEquals("expected one check", 1, collector.nrOfItemsChecked)
+        HtmlPage nestedPage = new HtmlPage(nestedFile)
+        checkLocalResources(nestedPage)
     }
 
+    private void checkLocalResources(HtmlPage indexPage) {
+        MissingLocalResourcesChecker missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
+        SingleCheckResults collector = missingLocalResourcesChecker.performCheck(indexPage)
+
+        // assert that no issue is found
+        // (== the existinglocal resource subDir/fname.html is found)
+        assertEquals("expected zero findings", 0, collector.nrOfProblems())
+        assertEquals("expected one check", 1, collector.nrOfItemsChecked)
+    }
 
     @Test
     void testPureCrossReferenceIsNotChecked() {
@@ -82,10 +77,10 @@ class MissingLocalResourcesCheckerTest {
             <a href="#aim42">aim42</a>
            ${HtmlConst.HTML_END}"""
 
-        htmlPage = new HtmlPage(HTML)
+        HtmlPage indexPage = new HtmlPage(HTML)
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
-        collector = missingLocalResourcesChecker.performCheck(htmlPage)
+        MissingLocalResourcesChecker missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
+        SingleCheckResults collector = missingLocalResourcesChecker.performCheck(indexPage)
 
         assertEquals("expected zero finding", 0, collector.nrOfProblems())
         assertEquals("expected zero checks", 0, collector.nrOfItemsChecked)
@@ -100,11 +95,11 @@ class MissingLocalResourcesCheckerTest {
             <a href="no/nex/ist/ing/dire/tory/test.pdf">another nonexisting download</a>
            ${HtmlConst.HTML_END}"""
 
-        htmlPage = new HtmlPage(HTML)
+        HtmlPage indexPage = new HtmlPage(HTML)
 
         myConfig.setSourceConfiguration(new File("."), [] as Set)
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
-        collector = missingLocalResourcesChecker.performCheck(htmlPage)
+        MissingLocalResourcesChecker missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
+        SingleCheckResults collector = missingLocalResourcesChecker.performCheck(indexPage)
 
         int expectedChecks = 2
         assertEquals("expected $expectedChecks checks", expectedChecks, collector.nrOfItemsChecked)
@@ -117,27 +112,30 @@ class MissingLocalResourcesCheckerTest {
     helper to created nested directory structure
      */
     private static List createNestedTempDirWithFile() {
-        // 1.) create tmp directory d1 with subdir d2
-        File d1 = File.createTempDir()
-        File d2 = new File(d1, "/d2")
-        d2.mkdirs()
+        // 1.) create tmp directory with subdir
+        File rootDir = File.createTempDir()
+        File subDir = new File(rootDir, "/subdir")
+        subDir.mkdirs()
 
-        // 2.) create local resource file f2 in subdir d2
+        // 2.) create local resource file f2 in subdir
         final String fname = "fname.html"
-        File f2 = new File(d2, fname) << HtmlConst.HTML_HEAD
+        File nestedFile = new File(subDir, fname) << """${HtmlConst.HTML_HEAD}
+            <h1>Neste File</h1>
+            <a href="../">root</a>
+           ${HtmlConst.HTML_END}"""
 
-        assertEquals("created an artificial file",
-                // unix: /d2/fname.html
-                // windows: \d2\fname.html
-                File.separator + "d2" + File.separator + "fname.html",
-                f2.canonicalPath - d1.canonicalPath)
+        assertEquals("created a file in subdir",
+                // unix: /subdir/fname.html
+                // windows: \subdir\fname.html
+                File.separator + "subdir" + File.separator + "fname.html",
+                nestedFile.canonicalPath - rootDir.canonicalPath)
 
-        assertTrue("newly created artificial file exists", f2.exists())
+        assertTrue("newly created file in subdir exists", nestedFile.exists())
 
-        // 3.) create tmp html file "index.html" linking to f2 in directory d1
-        File index = new File(d1, "index.html") << HtmlConst.HTML_HEAD
+        // 3.) create tmp html file "index.html" linking to file in subdir
+        File index = new File(rootDir, "index.html") << HtmlConst.HTML_HEAD << HtmlConst.HTML_END
 
-        return [index, fname, d1]
+        return [index, nestedFile, fname, rootDir, subDir]
     }
 
     @Test
@@ -154,14 +152,14 @@ class MissingLocalResourcesCheckerTest {
 </html>"""
 
         myConfig.setSourceConfiguration(tempFolder, [htmlFile] as Set)
-        htmlPage = new HtmlPage(htmlFile)
+        HtmlPage indexPage = new HtmlPage(htmlFile)
 
-        int nrOfLocalReferences = htmlPage.getAllHrefStrings().size()
+        int nrOfLocalReferences = indexPage.getAllHrefStrings().size()
         assertEquals("expected one reference", 1, nrOfLocalReferences)
 
-        missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
+        MissingLocalResourcesChecker missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
 
-        collector = missingLocalResourcesChecker.performCheck(htmlPage)
+        SingleCheckResults collector = missingLocalResourcesChecker.performCheck(indexPage)
 
         int expectedResources = 1
         int actualResources = collector.nrOfItemsChecked

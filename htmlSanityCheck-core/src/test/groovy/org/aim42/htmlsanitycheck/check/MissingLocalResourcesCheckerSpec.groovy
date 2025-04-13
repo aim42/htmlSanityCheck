@@ -4,6 +4,7 @@ import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
+import spock.lang.Rollup
 import spock.lang.Specification
 
 class MissingLocalResourcesCheckerSpec extends Specification {
@@ -26,10 +27,10 @@ class MissingLocalResourcesCheckerSpec extends Specification {
      * short relative links like "xx/example" are often used as shorthand for
      * "xx/example.html"
      */
-    def "link to existing local file is identified as correct"() {
+    @Rollup
+    def "link to existing local file is identified as correct"(linkToLocalFile) {
         given: "link within index.html to local file example.html"
 
-        String linkToLocalFile = """<a href="example.html">aim42</a>"""
         String HTML = """$HtmlConst.HTML_HEAD $linkToLocalFile $HtmlConst.HTML_END"""
 
         // 1.) create tmp directory d1
@@ -52,6 +53,14 @@ class MissingLocalResourcesCheckerSpec extends Specification {
 
         then:
         collector.nrOfProblems() == 0
+
+        where:
+        linkToLocalFile << [
+                """<a href="example.html">aim42</a>""",
+                """<a href="file:///example.html">aim42</a>""",
+                """<a href="file:///">aim42</a>"""
+        ]
+
     }
 
     def "empty page has no errors"() {
@@ -69,6 +78,43 @@ class MissingLocalResourcesCheckerSpec extends Specification {
         collector.nrOfProblems() == 0
     }
 
+    def "special file is neither directory nor regular file"() {
+        given: "a special file (e.g., a pipe or device file) in the temp directory"
+        File specialFile
+        File tempDir = File.createTempDir()
+
+        if (System.getProperty("os.name").toLowerCase().contains("nix") ||
+                System.getProperty("os.name").toLowerCase().contains("inux") ||
+                System.getProperty("os.name").toLowerCase().contains("mac")
+        ) {
+            specialFile = new File(tempDir, "specialFile").with { file ->
+                ["mkfifo", file.absolutePath].execute().waitFor()
+                return file
+            }
+        } else {
+            specialFile = new File(tempDir, "specialFile")
+            specialFile.createNewFile() // Not a true special file on non-Unix systems but used for example
+        }
+
+        String linkToSpecialFile = """<a href="${specialFile.name}">Special File</a>"""
+        String HTML = """$HtmlConst.HTML_HEAD $linkToSpecialFile $HtmlConst.HTML_END"""
+
+        File mainFile = new File(tempDir, "index.html") << HTML
+
+        myConfig.setSourceConfiguration(tempDir, [specialFile] as Set)
+        missingLocalResourcesChecker = new MissingLocalResourcesChecker(myConfig)
+        htmlPage = new HtmlPage(mainFile)
+
+        when: "the page with a link to the special file is checked"
+        collector = missingLocalResourcesChecker.performCheck(htmlPage)
+
+        then: "one problem should be detected since the checker found one special file"
+        collector.nrOfProblems() == 1
+
+        cleanup: "delete temp directory and special file"
+        specialFile?.delete()
+        tempDir?.deleteDir()
+    }
 }
 
 /************************************************************************
