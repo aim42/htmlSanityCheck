@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.aim42.htmlsanitycheck.Configuration;
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
 import org.aim42.htmlsanitycheck.html.HtmlPage;
-import org.aim42.htmlsanitycheck.tools.InvalidUriSyntaxException;
 import org.aim42.htmlsanitycheck.tools.Web;
 
 import java.io.File;
@@ -88,7 +87,8 @@ public class MissingLocalResourcesChecker extends Checker {
         try {
             localResourceURI = new URI(localResource);
         } catch (URISyntaxException e) {
-            throw new InvalidUriSyntaxException(e);
+            log.error("'{}' is an invalid URI: '{}'", localResource, e.getMessage());
+            return;
         }
 
         String scheme = localResourceURI.getScheme();
@@ -99,7 +99,7 @@ public class MissingLocalResourcesChecker extends Checker {
             return;
         }
         if (localResourcePath == null) {
-            log.debug("Ignoring '{}'", localResource);
+            log.error("Ignoring '{}' as the local resource path is empty", localResource);
             return;
         }
 

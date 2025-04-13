@@ -112,12 +112,12 @@ class WebSpec extends Specification {
     }
 
     @Unroll
-    def "invalid URIs throw InvalidUriSyntaxException"(String invalidUri) {
+    def "invalid URIs are skipped"(String invalidUri) {
         when:
-        Web.isLocalResource(invalidUri)
+        boolean isLocalResource = Web.isLocalResource(invalidUri)
 
         then:
-        thrown(InvalidUriSyntaxException)
+        !isLocalResource
 
         where:
         invalidUri << [

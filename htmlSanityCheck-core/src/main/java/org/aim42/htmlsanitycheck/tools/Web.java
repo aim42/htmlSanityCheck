@@ -226,7 +226,8 @@ public class Web {
                 log.trace("Trying to resolve URI for '{}'", link);
                 aUri = new URI(link);
             } catch (URISyntaxException e) {
-                throw new InvalidUriSyntaxException(e);
+                log.error("'{}' is an invalid URI: '{}'", link, e.getMessage());
+                return false;
             }
 
             if (null == aUri.getPath()) {
