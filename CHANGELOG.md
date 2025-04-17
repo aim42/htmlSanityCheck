@@ -6,6 +6,44 @@
 - [Maven Central](https://central.sonatype.com/namespace/org.aim42.htmlSanityCheck)
 - [Gradle Plugin Portal](https://plugins.gradle.org/search?term=org.aim42.htmlSanityCheck)
 
+## 2.0.0-rc4
+
+#### Improvements (2.0.0-rc4)
+
+- [#276](https://github.com/aim42/htmlSanityCheck/issues/276) - Exclude Hosts/URLs by RegExp
+- [#367](https://github.com/aim42/htmlSanityCheck/issues/367) - Add SDKMAN distribution
+- [#390](https://github.com/aim42/htmlSanityCheck/issues/390) - Check directory links for index file(s)
+- [#391](https://github.com/aim42/htmlSanityCheck/issues/391) - Check Remote URLs only once
+
+#### Version Bumps (2.0.0-rc4)
+
+- AssertJ
+- Develocity
+- Gradle
+- Gradle ToolChain Resolver
+- Gradle Versions Plugin
+- JReleaser
+- JUnit / Jupiter
+- JaCoCo Reporter GH Action
+- Lombok
+- Mockito
+- Slf4j
+- TestContainers
+
+#### Misc. Changes (2.0.0-rc4)
+
+- [#343](https://github.com/aim42/htmlSanityCheck/issues/343)
+    - Increase test coverage
+    - Add Maven sticker
+    - Check for new GH Actions by DependaBot
+    - Fix landing page
+    - Fix typos + grammar
+    - Clean up variable names
+
+### New Contributors (2.0.0-rc4)
+
+- [Eleonor Bengtsson](https://github.com/elebeida) (EB)
+
 ## 2.0.0-rc3
 
 #### Improvements (2.0.0-rc3)
