@@ -152,7 +152,7 @@ class HtmlReporterTest {
 
         // Check the output
         String content = getResultContents()
-        assertTrue(content.contains("<div class=\"failures\"><h3>Test Checks</h3></div>\n"))
+        assertTrue(content.contains("<div class=\"failures\"><h3>Test Checks</h3></div>"))
         assertTrue(content.contains("1 Test Source checked"))
         assertTrue(content.contains("1 Test Target found.<br>"))
         assertTrue(content.contains("Test Remark"))

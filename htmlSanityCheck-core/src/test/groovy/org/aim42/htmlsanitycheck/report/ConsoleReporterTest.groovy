@@ -124,19 +124,17 @@ class ConsoleReporterTest {
         reporter.reportSingleCheckSummary(singleCheckResults)
 
         // Check the output
-        String expectedOutput1 = "\n"
-        String expectedOutput2 = String.join("", Collections.nCopies(50, "-"))
-        String expectedOutput3 = "Results for Test Check"
-        String expectedOutput4 = "1 Test Source checked,"
-        String expectedOutput5 = "1 Test Target found.\n"
-        String expectedOutput6 = "Test Remark"
+        String expectedOutput1 = String.join("", Collections.nCopies(50, "-"))
+        String expectedOutput2 = "Results for Test Check"
+        String expectedOutput3 = "1 Test Source checked,"
+        String expectedOutput4 = "1 Test Target found."
+        String expectedOutput5 = "Test Remark"
 
         assertTrue(outContent.toString().contains(expectedOutput1))
         assertTrue(outContent.toString().contains(expectedOutput2))
         assertTrue(outContent.toString().contains(expectedOutput3))
         assertTrue(outContent.toString().contains(expectedOutput4))
         assertTrue(outContent.toString().contains(expectedOutput5))
-        assertTrue(outContent.toString().contains(expectedOutput6))
     }
 
     @Test

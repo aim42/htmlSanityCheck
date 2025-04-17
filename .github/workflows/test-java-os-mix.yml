@@ -78,7 +78,7 @@ jobs:
           uname -a
           cd ./integration-test/
           pwd
-          cmd /c "echo off && ..\gradlew.bat integrationTest --scan $env:GRADLE_DEBUG"
+          cmd /c "echo off && ..\gradlew integrationTest --scan $env:GRADLE_DEBUG"
 
       - name: Collect state upon failure (On Unix)
         if: failure() && runner.os != 'Windows'

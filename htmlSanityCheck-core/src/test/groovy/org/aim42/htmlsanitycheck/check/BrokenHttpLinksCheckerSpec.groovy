@@ -5,7 +5,9 @@ import org.aim42.htmlsanitycheck.collect.SingleCheckResults
 import org.aim42.htmlsanitycheck.html.HtmlConst
 import org.aim42.htmlsanitycheck.html.HtmlPage
 import org.aim42.htmlsanitycheck.test.dns.CustomHostNameResolver
+import org.testcontainers.DockerClientFactory
 import org.wiremock.integrations.testcontainers.WireMockContainer
+import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -15,6 +17,8 @@ import java.lang.reflect.Proxy
 import java.util.regex.Pattern
 
 // see end-of-file for license information
+
+@IgnoreIf({ !DockerClientFactory.instance().isDockerAvailable() })
 class BrokenHttpLinksCheckerSpec extends Specification {
 
     Checker brokenHttpLinksChecker

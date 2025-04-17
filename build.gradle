@@ -354,12 +354,13 @@ tasks.register("integrationTestOnly") {
     )
 
     doLast {
-        def result = exec {
+        def result = providers.exec {
             workingDir INTEGRATION_TEST_DIRECTORY
-            commandLine((System.getProperty("os.name") ==~ /Windows.*/
-                    ? "..\\gradlew.bat"
-                    : "../gradlew"),
-                    "integrationTest")
+            if (System.getProperty("os.name") ==~ /Windows.*/) {
+                commandLine("cmd", "/c", "..\\gradlew", "integrationTest")
+            } else {
+                commandLine("../gradlew", "integrationTest")
+            }
         }
         logger.debug "Script output: ${result}"
     }
@@ -370,12 +371,13 @@ tasks.register("cleanIntegrationTest", Delete) {
     description("Perform clean for Integration Tests")
 
     doLast {
-        def result = exec {
+        def result = providers.exec {
             workingDir INTEGRATION_TEST_DIRECTORY
-            commandLine((System.getProperty("os.name") ==~ /Windows.*/
-                    ? "..\\gradlew.bat"
-                    : "../gradlew"),
-                    "clean")
+            if (System.getProperty("os.name") ==~ /Windows.*/) {
+                commandLine("cmd", "/c", "..\\gradlew", "clean")
+            } else {
+                commandLine("../gradlew", "clean")
+            }
         }
         logger.debug "Script output: ${result}"
     }

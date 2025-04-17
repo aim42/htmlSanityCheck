@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
@@ -160,7 +161,7 @@ class HtmlSanityCheckMojoTest {
     }
 
     @Test
-    void execuuserte() throws IOException, MojoExecutionException {
+    void execute() throws IOException, MojoExecutionException {
         Path junitDir = Files.createTempDirectory("MojoJunit");
         Path resultDir = Files.createTempDirectory("MojoJunit");
         Path sourceDir = Files.createTempDirectory("MojoSource");
@@ -184,24 +185,23 @@ class HtmlSanityCheckMojoTest {
 
         mojo.execute(myConfig);
 
-
         // Clean up
         deleteDirectory(junitDir.toFile());
         deleteDirectory(resultDir.toFile());
     }
 
-
     // Helper functions
-
     void deleteDirectory(File directoryToBeDeleted) throws IOException {
-        File[] allContents = directoryToBeDeleted.listFiles();
-        if (allContents != null) {
-            for (File file : allContents) {
-                deleteDirectory(file);
+        try {
+            File[] allContents = directoryToBeDeleted.listFiles();
+            if (allContents != null) {
+                for (File file : allContents) {
+                    deleteDirectory(file);
+                }
             }
+            Files.deleteIfExists(directoryToBeDeleted.toPath());
+        } catch (FileSystemException e) {
+            System.err.println("[WARNING] Could not delete " + directoryToBeDeleted + ". Please delete manually.");
         }
-        Files.deleteIfExists(directoryToBeDeleted.toPath());
     }
-
-
 }

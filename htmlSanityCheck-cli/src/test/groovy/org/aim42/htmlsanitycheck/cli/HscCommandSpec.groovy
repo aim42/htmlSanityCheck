@@ -142,7 +142,7 @@ class HscCommandSpec extends Specification {
         File resultFile = new File(testResultsDir.root, 'index.html')
         resultFile.exists()
         String result = resultFile.text
-        result.toString().contains("<div class=\"infoBox failures\" id=\"successRate\"><div class=\"percent\">0%</div>successful</div>\n")
+        result.toString().contains("<div class=\"infoBox failures\" id=\"successRate\"><div class=\"percent\">0%</div>successful</div>")
     }
 
 }

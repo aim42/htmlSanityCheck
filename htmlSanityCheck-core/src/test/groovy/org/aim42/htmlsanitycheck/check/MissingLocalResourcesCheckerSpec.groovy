@@ -80,20 +80,13 @@ class MissingLocalResourcesCheckerSpec extends Specification {
 
     def "special file is neither directory nor regular file"() {
         given: "a special file (e.g., a pipe or device file) in the temp directory"
-        File specialFile
         File tempDir = File.createTempDir()
-
-        if (System.getProperty("os.name").toLowerCase().contains("nix") ||
-                System.getProperty("os.name").toLowerCase().contains("inux") ||
-                System.getProperty("os.name").toLowerCase().contains("mac")
-        ) {
-            specialFile = new File(tempDir, "specialFile").with { file ->
-                ["mkfifo", file.absolutePath].execute().waitFor()
-                return file
-            }
-        } else {
-            specialFile = new File(tempDir, "specialFile")
-            specialFile.createNewFile() // Not a true special file on non-Unix systems but used for example
+        File specialFile = new File(tempDir, "specialFile").with { file ->
+            System.getProperty("os.name").toLowerCase().contains("windows") ?
+                    ["cmd", "/c", "mklink", file.absolutePath, new File(tempDir, "non-existent")].execute().waitFor()
+                    :
+                    ["mkfifo", file.absolutePath].execute().waitFor()
+            return file
         }
 
         String linkToSpecialFile = """<a href="${specialFile.name}">Special File</a>"""
