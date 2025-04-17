@@ -56,7 +56,7 @@ dependencies {
 reporting {
     reports {
         testCodeCoverageReport(JacocoCoverageReport) {
-            testType = TestSuiteType.UNIT_TEST
+            testSuiteName = "test"
         }
     }
 }
@@ -354,8 +354,8 @@ tasks.register("integrationTestOnly") {
     )
 
     doLast {
-        def result = exec {
-            workingDir INTEGRATION_TEST_DIRECTORY
+        def result = providers.exec {
+            workingDir = INTEGRATION_TEST_DIRECTORY
             commandLine((System.getProperty("os.name") ==~ /Windows.*/
                     ? "..\\gradlew.bat"
                     : "../gradlew"),
@@ -370,8 +370,8 @@ tasks.register("cleanIntegrationTest", Delete) {
     description("Perform clean for Integration Tests")
 
     doLast {
-        def result = exec {
-            workingDir INTEGRATION_TEST_DIRECTORY
+        def result = providers.exec {
+            workingDir = INTEGRATION_TEST_DIRECTORY
             commandLine((System.getProperty("os.name") ==~ /Windows.*/
                     ? "..\\gradlew.bat"
                     : "../gradlew"),
