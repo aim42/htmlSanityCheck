@@ -299,6 +299,28 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         then: "no findings are reported"
         collector.getFindings().isEmpty()
     }
+
+    def 'check same URLs only once'() {
+        given: "HTML pages with same targets"
+        String goodAmazonLink = "http://www.amazon.com:$port/dp/B01A2QL9SS"
+        String HTML = """$HtmlConst.HTML_HEAD 
+                <a href="${goodAmazonLink}">Amazon</a>
+                $HtmlConst.HTML_END """
+
+        htmlPage = new HtmlPage(HTML)
+
+        when: "page (including URL) is checked"
+        brokenHttpLinksChecker.performCheck(htmlPage)
+
+        and: "page (including URL) is checked again"
+        SingleCheckResults collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+        then: "a single item is checked"
+        collector.nrOfItemsChecked == 1
+
+        and: "the result is still ok (but coverage should be increased)"
+        collector.nrOfProblems() == 0
+    }
 }
 
 /************************************************************************

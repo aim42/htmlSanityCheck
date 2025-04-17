@@ -13,7 +13,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -25,6 +27,9 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 class BrokenHttpLinksChecker extends Checker {
+
+    private static final Map<String, Integer> count = new HashMap<>();
+
     static {
         TrustAllCertificates.install();
     }
@@ -117,6 +122,13 @@ class BrokenHttpLinksChecker extends Checker {
         }
         // bookkeeping:
         getCheckingResults().incNrOfChecks();
+        if (count.containsKey(href)) {
+            count.put(href, count.get(href) + 1);
+            log.trace("Link to '{}' checked again ({} times)", href, count.get(href));
+            return;
+        } else {
+            count.put(href, 1);
+        }
 
         try {
             URL url = new URL(href);
