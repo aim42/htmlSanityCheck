@@ -293,6 +293,20 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         and: "the result is still ok (but coverage should be increased)"
         collector.nrOfProblems() == 0
     }
+
+    def 'check URL with IP'() {
+        given: "IP based URL"
+        String href = "http://10.1.2.3"
+        URL url = new URL(href)
+
+        brokenHttpLinksChecker.setCheckingResults(new SingleCheckResults())
+
+        when: "URL with IP is checked"
+        brokenHttpLinksChecker.checkIfIPAddress(url, href)
+
+        then: "the result contains a warning"
+        brokenHttpLinksChecker.getCheckingResults().nrOfProblems() == 1
+    }
 }
 
 /************************************************************************

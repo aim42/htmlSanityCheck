@@ -219,7 +219,7 @@ class BrokenHttpLinksChecker extends Checker {
     }
 
     // if configured, ip addresses in URLs yield warnings
-    private void checkIfIPAddress(URL url, String href) {
+    void checkIfIPAddress(URL url, String href) {
         if (!getMyConfig().isIgnoreIPAddresses()) {
             String host = url.getHost();
 
@@ -231,7 +231,7 @@ class BrokenHttpLinksChecker extends Checker {
     }
 
     // if configured, localhost-URLs yield warnings!
-    private void checkIfLocalhostURL(URL url, String href) {
+    void checkIfLocalhostURL(URL url, String href) {
         if (!getMyConfig().isIgnoreLocalhost()) {
             String host = url.getHost();
             if (("localhost".equals(host)) || host.startsWith("127.0.0")) {
