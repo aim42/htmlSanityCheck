@@ -297,6 +297,54 @@
           "Location": "https://arc42.de"
         }
       }
+    },
+    {
+      "request": {
+        "method": "HEAD",
+        "urlPattern": "/dubious"
+      },
+      "response": {
+        "status": 405,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/dubious"
+      },
+      "response": {
+        "status": 308,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "HEAD",
+        "urlPattern": "/undef-returncode"
+      },
+      "response": {
+        "status": 405,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/undef-returncode"
+      },
+      "response": {
+        "status": 600,
+        "headers": {
+          "Content-Type": "text/plain"
+        }
+      }
     }
   ]
 }

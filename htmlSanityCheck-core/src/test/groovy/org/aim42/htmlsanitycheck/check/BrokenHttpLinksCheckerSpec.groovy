@@ -307,6 +307,32 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         then: "the result contains a warning"
         brokenHttpLinksChecker.getCheckingResults().nrOfProblems() == 1
     }
+
+    @Unroll
+    def "Some URLs return undefined returns or warnings"() {
+        given: "An HTML page with a single dubious anchor/link"
+        String HTML = """$HtmlConst.HTML_HEAD 
+                <a href="${link}">the link</a>
+                $HtmlConst.HTML_END """
+
+        htmlPage = new HtmlPage(HTML)
+
+        when: "page is checked"
+        SingleCheckResults collector = brokenHttpLinksChecker.performCheck(htmlPage)
+
+        then: "a single item is checked"
+        collector.nrOfItemsChecked == 1
+
+        and: "the result is not ok"
+        collector.findings.get(0).whatIsTheProblem.startsWith(result)
+
+        where:
+        link                                     | result
+        "http://arc42.de:$port/dubious"          | "Warning"
+        "http://arc42.de:$port/undef-returncode" | "Error"
+    }
+
+
 }
 
 /************************************************************************
