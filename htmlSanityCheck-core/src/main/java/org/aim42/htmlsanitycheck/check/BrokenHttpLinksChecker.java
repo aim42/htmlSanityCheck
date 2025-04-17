@@ -82,7 +82,6 @@ class BrokenHttpLinksChecker extends Checker {
 
     }
 
-
     private void addWarningIfNoInternetConnection() {
         if (!Web.isInternetConnectionAvailable()) {
             getCheckingResults().setGeneralRemark("There seems to be a general problem with internet connectivity, all other checks for http/https links might yield incorrect results!");
@@ -106,7 +105,6 @@ class BrokenHttpLinksChecker extends Checker {
      * we try again with a GET, to get the "finalResponseCode" -
      * which we then categorize as success, error or warning
      */
-
 
     protected void doubleCheckSingleHttpLink(String href) {
         // Check if the href matches any of the regular expressions in the exclude set
@@ -150,7 +148,7 @@ class BrokenHttpLinksChecker extends Checker {
             firstConnection.connect();
             int responseCode = firstConnection.getResponseCode();
 
-            // issue 218 and 219: some web servers respond with 403 or 405
+            // issues 218 and 219: some web servers respond with 403 or 405
             // when given HEAD requests. Therefore, try to GET
             if (successCodes.contains(responseCode)) {
                 return;
@@ -164,7 +162,6 @@ class BrokenHttpLinksChecker extends Checker {
 
                     problem = String.format("Warning: %s returned statuscode %d, new location: %s", href, responseCode, newLocation);
                     getCheckingResults().addFinding(new Finding(problem));
-
                 }
             }
             // in case of errors or warnings,
@@ -186,14 +183,11 @@ class BrokenHttpLinksChecker extends Checker {
                 }
 
                 problem += String.format(" %s returned statuscode %d.", href, responseCode);
-
                 getCheckingResults().addFinding(new Finding(problem));
-
-            } // else
+            }
 
             // cleanup firstConnection
             firstConnection.disconnect();
-
         } catch (UnknownHostException exception) {
             Finding unknownHostFinding = new Finding("Unknown host with href=" + href);
             getCheckingResults().addFinding(unknownHostFinding);
@@ -202,7 +196,6 @@ class BrokenHttpLinksChecker extends Checker {
             getCheckingResults().addFinding(someException);
         }
     }
-
 
     private HttpURLConnection getNewURLConnection(URL url) throws IOException {
 
@@ -220,8 +213,7 @@ class BrokenHttpLinksChecker extends Checker {
         connection.setRequestProperty("Referer", "https://aim42.org");
         connection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0");
 
-        // TODO followRedirects should be a configuration parameter
-        // that defaults to false
+        // TODO followRedirects should be a configuration parameter that defaults to false
 
         return connection;
     }
@@ -232,23 +224,22 @@ class BrokenHttpLinksChecker extends Checker {
             String host = url.getHost();
 
             if (host.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")) {
-                Finding localhostWarning = new Finding("Warning: numerical urls (ip address) indicates suspicious environment dependency: href=" + href);
+                Finding localhostWarning = new Finding("Warning: numerical urls (ip address) indicate a suspicious environment dependency: href=" + href);
                 getCheckingResults().addFinding(localhostWarning);
             }
         }
     }
 
-    // if configured ,localhost-URLs yield warnings!
+    // if configured, localhost-URLs yield warnings!
     private void checkIfLocalhostURL(URL url, String href) {
         if (!getMyConfig().isIgnoreLocalhost()) {
             String host = url.getHost();
             if (("localhost".equals(host)) || host.startsWith("127.0.0")) {
-                Finding localhostWarning = new Finding("Warning: localhost urls indicates suspicious environment dependency: href=" + href);
+                Finding localhostWarning = new Finding("Warning: localhost urls indicate a suspicious environment dependency: href=" + href);
                 getCheckingResults().addFinding(localhostWarning);
             }
         }
     }
-
 
     private void setExcludes(Set<Pattern> excludes) {
         this.excludes = excludes != null ? excludes : new HashSet<>();

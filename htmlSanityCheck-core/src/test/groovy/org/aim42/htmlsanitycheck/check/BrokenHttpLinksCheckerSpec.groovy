@@ -15,13 +15,10 @@ import java.lang.reflect.Proxy
 import java.util.regex.Pattern
 
 // see end-of-file for license information
-
-
 class BrokenHttpLinksCheckerSpec extends Specification {
 
     Checker brokenHttpLinksChecker
     HtmlPage htmlPage
-    SingleCheckResults collector
 
     private Configuration myConfig
     static private int port
@@ -44,17 +41,13 @@ class BrokenHttpLinksCheckerSpec extends Specification {
     /* executed before every single spec */
     def setup() {
         myConfig = new Configuration()
-        brokenHttpLinksChecker = new BrokenHttpLinksChecker( myConfig )
-
-        collector = new SingleCheckResults()
+        brokenHttpLinksChecker = new BrokenHttpLinksChecker(myConfig)
     }
-
 
     /** executed once after all specs are executed **/
     def cleanupSpec() {
         wireMockServer.stop()
     }
-
 
     // Custom method to register the DNS resolver
     private void registerCustomDnsResolver() {
@@ -86,16 +79,14 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         htmlPage = new HtmlPage(HTML)
 
         when: "page is checked"
-        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+        SingleCheckResults collector = brokenHttpLinksChecker.performCheck(htmlPage)
 
         then: "no checks are performed"
         collector.nrOfItemsChecked == 0
 
         and: "no error is found (aka: checkingResult is empty"
         collector.nrOfProblems() == 0
-
     }
-
 
     def "one syntactically correct http URL is ok"() {
         given: "an HTML page with a single correct anchor/link"
@@ -106,16 +97,14 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         htmlPage = new HtmlPage(HTML)
 
         when: "page is checked"
-        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+        SingleCheckResults collector = brokenHttpLinksChecker.performCheck(htmlPage)
 
         then: "a single item is checked"
         collector.nrOfItemsChecked == 1
 
         and: "the result is ok"
         collector.nrOfProblems() == 0
-
     }
-
 
     def "regression for issue 272"(String goodUrl) {
         given: "an HTML page with a single correct anchor/link"
@@ -126,7 +115,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         htmlPage = new HtmlPage(HTML)
 
         when: "Douglas Cayers url is checked"
-        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+        SingleCheckResults collector = brokenHttpLinksChecker.performCheck(htmlPage)
 
         then: "a single item is checked"
         collector.nrOfItemsChecked == 1
@@ -135,15 +124,13 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         collector.nrOfProblems() == 0
 
         where:
-           goodUrl << ["http://junit.org:$port/junit4",
-                       "http://plumelib.org:$port/plume-util",
-                       "http://people.csail.mit.edu:$port/cpacheco"
-           ]
+        goodUrl << ["http://junit.org:$port/junit4",
+                    "http://plumelib.org:$port/plume-util",
+                    "http://people.csail.mit.edu:$port/cpacheco"
+        ]
     }
 
-
     def "single bad link is identified as problem"() {
-
         given: "an HTML page with a single (bad) link"
         String badhref = "http://arc42.org:$port/ui98jfuhenu87djch"
         String HTML = """$HtmlConst.HTML_HEAD 
@@ -153,19 +140,16 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         htmlPage = new HtmlPage(HTML)
 
         when: "page is checked"
-        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+        SingleCheckResults collector = brokenHttpLinksChecker.performCheck(htmlPage)
 
         then: "then collector contains the appropriate error message"
         collector.findings[0].whatIsTheProblem.contains(badhref)
-
     }
 
     /**
      * regression for weird behavior of certain Amazon.com links,
      * where HEAD requests are always answered with 405 instead of 200...
      */
-
-
     def "amazon does not deliver 405 statuscode for links that really exist"() {
         given: "an HTML page with a single (good) amazon link"
         String goodAmazonLink = "http://www.amazon.com:$port/dp/B01A2QL9SS"
@@ -176,19 +160,16 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         htmlPage = new HtmlPage(HTML)
 
         when: "page is checked"
-        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+        SingleCheckResults collector = brokenHttpLinksChecker.performCheck(htmlPage)
 
         then: "a single item is checked"
         collector.nrOfItemsChecked == 1
 
         and: "the result is ok"
         collector.nrOfProblems() == 0
-
     }
 
-
     def "bad amazon link is identified as problem"() {
-
         given: "an HTML page with a single (good) amazon link"
         String badAmazonLink = "https://www.amazon.com:$port/dp/4242424242"
         String HTML = """$HtmlConst.HTML_HEAD 
@@ -198,17 +179,14 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         htmlPage = new HtmlPage(HTML)
 
         when: "page is checked"
-        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+        SingleCheckResults collector = brokenHttpLinksChecker.performCheck(htmlPage)
 
         then: "then collector contains the appropriate error message"
         collector.findings[0].whatIsTheProblem.contains(badAmazonLink)
-
     }
-
 
     @Unroll
     def 'bad link #badLink is recognized as such'() {
-
         given: "an HTML page with a single (broken) link"
         String goodURL = "http://mock.codes$port/${badLink}"
         String HTML = """$HtmlConst.HTML_HEAD 
@@ -218,7 +196,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         htmlPage = new HtmlPage(HTML)
 
         when: "page is checked"
-        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+        SingleCheckResults collector = brokenHttpLinksChecker.performCheck(htmlPage)
 
         then: "then collector contains one error message"
         collector.getFindings().size() == 1
@@ -226,12 +204,9 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         where:
 
         badLink << [400, 401, 403, 404, 405, 406, 408, 409, 410, 429, 431, 500, 501, 502, 504, 505, 506, 507]
-
     }
 
-
     def 'redirects are recognized and their new location is contained in warning message'() {
-
         given: "the old arc42 (http!) page "
         String HTML = """$HtmlConst.HTML_HEAD 
                 <a href="http://arc42.de:$port/old"></a>
@@ -240,13 +215,12 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         htmlPage = new HtmlPage(HTML)
 
         when: "page is checked"
-        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+        SingleCheckResults collector = brokenHttpLinksChecker.performCheck(htmlPage)
 
         then: "then collector contains one error message"
         collector.getFindings().size() == 1
 
         collector?.getFindings()?.first()?.whatIsTheProblem?.contains("https://arc42.de")
-
     }
 
     /**
@@ -263,15 +237,13 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         htmlPage = new HtmlPage(HTML)
 
         when: "page is checked"
-        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+        SingleCheckResults collector = brokenHttpLinksChecker.performCheck(htmlPage)
 
         then: "warning is given"
 
         collector?.getFindings()?.first()?.whatIsTheProblem?.contains("Warning")
         collector?.getFindings()?.first()?.whatIsTheProblem?.contains("suspicious")
-
     }
-
 
     def 'excludes are not checked'() {
         given: "HTML page with excludes"
@@ -294,7 +266,7 @@ class BrokenHttpLinksCheckerSpec extends Specification {
         BrokenHttpLinksChecker brokenHttpLinksChecker = new BrokenHttpLinksChecker(config)
 
         when: "page is checked"
-        collector = brokenHttpLinksChecker.performCheck(htmlPage)
+        SingleCheckResults collector = brokenHttpLinksChecker.performCheck(htmlPage)
 
         then: "no findings are reported"
         collector.getFindings().isEmpty()
