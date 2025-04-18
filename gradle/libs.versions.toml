@@ -26,7 +26,7 @@ wiremock-testcontainers = { module = 'org.wiremock.integrations.testcontainers:w
 gradle-versions = { id= 'com.github.ben-manes.versions', version = '0.52.0' }
 sonar = { id = 'org.sonarqube', version = '5.1.0.4882' }
 jreleaser = {  id = 'org.jreleaser', version = '1.17.0'}
-gitProperties = { id = 'com.gorylenko.gradle-git-properties', version = '2.4.2' }
+gitProperties = { id = 'com.gorylenko.gradle-git-properties', version = '2.5.0' }
 
 # Copyright Gerd Aschemann and aim42 contributors.
 #
