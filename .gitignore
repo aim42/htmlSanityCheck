@@ -6,6 +6,7 @@ docs/.gradle
 hsc_diagrams.ldb
 gradle-app.setting
 .gradle
+.develocity
 htmlsanitycheck-doc.sublime-project
 htmlsanitycheck-doc.sublime-workspace
 gen-html/css/base-style.css
