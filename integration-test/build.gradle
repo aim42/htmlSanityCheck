@@ -114,11 +114,11 @@ tasks.register("integrationTestCli") {
 //        def stdout = new ByteArrayOutputStream()
 //        def stderr = new ByteArrayOutputStream()
 
-        def result = exec {
+        def result = providers.exec {
             buildReportsDirectory.mkdirs()
             final String hscScriptFileName = "../htmlSanityCheck-cli/${BUILD_DIRECTORY}/install/hsc/bin/hsc"
             String params = "-r ${buildReportsDirectory} " +
-                    "--exclude https://www.baeldung.com/.*" +
+                    "--exclude https://www.baeldung.com/.* " +
                     "${INTEGRATION_TEST_DIRECTORY_COMMON_BUILD}/docs"
             if (System.getProperty("os.name") ==~ /Windows.*/) {
                 commandLine 'cmd', '/c', "echo off && ${hscScriptFileName.replace('/', '\\')}.bat ${params}"
@@ -127,8 +127,8 @@ tasks.register("integrationTestCli") {
             }
 //            standardOutput = stdout
 //            errorOutput = stderr
-        }.get()
-        logger.lifecycle "Script output: ${result}"
+        }
+        logger.quiet "Script output: ${result}"
         if (!testIndex.exists()) {
             throw new GradleException("Integration test failed: '${testIndex}' does not exist:\n\n")
 //                    +
