@@ -108,3 +108,11 @@ jobs:
           foreach ($file in $files) {
             Write-Output $file.FullName
           }
+
+      - name: Upload Artifacts (on failure)
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: failure-artifacts
+          path: |
+            **/build
