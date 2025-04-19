@@ -113,6 +113,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: failure-artifacts
+          name: failure-artifacts-{{ matrix.os-version }}-{{ matrix.java-version }}
           path: |
             **/build
