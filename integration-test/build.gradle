@@ -113,6 +113,7 @@ tasks.register("integrationTestCli") {
     doLast {
         def stdout = new ByteArrayOutputStream()
         def stderr = new ByteArrayOutputStream()
+
         def result = providers.exec {
             buildReportsDirectory.mkdirs()
             final String hscScriptFileName = "../htmlSanityCheck-cli/${BUILD_DIRECTORY}/install/hsc/bin/hsc"
@@ -126,8 +127,8 @@ tasks.register("integrationTestCli") {
             }
             standardOutput = stdout
             errorOutput = stderr
-        }
-        logger.debug "Script output: ${result}"
+        }.get()
+        logger.lifecycle "Script output: ${result}"
         if (!testIndex.exists()) {
             throw new GradleException("Integration test failed: '${testIndex}' does not exist:\n\n" +
                     "stdout: ${stdout.toString()}\n\n" +
