@@ -111,9 +111,9 @@ tasks.register("integrationTestCli") {
     mustRunAfter(cleanIntegrationTestCli)
 
     doLast {
+        def stdout = new ByteArrayOutputStream()
+        def stderr = new ByteArrayOutputStream()
         def result = providers.exec {
-            def stdout = new ByteArrayOutputStream()
-            def stderr = new ByteArrayOutputStream()
             buildReportsDirectory.mkdirs()
             final String hscScriptFileName = "../htmlSanityCheck-cli/${BUILD_DIRECTORY}/install/hsc/bin/hsc"
             String params = "-r ${buildReportsDirectory} " +
