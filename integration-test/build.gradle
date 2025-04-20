@@ -111,8 +111,8 @@ tasks.register("integrationTestCli") {
     mustRunAfter(cleanIntegrationTestCli)
 
     doLast {
-//        def stdout = new ByteArrayOutputStream()
-//        def stderr = new ByteArrayOutputStream()
+        def stdout = new ByteArrayOutputStream()
+        def stderr = new ByteArrayOutputStream()
 
         def result = providers.exec {
             buildReportsDirectory.mkdirs()
@@ -125,15 +125,15 @@ tasks.register("integrationTestCli") {
             } else {
                 commandLine 'sh', '-c', "${hscScriptFileName} ${params}"
             }
-//            standardOutput = stdout
-//            errorOutput = stderr
+            standardOutput = stdout
+            errorOutput = stderr
         }
         logger.quiet "Script output: ${result}"
         if (!testIndex.exists()) {
-            throw new GradleException("Integration test failed: '${testIndex}' does not exist:\n\n")
-//                    +
-//                    "stdout: ${stdout.toString()}\n\n" +
-//                    "stderr: ${stderr.toString()}")
+            throw new GradleException("Integration test failed: '${testIndex}' does not exist:\n\n"
+                    + "stdout: ${stdout.toString()}\n\n"
+                    + "stderr: ${stderr.toString()}"
+            )
         }
     }
 }
