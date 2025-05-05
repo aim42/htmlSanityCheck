@@ -9,7 +9,7 @@ wiremock-testcontainers-version = '1.0-alpha-14'
 
 [libraries]
 commons-validator = 'commons-validator:commons-validator:1.9.0'
-jsoup = 'org.jsoup:jsoup:1.18.3'
+jsoup = 'org.jsoup:jsoup:1.20.1'
 junit-jupiter = { module = 'org.junit.jupiter:junit-jupiter', version.ref = 'junit5-version' }
 junit-vintage = { module = 'org.junit.vintage:junit-vintage-engine', version.ref = 'junit5-version' }
 lombok = 'org.projectlombok:lombok:1.18.38'
