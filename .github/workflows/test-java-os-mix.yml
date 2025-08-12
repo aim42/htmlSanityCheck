@@ -47,7 +47,7 @@ jobs:
           }
 
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup JDK
         uses: actions/setup-java@v4
