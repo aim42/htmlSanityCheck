@@ -97,7 +97,7 @@
 
 #### Features (2.0.0-rc1)
 
-- Add [Develocity](https://scans.gradle.com/) build scans
+- Add [Develocity](https://gradle.com/scans/gradle/) build scans
 - Add [JReleaser](https://jreleaser.org/)
 - Improve Signing (for Maven Central)
 - [#343](https://github.com/aim42/htmlSanityCheck/issues/343) - Clean up and improve code and docs
