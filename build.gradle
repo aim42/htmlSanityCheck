@@ -267,6 +267,11 @@ configure(subprojects) {
         }
     }
 
+    tasks.withType(PublishToMavenRepository).named { it.contains("MyLocalRepositoryForFullIntegrationTests") }.configureEach {
+        outputs.dir(mavenBuildRepo)
+        outputs.upToDateWhen { false }
+    }
+
     tasks.named('test', Test) {
         useJUnitPlatform()
     }
