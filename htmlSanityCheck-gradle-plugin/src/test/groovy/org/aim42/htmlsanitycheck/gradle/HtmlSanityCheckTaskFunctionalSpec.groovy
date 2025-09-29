@@ -29,10 +29,10 @@ class HtmlSanityCheckTaskFunctionalSpec extends HtmlSanityCheckBaseSpec {
             // Test execution in CI will execute all versions.
             // Local test is restricted to latest version
             // 6.x or older does not work!
-            '7.6.3', // latest 7.x
+            '7.6.6', // latest 7.x
             '8.0.2', '8.1.1', '8.2.1', '8.3', '8.4',
             '8.5', '8.6', '8.7', '8.8', '8.9', '8.10.2', '8.11.1',
-            '8.12.1'  // all 8.x minor versions (latest patch release)
+            '8.12.1', '8.13', '8.14.3'  // all 8.x minor versions (latest patch release)
             // end::tested-gradle-versions[]
     ])
 
