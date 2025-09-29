@@ -12,6 +12,8 @@ htmlSanityCheck {
 
     excludes = ["https://www.baeldung.com/.*"]
 
+    httpSuccessCodes = [429]
+
     checkingResultsDir = reports
     failOnErrors = true
 

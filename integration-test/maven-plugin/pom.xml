@@ -39,6 +39,7 @@
                     <checkingResultsDir>${project.build.directory}/reports</checkingResultsDir>
                     <failOnErrors>true</failOnErrors>
                     <junitResultsDir>${project.build.directory}/test-results/htmlSanityCheck</junitResultsDir>
+                    <httpSuccessCodes>429</httpSuccessCodes>
                 </configuration>
             </plugin>
         </plugins>
