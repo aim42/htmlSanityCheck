@@ -185,7 +185,7 @@ Clean, check (test), and perform integration tests:
 
 [source,shell]
 ----
-./gradlew clean && ./gradlew check integrationTest
+./gradlew clean check integrationTest
 ----
 
 === Publish on Gradle Plugin Portal
