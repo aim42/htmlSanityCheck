@@ -164,7 +164,7 @@ This variable setting enables <<sec:stage-to-maven-central-and-release-to-github
 upload to the staging area>>, perform <<sec:publish-to-maven-central,the final publication>> interactively.
 <2> Get an appropriate GitHub token (needs write access to the repository).
 <3> Follow the <<sec:maven-central-account,steps above>> to get the required Maven credentials.
-Create a deployment user and password in your Maven Central (Sonatype) https://central.sonatype.com/account[account].
+Create a deployment user and password in your Maven Central (Sonatype) account.
 <4> Access token for your Mastodon Account (on https://mastodon.social[]footnote:[Publishing to a different Mastodon server requires more changes.]).
 <5> Key and Token for access to the <<sec:sdkman-api-credentials,SDKMAN API>>.
 
