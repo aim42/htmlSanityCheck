@@ -18,7 +18,7 @@ dependencies {
     testImplementation libs.junit.jupiter
     testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.12.2"
     // Explicit Launcher Version to override Gradle default
-    testImplementation 'org.assertj:assertj-core:3.27.3'
+    testImplementation 'org.assertj:assertj-core:3.27.6'
 }
 
 test {
