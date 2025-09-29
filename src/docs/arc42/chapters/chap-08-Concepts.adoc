@@ -94,6 +94,7 @@ The appropriate copy method took a https://github.com/gradle/gradle/blob/5c45052
 
 
 ==== Attributions
-Credits for the arrow-icon https://www.iconfinder.com/icons/118743/arrow_up_icon
+
+Credits for the https://www.iconfinder.com/icons/118743/arrow_up_icon[arrow up icon] go to https://www.freepik.com/[FreeP!K].
 
 
