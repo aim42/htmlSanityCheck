@@ -5,7 +5,7 @@ picocli-version = "4.7.6"
 slf4j-version = '2.0.17'
 string-similarity-version = '1.0.0'
 testcontainers-version = '1.20.6'
-wiremock-testcontainers-version = '1.0-alpha-14'
+wiremock-testcontainers-version = '1.0-alpha-15'
 
 [libraries]
 commons-validator = 'commons-validator:commons-validator:1.9.0'
