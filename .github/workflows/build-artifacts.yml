@@ -10,9 +10,15 @@ on:
         required: false
         type: boolean
         default: false
+    secrets:
+      SONAR_TOKEN:
+        required: false
+
 env:
   SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION || 'aim42' }}
   SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY || 'aim42_htmlSanityCheck' }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -63,10 +69,8 @@ jobs:
         if: ${{ inputs.run-sonar }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          ./gradlew sonar -Psonar.branch.name=${BRANCH_NAME} --info --scan
+          ./gradlew sonar -Psonar.branch.name=${GITHUB_REF#refs/heads/} --info --scan
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4

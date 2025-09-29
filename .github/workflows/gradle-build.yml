@@ -7,6 +7,7 @@ on:
   pull_request:
   push:
   workflow_dispatch:
+
 jobs:
   build-artifacts:
     uses: ./.github/workflows/build-artifacts.yml
@@ -14,6 +15,8 @@ jobs:
       # SonarQube requires JDK 17 or higher
       java-version: '17'
       run-sonar: true
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   post-build:
     needs: build-artifacts
