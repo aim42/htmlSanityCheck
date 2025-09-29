@@ -14,7 +14,7 @@ jobs:
     with:
       # SonarQube requires JDK 17 or higher
       java-version: '17'
-      run-sonar: true
+      run-sonar: ${{ github.repository == 'aim42/htmlSanityCheck' }}
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
