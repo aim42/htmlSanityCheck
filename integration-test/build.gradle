@@ -244,7 +244,7 @@ tasks.register("integrationTest") {
     group("Verification")
     description("Run all integration tests (without any installations etc.)")
 
-    dependsOn(integrationTestGradlePlugin, integrationTestCli, integrationTestMavenPlugin)
+    dependsOn(integrationTestGradlePlugin, integrationTestCli, integrationTestMavenPlugin, integrationTestDocker)
 }
 
 tasks.register("cleanIntegrationTest", Delete) {
@@ -252,6 +252,6 @@ tasks.register("cleanIntegrationTest", Delete) {
     description("Deletes all integration test builds")
 
     dependsOn(cleanIntegrationTestCommon, cleanIntegrationTestGradlePlugin,
-            cleanIntegrationTestCli, cleanIntegrationTestMavenPlugin)
+            cleanIntegrationTestCli, cleanIntegrationTestMavenPlugin, cleanIntegrationTestDocker)
 }
 clean.dependsOn(cleanIntegrationTest)
