@@ -1,4 +1,4 @@
-= image:htmlsanitycheck-logo.png[HSC] Html Sanity Check (HSC)
+= image:htmlsanitycheck-logo.png[HSC] HTML Sanity Check (HSC)
 :doctype: book
 include::asciidoctor-config.ad[]
 
@@ -14,8 +14,7 @@ endif::env-github[]
 ====
 https://hsc.aim42.org[HTML Sanity Check] (HSC) provides some basic sanity checking on HTML files.
 
-It can be helpful in case of HTML generated from, e.g., {asciidoc-url}[Asciidoctor],
-Markdown or other formats -- as converters usually don't check for missing images
+It can be helpful in case of HTML generated from, e.g., {asciidoc-url}[Asciidoctor], Markdown, or other formats -- as converters usually don't check for missing images
 or broken links.
 ====
 
@@ -98,7 +97,7 @@ Use checkerClass _DuplicateIdChecker_.
 
 === Missing Local Resources
 
-All files, (e.g., downloads) referenced from HTML.
+All files, (e.g., download) referenced from HTML.
 
 Use checkerClass _MissingLocalResourcesChecker_.
 
@@ -139,13 +138,13 @@ This tiny piece rests on incredible groundwork:
 
 * IntelliJ IDEA — my (Gernot) best (programming) friend.
 
-* Of course, Groovy, Gradle, JUnit and Spock framework.
+* Of course, Groovy, Gradle, JUnit, and Spock framework.
 
 == Ideas and Origin
 
 * The plugin heavily relies on code provided by {gradle-url}[Gradle].
 
-* Inspiration on code organization, implementation and testing of the plugin came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by https://github.com/aalmiray[Andres Almiray].
+* Inspiration on code organization, implementation, and testing of the plugin came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by https://github.com/aalmiray[Andres Almiray].
 
 * Code for string similarity calculation by
 https://github.com/rrice/java-string-similarity[Ralph Rice].
@@ -173,7 +172,7 @@ CAUTION: However, as of 2024-08-14 they have deleted the repository (there seems
 
 == Licence
 
-Currently, code is published under the Apache-2.0 licence, documentation under Creative-Commons-Sharealike-4.0.
+Currently, code is published under the Apache-2.0 license, documentation under Creative-Commons-Sharealike-4.0.
 Some day we'll unify that 😬.
 
 == Kudos

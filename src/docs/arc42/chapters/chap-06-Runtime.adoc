@@ -8,4 +8,4 @@ include::_config.adoc[]
 
 :filename: arc42/chapters/chap-06-Runtime.adoc
 
-NOTE: Not appropriate for this system due to very simple implementation.
+NOTE: Not appropriate for this system due to a very simple implementation.

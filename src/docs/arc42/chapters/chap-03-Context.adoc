@@ -22,13 +22,13 @@ include::../../plantuml/hsc-context.puml["Business Context", title="Business Con
 .Business Context
 |===
 | Neighbor | Description
-| user | documents software with toolchain that generates html. Wants to ensure that
-links within this html are valid.
-| build system |
-| local html files | HSC reads and parses local html files and
+| user | Documents software with a toolchain that generates HTML.
+Wants to ensure that links within this HTML are valid.
+| Build system |
+| local html files | HSC reads and parses local HTML files and
 performs sanity checks within those.
 | local image files | HSC checks if linked images exist as (local) files.
-| external web resources | HSC can be configured to optionally check for the existence
+| External web resources | HSC can be configured to optionally check for the existence
 of external web resources. Due to the nature of web systems, this check might need a significant
 amount of time and might yield invalid results due to network and latency issues.
 |===
@@ -47,17 +47,18 @@ include::../../plantuml/deployment-context.puml["Deployment Context", title="Dep
 .Deployment Context
 |===
 | Node / Artifact | Description
-| {node} hsc-development | where development of HSC takes place
-| {artifact} hsc-cli | compiled and packaged version of HSC including required dependencies.
-| {artifact} hsc-maven-plugin | compiled and packaged version of HSC including required dependencies.
-| {artifact} hsc-gradle-plugin | compiled and packaged version of HSC including required dependencies.
-| {artifact} hsc-core | compiled and packaged version of HSC core functionality including required dependencies.
-| {node} artifact repository (https://repo1.maven.org/maven2/[Maven Central]) | public Java artifact repository, cf. https://search.maven.org/[Maven Central Search].
+| {node} hsc-development | Where development of HSC takes place
+| {artifact} hsc-cli | Compiled and packaged version of HSC including required dependencies.
+| {artifact} hsc-maven-plugin | Compiled and packaged version of HSC including required dependencies.
+| {artifact} hsc-gradle-plugin | Compiled and packaged version of HSC including required dependencies.
+| {artifact} hsc-core | Compiled and packaged version of HSC core functionality including required dependencies.
+| {node} Artifact repository (https://repo1.maven.org/maven2/[Maven Central]) | Public Java artifact repository, cf.
+https://search.maven.org/[Maven Central Search].
 HSC binaries are uploaded to this server.
-| {node} hsc user computer | where arbitrary documentation takes place with html as output formats.
-| {artifact} build.gradle | Gradle build script configuring (among other things) the HSC plugin to perform the Html checking.
-| {artifact} build.maven | Maven POM configuring (among other things) the HSC plugin to perform the Html checking.
-| {artifact} commandline | Commandline used to invole the hsc command line interface.
+| {node} HSC user computer | Where arbitrary documentation takes place with HTML as output formats.
+| {artifact} build.gradle | Gradle build script configuring, among other things,() the HSC plugin to perform the HTML checking.
+| {artifact} build.maven | Maven POM, configuring (among other things) the HSC plugin to perform the HTML checking.
+| {artifact} commandline | Commandline used to involve the hsc command line interface.
 |===
 
 

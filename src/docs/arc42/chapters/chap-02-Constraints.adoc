@@ -9,8 +9,8 @@ include::_config.adoc[]
 
 HSC shall be:
 
-* platform-independent and should run on the major operating systems
+* Platform-independent and should run on the major operating systems
 (Windows(TM), Linux, and Mac-OS(TM))
-* integrated with the Gradle build tool
-* runnable from the command line
-* developed under a liberal open-source license
+* Integrated with the Gradle build tool
+* Runnable from the command line
+* Developed under a liberal open-source license

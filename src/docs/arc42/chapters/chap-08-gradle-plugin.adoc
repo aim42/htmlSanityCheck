@@ -41,18 +41,17 @@ include::{gradle-plugin-source-path}/htmlsanitycheck/gradle/HtmlSanityCheckPlugi
    |
 ----
 
-<1> the actual plugin code: `HtmlSanityCheckPlugin.groovy` and
-`HtmlSanityCheckTask.groovy` groovy files
+<1> The actual plugin code: `HtmlSanityCheckPlugin.groovy` and `HtmlSanityCheckTask.groovy` Groovy files
 <2> Gradle expects plugin properties in `META-INF`
-<3> property file containing the name of the actual implementation class:
+<3> Property file containing the name of the actual implementation class:
 `implementation-class=org.aim42.htmlsanitycheck.HtmlSanityCheckPlugin`
 
-==== Passing Parameters From Buildfile to Plugin
+==== Passing Parameters From Build file to Plugin
 To be done
 
 ==== Building the Plugin
 
-The plugin code itself is built with gradle.
+The plugin code itself is built with Gradle.
 
 ==== Uploading to Public Archives
 
@@ -60,4 +59,4 @@ TBD
 
 ==== Further Information on Creating Gradle Plugins
 
-The https://www.gradle.org/docs/current/userguide/custom_plugins.html[Gradle user guide] describes how to write a plugins.
+The https://www.gradle.org/docs/current/userguide/custom_plugins.html[Gradle user guide] describes how to write a plugin.

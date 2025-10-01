@@ -18,14 +18,14 @@ include::chap-08-html-encapsulation.adoc[]
 
 [[sec:reporting-concept]]
 === Flexible Reporting
-HSC allows for different output formats:
 
-* formats (HTML and text) and
-* destinations (file and console)
+HSC allows for different output formats and destinations:
 
+* Formats (HTML and text) and
+* Destinations (file and console)
 
-The reporting subsystem uses the template method pattern to allow different output formats
-(e.g. Console and HTML). The overall structure of reports is always the same:
+The reporting subsystem uses the template method pattern to allow different output formats (e.g., Console and HTML).
+The overall structure of reports is always the same:
 
 Graphical clients can use the API of the reporting subsystem to display
 reports in arbitrary formats.
@@ -55,42 +55,29 @@ as follows:
         }
     }
 
-<1> initialize the report, e.g. create and open the file, copy css-, javascript and image files.
-
-<2> create the overall summary, with the overall success percentage and a list of all checked pages with their success rate.
-
-<3> iterate over all pages 
-
-<4> write report footer - in HTML report also create back-to-top-link
-
-<5> for a single page, report the nr of checks and problems plus the success rate 
-
-<6> for every singleCheck on that page, report a summary and 
-
-<7> all detailed findings for a singleCheck.
-
-<8> for every checked page, create a footer, page break or similar to graphically distinguish
-pages between each other.
-
-
-
+<1> Initialize the report, e.g., create and open the file, copy css-, JavaScript and image files.
+<2> Create the overall summary, with the overall success percentage and a list of all checked pages with their success rate.
+<3> Iterate over all pages
+<4> Write report footer - in HTML report also creates a back-to-top-link
+<5> For a single page, report the number of checks and problems plus the success rate
+<6> For every singleCheck on that page, report a summary and
+<7> All detailed findings for a singleCheck.
+<8> For every checked page, create a footer, page break or similar to graphically distinguish pages between each other.
 
 ==== Styling the Reporting Output
 
-* The `HtmlReporter` explicitly generates css classes together with the html elements,
-based upon css styling re-used from the Gradle JUnit plugin.
-* Stylesheets, a minimized version of jQuery javascript library plus some icons
-are copied at report-generation time from the jar-file to the report output directory.
+* The `HtmlReporter` explicitly generates CSS classes together with the HTML elements, based upon CSS styling re-used from the Gradle JUnit plugin.
+* Stylesheets, a minimized version of jQuery JavaScript library, plus some icons are copied at report-generation time from the jar-file to the report output directory.
 
-* Styling the back-to-top arrow/button is done as a combination of JavaScript plus some css styling, as described in https://www.webtipblog.com/adding-scroll-top-button-website/.
+* Styling the back-to-top arrow/button is done as a combination of JavaScript plus some CSS styling, as described in https://www.webtipblog.com/adding-scroll-top-button-website/.
 
 
 ==== Copy Required Resources to Output Directory
 
-When creating the HTML report, we need to copy the required resource files (css, JavaScript)
+When creating the HTML report, we need to copy the required resource files (CSS, JavaScript)
 to the output directory.
 
-The appropriate copy method took a https://github.com/gradle/gradle/blob/5c45052ef3fa9395fa85f71340611bd159cd1489/testing/internal-performance-testing/src/main/groovy/org/gradle/performance/results/report/AbstractReportGenerator.java#L190[Gradle source] as blueprint.
+The appropriate copy method took a https://github.com/gradle/gradle/blob/5c45052ef3fa9395fa85f71340611bd159cd1489/testing/internal-performance-testing/src/main/groovy/org/gradle/performance/results/report/AbstractReportGenerator.java#L190[Gradle source] as a blueprint.
 
 
 ==== Attributions

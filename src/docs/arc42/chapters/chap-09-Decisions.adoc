@@ -27,7 +27,7 @@ Check HTML programmatically by using an existing API that provides access and fi
 
 Decision Criteria::
 * Few dependencies, so the HSC binary stays as small as possible.
-* Accessor and finder methods to find images, links and link-targets within the DOM tree.
+* Accessor and finder methods to find images, links, and link-targets within the DOM tree.
 
 Alternatives::
 
@@ -44,6 +44,7 @@ As it is a public binary, available at https://central.sonatype.com/artifact/net
 Primarily, we have used Jaro-Winkler strategy to find similarity.
 
 === Changing Groovy to Plain Java
-In 2024/2025 we decided to port the html sanity checker to plain java, because in some environments the use of the groovy-framework caused trouble.
-In some cases different versions of the groovey enwironment uesed in maven projekts result in an incompatibility that renders the build not working.
-Using plain java we get rid of all gropvy dependencies and therefore eleminating all version conflicts.
+
+In 2024/2025 we decided to port HSC to plain Java, because in some environments the use of the Groovy-framework caused trouble.
+In some cases different versions of the Groovy environment used in Maven projekts resulted in an incompatibility that renders the build not working.
+Using plain Java in the core library and the Maven plugin, we get rid of all Groovy dependencies and therefore eliminate all version conflicts.

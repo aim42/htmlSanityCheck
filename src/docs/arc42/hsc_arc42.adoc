@@ -21,7 +21,8 @@ image:arc42-logo.png[arc42, link={arc42-url}, float=left]
 template^], freely available at {arc42-url}[{arc42-url}^].
 
 [small]#This material is open source and provided under the Creative Commons Sharealike 4.0 license.
-It comes *without any guarantee*. Use on your own risk.
+It comes *without any guarantee*.
+Use at your own risk.
 arc42 and its structure by Dr. Peter Hruschka and Dr. Gernot Starke.
 AsciiDoc version initiated by Markus Schärtel and Jürgen Krey,
 completed and maintained by Ralf Müller and Gernot Starke.#
@@ -83,4 +84,5 @@ include::chapters/chap-09-Decisions.adoc[]
 
 
 == Glossary
-See the <<HTML Checking Domain Model, domain model>> for explanations of important terms.
+
+See the <<HTML Checking Domain Model,domain model>> for explanations of important terms.

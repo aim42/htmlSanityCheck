@@ -9,7 +9,7 @@ include::../_feedback.adoc[]
 HSC uses the template-method-pattern to enable flexible checking algorithms:
 
 [quote,{template-method-pattern-url}]
-The Template Method defines a skeleton of an algorithm in an operation, and defers some steps to subclasses.
+The Template Method defines a skeleton of an algorithm in an operation and defers some steps to subclasses.
 
 We achieve that by defining the skeleton of the checking algorithm in one operation, deferring the specific checking algorithm steps to subclasses.
 
@@ -35,15 +35,15 @@ include::../../plantuml/template-method.puml["Template Method", title="Template-
 .Template Method
 |===
 | Component | Description
-| Checker                           | _abstract_ base class, containing the template method +check()+
+| Checker                           | _Abstract_ base class, containing the template method +check()+
                                         plus the public method +performCheck()+
-| <<MissingImageFilesChecker>>      | checks if referenced local image files exist
-| <<MissingImgAltAttributeChecker>> | checks if there are image tags without alt-attributes
-| <<BrokenCrossReferencesChecker>>  | checks if cross references (links referenced within the page) exist
-| <<DuplicateIdChecker>>            | checks if any id has multiple definitions
-| <<MissingLocalResourcesChecker>>  | checks if referenced other resources exist
-| <<BrokenHttpLinksChecker>>    | checks if external links are valid
-| <<IllegalLinkChecker>>            | checks if links do not violate HTML link syntax
+| <<MissingImageFilesChecker>>      | Checks if referenced local image files exist
+| <<MissingImgAltAttributeChecker>> | Checks if there are image tags without alt-attributes
+| <<BrokenCrossReferencesChecker>>  | Checks if cross-references (links referenced within the page) exist
+| <<DuplicateIdChecker>>            | Checks if any id has multiple definitions
+| <<MissingLocalResourcesChecker>>  | Checks if referenced other resources exist
+| <<BrokenHttpLinksChecker>>    | Checks if external links are valid
+| <<IllegalLinkChecker>>            | Checks if links do not violate HTML link syntax
 |===
 
 [[MissingImageFilesChecker]]
@@ -51,12 +51,9 @@ include::../../plantuml/template-method.puml["Template Method", title="Template-
 
 [small]#Addresses requirement {xrefRequirementsRequiredChecks} (R-1).#
 
-Checks if image files referenced in +<img src="someFile.jpg">+ really
-exists on the local file system.
+Checks if image files referenced in +<img src="someFile.jpg">+ really exist on the local file system.
 
-The (little) problem with checking images is their path: Consider the following
-HTML fragment (from the file +testme.html+):
-
+The (little) problem with checking images is their path: Consider the following HTML fragment:
 
 [source, html]
 <img src="./images/one-image.jpg">
@@ -65,8 +62,7 @@ HTML fragment (from the file +testme.html+):
 This image file ("one-image.jpg") has to be located relative to the directory
 containing the corresponding HTML file.
 
-Therefore the expected absolute path of the "one-image.jpg" has to be determined
-from the absolute path of the html file under test.
+Therefore, the expected absolute path of the "one-image.jpg" has to be determined from the absolute path of the HTML file under test.
 
 We check for existing files using the usual Java API, but have to do some
 _directory arithmetic_ to get the +absolutePathToImageFile+:
@@ -87,20 +83,19 @@ if the image has an alt-tag.
 ==== BrokenCrossReferencesChecker
 [small]#Addresses requirement {xrefRequirementsRequiredChecks} (R-2).#
 
-Cross references are document-internal links where the +href="link-target" from the html anchor
+Cross-references are document-internal links where the +href="link-target" from the HTML anchor
 tag has no prefix like +http+, +https+, +ftp+, +telnet+, +mailto+, +file+ and such.
 
-Only links with prefix +#+ shall be taken into account, e.g. +<a href="#internalLink">+.
+Only links with the prefix +#+ shall be taken into account, e.g. +<a href="#internalLink">+.
 
 [[DuplicateIdChecker]]
 ==== DuplicateIdChecker
 
 [small]#Addresses requirement {xrefRequirementsRequiredChecks} (R-4).#
 
-Sections, especially headings, can be made link-targets by adding the +id="#xyz"+ element,
-yielding for example html headings like the following example.
+Sections, especially headings, can be made link-targets by adding the +id="#xyz"+ element, yielding, for example, HTML headings like the following example.
 
-Problems occur if the same link target is defined several times (also shown below).
+Problems occur if the same link target is defined several times, (also shown below).
 
 [source,html]
 <h2 id="seealso">First Heading</h2>
@@ -119,9 +114,9 @@ Does *NOT* deep-checking of references-with-anchors of the following form:
 [source,html]
 <a href="api/Artifact.html#target">GroupInit</a>
 
-containing both a local (file) reference plus an internal anchor +#target+
+Containing both a local (file) reference plus an internal anchor +#target+
 
-See issues #252 (false positives) and #253 (deep links shall be checked)
+See issues #252 (false positives), and #253 (deep links shall be checked)
 
 
 
@@ -130,12 +125,12 @@ See issues #252 (false positives) and #253 (deep links shall be checked)
 
 [small]#Addresses requirement {xrefRequirementsRequiredChecks} (R-9).#
 
-Problem here are networking issues, latency and HTTP return codes. This checker is planned,
-but currently not implemented.
+Problem here are networking issues, latency and HTTP return codes.
+This checker is planned but currently not implemented.
 
 [[IllegalLinkChecker]]
 ==== IllegalLinkChecker
 
 [small]#Addresses requirement {xrefRequirementsRequiredChecks} (R-5).#
 
-This checker is planned, but currently not implemented.
+This checker is planned but currently not implemented.

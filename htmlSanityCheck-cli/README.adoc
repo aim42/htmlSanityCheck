@@ -93,7 +93,7 @@ Type: Integer
 +
 Default: `5000`
 
-`--ignoreLocalHost` (optional):: Ignore localhost as hostname.
+`--ignoreLocalHost` (optional):: Ignore localhost as the hostname.
 +
 Type: Boolean
 +
@@ -128,7 +128,7 @@ Default: Empty list
 []
 ----
 
-`--httpWarningCodes` (optional):: HTTP response codes treated as warning.
+`--httpWarningCodes` (optional):: HTTP response codes are treated as warning.
 +
 Type: List
 +
@@ -149,7 +149,7 @@ or new location (cf.{nbsp}{project-issues}/244[Issue 244]).
 Some HSC reports contain the respective location.
 ====
 
-`--httpErrorCodes` (optional):: HTTP response codes treated as error.
+`--httpErrorCodes` (optional):: HTTP response codes which are treated as errors.
 +
 Type: List
 +

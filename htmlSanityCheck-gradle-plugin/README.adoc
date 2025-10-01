@@ -56,7 +56,8 @@ buildscript {
 
 apply plugin: 'org.aim42.{project}'
 ----
-<1> In case you would like to use a development version (or even branch), check out <<sec:development-versions,development versions>>.
+
+<1> In case you would like to use a development version (or even a branch), check out <<sec:development-versions,development versions>>.
 <2> Beginning with version `2.x` all releases will be published to https://central.sonatype.com/artifact/org.aim42.htmlSanityCheck/org.aim42.htmlSanityCheck.gradle.plugin[Maven Central].
 <3> The https://plugins.gradle.org[Gradle Plugin Portal] contains https://plugins.gradle.org/plugin/org.aim42.htmlSanityCheck[most versions] or will redirect downloads of newer versions to Maven Central.
 <4> Check out <<box:current-version,the current version>>.
@@ -65,7 +66,7 @@ apply plugin: 'org.aim42.{project}'
 [IMPORTANT]
 .Latest (development) versions
 ====
-* The latest https://github.com/aim42/htmlSanityCheck/releases[release version] is defined in https://github.com/aim42/htmlSanityCheck/blob/main/gradle.properties[`gradle.properties` on `main` branch].
+* The latest https://github.com/aim42/htmlSanityCheck/releases[release version] is defined in https://github.com/aim42/htmlSanityCheck/blob/main/gradle.properties[`gradle.properties` on the `main` branch].
 * The current (development) version is defined in {gradleProperties}
 +
 [source]
@@ -93,7 +94,7 @@ Type: `org.gradle.api.file.FileCollection`.
 +
 Default: All files in `+{sourceDir}+` whose names end with `.html`.
 
-`checkingResultsDir` (optional):: Directory where the checking results written to.
+`checkingResultsDir` (optional):: Directory where the checking results are written to.
 +
 Type: Directory.
 +
@@ -118,7 +119,7 @@ Type: Integer.
 +
 Default: `5000`.
 
-`ignoreLocalHost` (optional):: Ignore localhost as hostname.
+`ignoreLocalHost` (optional):: Ignore localhost as the hostname.
 +
 Type: Boolean.
 +
@@ -153,7 +154,7 @@ Default: Empty list
 []
 ----
 
-`httpWarningCodes` (optional):: Additional HTTP response codes treated as warning.
+`httpWarningCodes` (optional):: Additional HTTP response codes are treated as warning.
 +
 Type: List.
 +
@@ -174,9 +175,7 @@ Note that HTTP redirects are treated as a warning to make the user aware of the 
 Some HSC reports contain the respective location.
 ====
 
-
-
-`httpErrorCodes` (optional):: Additional HTTP response codes treated as error.
+`httpErrorCodes` (optional):: Additional HTTP response codes are treated as errors.
 +
 Type: List.
 +
@@ -187,7 +186,7 @@ Default:
 include::../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/tools/Web.java[tag=HTTP_ERROR_CODES,indent=0]
 ----
 
-`httpSuccessCodes` (optional):: Additional HTTP response codes treated as success.
+`httpSuccessCodes` (optional):: Additional HTTP response codes are treated as a success.
 +
 Type: List.
 +

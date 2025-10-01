@@ -16,10 +16,11 @@ include::{maven-plugin-source-path}/htmlSanityCheck/maven/HtmlSanityCheckMojo.ja
 
 ==== Directory Structure and Required Files
 
-To be dome //todo
+To be done.
 
-==== Passing Parameters From Buildfile to Plugin
-To be done
+==== Passing Parameters From Build file to Plugin
+
+To be done.
 
 ==== Building the Plugin
 
@@ -31,4 +32,4 @@ TBD
 
 ==== Further Information on Creating Maven Plugins
 
-The https://maven.apache.org/plugin-developers/index.html[Maven user guide] describes how to write a plugins.
+The https://maven.apache.org/plugin-developers/index.html[Maven user guide] describes how to write plugins.
