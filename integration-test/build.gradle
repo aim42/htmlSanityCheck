@@ -143,9 +143,9 @@ tasks.register("cleanIntegrationTestMavenPlugin") {
         def result = exec {
             workingDir INTEGRATION_TEST_DIRECTORY_MAVEN
             if (System.getProperty("os.name") ==~ /Windows.*/) {
-                commandLine "cmd", "/c", "mvnw.cmd", "clean", "-Dhsc.version=${project.version}", "-ssettings.xml"
+                commandLine "cmd", "/c", "mvnw.cmd", "clean", "-Dhsc.version=${project.version}", "-ssettings.xml", "-B"
             } else {
-                commandLine "./mvnw", "clean", "-Dhsc.version=${project.version}", "-ssettings.xml"
+                commandLine "./mvnw", "clean", "-Dhsc.version=${project.version}", "-ssettings.xml", "-B"
             }
         }
 
