@@ -1,4 +1,7 @@
 ifdef::backend-html5[]
+:project-report-issue-link: {project-issues}/new?title=&body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23page:
+:project-repository-docs-edit-link: {project-url}/edit/develop/src/docs/
+
 image::https://img.shields.io/badge/improve-this%20doc-orange.svg[link={project-repository-docs-edit-link}{filename}, float=right]
 image::https://img.shields.io/badge/create-an%20issue-blue.svg[link="{project-report-issue-link}{filename}", float=right]
 endif::[]

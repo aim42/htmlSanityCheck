@@ -5,12 +5,11 @@ Dr. Gernot Starke <gernot.starke@innoq.com>
 v0.9, 2014-09-02
 :imagesdir: ./images
 :experimental:
-:repositoryDocsDir: https://github.com/aim42/htmlSanityCheck/blob/main/src/docs/
+
+include::asciidoctor-config.ad[]
+
+:repositoryDocsDir: {project-url}/blob/main/src/docs/
 :improveDocImage: https://img.shields.io/badge/improve-this%20doc-orange.svg
-:project: htmlSanityCheck
-:project-url: https://github.com/aim42/htmlSanityCheck
-:project-issues: https://github.com/aim42/htmlSanityCheck/issues
-:project-bugs: "https://github.com/aim42/htmlSanityCheck/issues?q=is%3Aopen+is%3Aissue+label%3Abug"
 
 image::{improveDocImage}[link={repositoryDocsDir}index.adoc, float=right]
 

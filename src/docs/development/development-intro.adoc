@@ -12,13 +12,15 @@
 :experimental:
 :imagesdir: ../images
 
+include::../asciidoctor-config.ad[]
+
 === Prerequisites
 
 ==== General Prerequisites
 
 Make yourself familiar with
 
-* The{gradle-url}[Gradle] build system,
+* The {gradle-url}[Gradle] build system,
 * the {maven-url}[Maven] build system,
 * https://jsoup.org/apidocs/[JSoup API documentation].
 

@@ -1,6 +1,6 @@
 = image:htmlsanitycheck-logo.png[HSC] HTML Sanity Check (HSC)
 :doctype: book
-include::asciidoctor-config.ad[]
+include::src/docs/asciidoctor-config.ad[]
 
 ifndef::xrefToCli[:xrefToCli: htmlSanityCheck-cli/README.adoc]
 ifndef::xrefToGradlePlugin[:xrefToGradlePlugin: htmlSanityCheck-gradle-plugin/README.adoc]

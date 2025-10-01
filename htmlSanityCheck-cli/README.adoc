@@ -1,6 +1,6 @@
 = HSC CLI Module
 :doctype: book
-include::../asciidoctor-config.ad[]
+include::../src/docs/asciidoctor-config.ad[]
 
 ifdef::env-github[]
 :imagesdir: ../src/docs/images

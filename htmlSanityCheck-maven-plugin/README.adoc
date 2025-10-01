@@ -1,6 +1,6 @@
 = HSC Maven Plugin
 :doctype: book
-include::../asciidoctor-config.ad[]
+include::../src/docs/asciidoctor-config.ad[]
 
 image:https://img.shields.io/maven-central/v/org.aim42.htmlSanityCheck/htmlSanityCheck-maven-plugin[link=https://central.sonatype.com/artifact/org.aim42.htmlSanityCheck/htmlSanityCheck-maven-plugin]
 

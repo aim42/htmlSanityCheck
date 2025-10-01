@@ -16,6 +16,7 @@ tasks.register('copyReadmeResources', Copy) {
     }
     from("${projectRoot}/src/docs") {
         include 'images/**'
+        include 'asciidoctor-config.ad'
     }
     into "${Project.DEFAULT_BUILD_DIR_NAME}/docs"
 }
