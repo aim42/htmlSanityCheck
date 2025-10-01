@@ -4,8 +4,8 @@ allowmixing
 
 frame "cmp HTML_Checking_Domain" {
 
-    class "(external) Hyperlink" as hyperlink #yellow
-    class "(internal) Cross Reference" as crossreference #yellow
+    class "(external)\nHyperlink" as hyperlink #yellow
+    class "(internal)\nCross-Reference" as crossreference #yellow
     class "Link" as link #yellow
     class "link Target" as linktarget #yellow
     class "URI" as uri #yellow
@@ -16,7 +16,7 @@ frame "cmp HTML_Checking_Domain" {
 
     class "HTML page" as htmlpage #lightblue
     class "Checker" as checker #lightblue
-    class "HTMLElment" as htmlelement #lightblue
+    class "HTML Element" as htmlelement #lightblue
     class "Finding" as finding #lightblue {
     -item : String
     -suggestion : String
@@ -28,7 +28,7 @@ frame "cmp HTML_Checking_Domain" {
     -nrOfItemsChecked:int
     }
 
-    class "Single Page Result" as singlepasgeresult #lightblue {
+    class "Single Page Results" as singlepageresults #lightblue {
     -pageTitle:String
     -pageName:String
     }
@@ -36,8 +36,8 @@ frame "cmp HTML_Checking_Domain" {
     -imageDirs:FileCollection
     }
 
-    link <|-down- hyperlink
-    link <|-down- crossreference
+    link <|-down-- hyperlink
+    link <|-down-- crossreference
     linktarget <|-- resource
     resource <|-- file
     resource <|-- stylesheet
@@ -53,24 +53,19 @@ frame "cmp HTML_Checking_Domain" {
     finding -[dashed]-> htmlelement : responsible
     singecheckresult -[dashed]-> htmlpage : refers to
 
-    link "0..*"  <-down-> "1" linktarget : refences
+    link "0..*" <-down-> "1" linktarget : references
 
-    htmlpage "0..*" o-- "0..*" link :contains
+    htmlpage "0..*" o-- "0..*" link : contains
 
     singecheckresult "1" o-- "0..*" finding
-    singecheckresult --o  singlepasgeresult
-    runresult o-- singlepasgeresult
-
-    rectangle "legende" {
-    rectangle "Implementation Class" #lightblue
-    rectangle "Domain Class" #yellow
-    }
+    singecheckresult --o  singlepageresults
+    runresult o-- singlepageresults
 }
 
-
-
-
-
-
+rectangle "legend" {
+    rectangle "Implementation Class" #lightblue
+    rectangle "Domain Class" #yellow
+    "Implementation Class" -down[hidden]- "Domain Class"
+}
 @enduml
 

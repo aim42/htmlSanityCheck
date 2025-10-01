@@ -16,7 +16,7 @@ frame "cmp hsc-deployment" {
         JDK -- Groovy
         JDK -- Gradle
         hsccheck -[dashed]-> jsoup
-        }
+    }
 
     node "global artifact repository (maven central)" {
         artifact "hsc-plugin (fat-jar)" as jar <<binary>> #lightgreen
@@ -34,14 +34,13 @@ frame "cmp hsc-deployment" {
     build -up[dashed]-> jar : <<referenced-binary-version>>\n internet/https
     spec -[dashed]-> jar : <<describe>>
     jar -[dashed]-> hsccheck : <<compiled-from>>
+}
 
-    rectangle legende {
-       rectangle "our stuff" #lightgreen
-       rectangle "other stuff" #lightblue
-    }
+rectangle legend {
+   rectangle "our stuff" #lightgreen
+   rectangle "other stuff" #lightblue
 
-
-
+   "our stuff" -down[hidden]- "other stuff"
 }
 
 @enduml
