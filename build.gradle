@@ -354,7 +354,7 @@ tasks.register("integrationTestOnly") {
     dependsOn(
             ':publishAllPublicationsToMyLocalRepositoryForFullIntegrationTestsRepository',
             ':htmlSanityCheck-cli:installDist',
-            ':htmlSanityCheck-cli:dockerBuild'
+            ':htmlSanityCheck-cli:dockerBuildLocal'
     )
 
     doLast {

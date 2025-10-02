@@ -226,7 +226,7 @@ tasks.register("integrationTestDocker") {
         String docsDir = file("${INTEGRATION_TEST_DIRECTORY_COMMON_BUILD}/docs").absolutePath
         String reportsDir = buildReportsDirectory.absolutePath
 
-        String params = "--rm -v \"${docsDir}:${docsDir}\" -v \"${reportsDir}\":/reports -w \"${docsDir}\" ${image} -r /reports --exclude https://www\\.baeldung\\.com/.*"
+        String params = "--rm -v \"${docsDir}:${docsDir}\" -v \"${reportsDir}\":/reports -w \"${docsDir}\" ${image} -r /reports --exclude https://www\\.baeldung\\.com/.* --fail-on-errors"
         def result = exec {
             if (System.getProperty("os.name") ==~ /Windows.*/) {
                 // Use cmd to run docker on Windows
