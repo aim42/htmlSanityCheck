@@ -92,6 +92,9 @@ class HscCommand implements Runnable {
     @Option(names = ["-e", "--exclude"], description = "Exclude remote patterns to check", split = ',')
     Pattern[] excludes = []
 
+    @Option(names = ["-f", "--fail-on-errors"], description = "Fail On Error(s")
+    boolean failOnErrors
+
     @Parameters(index = "0", arity = "0..1", description = "base directory (default: current directory)")
     File srcDir = new File(".").getAbsoluteFile()
 
@@ -177,6 +180,7 @@ class HscCommand implements Runnable {
                     .checkingResultsDir(resultsDirectory)
                     .checksToExecute(AllCheckers.CHECKER_CLASSES)
                     .excludes(hscCommand.excludes as Set)
+                    .failOnErrors(hscCommand.failOnErrors)
                     .build()
 
             // if we have no valid configuration, abort with exception
