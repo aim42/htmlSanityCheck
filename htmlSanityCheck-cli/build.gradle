@@ -43,13 +43,19 @@ def dockerTags(Project project) {
         result += ['v' + project.version.substring(0, 1), 'latest']
     }
 
+    def additionalTags = System.getProperty('docker.image.additional.tags')
+    if (additionalTags) {
+        logger.quiet("Adding additional tags '${additionalTags}'")
+        result += additionalTags.split(',').collect { it.trim() }
+    }
+
     return result
 }
 
 docker {
     registry = "ghcr.io"
     repository = "aim42/hsc"
-    buildArgs = [VERSION: project.version]
+    buildArgs = ["VERSION": "${project.version}" as String]
     dockerFilePath = "."
     tags = dockerTags(project)
     applyLatestTag = false

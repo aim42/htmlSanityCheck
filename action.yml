@@ -10,7 +10,6 @@ runs:
   using: 'docker'
   # If the image tag changes, e.g., to v3, the action in the test workflow (workflows/gradle-build.yml) must be adjusted accordingly
   image: 'docker://ghcr.io/aim42/hsc:v2'
-  entrypoint: '/bin/sh'
+  entrypoint: '/hsc.sh'
   args:
-  - -c
-  - java -jar /hsc.jar ${{ inputs.args }}
+    - ${{ inputs.args }}

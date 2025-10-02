@@ -7,6 +7,11 @@ on:
   pull_request:
   push:
   workflow_dispatch:
+    inputs:
+      additional_tags:
+        description: 'Additional tags for Docker images (comma-separated)'
+        required: false
+        type: string
 
 jobs:
   build-artifacts:
@@ -150,7 +155,9 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle-caches
 
       - name: Execute Gradle build
-        run: ./gradlew dockerPush --scan --stacktrace
+        env:
+          ADDITIONAL_TAGS: ${{ inputs.additional_tags }}
+        run: ./gradlew dockerPush -Ddocker.image.additional.tags="${ADDITIONAL_TAGS}" --scan --stacktrace
 
       - name: Collect state upon failure
         if: failure()
