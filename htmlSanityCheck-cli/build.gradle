@@ -56,13 +56,6 @@ docker {
     applyLatestTag = false
 }
 
-tasks.register('dockerBuildLocal', com.fussionlabs.gradle.docker.tasks.DockerBuildx) {
-    loadImage = true
-    pushImage = false
-
-    dependsOn shadowJar
-}
-
 /*
  * Copyright Gerd Aschemann and aim42 contributors.
  *
