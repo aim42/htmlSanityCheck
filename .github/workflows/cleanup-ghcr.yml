@@ -1,0 +1,102 @@
+name: Clean up old GHCR images
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # every night at 02:00 UTC
+  workflow_dispatch:
+    inputs:
+      retention_days:
+        description: 'Delete images older than this many days'
+        required: false
+        default: '14'
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  cleanup-ghcr:
+    name: Remove timestamped images older than 14 days
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'schedule' || github.ref == 'refs/heads/main' }}
+    steps:
+      - name: Clean up old container versions
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const org = 'aim42';
+            const package_type = 'container';
+            const package_name = 'hsc';
+            const per_page = 100;
+            const tsTagRegex = /^\d{14}$/; // yyyyMMddHHmmss
+            const daysInput = (context.payload && context.payload.inputs && context.payload.inputs.retention_days) || '14';
+            const daysParsed = parseInt(daysInput, 10);
+            const retentionDays = Number.isFinite(daysParsed) && daysParsed > 0 ? daysParsed : 14;
+            const cutoff = new Date(Date.now() - retentionDays * 24 * 60 * 60 * 1000); // retentionDays days ago
+            core.info(`Using retention period: ${retentionDays} day(s).`);
+
+            function parseTimestampTag(tag) {
+              // tag format: yyyyMMddHHmmss, interpreted as UTC
+              const y = parseInt(tag.slice(0, 4), 10);
+              const m = parseInt(tag.slice(4, 6), 10) - 1;
+              const d = parseInt(tag.slice(6, 8), 10);
+              const hh = parseInt(tag.slice(8, 10), 10);
+              const mm = parseInt(tag.slice(10, 12), 10);
+              const ss = parseInt(tag.slice(12, 14), 10);
+              return new Date(Date.UTC(y, m, d, hh, mm, ss));
+            }
+
+            let page = 1;
+            let totalDeleted = 0;
+            let scanned = 0;
+
+            while (true) {
+              const { data: versions } = await github.request(
+                'GET /orgs/{org}/packages/{package_type}/{package_name}/versions',
+                { org, package_type, package_name, per_page, page }
+              );
+
+              if (!versions || versions.length === 0) break;
+
+              for (const v of versions) {
+                scanned++;
+                const tags = (v.metadata && v.metadata.container && v.metadata.container.tags) || [];
+                if (!tags || tags.length === 0) continue;
+
+                // Skip protected tags to avoid removing latest or release tags that share the same version
+                const hasProtected = tags.some(t => t === 'latest' || /^v\d+/.test(t));
+                if (hasProtected) {
+                  core.info(`Skipping protected version ${v.id} with tags: ${tags.join(', ')}`);
+                  continue;
+                }
+
+                const tsTags = tags.filter(t => tsTagRegex.test(t));
+                if (tsTags.length === 0) continue;
+
+                // If any timestamp tag is older than cutoff, delete the entire version
+                let shouldDelete = tsTags.some(t => parseTimestampTag(t) < cutoff);
+
+                if (shouldDelete) {
+                  try {
+                    await github.request(
+                      'DELETE /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}',
+                      {
+                        org,
+                        package_type,
+                        package_name,
+                        package_version_id: v.id,
+                      }
+                    );
+                    totalDeleted++;
+                    core.info(`Deleted version ${v.id} with tags: ${tags.join(', ')}`);
+                  } catch (err) {
+                    core.warning(`Failed to delete version ${v.id}: ${err.message}`);
+                  }
+                }
+              }
+
+              page++;
+            }
+
+            core.info(`Scanned versions: ${scanned}. Deleted versions: ${totalDeleted}.`);
