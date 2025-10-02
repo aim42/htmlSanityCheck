@@ -2,7 +2,6 @@ plugins {
     id 'application'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'com.fussionlabs.gradle.docker-plugin' version '0.6.0'
-
 }
 
 dependencies {
@@ -36,12 +35,12 @@ shadowJar {
 def dockerTags(Project project) {
     String currentBranch = "${'git branch --show-current'.execute().text.trim()}"
     def result = [
-            "${currentBranch == 'main' ? 'latest' : java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern('yyyyMMddHHmmss'))}" as String,
+            java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern('yyyyMMddHHmmss')) as String,
             "${currentBranch.replaceAll('/', '-')}" as String,
             ]
     if (currentBranch == 'main') {
         // On the main branch we should have the latest major prepended with 'v' for GH actions
-        result += [ 'v' + project.version.substring(0, 1) ]
+        result += ['v' + project.version.substring(0, 1), 'latest']
     }
 
     return result
@@ -54,6 +53,7 @@ docker {
     buildArgs = [VERSION: project.version]
     dockerFilePath = "."
     tags = dockerTags(project)
+    applyLatestTag = false
 }
 
 /*
