@@ -49,7 +49,6 @@ def dockerTags(Project project) {
 docker {
     registry = "ghcr.io"
     repository = "aim42/hsc"
-    platforms = ["linux/amd64", "linux/arm64"]
     buildArgs = [VERSION: project.version]
     dockerFilePath = "."
     tags = dockerTags(project)
@@ -60,8 +59,24 @@ tasks.register('dockerBuildLocal', com.fussionlabs.gradle.docker.tasks.DockerBui
     loadImage = true
     pushImage = false
 
+    def arch = System.getProperty("os.arch")
+    project.extensions.getByType(com.fussionlabs.gradle.docker.DockerPluginExtension).platforms = ["linux/${(arch == 'amd64') ? 'amd64' : 'arm64'}"]
+    logger.quiet("Using Docker platform(s): ${project.extensions.getByType(com.fussionlabs.gradle.docker.DockerPluginExtension).platforms} (for arch '${arch}')")
+
     dependsOn shadowJar
 }
+
+tasks.register('dockerBuildMulti', com.fussionlabs.gradle.docker.tasks.DockerBuildx) {
+    loadImage = false
+    pushImage = true
+
+    project.extensions.getByType(com.fussionlabs.gradle.docker.DockerPluginExtension).platforms = ["linux/amd64", "linux/arm64"]
+    logger.quiet("Using Docker platform(s): ${project.extensions.getByType(com.fussionlabs.gradle.docker.DockerPluginExtension).platforms}")
+
+    dependsOn shadowJar
+}
+
+dockerPush.dependsOn("dockerBuildMulti")
 
 /*
  * Copyright Gerd Aschemann and aim42 contributors.
