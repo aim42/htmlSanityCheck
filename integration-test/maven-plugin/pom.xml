@@ -33,7 +33,7 @@
                         <file>../common/build/docs/README.html</file>
                     </sourceDocuments>
                     <excludes>
-                        <exclude>https://www.baeldung.com/.*</exclude>
+                        <exclude>https://www\.baeldung\.com/.*</exclude>
                     </excludes>
                     <sourceDir>../common/build/docs</sourceDir>
                     <checkingResultsDir>${project.build.directory}/reports</checkingResultsDir>

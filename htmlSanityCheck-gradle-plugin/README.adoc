@@ -328,7 +328,7 @@ htmlSanityCheck {
     checkerClasses = [DuplicateIdChecker, MissingImageFilesChecker]
 
     // Exclude from checking
-    excludes = ["(http|https)://exclude.this/url.*", ".*skip-host.org.*", "https://www.baeldung.com/.*"] // <1>
+    excludes = ["(http|https)://exclude\\.this/url.*", ".*skip-host\\.org.*", "https://www\\.baeldung\\.com/.*"] // <1>
 }
 ----
 

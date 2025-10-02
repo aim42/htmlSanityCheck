@@ -10,7 +10,7 @@ File reports = file("${Project.DEFAULT_BUILD_DIR_NAME}/reports")
 htmlSanityCheck {
     sourceDir = file("../common/${Project.DEFAULT_BUILD_DIR_NAME}/docs")
 
-    excludes = ["https://www.baeldung.com/.*"]
+    excludes = ["https://www\\.baeldung\\.com/.*"]
 
     httpSuccessCodes = [429]
 
