@@ -206,8 +206,6 @@ tasks.register("integrationTestDocker") {
         try {
             if (System.getProperty("os.name") ==~ /Windows.*/) {
                 'cmd /c "docker --version"'.execute().waitFor()
-                logger.quiet("Though Docker is available we currently skip Docker integration tests as there is no Windows image of HSC provided")
-                return
             } else {
                 'docker --version'.execute().waitFor()
             }
