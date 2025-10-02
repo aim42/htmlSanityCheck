@@ -18,6 +18,58 @@ jobs:
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+  test-gh-action:
+    needs: build-artifacts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v5
+
+      - name: Prepare Docker image for test
+        run: |
+          tag=$(git branch --show-current | tr '/' '-')
+          docker pull ghcr.io/aim42/hsc:${tag}
+          docker tag ghcr.io/aim42/hsc:${tag} ghcr.io/aim42/hsc:v2
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: build-artifacts
+          path: .
+
+      - name: Run GH Action as provided by this repository
+        uses: ./
+        with:
+          args: -r build/gh-action-test-report integration-test/common/build/docs --exclude 'https://www\.baeldung\.com/.*' --fail-on-errors
+
+      - name: Upload GH Action test results
+        uses: actions/upload-artifact@v4
+        with:
+          path: build/gh-action-test-report
+
+      - name: Test Result of GH Action
+        run: |
+          if test -s build/gh-action-test-report/index.html; then
+            echo "Test Successful"
+          else
+            echo "Test Failed: Report not found" >&2
+            exit 1
+          fi
+
+      - name: Collect state upon failure
+        if: failure()
+        run: |
+          echo "Git:"
+          git status
+          echo "Env:"
+          env | sort
+          echo "PWD:"
+          pwd
+          echo "Files:"
+          find * -ls
+          ./gradlew javaToolchains
+
   post-build:
     needs: build-artifacts
     runs-on: ubuntu-latest
@@ -60,7 +112,7 @@ jobs:
           ./gradlew javaToolchains
 
   publish-docker-images:
-    needs: build-artifacts
+    needs: test-gh-action
     permissions:
       packages: write
       contents: read
