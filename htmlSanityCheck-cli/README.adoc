@@ -17,22 +17,47 @@ The Command Line Interface (CLI) module of HTML Sanity Check (xref:{xrefToManual
 
 == Installation (Command Line Interface)
 
-=== Prerequisites
+You can run HSC on your machine
+
+* As a <<sec:java-usage,Java application>>{nbsp}->{nbsp}<<sec:java-installation>>, or
+* As a <<sec:container-usage,Container>>{nbsp}->{nbsp}<<sec:container-installation>>, or
+
+
+[[sec:java-installation]]
+=== Java Installation
+
+==== Prerequisites
 
 The HSC CLI needs Java 8 (`java` executable) or higher on the respective OS search path (`+${PATH}+` on Linux/macOS, `%path%` on Windows).
 
-=== SDKMAN
+==== SDKMAN
 
 If you use https://sdkman.io[SDKMAN], you can install HSC as SDKMAN candidate: `sdk install hsc`.
 
-=== Download
+==== Download
 
-Alternatively,
+Alternatively, you can download and unpack the CLI release:
 
 * Download the HSC CLI from the https://github.com/aim42/htmlSanityCheck/releases[release{nbsp}page].
 * Unpack the file in a convenient place, e.g., `/usr/local/hsc`.
+* Add the unpacked bin directory to your path, e.g. (for Unix), `+PATH=${PATH}:/usr/local/hsc/bin+`.
+
+[[sec:container-installation]]
+=== Container (Docker) Installation
+
+Alternatively, you can use a local Container runtime (such as https://www.docker.com/[Docker] or https://podman.io/[Podman]) and execute HSC as a container.
+In this case, no preliminary installation is necessary (except for the container runtime) you can directly <<sec:container-usage,run HSC>>.
+
+[NOTE]
+====
+While HSC supports both Docker and Podman as container runtimes, our examples and automated tests currently only use Docker.
+The commands should work similarly with Podman by replacing `docker` with `podman` in the examples.
+====
 
 == Usage
+
+[[sec:java-usage]]
+=== Java usage
 
 Execute the CLI tool with the following command.
 If the `sourceDirectory` is omitted, HSC uses the current directory as base-directory to search for HTML files.
@@ -50,6 +75,69 @@ Windows::
 ----
 hsc.bat [ options ] [ sourceDirectory ]
 ----
+
+[[sec:container-usage]]
+=== Using the Container image
+
+You can run HSC without installing Java or the CLI by using the Container image published at the GitHub Container Registry:
+`ghcr.io/aim42/hsc`.
+
+Unix (shell) example (Linux/macOS)::
++
+[source,sh]
+----
+# Assume your HTML files are under ./docs and you want the report under ./build/reports
+docs_dir="${PWD}/docs"
+reports_dir="${PWD}/build/reports"
+mkdir -p "$reports_dir"
+
+# Run the Docker image, mount the docs and a host reports directory, and set the working directory
+docker run --rm \
+  -v "${docs_dir}:${docs_dir}" \
+  -v "${reports_dir}:/reports" \
+  -w "${docs_dir}" \
+  ghcr.io/aim42/hsc:latest \
+  -r /reports
+----
+
+Add options as necessary (example)::
++
+[source,sh]
+----
+# Exclude some external links via regex and restrict checked suffixes
+docker run --rm \
+  -v "$docs_dir:$docs_dir" \
+  -v "$reports_dir:/reports" \
+  -w "$docs_dir" \
+  ghcr.io/aim42/hsc:latest \
+  -r /reports \
+  --exclude https://www.example.com/.* \
+  --suffix html,htm
+----
+
+Windows PowerShell example::
++
+[source,powershell]
+----
+$DocsDir = (Resolve-Path ./docs).Path
+$ReportsDir = (Resolve-Path ./build/reports).Path
+New-Item -Force -ItemType Directory $ReportsDir | Out-Null
+
+docker run --rm `
+  -v "$DocsDir`:$DocsDir" `
+  -v "$ReportsDir`:/reports" `
+  -w "$DocsDir" `
+  ghcr.io/aim42/hsc:latest `
+  -r /reports
+----
+
+Notes::
+
+* The container entrypoint simply invokes the CLI (`java -jar /hsc.jar`) and forwards all arguments, so you can pass the same options as described below.
+* Reports will be written to the directory you mount at `/reports` when using `-r /reports`.
+* Tags: use `:latest` for the latest released image.
+Development builds may also be available using branch-name tags (used in integration tests).
+* The integration test `integration-test/build.gradle` contains a full working example of the Docker invocation used in CI.
 
 === Options
 
