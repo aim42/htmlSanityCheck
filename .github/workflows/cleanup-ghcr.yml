@@ -9,6 +9,11 @@ on:
         description: 'Delete images older than this many days'
         required: false
         default: '14'
+      dry_run:
+        description: 'If true, only print which versions would be deleted (no deletion performed)'
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -30,11 +35,18 @@ jobs:
             const package_name = 'hsc';
             const per_page = 100;
             const tsTagRegex = /^\d{14}$/; // yyyyMMddHHmmss
+            const sha256Regex = /^[a-f0-9]{64}$/i; // sha256 digest-like tag
+
             const daysInput = (context.payload && context.payload.inputs && context.payload.inputs.retention_days) || '14';
             const daysParsed = parseInt(daysInput, 10);
             const retentionDays = Number.isFinite(daysParsed) && daysParsed > 0 ? daysParsed : 14;
             const cutoff = new Date(Date.now() - retentionDays * 24 * 60 * 60 * 1000); // retentionDays days ago
-            core.info(`Using retention period: ${retentionDays} day(s).`);
+
+            const dryRunInput = context.payload && context.payload.inputs ? context.payload.inputs.dry_run : undefined;
+            const dryRun = (typeof dryRunInput === 'boolean') ? dryRunInput
+              : (dryRunInput === undefined ? true : String(dryRunInput).toLowerCase() === 'true');
+
+            core.info(`Using retention period: ${retentionDays} day(s). Dry-run: ${dryRun}.`);
 
             function parseTimestampTag(tag) {
               // tag format: yyyyMMddHHmmss, interpreted as UTC
@@ -49,6 +61,7 @@ jobs:
 
             let page = 1;
             let totalDeleted = 0;
+            let wouldDelete = 0;
             let scanned = 0;
 
             while (true) {
@@ -56,47 +69,80 @@ jobs:
                 'GET /orgs/{org}/packages/{package_type}/{package_name}/versions',
                 { org, package_type, package_name, per_page, page }
               );
-
+            
               if (!versions || versions.length === 0) break;
 
               for (const v of versions) {
                 scanned++;
                 const tags = (v.metadata && v.metadata.container && v.metadata.container.tags) || [];
-                if (!tags || tags.length === 0) continue;
+                const createdAt = new Date(v.created_at || v.updated_at || 0);
+
+                core.debug (`Checking version '${v.id}' (${v.name}) of '${createdAt}' with tags: '${tags.join(', ')}'`); 
 
                 // Skip protected tags to avoid removing latest or release tags that share the same version
-                const hasProtected = tags.some(t => t === 'latest' || /^v\d+/.test(t));
-                if (hasProtected) {
+                const isProtected = tags.some(t => t === 'latest' || /^v\d[\.\d]*/.test(t));
+                if (isProtected) {
                   core.info(`Skipping protected version ${v.id} with tags: ${tags.join(', ')}`);
                   continue;
                 }
 
                 const tsTags = tags.filter(t => tsTagRegex.test(t));
-                if (tsTags.length === 0) continue;
+                const shaTags = tags.filter(t => sha256Regex.test(t));
+                const nonShaTags = tags.filter(t => !sha256Regex.test(t));
+
+                let shouldDelete = false;
 
                 // If any timestamp tag is older than cutoff, delete the entire version
-                let shouldDelete = tsTags.some(t => parseTimestampTag(t) < cutoff);
+                if (tsTags.length > 0) {
+                  shouldDelete = tsTags.some(t => parseTimestampTag(t) < cutoff);
+                }
+
+                // Additionally handle versions that are tagged only by sha256 values.
+                // Delete if older than retention (by created_at/updated_at) unless there is any non-sha256 tag.
+                if (!shouldDelete && shaTags.length > 0 && nonShaTags.length === 0) {
+                  if (createdAt instanceof Date && !isNaN(createdAt) && createdAt < cutoff) {
+                    shouldDelete = true;
+                  }
+                }
+
+                // Handle versions with no tags at all: delete if older than retention by created/updated timestamp
+                if (!shouldDelete && (!tags || tags.length === 0)) {
+                  if (createdAt instanceof Date && !isNaN(createdAt) && createdAt < cutoff) {
+                    shouldDelete = true;
+                  }
+                }
 
                 if (shouldDelete) {
-                  try {
-                    await github.request(
-                      'DELETE /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}',
-                      {
-                        org,
-                        package_type,
-                        package_name,
-                        package_version_id: v.id,
-                      }
-                    );
-                    totalDeleted++;
-                    core.info(`Deleted version ${v.id} with tags: ${tags.join(', ')}`);
-                  } catch (err) {
-                    core.warning(`Failed to delete version ${v.id}: ${err.message}`);
+                  if (dryRun) {
+                    wouldDelete++;
+                    core.info(`[DRY-RUN] Would delete version '${v.id}' (${v.name}) of '${createdAt}' with tags: '${tags.join(', ')}'`);
+                  } else {
+                    try {
+                      await github.request(
+                        'DELETE /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}',
+                        {
+                          org,
+                          package_type,
+                          package_name,
+                          package_version_id: v.id,
+                        }
+                      );
+                      totalDeleted++;
+                      core.info(`Deleted version '${v.id}' (${v.name}) of '${createdAt}' with tags: ${tags.join(', ')}`);
+                    } catch (err) {
+                      core.warning(`Failed to delete version ${v.id}: ${err.message}`);
+                    }
                   }
+                } else {
+                  core.debug (`Not deleting '${v.id}' (${v.name}) of '${createdAt}' with tags: '${tags.join(', ')}'`); 
                 }
               }
 
               page++;
             }
 
-            core.info(`Scanned versions: ${scanned}. Deleted versions: ${totalDeleted}.`);
+            if (dryRun) {
+              core.info(`Scanned versions: ${scanned}. Would delete versions: ${wouldDelete}.`);
+            } else {
+              core.info(`Scanned versions: ${scanned}. Deleted versions: ${totalDeleted}.`);
+            }
