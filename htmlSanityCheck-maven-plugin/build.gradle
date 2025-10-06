@@ -16,7 +16,7 @@ dependencies {
     implementation("org.apache.maven.plugin-tools:maven-plugin-annotations:${mavenPluginToolsVersion}")
 
     testImplementation libs.junit.jupiter
-    testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.12.2"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:6.0.0"
     // Explicit Launcher Version to override Gradle default
     testImplementation 'org.assertj:assertj-core:3.27.6'
 }
