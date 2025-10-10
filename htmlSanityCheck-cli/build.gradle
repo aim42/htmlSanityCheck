@@ -62,6 +62,8 @@ docker {
 }
 
 tasks.register('dockerBuildLocal', com.fussionlabs.gradle.docker.tasks.DockerBuildx) {
+    def tag = "${'git branch --show-current'.execute().text.trim().replaceAll('/', '-')}"
+    logger.quiet("Using tag '${tag}' for dockerBuildLocal")
     loadImage = true
     pushImage = false
 

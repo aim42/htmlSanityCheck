@@ -15,11 +15,15 @@ on:
 
 jobs:
   build-artifacts:
+    permissions:
+      packages: write
+      contents: read
     uses: ./.github/workflows/build-artifacts.yml
     with:
       # SonarQube requires JDK 17 or higher
       java-version: '17'
       run-sonar: ${{ github.repository == 'aim42/htmlSanityCheck' }}
+      push-docker-sha: true
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
@@ -33,9 +37,11 @@ jobs:
 
       - name: Prepare Docker image for test
         run: |
-          tag=$(git branch --show-current | tr '/' '-')
-          docker pull ghcr.io/aim42/hsc:${tag}
-          docker tag ghcr.io/aim42/hsc:${tag} ghcr.io/aim42/hsc:v2
+          tag="${{ github.sha }}"
+          docker pull "ghcr.io/aim42/hsc:${tag}"
+          echo "Docker Images:"
+          docker images
+          docker tag "ghcr.io/aim42/hsc:${tag}" ghcr.io/aim42/hsc:v2
 
       - name: Download Artifacts
         uses: actions/download-artifact@v5
@@ -65,6 +71,8 @@ jobs:
       - name: Collect state upon failure
         if: failure()
         run: |
+          echo "Docker Images:"
+          docker images
           echo "Git:"
           git status
           echo "Env:"
@@ -162,6 +170,8 @@ jobs:
       - name: Collect state upon failure
         if: failure()
         run: |
+          echo "Docker Images:"
+          docker images
           echo "Maven Repo:"
           (cd $HOME && find .m2 -ls)
           echo "Git:"
