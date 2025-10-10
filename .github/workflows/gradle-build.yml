@@ -151,7 +151,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
-          key: "${{ runner.os }}-gradle-caches }}"
+          key: "${{ runner.os }}-gradle-caches"
           restore-keys: ${{ runner.os }}-gradle-caches
 
       - name: Execute Gradle build
