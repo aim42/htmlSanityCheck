@@ -33,9 +33,9 @@ jobs:
 
       - name: Prepare Docker image for test
         run: |
-          tag=$(git branch --show-current | tr '/' '-')
-          docker pull ghcr.io/aim42/hsc:${tag}
-          docker tag ghcr.io/aim42/hsc:${tag} ghcr.io/aim42/hsc:v2
+          tag="${GITHUB_REF_NAME:=$(git branch --show-current)}"
+          tag="${tag/\//-}"
+          docker tag "ghcr.io/aim42/hsc:${tag}" ghcr.io/aim42/hsc:v2
 
       - name: Download Artifacts
         uses: actions/download-artifact@v5
