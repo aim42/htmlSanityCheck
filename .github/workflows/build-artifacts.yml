@@ -69,6 +69,7 @@ jobs:
         run: |
           ./gradlew dockerPush -Ddocker.image.additional.tags=${{ github.sha }}
           docker pull "ghcr.io/aim42/hsc:${{ github.sha }}"
+          echo "Docker Images:"
           docker images
 
       - name: Cache SonarCloud packages
@@ -96,6 +97,8 @@ jobs:
       - name: Collect state upon failure
         if: failure()
         run: |
+          echo "Docker Images:"
+          docker images
           echo "Git:"
           git status
           echo "Env:"
@@ -105,4 +108,3 @@ jobs:
           echo "Files:"
           find * -ls
           ./gradlew javaToolchains
-          docker images

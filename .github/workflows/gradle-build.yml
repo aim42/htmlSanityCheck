@@ -39,7 +39,8 @@ jobs:
         run: |
           tag="${{ github.sha }}"
           docker pull "ghcr.io/aim42/hsc:${tag}"
-          docker images | grep hsc
+          echo "Docker Images:"
+          docker images
           docker tag "ghcr.io/aim42/hsc:${tag}" ghcr.io/aim42/hsc:v2
 
       - name: Download Artifacts
@@ -70,6 +71,8 @@ jobs:
       - name: Collect state upon failure
         if: failure()
         run: |
+          echo "Docker Images:"
+          docker images
           echo "Git:"
           git status
           echo "Env:"
@@ -79,7 +82,6 @@ jobs:
           echo "Files:"
           find * -ls
           ./gradlew javaToolchains
-          docker images
 
   post-build:
     needs: build-artifacts
@@ -168,6 +170,8 @@ jobs:
       - name: Collect state upon failure
         if: failure()
         run: |
+          echo "Docker Images:"
+          docker images
           echo "Maven Repo:"
           (cd $HOME && find .m2 -ls)
           echo "Git:"
@@ -179,4 +183,3 @@ jobs:
           echo "Files:"
           find * -ls
           ./gradlew javaToolchains
-          docker images
