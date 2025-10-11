@@ -68,6 +68,8 @@ jobs:
         if: ${{ inputs.push-docker-sha }}
         run: |
           ./gradlew dockerPush -Pdocker.image.additional.tags=${{ github.sha }}
+          docker pull "ghcr.io/aim42/hsc:${{ github.sha }}"
+          docker images
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
