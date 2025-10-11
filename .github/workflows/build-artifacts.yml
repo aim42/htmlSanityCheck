@@ -25,6 +25,9 @@ env:
 
 jobs:
   build:
+    env:
+      DOCKER_USERNAME: ${{ github.repository_owner }}
+      DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out

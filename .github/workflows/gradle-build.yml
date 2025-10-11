@@ -15,6 +15,9 @@ on:
 
 jobs:
   build-artifacts:
+    permissions:
+      packages: write
+      contents: read
     uses: ./.github/workflows/build-artifacts.yml
     with:
       # SonarQube requires JDK 17 or higher
