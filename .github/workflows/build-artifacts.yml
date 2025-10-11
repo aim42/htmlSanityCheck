@@ -67,7 +67,7 @@ jobs:
       - name: Push Docker with Git SHA as tag for subsequent tests
         if: ${{ inputs.push-docker-sha }}
         run: |
-          ./gradlew dockerPush -Pdocker.image.additional.tags=${{ github.sha }}
+          ./gradlew dockerPush -Ddocker.image.additional.tags=${{ github.sha }}
           docker pull "ghcr.io/aim42/hsc:${{ github.sha }}"
           docker images
 
