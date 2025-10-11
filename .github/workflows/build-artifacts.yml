@@ -6,6 +6,10 @@ on:
         required: true
         type: string
         default: '17'
+      push-docker-sha:
+        required: false
+        type: boolean
+        default: false
       run-sonar:
         required: false
         type: boolean
@@ -56,6 +60,11 @@ jobs:
 
       - name: Execute Gradle build
         run: ./gradlew clean check integrationTest build --scan --stacktrace
+
+      - name: Push Docker with Git SHA as tag for subsequent tests
+        if: ${{ inputs.push-docker-sha }}
+        run: |
+          ./gradlew dockerPush -Pdocker.image.additional.tags=${{ github.sha }}
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
