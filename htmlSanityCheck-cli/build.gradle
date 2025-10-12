@@ -1,5 +1,7 @@
 plugins {
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'com.fussionlabs.gradle.docker-plugin' version '0.6.0'
 }
 
 dependencies {
@@ -23,6 +25,79 @@ application {
     mainClass = 'org.aim42.htmlsanitycheck.cli.HscCommand'
     applicationName = 'hsc'
 }
+
+shadowJar {
+    archiveClassifier.set('all')
+    mergeServiceFiles()
+    append 'META-INF/services'
+}
+
+def dockerTags(Project project) {
+    String currentBranch = "${'git branch --show-current'.execute().text.trim()}"
+    // Determine a safe tag: prefer branch name, fallback to Git SHA (from env or git)
+    String githubSha = System.getenv('GITHUB_SHA') ?: "${'git rev-parse HEAD'.execute().text.trim()}"
+    String branchOrShaTag = currentBranch ? currentBranch.replaceAll('/', '-') : (githubSha ? "${githubSha}" : null)
+
+    def result = [] as List<String>
+    // Always include a timestamp tag for traceability
+    result += java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern('yyyyMMddHHmmss')) as String
+    // Include branch or SHA-derived tag if available
+    if (branchOrShaTag) {
+        result += branchOrShaTag as String
+    } else {
+        logger.quiet("No branch name or Git SHA could be determined; only timestamp tag will be used")
+    }
+
+    if (currentBranch == 'main') {
+        // On the main branch we should have the latest major prepended with 'v' for GH actions
+        result += ['v' + project.version.substring(0, 1), 'latest']
+    }
+
+    def additionalTags = System.getProperty('docker.image.additional.tags')
+    if (additionalTags) {
+        logger.quiet("Adding additional tags '${additionalTags}'")
+        result += additionalTags.split(',').collect { it.trim() }
+    }
+
+    // Avoid duplicate tags (e.g., if additionalTags repeats a SHA)
+    return result.findAll { it && it.trim() }.unique()
+}
+
+docker {
+    registry = "ghcr.io"
+    repository = "aim42/hsc"
+    buildArgs = ["VERSION": "${project.version}" as String]
+    dockerFilePath = "."
+    tags = dockerTags(project)
+    applyLatestTag = false
+}
+
+tasks.register('dockerBuildLocal', com.fussionlabs.gradle.docker.tasks.DockerBuildx) {
+    def branch = "${'git branch --show-current'.execute().text.trim()}"
+    def sha = System.getenv('GITHUB_SHA') ?: "${'git rev-parse HEAD'.execute().text.trim()}"
+    def tag = branch ? branch.replaceAll('/', '-') : (sha ?: 'timestamp-only')
+    logger.quiet("Using tag '${tag}' for dockerBuildLocal")
+    loadImage = true
+    pushImage = false
+
+    def arch = System.getProperty("os.arch")
+    project.extensions.getByType(com.fussionlabs.gradle.docker.DockerPluginExtension).platforms = ["linux/${(arch == 'amd64') ? 'amd64' : 'arm64'}"]
+    logger.quiet("Using Docker platform(s): ${project.extensions.getByType(com.fussionlabs.gradle.docker.DockerPluginExtension).platforms} (for arch '${arch}')")
+
+    dependsOn shadowJar
+}
+
+tasks.register('dockerBuildMulti', com.fussionlabs.gradle.docker.tasks.DockerBuildx) {
+    loadImage = false
+    pushImage = true
+
+    project.extensions.getByType(com.fussionlabs.gradle.docker.DockerPluginExtension).platforms = ["linux/amd64", "linux/arm64"]
+    logger.quiet("Using Docker platform(s): ${project.extensions.getByType(com.fussionlabs.gradle.docker.DockerPluginExtension).platforms}")
+
+    dependsOn shadowJar
+}
+
+dockerPush.dependsOn("dockerBuildMulti")
 
 /*
  * Copyright Gerd Aschemann and aim42 contributors.

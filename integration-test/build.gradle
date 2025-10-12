@@ -115,7 +115,7 @@ tasks.register("integrationTestCli") {
             buildReportsDirectory.mkdirs()
             final String hscScriptFileName = "../htmlSanityCheck-cli/${BUILD_DIRECTORY}/install/hsc/bin/hsc"
             String params = "-r ${buildReportsDirectory} " +
-                    "--exclude https://www.baeldung.com/.*" +
+                    "--exclude https://www\\.baeldung\\.com/.*" +
                     "${INTEGRATION_TEST_DIRECTORY_COMMON_BUILD}/docs"
             if (System.getProperty("os.name") ==~ /Windows.*/) {
                 commandLine 'cmd', '/c', "echo off && ${hscScriptFileName.replace('/', '\\')}.bat ${params}"
@@ -179,11 +179,75 @@ tasks.register("integrationTestMavenPlugin") {
     }
 }
 
+final String INTEGRATION_TEST_DIRECTORY_DOCKER = "docker"
+final String INTEGRATION_TEST_DIRECTORY_DOCKER_BUILD = "${INTEGRATION_TEST_DIRECTORY_DOCKER}/${BUILD_DIRECTORY}"
+
+tasks.register("cleanIntegrationTestDocker", Delete) {
+    group("Build")
+    description("Deletes the result directory from Docker integration tests")
+
+    def filesToDelete = files(INTEGRATION_TEST_DIRECTORY_DOCKER_BUILD)
+    delete(filesToDelete)
+    outputs.upToDateWhen { !filesToDelete.files.any { it.exists() } }
+}
+
+tasks.register("integrationTestDocker") {
+    group("Verification")
+    description("Run Docker integration tests (only)")
+
+    final File buildReportsDirectory = file("${INTEGRATION_TEST_DIRECTORY_DOCKER_BUILD}/reports")
+    final File testIndex = new File(buildReportsDirectory, "index.html")
+    outputs.file testIndex
+
+    dependsOn(integrationTestPrepare)
+    mustRunAfter(cleanIntegrationTestDocker)
+
+    doLast {
+        try {
+            if (System.getProperty("os.name") ==~ /Windows.*/) {
+                'cmd /c "docker --version"'.execute().waitFor()
+                logger.quiet("Though Docker is available we currently skip Docker integration tests as there is no Windows image of HSC provided")
+                return
+            } else {
+                'docker --version'.execute().waitFor()
+            }
+        } catch (Exception e) {
+            logger.quiet("Docker is not available - skipping Docker integration tests", e)
+            return
+        }
+
+        buildReportsDirectory.mkdirs()
+        // Compute the image tag exactly as in the CLI module: use branch name tag
+        String currentBranch = "${'git branch --show-current'.execute().text.trim()}"
+        String branchTag = currentBranch?.replaceAll('/', '-')
+        String sha = System.getenv('GITHUB_SHA') ?: "${'git rev-parse HEAD'.execute().text.trim()}"
+        String tag = branchTag ?: sha
+        String image = "ghcr.io/aim42/hsc:${tag}"
+
+        // Prepare absolute paths for volume mounts
+        String docsDir = file("${INTEGRATION_TEST_DIRECTORY_COMMON_BUILD}/docs").absolutePath
+        String reportsDir = buildReportsDirectory.absolutePath
+
+        String params = "--rm -v \"${docsDir}:${docsDir}\" -v \"${reportsDir}\":/reports -w \"${docsDir}\" ${image} -r /reports --exclude https://www\\.baeldung\\.com/.* --fail-on-errors"
+        logger.quiet("Executing Docker run with '${params}'")
+        def result = exec {
+            if (System.getProperty("os.name") ==~ /Windows.*/) {
+                // Use cmd to run docker on Windows
+                commandLine 'cmd', '/c', "docker run ${params}"
+            } else {
+                commandLine 'sh', '-c', "docker run ${params}"
+            }
+        }
+        logger.debug "Script output: ${result}"
+        assert testIndex.exists()
+    }
+}
+
 tasks.register("integrationTest") {
     group("Verification")
     description("Run all integration tests (without any installations etc.)")
 
-    dependsOn(integrationTestGradlePlugin, integrationTestCli, integrationTestMavenPlugin)
+    dependsOn(integrationTestGradlePlugin, integrationTestCli, integrationTestMavenPlugin, integrationTestDocker)
 }
 
 tasks.register("cleanIntegrationTest", Delete) {
@@ -191,6 +255,6 @@ tasks.register("cleanIntegrationTest", Delete) {
     description("Deletes all integration test builds")
 
     dependsOn(cleanIntegrationTestCommon, cleanIntegrationTestGradlePlugin,
-            cleanIntegrationTestCli, cleanIntegrationTestMavenPlugin)
+            cleanIntegrationTestCli, cleanIntegrationTestMavenPlugin, cleanIntegrationTestDocker)
 }
 clean.dependsOn(cleanIntegrationTest)
