@@ -219,14 +219,17 @@ tasks.register("integrationTestDocker") {
         buildReportsDirectory.mkdirs()
         // Compute the image tag exactly as in the CLI module: use branch name tag
         String currentBranch = "${'git branch --show-current'.execute().text.trim()}"
-        String branchTag = currentBranch.replaceAll('/', '-')
-        String image = "ghcr.io/aim42/hsc:${branchTag}"
+        String branchTag = currentBranch?.replaceAll('/', '-')
+        String sha = System.getenv('GITHUB_SHA') ?: "${'git rev-parse HEAD'.execute().text.trim()}"
+        String tag = branchTag ?: sha
+        String image = "ghcr.io/aim42/hsc:${tag}"
 
         // Prepare absolute paths for volume mounts
         String docsDir = file("${INTEGRATION_TEST_DIRECTORY_COMMON_BUILD}/docs").absolutePath
         String reportsDir = buildReportsDirectory.absolutePath
 
         String params = "--rm -v \"${docsDir}:${docsDir}\" -v \"${reportsDir}\":/reports -w \"${docsDir}\" ${image} -r /reports --exclude https://www\\.baeldung\\.com/.* --fail-on-errors"
+        logger.quiet("Executing Docker run with '${params}'")
         def result = exec {
             if (System.getProperty("os.name") ==~ /Windows.*/) {
                 // Use cmd to run docker on Windows
