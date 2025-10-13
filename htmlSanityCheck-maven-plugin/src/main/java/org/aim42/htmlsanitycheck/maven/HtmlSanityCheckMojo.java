@@ -200,6 +200,18 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
     @Parameter
     private Set<String> excludes = new HashSet<>();
 
+    /**
+     * (optional)
+     * JUnit output style: FLAT (all files in one directory, default for backwards compatibility)
+     * or HIERARCHICAL (subdirectories mirror source structure, solves filename length issues).
+     * <p>
+     * Type: JunitOutputStyle (FLAT or HIERARCHICAL).
+     * <p>
+     * Default: FLAT.
+     */
+    @Parameter
+    private Configuration.JunitOutputStyle junitOutputStyle;
+
     static PerRunResults performChecks(Configuration myConfig) throws MojoExecutionException {
         try {
             AllChecksRunner allChecksRunner = new AllChecksRunner(myConfig);
@@ -286,6 +298,7 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
                 .ignoreIPAddresses(ignoreIPAddresses)
 
                 .checksToExecute(checkerClasses)
+                .junitOutputStyle(junitOutputStyle)
                 .build();
 
         // in case we have configured specific interpretations of http status codes

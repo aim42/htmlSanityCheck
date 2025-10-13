@@ -86,6 +86,11 @@ class HtmlSanityCheckTask extends DefaultTask {
     @Input
     Set<String> excludes
 
+    // JUnit output style: FLAT (default, backwards compatible) or HIERARCHICAL (mirrors source structure)
+    @Optional
+    @Input
+    Configuration.JunitOutputStyle junitOutputStyle
+
     @Input
     List<Class<? extends Checker>> checkerClasses = AllCheckers.CHECKER_CLASSES
 
@@ -194,6 +199,7 @@ See ${checkingResultsDir} for a detailed report."""
 
                 .checksToExecute(checkerClasses)
                 .excludes(excludes.stream().map(Pattern::compile).collect(Collectors.toSet()))
+                .junitOutputStyle(junitOutputStyle)
                 .build()
 
         // in case we have configured specific interpretations of http status codes

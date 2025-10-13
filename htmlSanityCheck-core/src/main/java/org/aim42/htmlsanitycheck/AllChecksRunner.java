@@ -53,6 +53,9 @@ public class AllChecksRunner {
     // keep all results
     private final PerRunResults resultsForAllPages;
 
+    // configuration (needed for junit output style)
+    private final Configuration configuration;
+
     private static final Logger logger = LoggerFactory.getLogger(AllChecksRunner.class);
 
     /**
@@ -62,6 +65,7 @@ public class AllChecksRunner {
     public AllChecksRunner(Configuration configuration) {
         super();
 
+        this.configuration = configuration;
         this.filesToCheck = configuration.getSourceDocuments();
 
         // TODO: #185 (checker classes shall be detected automatically (aka CheckerFactory)
@@ -175,7 +179,8 @@ public class AllChecksRunner {
      * Report results in JUnit XML
      */
     private void reportCheckingResultsAsJUnitXml(String resultsDir) {
-        Reporter reporter = new JUnitXmlReporter(resultsForAllPages, resultsDir);
+        Reporter reporter = new JUnitXmlReporter(resultsForAllPages, resultsDir,
+                configuration.getJunitOutputStyle());
         reporter.reportFindings();
     }
 }

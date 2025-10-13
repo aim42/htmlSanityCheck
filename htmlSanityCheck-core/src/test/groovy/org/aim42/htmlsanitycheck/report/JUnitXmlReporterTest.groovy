@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.report
 
+import org.aim42.htmlsanitycheck.Configuration
 import org.aim42.htmlsanitycheck.collect.Finding
 import org.aim42.htmlsanitycheck.collect.PerRunResults
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults
@@ -245,8 +246,9 @@ class JUnitXmlReporterTest {
         PerRunResults runResults = new PerRunResults()
         runResults.addPageResults(singlePageResultsWithSimplePath)
 
-        // When: we generate the report
-        new JUnitXmlReporter(runResults, outputPath.absolutePath).reportPageSummary(singlePageResultsWithSimplePath)
+        // When: we generate the report in HIERARCHICAL mode
+        new JUnitXmlReporter(runResults, outputPath.absolutePath, Configuration.JunitOutputStyle.HIERARCHICAL)
+                .reportPageSummary(singlePageResultsWithSimplePath)
 
         // Then: the test file should be created directly in the output directory
         File expectedFile = new File(outputPath, "TEST-index.html.xml")
@@ -268,8 +270,9 @@ class JUnitXmlReporterTest {
         PerRunResults runResults = new PerRunResults()
         runResults.addPageResults(singlePageResultsWithPath)
 
-        // When: we generate the report
-        new JUnitXmlReporter(runResults, outputPath.absolutePath).reportPageSummary(singlePageResultsWithPath)
+        // When: we generate the report in HIERARCHICAL mode
+        new JUnitXmlReporter(runResults, outputPath.absolutePath, Configuration.JunitOutputStyle.HIERARCHICAL)
+                .reportPageSummary(singlePageResultsWithPath)
 
         // Then: the test file should be created in a subdirectory
         File expectedDir = new File(outputPath, "docs")
@@ -294,8 +297,9 @@ class JUnitXmlReporterTest {
         PerRunResults runResults = new PerRunResults()
         runResults.addPageResults(singlePageResultsWithDeepPath)
 
-        // When: we generate the report
-        new JUnitXmlReporter(runResults, outputPath.absolutePath).reportPageSummary(singlePageResultsWithDeepPath)
+        // When: we generate the report in HIERARCHICAL mode
+        new JUnitXmlReporter(runResults, outputPath.absolutePath, Configuration.JunitOutputStyle.HIERARCHICAL)
+                .reportPageSummary(singlePageResultsWithDeepPath)
 
         // Then: the full directory hierarchy should be created
         File expectedDir = new File(outputPath, "docs/guide/user/installation")
@@ -325,8 +329,9 @@ class JUnitXmlReporterTest {
         PerRunResults runResults = new PerRunResults()
         runResults.addPageResults(singlePageResultsWithLongPath)
 
-        // When: we generate the report (should not throw exception)
-        new JUnitXmlReporter(runResults, outputPath.absolutePath).reportPageSummary(singlePageResultsWithLongPath)
+        // When: we generate the report in HIERARCHICAL mode (should not throw exception)
+        new JUnitXmlReporter(runResults, outputPath.absolutePath, Configuration.JunitOutputStyle.HIERARCHICAL)
+                .reportPageSummary(singlePageResultsWithLongPath)
 
         // Then: the file should be created successfully with proper directory structure
         File parentPath = new File(longPath).parentFile
@@ -362,9 +367,9 @@ class JUnitXmlReporterTest {
         runResults.addPageResults(page1)
         runResults.addPageResults(page2)
 
-        JUnitXmlReporter reporter = new JUnitXmlReporter(runResults, outputPath.absolutePath)
+        JUnitXmlReporter reporter = new JUnitXmlReporter(runResults, outputPath.absolutePath, Configuration.JunitOutputStyle.HIERARCHICAL)
 
-        // When: we generate reports for both pages
+        // When: we generate reports for both pages in HIERARCHICAL mode
         reporter.reportPageSummary(page1)
         reporter.reportPageSummary(page2)
 
@@ -399,8 +404,9 @@ class JUnitXmlReporterTest {
         PerRunResults runResults = new PerRunResults()
         runResults.addPageResults(pageWithSpecialChars)
 
-        // When: we generate the report
-        new JUnitXmlReporter(runResults, outputPath.absolutePath).reportPageSummary(pageWithSpecialChars)
+        // When: we generate the report in HIERARCHICAL mode
+        new JUnitXmlReporter(runResults, outputPath.absolutePath, Configuration.JunitOutputStyle.HIERARCHICAL)
+                .reportPageSummary(pageWithSpecialChars)
 
         // Then: the filename should be sanitized but directory structure preserved
         File expectedDir = new File(outputPath, "docs")
@@ -430,8 +436,9 @@ class JUnitXmlReporterTest {
         PerRunResults runResults = new PerRunResults()
         runResults.addPageResults(pageWithRelativePath)
 
-        // When: we generate the report
-        new JUnitXmlReporter(runResults, outputPath.absolutePath).reportPageSummary(pageWithRelativePath)
+        // When: we generate the report in HIERARCHICAL mode
+        new JUnitXmlReporter(runResults, outputPath.absolutePath, Configuration.JunitOutputStyle.HIERARCHICAL)
+                .reportPageSummary(pageWithRelativePath)
 
         // Then: the file should be created (path handling depends on implementation)
         // The implementation should handle this gracefully
