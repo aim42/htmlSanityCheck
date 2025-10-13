@@ -12,6 +12,7 @@ import javax.xml.stream.XMLStreamWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.UUID;
 
 /************************************************************************
@@ -147,8 +148,12 @@ public class JUnitXmlReporter extends Reporter {
                 File tempPath = new File(outputPath, parentDir.getPath());
                 testOutputDir = tempPath.getCanonicalFile();
 
-                // Verify the canonical path is still under outputPath
-                if (!testOutputDir.getAbsolutePath().startsWith(outputPath.getCanonicalPath())) {
+                // Verify the canonical path is still under outputPath using NIO Path API
+                // This provides better security against path traversal attacks
+                Path normalizedOutputPath = outputPath.getCanonicalFile().toPath().normalize();
+                Path normalizedTestOutputDir = testOutputDir.toPath().normalize();
+
+                if (!normalizedTestOutputDir.startsWith(normalizedOutputPath)) {
                     // Path tries to escape outputPath, so just use outputPath directly
                     testOutputDir = outputPath;
                 }
@@ -162,7 +167,13 @@ public class JUnitXmlReporter extends Reporter {
 
         // Ensure the directory exists
         if (!testOutputDir.exists() && !testOutputDir.mkdirs()) {
-            throw new RuntimeException("Cannot create directory " + testOutputDir); //NOSONAR(S112)
+            StringBuilder errorMsg = new StringBuilder("Cannot create directory: ")
+                .append(testOutputDir.getAbsolutePath());
+            errorMsg.append(" (exists: ").append(testOutputDir.exists())
+                    .append(", parent canWrite: ")
+                    .append(testOutputDir.getParentFile() != null ? testOutputDir.getParentFile().canWrite() : "unknown")
+                    .append(")");
+            throw new RuntimeException(errorMsg.toString()); //NOSONAR(S112)
         }
 
         // Create the test file with a simple, sanitized filename
