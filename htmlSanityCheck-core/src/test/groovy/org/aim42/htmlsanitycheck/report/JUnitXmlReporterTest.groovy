@@ -54,16 +54,16 @@ class JUnitXmlReporterTest {
 	}
 	
     @Test(expected = RuntimeException.class)
-    void testInitReportWithNonWritableDirectory() throws IOException {
-        // Create a temporary directory
-        File tempDir = tempFolder.newFolder()
+    void testInitReportWithNonWritableDirectory() {
+        // Create a path that cannot be created (using a non-existent parent and restricted path)
+        File nonExistentPath = new File("/nonexistent/path/that/cannot/be/created")
 
-        // Make the directory non-writable
-        assertTrue("Could not make temp directory non-writable", tempDir.setWritable(false))
-
-        // Create a new JUnitXmlReporter with the non-writable directory
+        // Try to create a JUnitXmlReporter with a path that cannot be created
         PerRunResults runResults = new PerRunResults()
-        new JUnitXmlReporter(runResults, tempDir.getAbsolutePath()).initReport()
+        JUnitXmlReporter reporter = new JUnitXmlReporter(runResults, nonExistentPath.getAbsolutePath())
+
+        // This should throw RuntimeException because the path cannot be created
+        reporter.initReport()
     }
 
     @Test
@@ -232,7 +232,83 @@ class JUnitXmlReporterTest {
         return null
     }
 
+    // Tests for FLAT output style (default, backwards compatible)
+
+    @Test
+    void testFlatModeCreatesEncodedFilename() {
+        // Given: a page with a nested path
+        SinglePageResults pageWithPath = new SinglePageResults(
+                "about.html",
+                "docs/guide/about.html",
+                "About Page",
+                1000,
+                new ArrayList<>())
+        PerRunResults runResults = new PerRunResults()
+        runResults.addPageResults(pageWithPath)
+
+        // When: we generate the report in FLAT mode (explicit)
+        new JUnitXmlReporter(runResults, outputPath.absolutePath, Configuration.JunitOutputStyle.FLAT)
+                .reportPageSummary(pageWithPath)
+
+        // Then: the file should be created in the root with encoded path
+        File[] files = outputPath.listFiles()
+        assertEquals("Should have exactly one file in root", 1, files.length)
+        assertTrue("Filename should contain encoded path",
+                   files[0].name.contains("docs") && files[0].name.contains("guide"))
+        assertTrue("Filename should start with TEST-unit-html-", files[0].name.startsWith("TEST-unit-html-"))
+
+        def testsuite = new XmlSlurper().parse(files[0])
+        assertEquals("docs/guide/about.html", testsuite.@name.text())
+    }
+
+    @Test
+    void testFlatModeIsDefaultWhenNotSpecified() {
+        // Given: a page with a nested path
+        SinglePageResults pageWithPath = new SinglePageResults(
+                "about.html",
+                "docs/guide/about.html",
+                "About Page",
+                1000,
+                new ArrayList<>())
+        PerRunResults runResults = new PerRunResults()
+        runResults.addPageResults(pageWithPath)
+
+        // When: we generate the report WITHOUT specifying mode (should default to FLAT)
+        new JUnitXmlReporter(runResults, outputPath.absolutePath)
+                .reportPageSummary(pageWithPath)
+
+        // Then: the file should be created in the root with encoded path (FLAT behavior)
+        File[] files = outputPath.listFiles()
+        assertEquals("Should have exactly one file in root", 1, files.length)
+        assertTrue("Filename should contain encoded path",
+                   files[0].name.contains("docs") && files[0].name.contains("guide"))
+
+        def testsuite = new XmlSlurper().parse(files[0])
+        assertEquals("docs/guide/about.html", testsuite.@name.text())
+    }
+
     // Tests for hierarchical directory structure (issue #405)
+
+    @Test(expected = RuntimeException.class)
+    void testHierarchicalModeFailsWhenCannotCreateDirectory() {
+        // Given: an output path that's a file (not a directory)
+        File tempFile = File.createTempFile("test", ".txt")
+        tempFile.deleteOnExit()
+
+        SinglePageResults pageWithPath = new SinglePageResults(
+                "about.html",
+                "docs/guide/about.html",
+                "About Page",
+                1000,
+                new ArrayList<>())
+        PerRunResults runResults = new PerRunResults()
+        runResults.addPageResults(pageWithPath)
+
+        // When: we try to generate a report in HIERARCHICAL mode with a file as output path
+        // Then: it should throw RuntimeException because it cannot create subdirectories
+        new JUnitXmlReporter(runResults, tempFile.getAbsolutePath(), Configuration.JunitOutputStyle.HIERARCHICAL)
+                .reportPageSummary(pageWithPath)
+    }
 
     @Test
     void testSimpleFilenameCreatesFileInRootDirectory() {
