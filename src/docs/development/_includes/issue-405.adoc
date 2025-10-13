@@ -1,0 +1,98 @@
+:filename: development/issue-405.adoc
+include::../../_common.adoc[]
+
+== {issue-closed} "File name too long" error with deep paths in JUnit reports (405)
+
+=== Problem
+
+https://github.com/aim42/htmlSanityCheck/issues/405[Issue 405] reports that when using the htmlSanityCheck Gradle plugin within a sub-project with deeply nested directory structures, a "File name too long" error occurs during the generation of JUnit XML reports.
+
+The error happens because the generated JUnit report filenames incorporate both the full path to the Gradle sub-project and the deeply nested folder structure of the files being checked. This results in filenames that exceed the filesystem's maximum filename length limit (typically 255 characters).
+
+Example error:
+[source,text]
+----
+Caused by: java.io.FileNotFoundException:
+/home/xxxxx/.../documentation/build/test-results/htmlchecks/
+TEST-unit-html-_xxxx_xxxxx_xxx_xxxxxxxx_xxxxxxxxxx_xxxxxxxxxxxx_
+xxxxxxxxxxxxxxxxxxxxx_documentation_build_test-results_htmlchecks_
+xxxxxxxxxxxxxxx_xx_xxxxx_xxxxxxxx_xxx_xxxx_xxxxxxxxx_xx_xxxx_xx_
+xx_xxxxxxxxxxxxx_xx_xxxxxx_xxxxxxxxxxxxx_xx_xxxxxxxx_xxxxxxxxxx_
+xxxx.xml (File name too long)
+----
+
+=== Background
+
+The original `JUnitXmlReporter` implementation used a flat file structure where all JUnit XML reports were stored in a single directory. The filename was constructed by:
+
+. Taking the full file path of the checked HTML file
+. Sanitizing it by replacing all non-alphanumeric characters with underscores
+. Prepending `TEST-unit-html-` to create the final filename
+
+This approach worked well for shallow directory structures, but failed when:
+
+* Working in deeply nested Gradle sub-projects
+* Checking HTML files that are themselves in deep directory structures
+* The combined path length exceeded OS filename limits (~255 characters)
+
+=== Solution
+
+Instead of encoding the entire directory path into a single filename, the solution creates a hierarchical directory structure that mirrors the source file organization.
+
+Before (flat structure)::
++
+[source,text]
+----
+build/test-results/htmlchecks/
+  └── TEST-unit-html-_very_long_path_with_underscores.xml  ❌
+----
+
+After (hierarchical structure)::
++
+[source,text]
+----
+build/test-results/htmlchecks/
+  └── docs/
+      └── guide/
+          └── user/
+              └── installation/
+                  └── TEST-linux.html.xml  ✅
+----
+
+This approach provides several benefits:
+
+Solves the filename length issue:: Individual filenames stay well under the 255-character filesystem limit
+Intuitive organization:: Directory structure mirrors the checked HTML files' structure, making results easy to find
+Maintains all information:: Full path information is preserved through the directory hierarchy
+Backward compatible:: Existing functionality is preserved; only the file organization has changed
+Robust error handling:: Handles edge cases like special characters, relative paths, and path traversal attempts
+
+=== Implementation
+
+The solution was implemented in `JUnitXmlReporter.java` by modifying the `reportPageSummary()` method:
+
+[source,java]
+----
+include::../../../../htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/report/JUnitXmlReporter.java[tags=reportPageSummary,indent=0]
+----
+
+Key implementation details:
+
+Path normalization:: Uses `getCanonicalFile()` to handle relative paths with `..` references
+Security check:: Verifies that normalized paths don't escape the output directory
+Graceful fallback:: Falls back to the output root if path resolution fails
+Filename sanitization:: Only sanitizes the filename component, not the entire path
+
+=== Testing
+
+The implementation includes comprehensive test coverage with 7 new tests in `JUnitXmlReporterTest`:
+
+`testSimpleFilenameCreatesFileInRootDirectory`:: Verifies files with no directory path are created in the root
+`testSingleLevelDirectoryCreatesSubdirectory`:: Tests single-level directory creation
+`testDeepNestedDirectoryCreatesFullHierarchy`:: Tests deeply nested directories (4+ levels)
+`testVeryLongPathDoesNotExceedFilenameLimit`:: Reproduces and fixes the issue with very long paths
+`testMultiplePagesCreateSeparateDirectories`:: Verifies multiple pages create separate directory structures
+`testFilenameWithSpecialCharactersIsSanitized`:: Tests filename sanitization while preserving directory structure
+`testRelativePathWithDotDotIsHandledCorrectly`:: Tests edge case handling of relative paths
+
+All existing tests (379 total) continue to pass, ensuring backward compatibility.

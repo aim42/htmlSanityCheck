@@ -52,11 +52,47 @@ public class JUnitXmlReporter extends Reporter {
         }
     }
 
+    // tag::reportPageSummary[]
     @Override
     protected void reportPageSummary(SinglePageResults singlePageResults) {
         String name = filenameOrTitleOrRandom(singlePageResults);
-        String sanitizedPath = name.replaceAll("[^A-Za-z0-9_-]+", "_");
-        File testOutputFile = new File(outputPath, "TEST-unit-html-" + sanitizedPath + ".xml");
+
+        // Parse the path to extract directory structure and filename
+        File sourcePath = new File(name);
+        File parentDir = sourcePath.getParentFile();
+        String fileName = sourcePath.getName();
+
+        // Create directory structure under outputPath to mirror the source file hierarchy
+        File testOutputDir;
+        if (parentDir != null) {
+            // Normalize the path to handle relative references like ".."
+            // This ensures we stay within the outputPath and don't try to escape it
+            try {
+                File tempPath = new File(outputPath, parentDir.getPath());
+                testOutputDir = tempPath.getCanonicalFile();
+
+                // Verify the canonical path is still under outputPath
+                if (!testOutputDir.getAbsolutePath().startsWith(outputPath.getCanonicalPath())) {
+                    // Path tries to escape outputPath, so just use outputPath directly
+                    testOutputDir = outputPath;
+                }
+            } catch (Exception e) {
+                // If normalization fails, fall back to outputPath
+                testOutputDir = outputPath;
+            }
+        } else {
+            testOutputDir = outputPath;
+        }
+
+        // Ensure the directory exists
+        if (!testOutputDir.exists() && !testOutputDir.mkdirs()) {
+            throw new RuntimeException("Cannot create directory " + testOutputDir); //NOSONAR(S112)
+        }
+
+        // Create the test file with a simple, sanitized filename
+        String sanitizedFileName = fileName.replaceAll("[^A-Za-z0-9_.-]+", "_");
+        File testOutputFile = new File(testOutputDir, "TEST-" + sanitizedFileName + ".xml");
+        // end::reportPageSummary[]
 
         XMLOutputFactory factory = XMLOutputFactory.newInstance();
         try (FileWriter fileWriter = new FileWriter(testOutputFile)) {
