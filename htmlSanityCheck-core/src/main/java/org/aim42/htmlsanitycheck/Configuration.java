@@ -51,7 +51,7 @@ public class Configuration {
     @Builder.Default
     Set<Pattern> excludes = new HashSet<>();
     @Builder.Default
-    Set<String> indexFilenames = defaultIndeFilenames();
+    Set<String> indexFilenames = defaultIndexFilenames();
 
     /*
      * Explanation for configuring http status codes:
@@ -77,13 +77,13 @@ public class Configuration {
         this.ignoreIPAddresses = false;// warning if numerical IP addresses
         this.ignoreLocalhost = false;// warning if localhost-URLs
         this.indexFilenames
-                = defaultIndeFilenames();
+                = defaultIndexFilenames();
         this.prefixOnlyHrefExtensions = Web.POSSIBLE_EXTENSIONS;
 
         this.checksToExecute = AllCheckers.CHECKER_CLASSES;
     }
 
-    private static Set<String> defaultIndeFilenames() {
+    private static Set<String> defaultIndexFilenames() {
         return Arrays.stream("index.html,index.htm".split(",")).collect(Collectors.toSet());
     }
 
