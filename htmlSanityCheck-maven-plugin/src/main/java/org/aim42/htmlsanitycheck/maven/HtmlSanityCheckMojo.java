@@ -311,7 +311,7 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
 
     /**
      * Recursively finds all HTML files in the given directory.
-     * Mirrors the behavior of the Gradle plugin's fileTree(sourceDir).include('**&#47;*.html')
+     * Searches for files with .html and .htm extensions.
      *
      * @param directory the directory to search
      * @return set of HTML files found
@@ -328,7 +328,7 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
                 if (file.isDirectory()) {
                     // Recursively search subdirectories
                     htmlFiles.addAll(findHtmlFiles(file));
-                } else if (file.isFile() && file.getName().endsWith(".html")) {
+                } else if (file.isFile() && (file.getName().endsWith(".html") || file.getName().endsWith(".htm"))) {
                     htmlFiles.add(file);
                 }
             }
