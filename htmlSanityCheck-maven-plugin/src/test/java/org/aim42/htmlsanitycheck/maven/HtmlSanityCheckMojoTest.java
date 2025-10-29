@@ -36,6 +36,68 @@ class HtmlSanityCheckMojoTest {
         Assertions.assertThat(config.getFailOnErrors()).isFalse();
     }
 
+    @Test
+    void setupConfigurationWithHttpSuccessCodes() throws Exception {
+        // Create mojo with custom HTTP success codes
+        Set<Integer> customSuccessCodes = new HashSet<>();
+        customSuccessCodes.add(299);
+
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "httpSuccessCodes", customSuccessCodes);
+
+        Configuration config = mojo.setupConfiguration();
+
+        Assertions.assertThat(config).isNotNull();
+        Assertions.assertThat(config.getHttpSuccessCodes()).contains(299);
+    }
+
+    @Test
+    void setupConfigurationWithHttpErrorCodes() throws Exception {
+        // Create mojo with custom HTTP error codes
+        Set<Integer> customErrorCodes = new HashSet<>();
+        customErrorCodes.add(599);
+
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "httpErrorCodes", customErrorCodes);
+
+        Configuration config = mojo.setupConfiguration();
+
+        Assertions.assertThat(config).isNotNull();
+        Assertions.assertThat(config.getHttpErrorCodes()).contains(599);
+    }
+
+    @Test
+    void setupConfigurationWithHttpWarningCodes() throws Exception {
+        // Create mojo with custom HTTP warning codes
+        Set<Integer> customWarningCodes = new HashSet<>();
+        customWarningCodes.add(199);
+
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "httpWarningCodes", customWarningCodes);
+
+        Configuration config = mojo.setupConfiguration();
+
+        Assertions.assertThat(config).isNotNull();
+        Assertions.assertThat(config.getHttpWarningCodes()).contains(199);
+    }
+
+    @Test
+    void setupConfigurationWithEmptyHttpStatusCodesShouldNotOverride() throws Exception {
+        // Create mojo with empty HTTP status code sets (should not override defaults)
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "httpSuccessCodes", new HashSet<Integer>());
+        setField(mojo, "httpErrorCodes", new HashSet<Integer>());
+        setField(mojo, "httpWarningCodes", new HashSet<Integer>());
+
+        Configuration config = mojo.setupConfiguration();
+
+        // Verify that default codes are still present (not overridden by empty sets)
+        Assertions.assertThat(config).isNotNull();
+        Assertions.assertThat(config.getHttpSuccessCodes()).contains(200);  // Default success code
+        Assertions.assertThat(config.getHttpErrorCodes()).contains(404);    // Default error code
+        Assertions.assertThat(config.getHttpWarningCodes()).contains(301);  // Default warning code (redirect)
+    }
+
 
     @Test
     void logBuildParameter() {
@@ -227,6 +289,83 @@ class HtmlSanityCheckMojoTest {
     }
 
     @Test
+    void findHtmlFilesWithNullDirectory() throws Exception {
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "sourceDir", null);
+        setField(mojo, "sourceDocuments", null);
+
+        Configuration config = mojo.setupConfiguration();
+
+        // When both sourceDir and sourceDocuments are null, the config should have null sourceDocuments
+        // (This will be caught by validation)
+        Assertions.assertThat(config.getSourceDocuments()).isNull();
+    }
+
+    @Test
+    void findHtmlFilesWithNonExistentDirectory() throws Exception {
+        Path nonExistentDir = java.nio.file.Paths.get("/tmp/this-directory-does-not-exist-" + System.currentTimeMillis());
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "sourceDir", nonExistentDir.toFile());
+        setField(mojo, "sourceDocuments", null);
+
+        Configuration config = mojo.setupConfiguration();
+
+        // Should return empty set when directory doesn't exist
+        Assertions.assertThat(config.getSourceDocuments()).isEmpty();
+    }
+
+    @Test
+    void findHtmlFilesWithEmptyDirectory() throws Exception {
+        Path emptyDir = Files.createTempDirectory("MojoEmpty");
+
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "sourceDir", emptyDir.toFile());
+        setField(mojo, "sourceDocuments", null);
+
+        Configuration config = mojo.setupConfiguration();
+
+        // Should return empty set when directory is empty
+        Assertions.assertThat(config.getSourceDocuments()).isEmpty();
+
+        // Clean up
+        Files.deleteIfExists(emptyDir);
+    }
+
+    @Test
+    void findHtmlFilesIgnoresNonHtmlFiles() throws Exception {
+        Path sourceDir = Files.createTempDirectory("MojoSource");
+
+        // Create various non-HTML files
+        File txtFile = new File(sourceDir.toFile(), "readme.txt");
+        Files.write(txtFile.toPath(), "Text content".getBytes(StandardCharsets.UTF_8));
+
+        File pdfFile = new File(sourceDir.toFile(), "document.pdf");
+        Files.write(pdfFile.toPath(), "PDF content".getBytes(StandardCharsets.UTF_8));
+
+        File xmlFile = new File(sourceDir.toFile(), "config.xml");
+        Files.write(xmlFile.toPath(), "<xml/>".getBytes(StandardCharsets.UTF_8));
+
+        // Create one HTML file
+        File htmlFile = new File(sourceDir.toFile(), "page.html");
+        Files.write(htmlFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
+
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "sourceDir", sourceDir.toFile());
+        setField(mojo, "sourceDocuments", null);
+
+        Configuration config = mojo.setupConfiguration();
+
+        // Should only find the HTML file
+        Assertions.assertThat(config.getSourceDocuments()).hasSize(1);
+        Assertions.assertThat(config.getSourceDocuments())
+                .extracting(File::getName)
+                .containsExactly("page.html");
+
+        // Clean up
+        deleteDirectory(sourceDir.toFile());
+    }
+
+    @Test
     void executeWithOnlySourceDir_ShouldIncludeHtmFiles() throws IOException, MojoExecutionException {
         // Setup: Create temp directories
         Path junitDir = Files.createTempDirectory("MojoJunit");
@@ -283,22 +422,15 @@ class HtmlSanityCheckMojoTest {
                                    File checkingResultsDir, File junitResultsDir) {
             // Use reflection to set private fields
             try {
-                setField(this, "sourceDir", sourceDir);
-                setField(this, "sourceDocuments", sourceDocuments);
-                setField(this, "checkingResultsDir", checkingResultsDir);
-                setField(this, "junitResultsDir", junitResultsDir);
-                setField(this, "checkerClasses", AllCheckers.CHECKER_CLASSES);
-                setField(this, "excludes", new HashSet<String>());
+                HtmlSanityCheckMojoTest.setField(this, "sourceDir", sourceDir);
+                HtmlSanityCheckMojoTest.setField(this, "sourceDocuments", sourceDocuments);
+                HtmlSanityCheckMojoTest.setField(this, "checkingResultsDir", checkingResultsDir);
+                HtmlSanityCheckMojoTest.setField(this, "junitResultsDir", junitResultsDir);
+                HtmlSanityCheckMojoTest.setField(this, "checkerClasses", AllCheckers.CHECKER_CLASSES);
+                HtmlSanityCheckMojoTest.setField(this, "excludes", new HashSet<String>());
             } catch (Exception e) {
                 throw new RuntimeException("Failed to set fields", e);
             }
-        }
-
-        private void setField(Object target, String fieldName, Object value)
-                throws NoSuchFieldException, IllegalAccessException {
-            java.lang.reflect.Field field = HtmlSanityCheckMojo.class.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            field.set(target, value);
         }
     }
 
@@ -313,6 +445,16 @@ class HtmlSanityCheckMojoTest {
             }
         }
         Files.deleteIfExists(directoryToBeDeleted.toPath());
+    }
+
+    /**
+     * Helper method to set private fields on HtmlSanityCheckMojo for testing
+     */
+    private static void setField(Object target, String fieldName, Object value)
+            throws NoSuchFieldException, IllegalAccessException {
+        java.lang.reflect.Field field = HtmlSanityCheckMojo.class.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(target, value);
     }
 
 
