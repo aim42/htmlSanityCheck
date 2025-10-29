@@ -190,6 +190,69 @@ class HtmlSanityCheckMojoTest {
         deleteDirectory(resultDir.toFile());
     }
 
+    @Test
+    void executeWithOnlySourceDir_ShouldSucceed() throws IOException, MojoExecutionException {
+        // Setup: Create temp directories
+        Path junitDir = Files.createTempDirectory("MojoJunit");
+        Path resultDir = Files.createTempDirectory("MojoResult");
+        Path sourceDir = Files.createTempDirectory("MojoSource");
+
+        // Create HTML file in root of sourceDir
+        File rootHtmlFile = new File(sourceDir.toFile(), "root.html");
+        Files.write(rootHtmlFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
+
+        // Create subdirectory with another HTML file
+        File subDir = new File(sourceDir.toFile(), "subdir");
+        boolean mkdirSuccess = subDir.mkdirs();
+        Assertions.assertThat(mkdirSuccess).isTrue();
+        File subHtmlFile = new File(subDir, "nested.html");
+        Files.write(subHtmlFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
+
+        // Create Mojo and set only sourceDir field (NOT sourceDocuments)
+        // This simulates a Maven pom.xml with only <sourceDir> configured
+        HtmlSanityCheckMojo mojo = new TestableHtmlSanityCheckMojo(
+                sourceDir.toFile(),
+                null, // sourceDocuments explicitly NOT set
+                resultDir.toFile(),
+                junitDir.toFile()
+        );
+
+        // This should succeed - setupConfiguration() will auto-populate sourceDocuments
+        mojo.execute();
+
+        // Clean up
+        deleteDirectory(sourceDir.toFile());
+        deleteDirectory(junitDir.toFile());
+        deleteDirectory(resultDir.toFile());
+    }
+
+    /**
+     * Helper class to allow setting private fields for testing
+     */
+    static class TestableHtmlSanityCheckMojo extends HtmlSanityCheckMojo {
+        TestableHtmlSanityCheckMojo(File sourceDir, Set<File> sourceDocuments,
+                                   File checkingResultsDir, File junitResultsDir) {
+            // Use reflection to set private fields
+            try {
+                setField(this, "sourceDir", sourceDir);
+                setField(this, "sourceDocuments", sourceDocuments);
+                setField(this, "checkingResultsDir", checkingResultsDir);
+                setField(this, "junitResultsDir", junitResultsDir);
+                setField(this, "checkerClasses", AllCheckers.CHECKER_CLASSES);
+                setField(this, "excludes", new HashSet<String>());
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to set fields", e);
+            }
+        }
+
+        private void setField(Object target, String fieldName, Object value)
+                throws NoSuchFieldException, IllegalAccessException {
+            java.lang.reflect.Field field = HtmlSanityCheckMojo.class.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(target, value);
+        }
+    }
+
 
     // Helper functions
 

@@ -270,9 +270,16 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
     }
 
     protected Configuration setupConfiguration() {
+        // Auto-populate sourceDocuments from sourceDir if not specified
+        // (same pattern as Gradle plugin and CLI)
+        Set<File> documentsToCheck = sourceDocuments;
+        if (documentsToCheck == null && sourceDir != null) {
+            documentsToCheck = findHtmlFiles(sourceDir);
+        }
+
         Configuration result = Configuration.builder()
                 .excludes(excludes.stream().map(Pattern::compile).collect(Collectors.toSet()))
-                .sourceDocuments(sourceDocuments)
+                .sourceDocuments(documentsToCheck)
                 .sourceDir(sourceDir)
                 .checkingResultsDir(checkingResultsDir)
                 .junitResultsDir(junitResultsDir)
@@ -300,6 +307,33 @@ public class HtmlSanityCheckMojo extends AbstractMojo {
         }
 
         return result;
+    }
+
+    /**
+     * Recursively finds all HTML files in the given directory.
+     * Mirrors the behavior of the Gradle plugin's fileTree(sourceDir).include('**&#47;*.html')
+     *
+     * @param directory the directory to search
+     * @return set of HTML files found
+     */
+    private Set<File> findHtmlFiles(File directory) {
+        Set<File> htmlFiles = new HashSet<>();
+        if (directory == null || !directory.exists() || !directory.isDirectory()) {
+            return htmlFiles;
+        }
+
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    // Recursively search subdirectories
+                    htmlFiles.addAll(findHtmlFiles(file));
+                } else if (file.isFile() && file.getName().endsWith(".html")) {
+                    htmlFiles.add(file);
+                }
+            }
+        }
+        return htmlFiles;
     }
 }
 
