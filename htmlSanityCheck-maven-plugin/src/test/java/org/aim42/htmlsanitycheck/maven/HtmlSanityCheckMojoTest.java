@@ -226,6 +226,55 @@ class HtmlSanityCheckMojoTest {
         deleteDirectory(resultDir.toFile());
     }
 
+    @Test
+    void executeWithOnlySourceDir_ShouldIncludeHtmFiles() throws IOException, MojoExecutionException {
+        // Setup: Create temp directories
+        Path junitDir = Files.createTempDirectory("MojoJunit");
+        Path resultDir = Files.createTempDirectory("MojoResult");
+        Path sourceDir = Files.createTempDirectory("MojoSource");
+
+        // Create .htm file in root
+        File rootHtmFile = new File(sourceDir.toFile(), "document.htm");
+        Files.write(rootHtmFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
+
+        // Create .html file for comparison
+        File rootHtmlFile = new File(sourceDir.toFile(), "page.html");
+        Files.write(rootHtmlFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
+
+        // Create subdirectory with .htm file
+        File subDir = new File(sourceDir.toFile(), "docs");
+        boolean mkdirSuccess = subDir.mkdirs();
+        Assertions.assertThat(mkdirSuccess).isTrue();
+        File nestedHtmFile = new File(subDir, "nested.htm");
+        Files.write(nestedHtmFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
+
+        // Create Mojo and set only sourceDir field
+        HtmlSanityCheckMojo mojo = new TestableHtmlSanityCheckMojo(
+                sourceDir.toFile(),
+                null, // sourceDocuments explicitly NOT set
+                resultDir.toFile(),
+                junitDir.toFile()
+        );
+
+        // Get the configuration to verify sourceDocuments includes .htm files
+        Configuration config = mojo.setupConfiguration();
+
+        // Verify that both .html and .htm files are discovered
+        Assertions.assertThat(config.getSourceDocuments()).isNotNull();
+        Assertions.assertThat(config.getSourceDocuments()).hasSize(3);
+        Assertions.assertThat(config.getSourceDocuments())
+                .extracting(File::getName)
+                .containsExactlyInAnyOrder("document.htm", "page.html", "nested.htm");
+
+        // Execute should succeed with both file types
+        mojo.execute();
+
+        // Clean up
+        deleteDirectory(sourceDir.toFile());
+        deleteDirectory(junitDir.toFile());
+        deleteDirectory(resultDir.toFile());
+    }
+
     /**
      * Helper class to allow setting private fields for testing
      */
