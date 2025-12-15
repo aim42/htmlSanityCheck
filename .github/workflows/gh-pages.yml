@@ -59,7 +59,7 @@ jobs:
           java-version: 17
 
       - name: Download Artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: build-artifacts
           path: .
