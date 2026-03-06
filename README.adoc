@@ -60,7 +60,7 @@ Depending on your <<sec:usage>> find respective
 |===
 | The overall goal is to create neat and clear reports,
 showing eventual errors within HTML files — as shown in the adjoining figure.
-| image:sample-hsc-report.jpg[width="200",link="{imagesdir}/sample-hsc-report.jpg"
+| image:sample-hsc-report.jpg[width="200",link="sample-hsc-report.jpg"
 (click on thumbnail for details)]
 |===
 
