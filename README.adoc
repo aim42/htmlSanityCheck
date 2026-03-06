@@ -1,4 +1,4 @@
-= image:htmlsanitycheck-logo.png[HSC] HTML Sanity Check (HSC)
+= image:src/docs/images/htmlsanitycheck-logo.png[HSC] HTML Sanity Check (HSC)
 :doctype: book
 include::src/docs/asciidoctor-config.ad[]
 
@@ -60,7 +60,7 @@ Depending on your <<sec:usage>> find respective
 |===
 | The overall goal is to create neat and clear reports,
 showing eventual errors within HTML files — as shown in the adjoining figure.
-| image:sample-hsc-report.jpg[width="200",link="{imagesdir}/sample-hsc-report.jpg"
+| image:src/docs/images/sample-hsc-report.jpg[width="200",link="src/docs/images/sample-hsc-report.jpg"
 (click on thumbnail for details)]
 |===
 
@@ -177,6 +177,4 @@ Some day we'll unify that 😬.
 
 == Kudos
 
-Big thanx to image:structure101-logo.png[alt='Structure-101',link="https://structure101.com"] for helping us analyze and restructure our code.
-
-
+Big thanx to image:src/docs/images/structure101-logo.png[alt='Structure-101',link="src/docs/images/structure101-logo.png"] for helping us analyze and restructure our code.
