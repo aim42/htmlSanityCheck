@@ -16,6 +16,7 @@ ifdef::backend-html5[:markdown-suffix: html]
 We distribute HSC for different usage scenarios to appropriate repositories, i.e., we publish
 
 * The HSC artifacts (Core, Maven plugin, and Gradle plugin) to https://central.sonatype.com/search?q=org.aim42.htmlsanitycheck[Maven Central] (MC) for retrieval by the common Java build tools,
+* Development snapshots additionally to https://github.com/orgs/aim42/packages?repo_name=htmlSanityCheck[GitHub Packages] (replacing JitPack, cf. https://github.com/aim42/htmlSanityCheck/issues/432[Issue 432]),
 * The HSC Command Line Interface (CLI) distribution to
 ** https://github.com/aim42/htmlSanityCheck/releases[GitHub] for download as ZIP- or TAR-File.
 ** https://sdkman.io/sdks#hsc[SDKMAN] for convenient installation (`sdk install hsc`).
@@ -75,6 +76,20 @@ Alternatively, you can set these as environment variables:
 export GRADLE_PUBLISH_KEY=...
 export GRADLE_PUBLISH_SECRET=...
 ----
+
+[[sec:gh-packages-credentials]]
+=== GitHub Packages
+
+Development snapshots are pushed to https://github.com/orgs/aim42/packages?repo_name=htmlSanityCheck[GitHub Packages for `aim42/htmlSanityCheck`].
+A Personal Access Token (PAT) with `write:packages` scope is required, supplied via env vars:
+
+[source,shell]
+----
+export GITHUB_USER=...
+export GITHUB_TOKEN=<github-pat-with-write:packages-scope>
+----
+
+The same env-var pair is the default for GitHub Actions secrets — no additional configuration is needed on CI.
 
 [[sec:sdkman-api-credentials]]
 === SDKMAN
@@ -187,6 +202,18 @@ Clean, check (test), and perform integration tests:
 ----
 ./gradlew clean check integrationTest
 ----
+
+=== Publish development snapshot to GitHub Packages
+
+For sharing a development branch with downstream consumers before a release, push the current version to GitHub Packages (cf. <<sec:gh-packages-credentials,credentials above>>):
+
+[source,shell]
+----
+./gradlew publishAllPublicationsToGitHubPackagesRepository
+----
+
+This publishes all four artifacts (core, cli, gradle-plugin, maven-plugin) under the lowercase GA coordinates `org.aim42.htmlsanitycheck:htmlsanitycheck-*`.
+Consumers configure their build to read from the same repository — see the development-versions section of the xref:../manual/30_gradle-plugin.adoc[Gradle plugin] or xref:../manual/40_maven-plugin.adoc[Maven plugin] documentation.
 
 === Publish on Gradle Plugin Portal
 

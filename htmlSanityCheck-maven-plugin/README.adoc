@@ -74,6 +74,46 @@ include::../gradle.properties[tag=version]
 ----
 ====
 
+[[sec:development-versions]]
+=== Development versions
+
+Development snapshots are published to *GitHub Packages* for https://github.com/orgs/aim42/packages?repo_name=htmlSanityCheck[`aim42/htmlSanityCheck`].
+GitHub Packages requires authentication even for public packages — supply a Personal Access Token (PAT) with `read:packages` scope via `~/.m2/settings.xml`:
+
+.~/.m2/settings.xml
+[source,xml,subs="attributes+"]
+----
+<settings>
+  <servers>
+    <server>
+      <id>github-aim42</id>
+      <username>YOUR_GITHUB_USERNAME</username>
+      <password>YOUR_PAT_WITH_read:packages</password>
+    </server>
+  </servers>
+</settings>
+----
+
+Then declare the repository in your project's `pom.xml`:
+
+[source,xml,subs="attributes+"]
+----
+<pluginRepositories>
+  <pluginRepository>
+    <id>github-aim42</id>
+    <url>https://maven.pkg.github.com/aim42/htmlSanityCheck</url>
+    <snapshots><enabled>true</enabled></snapshots>
+  </pluginRepository>
+</pluginRepositories>
+----
+
+[WARNING]
+.JitPack (deprecated)
+====
+JitPack support is retained for backwards compatibility but is no longer recommended for the reasons documented in https://github.com/aim42/htmlSanityCheck/issues/432[Issue 432] (missing branches after force-push, stale builds, first-time timeouts).
+Prefer GitHub Packages.
+====
+
 [[sec:usage]]
 == Usage
 

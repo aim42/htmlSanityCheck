@@ -264,6 +264,21 @@ configure(subprojects) {
                 name = 'myLocalRepositoryForFullIntegrationTests'
                 url = mavenBuildRepo
             }
+            // Only register GitHubPackages when credentials are present. Otherwise Gradle's task-
+            // configuration validation fails for any publish task in the project with a cryptic
+            // "credentials.username doesn't have a configured value" — even for unrelated tasks.
+            // Skipping registration means trying to invoke publish*ToGitHubPackagesRepository
+            // without env vars yields a clear "task not found" instead.
+            if (System.getenv("GITHUB_USER") && System.getenv("GITHUB_TOKEN")) {
+                maven {
+                    name = "GitHubPackages"
+                    url = "https://maven.pkg.github.com/aim42/htmlSanityCheck"
+                    credentials {
+                        username = System.getenv("GITHUB_USER")
+                        password = System.getenv("GITHUB_TOKEN")
+                    }
+                }
+            }
             mavenLocal()
         }
     }
@@ -271,6 +286,17 @@ configure(subprojects) {
     tasks.withType(PublishToMavenRepository).named { it.contains("MyLocalRepositoryForFullIntegrationTests") }.configureEach {
         outputs.dir(mavenBuildRepo)
         outputs.upToDateWhen { false }
+    }
+
+    // GitHub Packages rejects GETs to the plugin marker's snapshot maven-metadata.xml with
+    // HTTP 400, presumably because the marker artifactId 'org.aim42.htmlsanitycheck.gradle.plugin'
+    // contains dots that GH's package URL parser treats specially. Skip publishing the marker
+    // to GitHub Packages; consumers can still resolve it through the Gradle Plugin Portal once
+    // a release is cut. Local + Maven Central publish targets keep the marker.
+    tasks.withType(PublishToMavenRepository).configureEach {
+        if (name.endsWith("PluginMarkerMavenPublicationToGitHubPackagesRepository")) {
+            enabled = false
+        }
     }
 
     tasks.named('test', Test) {

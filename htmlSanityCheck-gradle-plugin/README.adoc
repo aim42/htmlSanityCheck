@@ -366,20 +366,42 @@ include::src/test/groovy/org/aim42/htmlsanitycheck/gradle/HtmlSanityCheckTaskFun
 [[sec:development-versions]]
 == Development versions
 
-In case you want to use a current development (or arbitrary branch or tag) version from GitHub,
-add the following to your `settings.gradle`:
+In case you want to use a current development (or arbitrary branch or tag) version, the recommended source is *GitHub Packages*.
+JitPack is still available but no longer recommended (see <<sec:jitpack-deprecation,below>>).
+
+[[sec:github-packages]]
+=== GitHub Packages (recommended)
+
+Development snapshots are published to https://github.com/orgs/aim42/packages?repo_name=htmlSanityCheck[GitHub Packages for `aim42/htmlSanityCheck`].
+GitHub Packages requires authentication even for public packages, so you must supply a Personal Access Token (PAT) with `read:packages` scope via the env vars `GITHUB_USER` and `GITHUB_TOKEN`:
+
+[source,shell]
+----
+export GITHUB_USER=<your-github-username>
+export GITHUB_TOKEN=<github-pat-with-read:packages-scope>
+----
+
+Then declare the repository in your project's `settings.gradle`:
 
 .settings.gradle
 [source,groovy,subs="attributes+"]
 ----
 pluginManagement {
     repositories {
-        maven { url "{jitpack-url}" }
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/aim42/htmlSanityCheck"
+            credentials {
+                username = System.getenv("GITHUB_USER")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+        gradlePluginPortal()
     }
 }
 ----
 
-Then you can use a respective version in your `build.gradle`:
+And select the development version in your `build.gradle`:
 
 .build.gradle
 [source,groovy,subs="attributes+"]
@@ -389,15 +411,40 @@ plugins {
 }
 ----
 
-[NOTE]
-.JitPack builds
+[TIP]
 ====
-Building the desired version for the first time (or after some cache expiry at {jitpack-url}[JitPack]), you may experience a timeout.
+The same repository declaration works for the `dependencies {}` block (e.g. to pull `{project}-core` directly) — declare it under `repositories {}` in your `build.gradle` instead of `settings.gradle`.
+====
 
-You can look up the https://jitpack.io/#org.aim42/htmlSanityCheck[current build state]:
+[[sec:jitpack-deprecation]]
+=== JitPack (deprecated)
+
+[WARNING]
+====
+JitPack support is retained for backwards compatibility but is no longer recommended.
+Known issues that motivated the switch to GitHub Packages (https://github.com/aim42/htmlSanityCheck/issues/432[Issue 432]):
+
+* New branches do not always show up.
+* Updates after force pushes are not always rebuilt.
+* First-time builds (or after cache expiry) can time out.
+====
+
+If you still want to use JitPack, add it to your `settings.gradle`:
+
+.settings.gradle
+[source,groovy,subs="attributes+"]
+----
+pluginManagement {
+    repositories {
+        maven { url "{jitpack-url}" }
+        gradlePluginPortal()
+    }
+}
+----
+
+You can look up the https://jitpack.io/#org.aim42/htmlSanityCheck[current JitPack build state]:
 
 image::jitpack-branch-screenshot.png[]
-====
 
 
 
