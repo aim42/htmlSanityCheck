@@ -1,5 +1,5 @@
 plugins {
-    id 'org.aim42.htmlSanityCheck' version "${htmlSanityCheckVersion}"
+    id 'org.aim42.htmlsanitycheck' version "${htmlSanityCheckVersion}"
 }
 
 repositories {

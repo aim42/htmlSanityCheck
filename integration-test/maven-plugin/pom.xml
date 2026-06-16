@@ -3,7 +3,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.aim42.htmlSanityCheck.integration-test</groupId>
+    <groupId>org.aim42.htmlsanitycheck.integration-test</groupId>
     <artifactId>maven-plugin-integration-test</artifactId>
     <packaging>pom</packaging>
     <version>0.0-SNAPSHOT</version>
@@ -11,11 +11,12 @@
     <properties>
         <hsc.version>YOU MUST SET THIS EXPLICITLY</hsc.version>
     </properties>
+
     <build>
         <plugins>
             <plugin>
-                <groupId>org.aim42.htmlSanityCheck</groupId>
-                <artifactId>htmlSanityCheck-maven-plugin</artifactId>
+                <groupId>org.aim42.htmlsanitycheck</groupId>
+                <artifactId>htmlsanitycheck-maven-plugin</artifactId>
                 <version>${hsc.version}</version>
                 <executions>
                     <execution>

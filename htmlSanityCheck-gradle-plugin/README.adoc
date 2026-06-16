@@ -2,8 +2,8 @@
 :doctype: book
 include::../src/docs/asciidoctor-config.ad[]
 
-image:https://img.shields.io/gradle-plugin-portal/v/org.aim42.htmlSanityCheck[link=https://plugins.gradle.org/search?term=org.aim42.htmlSanityCheck]
-image:https://img.shields.io/maven-central/v/org.aim42.htmlSanityCheck/org.aim42.htmlSanityCheck.gradle.plugin[link=https://central.sonatype.com/artifact/org.aim42.htmlSanityCheck/org.aim42.htmlSanityCheck.gradle.plugin]
+image:https://img.shields.io/gradle-plugin-portal/v/org.aim42.htmlsanitycheck[link=https://plugins.gradle.org/search?term=org.aim42.htmlsanitycheck]
+image:https://img.shields.io/maven-central/v/org.aim42.htmlsanitycheck/org.aim42.htmlsanitycheck.gradle.plugin[link=https://central.sonatype.com/artifact/org.aim42.htmlsanitycheck/org.aim42.htmlsanitycheck.gradle.plugin]
 
 ifdef::env-github[]
 :imagesdir: ../src/docs/images
@@ -17,6 +17,15 @@ TIP: Use the https://hsc.aim42.org/manual/30_gradle-plugin.html[HSC Site] for a 
 endif::env-github[]
 
 The {gradle-url}[Gradle] plugin of HTML Sanity Check (xref:{xrefToManual}[HSC]) enables to check generated or native HTML documentation from the Gradle build.
+
+[IMPORTANT]
+.Breaking change since 2.0.0-rc4: lowercase GA coordinates
+====
+The plugin id and Maven coordinates were lowercased to comply with Maven conventions and to support repositories that enforce this (e.g., GitHub Packages).
+See https://github.com/aim42/htmlSanityCheck/issues/432[Issue 432] and the https://github.com/aim42/htmlSanityCheck/blob/main/CHANGELOG.md[CHANGELOG] for the migration table.
+
+Versions up to and including `2.0.0-rc4` remain available under the historical CamelCase id at https://plugins.gradle.org/plugin/org.aim42.htmlSanityCheck[the Gradle Plugin Portal] and https://central.sonatype.com/namespace/org.aim42.htmlSanityCheck[Maven Central].
+====
 
 [[sec:installation]]
 == Installation (Gradle Plugin)
@@ -37,30 +46,28 @@ plugins {
 
 === Legacy Installation
 
-In the case of https://docs.gradle.org/current/userguide/plugins.html#sec:old_plugin_application[legacy plugin usage]
+In the case of https://docs.gradle.org/current/userguide/plugins.html#sec:old_plugin_application[legacy plugin usage], the full Maven coordinates (group + artifact + version) are required.
+The plugin-marker pseudo-POM resolved automatically by the `plugins {}` DSL only applies to the default form above.
 
 .build.gradle
 [source,groovy,subs="attributes+"]
 ----
 buildscript {
     repositories {
-        // maven { url "{jitpack-url}" } // <1>
-        mavenCentral() // <2>
-        gradlePluginPortal() // <3>
+        mavenCentral() // <1>
+        gradlePluginPortal() // <2>
     }
 
     dependencies {
-        classpath ('gradle.plugin.org.aim42:{project}:{hsc-version}') // <4>
+        classpath 'org.aim42.{project}:{project}-gradle-plugin:{hsc-version}' // <3>
     }
 }
 
 apply plugin: 'org.aim42.{project}'
 ----
-
-<1> In case you would like to use a development version (or even a branch), check out <<sec:development-versions,development versions>>.
-<2> Beginning with version `2.x` all releases will be published to https://central.sonatype.com/artifact/org.aim42.htmlSanityCheck/org.aim42.htmlSanityCheck.gradle.plugin[Maven Central].
-<3> The https://plugins.gradle.org[Gradle Plugin Portal] contains https://plugins.gradle.org/plugin/org.aim42.htmlSanityCheck[most versions] or will redirect downloads of newer versions to Maven Central.
-<4> Check out <<box:current-version,the current version>>.
+<1> Beginning with version `2.x` all releases will be published to https://central.sonatype.com/artifact/org.aim42.htmlsanitycheck/htmlsanitycheck-gradle-plugin[Maven Central].
+<2> The https://plugins.gradle.org[Gradle Plugin Portal] contains https://plugins.gradle.org/plugin/org.aim42.htmlsanitycheck[most versions] or will redirect downloads of newer versions to Maven Central.
+<3> Full GA coordinates — see <<box:current-version,current version>>.
 
 [[box:current-version]]
 [IMPORTANT]
@@ -212,7 +219,7 @@ The mentioned configurations effectively move the configured codes around, i.e.,
 `build.gradle`
 [source,groovy]
 ----
-apply plugin: 'org.aim42.htmlSanityCheck'
+apply plugin: 'org.aim42.htmlsanitycheck'
 
 htmlSanityCheck {
     sourceDir = file( "$buildDir/docs" )
@@ -286,7 +293,7 @@ asciidoctor {
 
 }
 
-apply plugin: 'org.aim42.htmlSanityCheck'
+apply plugin: 'org.aim42.htmlsanitycheck'
 
 htmlSanityCheck {
     // ensure asciidoctor->html runs first

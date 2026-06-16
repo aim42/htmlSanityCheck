@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.aim42.htmlSanityCheck</groupId>
-    <artifactId>htmlSanityCheck-maven-plugin</artifactId>
+    <groupId>org.aim42.htmlsanitycheck</groupId>
+    <artifactId>htmlsanitycheck-maven-plugin</artifactId>
     <name>HTML Sanitycheck Maven Plugin</name>
     <version>${version}</version>
     <packaging>maven-plugin</packaging>
@@ -16,8 +16,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.aim42.htmlSanityCheck</groupId>
-            <artifactId>htmlSanityCheck-core</artifactId>
+            <groupId>org.aim42.htmlsanitycheck</groupId>
+            <artifactId>htmlsanitycheck-core</artifactId>
             <version>${version}</version>
         </dependency>
         <dependency>

@@ -7,6 +7,8 @@ plugins {
     // id 'codenarc'
 }
 
+base.archivesName = 'htmlsanitycheck-gradle-plugin'
+
 def profile = project.hasProperty('profile') ? project.property('profile') : 'no-gpp'
 
 afterEvaluate {
@@ -24,7 +26,7 @@ gradlePlugin {
     vcsUrl = rootProject.ext.urls['scm']
     plugins {
         htmlSanityCheck {
-            id = 'org.aim42.htmlSanityCheck'
+            id = 'org.aim42.htmlsanitycheck'
             implementationClass = 'org.aim42.htmlsanitycheck.gradle.HtmlSanityCheckPlugin'
             displayName = 'Gradle HtmlSanityCheck Plugin'
             description = project.description

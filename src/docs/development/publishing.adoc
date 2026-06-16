@@ -15,7 +15,7 @@ ifdef::backend-html5[:markdown-suffix: html]
 
 We distribute HSC for different usage scenarios to appropriate repositories, i.e., we publish
 
-* The HSC artifacts (Core, Maven plugin, and Gradle plugin) to https://central.sonatype.com/search?q=org.aim42.htmlSanityCheck[Maven Central] (MC) for retrieval by the common Java build tools,
+* The HSC artifacts (Core, Maven plugin, and Gradle plugin) to https://central.sonatype.com/search?q=org.aim42.htmlsanitycheck[Maven Central] (MC) for retrieval by the common Java build tools,
 * The HSC Command Line Interface (CLI) distribution to
 ** https://github.com/aim42/htmlSanityCheck/releases[GitHub] for download as ZIP- or TAR-File.
 ** https://sdkman.io/sdks#hsc[SDKMAN] for convenient installation (`sdk install hsc`).
@@ -34,7 +34,7 @@ Make yourself familiar with https://central.sonatype.org/publish-ea/publish-ea-g
 [CAUTION]
 .Maven Central credentials needed
 ====
-You need respective credentials to upload files to Maven Central for the `org.aim42.htmlSanityCheck` namespace.
+You need respective credentials to upload files to Maven Central for the `org.aim42.htmlsanitycheck` namespace.
 Talk to Gernot Starke to get these permissions.
 ====
 

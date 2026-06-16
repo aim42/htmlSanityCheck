@@ -3,8 +3,42 @@
 ## Publication (Generic)
 
 - [Documentation](https://hsc.aim42.org)
-- [Maven Central](https://central.sonatype.com/namespace/org.aim42.htmlSanityCheck)
-- [Gradle Plugin Portal](https://plugins.gradle.org/search?term=org.aim42.htmlSanityCheck)
+- [Maven Central](https://central.sonatype.com/namespace/org.aim42.htmlsanitycheck) (lowercase, see breaking change below)
+- [Gradle Plugin Portal](https://plugins.gradle.org/search?term=org.aim42.htmlsanitycheck)
+
+## Unreleased
+
+### ⚠️ BREAKING CHANGE — Lowercase GA coordinates ([#432](https://github.com/aim42/htmlSanityCheck/issues/432))
+
+All Maven `groupId` and `artifactId` values are now **lowercase**, aligning with
+Maven conventions and enabling publication to repositories that enforce this
+constraint (e.g., GitHub Packages).
+
+**Old → New:**
+
+| Coordinate | Before | After |
+|---|---|---|
+| Group | `org.aim42.htmlSanityCheck` | `org.aim42.htmlsanitycheck` |
+| Core | `htmlSanityCheck-core` | `htmlsanitycheck-core` |
+| CLI | `htmlSanityCheck-cli` | `htmlsanitycheck-cli` |
+| Gradle plugin id | `org.aim42.htmlSanityCheck` | `org.aim42.htmlsanitycheck` |
+| Gradle plugin artifact | `htmlSanityCheck-gradle-plugin` | `htmlsanitycheck-gradle-plugin` |
+| Maven plugin artifact | `htmlSanityCheck-maven-plugin` | `htmlsanitycheck-maven-plugin` |
+
+**Action required when upgrading:**
+
+- Gradle users: replace `id 'org.aim42.htmlSanityCheck'` with `id 'org.aim42.htmlsanitycheck'`.
+- Maven users: update `groupId` and `artifactId` in the plugin block to the lowercase form.
+- Direct dependency users: update group and artifactId coordinates in your build.
+
+Existing released versions (≤ `2.0.0-rc4`) remain available under the old CamelCase coordinates:
+
+- [Maven Central — `org.aim42.htmlSanityCheck`](https://central.sonatype.com/namespace/org.aim42.htmlSanityCheck) (historical artifacts up to and including `2.0.0-rc4`)
+- [Gradle Plugin Portal — `org.aim42.htmlSanityCheck`](https://plugins.gradle.org/plugin/org.aim42.htmlSanityCheck) (historical plugin versions)
+- [GitHub Releases](https://github.com/aim42/htmlSanityCheck/releases) (CLI binaries)
+
+The internal Gradle project / source directory names (e.g., `htmlSanityCheck-core/`)
+are unchanged for readability — only the published Maven coordinates differ.
 
 ## 2.0.0-rc4
 

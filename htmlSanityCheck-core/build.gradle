@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.gitProperties)
 }
 
+base.archivesName = 'htmlsanitycheck-core'
+
 dependencies {
     implementation (libs.commons.validator) {
         // Having a vulnerability here ...

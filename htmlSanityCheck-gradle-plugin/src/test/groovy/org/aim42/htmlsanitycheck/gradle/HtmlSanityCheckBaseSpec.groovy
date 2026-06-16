@@ -30,7 +30,7 @@ class HtmlSanityCheckBaseSpec extends Specification {
         //   (URIs consist of / instead of backslashes)
         buildFile = testProjectDir.newFile('build.gradle') << """
             plugins {
-                id 'org.aim42.htmlSanityCheck'
+                id 'org.aim42.htmlsanitycheck'
             }
 
             htmlSanityCheck {

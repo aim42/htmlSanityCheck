@@ -2,6 +2,8 @@ plugins {
     id 'application'
 }
 
+base.archivesName = 'htmlsanitycheck-cli'
+
 dependencies {
     implementation libs.picocli.impl
     annotationProcessor libs.picocli.annotationprocessor

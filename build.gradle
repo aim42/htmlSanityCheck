@@ -216,6 +216,9 @@ configure(subprojects) {
     publishing {
         publications.all { publication ->
             if (publication instanceof MavenPublication) {
+                // GA coordinates must be lowercase (Maven convention, enforced by GitHub Packages).
+                // Each subproject sets base.archivesName explicitly to its lowercase artifactId.
+                artifactId = project.base.archivesName.get()
                 publication.pom {
                     name = project.name
                     description = project.description

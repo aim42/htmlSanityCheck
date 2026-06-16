@@ -2,7 +2,7 @@
 :doctype: book
 include::../src/docs/asciidoctor-config.ad[]
 
-image:https://img.shields.io/maven-central/v/org.aim42.htmlSanityCheck/htmlSanityCheck-maven-plugin[link=https://central.sonatype.com/artifact/org.aim42.htmlSanityCheck/htmlSanityCheck-maven-plugin]
+image:https://img.shields.io/maven-central/v/org.aim42.htmlsanitycheck/htmlsanitycheck-maven-plugin[link=https://central.sonatype.com/artifact/org.aim42.htmlsanitycheck/htmlsanitycheck-maven-plugin]
 
 ifdef::env-github[]
 :imagesdir: ../src/docs/images
@@ -17,6 +17,15 @@ endif::env-github[]
 
 The {maven-url}[Maven] plugin of HTML Sanity Check (xref:{xrefToManual}[HSC]) enables to check generated or native HTML documentation from the Maven build.
 
+[IMPORTANT]
+.Breaking change since 2.0.0-rc4: lowercase GA coordinates
+====
+The Maven `groupId` and `artifactId` were lowercased to comply with Maven conventions and to support repositories that enforce this (e.g., GitHub Packages).
+See https://github.com/aim42/htmlSanityCheck/issues/432[Issue 432] and the https://github.com/aim42/htmlSanityCheck/blob/main/CHANGELOG.md[CHANGELOG] for the migration table.
+
+Versions up to and including `2.0.0-rc4` remain available under the historical CamelCase coordinates at https://central.sonatype.com/namespace/org.aim42.htmlSanityCheck[Maven Central].
+====
+
 [[sec:installation]]
 == Installation (Maven Plugin)
 
@@ -28,8 +37,8 @@ Use the following snippet inside a Maven build file:
 [source,xml,subs="attributes+"]
 ----
 <plugin>
-    <groupId>org.aim42.htmlSanityCheck</groupId>
-    <artifactId>htmlSanityCheck-maven-plugin</artifactId>
+    <groupId>org.aim42.htmlsanitycheck</groupId>
+    <artifactId>htmlsanitycheck-maven-plugin</artifactId>
     <version>{hsc-version}</version> // <1>
     <executions>
         <execution>
