@@ -12,6 +12,20 @@
         <hsc.version>YOU MUST SET THIS EXPLICITLY</hsc.version>
     </properties>
 
+    <!--
+        Resolve the htmlsanitycheck-maven-plugin (release or SNAPSHOT) from Gradle's publish target.
+        Declaring it as a 'remote' pluginRepository (instead of relying on the localRepository cache)
+        makes Maven's EnhancedLocalRepositoryManager track origin and resolve SNAPSHOTs reliably.
+    -->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>integration-test-local</id>
+            <url>file://${project.basedir}/../../build/maven-repo</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>true</enabled></snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
     <build>
         <plugins>
             <plugin>

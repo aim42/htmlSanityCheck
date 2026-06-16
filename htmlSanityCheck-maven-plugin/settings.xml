@@ -2,5 +2,11 @@
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
 
-    <localRepository>../build/maven-repo</localRepository>
+    <!--
+        Use a dedicated cache so it doesn't collide with the 'integration-test-local' remote repo
+        declared in the templated pom.xml. The remote is build/maven-repo (Gradle's publish target).
+        The cache lives in .gradle/ so it survives `gradle clean` (which wipes build/) — otherwise
+        every clean build re-downloads the Maven plugin toolchain from Maven Central.
+    -->
+    <localRepository>../.gradle/maven-local-cache</localRepository>
 </settings>

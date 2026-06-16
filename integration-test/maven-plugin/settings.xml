@@ -2,6 +2,13 @@
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
 
-    <localRepository>../../build/maven-repo</localRepository>
+    <!--
+        Dedicated cache; the Gradle build/maven-repo is declared as a 'remote' pluginRepository in
+        pom.xml so Maven's EnhancedLocalRepositoryManager tracks origin and resolves SNAPSHOTs
+        reliably (which it does not for artifacts that just appear in localRepository).
+        Located under .gradle/ so it survives `gradle clean` and avoids re-downloading the Maven
+        plugin toolchain on every clean build.
+    -->
+    <localRepository>../../.gradle/maven-local-cache</localRepository>
 
 </settings>

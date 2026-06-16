@@ -40,7 +40,12 @@ tasks.register('generatePom', Copy) {
     into 'build/maven'
     filesMatching("**/pom.*") {
         expand(version: project.version,
-                mavenPluginToolsVersion: project.mavenPluginToolsVersion)
+                mavenPluginToolsVersion: project.mavenPluginToolsVersion,
+                // Absolute file:// URL of the root build/maven-repo where Gradle publishes the
+                // just-built core artifact. Used by the templated pom.xml as a 'remote' repo so
+                // Maven resolves SNAPSHOTs cleanly. This pom.xml is build-time-only; the published
+                // pom.xml comes from generatePomFileForMavenJavaPublication.
+                mavenBuildRepoUrl: rootProject.file("${Project.DEFAULT_BUILD_DIR_NAME}/maven-repo").toURI().toString())
     }
 }
 

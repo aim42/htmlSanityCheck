@@ -16,11 +16,34 @@ plugins {
     alias(libs.plugins.jreleaser)
 
     id 'com.dorongold.task-tree' version '4.0.1'
+
+    id 'me.qoomon.git-versioning' version '6.4.4'
 }
 
 allprojects {
     group = group
     version = htmlSanityCheckVersion
+
+    // Derive the version from the current Git ref so feature/bugfix branches publish under their own
+    // -SNAPSHOT coordinate and don't collide with each other or with release versions on GitHub Packages.
+    // Tags shaped 'v<version>' produce a release version; any other ref falls back to gradle.properties.
+    gitVersioning.apply {
+        refs {
+            branch('^(feature|bugfix)/.+') {
+                version = '${ref}-SNAPSHOT'
+            }
+            tag('v(?<version>.*)') {
+                version = '${ref.version}'
+            }
+        }
+        rev {
+            // Use Groovy interpolation (double quotes) so the gradle.properties value is captured
+            // at config time. git-versioning only substitutes its own placeholders (${ref},
+            // ${commit}, ...) and would otherwise pass the single-quoted literal as the version,
+            // which leaks into the published POM as "${htmlSanityCheckVersion}".
+            version = "${htmlSanityCheckVersion}"
+        }
+    }
 
     repositories {
         mavenCentral()
@@ -44,6 +67,13 @@ allprojects {
                     println "=" * 80
                 }
     }
+}
+
+// Single-line `./gradlew -q printVersion` returns the git-versioning–derived project.version.
+// Used by generate-pages (and any shell caller) to propagate the dynamic version to standalone
+// sub-builds like self-check that read htmlSanityCheckVersion from gradle.properties.
+tasks.register("printVersion") {
+    doLast { println project.version }
 }
 
 dependencies {
@@ -391,7 +421,11 @@ tasks.register("integrationTestOnly") {
             commandLine((System.getProperty("os.name") ==~ /Windows.*/
                     ? "..\\gradlew.bat"
                     : "../gradlew"),
-                    "integrationTest")
+                    "integrationTest",
+                    // Forward the git-versioning–derived project.version to the child build so it
+                    // can locate the just-published artifact in build/maven-repo.
+                    "-PhtmlSanityCheckVersion=${project.version}",
+            )
         }
         logger.debug "Script output: ${result}"
     }

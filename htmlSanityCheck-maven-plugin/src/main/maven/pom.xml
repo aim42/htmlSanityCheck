@@ -14,6 +14,21 @@
         <java.version>8</java.version>
     </properties>
 
+    <!--
+        Resolve the just-published htmlsanitycheck-core (release or SNAPSHOT) from Gradle's
+        publish target. Declaring it as a 'remote' repo (instead of relying on the localRepository
+        cache) makes Maven's EnhancedLocalRepositoryManager track origin and resolve SNAPSHOTs
+        reliably — which it does not for artifacts that just appear in localRepository.
+    -->
+    <repositories>
+        <repository>
+            <id>integration-test-local</id>
+            <url>${mavenBuildRepoUrl}</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.aim42.htmlsanitycheck</groupId>

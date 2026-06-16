@@ -48,6 +48,9 @@ jobs:
 
       - name: Check out
         uses: actions/checkout@v5
+        with:
+          # Needed for git-versioning to derive the project version from the branch ref.
+          fetch-depth: 0
 
       - name: Setup JDK
         uses: actions/setup-java@v5
@@ -68,17 +71,26 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           uname -a
+          # The integration-test subproject reads htmlSanityCheckVersion from gradle.properties
+          # (static 2.0.0-rcN), but build-artifacts upstream published under git-versioning's
+          # <branch-slug>-SNAPSHOT. Read the actual published version straight from the maven-repo
+          # tree we just downloaded — avoids invoking gradle from root here, which would otherwise
+          # have to resolve every root plugin (sonar, git-versioning, ...) on this matrix worker.
+          HSC_VERSION="$(basename "$(find build/maven-repo/org/aim42/htmlsanitycheck/htmlsanitycheck-core -maxdepth 1 -mindepth 1 -type d | head -1)")"
+          echo "Resolved HSC version: ${HSC_VERSION}"
           cd integration-test
-          ../gradlew integrationTest --scan ${GRADLE_DEBUG}
+          ../gradlew integrationTest -PhtmlSanityCheckVersion=${HSC_VERSION} --scan ${GRADLE_DEBUG}
 
       - name: Execute integration tests (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
           uname -a
+          $HSC_VERSION = (Get-ChildItem -Directory build/maven-repo/org/aim42/htmlsanitycheck/htmlsanitycheck-core | Select-Object -First 1).Name
+          Write-Output "Resolved HSC version: $HSC_VERSION"
           cd ./integration-test/
           pwd
-          cmd /c "echo off && ..\gradlew.bat integrationTest --scan $env:GRADLE_DEBUG"
+          cmd /c "echo off && ..\gradlew.bat integrationTest -PhtmlSanityCheckVersion=$HSC_VERSION --scan $env:GRADLE_DEBUG"
 
       - name: Collect state upon failure (On Unix)
         if: failure() && runner.os != 'Windows'
