@@ -16,6 +16,10 @@ htmlSanityCheck {
             // hosts). The link works in browsers and from most environments; exclude it from
             // automated checking rather than dropping the historical reference.
             "https://web.archive.org/.*",
+            // TODO(#432): remove this exclude after the first release under the lowercase plugin id is published to the Gradle Plugin Portal.
+            "https://plugins.gradle.org/plugin/org.aim42.htmlsanitycheck.*",
+            // TODO(#432): remove this exclude after the first release under the lowercase group is published to Maven Central.
+            "https://central.sonatype.com/(namespace|artifact)/org.aim42.htmlsanitycheck.*",
     ]
 
     httpSuccessCodes = [429]
