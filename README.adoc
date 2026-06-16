@@ -160,7 +160,7 @@ It validated that all links in a local HTML file tree go out to other existing l
 +
 CAUTION: However, as of 2024-08-14 they have deleted the repository (there seems to be a fork in https://github.com/leonard84/gradle-linkchecker-plugin[]).
 * It was perhaps based on a similar approach (https://github.com/JamaSoftwareEngineering/linkchecker-maven-plugin[linkchecker-maven-plugin]) for https://maven.apache.org[Maven].
-* https://bmuschko.com/blog/golang-with-gradle/[Benjamin Muschko] has created a (Go-based) command-line tool to check links, called https://github.com/bmuschko/link-verifier[link verifier].
+* Benjamin Muschko has created a (Go-based) command-line tool to check links, called https://github.com/bmuschko/link-verifier[link verifier].
 * https://github.com/gjtorikian/html-proofer[html-proofer] is written in Ruby and provides different usage scenarios (programmatically, CLI, and Docker).
 * https://github.com/wjdp/htmltest[htmltest] is also written in Go(Lang) and claims to be rapid compared to `html-proofer` (stay tuned; we have plans for HSC to run with Graal quickly).
 
@@ -177,6 +177,7 @@ Some day we'll unify that 😬.
 
 == Kudos
 
-Big thanx to image:structure101-logo.png[alt='Structure-101',link="https://structure101.com"] for helping us analyze and restructure our code.
+Big thanx to image:structure101-logo.png[alt='Structure-101',link="https://web.archive.org/web/20250206232548/https://structure101.com/"] for helping us analyze and restructure our code.
+The product was acquired by SonarSource; the link above points to a Wayback snapshot of the original site.
 
 
