@@ -4,7 +4,7 @@ junit5-version = '5.12.2'
 picocli-version = "4.7.7"
 slf4j-version = '2.0.17'
 string-similarity-version = '1.0.0'
-testcontainers-version = '1.20.6'
+testcontainers-version = '1.21.4'
 wiremock-testcontainers-version = '1.0-alpha-15'
 
 [libraries]
@@ -26,7 +26,7 @@ wiremock-testcontainers = { module = 'org.wiremock.integrations.testcontainers:w
 gradle-versions = { id= 'com.github.ben-manes.versions', version = '0.52.0' }
 sonar = { id = 'org.sonarqube', version = '6.3.1.5724' }
 jreleaser = {  id = 'org.jreleaser', version = '1.17.0'}
-gitProperties = { id = 'com.gorylenko.gradle-git-properties', version = '2.5.3' }
+gitProperties = { id = 'com.gorylenko.gradle-git-properties', version = '2.5.4' }
 
 # Copyright Gerd Aschemann and aim42 contributors.
 #
