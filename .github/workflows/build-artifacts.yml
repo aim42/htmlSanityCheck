@@ -25,6 +25,31 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v5
+        with:
+          # git-versioning derives the project version from the current branch;
+          # the default fetch-depth: 1 leaves HEAD detached without a branch ref
+          # and the plugin falls back to gradle.properties' static version.
+          fetch-depth: 0
+
+      - name: Create local branch ref for git-versioning
+        # actions/checkout leaves HEAD detached and only creates refs/remotes/origin/<branch>.
+        # me.qoomon.git-versioning v6.4.4 sometimes finds the branch via the remote ref and
+        # sometimes falls back to the rev clause, producing 2.0.0-rc5 instead of
+        # <branch-slug>-SNAPSHOT — non-deterministic across workflow runs on the same SHA.
+        # Materialising refs/heads/<branch> ourselves makes detection reliable.
+        shell: bash
+        run: |
+          BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          if [[ -z "$BRANCH" || "$BRANCH" == "HEAD" ]]; then
+            echo "::notice::No branch name; leaving git-versioning to its own detection."
+            exit 0
+          fi
+          if [[ -z "$GITHUB_HEAD_REF" && "$GITHUB_REF" == refs/tags/* ]]; then
+            echo "::notice::Tag push; leaving git-versioning to its own detection."
+            exit 0
+          fi
+          git update-ref "refs/heads/$BRANCH" HEAD
+          echo "::notice::Materialised refs/heads/$BRANCH at $(git rev-parse --short HEAD)"
 
       - name: Setup Java
         uses: actions/setup-java@v5

@@ -51,6 +51,28 @@ jobs:
 
       - name: Check out
         uses: actions/checkout@v5
+        with:
+          # Needed for git-versioning to derive the branch-slug-SNAPSHOT version
+          # when generate-pages calls `./gradlew -q printVersion`.
+          fetch-depth: 0
+
+      - name: Create local branch ref for git-versioning
+        # See build-artifacts.yml — without this, git-versioning intermittently falls back
+        # to gradle.properties' static version, and generate-pages then asks self-check
+        # for the wrong coordinate.
+        shell: bash
+        run: |
+          BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          if [[ -z "$BRANCH" || "$BRANCH" == "HEAD" ]]; then
+            echo "::notice::No branch name; leaving git-versioning to its own detection."
+            exit 0
+          fi
+          if [[ -z "$GITHUB_HEAD_REF" && "$GITHUB_REF" == refs/tags/* ]]; then
+            echo "::notice::Tag push; leaving git-versioning to its own detection."
+            exit 0
+          fi
+          git update-ref "refs/heads/$BRANCH" HEAD
+          echo "::notice::Materialised refs/heads/$BRANCH at $(git rev-parse --short HEAD)"
 
       - name: Setup JDK
         uses: actions/setup-java@v5

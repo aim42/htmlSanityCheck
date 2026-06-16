@@ -18,6 +18,59 @@ jobs:
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+  publish-gh-packages:
+    # Publish per-branch SNAPSHOTs to GitHub Packages so downstream consumers
+    # can pull a feature/bugfix branch before it merges. Only runs on push
+    # events to feature/bugfix branches (git-versioning's SNAPSHOT regex);
+    # develop and main fall through to the static gradle.properties version
+    # and would conflict with already-published releases.
+    needs: build-artifacts
+    if: github.event_name == 'push' && (startsWith(github.ref, 'refs/heads/feature/') || startsWith(github.ref, 'refs/heads/bugfix/'))
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Check out
+        uses: actions/checkout@v5
+        with:
+          # Needed for git-versioning to derive the branch-slug-SNAPSHOT version.
+          fetch-depth: 0
+
+      - name: Create local branch ref for git-versioning
+        # See build-artifacts.yml — without this, git-versioning intermittently falls back
+        # to gradle.properties' static version and publishes under the wrong coordinate.
+        shell: bash
+        run: |
+          BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          if [[ -z "$BRANCH" || "$BRANCH" == "HEAD" ]]; then
+            echo "::notice::No branch name; leaving git-versioning to its own detection."
+            exit 0
+          fi
+          if [[ -z "$GITHUB_HEAD_REF" && "$GITHUB_REF" == refs/tags/* ]]; then
+            echo "::notice::Tag push; leaving git-versioning to its own detection."
+            exit 0
+          fi
+          git update-ref "refs/heads/$BRANCH" HEAD
+          echo "::notice::Materialised refs/heads/$BRANCH at $(git rev-parse --short HEAD)"
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: true
+
+      - name: Publish SNAPSHOT to GitHub Packages
+        env:
+          GITHUB_USER: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew publishAllPublicationsToGitHubPackagesRepository --no-daemon
+
   post-build:
     needs: build-artifacts
     runs-on: ubuntu-latest
