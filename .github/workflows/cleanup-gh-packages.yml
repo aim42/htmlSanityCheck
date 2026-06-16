@@ -1,0 +1,88 @@
+name: Cleanup orphaned GH Packages
+
+# Removes htmlsanitycheck-* SNAPSHOT versions on GitHub Packages whose branch
+# no longer exists on origin AND that are older than ORPHAN_RETENTION_DAYS.
+# Release versions (anything not ending in -SNAPSHOT) are never touched.
+
+on:
+  schedule:
+    - cron: '17 3 * * *'   # daily 03:17 UTC
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Log what would be deleted without actually deleting'
+        type: boolean
+        default: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    env:
+      ORG: aim42
+      ORPHAN_RETENTION_DAYS: 28
+      DRY_RUN: ${{ inputs.dry-run || 'false' }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Delete SNAPSHOTs of removed branches older than retention threshold
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          # Slugify active remote branches the same way git-versioning does:
+          # feature/432-add-gh-packages -> feature-432-add-gh-packages
+          mapfile -t active_slugs < <(
+            git for-each-ref --format='%(refname:strip=3)' refs/remotes/origin/ \
+              | grep -v '^HEAD$' \
+              | tr '/' '-'
+          )
+
+          now_epoch=$(date -u +%s)
+          retention_seconds=$(( ORPHAN_RETENTION_DAYS * 86400 ))
+
+          for pkg in \
+            htmlsanitycheck-core \
+            htmlsanitycheck-cli \
+            htmlsanitycheck-gradle-plugin \
+            htmlsanitycheck-maven-plugin \
+            org.aim42.htmlsanitycheck.gradle.plugin
+          do
+            echo "::group::${pkg}"
+            gh api --paginate "/orgs/${ORG}/packages/maven/${pkg}/versions" \
+              --jq '.[] | [.id, .name, .created_at] | @tsv' \
+              | while IFS=$'\t' read -r id name created_at; do
+
+                # Keep release versions
+                [[ "${name}" == *-SNAPSHOT ]] || continue
+
+                # Slug = name without trailing -SNAPSHOT
+                slug="${name%-SNAPSHOT}"
+
+                # Keep if branch still exists
+                if printf '%s\n' "${active_slugs[@]}" | grep -Fxq -- "${slug}"; then
+                  continue
+                fi
+
+                # Branch gone — check age
+                created_epoch=$(date -u -d "${created_at}" +%s)
+                age=$(( now_epoch - created_epoch ))
+                if (( age < retention_seconds )); then
+                  echo "::notice::keep (still in grace): ${pkg}@${name} (age $((age/86400))d, branch ${slug} gone)"
+                  continue
+                fi
+
+                if [[ "${DRY_RUN}" == "true" ]]; then
+                  echo "::notice::[DRY RUN] would delete: ${pkg}@${name} (age $((age/86400))d, branch ${slug} gone)"
+                else
+                  echo "deleting orphan: ${pkg}@${name} (age $((age/86400))d, branch ${slug} gone)"
+                  gh api -X DELETE "/orgs/${ORG}/packages/maven/${pkg}/versions/${id}"
+                fi
+              done
+            echo "::endgroup::"
+          done
