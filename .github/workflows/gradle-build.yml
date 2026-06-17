@@ -61,7 +61,10 @@ jobs:
           java-version: '17'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        # Pin to commit SHA per SonarCloud rule githubactions:S7637 (supply-chain hardening).
+        # Update both the SHA and the comment together when bumping; verify the SHA at
+        # https://github.com/gradle/actions/releases.
+        uses: gradle/actions/setup-gradle@48b5f213c81028ace310571dc5ec0fbbca0b2947 # v4.4.3
         with:
           cache-read-only: true
 
