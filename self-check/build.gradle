@@ -9,6 +9,7 @@ htmlSanityCheck {
     excludes = [
             "https://www.baeldung.com/.*", // Baeldung seems to have implemented some anti-robot/GPT strategy?
             "https://www.iconfinder.com/icons/118743/arrow_up_icon", "https://www.freepik.com/", // Both fail frequently on GitHub pages
+            "https://web.archive.org/.*", // Wayback Machine connect-times-out from some CI runners (notably Azure Windows hosts).
     ]
 
     httpSuccessCodes = [ 429 ]

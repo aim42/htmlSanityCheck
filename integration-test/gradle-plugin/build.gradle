@@ -10,7 +10,13 @@ File reports = file("${Project.DEFAULT_BUILD_DIR_NAME}/reports")
 htmlSanityCheck {
     sourceDir = file("../common/${Project.DEFAULT_BUILD_DIR_NAME}/docs")
 
-    excludes = ["https://www.baeldung.com/.*"]
+    excludes = [
+            "https://www.baeldung.com/.*",
+            // Wayback Machine connect-times-out from some CI runners (notably Azure Windows
+            // hosts). The link works in browsers and from most environments; exclude it from
+            // automated checking rather than dropping the historical reference.
+            "https://web.archive.org/.*",
+    ]
 
     httpSuccessCodes = [429]
 

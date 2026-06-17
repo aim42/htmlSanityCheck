@@ -34,6 +34,9 @@
                     </sourceDocuments>
                     <excludes>
                         <exclude>https://www.baeldung.com/.*</exclude>
+                        <!-- Wayback Machine connect-times-out from some CI runners (notably
+                             Azure Windows hosts); exclude rather than dropping the link. -->
+                        <exclude>https://web.archive.org/.*</exclude>
                     </excludes>
                     <sourceDir>../common/build/docs</sourceDir>
                     <checkingResultsDir>${project.build.directory}/reports</checkingResultsDir>
