@@ -387,6 +387,24 @@ sonar {
         property "sonar.coverage.jacoco.xmlReportPaths", "**/build/reports/jacoco/test/jacocoTestReport.xml"
         property "sonar.buildbreaker.skip", "false"
         property "sonar.qualitygate.wait", true
+
+        // Default sonar.branch.name to the current git branch so local `./gradlew sonar`
+        // analyses land on the branch you're on, not the project's main branch.
+        // CI keeps overriding via -Psonar.branch.name=<ref>; that takes precedence via
+        // findProperty(). On detached HEAD (no detectable branch) we leave it unset and
+        // SonarCloud falls back to the project's configured main branch.
+        if (!findProperty("sonar.branch.name")) {
+            def envBranch = System.getenv("GITHUB_REF_NAME") ?: System.getenv("GITHUB_HEAD_REF")
+            def gitBranch = providers.exec {
+                commandLine 'git', 'rev-parse', '--abbrev-ref', 'HEAD'
+            }.standardOutput.asText.map { it.trim() }.getOrElse('')
+            def branch = (envBranch && envBranch != 'HEAD') ? envBranch
+                       : (gitBranch && gitBranch != 'HEAD') ? gitBranch
+                       : null
+            if (branch) {
+                property "sonar.branch.name", branch
+            }
+        }
     }
 }
 
