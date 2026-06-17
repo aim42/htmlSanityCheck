@@ -10,6 +10,7 @@ htmlSanityCheck {
             "https://www.baeldung.com/.*", // Baeldung seems to have implemented some anti-robot/GPT strategy?
             "https://www.iconfinder.com/icons/118743/arrow_up_icon", "https://www.freepik.com/", // Both fail frequently on GitHub pages
             "https://web.archive.org/.*", // Wayback Machine connect-times-out from some CI runners (notably Azure Windows hosts).
+            "https://search.maven.org/.*", // Maven Central search endpoint returns 403 to Azure-hosted GitHub Actions runners.
             // TODO(#432): remove this exclude after the first release under the lowercase plugin id is published to the Gradle Plugin Portal.
             "https://plugins.gradle.org/plugin/org.aim42.htmlsanitycheck.*",
             // TODO(#432): remove this exclude after the first release under the lowercase group is published to Maven Central.
