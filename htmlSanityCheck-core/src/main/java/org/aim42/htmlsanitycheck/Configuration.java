@@ -32,6 +32,41 @@ import java.util.stream.Collectors;
 @ToString
 @Slf4j
 public class Configuration {
+
+    /**
+     * Defines the output style for JUnit XML reports.
+     * <p>
+     * This configuration option controls how JUnit XML report files are organized
+     * in the output directory.
+     *
+     * @since 2.0.0
+     */
+    public enum JunitOutputStyle {
+        /**
+         * Flat file structure where all JUnit XML reports are stored in a single directory.
+         * The entire file path is encoded into the filename using underscores.
+         * <p>
+         * Example: {@code build/test-results/htmlchecks/TEST-unit-html-_docs_guide_installation.xml}
+         * <p>
+         * This is the default for backwards compatibility, but may fail with
+         * "File name too long" errors for deeply nested directory structures.
+         */
+        FLAT,
+
+        /**
+         * Hierarchical directory structure where JUnit XML reports are organized
+         * in subdirectories that mirror the source file structure.
+         * <p>
+         * Example: {@code build/test-results/htmlchecks/docs/guide/TEST-installation.xml}
+         * <p>
+         * This avoids filename length issues and provides more intuitive organization.
+         * Recommended for projects with deeply nested directory structures.
+         *
+         * @see <a href="https://github.com/aim42/htmlSanityCheck/issues/405">Issue 405</a>
+         */
+        HIERARCHICAL
+    }
+
     Set<File> sourceDocuments;
     File sourceDir;
     File checkingResultsDir;
@@ -52,6 +87,8 @@ public class Configuration {
     Set<Pattern> excludes = new HashSet<>();
     @Builder.Default
     Set<String> indexFilenames = defaultIndeFilenames();
+    @Builder.Default
+    JunitOutputStyle junitOutputStyle = JunitOutputStyle.FLAT;
 
     /*
      * Explanation for configuring http status codes:
@@ -79,6 +116,7 @@ public class Configuration {
         this.indexFilenames
                 = defaultIndeFilenames();
         this.prefixOnlyHrefExtensions = Web.POSSIBLE_EXTENSIONS;
+        this.junitOutputStyle = JunitOutputStyle.FLAT;// FLAT for backwards compatibility
 
         this.checksToExecute = AllCheckers.CHECKER_CLASSES;
     }

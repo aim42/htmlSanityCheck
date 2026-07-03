@@ -92,6 +92,10 @@ class HscCommand implements Runnable {
     @Option(names = ["-e", "--exclude"], description = "Exclude remote patterns to check", split = ',')
     Pattern[] excludes = []
 
+    @Option(names = ["-o", "--junitOutputStyle"],
+            description = "JUnit output style: FLAT (all files in one directory, default) or HIERARCHICAL (mirrors source structure)")
+    Configuration.JunitOutputStyle junitOutputStyle
+
     @Parameters(index = "0", arity = "0..1", description = "base directory (default: current directory)")
     File srcDir = new File(".").getAbsoluteFile()
 
@@ -177,6 +181,7 @@ class HscCommand implements Runnable {
                     .checkingResultsDir(resultsDirectory)
                     .checksToExecute(AllCheckers.CHECKER_CLASSES)
                     .excludes(hscCommand.excludes as Set)
+                    .junitOutputStyle(hscCommand.junitOutputStyle)
                     .build()
 
             // if we have no valid configuration, abort with exception

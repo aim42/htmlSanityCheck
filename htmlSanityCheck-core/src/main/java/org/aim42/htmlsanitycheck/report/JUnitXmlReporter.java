@@ -1,5 +1,6 @@
 package org.aim42.htmlsanitycheck.report;
 
+import org.aim42.htmlsanitycheck.Configuration;
 import org.aim42.htmlsanitycheck.collect.Finding;
 import org.aim42.htmlsanitycheck.collect.PerRunResults;
 import org.aim42.htmlsanitycheck.collect.SingleCheckResults;
@@ -11,6 +12,7 @@ import javax.xml.stream.XMLStreamWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.UUID;
 
 /************************************************************************
@@ -36,13 +38,25 @@ import java.util.UUID;
 /**
  * Write the findings' report to JUnit XML. Allows tools processing JUnit to
  * include the findings.
+ * <p>
+ * Supports two output styles:
+ * <ul>
+ *   <li>{@link Configuration.JunitOutputStyle#FLAT} - All files in one directory with encoded paths (default, backwards compatible)</li>
+ *   <li>{@link Configuration.JunitOutputStyle#HIERARCHICAL} - Files organized in subdirectories mirroring source structure</li>
+ * </ul>
  */
 public class JUnitXmlReporter extends Reporter {
     File outputPath;
+    Configuration.JunitOutputStyle outputStyle;
 
     public JUnitXmlReporter(PerRunResults runResults, String outputPath) {
+        this(runResults, outputPath, Configuration.JunitOutputStyle.FLAT);
+    }
+
+    public JUnitXmlReporter(PerRunResults runResults, String outputPath, Configuration.JunitOutputStyle outputStyle) {
         super(runResults);
         this.outputPath = new File(outputPath);
+        this.outputStyle = outputStyle != null ? outputStyle : Configuration.JunitOutputStyle.FLAT;
     }
 
     @Override
@@ -52,11 +66,15 @@ public class JUnitXmlReporter extends Reporter {
         }
     }
 
+    // tag::reportPageSummary[]
     @Override
     protected void reportPageSummary(SinglePageResults singlePageResults) {
         String name = filenameOrTitleOrRandom(singlePageResults);
-        String sanitizedPath = name.replaceAll("[^A-Za-z0-9_-]+", "_");
-        File testOutputFile = new File(outputPath, "TEST-unit-html-" + sanitizedPath + ".xml");
+
+        File testOutputFile = (outputStyle == Configuration.JunitOutputStyle.HIERARCHICAL)
+            ? getHierarchicalOutputFile(name)
+            : getFlatOutputFile(name);
+        // end::reportPageSummary[]
 
         XMLOutputFactory factory = XMLOutputFactory.newInstance();
         try (FileWriter fileWriter = new FileWriter(testOutputFile)) {
@@ -94,6 +112,73 @@ public class JUnitXmlReporter extends Reporter {
         } catch (IOException | XMLStreamException e) {
             throw new RuntimeException(e); //NOSONAR(S112)
         }
+    }
+
+    /**
+     * Creates output file using flat structure (all files in one directory).
+     * Encodes the full path into the filename using underscores.
+     *
+     * @param name The source file path
+     * @return The output file for the JUnit XML report
+     */
+    private File getFlatOutputFile(String name) {
+        String sanitizedPath = name.replaceAll("[^A-Za-z0-9_-]+", "_");
+        return new File(outputPath, "TEST-unit-html-" + sanitizedPath + ".xml");
+    }
+
+    /**
+     * Creates output file using hierarchical structure (subdirectories mirror source structure).
+     * Solves filename length issues with deeply nested directories.
+     *
+     * @param name The source file path
+     * @return The output file for the JUnit XML report
+     */
+    private File getHierarchicalOutputFile(String name) {
+        // Parse the path to extract directory structure and filename
+        File sourcePath = new File(name);
+        File parentDir = sourcePath.getParentFile();
+        String fileName = sourcePath.getName();
+
+        // Create directory structure under outputPath to mirror the source file hierarchy
+        File testOutputDir;
+        if (parentDir != null) {
+            // Normalize the path to handle relative references like ".."
+            // This ensures we stay within the outputPath and don't try to escape it
+            try {
+                File tempPath = new File(outputPath, parentDir.getPath());
+                testOutputDir = tempPath.getCanonicalFile();
+
+                // Verify the canonical path is still under outputPath using NIO Path API
+                // This provides better security against path traversal attacks
+                Path normalizedOutputPath = outputPath.getCanonicalFile().toPath().normalize();
+                Path normalizedTestOutputDir = testOutputDir.toPath().normalize();
+
+                if (!normalizedTestOutputDir.startsWith(normalizedOutputPath)) {
+                    // Path tries to escape outputPath, so just use outputPath directly
+                    testOutputDir = outputPath;
+                }
+            } catch (Exception e) {
+                // If normalization fails, fall back to outputPath
+                testOutputDir = outputPath;
+            }
+        } else {
+            testOutputDir = outputPath;
+        }
+
+        // Ensure the directory exists
+        if (!testOutputDir.exists() && !testOutputDir.mkdirs()) {
+            StringBuilder errorMsg = new StringBuilder("Cannot create directory: ")
+                .append(testOutputDir.getAbsolutePath());
+            errorMsg.append(" (exists: ").append(testOutputDir.exists())
+                    .append(", parent canWrite: ")
+                    .append(testOutputDir.getParentFile() != null ? testOutputDir.getParentFile().canWrite() : "unknown")
+                    .append(")");
+            throw new RuntimeException(errorMsg.toString()); //NOSONAR(S112)
+        }
+
+        // Create the test file with a simple, sanitized filename
+        String sanitizedFileName = fileName.replaceAll("[^A-Za-z0-9_.-]+", "_");
+        return new File(testOutputDir, "TEST-" + sanitizedFileName + ".xml");
     }
 
     private static String filenameOrTitleOrRandom(SinglePageResults pageResult) {
