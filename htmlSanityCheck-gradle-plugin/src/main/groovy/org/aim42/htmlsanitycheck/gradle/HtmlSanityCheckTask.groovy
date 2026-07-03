@@ -117,6 +117,7 @@ class HtmlSanityCheckTask extends DefaultTask {
         if (sourceDocuments == null) {
             sourceDocuments = project.fileTree(sourceDir)
             sourceDocuments.include('**/*.html')
+            sourceDocuments.include('**/*.htm')
         }
     }
 

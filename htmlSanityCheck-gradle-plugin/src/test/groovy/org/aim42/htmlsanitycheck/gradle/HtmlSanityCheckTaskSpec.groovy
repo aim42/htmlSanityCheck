@@ -62,4 +62,32 @@ class HtmlSanityCheckTaskSpec extends HtmlSanityCheckBaseSpec {
         e.message.contains("Your build configuration included 'failOnErrors=true', and 1 error(s) were found on all checked pages.")
     }
 
+    def "should include .htm files when auto-populating sourceDocuments"() {
+        given:
+        // Create .htm file
+        def htmFile = new File(sourceDir, "document.htm")
+        htmFile << VALID_HTML
+
+        // Create .html file
+        htmlFile << VALID_HTML
+
+        // Create subdirectory with .htm file
+        def subDir = new File(sourceDir, "docs")
+        subDir.mkdirs()
+        def nestedHtmFile = new File(subDir, "nested.htm")
+        nestedHtmFile << VALID_HTML
+
+        when:
+        task.setSourceDir(testProjectDir.root)
+
+        then:
+        task.sourceDocuments != null
+        // Verify that sourceDocuments includes both .html and .htm files
+        def fileNames = task.sourceDocuments.files.collect { it.name }
+        fileNames.contains("test.html")
+        fileNames.contains("document.htm")
+        fileNames.contains("nested.htm")
+        task.sourceDocuments.files.size() == 3
+    }
+
 }

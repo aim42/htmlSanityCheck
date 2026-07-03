@@ -50,7 +50,7 @@ Use the following snippet inside a Maven build file:
     </executions>
     <configuration>
         <sourceDocuments>
-            <file>src/file-to-test.html</file> <2>
+            <sourceDocument>src/file-to-test.html</sourceDocument> <2>
         </sourceDocuments>
         <sourceDir>src</sourceDir> <3>
     </configuration>
@@ -128,7 +128,7 @@ Type: Directory.
 +
 Type: `org.maven.api.file.FileCollection`.
 +
-Default: All files in `+{sourceDir}+` whose names end with `.html`.
+Default: All files in `+{sourceDir}+` whose names end with `.html` or `.htm`.
 
 `checkingResultsDir` (optional):: Directory where the checking results are written to.
 +

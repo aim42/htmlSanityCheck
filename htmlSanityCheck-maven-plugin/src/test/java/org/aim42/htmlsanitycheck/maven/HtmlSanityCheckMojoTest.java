@@ -36,6 +36,68 @@ class HtmlSanityCheckMojoTest {
         Assertions.assertThat(config.getFailOnErrors()).isFalse();
     }
 
+    @Test
+    void setupConfigurationWithHttpSuccessCodes() throws Exception {
+        // Create mojo with custom HTTP success codes
+        Set<Integer> customSuccessCodes = new HashSet<>();
+        customSuccessCodes.add(299);
+
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "httpSuccessCodes", customSuccessCodes);
+
+        Configuration config = mojo.setupConfiguration();
+
+        Assertions.assertThat(config).isNotNull();
+        Assertions.assertThat(config.getHttpSuccessCodes()).contains(299);
+    }
+
+    @Test
+    void setupConfigurationWithHttpErrorCodes() throws Exception {
+        // Create mojo with custom HTTP error codes
+        Set<Integer> customErrorCodes = new HashSet<>();
+        customErrorCodes.add(599);
+
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "httpErrorCodes", customErrorCodes);
+
+        Configuration config = mojo.setupConfiguration();
+
+        Assertions.assertThat(config).isNotNull();
+        Assertions.assertThat(config.getHttpErrorCodes()).contains(599);
+    }
+
+    @Test
+    void setupConfigurationWithHttpWarningCodes() throws Exception {
+        // Create mojo with custom HTTP warning codes
+        Set<Integer> customWarningCodes = new HashSet<>();
+        customWarningCodes.add(199);
+
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "httpWarningCodes", customWarningCodes);
+
+        Configuration config = mojo.setupConfiguration();
+
+        Assertions.assertThat(config).isNotNull();
+        Assertions.assertThat(config.getHttpWarningCodes()).contains(199);
+    }
+
+    @Test
+    void setupConfigurationWithEmptyHttpStatusCodesShouldNotOverride() throws Exception {
+        // Create mojo with empty HTTP status code sets (should not override defaults)
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "httpSuccessCodes", new HashSet<Integer>());
+        setField(mojo, "httpErrorCodes", new HashSet<Integer>());
+        setField(mojo, "httpWarningCodes", new HashSet<Integer>());
+
+        Configuration config = mojo.setupConfiguration();
+
+        // Verify that default codes are still present (not overridden by empty sets)
+        Assertions.assertThat(config).isNotNull();
+        Assertions.assertThat(config.getHttpSuccessCodes()).contains(200);  // Default success code
+        Assertions.assertThat(config.getHttpErrorCodes()).contains(404);    // Default error code
+        Assertions.assertThat(config.getHttpWarningCodes()).contains(301);  // Default warning code (redirect)
+    }
+
 
     @Test
     void logBuildParameter() {
@@ -190,6 +252,188 @@ class HtmlSanityCheckMojoTest {
         deleteDirectory(resultDir.toFile());
     }
 
+    @Test
+    void executeWithOnlySourceDir_ShouldSucceed() throws IOException, MojoExecutionException {
+        // Setup: Create temp directories
+        Path junitDir = Files.createTempDirectory("MojoJunit");
+        Path resultDir = Files.createTempDirectory("MojoResult");
+        Path sourceDir = Files.createTempDirectory("MojoSource");
+
+        // Create HTML file in root of sourceDir
+        File rootHtmlFile = new File(sourceDir.toFile(), "root.html");
+        Files.write(rootHtmlFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
+
+        // Create subdirectory with another HTML file
+        File subDir = new File(sourceDir.toFile(), "subdir");
+        boolean mkdirSuccess = subDir.mkdirs();
+        Assertions.assertThat(mkdirSuccess).isTrue();
+        File subHtmlFile = new File(subDir, "nested.html");
+        Files.write(subHtmlFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
+
+        // Create Mojo and set only sourceDir field (NOT sourceDocuments)
+        // This simulates a Maven pom.xml with only <sourceDir> configured
+        HtmlSanityCheckMojo mojo = new TestableHtmlSanityCheckMojo(
+                sourceDir.toFile(),
+                null, // sourceDocuments explicitly NOT set
+                resultDir.toFile(),
+                junitDir.toFile()
+        );
+
+        // This should succeed - setupConfiguration() will auto-populate sourceDocuments
+        mojo.execute();
+
+        // Clean up
+        deleteDirectory(sourceDir.toFile());
+        deleteDirectory(junitDir.toFile());
+        deleteDirectory(resultDir.toFile());
+    }
+
+    @Test
+    void findHtmlFilesWithNullDirectory() throws Exception {
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "sourceDir", null);
+        setField(mojo, "sourceDocuments", null);
+
+        Configuration config = mojo.setupConfiguration();
+
+        // When both sourceDir and sourceDocuments are null, the config should have null sourceDocuments
+        // (This will be caught by validation)
+        Assertions.assertThat(config.getSourceDocuments()).isNull();
+    }
+
+    @Test
+    void findHtmlFilesWithNonExistentDirectory() throws Exception {
+        Path nonExistentDir = java.nio.file.Paths.get("/tmp/this-directory-does-not-exist-" + System.currentTimeMillis());
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "sourceDir", nonExistentDir.toFile());
+        setField(mojo, "sourceDocuments", null);
+
+        Configuration config = mojo.setupConfiguration();
+
+        // Should return empty set when directory doesn't exist
+        Assertions.assertThat(config.getSourceDocuments()).isEmpty();
+    }
+
+    @Test
+    void findHtmlFilesWithEmptyDirectory() throws Exception {
+        Path emptyDir = Files.createTempDirectory("MojoEmpty");
+
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "sourceDir", emptyDir.toFile());
+        setField(mojo, "sourceDocuments", null);
+
+        Configuration config = mojo.setupConfiguration();
+
+        // Should return empty set when directory is empty
+        Assertions.assertThat(config.getSourceDocuments()).isEmpty();
+
+        // Clean up
+        Files.deleteIfExists(emptyDir);
+    }
+
+    @Test
+    void findHtmlFilesIgnoresNonHtmlFiles() throws Exception {
+        Path sourceDir = Files.createTempDirectory("MojoSource");
+
+        // Create various non-HTML files
+        File txtFile = new File(sourceDir.toFile(), "readme.txt");
+        Files.write(txtFile.toPath(), "Text content".getBytes(StandardCharsets.UTF_8));
+
+        File pdfFile = new File(sourceDir.toFile(), "document.pdf");
+        Files.write(pdfFile.toPath(), "PDF content".getBytes(StandardCharsets.UTF_8));
+
+        File xmlFile = new File(sourceDir.toFile(), "config.xml");
+        Files.write(xmlFile.toPath(), "<xml/>".getBytes(StandardCharsets.UTF_8));
+
+        // Create one HTML file
+        File htmlFile = new File(sourceDir.toFile(), "page.html");
+        Files.write(htmlFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
+
+        HtmlSanityCheckMojo mojo = new HtmlSanityCheckMojo();
+        setField(mojo, "sourceDir", sourceDir.toFile());
+        setField(mojo, "sourceDocuments", null);
+
+        Configuration config = mojo.setupConfiguration();
+
+        // Should only find the HTML file
+        Assertions.assertThat(config.getSourceDocuments()).hasSize(1);
+        Assertions.assertThat(config.getSourceDocuments())
+                .extracting(File::getName)
+                .containsExactly("page.html");
+
+        // Clean up
+        deleteDirectory(sourceDir.toFile());
+    }
+
+    @Test
+    void executeWithOnlySourceDir_ShouldIncludeHtmFiles() throws IOException, MojoExecutionException {
+        // Setup: Create temp directories
+        Path junitDir = Files.createTempDirectory("MojoJunit");
+        Path resultDir = Files.createTempDirectory("MojoResult");
+        Path sourceDir = Files.createTempDirectory("MojoSource");
+
+        // Create .htm file in root
+        File rootHtmFile = new File(sourceDir.toFile(), "document.htm");
+        Files.write(rootHtmFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
+
+        // Create .html file for comparison
+        File rootHtmlFile = new File(sourceDir.toFile(), "page.html");
+        Files.write(rootHtmlFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
+
+        // Create subdirectory with .htm file
+        File subDir = new File(sourceDir.toFile(), "docs");
+        boolean mkdirSuccess = subDir.mkdirs();
+        Assertions.assertThat(mkdirSuccess).isTrue();
+        File nestedHtmFile = new File(subDir, "nested.htm");
+        Files.write(nestedHtmFile.toPath(), VALID_HTML.getBytes(StandardCharsets.UTF_8));
+
+        // Create Mojo and set only sourceDir field
+        HtmlSanityCheckMojo mojo = new TestableHtmlSanityCheckMojo(
+                sourceDir.toFile(),
+                null, // sourceDocuments explicitly NOT set
+                resultDir.toFile(),
+                junitDir.toFile()
+        );
+
+        // Get the configuration to verify sourceDocuments includes .htm files
+        Configuration config = mojo.setupConfiguration();
+
+        // Verify that both .html and .htm files are discovered
+        Assertions.assertThat(config.getSourceDocuments()).isNotNull();
+        Assertions.assertThat(config.getSourceDocuments()).hasSize(3);
+        Assertions.assertThat(config.getSourceDocuments())
+                .extracting(File::getName)
+                .containsExactlyInAnyOrder("document.htm", "page.html", "nested.htm");
+
+        // Execute should succeed with both file types
+        mojo.execute();
+
+        // Clean up
+        deleteDirectory(sourceDir.toFile());
+        deleteDirectory(junitDir.toFile());
+        deleteDirectory(resultDir.toFile());
+    }
+
+    /**
+     * Helper class to allow setting private fields for testing
+     */
+    static class TestableHtmlSanityCheckMojo extends HtmlSanityCheckMojo {
+        TestableHtmlSanityCheckMojo(File sourceDir, Set<File> sourceDocuments,
+                                   File checkingResultsDir, File junitResultsDir) {
+            // Use reflection to set private fields
+            try {
+                HtmlSanityCheckMojoTest.setField(this, "sourceDir", sourceDir);
+                HtmlSanityCheckMojoTest.setField(this, "sourceDocuments", sourceDocuments);
+                HtmlSanityCheckMojoTest.setField(this, "checkingResultsDir", checkingResultsDir);
+                HtmlSanityCheckMojoTest.setField(this, "junitResultsDir", junitResultsDir);
+                HtmlSanityCheckMojoTest.setField(this, "checkerClasses", AllCheckers.CHECKER_CLASSES);
+                HtmlSanityCheckMojoTest.setField(this, "excludes", new HashSet<String>());
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to set fields", e);
+            }
+        }
+    }
+
 
     // Helper functions
 
@@ -201,6 +445,16 @@ class HtmlSanityCheckMojoTest {
             }
         }
         Files.deleteIfExists(directoryToBeDeleted.toPath());
+    }
+
+    /**
+     * Helper method to set private fields on HtmlSanityCheckMojo for testing
+     */
+    private static void setField(Object target, String fieldName, Object value)
+            throws NoSuchFieldException, IllegalAccessException {
+        java.lang.reflect.Field field = HtmlSanityCheckMojo.class.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(target, value);
     }
 
 
