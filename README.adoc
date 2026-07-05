@@ -1,4 +1,4 @@
-= image:htmlsanitycheck-logo.png[HSC] HTML Sanity Check (HSC)
+image::htmlsanitycheck-logo.png[HSC] HTML Sanity Check (HSC)
 :doctype: book
 include::src/docs/asciidoctor-config.ad[]
 
@@ -14,8 +14,7 @@ endif::env-github[]
 ====
 https://hsc.aim42.org[HTML Sanity Check] (HSC) provides some basic sanity checking on HTML files.
 
-It can be helpful in case of HTML generated from, e.g., {asciidoc-url}[Asciidoctor], Markdown, or other formats -- as converters usually don't check for missing images
-or broken links.
+It can be helpful in case of HTML generated from, e.g., {asciidoc-url}[Asciidoctor], Markdown, or other formats -- as converters usually don't check for missing images or broken links.
 ====
 
 image:https://img.shields.io/badge/License-Apache%202.0-blue.svg[link="https://www.apache.org/licenses/LICENSE-2.0"]
@@ -46,6 +45,17 @@ Depending on your <<sec:usage>> you have to
 * Install the xref:{xrefToMavenPlugin}#sec:installation[Maven Plugin], or
 * Install the core library for programmatic use (TBD).
 
+WARNING: *Important Update:* Recent repository releases no longer distribute a standalone `.jar` file. To build or test your web content locally, you must follow the manual process described below.
+
+=== Manual Installation for Local Web Development
+
+If you want to quickly validate a local web project using an IDE like Visual Studio Code:
+
+1. *Download the distribution:* Go to the official link:https://github.com/aim42/htmlSanityCheck/releases[GitHub Releases] and download `hsc-2.0.0-rc4.zip`.
+2. *Extract:* Unzip the contents directly into the root directory of your website project.
+3. *Run the Analyzer:* Open your integrated terminal in that path and execute the script matching your OS: `hsc.bat` (Windows) or `./hsc` (Linux/macOS).
+4. *View Reports:* Open the generated `index.html` inside the `reporte-calidad/` folder in any browser.
+
 [[sec:examples]]
 == Examples
 
@@ -56,13 +66,9 @@ Depending on your <<sec:usage>> find respective
 
 == Typical Output
 
-[cols="1,1",width="50%"]
-|===
-| The overall goal is to create neat and clear reports,
-showing eventual errors within HTML files — as shown in the adjoining figure.
-| image:sample-hsc-report.jpg[width="200",link="{imagesdir}/sample-hsc-report.jpg"
-(click on thumbnail for details)]
-|===
+The overall goal is to create neat and clear reports, showing eventual errors within HTML files — as shown in the adjoining figure.
+
+image:sample-hsc-report.jpg[width="200",link="{imagesdir}/sample-hsc-report.jpg" (click on thumbnail for details)]
 
 == Types of Sanity Checks
 
@@ -120,6 +126,14 @@ Please comment in case you have additional requirements.
 
 Use checkerClass _BrokenHttpLinksChecker_.
 
+=== Structural Integrity and Empty Files (Mitigate "Positive Silence")
+
+Prevents false positives when checking corrupt or completely empty HTML files (0 bytes). If the system processes a DOM tree with no nodes, this checker intercepts the execution before other dynamic rules run.
+
+Instead of reporting a false success, it issues a critical system warning requiring a manual inspection of the build source.
+
+Use checkerClass _MiNuevoChecker_.
+
 === Other types of external links
 
 `ftp`, `ntp` or other protocols are currently not checked, but should...
@@ -135,20 +149,14 @@ Please see our https://hsc.aim42.org/arc42/About-This-Docu.html[software archite
 This tiny piece rests on incredible groundwork:
 
 * https://jsoup.org[Jsoup HTML parser] and analysis toolkit — robust and easy-to-use.
-
 * IntelliJ IDEA — my (Gernot) best (programming) friend.
-
 * Of course, Groovy, Gradle, JUnit, and Spock framework.
 
 == Ideas and Origin
 
 * The plugin heavily relies on code provided by {gradle-url}[Gradle].
-
 * Inspiration on code organization, implementation, and testing of the plugin came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by https://github.com/aalmiray[Andres Almiray].
-
-* Code for string similarity calculation by
-https://github.com/rrice/java-string-similarity[Ralph Rice].
-
+* Code for string similarity calculation by https://github.com/rrice/java-string-similarity[Ralph Rice].
 * Implementation, maintenance and documentation by
 ** Initially: {gernotstarke}[Gernot Starke],
 ** Currently: {gerdaschemann}[Gerd Aschemann] and several other contributors.
@@ -158,26 +166,4 @@ https://github.com/rrice/java-string-similarity[Ralph Rice].
 * Once upon a time the https://github.com/rackerlabs/[racketeers] hosted `gradle-linkchecker-plugin` which was an (open source) Gradle plugin.
 It validated that all links in a local HTML file tree go out to other existing local files or remote web locations, creating a simple text file report.
 +
-CAUTION: However, as of 2024-08-14 they have deleted the repository (there seems to be a fork in https://github.com/leonard84/gradle-linkchecker-plugin[]).
-* It was perhaps based on a similar approach (https://github.com/JamaSoftwareEngineering/linkchecker-maven-plugin[linkchecker-maven-plugin]) for https://maven.apache.org[Maven].
-* Benjamin Muschko has created a (Go-based) command-line tool to check links, called https://github.com/bmuschko/link-verifier[link verifier].
-* https://github.com/gjtorikian/html-proofer[html-proofer] is written in Ruby and provides different usage scenarios (programmatically, CLI, and Docker).
-* https://github.com/wjdp/htmltest[htmltest] is also written in Go(Lang) and claims to be rapid compared to `html-proofer` (stay tuned; we have plans for HSC to run with Graal quickly).
-
-== Development & Contributing
-
-* Please report {project-issues}[issues or suggestions].
-
-* In case you want to check out, build, fork and/or contribute, take a look into our https://hsc.aim42.org/development/development-intro.html[Development Information]
-
-== Licence
-
-Currently, code is published under the Apache-2.0 license, documentation under Creative-Commons-Sharealike-4.0.
-Some day we'll unify that 😬.
-
-== Kudos
-
-Big thanx to image:structure101-logo.png[alt='Structure-101',link="https://web.archive.org/web/20250206232548/https://structure101.com/"] for helping us analyze and restructure our code.
-The product was acquired by SonarSource; the link above points to a Wayback snapshot of the original site.
-
-
+CAUTION: However, as of 2024-08-14 they have deleted the
